@@ -5,13 +5,15 @@ import { useAttributeDefinition } from '../../../hooks/use-attribute-definition'
 import type { AttributeOption, MappedField } from '../../../types'
 
 export function useAddressOptions(
-  fields: Record<string, MappedField>
+  fields: Record<string, Nullable<MappedField>>
 ): AttributeOption[] {
   const { isAddressAttribute, getAddressAttributes } = useAddressAttributes()
   const getAttributeDefinition = useAttributeDefinition()
 
   const getLastAddressIndex = () => {
-    const addressFields = Object.values(fields).filter(isAddressAttribute)
+    const addressFields = Object.values(fields).filter(
+      field => !!field && isAddressAttribute(field)
+    ) as MappedField[]
 
     if (addressFields.length === 0) {
       return 0

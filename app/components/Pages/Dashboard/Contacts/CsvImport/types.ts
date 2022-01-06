@@ -7,6 +7,7 @@ export declare interface IContactAttributeType {
   show: boolean
   editable?: boolean
   singular: boolean
+  labels: string[]
 }
 
 export type CsvImportAttributeDefinition = {
@@ -30,11 +31,11 @@ interface BaseAttributeOption {
 
 export type AttributeDefinitionOption = BaseAttributeOption &
   CsvImportAttributeDefinition
-
 export type AttributeTypeOption = BaseAttributeOption & CsvImportAttributeType
 
 export type AttributeOption = AttributeDefinitionOption | AttributeTypeOption
 
 export type MappedField = {
   index?: number
+  label?: string
 } & IAttribute

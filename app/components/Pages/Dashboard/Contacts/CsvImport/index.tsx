@@ -5,8 +5,13 @@ import { Box, Button, makeStyles, Theme } from '@material-ui/core'
 import { CloseButton } from '@app/views/components/Button/CloseButton'
 import PageLayout from 'components/GlobalPageLayout'
 
+import { UploadingBanner } from './components/UploadingBanner'
+import { UploadSteps } from './components/UploadSteps'
 import { Context } from './context'
+import { useAutoMapFields } from './hooks/use-auto-map'
+import { useOwner } from './hooks/use-owner'
 import { useParseCsv } from './hooks/use-parse-csv'
+import { useUploadContacts } from './hooks/use-upload-contacts'
 import { MapFields } from './steps/MapFields'
 import { SelectFile } from './steps/SelectFile'
 
@@ -33,7 +38,14 @@ const useStyles = makeStyles(
 export default function CsvImport() {
   const classes = useStyles()
   const [file, setFile] = useState<Nullable<File>>(null)
+  const [owner, setOwner] = useOwner()
   const parsedCsv = useParseCsv(file)
+  const [mappedFields, setMappedFields] = useAutoMapFields(parsedCsv)
+  const [uploadContacts, isUploadingContacts] = useUploadContacts(
+    owner,
+    file,
+    mappedFields
+  )
 
   return (
     <PageLayout className={classes.layout}>
@@ -45,16 +57,31 @@ export default function CsvImport() {
         <Context.Provider
           value={{
             file,
+            owner,
+            mappedFields,
             csv: parsedCsv
           }}
         >
           <Box display="flex" flexDirection="column" height="100%">
+            <UploadSteps isUploadingContacts={isUploadingContacts} />
+
             <Box flexGrow={1}>
-              {!file && <SelectFile onSelectFile={setFile} />}
-              {file && <MapFields />}
+              {isUploadingContacts ? (
+                <UploadingBanner />
+              ) : (
+                <>
+                  {!file && (
+                    <SelectFile
+                      onSelectFile={setFile}
+                      onChangeOwner={setOwner}
+                    />
+                  )}
+                  {file && <MapFields setMappedFields={setMappedFields} />}
+                </>
+              )}
             </Box>
 
-            {file && (
+            {file && !isUploadingContacts && (
               <Box
                 display="flex"
                 alignItems="center"
@@ -62,7 +89,11 @@ export default function CsvImport() {
                 className={classes.footer}
               >
                 <Button onClick={() => setFile(null)}>Change File</Button>
-                <Button variant="contained" color="primary">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={uploadContacts}
+                >
                   Upload Contacts
                 </Button>
               </Box>

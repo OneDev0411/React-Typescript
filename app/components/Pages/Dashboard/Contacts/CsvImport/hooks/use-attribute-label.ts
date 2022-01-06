@@ -8,7 +8,7 @@ export function useAttributeLabel() {
   const getAttributeDefinition = useAttributeDefinition()
 
   return useCallback(
-    (attribute: IAttribute) => {
+    (attribute: Nullable<IAttribute>) => {
       if (!attribute) {
         return ''
       }

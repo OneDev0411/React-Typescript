@@ -12,7 +12,7 @@ import { useAddressOptions } from './use-address-options'
 import { usePartnerOptions } from './use-partner-options'
 
 export function useOptions(
-  fields: Record<string, MappedField>,
+  fields: Record<string, Nullable<MappedField>>,
   searchTerm: string
 ) {
   const attributes: IAttribute[] = useAttributes()
@@ -34,15 +34,17 @@ export function useOptions(
         return false
       }
 
-      return Object.values(fields).some(field => {
-        const isEqual = isAttributesEqual(field, attribute)
+      return Object.values(fields)
+        .filter(field => !!field)
+        .some((field: MappedField) => {
+          const isEqual = isAttributesEqual(field, attribute)
 
-        if (isSingular(attribute) && isEqual) {
-          return true
-        }
+          if (isSingular(attribute) && isEqual) {
+            return true
+          }
 
-        return isEqual && field.index === index
-      })
+          return isEqual && field.index === index
+        })
     },
     [getAttributeDefinition, isAddressAttribute, fields]
   )

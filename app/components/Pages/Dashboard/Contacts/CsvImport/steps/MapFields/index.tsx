@@ -1,10 +1,11 @@
+import { Dispatch, SetStateAction } from 'react'
+
 import { Grid, makeStyles, Theme, Typography } from '@material-ui/core'
 import cn from 'classnames'
 
 import { AttributeDropdown } from '../../components/AttributeDropdown'
 import { LabelDropdown } from '../../components/LabelDropdown'
 import { getCsvColumns } from '../../helpers/get-csv-columns'
-import { useAutoMapFields } from '../../hooks/use-auto-map'
 import { useImportCsv } from '../../hooks/use-import-csv'
 import { AttributeOption, MappedField } from '../../types'
 
@@ -22,29 +23,62 @@ const useStyles = makeStyles(
   }
 )
 
-export function MapFields() {
-  const classes = useStyles()
-  const { csv } = useImportCsv()
-  const [fields, setFields] = useAutoMapFields(csv)
+interface Props {
+  setMappedFields: Dispatch<
+    SetStateAction<Record<string, Nullable<MappedField>>>
+  >
+}
 
-  const handleSelect = (column: string, option: AttributeOption) => {
-    setFields(state => ({
+export function MapFields({ setMappedFields }: Props) {
+  const classes = useStyles()
+  const { csv, mappedFields } = useImportCsv()
+
+  const handleSelectAttribute = (column: string, option: AttributeOption) => {
+    const field = {
+      index: option.index,
+      type: option.type,
+      attributeTypeName:
+        option.type === 'attribute_type' ? option.attributeTypeName : undefined,
+      attributeDefId:
+        option.type === 'attribute_def' ? option.attributeDefId : undefined
+    } as MappedField
+
+    setMappedFields(state => ({
+      ...state,
+      [column]: field
+    }))
+  }
+
+  const handleRemoveAttribute = (column: string) => {
+    setMappedFields(state => ({
+      ...state,
+      [column]: null
+    }))
+  }
+
+  const handleSelectLabel = (column: string, label: string) => {
+    return setMappedFields(state => ({
       ...state,
       [column]: {
-        index: option.index,
-        type: option.type,
-        attributeTypeName:
-          option.type === 'attribute_type' && option.attributeTypeName,
-        attributeDefId: option.type === 'attribute_def' && option.attributeDefId
+        ...(state[column] as MappedField),
+        label
       }
     }))
   }
 
-  console.log('>> MAPPED: ', fields)
+  const handleRemoveLabel = (column: string) => {
+    return setMappedFields(state => ({
+      ...state,
+      [column]: {
+        ...(state[column] as MappedField),
+        label: undefined
+      }
+    }))
+  }
 
   return (
-    <>
-      <Grid container spacing={1} className={cn(classes.row, 'heading')}>
+    <div>
+      <Grid container spacing={5} className={cn(classes.row, 'heading')}>
         <Grid item xs={4}>
           <Typography variant="subtitle1">Columns Label From CSV</Typography>
         </Grid>
@@ -59,28 +93,30 @@ export function MapFields() {
       </Grid>
 
       {getCsvColumns(csv).map((column, key) => (
-        <Grid key={key} container spacing={1} className={classes.row}>
+        <Grid key={key} container spacing={5} className={classes.row}>
           <Grid item xs={4}>
             {column}
           </Grid>
 
           <Grid item xs={4}>
             <AttributeDropdown
-              fields={fields}
+              fields={mappedFields}
               column={column}
-              onSelect={option => handleSelect(column, option)}
+              onSelect={option => handleSelectAttribute(column, option)}
+              onRemove={() => handleRemoveAttribute(column)}
             />
           </Grid>
 
           <Grid item xs={4}>
             <LabelDropdown
-              fields={fields}
+              fields={mappedFields}
               column={column}
-              onSelect={() => {}}
+              onSelect={label => handleSelectLabel(column, label)}
+              onRemove={() => handleRemoveLabel(column)}
             />
           </Grid>
         </Grid>
       ))}
-    </>
+    </div>
   )
 }

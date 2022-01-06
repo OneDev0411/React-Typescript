@@ -18,10 +18,14 @@ interface CompareMatches {
 
 export function useAutoMapFields(
   csv: Nullable<ParseResult<unknown>>
-): [Record<string, MappedField>, typeof setList, Nullable<'doing' | 'done'>] {
+): [
+  Record<string, Nullable<MappedField>>,
+  typeof setList,
+  Nullable<'doing' | 'done'>
+] {
   const attributes = useAttributes()
   const getAttributeLabel = useAttributeLabel()
-  const [list, setList] = useState<Record<string, MappedField>>({})
+  const [list, setList] = useState<Record<string, Nullable<MappedField>>>({})
   const [status, setStatus] = useState<Nullable<'doing' | 'done'>>(null)
 
   const findRelatedAttribute = useCallback(
@@ -71,24 +75,23 @@ export function useAutoMapFields(
 
     setStatus('doing')
 
-    const list = getCsvColumns(csv).reduce<Record<string, MappedField>>(
-      (list, column) => {
-        const match = findRelatedAttribute(column)
+    const list = getCsvColumns(csv).reduce<
+      Record<string, Nullable<MappedField>>
+    >((list, column) => {
+      const match = findRelatedAttribute(column)
 
-        if (!match) {
-          return list
-        }
+      if (!match) {
+        return list
+      }
 
-        return {
-          ...list,
-          [column]: {
-            index: 0,
-            ...match.attribute
-          }
+      return {
+        ...list,
+        [column]: {
+          index: 0,
+          ...match.attribute
         }
-      },
-      {}
-    )
+      }
+    }, {})
 
     setStatus('done')
     setList(list)

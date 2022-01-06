@@ -4,6 +4,8 @@ import { Box, Button, Theme, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { useDropzone } from 'dropzone'
 
+import { Owner } from '../../components/Owner'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {},
@@ -22,9 +24,10 @@ const useStyles = makeStyles(
 
 interface Props {
   onSelectFile: (file: File) => void
+  onChangeOwner: (user: IUser) => void
 }
 
-export function SelectFile({ onSelectFile }: Props) {
+export function SelectFile({ onSelectFile, onChangeOwner }: Props) {
   const classes = useStyles()
 
   const onDrop = useCallback(
@@ -41,6 +44,7 @@ export function SelectFile({ onSelectFile }: Props) {
   return (
     <Box
       display="flex"
+      flexDirection="column"
       alignItems="center"
       justifyContent="center"
       className={classes.root}
@@ -66,6 +70,10 @@ export function SelectFile({ onSelectFile }: Props) {
         </Box>
 
         <Button color="secondary">Select a file</Button>
+      </Box>
+
+      <Box my={2}>
+        <Owner onSelect={onChangeOwner} />
       </Box>
     </Box>
   )

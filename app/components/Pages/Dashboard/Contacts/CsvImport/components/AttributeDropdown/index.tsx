@@ -12,7 +12,8 @@ import {
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 
 import { useAttributeLabel } from '../../hooks/use-attribute-label'
-import type { AttributeOption, IAttribute, MappedField } from '../../types'
+import type { AttributeOption, MappedField } from '../../types'
+import { DropdownButton } from '../DropdownButton'
 
 import { useOptions } from './hooks/use-attribute-options'
 
@@ -41,12 +42,18 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  fields: Record<string, MappedField>
+  fields: Record<string, Nullable<MappedField>>
   column: string
   onSelect: (attribute: AttributeOption) => void
+  onRemove: () => void
 }
 
-export function AttributeDropdown({ fields, column, onSelect }: Props) {
+export function AttributeDropdown({
+  fields,
+  column,
+  onSelect,
+  onRemove
+}: Props) {
   const classes = useStyles()
   const getAttributeLabel = useAttributeLabel()
 
@@ -58,7 +65,14 @@ export function AttributeDropdown({ fields, column, onSelect }: Props) {
   return (
     <BaseDropdown
       renderDropdownButton={buttonProps => (
-        <div {...buttonProps}>{getAttributeLabel(field)}</div>
+        <div>
+          <DropdownButton
+            buttonProps={buttonProps}
+            label={getAttributeLabel(field) || 'Select an attribute'}
+            hasValue={!!field}
+            onRemove={onRemove}
+          />
+        </div>
       )}
       renderMenu={({ close }) => (
         <Box

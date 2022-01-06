@@ -1,12 +1,14 @@
-import { useAttributeDefs } from '../../hooks/use-attribute-defs'
+import { useAttributeDefinition } from '../../hooks/use-attribute-definition'
 import type { IAttribute } from '../../types'
 
-export function useLabelOptions(attribute: IAttribute) {
-  const { byId } = useAttributeDefs()
+export function useLabelOptions(attribute: Nullable<IAttribute>) {
+  const getAttributeDefinitions = useAttributeDefinition()
 
-  if (!attribute || attribute.type === 'attribute_type') {
+  if (!attribute) {
     return []
   }
 
-  return byId[attribute.attributeDefId].labels ?? []
+  const definition = getAttributeDefinitions(attribute)
+
+  return definition.labels ?? []
 }

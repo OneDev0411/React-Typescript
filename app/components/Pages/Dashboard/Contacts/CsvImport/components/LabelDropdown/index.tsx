@@ -4,16 +4,18 @@ import { BaseDropdown } from '@app/views/components/BaseDropdown'
 
 import { useAttributeDefs } from '../../hooks/use-attribute-defs'
 import type { IAttribute, MappedField } from '../../types'
+import { DropdownButton } from '../DropdownButton'
 
 import { useLabelOptions } from './use-label-options'
 
 interface Props {
-  fields: Record<string, MappedField>
+  fields: Record<string, Nullable<MappedField>>
   column: string
-  onSelect: (label: Nullable<string>) => void
+  onSelect: (label: string) => void
+  onRemove: () => void
 }
 
-export function LabelDropdown({ fields, column, onSelect }: Props) {
+export function LabelDropdown({ fields, column, onSelect, onRemove }: Props) {
   const field = fields[column]
 
   const { byId } = useAttributeDefs()
@@ -34,7 +36,12 @@ export function LabelDropdown({ fields, column, onSelect }: Props) {
   return (
     <BaseDropdown
       renderDropdownButton={buttonProps => (
-        <div {...buttonProps}>Select Label</div>
+        <DropdownButton
+          buttonProps={buttonProps}
+          label={field.label ?? 'Select a label'}
+          hasValue={!!field?.label}
+          onRemove={onRemove}
+        />
       )}
       renderMenu={({ close }) => (
         <Box>
