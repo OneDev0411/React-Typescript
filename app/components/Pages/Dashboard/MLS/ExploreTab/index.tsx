@@ -10,6 +10,7 @@ import { confirmation } from '@app/store_actions/confirmation'
 import { getLocationErrorMessage } from '@app/utils/map'
 import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
 import GlobalPageLayout from '@app/views/components/GlobalPageLayout'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 
 import {
   FILTERS_INITIAL_VALUES,
@@ -53,6 +54,7 @@ interface Props extends WithRouterProps {
 
 function ExploreTab({ isWidget, user, location }: Props) {
   const classes = useStyles()
+  const activeTeam = useUnsafeActiveTeam()
 
   const [filtersStorageValue, setFiltersStorageValue] = useLocalStorage<
     Nullable<string>
@@ -63,8 +65,8 @@ function ExploreTab({ isWidget, user, location }: Props) {
 
   const hasUrlQuery = !!(brokerageQuery || searchQuery)
 
-  const userLastBrowsingLocation = getUserLastBrowsingLocation(user)
-  const userActiveSort = parseSortIndex(getDefaultSort(user))
+  const userLastBrowsingLocation = getUserLastBrowsingLocation(activeTeam)
+  const userActiveSort = parseSortIndex(getDefaultSort(activeTeam))
 
   const mapInitialLocation =
     userLastBrowsingLocation?.center && userLastBrowsingLocation?.zoom

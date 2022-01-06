@@ -7,6 +7,7 @@ import { WithRouterProps } from 'react-router'
 import { confirmation } from '@app/store_actions/confirmation'
 import { getLocationErrorMessage } from '@app/utils/map'
 import GlobalPageLayout from '@app/views/components/GlobalPageLayout'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 
 import { USER_LOCATION_ZOOM_LEVEL } from '../constants'
 import { ListingsUiContext } from '../context'
@@ -38,9 +39,10 @@ interface Props extends WithRouterProps {
 
 function FavoritesTab({ isWidget, user }: Props) {
   const classes = useStyles()
+  const activeTeam = useUnsafeActiveTeam()
 
   const reduxDispatch = useDispatch()
-  const userLastBrowsingLocation = getUserLastBrowsingLocation(user)
+  const userLastBrowsingLocation = getUserLastBrowsingLocation(activeTeam)
 
   const initialState = {
     map: userLastBrowsingLocation

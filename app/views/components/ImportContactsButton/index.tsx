@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, Fragment } from 'react'
 
 import { Link, MenuItem, Typography, Grid } from '@material-ui/core'
-import { connect, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link as RouterLink } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
@@ -15,11 +15,12 @@ import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
 import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import OutlookIcon from 'components/SvgIcons/Outlook/IconOutlook'
 import { OAuthProvider } from 'constants/contacts'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 import { putUserSetting } from 'models/user/put-user-setting'
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-import { getUserSettingsInActiveTeam } from 'utils/user-teams'
+import { getSettingsInActiveTeam } from 'utils/user-teams'
 
 import { ConnectedAccount } from './ConnectedAccount'
 import { useStyles } from './styles'
@@ -29,25 +30,25 @@ export const IMPORT_TOOLTIP_VISITED_SETTINGS_KEY = 'import_tooltip_visited'
 const TOOLTIP_WIDTH = 150
 
 interface Props {
-  accounts: IOAuthAccount[]
-  user: IUser
   onFetchedOAuthAccounts?: () => void
   hasCSVButton?: boolean
   tooltip?: string
 }
 
 export function ImportContactsButton({
-  accounts,
-  user,
   onFetchedOAuthAccounts,
   hasCSVButton = false,
   tooltip = 'Connect to Google or Outlook'
 }: Props) {
   const dispatch = useDispatch()
+  const activeTeam = useUnsafeActiveTeam()
+  const accounts: IOAuthAccount[] = useSelector((state: IAppState) =>
+    selectAllConnectedAccounts(state.contacts.oAuthAccounts)
+  )
   const classes = useStyles()
 
   const isTooltipOpen =
-    !getUserSettingsInActiveTeam(user, IMPORT_TOOLTIP_VISITED_SETTINGS_KEY) &&
+    !getSettingsInActiveTeam(activeTeam, IMPORT_TOOLTIP_VISITED_SETTINGS_KEY) &&
     accounts.length === 0
 
   useEffect(() => {
@@ -212,11 +213,4 @@ export function ImportContactsButton({
   )
 }
 
-function mapStateToProps(state: IAppState) {
-  return {
-    accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts),
-    user: state.user
-  }
-}
-
-export default connect(mapStateToProps)(ImportContactsButton)
+export default ImportContactsButton

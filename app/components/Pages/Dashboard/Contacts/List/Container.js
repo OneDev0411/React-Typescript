@@ -42,7 +42,7 @@ import {
   clearImportingGoogleContacts,
   getNewConnectedGoogleAccount
 } from 'utils/oauth-provider'
-import { viewAs, getUserSettingsInActiveTeam } from 'utils/user-teams'
+import { viewAs, getActiveTeamSetting } from 'utils/user-teams'
 
 import { Board } from '../Board'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
@@ -95,7 +95,7 @@ class ContactsList extends React.Component {
     const globalButtonDispatch = this.context
 
     const { parkedContactsCount } = this.state
-    const { user, fetchTags, getContactsTags } = this.props
+    const { getSetting, fetchTags, getContactsTags } = this.props
 
     this.loadTableData()
 
@@ -110,8 +110,7 @@ class ContactsList extends React.Component {
     this.getDuplicateClusterCount()
     this.setSelectedShortcutFilter()
 
-    const viewMode =
-      getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) || 'table'
+    const viewMode = getSetting(VIEW_MODE_FIELD_SETTING_KEY, 'table')
 
     this.setState({ viewMode })
 
@@ -161,13 +160,10 @@ class ContactsList extends React.Component {
 
   loadTableData = () => {
     const { searchInputValue } = this.state
-    const { user } = this.props
+    const { getSetting } = this.props
 
     // load previous sorting settings from active team
-    const sortFieldSetting = getUserSettingsInActiveTeam(
-      user,
-      SORT_FIELD_SETTING_KEY
-    )
+    const sortFieldSetting = getSetting(SORT_FIELD_SETTING_KEY)
 
     const relevanceSortKey = '-last_touch_rank'
     const sortOrder = searchInputValue
@@ -450,15 +446,14 @@ class ContactsList extends React.Component {
 
   handleSearch = value => {
     const { sortOrder } = this.state
+    const { getSetting } = this.props
     const relevanceSortKey = '-last_touch_rank'
     let order = sortOrder
 
     if (value) {
       order = relevanceSortKey
     } else if (order === relevanceSortKey) {
-      order =
-        getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ??
-        '-last_touch'
+      order = getSetting(SORT_FIELD_SETTING_KEY, '-last_touch')
     }
 
     this.setState(
@@ -1044,6 +1039,7 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
     filter => filter.id === OPEN_HOUSE_FILTER_ID
   )
   const viewAsUsers = viewAs(restOfState.activeTeam ?? null)
+  const getSetting = getActiveTeamSetting(restOfState.activeTeam ?? null)
 
   return {
     tags: tags.byId,
@@ -1059,6 +1055,7 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
     list: contacts.list,
     listInfo,
     user,
+    getSetting,
     viewAsUsers,
     activeSegment: selectActiveSavedSegment(
       filterSegments,

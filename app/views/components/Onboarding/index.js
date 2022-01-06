@@ -1,4 +1,4 @@
-import React, {
+import {
   forwardRef,
   useCallback,
   useImperativeHandle,
@@ -8,11 +8,11 @@ import React, {
 
 import PropTypes from 'prop-types'
 import Joyride from 'react-joyride'
-import { connect } from 'react-redux'
 
 import { OnboardingStepCard } from 'components/Onboarding/OnboardingStepCard'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { putUserSetting } from 'models/user/put-user-setting'
-import { getUserSettingsInActiveTeam } from 'utils/user-teams'
+import { getSettingsInActiveTeam } from 'utils/user-teams'
 
 const ONBOARDING_SETTING_KEY_PREFIX = 'onboarding_'
 
@@ -24,7 +24,6 @@ Onboarding.propTypes = {
 }
 
 function Onboarding({
-  user,
   tourId,
   steps,
   onFinishIntro,
@@ -32,8 +31,9 @@ function Onboarding({
   run,
   onboardingRef
 }) {
+  const activeTeam = useUnsafeActiveTeam()
   const SETTING_KEY = `${ONBOARDING_SETTING_KEY_PREFIX}_${tourId}`
-  const alreadyShown = getUserSettingsInActiveTeam(user, SETTING_KEY)
+  const alreadyShown = getSettingsInActiveTeam(activeTeam, SETTING_KEY)
 
   const [shown, toggle] = useState(alreadyShown == null)
 
@@ -90,14 +90,8 @@ function Onboarding({
   )
 }
 
-const mapStateToProps = state => ({
-  user: state.user
-})
-
-const ConnectedOnboarding = connect(mapStateToProps)(Onboarding)
-
 export default forwardRef((props, ref) => (
-  <ConnectedOnboarding {...props} onboardingRef={ref} />
+  <Onboarding {...props} onboardingRef={ref} />
 ))
 
 function isCloseEvent({ type, action }) {

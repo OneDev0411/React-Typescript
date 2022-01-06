@@ -14,7 +14,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { selectUserUnsafe } from '@app/selectors/user'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
-import { getUserSettingsInActiveTeam } from '@app/utils/user-teams'
+import { getSettingsInActiveTeam } from '@app/utils/user-teams'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 
 import { SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY } from '../../../constants'
 
@@ -55,13 +56,14 @@ export function SaveSearchButton({ isLoading, onClick }: Props) {
   const classes = useStyles()
   const buttonRef = useRef<Nullable<HTMLButtonElement>>(null)
   const user = useSelector(selectUserUnsafe)
+  const activeTeam = useUnsafeActiveTeam()
   const dispatch = useDispatch()
 
   const [dontShow, setDontShow] = useState(false)
   const [isOpenHint, setIsOpenHint] = useState(
-    user
-      ? !getUserSettingsInActiveTeam(
-          user,
+    activeTeam
+      ? !getSettingsInActiveTeam(
+          activeTeam,
           SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY
         )
       : false

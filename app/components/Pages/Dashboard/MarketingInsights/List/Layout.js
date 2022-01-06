@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Box, Button, Chip, makeStyles } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import PageLayout from 'components/GlobalPageLayout'
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
-import { selectUser } from 'selectors/user'
-import { getUserSettingsInActiveTeam } from 'utils/user-teams'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
+import { getSettingsInActiveTeam } from 'utils/user-teams'
 
 import SortField from './SortField'
 
@@ -31,7 +31,7 @@ function InsightsLayout({
   renderContent
 }) {
   const classes = useStyles()
-  const user = useSelector(selectUser)
+  const activeTeam = useUnsafeActiveTeam()
   const dispatch = useDispatch()
   const [sortField, setSortField] = useState({
     label: 'Newest',
@@ -53,8 +53,8 @@ function InsightsLayout({
   ]
 
   useEffectOnce(() => {
-    const savedSortField = getUserSettingsInActiveTeam(
-      user,
+    const savedSortField = getSettingsInActiveTeam(
+      activeTeam,
       SORT_FIELD_INSIGHT_KEY
     )
 

@@ -2,12 +2,12 @@ export const SORT_FIELD_SETTING_KEY = 'mls_sort_field'
 export const LAST_BROWSING_LOCATION = 'mls_last_browsing_location'
 export const SORT_FIELD_DEFAULT = '-price'
 
-import { getUserSettingsInActiveTeam } from '@app/utils/user-teams'
+import { getSettingsInActiveTeam } from '@app/utils/user-teams'
 
 import { IMapPosition, Sort, SortIndex, SortPrefix, SortString } from '../types'
 
 export const sortOptions = {
-  created_at: 'Listed Date',
+  created_at: 'Listed Dateå',
   price: 'Price',
   beds: 'Bedrooms',
   baths: 'Bathrooms',
@@ -35,8 +35,8 @@ export const parseSortIndex = (sort: SortString): Sort => {
   }
 }
 
-export const getDefaultSort = (user: IUser): SortString => {
-  const sortIndex = getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY)
+export const getDefaultSort = (team: Nullable<IUserTeam>): SortString => {
+  const sortIndex = getSettingsInActiveTeam(team, SORT_FIELD_SETTING_KEY)
 
   return (
     typeof sortIndex === 'string' ? sortIndex : SORT_FIELD_DEFAULT
@@ -50,9 +50,9 @@ export const sortByIndex = (
   ascending: boolean
 ) => (ascending ? a[index] - b[index] : b[index] - a[index])
 
-export const getUserLastBrowsingLocation = (user: IUser) => {
-  return getUserSettingsInActiveTeam(
-    user,
+export const getUserLastBrowsingLocation = (team: Nullable<IUserTeam>) => {
+  return getSettingsInActiveTeam(
+    team,
     LAST_BROWSING_LOCATION
   ) as Optional<IMapPosition>
 }
