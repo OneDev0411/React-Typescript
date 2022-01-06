@@ -11,5 +11,6 @@ export default {
   live_by_api_key: process.env.LIVE_BY_API_KEY!,
   my_marketing_matters_duns: process.env.MY_MARKETING_MATTERS_DUNS!,
   my_marketing_matters_shared_secret:
-    process.env.MY_MARKETING_MATTERS_SHARED_SECRET!
+    process.env.MY_MARKETING_MATTERS_SHARED_SECRET!,
+  prerender_token: process.env.PRERENDER_TOKEN!
 }

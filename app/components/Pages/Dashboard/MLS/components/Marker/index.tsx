@@ -100,6 +100,7 @@ interface Props {
   bedroomCount: Nullable<number>
   coverImageUrl: string
   propertyType: string
+  mlsSource?: string
   zoom?: number
   onClick?: (id: UUID) => void
 }
@@ -117,6 +118,7 @@ const Marker = ({
   bedroomCount,
   coverImageUrl,
   propertyType,
+  mlsSource,
   onClick = noop,
   zoom = MINIMAL_MARKER_ZOOM_LEVEL
 }: Props) => {
@@ -172,6 +174,7 @@ const Marker = ({
             bedroomCount={bedroomCount}
             coverImageUrl={coverImageUrl}
             propertyType={propertyType}
+            mlsSource={mlsSource}
           />
         </Popper>
       )}

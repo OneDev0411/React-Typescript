@@ -150,6 +150,11 @@ export function hasUserAccessToBrandSettings(user: IUser | null): boolean {
   return isAdmin(user) && hasUserAccessToMarketingCenter(user)
 }
 
+export function hasUserAccessToUploadBrandAssets(user: IUser | null): boolean {
+  // User should be an admin and should have access to MC
+  return isAdmin(user) && hasUserAccessToMarketingCenter(user)
+}
+
 export function isActiveTeamTraining(user: IUser | null): boolean {
   const activeTeam: IUserTeam | null = getActiveTeam(user)
 

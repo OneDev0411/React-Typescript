@@ -11,11 +11,13 @@ import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 import { Section } from '../components/Section'
 
 function getDocumentLastState(instance) {
-  return instance && truncateTextFromMiddle(instance.branch, 50)
+  return (
+    instance && truncateTextFromMiddle(instance.branch ?? instance.file.url, 20)
+  )
 }
 
 function handleCopyUrl(props) {
-  copy(props.instance.branch)
+  copy(props.instance.branch ?? props.instance.file.url)
 
   props.notify({
     message: 'Link Copied',

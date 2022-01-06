@@ -27,6 +27,10 @@ interface Props {
   mapIsShown: boolean
   isWidget: boolean
   listingStates: IListingUIStates
+
+  // TODO: remove this after refactoring fav/saved tab
+  // related to https://gitlab.com/rechat/web/-/issues/4864
+  unselectOnToggleFavorite?: boolean
   onToggleLike?: (id: UUID) => void
   onChangeHoverState?: (id: UUID, hover: boolean) => void
   onToggleListingModal?: (id: UUID, isOpen: boolean) => void
@@ -37,6 +41,7 @@ export const CardsView = ({
   mapIsShown,
   isWidget,
   listingStates,
+  unselectOnToggleFavorite = false,
   onToggleLike = noop,
   onChangeHoverState = noop,
   onToggleListingModal = noop
@@ -105,6 +110,7 @@ export const CardsView = ({
               clicked={listingStates.click === listing.id}
               reduxToggleFavorite={false} // TODO: remove this after refactoring fav/saved tab
               onToggleLike={handleToggleLike}
+              unselectOnToggleFavorite={unselectOnToggleFavorite}
               selected={selections.some(
                 (item: ICompactListing) => item.id === listing.id
               )}
