@@ -27,11 +27,23 @@ function SuperCampaignWithEnrollmentCard({
 
   const closePreviewDrawer = () => setIsPreviewOpen(false)
 
+  const getBestDescriptionLineCount = () => {
+    if (hasManageAccess) {
+      return 6
+    }
+
+    if (enrollment) {
+      return 3
+    }
+
+    return 4
+  }
+
   return (
     <>
       <SuperCampaignCard
         superCampaign={superCampaign}
-        descriptionLineCount={enrollment || hasManageAccess ? 3 : 4}
+        descriptionLineCount={getBestDescriptionLineCount()}
         to={
           hasManageAccess
             ? `/dashboard/insights/super-campaign/${superCampaign.id}/detail?backUrl=/dashboard/marketing`

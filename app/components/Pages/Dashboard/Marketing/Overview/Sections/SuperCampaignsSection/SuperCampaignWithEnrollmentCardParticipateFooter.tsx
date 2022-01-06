@@ -20,7 +20,7 @@ function SuperCampaignWithEnrollmentCardParticipateFooter() {
         component="div"
         tabIndex={-1}
       >
-        Add Tags to Participate
+        Participate
       </Button>
     </div>
   )
