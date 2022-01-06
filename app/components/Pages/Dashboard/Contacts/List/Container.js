@@ -97,9 +97,7 @@ class ContactsList extends React.Component {
     const { parkedContactsCount } = this.state
     const { user, fetchTags, getContactsTags } = this.props
 
-    const sortOrder = this.getTeamSortOrder()
-
-    this.fetchContactsAndJumpToSelected(sortOrder)
+    this.loadTableData()
 
     if (!parkedContactsCount) {
       this.getParkedContactCount()
@@ -115,7 +113,7 @@ class ContactsList extends React.Component {
     const viewMode =
       getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) || 'table'
 
-    this.setState({ viewMode, sortOrder })
+    this.setState({ viewMode })
 
     if (globalButtonDispatch) {
       globalButtonDispatch({
@@ -159,6 +157,14 @@ class ContactsList extends React.Component {
     }
 
     setContactsListTextFilter(this.state.searchInputValue)
+  }
+
+  loadTableData = () => {
+    const sortOrder = this.getTeamSortOrder()
+
+    this.fetchContactsAndJumpToSelected(sortOrder)
+
+    this.setState({ sortOrder })
   }
 
   setSelectedShortcutFilter = () => {
@@ -488,8 +494,8 @@ class ContactsList extends React.Component {
 
     setUserSetting(SORT_FIELD_SETTING_KEY, sortOrder)
     this.setState({ sortOrder })
-
     this.handleFilterChange({}, true, sortOrder)
+
     getUserTeams(user)
   }
 
@@ -546,7 +552,7 @@ class ContactsList extends React.Component {
 
     this.setState({ isFetchingMoreContactsBefore: true })
 
-    await this.fetchList(start, true, false)
+    await this.fetchList(start, true)
 
     this.setState({ isFetchingMoreContactsBefore: false })
   }
