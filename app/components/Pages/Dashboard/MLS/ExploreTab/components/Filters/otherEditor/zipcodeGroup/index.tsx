@@ -12,10 +12,16 @@ export interface ZipcodeOption {
   title: string
 }
 
+export interface ZipCodeGroupProps {
+  hasMapDrawing?: boolean
+}
+
 export const ZipcodeGroup = ({
+  hasMapDrawing,
   filters,
   updateFilters
-}: Omit<FilterButtonDropDownProp<AlertFilters>, 'resultsCount'>) => {
+}: Omit<FilterButtonDropDownProp<AlertFilters>, 'resultsCount'> &
+  ZipCodeGroupProps) => {
   const classes = useStyles()
 
   const onZipcodeChange = (event: any, values: ZipcodeOption[]) => {
@@ -30,6 +36,7 @@ export const ZipcodeGroup = ({
   return (
     <EditorGroup title="Zipcode">
       <Autocomplete
+        disabled={hasMapDrawing}
         className={classes.select}
         classes={{ popper: 'u-scrollbar--thinner' }}
         id="zipcodes-select"
@@ -37,7 +44,7 @@ export const ZipcodeGroup = ({
         size="small"
         multiple
         limitTags={1}
-        value={mapPostcodesToOptions(filters.postal_codes)}
+        value={hasMapDrawing ? [] : mapPostcodesToOptions(filters.postal_codes)}
         filterOptions={(options, params) => {
           if (params.inputValue) {
             return [
@@ -60,6 +67,7 @@ export const ZipcodeGroup = ({
             variant="outlined"
             label=""
             placeholder="Type in a zipcode ..."
+            helperText="Depending on how you want to select an area, you can either select zipcodes or draw an area on the map"
             InputProps={{
               ...params.InputProps,
               autoComplete: 'new-password' // disable autocomplete and autofill

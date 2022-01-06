@@ -168,6 +168,7 @@ export const Filters = () => {
                 )}
                 renderDropdown={() => (
                   <OtherEditor
+                    hasMapDrawing={state.search.drawing.length > 0}
                     filters={currentFilters}
                     updateFilters={updateFilters}
                     defaultFilters={systemDefaultFilters}

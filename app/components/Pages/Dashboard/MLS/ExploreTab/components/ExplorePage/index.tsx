@@ -361,7 +361,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
               <Grid className={classes.mapCanvas}>
                 <Map
                   isWidget={isWidget}
-                  hasDrawingMode
+                  hasDrawingMode={!state.search.filters.postal_codes}
                   pin={state.pinMarker}
                   drawing={state.search.drawing}
                   onStartDrawingMode={onStartDrawingMode}

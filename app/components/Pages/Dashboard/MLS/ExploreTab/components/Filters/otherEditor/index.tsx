@@ -16,12 +16,13 @@ import { PoolGroup } from './poolGroup'
 import { SquareFootageGroup } from './squareFootageGroup'
 import { StatusGroup } from './statusGroup'
 import { YearBuiltGroup } from './yearBuiltGroup'
-import { ZipcodeGroup } from './zipcodeGroup'
+import { ZipcodeGroup, ZipCodeGroupProps } from './zipcodeGroup'
 
 export const OtherEditor = ({
+  hasMapDrawing,
   resultsCount,
   ...otherEditorProps
-}: FilterButtonDropDownProp<AlertFilters>) => {
+}: FilterButtonDropDownProp<AlertFilters> & ZipCodeGroupProps) => {
   const classes = useStyles()
   const defaultFilters = otherEditorProps.defaultFilters
   const filters = otherEditorProps.filters
@@ -87,7 +88,7 @@ export const OtherEditor = ({
           <YearBuiltGroup {...otherEditorProps} />
         )}
 
-        <ZipcodeGroup {...otherEditorProps} />
+        <ZipcodeGroup hasMapDrawing={hasMapDrawing} {...otherEditorProps} />
 
         {['Residential', 'Residential Lease'].includes(
           filters.property_types[0]
