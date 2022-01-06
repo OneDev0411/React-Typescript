@@ -508,18 +508,22 @@ class MasterField extends Component {
   }
 
   renderViewMode = () => {
-    const { currentTrigger } = this.state
+    const { currentTrigger, is_primary, value } = this.state
     const { trigger: triggerFromParent } = this.props
     const trigger = triggerFromParent || currentTrigger
+    const isDateAlreadySet = !!(
+      typeof value === 'object' &&
+      (value.month?.value || value.day?.value)
+    )
 
     return (
       <ViewMode
-        is_primary={this.state.is_primary}
+        is_primary={is_primary}
         name={this.attribute_def.name || ''}
         title={this.title}
-        value={formatValue(this.attribute_def, this.state.value)}
+        value={formatValue(this.attribute_def, value)}
         isTriggerable={this.isTriggerable}
-        isTriggerActive={Boolean(trigger)}
+        isTriggerActive={Boolean(trigger) && isDateAlreadySet}
       />
     )
   }
