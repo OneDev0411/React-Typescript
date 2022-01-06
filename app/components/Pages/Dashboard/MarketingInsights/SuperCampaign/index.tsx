@@ -11,7 +11,12 @@ function SuperCampaignList(props) {
 
   const renderContent = props => <SuperCampaignGridView {...props} />
 
-  return <Layout renderContent={props => renderContent(props)} />
+  return (
+    <Layout
+      renderContent={props => renderContent(props)}
+      hasSortFilter={false}
+    />
+  )
 }
 
 export default memo(SuperCampaignList)
