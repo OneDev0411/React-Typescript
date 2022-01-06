@@ -27,11 +27,18 @@ const useStyles = makeStyles(
   { name: 'SuperCampaignAdminList' }
 )
 
-function SuperCampaignAdminList() {
+interface SuperCampaignAdminListProps {
+  sortDir: 'ASC' | 'DESC'
+}
+
+const SORT_ASC = ['+due_at', '+updated_at', '+created_at']
+const SORT_DESC = ['-due_at', '-updated_at', '-created_at']
+
+function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
   const { isLoading, superCampaigns, setSuperCampaigns, loadMore } =
-    useGetAdminSuperCampaigns()
+    useGetAdminSuperCampaigns(sortDir === 'ASC' ? SORT_ASC : SORT_DESC)
 
   const handleSendNow = (newSuperCampaign: ISuperCampaign) =>
     setSuperCampaigns(superCampaigns =>
