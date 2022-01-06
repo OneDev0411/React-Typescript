@@ -24,7 +24,6 @@ import {
   AddTagContainer,
   AddTagInputContainer
 } from './styled'
-import SuperCampaignAdminPermission from './SuperCampaignAdminPermission'
 
 const HIGHLIGHT_SECONDS = 4
 const INVALID_TAG_PATTERN = /^\.+$/
@@ -275,7 +274,6 @@ class ManageTags extends Component {
             <Loading />
           ) : (
             <Fragment>
-              <SuperCampaignAdminPermission />
               <AddTagContainer>
                 <Description>
                   Start typing tags and hit Return/Enter to add.
