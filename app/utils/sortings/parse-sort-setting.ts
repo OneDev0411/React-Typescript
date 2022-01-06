@@ -1,4 +1,4 @@
-import { getUserSettingsInActiveTeam } from 'utils/user-teams'
+import { getSettingsInActiveTeam } from 'utils/user-teams'
 
 interface SortSetting {
   id: string
@@ -6,12 +6,15 @@ interface SortSetting {
 }
 
 export function parseSortSetting(
-  user: IUser,
+  team: Nullable<IUserTeam>,
   settingKey: string,
   defaultValue = ''
 ): SortSetting {
-  const rawSortSetting: string =
-    getUserSettingsInActiveTeam(user, settingKey) || defaultValue
+  const rawSortSetting: string = getSettingsInActiveTeam(
+    team,
+    settingKey,
+    defaultValue
+  )
 
   return rawSortSetting.startsWith('-')
     ? {

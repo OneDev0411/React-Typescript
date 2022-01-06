@@ -100,27 +100,21 @@ export function viewAs(
   return allTeamMemberIds
 }
 
-type GetSettings = (
-  team: IUserTeam,
-  includesParents?: boolean
-) => StringMap<any>
-
-export const getSettingsFromActiveTeam =
-  (getSettings: GetSettings) =>
-  (user: IUser | null, includesParents?: boolean) => {
-    const team = getActiveTeam(user)
-
+export const getActiveTeamSetting =
+  (team: Nullable<IUserTeam>) => (key: string, defaultValue?: any) => {
     if (!team) {
-      return {}
+      return defaultValue
     }
 
-    return getSettings(team, includesParents)
+    return team?.settings?.[key] ?? defaultValue
   }
 
-export const getUserSettingsInActiveTeam = (user: IUser, key: string): any => {
-  return getSettingsFromActiveTeam(team => {
-    return team?.settings?.[key]
-  })(user)
+export const getSettingsInActiveTeam = (
+  team: Nullable<IUserTeam>,
+  key: string,
+  defaultValue?: any
+): any => {
+  return getActiveTeamSetting(team)(key, defaultValue)
 }
 
 export function getActiveTeamPalette(team: IUserTeam): BrandMarketingPalette {
