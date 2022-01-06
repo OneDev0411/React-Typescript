@@ -10,6 +10,7 @@ import { Table } from 'components/Grid/Table'
 import { SortableColumn, RenderProps } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getNameInitials } from 'utils/helpers'
 import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
@@ -38,6 +39,7 @@ export function ListTable({
   onSelectAgentInfo
 }: Props) {
   const theme: Theme = useTheme()
+  const activeTeam = useUnsafeActiveTeam()
 
   const columns = [
     {
@@ -141,7 +143,11 @@ export function ListTable({
   ]
 
   const getActiveSort = () => {
-    const sort = parseSortSetting(user, SORT_FIELD_SETTING_KEY, '-listings')
+    const sort = parseSortSetting(
+      activeTeam,
+      SORT_FIELD_SETTING_KEY,
+      '-listings'
+    )
 
     return SortableColumns.find(
       col => col.value === sort.id && col.ascending === sort.ascending

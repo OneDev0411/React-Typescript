@@ -19,7 +19,7 @@ import {
   isClosedDeal,
   isPendingDeal
 } from 'deals/List/helpers/statuses'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
+import { useActiveTeam } from 'hooks/team/use-active-team'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import {
   getStatus,
@@ -27,7 +27,6 @@ import {
   getFormattedPrice
 } from 'models/Deal/helpers/context'
 import { IAppState } from 'reducers'
-import { selectUser } from 'selectors/user'
 import { sortDealsStatus } from 'utils/sort-deals-status'
 
 import onDealOpened from '../../../utils/on-deal-opened'
@@ -69,9 +68,9 @@ const Filters = {
 
 function AgentGrid(props: Props & WithRouterProps) {
   const gridClasses = useGridStyles()
-  const activeBrandId = useActiveBrandId()
+  const activeTeam = useActiveTeam()
+  const activeBrandId = activeTeam?.brand.id
 
-  const user = useSelector(selectUser)
   const isFetchingDeals = useSelector(
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
@@ -167,7 +166,7 @@ function AgentGrid(props: Props & WithRouterProps) {
       sorting={{
         columns: props.sortableColumns,
         sortBy: getGridSort(
-          user,
+          activeTeam,
           columns,
           props.location,
           SORT_FIELD_SETTING_KEY

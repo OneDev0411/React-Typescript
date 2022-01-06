@@ -12,14 +12,13 @@ import { TrProps } from '@app/views/components/Grid/Table/types'
 import Grid from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
 import { getGridSort } from 'deals/List/helpers/sorting'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
+import { useActiveTeam } from 'hooks/team/use-active-team'
 import {
   getStatus,
   getFormattedPrice,
   getPrice
 } from 'models/Deal/helpers/context'
 import { IAppState } from 'reducers'
-import { selectUser } from 'selectors/user'
 import { sortDealsStatus } from 'utils/sort-deals-status'
 
 import onDealOpened from '../../../utils/on-deal-opened'
@@ -45,13 +44,13 @@ interface Props {
 
 function BackOfficeGrid(props: Props & WithRouterProps) {
   const gridClasses = useGridStyles()
-  const activeBrandId = useActiveBrandId()
+  const activeTeam = useActiveTeam()
   const isFetchingDeals = useSelector(
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
   const deals = useSelector(({ deals }: IAppState) => deals.list)
   const roles = useSelector(({ deals }: IAppState) => deals.roles)
-  const user = useSelector(selectUser)
+  const activeBrandId = activeTeam.brand.id
   const brandChecklists = useBrandChecklists(activeBrandId)
 
   const getOffice = (deal: IDeal) => {
@@ -198,7 +197,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       sorting={{
         columns: SORTABLE_COLUMNS,
         sortBy: getGridSort(
-          user,
+          activeTeam,
           columns,
           props.location,
           SORT_FIELD_SETTING_KEY
