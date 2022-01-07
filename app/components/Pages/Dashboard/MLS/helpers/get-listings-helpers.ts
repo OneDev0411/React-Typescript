@@ -36,7 +36,6 @@ export function createValertQueryString(
 
 export function createValertOptions(
   search: ListingSearchOptions,
-  postalCodes: Nullable<string[]>,
   limit: number
 ) {
   const points =
@@ -45,10 +44,12 @@ export function createValertOptions(
       : pointFromBounds(search.bounds)
 
   return {
-    ...pickBy(search.filters), // TO remove null values
-    points,
+    // TO remove null values
+    ...pickBy(search.filters),
+    // If the criteria includes a zip code, then we should not provide points anymore.
+    // https://gitlab.com/rechat/web/-/merge_requests/2829#note_802763782
+    ...(search.filters.postal_codes?.length ? {} : { points }),
     ...(search.office ? { offices: [search.office] } : {}),
-    postal_codes: postalCodes,
     limit
   }
 }
