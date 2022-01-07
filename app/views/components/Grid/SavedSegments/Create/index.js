@@ -148,6 +148,11 @@ class SaveSegment extends React.Component {
     return selectedOption === CURRENT_SEGMENT ? 'Update list' : 'Save new list'
   }
 
+  cancelInput = () => {
+    this.setState({ newFilterName: '' })
+    this.toggleShowModal()
+  }
+
   render() {
     let areFiltersValid = true
     const { state, props } = this
@@ -215,7 +220,7 @@ class SaveSegment extends React.Component {
                 size="small"
                 appearance="outline"
                 disabled={state.isSaving}
-                onClick={this.toggleShowModal}
+                onClick={this.cancelInput}
                 style={{ marginRight: '0.5em' }}
               >
                 Cancel
