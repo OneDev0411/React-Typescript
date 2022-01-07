@@ -5,6 +5,7 @@ import {
   Theme,
   CircularProgress
 } from '@material-ui/core'
+import cn from 'classnames'
 
 import { CrmEventType } from '../../../types'
 import { EmptyState } from '../EmptyState'
@@ -14,21 +15,28 @@ import { EventHeader } from '../EventHeader'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     eventHeaderContainer: {
-      width: theme.spacing(12)
+      minWidth: theme.spacing(12),
+      maxWidth: theme.spacing(13.5)
     },
     eventsSectionContainer: {
       display: 'flex',
+      letterSpacing: '0.15px',
+      paddingLeft: theme.spacing(2),
       borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
-      paddingLeft: theme.spacing(2)
-    },
-    eventsListContainer: {
-      '& $event:nth-child(even)': {
-        backgroundColor: theme.palette.grey['50']
+      '&.isToday': {
+        borderBottom: `1px solid ${theme.palette.error.main}`
       }
     },
+    eventsListContainer: {
+      width: '100%'
+    },
     eventContainer: {
-      flexGrow: 1,
+      width: '100%',
+      flex: '1 1 auto',
       backgroundColor: '#fff',
+      '&:nth-child(even)': {
+        backgroundColor: theme.palette.grey['50']
+      },
       '&:hover': {
         backgroundColor: theme.palette.grey['100']
       }
@@ -45,8 +53,7 @@ const useStyles = makeStyles(
       top: 0,
       left: 0,
       right: 0,
-      bottom: 0,
-      padding: theme.spacing(2, 1)
+      bottom: 0
     },
     progressLoaderContainer: {
       position: 'absolute',
@@ -122,7 +129,9 @@ export function EventLoader({
         <Box>
           {rows.map((section, index) => (
             <Box
-              className={classes.eventsSectionContainer}
+              className={cn(classes.eventsSectionContainer, {
+                isToday: section.header.isToday
+              })}
               key={`${section.header.date}-${index}`}
             >
               <Box className={classes.eventHeaderContainer}>

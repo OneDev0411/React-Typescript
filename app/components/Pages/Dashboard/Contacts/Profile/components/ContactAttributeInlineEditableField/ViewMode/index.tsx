@@ -18,7 +18,8 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
+      padding: theme.spacing(0, 1),
       '&:hover $title': {
         color: theme.palette.text.primary
       }
@@ -35,7 +36,9 @@ const useStyles = makeStyles(
       width: '100%',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
+      textAlign: 'right',
       msTextOverflow: 'ellipsis',
+      textOverflow: 'ellipsis',
       color: theme.palette.grey[900]
     },
     triggerIndicator: {
