@@ -12,6 +12,10 @@ const AttributeTypes: CsvImportAttributeType[] = [
   {
     type: 'attribute_type',
     attributeTypeName: 'full_address'
+  },
+  {
+    type: 'attribute_type',
+    attributeTypeName: 'tag'
   }
 ]
 

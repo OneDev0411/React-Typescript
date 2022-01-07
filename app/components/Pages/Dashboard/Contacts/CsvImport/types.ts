@@ -3,11 +3,12 @@ export type AttributeType = 'attribute_def' | 'attribute_type'
 export declare interface IContactAttributeType {
   name: string
   label: string
-  section: string
+  section?: string
   show: boolean
   editable?: boolean
   singular: boolean
   labels: string[]
+  multivalued?: boolean
 }
 
 export type CsvImportAttributeDefinition = {
@@ -27,6 +28,7 @@ interface BaseAttributeOption {
   index: number
   disabled: boolean
   isPartner?: boolean
+  multiValued?: boolean
 }
 
 export type AttributeDefinitionOption = BaseAttributeOption &
@@ -39,4 +41,5 @@ export type MappedField = {
   index?: number
   label?: string
   isPartner?: boolean
+  multiValued?: boolean
 } & IAttribute

@@ -8,7 +8,8 @@ function normalize(field: Nullable<MappedField>) {
   const data = {
     index: field.index,
     label: field.label,
-    is_partner: field.isPartner
+    is_partner: field.isPartner,
+    multivalued: field.multiValued
   }
 
   if (field.type === 'attribute_def') {

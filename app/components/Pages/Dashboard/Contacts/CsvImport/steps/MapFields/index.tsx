@@ -46,8 +46,9 @@ export function MapFields({ setMappedFields }: Props) {
       [column]: {
         ...attribute,
         index: option.index,
+        multiValued: option.multiValued,
         isPartner: option.isPartner
-      }
+      } as MappedField
     }))
   }
 

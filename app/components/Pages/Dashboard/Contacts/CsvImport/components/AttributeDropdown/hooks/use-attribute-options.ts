@@ -7,7 +7,12 @@ import { isAttributesEqual } from '../../../helpers/is-attributes-equal'
 import { useAddressAttributes } from '../../../hooks/use-address-attributes'
 import { useAttributeDefinition } from '../../../hooks/use-attribute-definition'
 import { useAttributes } from '../../../hooks/use-attributes'
-import { IAttribute, AttributeOption, MappedField } from '../../../types'
+import {
+  IAttribute,
+  AttributeOption,
+  MappedField,
+  IContactAttributeType
+} from '../../../types'
 
 import { useAddressOptions } from './use-address-options'
 import { usePartnerOptions } from './use-partner-options'
@@ -60,12 +65,18 @@ export function useOptions(
       .map(attribute => {
         const definition = getAttributeDefinition(attribute)
 
-        return {
+        const option: AttributeOption = {
+          ...attribute,
           index: 0,
           disabled: false,
-          label: definition.label,
-          ...attribute
+          label: definition.label
         }
+
+        if (attribute.type === 'attribute_type') {
+          option.multiValued = (definition as IContactAttributeType).multivalued
+        }
+
+        return option
       })
 
     return [...list, ...addressOptions, ...partnerOptions].map(option => {
