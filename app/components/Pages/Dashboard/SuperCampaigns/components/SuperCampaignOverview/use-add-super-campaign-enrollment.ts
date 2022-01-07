@@ -20,15 +20,34 @@ export function useAddSuperCampaignEnrollment(
   ) =>
     runActionThenNotify(
       async () => {
-        const enrollments = await enrollUserInSuperCampaign(
+        const newEnrollments = await enrollUserInSuperCampaign(
           superCampaignId,
           data
         )
 
-        setSuperCampaignEnrollments(prevSuperCampaignEnrollments => [
-          ...enrollments,
-          ...prevSuperCampaignEnrollments
-        ])
+        setSuperCampaignEnrollments(prevEnrollments => {
+          return [
+            // Append the new items on the top but exclude the existing ones to avoid duplications
+            ...newEnrollments.filter(
+              newEnrollment =>
+                !prevEnrollments.find(
+                  prevEnrollment => prevEnrollment.id === newEnrollment.id
+                )
+            ),
+            // Update the existing items and replace them with a new one if there is
+            ...prevEnrollments.map(prevEnrollment => {
+              const newEnrollment = newEnrollments.find(
+                item => item.id === prevEnrollment.id
+              )
+
+              if (newEnrollment) {
+                return newEnrollment
+              }
+
+              return prevEnrollment
+            })
+          ]
+        })
       },
       'The user was enrolled successfully',
       'Something went wrong while adding the enrollment'
