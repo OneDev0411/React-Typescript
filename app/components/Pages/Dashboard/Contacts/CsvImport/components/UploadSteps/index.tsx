@@ -41,11 +41,18 @@ export function UploadSteps({ isUploadingContacts }: Props) {
         <Stepper activeStep={step} alternativeLabel>
           {[
             'Select a CSV File',
-            'Map Columns Label From CSV to Rechat Property',
+            () => (
+              <>
+                Connect <strong>Columns Label From CSV</strong> to{' '}
+                <strong>Rechat Property</strong>
+              </>
+            ),
             'Upload Contacts'
-          ].map(label => (
-            <Step key={label}>
-              <StepLabel StepIconComponent={StepIcon}>{label}</StepLabel>
+          ].map((label, index) => (
+            <Step key={index}>
+              <StepLabel StepIconComponent={StepIcon}>
+                {typeof label === 'function' ? label() : label}
+              </StepLabel>
             </Step>
           ))}
         </Stepper>

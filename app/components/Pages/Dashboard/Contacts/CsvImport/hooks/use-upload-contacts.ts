@@ -30,9 +30,7 @@ export function useUploadContacts(
 
     const fileData = await uploadCsvFile(file!)
 
-    await importCsv(fileData.id, owner.id, normalizeMappedFields(mappedFields))
-
-    setIsUploadingContacts(false)
+    importCsv(fileData.id, owner.id, normalizeMappedFields(mappedFields))
   }
 
   useEffect(() => {
@@ -44,6 +42,20 @@ export function useUploadContacts(
 
     setError(error)
   }, [mappedFields])
+
+  useEffect(() => {
+    window.socket.on('contact:import', ({ state }) => {
+      setIsUploadingContacts(false)
+      notify({
+        status: 'success',
+        message: 'We upload the list to your contacts.'
+      })
+    })
+
+    return () => {
+      window.socket.off('contact:import')
+    }
+  }, [notify])
 
   return [uploadContacts, isUploadingContacts, error]
 }
