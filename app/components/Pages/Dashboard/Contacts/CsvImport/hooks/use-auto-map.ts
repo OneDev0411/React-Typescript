@@ -32,13 +32,15 @@ export function useAutoMapFields(
     (column: string) => {
       const matches: CompareMatches[] = []
 
+      const columnName = column
+        .trim()
+        .toLowerCase()
+        .replaceAll(/[^a-zA-Z0-9 ]/gi, '')
+
       attributes.some(attribute => {
         const label = getAttributeDefinition(attribute).label
 
-        const rate = compareTwoStrings(
-          column.trim().toLowerCase(),
-          label.toLowerCase()
-        )
+        const rate = compareTwoStrings(columnName, label.toLowerCase())
 
         if (rate === 0) {
           return false

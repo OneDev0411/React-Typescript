@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { Box, Button, makeStyles, Theme } from '@material-ui/core'
 
@@ -39,7 +39,9 @@ export default function CsvImport() {
   const classes = useStyles()
   const [file, setFile] = useState<Nullable<File>>(null)
   const [owner, setOwner] = useOwner()
-  const parsedCsv = useParseCsv(file)
+  const [parsedCsv, csvError] = useParseCsv(file, {
+    onError: useCallback(() => setFile(null), [])
+  })
   const [mappedFields, setMappedFields] = useAutoMapFields(parsedCsv)
   const [uploadContacts, isUploadingContacts] = useUploadContacts(
     owner,
@@ -76,12 +78,14 @@ export default function CsvImport() {
                       onChangeOwner={setOwner}
                     />
                   )}
-                  {file && <MapFields setMappedFields={setMappedFields} />}
+                  {file && !csvError && (
+                    <MapFields setMappedFields={setMappedFields} />
+                  )}
                 </>
               )}
             </Box>
 
-            {file && !isUploadingContacts && (
+            {file && !isUploadingContacts && !csvError && (
               <Box
                 display="flex"
                 alignItems="center"
