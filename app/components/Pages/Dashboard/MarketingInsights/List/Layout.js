@@ -29,7 +29,8 @@ function InsightsLayout({
   sentCount = 0,
   scheduledCount = 0,
   onCreateEmail = noop,
-  renderContent
+  renderContent,
+  hasSortFilter = true
 }) {
   const classes = useStyles()
   const user = useSelector(selectUser)
@@ -114,18 +115,20 @@ function InsightsLayout({
                 value={to}
               />
             ))}
-            actions={[
-              <Tab
-                key="sort-field"
-                label={
-                  <SortField
-                    component="div"
-                    sortLabel={sortField.label}
-                    onChange={handleSortChange}
-                  />
-                }
-              />
-            ]}
+            actions={
+              hasSortFilter && [
+                <Tab
+                  key="sort-field"
+                  label={
+                    <SortField
+                      component="div"
+                      sortLabel={sortField.label}
+                      onChange={handleSortChange}
+                    />
+                  }
+                />
+              ]
+            }
           />
 
           <Box mt={1.5} flex="1 1 auto">

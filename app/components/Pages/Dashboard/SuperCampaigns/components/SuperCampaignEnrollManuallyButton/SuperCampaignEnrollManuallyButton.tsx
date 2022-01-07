@@ -3,6 +3,7 @@ import { useCallback } from 'react'
 import { Button, makeStyles, Typography, Link } from '@material-ui/core'
 import { mdiPlus } from '@mdi/js'
 import classNames from 'classnames'
+import pluralize from 'pluralize'
 
 import useSafeState from '@app/hooks/use-safe-state'
 import getSuperCampaignEligibleAgents from '@app/models/super-campaign/get-super-campaign-eligible-agents'
@@ -10,6 +11,8 @@ import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { Agent } from '@app/views/components/TeamAgents/types'
 import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
+
+import { useSuperCampaignAvailableAgentCount } from './use-super-campaign-available-agent-count'
 
 const useStyles = makeStyles(
   theme => ({
@@ -32,13 +35,17 @@ interface SuperCampaignEnrollManuallyButtonProps {
   superCampaignId: UUID
   superCampaignTags: ISuperCampaign<'template_instance'>['tags']
   onEnroll: (data: ISuperCampaignEnrollmentInput[]) => Promise<void>
+  enrolledAgentCount: number
+  eligibleBrands: Nullable<string[]>
 }
 
 function SuperCampaignEnrollManuallyButton({
   className,
   superCampaignId,
   superCampaignTags,
-  onEnroll
+  onEnroll,
+  enrolledAgentCount,
+  eligibleBrands
 }: SuperCampaignEnrollManuallyButtonProps) {
   const classes = useStyles()
   const [isSaving, setIsSaving] = useSafeState(false)
@@ -69,23 +76,35 @@ function SuperCampaignEnrollManuallyButton({
     [superCampaignId]
   )
 
+  const availableAgentCount = useSuperCampaignAvailableAgentCount(
+    teamAgentsModelFn,
+    enrolledAgentCount,
+    eligibleBrands
+  )
+
+  if (availableAgentCount < 1) {
+    return null
+  }
+
   return (
     <>
       <div className={classNames(classes.root, className)}>
-        <Typography variant="body2">
-          {/* TODO: Use the real user`s count instead of the Some word below. */}
-          Some users did not meet the criteria to enroll in this campaign.
-          {/* TODO: Fix the link below */}
-          <Link
-            className={classes.link}
-            color="primary"
-            href="#"
-            target="_blank"
-            rel="noopener"
-          >
-            Learn More
-          </Link>
-        </Typography>
+        {
+          <Typography variant="body2">
+            {pluralize('user', availableAgentCount, true)} did not meet the
+            criteria to enroll in this campaign.
+            {/* TODO: Fix the link below */}
+            <Link
+              className={classes.link}
+              color="primary"
+              href="#"
+              target="_blank"
+              rel="noopener"
+            >
+              Learn More
+            </Link>
+          </Typography>
+        }
         <Button
           color="primary"
           startIcon={<SvgIcon path={mdiPlus} size={muiIconSizes.small} />}

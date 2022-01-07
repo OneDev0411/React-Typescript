@@ -178,11 +178,12 @@ export const PopoverContactTagSelector = ({
               variant: 'outlined',
               size: 'small'
             }}
-            textFieldProps={{
+            textFieldProps={params => ({
+              ...params,
               autoFocus: true,
               variant: 'outlined',
               className: classes.textField
-            }}
+            })}
             value={value}
             onChange={handleChange}
           />

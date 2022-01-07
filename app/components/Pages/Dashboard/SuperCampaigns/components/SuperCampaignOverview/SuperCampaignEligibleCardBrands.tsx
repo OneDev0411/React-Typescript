@@ -1,6 +1,8 @@
 import { Button } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
 import useSafeState from '@app/hooks/use-safe-state'
+import { selectActiveBrandId } from '@app/selectors/brand'
 import { MultiSelectionBrandSelectorDrawer } from '@app/views/components/BrandSelector'
 
 import { isSuperCampaignReadOnly } from '../../helpers'
@@ -9,6 +11,7 @@ import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 import { useUpdateSuperCampaignEligibility } from './use-update-super-campaign-eligibility'
 
 function SuperCampaignEligibleCardBrands() {
+  const activeBrandId = useSelector(selectActiveBrandId)
   const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useSafeState(false)
 
   const { superCampaign, setSuperCampaign } = useSuperCampaignDetail()
@@ -52,6 +55,7 @@ function SuperCampaignEligibleCardBrands() {
           onClose={closeBrandSelector}
           onSave={handleSelectedBrandSave}
           drawerTitle="Select Offices or Teams"
+          brandSelectorProps={{ rootBrandId: activeBrandId }}
         />
       )}
     </>
