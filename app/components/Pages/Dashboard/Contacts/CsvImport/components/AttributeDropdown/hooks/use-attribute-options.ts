@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react'
 
 import Fuse from 'fuse.js'
 
+import { convertOptionToAttribute } from '../../../helpers/convert-option-to-attribute'
 import { isAttributesEqual } from '../../../helpers/is-attributes-equal'
 import { useAddressAttributes } from '../../../hooks/use-address-attributes'
 import { useAttributeDefinition } from '../../../hooks/use-attribute-definition'
@@ -68,12 +69,7 @@ export function useOptions(
       })
 
     return [...list, ...addressOptions, ...partnerOptions].map(option => {
-      const attribute = {
-        type: option.type,
-        attributeTypeName:
-          option.type === 'attribute_type' && option.attributeTypeName,
-        attributeDefId: option.type === 'attribute_def' && option.attributeDefId
-      } as IAttribute
+      const attribute = convertOptionToAttribute(option)!
 
       return {
         ...option,

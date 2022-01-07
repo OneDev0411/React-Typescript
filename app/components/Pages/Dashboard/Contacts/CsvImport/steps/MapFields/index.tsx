@@ -5,6 +5,7 @@ import cn from 'classnames'
 
 import { AttributeDropdown } from '../../components/AttributeDropdown'
 import { LabelDropdown } from '../../components/LabelDropdown'
+import { convertOptionToAttribute } from '../../helpers/convert-option-to-attribute'
 import { getCsvColumns } from '../../helpers/get-csv-columns'
 import { useImportCsv } from '../../hooks/use-import-csv'
 import { AttributeOption, MappedField } from '../../types'
@@ -34,18 +35,19 @@ export function MapFields({ setMappedFields }: Props) {
   const { csv, mappedFields } = useImportCsv()
 
   const handleSelectAttribute = (column: string, option: AttributeOption) => {
-    const field = {
-      index: option.index,
-      type: option.type,
-      attributeTypeName:
-        option.type === 'attribute_type' ? option.attributeTypeName : undefined,
-      attributeDefId:
-        option.type === 'attribute_def' ? option.attributeDefId : undefined
-    } as MappedField
+    const attribute = convertOptionToAttribute(option)
+
+    if (!attribute) {
+      return null
+    }
 
     setMappedFields(state => ({
       ...state,
-      [column]: field
+      [column]: {
+        ...attribute,
+        index: option.index,
+        isPartner: option.isPartner
+      }
     }))
   }
 

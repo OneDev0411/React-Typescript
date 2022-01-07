@@ -38,4 +38,5 @@ export type AttributeOption = AttributeDefinitionOption | AttributeTypeOption
 export type MappedField = {
   index?: number
   label?: string
+  isPartner?: boolean
 } & IAttribute

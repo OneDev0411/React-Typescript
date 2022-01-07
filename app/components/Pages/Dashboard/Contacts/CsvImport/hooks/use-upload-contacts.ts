@@ -30,13 +30,7 @@ export function useUploadContacts(
 
     const fileData = await uploadCsvFile(file!)
 
-    const result = await importCsv(
-      fileData.id,
-      owner.id,
-      normalizeMappedFields(mappedFields)
-    )
-
-    console.log(fileData, result)
+    await importCsv(fileData.id, owner.id, normalizeMappedFields(mappedFields))
 
     setIsUploadingContacts(false)
   }
