@@ -1,6 +1,6 @@
 import { useQuery } from 'hooks/query'
 
-import * as keys from '../query-keys'
+import * as keys from '../query-keys/contact'
 
 import { getContact } from './index'
 
