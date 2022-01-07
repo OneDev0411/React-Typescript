@@ -9,7 +9,10 @@ import useSafeState from '@app/hooks/use-safe-state'
 import getSuperCampaignEligibleAgents from '@app/models/super-campaign/get-super-campaign-eligible-agents'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-import { Agent } from '@app/views/components/TeamAgents/types'
+import type {
+  Agent,
+  NormalizedBrand
+} from '@app/views/components/TeamAgents/types'
 import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
 
 import { useSuperCampaignAvailableAgentCount } from './use-super-campaign-available-agent-count'
@@ -37,6 +40,10 @@ interface SuperCampaignEnrollManuallyButtonProps {
   onEnroll: (data: ISuperCampaignEnrollmentInput[]) => Promise<void>
   enrolledAgentCount: number
   eligibleBrands: Nullable<string[]>
+  superCampaignEnrollments: Pick<
+    ISuperCampaignEnrollment<'user' | 'brand'>,
+    'user' | 'brand' | 'deleted_at'
+  >[]
 }
 
 function SuperCampaignEnrollManuallyButton({
@@ -45,7 +52,8 @@ function SuperCampaignEnrollManuallyButton({
   superCampaignTags,
   onEnroll,
   enrolledAgentCount,
-  eligibleBrands
+  eligibleBrands,
+  superCampaignEnrollments
 }: SuperCampaignEnrollManuallyButtonProps) {
   const classes = useStyles()
   const [isSaving, setIsSaving] = useSafeState(false)
@@ -80,6 +88,28 @@ function SuperCampaignEnrollManuallyButton({
     teamAgentsModelFn,
     enrolledAgentCount,
     eligibleBrands
+  )
+
+  // Remove the enrolled people from the teams
+  const filterTeamsFn = useCallback(
+    (teams: NormalizedBrand[]) => {
+      const availableEnrollments = superCampaignEnrollments.filter(
+        enrollment => !enrollment.deleted_at
+      )
+
+      return teams.map(team => ({
+        ...team,
+        users: team.users.filter(
+          user =>
+            !availableEnrollments.find(
+              enrollment =>
+                enrollment.user.id === user.id &&
+                enrollment.brand.id === team.id
+            )
+        )
+      }))
+    },
+    [superCampaignEnrollments]
   )
 
   if (availableAgentCount < 1) {
@@ -124,6 +154,7 @@ function SuperCampaignEnrollManuallyButton({
           onSelectAgents={handleEnroll}
           onClose={handleCloseTeamAgentsDrawer}
           teamAgentsModelFn={teamAgentsModelFn}
+          filterTeamsFn={filterTeamsFn}
         />
       )}
     </>

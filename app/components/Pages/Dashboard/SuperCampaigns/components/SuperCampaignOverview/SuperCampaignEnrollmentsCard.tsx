@@ -66,6 +66,7 @@ function SuperCampaignEnrollmentsCard() {
               isLoading ? Number.POSITIVE_INFINITY : enrolledAgentCount
             }
             eligibleBrands={superCampaign.eligible_brands}
+            superCampaignEnrollments={superCampaignEnrollments}
           />
           <SuperCampaignCardHeader
             className={classes.title}
