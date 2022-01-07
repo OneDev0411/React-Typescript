@@ -39,25 +39,23 @@ function SuperCampaignWithEnrollmentCard({
     return 4
   }
 
-  const isAdminMode = !enrollment && hasManageAccess
-
   return (
     <>
       <SuperCampaignCard
         superCampaign={superCampaign}
         descriptionLineCount={getBestDescriptionLineCount()}
         to={
-          isAdminMode
+          hasManageAccess
             ? `/dashboard/insights/super-campaign/${superCampaign.id}/detail?backUrl=/dashboard/marketing`
             : undefined
         }
-        onClick={!isAdminMode ? openPreviewDrawer : undefined}
+        onClick={!hasManageAccess ? openPreviewDrawer : undefined}
       >
         {enrollment ? (
           <SuperCampaignWithEnrollmentCardEnrolledFooter
             superCampaignTags={enrollment.tags}
           />
-        ) : isAdminMode ? (
+        ) : hasManageAccess ? (
           <SuperCampaignWithEnrollmentCardManagementFooter />
         ) : (
           <SuperCampaignWithEnrollmentCardParticipateFooter />
