@@ -9,6 +9,8 @@ import { DateTimePicker } from '@app/views/components/DateTimePicker'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
+import { futureTimeValidator } from '../../helpers'
+
 export interface SuperCampaignDetailHeaderScheduleButtonProps {
   className: string
   isExecuted: boolean
@@ -51,12 +53,13 @@ function SuperCampaignDetailHeaderScheduleButton({
       onClose={handleChange}
       selectedDate={selectedDate}
       showTimePicker
-      defaultlSelectedDate={selectedDate}
+      defaultSelectedDate={selectedDate}
       datePickerModifiers={{
         disabled: {
           before: new Date()
         }
       }}
+      validate={futureTimeValidator}
     >
       {({ handleOpen }) => (
         <Button
