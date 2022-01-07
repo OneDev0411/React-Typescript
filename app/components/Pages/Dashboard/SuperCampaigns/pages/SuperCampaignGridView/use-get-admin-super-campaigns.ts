@@ -1,6 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react'
-
-import { useEffectOnce } from 'react-use'
+import { Dispatch, SetStateAction, useEffect, useRef } from 'react'
 
 import useAsync from '@app/hooks/use-async'
 import getAllSuperCampaign, {
@@ -15,12 +13,15 @@ interface UseGetSuperCampaign {
 }
 
 const numberOfLoadSuperCampaignInRequest: number = 50
+const initialRange: FetchRange = {
+  start: 0,
+  limit: numberOfLoadSuperCampaignInRequest
+}
 
-export function useGetAdminSuperCampaigns(): UseGetSuperCampaign {
-  const [range, setRange] = useState<FetchRange>({
-    start: 0,
-    limit: numberOfLoadSuperCampaignInRequest
-  })
+export function useGetAdminSuperCampaigns(
+  order: string[]
+): UseGetSuperCampaign {
+  const rangeRef = useRef<FetchRange>(initialRange)
   const {
     run,
     data: superCampaigns,
@@ -34,24 +35,33 @@ export function useGetAdminSuperCampaigns(): UseGetSuperCampaign {
   const loadMore = () => {
     run(async () => {
       const newRange: FetchRange = {
-        start: range.limit,
-        limit: range.limit + numberOfLoadSuperCampaignInRequest
+        start: rangeRef.current.limit,
+        limit: rangeRef.current.limit + numberOfLoadSuperCampaignInRequest
       }
-      const newLoadedSuperCampaigns = await getAllSuperCampaign(newRange)
+      const newLoadedSuperCampaigns = await getAllSuperCampaign(newRange, order)
       const newSuperCampaigns = [
         ...(superCampaigns ?? []),
         ...newLoadedSuperCampaigns
       ]
 
-      setRange(newRange)
+      rangeRef.current = newRange
 
       return newSuperCampaigns
     })
   }
 
-  useEffectOnce(() => {
-    run(async () => getAllSuperCampaign(range))
-  })
+  useEffect(() => {
+    run(async () => {
+      const loadedSuperCampaigns = await getAllSuperCampaign(
+        initialRange,
+        order
+      )
+
+      rangeRef.current = initialRange
+
+      return loadedSuperCampaigns
+    })
+  }, [run, order])
 
   return { isLoading, superCampaigns, setSuperCampaigns, loadMore }
 }

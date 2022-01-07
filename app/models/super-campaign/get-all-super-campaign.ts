@@ -6,11 +6,12 @@ export type FetchRange = {
 }
 
 async function getAllSuperCampaign(
-  range: FetchRange
+  range: FetchRange,
+  order?: string[]
 ): Promise<ISuperCampaign[]> {
   const response = await new Fetch()
     .post('/email/super-campaigns/filter')
-    .send({ ...range })
+    .send({ ...range, order })
 
   return response.body.data
 }

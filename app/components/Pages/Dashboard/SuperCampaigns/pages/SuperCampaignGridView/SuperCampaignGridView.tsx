@@ -1,14 +1,19 @@
-import { ACL } from '@app/constants/acl'
-import { useAcl } from '@app/views/components/Acl/use-acl'
-
 import SuperCampaignAdminList from './SuperCampaignAdminList'
 import SuperCampaignAgentList from './SuperCampaignAgentList'
 
-function SuperCampaignGridView() {
-  const isAdmin = useAcl(ACL.ADMIN)
+interface SuperCampaignGridViewProps {
+  isAdmin: boolean
+  sortBy: { ascending: boolean }
+}
 
+function SuperCampaignGridView({
+  isAdmin,
+  sortBy
+}: SuperCampaignGridViewProps) {
   if (isAdmin) {
-    return <SuperCampaignAdminList />
+    return (
+      <SuperCampaignAdminList sortDir={sortBy.ascending ? 'ASC' : 'DESC'} />
+    )
   }
 
   return <SuperCampaignAgentList />
