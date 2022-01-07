@@ -71,6 +71,7 @@ function SuperCampaignTemplateEditor({
       }
       actionButtonsDisabled={isLoading}
       onSave={handleSave}
+      templatePurpose="ForCampaigns"
     />
   )
 }

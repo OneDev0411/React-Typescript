@@ -3,7 +3,6 @@ export const LISTINGS_BLOCK_CATEGORY = 'Listings'
 export const ARTICLES_BLOCK_CATEGORY = 'Articles'
 export const AGENTS_BLOCK_CATEGORY = 'Agents'
 export const MARKET_REPORTS_CATEGORY = 'Market Reports'
-export const PLACEHOLDER_BLOCK_CATEGORY = 'Placeholders'
 
 export const TOOLBAR_BUTTONS_PREFIX = 'rechat'
 
