@@ -8,7 +8,7 @@ import { compareTwoStrings } from 'utils/dice-coefficient'
 import { getCsvColumns } from '../helpers/get-csv-columns'
 import type { IAttribute, MappedField } from '../types'
 
-import { useAttributeLabel } from './use-attribute-label'
+import { useAttributeDefinition } from './use-attribute-definition'
 import { useAttributes } from './use-attributes'
 
 interface CompareMatches {
@@ -24,7 +24,7 @@ export function useAutoMapFields(
   Nullable<'doing' | 'done'>
 ] {
   const attributes = useAttributes()
-  const getAttributeLabel = useAttributeLabel()
+  const getAttributeDefinition = useAttributeDefinition()
   const [list, setList] = useState<Record<string, Nullable<MappedField>>>({})
   const [status, setStatus] = useState<Nullable<'doing' | 'done'>>(null)
 
@@ -33,7 +33,7 @@ export function useAutoMapFields(
       const matches: CompareMatches[] = []
 
       attributes.some(attribute => {
-        const label = getAttributeLabel(attribute)
+        const label = getAttributeDefinition(attribute).label
 
         const rate = compareTwoStrings(
           column.trim().toLowerCase(),
@@ -63,7 +63,7 @@ export function useAutoMapFields(
 
       return bestMatch.rate > 0.32 ? bestMatch : null
     },
-    [attributes, getAttributeLabel]
+    [attributes, getAttributeDefinition]
   )
 
   useDeepCompareEffect(() => {
