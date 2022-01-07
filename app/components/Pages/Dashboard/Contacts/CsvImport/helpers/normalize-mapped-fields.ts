@@ -14,7 +14,7 @@ function normalize(field: Nullable<MappedField>) {
   if (field.type === 'attribute_def') {
     return {
       ...data,
-      definition_id: field.attributeDefId
+      attribute_def: field.attributeDefId
     }
   }
 

@@ -45,11 +45,25 @@ export function useUploadContacts(
 
   useEffect(() => {
     window.socket.on('contact:import', ({ state }) => {
-      setIsUploadingContacts(false)
+      console.log(`Server Status: ${state}`)
+
+      if (state !== 'complete') {
+        setIsUploadingContacts(false)
+
+        notify({
+          status: 'error',
+          message: 'The upload failed. We recommend that you try again.'
+        })
+
+        return
+      }
+
       notify({
         status: 'success',
-        message: 'We upload the list to your contacts.'
+        message: 'The list has been uploaded to your contacts.'
       })
+
+      window.location.href = '/dashboard/contacts'
     })
 
     return () => {
