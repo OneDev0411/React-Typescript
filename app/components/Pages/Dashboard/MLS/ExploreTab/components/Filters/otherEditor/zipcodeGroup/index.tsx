@@ -24,7 +24,7 @@ export const ZipcodeGroup = ({
   ZipCodeGroupProps) => {
   const classes = useStyles()
 
-  const onZipcodeChange = (event: any, values: ZipcodeOption[]) => {
+  const onZipcodeChange = (_: unknown, values: ZipcodeOption[]) => {
     const selectedValues =
       values && values.length ? values.map(item => item.id) : null
 
