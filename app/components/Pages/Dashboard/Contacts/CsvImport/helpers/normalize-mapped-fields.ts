@@ -15,14 +15,14 @@ function normalize(field: Nullable<MappedField>) {
   if (field.type === 'attribute_def') {
     return {
       ...data,
-      attribute_def: field.attributeDefId
+      attribute_def: field.attribute_def
     }
   }
 
   if (field.type === 'attribute_type') {
     return {
       ...data,
-      attribute_type: field.attributeTypeName
+      attribute_type: field.attribute_type
     }
   }
 

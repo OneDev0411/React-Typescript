@@ -11,11 +11,11 @@ import type {
 const AttributeTypes: CsvImportAttributeType[] = [
   {
     type: 'attribute_type',
-    attributeTypeName: 'full_address'
+    attribute_type: 'full_address'
   },
   {
     type: 'attribute_type',
-    attributeTypeName: 'tag'
+    attribute_type: 'tag'
   }
 ]
 
@@ -26,7 +26,7 @@ export function useAttributes(): IAttribute[] {
   >(({ contacts }) =>
     Object.values(contacts.attributeDefs.byId).map(({ id }) => ({
       type: 'attribute_def',
-      attributeDefId: id
+      attribute_def: id
     }))
   )
 

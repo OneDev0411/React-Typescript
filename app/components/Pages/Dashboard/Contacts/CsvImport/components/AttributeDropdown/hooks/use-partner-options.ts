@@ -12,7 +12,7 @@ export function usePartnerOptions(): AttributeOption[] {
     return {
       index: 0,
       type: 'attribute_def',
-      attributeDefId: definition.id,
+      attribute_def: definition.id,
       isPartner: true,
       disabled: false,
       label: `Spouse/Partner - ${definition.label}`

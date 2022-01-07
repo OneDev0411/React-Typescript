@@ -8,14 +8,14 @@ export function convertOptionToAttribute(
   if (option.type === 'attribute_def') {
     field = {
       type: option.type,
-      attributeDefId: option.attributeDefId
+      attribute_def: option.attribute_def
     }
   }
 
   if (option.type === 'attribute_type') {
     field = {
       type: option.type,
-      attributeTypeName: option.attributeTypeName
+      attribute_type: option.attribute_type
     }
   }
 

@@ -69,7 +69,7 @@ export function AttributeDropdown({
   const handleCreateCustomAttribute = (attribute: IContactAttributeDef) => {
     onSelect({
       type: 'attribute_def',
-      attributeDefId: attribute.id,
+      attribute_def: attribute.id,
       disabled: false,
       label: attribute.label,
       index: 0

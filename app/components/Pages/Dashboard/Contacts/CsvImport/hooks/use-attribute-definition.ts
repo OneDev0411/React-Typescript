@@ -12,10 +12,10 @@ export function useAttributeDefinition() {
   return useCallback(
     (attribute: IAttribute) => {
       if (attribute.type === 'attribute_type') {
-        return attributeTypesByName[attribute.attributeTypeName]
+        return attributeTypesByName[attribute.attribute_type]
       }
 
-      return attributeDefsById[attribute.attributeDefId]
+      return attributeDefsById[attribute.attribute_def]
     },
     [attributeDefsById, attributeTypesByName]
   )

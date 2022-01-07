@@ -26,7 +26,7 @@ export function LabelDropdown({ fields, column, onSelect, onRemove }: Props) {
       return false
     }
 
-    return byId[attribute.attributeDefId].has_label
+    return byId[attribute.attribute_def].has_label
   }
 
   if (!field || !hasLabel(field)) {
