@@ -2,6 +2,8 @@ import { Box, Step, StepLabel, Stepper, Typography } from '@material-ui/core'
 
 import { useImportCsv } from '../../hooks/use-import-csv'
 
+import { StepIcon } from './StepIcon'
+
 interface Props {
   isUploadingContacts: boolean
 }
@@ -43,7 +45,7 @@ export function UploadSteps({ isUploadingContacts }: Props) {
             'Upload Contacts'
           ].map(label => (
             <Step key={label}>
-              <StepLabel>{label}</StepLabel>
+              <StepLabel StepIconComponent={StepIcon}>{label}</StepLabel>
             </Step>
           ))}
         </Stepper>
