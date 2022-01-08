@@ -24,18 +24,12 @@ export function useAttributeMap(
   const [status, setStatus] = useState<Nullable<'doing' | 'done'>>(null)
   const options: AttributeOption[] = useOptions({}, '')
   const notify = useNotify()
+  const columns = getCsvColumns(csv)
 
   useDeepCompareEffect(() => {
-    if (
-      status !== null ||
-      !csv ||
-      csv?.errors.length > 0 ||
-      options.length === 0
-    ) {
+    if (status !== null || columns.length === 0 || options.length === 0) {
       return
     }
-
-    const columns = getCsvColumns(csv)
 
     const request = async () => {
       console.log('Start Mapping...')
@@ -87,7 +81,7 @@ export function useAttributeMap(
     }
 
     request()
-  }, [csv, options, notify])
+  }, [columns, options, notify])
 
   return [list, setList, status]
 }
