@@ -1,6 +1,5 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 
-import { WithRouterProps } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
@@ -13,7 +12,7 @@ import { ViewAs } from 'components/ViewAs'
 
 import { useStyles as useCommonStyles } from './use-styles'
 
-export default function CalendarPage(props: WithRouterProps) {
+export default function CalendarPage() {
   const classes = useCommonStyles()
   const actionRef = useRef<ActionRef>(null)
   const [, dispatch] = useGlobalActionContext()
@@ -38,7 +37,9 @@ export default function CalendarPage(props: WithRouterProps) {
   return (
     <div className={classes.container}>
       <GlobalHeader title="Calendar" noPadding>
-        <ViewAs />
+        <div className={classes.viewAsContainer}>
+          <ViewAs />
+        </div>
         <ImportContactsButton />
       </GlobalHeader>
       <div className={classes.listContainer}>

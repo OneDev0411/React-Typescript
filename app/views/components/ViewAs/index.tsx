@@ -4,11 +4,11 @@ import { Avatar, Popover, makeStyles, Tooltip, Theme } from '@material-ui/core'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 import { useSelector } from 'react-redux'
 
-import { useUnsafeActiveTeam, useActiveTeamAvailableMembers } from 'hooks/team'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { getContactNameInitials } from 'models/contacts/helpers'
 import { selectUser } from 'selectors/user'
 import { isBackOffice } from 'utils/acl'
-import { viewAs } from 'utils/user-teams'
+import { viewAs, getTeamAvailableMembers } from 'utils/user-teams'
 
 import { MemberList } from './components/List'
 
@@ -34,9 +34,15 @@ export const ViewAs = ({ containerStyle }: Props) => {
   const classes = useStyles()
   const user: IUser = useSelector(selectUser)
   const activeTeam: Nullable<IUserTeam> = useUnsafeActiveTeam()
-  const teamMembers: IUser[] = useActiveTeamAvailableMembers()
-  const initialSelectedMembers: UUID[] = useMemo(
-    () => viewAs(activeTeam, true),
+
+  const {
+    initialSelectedMembers,
+    teamMembers
+  }: { initialSelectedMembers: UUID[]; teamMembers: IUser[] } = useMemo(
+    () => ({
+      initialSelectedMembers: viewAs(activeTeam, true),
+      teamMembers: getTeamAvailableMembers(activeTeam)
+    }),
     [activeTeam]
   )
   const [selectedMembers, setSelectedMembers] = useState<UUID[]>(
