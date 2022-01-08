@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react'
 
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import useAsync from '@app/hooks/use-async'
 import { getBrands } from 'models/BrandConsole/Brands'
 import { TreeFn } from 'utils/tree-utils/types'
@@ -15,7 +16,8 @@ interface UseUserRootTeamsReturnType {
   teams: TreeFn<IBrand>
 }
 
-export function useUserRootTeams(user: IUser): UseUserRootTeamsReturnType {
+export function useUserRootTeams(): UseUserRootTeamsReturnType {
+  const activeTeam = useUnsafeActiveTeam()
   const {
     data: rootTeam,
     isLoading,
@@ -25,7 +27,7 @@ export function useUserRootTeams(user: IUser): UseUserRootTeamsReturnType {
 
   useEffectOnce(() => {
     run(async () => {
-      const rootBrand = getRootBrand(user)
+      const rootBrand = getRootBrand(activeTeam)
 
       if (rootBrand) {
         const { data: brandTree } = await getBrands(rootBrand.id, true, [])

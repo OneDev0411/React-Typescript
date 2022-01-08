@@ -48,18 +48,20 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
       <Button size="small" onClick={hanldeOpenDrawer}>
         Our Agents
       </Button>
-      <UserRootBrandSelectorDrawer
-        open={isOpen}
-        /*
+      {isOpen && (
+        <UserRootBrandSelectorDrawer
+          open
+          /*
         we set the drawer width to the 43rem manually bacause in our email drawer we set this
         value and base on shayan request we want the brand selector drawer cover the email drawer
         */
-        width="43rem"
-        onClose={hanldeCloseDrawer}
-        brandSelectorProps={{
-          nodeRenderer: renderBrandNode
-        }}
-      />
+          width="43rem"
+          onClose={hanldeCloseDrawer}
+          brandSelectorProps={{
+            nodeRenderer: renderBrandNode
+          }}
+        />
+      )}
     </>
   )
 }

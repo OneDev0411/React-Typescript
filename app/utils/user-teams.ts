@@ -203,14 +203,12 @@ export function getBrandByType(
   return null
 }
 
-export function getRootBrand(user: IUser | null): IBrand | null {
-  const team = getActiveTeam(user)
-
-  if (team === null) {
+export function getRootBrand(team: Nullable<IUserTeam>): Nullable<IBrand> {
+  if (!team) {
     return null
   }
 
-  let brand: IBrand | null = team.brand
+  let brand: Nullable<IBrand> = team.brand
 
   while (brand && brand.parent) {
     brand = brand.parent
