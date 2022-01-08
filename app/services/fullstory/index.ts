@@ -13,6 +13,6 @@ export function setupFullStory(user: IUser) {
   // just helps us have the info of those sessions which were recorded for
   // logged in users
   if (!process.env.ENABLE_FULLSTORY || !user) {
-    window.FS.shutdown()
+    window.FS?.shutdown()
   }
 }

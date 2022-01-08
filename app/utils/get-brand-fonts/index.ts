@@ -1,19 +1,27 @@
-import flattenBrand from 'utils/flatten-brand'
-
 export function getBrandFontFamilies(brand: IBrand): string[] {
-  const flattedBrand = flattenBrand(brand)
+  const fontFamilies: string[] = []
 
-  if (!flattedBrand?.settings?.marketing_palette) {
-    return []
+  if (brand.settings?.marketing_palette) {
+    fontFamilies.push(
+      ...getFontFamiliesFromPalette(brand.settings.marketing_palette)
+    )
   }
 
-  const brandPalette = flattedBrand.settings
-    .marketing_palette as BrandMarketingPalette
+  while (brand.parent) {
+    if (brand.parent.settings?.marketing_palette) {
+      fontFamilies.push(
+        ...getFontFamiliesFromPalette(brand.parent.settings.marketing_palette)
+      )
+    }
 
-  const fontFamilyKeys = Object.keys(brandPalette).filter(key =>
-    key.includes('font-family')
-  )
-  const brandFontFamilies = fontFamilyKeys.map(key => brandPalette[key])
+    brand = brand.parent
+  }
 
-  return [...new Set(brandFontFamilies)]
+  return [...new Set(fontFamilies)]
+}
+
+function getFontFamiliesFromPalette(palette: BrandMarketingPalette): string[] {
+  return Object.keys(palette)
+    .filter(key => key.includes('font-family'))
+    .map(key => palette[key])
 }

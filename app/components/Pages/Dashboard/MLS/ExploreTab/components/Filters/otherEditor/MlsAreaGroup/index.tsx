@@ -68,7 +68,7 @@ export const MlsAreaGroup = ({
       .finally(() => setLoadingMlsSubAreas(false))
   }
 
-  const onMlsAreaChange = (event: any, values: IMLSArea[]) => {
+  const onMlsAreaChange = (_: unknown, values: IMLSArea[]) => {
     const selectedValues = values || []
 
     setSelectedMlsAreas(selectedValues)
@@ -86,7 +86,7 @@ export const MlsAreaGroup = ({
     }
   }
 
-  const onMlsAreaSubChange = (event: any, values: IMLSArea[]) => {
+  const onMlsAreaSubChange = (_: unknown, values: IMLSArea[]) => {
     const selectedValues = values || []
 
     setSelectedMlsSubAreas(selectedValues)
