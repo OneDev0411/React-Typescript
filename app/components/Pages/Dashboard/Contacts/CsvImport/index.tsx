@@ -5,10 +5,11 @@ import { Box, Button, makeStyles, Theme } from '@material-ui/core'
 import { CloseButton } from '@app/views/components/Button/CloseButton'
 import PageLayout from 'components/GlobalPageLayout'
 
+import { MappingDialog } from './components/MappingDialog'
 import { UploadingBanner } from './components/UploadingBanner'
 import { UploadSteps } from './components/UploadSteps'
 import { Context } from './context'
-import { useAutoMapFields } from './hooks/use-auto-map'
+import { useAttributeMap } from './hooks/use-attribute-map'
 import { useOwner } from './hooks/use-owner'
 import { useParseCsv } from './hooks/use-parse-csv'
 import { useUploadContacts } from './hooks/use-upload-contacts'
@@ -42,7 +43,8 @@ export default function CsvImport() {
   const [parsedCsv, csvError] = useParseCsv(file, {
     onError: useCallback(() => setFile(null), [])
   })
-  const [mappedFields, setMappedFields] = useAutoMapFields(parsedCsv)
+  const [mappedFields, setMappedFields, mappingStatus] =
+    useAttributeMap(parsedCsv)
   const [uploadContacts, isUploadingContacts] = useUploadContacts(
     owner,
     file,
@@ -66,6 +68,8 @@ export default function CsvImport() {
         >
           <Box display="flex" flexDirection="column" height="100%">
             <UploadSteps isUploadingContacts={isUploadingContacts} />
+
+            {mappingStatus === 'doing' && <MappingDialog />}
 
             <Box flexGrow={1}>
               {isUploadingContacts ? (

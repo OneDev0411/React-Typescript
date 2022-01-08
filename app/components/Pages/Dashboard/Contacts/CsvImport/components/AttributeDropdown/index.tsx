@@ -12,11 +12,10 @@ import {
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 
 import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
+import { useOptions } from '../../hooks/attribute-options/use-attribute-options'
 import { useAttributeLabel } from '../../hooks/use-attribute-label'
 import type { AttributeOption, MappedField } from '../../types'
 import { DropdownButton } from '../DropdownButton'
-
-import { useOptions } from './hooks/use-attribute-options'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
