@@ -29,7 +29,7 @@ export function LabelDropdown({ fields, column, onSelect, onRemove }: Props) {
     return byId[attribute.attribute_def].has_label
   }
 
-  if (!field || !hasLabel(field)) {
+  if (!field || !hasLabel(field) || options.length === 0) {
     return null
   }
 
