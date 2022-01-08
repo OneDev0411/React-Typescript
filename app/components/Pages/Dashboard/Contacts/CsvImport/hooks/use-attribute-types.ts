@@ -8,7 +8,7 @@ export function useAttributeTypes(): Record<string, IContactAttributeType> {
       section: 'Addresses',
       show: true,
       singular: true,
-      labels: []
+      labels: ['Home', 'Work', 'Investment Property', 'Other']
     },
     tag: {
       name: 'tag',
