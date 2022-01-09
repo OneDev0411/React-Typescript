@@ -16,7 +16,7 @@ const validators = {
   phone_number: isPhoneNumber
 }
 
-export function validation(attribute_def, value) {
+export async function validation(attribute_def, value) {
   if (typeof value === 'string') {
     value = value.trim()
   }
