@@ -98,6 +98,13 @@ function DomainManagementNewDomain({
         handleAddDomainToHost(domainName, wizard)
       } catch (_: unknown) {
         wizard.setLoading(false)
+        dispatch(
+          notify({
+            message:
+              'Something went wrong while purchasing the domain. Please try again.',
+            status: 'error'
+          })
+        )
       }
 
       done?.()
