@@ -22,7 +22,7 @@ export function MappingDialog() {
           </Box>
 
           <Typography variant="body1">
-            We are trying to atuomatically Connect Columns Label From CSV to
+            We are trying to automatically Connect Columns Label From CSV to
             Rechat Property
           </Typography>
 
