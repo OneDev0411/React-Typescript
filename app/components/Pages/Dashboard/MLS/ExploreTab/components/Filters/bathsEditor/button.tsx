@@ -23,7 +23,7 @@ export const BathsButton = ({
       onClick={onClick}
       color={isActive ? 'primary' : undefined}
       variant="outlined"
-      size="medium"
+      size="small"
       startIcon={<SvgIcon size={muiIconSizes.small} path={mdiShower} />}
     >
       {isActive ? <>{filters.minimum_bathrooms}+</> : <>Baths</>}

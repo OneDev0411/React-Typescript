@@ -70,7 +70,7 @@ export const SchoolsDistrictsGroup = ({
     })
   }
 
-  const onSchoolsDistrictChange = (event: any, values: string[]) => {
+  const onSchoolsDistrictChange = (_: unknown, values: string[]) => {
     const selectedValues = values || []
 
     if (selectedValues.length === 0) {

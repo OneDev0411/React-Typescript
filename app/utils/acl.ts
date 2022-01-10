@@ -121,3 +121,15 @@ export function hasUserAccessToBrandSettings(
   // User should be an admin and should have access to MC
   return isAdmin(team) && hasUserAccessToMarketingCenter(team)
 }
+
+/**
+ * Indicate that user is able to upload assets for a brand
+ * @param team The active team
+ * @returns true or false
+ */
+export function hasUserAccessToUploadBrandAssets(
+  team: Nullable<IUserTeam>
+): boolean {
+  // User should be an admin and should have access to MC
+  return isAdmin(team) && hasUserAccessToMarketingCenter(team)
+}

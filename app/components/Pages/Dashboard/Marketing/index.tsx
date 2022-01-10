@@ -1,24 +1,34 @@
-import { useMemo, memo } from 'react'
+import { useState, useMemo, memo } from 'react'
 
-import { Tooltip, IconButton, makeStyles } from '@material-ui/core'
-import { mdiCogOutline } from '@mdi/js'
+import { Button, Tooltip, IconButton, makeStyles } from '@material-ui/core'
+import { mdiCogOutline, mdiPlus } from '@mdi/js'
+import { orderBy } from 'lodash'
+import pluralize from 'pluralize'
 import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useActiveTeam } from '@app/hooks/team/use-active-team'
+import { useBrandAssets } from '@app/hooks/use-brand-assets'
+import { useMarketingCenterMediums } from '@app/hooks/use-marketing-center-mediums'
+import { useMarketingCenterSections } from '@app/hooks/use-marketing-center-sections'
 import { useMarketingTemplateTypesWithMediums } from '@app/hooks/use-marketing-template-types-with-mediums'
+import useNotify from '@app/hooks/use-notify'
+import {
+  hasUserAccessToBrandSettings,
+  hasUserAccessToUploadBrandAssets
+} from '@app/utils/acl'
+import { goTo } from '@app/utils/go-to'
+import {
+  isBrandAsset,
+  isTemplateInstance
+} from '@app/utils/marketing-center/helpers'
+import Acl from '@app/views/components/Acl'
+import PageLayout from '@app/views/components/GlobalPageLayout'
+import MarketingAssetUploadDrawer from '@app/views/components/MarketingAssetUploadDrawer'
 import MarketingSearchInput, {
   TemplateTypeWithMedium
 } from '@app/views/components/MarketingSearchInput'
-import Acl from 'components/Acl'
-import PageLayout from 'components/GlobalPageLayout'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
-import { useMarketingCenterMediums } from 'hooks/use-marketing-center-mediums'
-import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
-import { hasUserAccessToBrandSettings } from 'utils/acl'
-import { goTo } from 'utils/go-to'
-import { isTemplateInstance } from 'utils/marketing-center/helpers'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { useTemplates } from './hooks/use-templates'
 import Tabs from './Tabs'
@@ -29,6 +39,12 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'row-reverse',
     alignItems: 'center'
   },
+  uploadAssetButtonContainer: {
+    marginRight: theme.spacing(2),
+    '& svg': {
+      marginRight: theme.spacing(1)
+    }
+  },
   searchContainer: {
     width: 300,
     marginLeft: theme.spacing(2)
@@ -37,13 +53,20 @@ const useStyles = makeStyles(theme => ({
 
 interface Props {
   render: (props: {
-    items: IBrandMarketingTemplate[]
+    items: (IBrandMarketingTemplate | IBrandAsset)[]
     isLoading: boolean
     types: string
     medium: IMarketingTemplateMedium
     defaultSelectedTemplate: Optional<UUID>
-    onSelectTemplate: (template: IBrandMarketingTemplate) => void
+    onSelectTemplate: (
+      template:
+        | IBrandMarketingTemplate
+        | IMarketingTemplateInstance
+        | IBrandAsset
+    ) => void
     onDeleteTemplate: (template: IBrandMarketingTemplate) => void
+    onDeleteBrandAsset: (asset: IBrandAsset) => void
+    hasDeleteAccessOnBrandAsset: (asset: IBrandAsset) => boolean
   }) => JSX.Element
 }
 
@@ -56,25 +79,50 @@ export function MarketingLayout({
     { templateId?: UUID }
   >) {
   const classes = useStyles()
-  const activeTeam = useUnsafeActiveTeam()
-  const activeBrandId = useActiveBrandId()
+  const activeTeam = useActiveTeam()
+  const notify = useNotify()
+  const activeBrandId = activeTeam.brand.id
+  const [
+    isMarketingAssetUploadDrawerOpen,
+    setIsMarketingAssetUploadDrawerOpen
+  ] = useState<boolean>(false)
 
   const { params, router, location } = props
   const sections = useMarketingCenterSections(params)
 
   const templateTypes = params.types
 
-  const { templates, isLoading, deleteTemplate } = useTemplates(activeBrandId)
-  const mediums = useMarketingCenterMediums(templates)
-
-  const templateTypesWithMediums =
-    useMarketingTemplateTypesWithMediums(templates)
+  const {
+    templates,
+    isLoading: isLoadingTemplates,
+    deleteTemplate
+  } = useTemplates(activeBrandId)
 
   const currentMedium = params.medium
+  const {
+    assets,
+    isLoading: isLoadingBrandAssets,
+    refetch: refetchBrandAssets,
+    delete: deleteBrandAsset,
+    hasDeleteAccess: hasDeleteAccessOnBrandAsset
+  } = useBrandAssets(activeBrandId, {
+    templateTypes: templateTypes
+      ? (templateTypes.split(',') as IMarketingTemplateType[])
+      : []
+  })
+  const mediums = useMarketingCenterMediums(templates, assets)
+
+  const templateTypesWithMediums = useMarketingTemplateTypesWithMediums(
+    templates,
+    assets
+  )
+
+  const isLoading = isLoadingTemplates || isLoadingBrandAssets
+
   const currentPageItems = useMemo(() => {
     const splittedTemplateTypes = templateTypes ? templateTypes.split(',') : []
 
-    return templates.filter(item => {
+    const currentPageTemplates = templates.filter(item => {
       const mediumMatches = currentMedium
         ? item.template.medium === currentMedium
         : true
@@ -85,12 +133,28 @@ export function MarketingLayout({
 
       return mediumMatches && typeMatches
     })
-  }, [currentMedium, templateTypes, templates])
+
+    const currentPageAssets = assets.filter(item => {
+      return currentMedium ? item.medium === currentMedium : !!item.medium
+    })
+
+    const currentPageTemplatesAndAssets: Array<
+      IBrandMarketingTemplate | IBrandAsset
+    > = orderBy(
+      [...currentPageTemplates, ...currentPageAssets],
+      ['created_at'],
+      'desc'
+    )
+
+    return currentPageTemplatesAndAssets
+  }, [currentMedium, templateTypes, templates, assets])
 
   const hasAccessToBrandSettings = hasUserAccessToBrandSettings(activeTeam)
+  const hasAccessToUploadBrandAssets =
+    hasUserAccessToUploadBrandAssets(activeTeam)
 
   const onSelectTemplate = (
-    template: IBrandMarketingTemplate | IMarketingTemplateInstance
+    template: IBrandMarketingTemplate | IMarketingTemplateInstance | IBrandAsset
   ) => {
     const newQuery = { ...location.query }
 
@@ -105,11 +169,16 @@ export function MarketingLayout({
       return
     }
 
+    const templateId = isBrandAsset(template)
+      ? template.id
+      : (template as IBrandMarketingTemplate | IMarketingTemplateInstance)
+          .template.id
+
     router.replace({
       ...location,
       query: {
         ...newQuery,
-        templateId: template.template.id
+        templateId
       }
     })
   }
@@ -120,6 +189,32 @@ export function MarketingLayout({
         result.medium ? `/${result.medium}` : ''
       }`
     )
+  }
+
+  const openUploadMarketingAssetDrawer = () => {
+    setIsMarketingAssetUploadDrawerOpen(true)
+  }
+
+  const closeUploadMarketingAssetDrawer = async (
+    uploadedAssets?: IBrandAsset[]
+  ) => {
+    if (uploadedAssets) {
+      notify({
+        status: 'success',
+        message: `${pluralize(
+          'asset',
+          uploadedAssets.length,
+          true
+        )} uploaded successfully`
+      })
+      refetchBrandAssets()
+    }
+
+    setIsMarketingAssetUploadDrawerOpen(false)
+  }
+
+  const handleUploadAssetClick = () => {
+    openUploadMarketingAssetDrawer()
   }
 
   return (
@@ -146,6 +241,20 @@ export function MarketingLayout({
                 </Tooltip>
               </div>
             )}
+            {hasAccessToUploadBrandAssets && (
+              <div className={classes.uploadAssetButtonContainer}>
+                <Tooltip title="Upload Asset">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleUploadAssetClick}
+                    startIcon={<SvgIcon path={mdiPlus} />}
+                  >
+                    Add
+                  </Button>
+                </Tooltip>
+              </div>
+            )}
           </div>
         </PageLayout.Header>
         <PageLayout.Main minHeight="100vh">
@@ -166,8 +275,21 @@ export function MarketingLayout({
               medium: params.medium,
               onSelectTemplate,
               defaultSelectedTemplate: location.query.templateId,
-              onDeleteTemplate: deleteTemplate
+              onDeleteTemplate: deleteTemplate,
+              onDeleteBrandAsset: deleteBrandAsset,
+              hasDeleteAccessOnBrandAsset
             })}
+          {isMarketingAssetUploadDrawerOpen && (
+            <MarketingAssetUploadDrawer
+              defaultSelectedTemplateType={
+                templateTypes
+                  ? (templateTypes.split(',')[0] as IMarketingTemplateType)
+                  : undefined
+              }
+              defaultSelectedMedium={currentMedium}
+              onClose={closeUploadMarketingAssetDrawer}
+            />
+          )}
         </PageLayout.Main>
       </PageLayout>
     </Acl.Marketing>

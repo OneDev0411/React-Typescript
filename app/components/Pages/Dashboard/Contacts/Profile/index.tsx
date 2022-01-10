@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
+import { useGetGlobalTriggers } from '@app/components/Pages/Dashboard/Account/Triggers/hooks/use-get-global-triggers'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import PageLayout from 'components/GlobalPageLayout'
 import { deleteContacts } from 'models/contacts/delete-contact'
@@ -92,6 +93,8 @@ const useStyles = makeStyles(
 */
 
 const ContactProfile = props => {
+  useGetGlobalTriggers()
+
   const classes = useStyles()
   const [contact, setContact] = useState<Nullable<INormalizedContact>>(null)
   const [currentContactId, setCurrentContactId] = useState<string | undefined>(

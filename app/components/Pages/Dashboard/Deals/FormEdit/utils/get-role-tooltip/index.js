@@ -1,5 +1,3 @@
-import { roleName } from 'deals/utils/roles'
-
 const ordinalNumbers = [
   'First',
   'Second',
@@ -33,19 +31,19 @@ function normalizeAttribute(context) {
   return uniqList.length > 1 ? `(${uniqList.join(' Or ')})` : uniqList[0]
 }
 
-function normalizeRoles(context, multiRoles) {
+function normalizeRoles(dealRolesByName, context, multiRoles) {
   return context.role
     .map(name => {
-      const role = roleName(name)
+      const role = dealRolesByName[name]?.title
 
       return multiRoles ? `${role}s` : role
     })
     .join(' or ')
 }
 
-export function getRoleTooltip(context, multiRoles = false) {
+export function getRoleTooltip(dealRolesByName, context, multiRoles = false) {
   const attribute = normalizeAttribute(context)
-  const roles = normalizeRoles(context, multiRoles)
+  const roles = normalizeRoles(dealRolesByName, context, multiRoles)
 
   if (multiRoles) {
     return `${attribute} of ${roles}`

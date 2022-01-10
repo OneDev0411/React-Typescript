@@ -1,14 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { Grid, Theme, useTheme } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffectOnce } from 'react-use'
 
 import { getContextsByBrand } from 'actions/deals'
 import ActionButton from 'components/Button/ActionButton'
 import { addNotification } from 'components/notification'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { forcePushReminderNotificationSettings } from 'models/reminder-notifications/force-push-reminder-notification-settings'
 import {
@@ -18,6 +16,7 @@ import {
 import Loading from 'partials/Loading'
 import { IAppState } from 'reducers'
 import { selectBrandContexts } from 'reducers/deals/contexts'
+import { selectDeals } from 'selectors/deals'
 import { hasUserAccessToCrm, hasUserAccessToDeals } from 'utils/acl'
 
 import Column from './components/Column'
@@ -30,9 +29,8 @@ import { updateNewColumnInColumns } from './helpers/update-new-column-in-columns
 import { ColumnState } from './types'
 
 export default function ReminderNotifications() {
-  const activeBrandId = useActiveBrandId()
   const activeTeam = useUnsafeActiveTeam()
-  const deals = useSelector((state: IAppState) => state.deals)
+  const deals = useSelector(selectDeals)
   const contactsAttributeDefs = useSelector(
     ({ contacts }: IAppState) => contacts.attributeDefs
   )
@@ -68,7 +66,7 @@ export default function ReminderNotifications() {
     setColumns(newColumns)
   }
 
-  useEffectOnce(() => {
+  useEffect(() => {
     initializeColumns()
 
     async function initializeColumns(): Promise<void> {
@@ -107,18 +105,21 @@ export default function ReminderNotifications() {
 
       async function getDealContexts(): Promise<readonly IDealBrandContext[]> {
         // const dealContexts = getDealContextsFromStore()
-        const dealContexts = selectBrandContexts(deals.contexts, activeBrandId)
+        const dealContexts = selectBrandContexts(
+          deals.contexts,
+          activeTeam?.brand.id
+        )
 
         if (dealContexts) {
           return dealContexts
         }
 
-        await dispatch(getContextsByBrand(activeBrandId))
+        await dispatch(getContextsByBrand(activeTeam?.brand.id))
 
         return dealContexts ?? []
       }
     }
-  })
+  }, [activeTeam, contactsAttributeDefs, deals, dispatch])
 
   return (
     <>

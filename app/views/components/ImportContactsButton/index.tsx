@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Link as RouterLink } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
+import { IMPORT_TOOLTIP_VISITED_SETTINGS_KEY } from '@app/components/Pages/Dashboard/Contacts/List/constants'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Divider } from 'components/Divider'
 import { addNotification as notify } from 'components/notification'
@@ -24,8 +25,6 @@ import { getSettingsInActiveTeam } from 'utils/user-teams'
 
 import { ConnectedAccount } from './ConnectedAccount'
 import { useStyles } from './styles'
-
-export const IMPORT_TOOLTIP_VISITED_SETTINGS_KEY = 'import_tooltip_visited'
 
 const TOOLTIP_WIDTH = 150
 
@@ -53,7 +52,7 @@ export function ImportContactsButton({
 
   useEffect(() => {
     if (isTooltipOpen) {
-      putUserSetting(IMPORT_TOOLTIP_VISITED_SETTINGS_KEY, '1')
+      putUserSetting(IMPORT_TOOLTIP_VISITED_SETTINGS_KEY, true)
     }
   }, [isTooltipOpen])
 

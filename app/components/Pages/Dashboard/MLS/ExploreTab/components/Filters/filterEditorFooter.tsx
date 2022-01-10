@@ -11,13 +11,13 @@ export interface RenderButton {
 }
 
 interface Props {
-  resultCount: number
+  resultCount?: number
   disabledReset?: boolean
   onClickReset?: () => void
 }
 
 export function FilterEditorFooter({
-  resultCount,
+  resultCount = 0,
   disabledReset = false,
   onClickReset = noop
 }: Props) {

@@ -3,6 +3,7 @@ import React, { ReactNode, useState, memo } from 'react'
 import {
   FormControl,
   makeStyles,
+  IconButton,
   Typography,
   InputLabel,
   TextField,
@@ -12,36 +13,23 @@ import {
   Switch,
   Theme
 } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
+import { mdiClose, mdiNewBox } from '@mdi/js'
 import cn from 'classnames'
 import pluralize from 'pluralize'
 
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { TeamContactSelect } from '@app/views/components/TeamContact/TeamContactSelect'
 import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
+import { goTo } from 'utils/go-to'
 import { isSoloActiveTeam } from 'utils/user-teams'
 
 import { TemplateSelector } from './components/TemplateSelector'
 import { convertSecondsToDay } from './helpers'
 
-interface Props {
-  sender: IUser
-  disabled?: boolean
-  renderAttributeFields: () => ReactNode
-  attributeName: TriggerContactEventTypes
-  currentValue: Nullable<ITrigger>
-  isActive: boolean
-  isSaving?: boolean
-  subject: string
-  sendBefore: number
-  onChangeActive: (value: boolean) => void
-  onChangeSubject: (value: string) => void
-  onChangeSender: (value: IContact) => void
-  onChangeSendBefore: (value: number) => void
-  onChangeTemplate: (templateInstance: IMarketingTemplateInstance) => void
-}
-
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {
+    fieldsContainer: {
       display: 'flex',
       alignItems: 'flex-start'
     },
@@ -82,21 +70,49 @@ const useStyles = makeStyles(
     senderLabel: {
       marginLeft: theme.spacing(0.5),
       color: theme.palette.grey[500]
+    },
+    promoteGlobalTriggerContainer: {
+      alignItems: 'center',
+      marginBottom: theme.spacing(2)
+    },
+    goToGlobalTrigger: {
+      cursor: 'pointer'
     }
   }),
   { name: 'TriggerEditMode' }
 )
 
+interface Props {
+  sender: IUser
+  disabled?: boolean
+  renderAttributeFields: () => ReactNode
+  attributeName: TriggerContactEventTypes
+  attributeGlobalTrigger?: IGlobalTrigger<'template' | 'template_instance'>
+  isActive: boolean
+  isSaving?: boolean
+  subject: string
+  sendBefore: number
+  selectedTemplate: Nullable<
+    IMarketingTemplateInstance | IBrandMarketingTemplate
+  >
+  onChangeActive: (value: boolean) => void
+  onChangeSubject: (value: string) => void
+  onChangeSender: (value: IUser) => void
+  onChangeSendBefore: (value: number) => void
+  onChangeTemplate: (templateInstance: IMarketingTemplateInstance) => void
+}
+
 const TriggerEditModeComponent = ({
   disabled = false,
   isSaving = false,
-  currentValue,
   attributeName,
   renderAttributeFields,
+  attributeGlobalTrigger,
   isActive: isActiveProp = false,
   sendBefore: sendBeforeProp = 0,
   sender: senderProp,
   subject: subjectProp = '',
+  selectedTemplate: selectedTemplateProp = null,
   onChangeSender,
   onChangeActive,
   onChangeSubject,
@@ -112,7 +128,13 @@ const TriggerEditModeComponent = ({
     convertSecondsToDay(sendBeforeProp)
   )
   const [selectedTemplate, setSelectedTemplate] =
-    useState<Nullable<IMarketingTemplateInstance>>(null)
+    useState<Nullable<IMarketingTemplateInstance | IBrandMarketingTemplate>>(
+      selectedTemplateProp
+    )
+
+  // Show global trigger feature banner
+  const [isGlobalTriggerInfoOpen, setIsGlobalTriggerInfoOpen] =
+    useState<boolean>(!attributeGlobalTrigger)
 
   const handleActiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked
@@ -166,7 +188,7 @@ const TriggerEditModeComponent = ({
     return (
       <div className={classes.senderContainer}>
         <TeamContactSelect
-          disabled={disabled || !isActive}
+          disabled={disabled || !isActive || isSaving}
           owner={sender}
           user={sender}
           onSelect={handleSenderChange}
@@ -202,84 +224,116 @@ const TriggerEditModeComponent = ({
   }
 
   return (
-    <div className={classes.container}>
-      <div className={classes.containerItem}>
-        {renderAttributeFields()}
-        <div className={classes.triggerFields}>
-          {renderSenderSwitcher()}
-          <div className={classes.switch}>
-            <div className={classes.switchContainer}>
-              <Typography component="span" variant="subtitle2">
-                Automate Email
-              </Typography>
-              <Switch
-                checked={isActive}
-                disabled={disabled}
-                onChange={handleActiveChange}
-                color="primary"
-                size="small"
-              />
-            </div>
-            <Typography
-              component="p"
-              variant="body2"
-              className={classes.switchDesc}
-            >
-              Send automate email to this contact and don’t miss any important
-              date ever.
-            </Typography>
-          </div>
-          <>
-            <TextField
-              id="subject"
-              label="Subject"
-              type="text"
+    <>
+      {isGlobalTriggerInfoOpen && (
+        <Alert
+          severity="success"
+          className={classes.promoteGlobalTriggerContainer}
+          icon={<SvgIcon path={mdiNewBox} />}
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
               size="small"
-              disabled={disabled || !isActive || isSaving}
-              defaultValue={subject}
-              InputLabelProps={{
-                shrink: true
+              onClick={() => {
+                setIsGlobalTriggerInfoOpen(false)
               }}
-              variant="outlined"
-              className={classes.inputField}
-              onChange={handleSubjectChange}
-            />
-            <FormControl
-              variant="outlined"
-              size="small"
-              className={classes.inputField}
-              disabled={disabled || !isActive || isSaving}
             >
-              <InputLabel id="trigger-send-before">Deliver in</InputLabel>
-              <Select
-                labelId="trigger-send-before"
-                id="trigger-send-before-select"
-                value={sendBefore}
-                defaultValue={0}
-                onChange={handleSendBeforeChange}
-                label="Deliver in"
+              <SvgIcon path={mdiClose} />
+            </IconButton>
+          }
+        >
+          <Typography variant="body2" color="textPrimary">
+            You can send emails to all your contacts automatically.
+          </Typography>
+          <Typography
+            variant="body2"
+            color="primary"
+            className={classes.goToGlobalTrigger}
+            onClick={() => goTo('/dashboard/account/triggers')}
+          >
+            Activate Global Trigger From The Settings
+          </Typography>
+        </Alert>
+      )}
+      <div className={classes.fieldsContainer}>
+        <div className={classes.containerItem}>
+          {renderAttributeFields()}
+          <div className={classes.triggerFields}>
+            {renderSenderSwitcher()}
+            <div className={classes.switch}>
+              <div className={classes.switchContainer}>
+                <Typography component="span" variant="subtitle2">
+                  Automate Email
+                </Typography>
+                <Switch
+                  checked={isActive}
+                  disabled={disabled}
+                  onChange={handleActiveChange}
+                  color="primary"
+                  size="small"
+                />
+              </div>
+              <Typography
+                component="p"
+                variant="body2"
+                className={classes.switchDesc}
               >
-                <MenuItem value={0}>Same Day</MenuItem>
-                {[1, 2, 3, 4].map(item => (
-                  <MenuItem key={item} value={item}>
-                    {pluralize('day', item, true)} earlier
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </>
+                Send automate email to this contact and don’t miss any important
+                date ever.
+              </Typography>
+            </div>
+            <>
+              <TextField
+                id="subject"
+                label="Subject"
+                type="text"
+                size="small"
+                disabled={disabled || !isActive || isSaving}
+                defaultValue={subject}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                variant="outlined"
+                className={classes.inputField}
+                onChange={handleSubjectChange}
+              />
+              <FormControl
+                variant="outlined"
+                size="small"
+                className={classes.inputField}
+                disabled={disabled || !isActive || isSaving}
+              >
+                <InputLabel id="trigger-send-before">Deliver in</InputLabel>
+                <Select
+                  labelId="trigger-send-before"
+                  id="trigger-send-before-select"
+                  value={sendBefore}
+                  defaultValue={0}
+                  onChange={handleSendBeforeChange}
+                  label="Deliver in"
+                >
+                  <MenuItem value={0}>Same Day</MenuItem>
+                  {[1, 2, 3, 4].map(item => (
+                    <MenuItem key={item} value={item}>
+                      {pluralize('day', item, true)} earlier
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </>
+          </div>
+        </div>
+        <div className={classes.containerItem}>
+          <TemplateSelector
+            disabled={disabled || !isActive || isSaving}
+            attributeName={attributeName}
+            selectedTemplate={selectedTemplate}
+            onSelectTemplate={handleSelectTemplate}
+          />
         </div>
       </div>
-      <div className={classes.containerItem}>
-        <TemplateSelector
-          disabled={disabled || !isActive}
-          currentValue={currentValue}
-          attributeName={attributeName}
-          selectedTemplate={selectedTemplate}
-          onSelectTemplate={handleSelectTemplate}
-        />
-      </div>
-    </div>
+    </>
   )
 }
 

@@ -52,7 +52,7 @@ export const SubdivisionGroup = ({
     [subdivisionInputValue]
   )
 
-  const onSubdivisionChange = (event: any, values: string[]) => {
+  const onSubdivisionChange = (_: unknown, values: string[]) => {
     const selectedValues = values && values.length ? values : null
 
     updateFilters({

@@ -1,10 +1,11 @@
 import { memo } from 'react'
 
-import { Chip, Grid, makeStyles, Typography } from '@material-ui/core'
+import { alpha, Chip, Grid, makeStyles, Typography } from '@material-ui/core'
 import {
   mdiShower,
   mdiBedKingOutline,
-  mdiFullscreen,
+  mdiVectorSquare,
+  mdiDatabaseOutline,
   mdiMapMarkerOutline
 } from '@mdi/js'
 import { useSelector } from 'react-redux'
@@ -16,7 +17,7 @@ import {
   addressTitle,
   metersToFeet,
   getResizeUrl,
-  getStatusColorClass
+  getStatusColor
 } from '@app/utils/listing'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -32,6 +33,7 @@ const useStyles = makeStyles(
       borderRadius: 5
     },
     image: {
+      position: 'relative',
       backgroundRepeat: 'none',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
@@ -47,7 +49,44 @@ const useStyles = makeStyles(
       fontSize: 15,
       marginBottom: theme.spacing(1)
     },
-    status: { color: '#fff', fontSize: 12, marginTop: theme.spacing(-1) },
+    mlsSource: {
+      ...theme.typography.body3,
+      display: 'flex',
+      alignItems: 'center',
+      color: theme.palette.grey[700]
+    },
+    mlsSourceIcon: {
+      maxWidth: theme.spacing(2),
+      maxHeight: theme.spacing(2),
+      marginRight: theme.spacing(0.5)
+    },
+    statusContainer: {
+      position: 'absolute',
+      top: theme.spacing(1),
+      right: theme.spacing(1)
+    },
+    statusChip: {
+      fontSize: 12,
+      backgroundColor: `${alpha(theme.palette.grey[100], 0.8)}`,
+      borderRadius: theme.spacing(0.5),
+      filter: `drop-shadow(0px 0.3px 0.5px ${alpha(
+        theme.palette.common.black,
+        0.1
+      )}) drop-shadow(0px 2px 4px ${alpha(theme.palette.common.black, 0.2)})`,
+      border: 'none'
+    },
+    statusDot: (props: Props) => ({
+      backgroundColor: `#${getStatusColor(props.status)}`,
+      width: theme.spacing(1),
+      height: theme.spacing(1),
+      borderRadius: '50%',
+      display: 'inline-block'
+    }),
+    iconSmall: {
+      // TODO: there should be better ways to handling this.
+      // https://stackoverflow.com/questions/63880835
+      marginLeft: `${theme.spacing(1)}px !important`
+    },
     address: {
       fontSize: 13,
       color: theme.palette.grey[500],
@@ -93,25 +132,27 @@ interface Props {
   bedroomCount: Nullable<number>
   coverImageUrl: string
   propertyType: string
+  mlsSource?: string
   onClick?: () => void
 }
 
-const MarkerPopup = ({
-  status,
-  price,
-  closePrice,
-  address,
-  squareMeters,
-  bathroomCount,
-  bedroomCount,
-  coverImageUrl,
-  propertyType,
-  onClick = noop
-}: Props) => {
-  const classes = useStyles()
+const MarkerPopup = (props: Props) => {
+  const {
+    status,
+    price,
+    closePrice,
+    address,
+    squareMeters,
+    bathroomCount,
+    bedroomCount,
+    coverImageUrl,
+    propertyType,
+    mlsSource = '',
+    onClick = noop
+  } = props
+  const classes = useStyles(props)
   const user = useSelector(selectUserUnsafe)
 
-  const statusColor = getStatusColorClass(status)
   const listingPrice = getListingFormatedPrice(price, closePrice, user, false)
   const squareFeet = Math.floor(metersToFeet(squareMeters)).toLocaleString()
   const fullAddress = addressTitle(address)
@@ -131,18 +172,36 @@ const MarkerPopup = ({
       <div
         className={classes.image}
         style={{ backgroundImage: `url(${coverImageURL})` }}
-      />
+      >
+        <Grid className={classes.statusContainer}>
+          <Chip
+            label={status}
+            size="small"
+            variant="default"
+            classes={{
+              root: classes.statusChip,
+              iconSmall: classes.iconSmall
+            }}
+            icon={<Grid className={classes.statusDot} />}
+          />
+        </Grid>
+      </div>
       <div className={classes.info}>
-        <Grid container justifyContent="space-between" alignItems="center">
+        <Grid container justifyContent="space-between" alignItems="flex-start">
           <Typography variant="subtitle1" className={classes.price}>
             ${listingPrice}
           </Typography>
-          <Chip
-            size="small"
-            className={classes.status}
-            style={{ backgroundColor: statusColor }}
-            label={status}
-          />
+          <Grid
+            className={classes.mlsSource}
+            item
+            title="Listing Provider (MLS) Source"
+          >
+            <SvgIcon
+              path={mdiDatabaseOutline}
+              className={classes.mlsSourceIcon}
+            />
+            {mlsSource}
+          </Grid>
         </Grid>
 
         {!['Commercial', 'Lots & Acreage'].includes(propertyType) && (
@@ -156,7 +215,7 @@ const MarkerPopup = ({
               {baths}
             </Grid>
             <Grid className={classes.detailItem} item>
-              <SvgIcon path={mdiFullscreen} className={classes.icon} />
+              <SvgIcon path={mdiVectorSquare} className={classes.icon} />
               {squareFeet} ft
               <sup>2</sup>
             </Grid>

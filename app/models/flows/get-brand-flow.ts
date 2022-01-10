@@ -1,7 +1,6 @@
 import Fetch from '../../services/fetch'
 
 import { DEFAULT_QUERY } from './contants'
-// import { getStepsWithWaitDays } from './helpers'
 
 export async function getBrandFlow(
   brand: UUID,

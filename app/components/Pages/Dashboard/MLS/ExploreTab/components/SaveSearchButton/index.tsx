@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, ChangeEvent } from 'react'
 
 import {
   Button,
@@ -72,14 +72,14 @@ export function SaveSearchButton({ isLoading, onClick }: Props) {
   const onClickGotIt = () => {
     if (dontShow) {
       dispatch(
-        setActiveTeamSetting(SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY, '1')
+        setActiveTeamSetting(SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY, true)
       )
     }
 
     setIsOpenHint(false)
   }
 
-  const handleDontShowChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDontShowChange = (event: ChangeEvent<HTMLInputElement>) => {
     setDontShow(event.target.checked)
   }
 
@@ -89,7 +89,7 @@ export function SaveSearchButton({ isLoading, onClick }: Props) {
         <>
           <Button
             className={classes.saveButton}
-            size="medium"
+            size="small"
             variant="contained"
             color="primary"
             disabled={isLoading}

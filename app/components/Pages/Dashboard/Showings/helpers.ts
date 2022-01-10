@@ -113,23 +113,35 @@ export function hasInvalidTimeRange(
   )
 }
 
+function compareDateDESC(date1: Date, date2: Date): number {
+  return date2.getTime() - date1.getTime()
+}
+
 export function sortAppointments(
   appointments: IShowingAppointment<'showing'>[]
 ): IShowingAppointment<'showing'>[] {
-  return [...appointments].sort((a, b) => {
+  const sortedAppointmentsByTime = [...appointments].sort((a, b) => {
     const time1 = new Date(a.time)
     const time2 = new Date(b.time)
 
-    if (time1 > time2) {
-      return -1
-    }
-
-    if (time1 < time2) {
-      return 1
-    }
-
-    return 0
+    return compareDateDESC(time1, time2)
   })
+
+  const pastAppointments: IShowingAppointment<'showing'>[] = []
+  const upcomingAppointments: IShowingAppointment<'showing'>[] = []
+
+  const currentTime = new Date()
+
+  sortedAppointmentsByTime.forEach(appointment => {
+    if (compareDateDESC(new Date(appointment.time), currentTime) <= 0) {
+      // Upcoming appointments should sort ASC, so I use unshift instead of push
+      upcomingAppointments.unshift(appointment)
+    } else {
+      pastAppointments.push(appointment)
+    }
+  })
+
+  return [...upcomingAppointments, ...pastAppointments]
 }
 
 export function getShowingRoleLabel(role: IDealRoleType): string {

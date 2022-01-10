@@ -2,11 +2,11 @@ import { MenuItem } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
 import { getActiveSort, getGridSortLabel } from 'deals/List/helpers/sorting'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 
 import AnalyticsDropdownTab from '../../../Analytics/DropdownTab'
 import {
@@ -26,6 +26,7 @@ interface Props {
 const TabFilters = withRouter((props: Props & WithRouterProps) => {
   const dispatch = useDispatch()
   const activeTeam = useUnsafeActiveTeam()
+
   const activeSort = getActiveSort(
     activeTeam,
     props.location,
@@ -39,10 +40,14 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
   useDefaultTab(props.params || {}, defaultTab)
 
   const handleChangeSort = async (column: SortableColumn) => {
+    const newQuery = {
+      ...props.location.query,
+      sortBy: column.value,
+      sortType: column.ascending ? 'asc' : 'desc'
+    }
+
     props.router.push(
-      `${props.location.pathname}?type=${props.searchQuery.type}&sortBy=${
-        column.value
-      }&sortType=${column.ascending ? 'asc' : 'desc'}`
+      `${props.location.pathname}?${new URLSearchParams(newQuery).toString()}`
     )
 
     const fieldValue = column.ascending ? column.value : `-${column.value}`
@@ -50,20 +55,9 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
     dispatch(setActiveTeamSetting(SORT_FIELD_SETTING_KEY, fieldValue))
   }
 
-  // The closings filter uses query type but it is not included in the static filters.
-  const staticFiltersTitle =
-    props.location.query.type === 'query' && props.params.filter !== 'closings'
-      ? `All ${props.params.filter} deals`
-      : 'All Deals'
-
   return (
     <PageTabs
-      value={
-        props.location.query.type === 'query' &&
-        ['listing', 'contract'].includes(props.params.filter)
-          ? 'all-deals'
-          : null
-      }
+      value={props.params.filter}
       defaultValue={props.params.filter}
       tabs={[
         ...inboxTabs
@@ -82,48 +76,11 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
           label={<span>Upcoming Closings</span>}
           to="/dashboard/deals/filter/closings?type=query"
         />,
-        <Tab
-          key={inboxTabs.length + 1}
-          value="all-deals"
-          label={
-            <DropdownTab component="div" title={staticFiltersTitle}>
-              {({ toggleMenu }) => (
-                <>
-                  <MenuItem
-                    key={0}
-                    selected={
-                      props.params.filter === 'listing' &&
-                      props.location.query.type === 'query'
-                    }
-                    onClick={() => {
-                      toggleMenu()
-                      props.router.push(
-                        '/dashboard/deals/filter/listing?type=query'
-                      )
-                    }}
-                  >
-                    All Listings Deals
-                  </MenuItem>
-
-                  <MenuItem
-                    key={1}
-                    selected={
-                      props.params.filter === 'contract' &&
-                      props.location.query.type === 'query'
-                    }
-                    onClick={() => {
-                      toggleMenu()
-                      props.router.push(
-                        '/dashboard/deals/filter/contract?type=query'
-                      )
-                    }}
-                  >
-                    All Contract Deals
-                  </MenuItem>
-                </>
-              )}
-            </DropdownTab>
-          }
+        <TabLink
+          key="search"
+          value="search"
+          label={<span>Search</span>}
+          to="/dashboard/deals/filter/search?type=query"
         />
       ]}
       actions={[

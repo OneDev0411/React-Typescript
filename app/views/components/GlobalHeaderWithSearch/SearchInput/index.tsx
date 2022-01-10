@@ -57,6 +57,7 @@ export const SearchInput = forwardRef(
       debounceTime = 0,
       defaultValue,
       onChange = () => {},
+      InputProps,
       ...others
     }: SearchInputProps,
     ref
@@ -155,7 +156,8 @@ export const SearchInput = forwardRef(
               )}
             </>
           ),
-          className: classes.input
+          className: classes.input,
+          ...InputProps
         }}
         style={widthStyle}
         inputRef={inputEl}

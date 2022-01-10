@@ -100,11 +100,11 @@ Are you sure?`,
     async (image: File) => {
       setIsLoading(true)
 
-      const brandAsset = await uploadBrandAsset(activeBrandId, image)
+      const brandAsset = await uploadBrandAsset([activeBrandId], image)
 
       setIsLoading(false)
 
-      return brandAsset.file
+      return brandAsset[0]!.file
     },
     [activeBrandId]
   )

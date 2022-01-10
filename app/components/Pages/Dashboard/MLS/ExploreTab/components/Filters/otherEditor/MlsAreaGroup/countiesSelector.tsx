@@ -53,7 +53,7 @@ export const CountiesSelector = ({ value, updateFilters }: Props) => {
     [countyInputValue]
   )
 
-  const onCountyChange = (event: any, values: string[]) => {
+  const onCountyChange = (_: unknown, values: string[]) => {
     const selectedValues = values && values.length ? values : null
 
     updateFilters({

@@ -12,6 +12,8 @@ import { selectBrandContexts } from 'reducers/deals/contexts'
 import { hasUserAccessToDeals, isBackOffice } from 'utils/acl'
 import { viewAsEveryoneOnTeam } from 'utils/user-teams'
 
+import { DealContextProviders } from './contexts'
+
 interface StateProps {
   activeTeam: Nullable<IUserTeam>
   dealsCount: number
@@ -88,7 +90,7 @@ function Container(props: Props) {
     )
   }
 
-  return <>{props.children}</>
+  return <DealContextProviders>{props.children}</DealContextProviders>
 }
 
 export default memo(Container)

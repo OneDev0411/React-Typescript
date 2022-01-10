@@ -8,6 +8,7 @@ import {
   Typography
 } from '@material-ui/core'
 import { mdiDrag, mdiTrashCan } from '@mdi/js'
+import cn from 'classnames'
 import {
   Draggable,
   DraggableProvided,
@@ -25,6 +26,8 @@ import { deletePropertyType } from 'models/property-types/delete-property-type'
 
 import { getChecklistPageLink } from '../helpers/get-checklist-page-link'
 
+import { PropertyTypeEdit } from './PropertyTypeEdit'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
@@ -37,11 +40,11 @@ const useStyles = makeStyles(
       '&:hover': {
         backgroundColor: theme.palette.action.hover
       },
-      '&:hover $deleteIcon': {
+      '&:hover .icon-button': {
         visibility: 'visible'
       },
-      '& .active': {
-        backgroundColor: theme.palette.success.light
+      '&.active': {
+        backgroundColor: theme.palette.info.light
       }
     },
     dragHandler: {
@@ -68,14 +71,18 @@ const useStyles = makeStyles(
 
 interface Props {
   index: number
+  isSelected: boolean
   checklistType: IDealChecklistType
   propertyType: IDealPropertyType
+  onUpdate: (propertyType: IDealPropertyType) => void
 }
 
 export function ChecklistsSidenavItem({
   index,
+  isSelected,
   checklistType,
-  propertyType
+  propertyType,
+  onUpdate
 }: Props) {
   const classes = useStyles()
   const [isDeleted, setIsDeleted] = useState(false)
@@ -141,7 +148,11 @@ export function ChecklistsSidenavItem({
     <Draggable draggableId={propertyType.id} index={index}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
         <div ref={provided.innerRef} {...provided.draggableProps}>
-          <div className={classes.root}>
+          <div
+            className={cn(classes.root, {
+              active: isSelected
+            })}
+          >
             <Box display="flex" alignItems="center">
               <div
                 {...provided.dragHandleProps}
@@ -158,16 +169,23 @@ export function ChecklistsSidenavItem({
               </Link>
             </Box>
 
-            <IconButton
-              size="small"
-              onClick={() => requestDelete(propertyType)}
-            >
-              <SvgIcon
-                path={mdiTrashCan}
-                className={classes.deleteIcon}
-                size={muiIconSizes.small}
+            <div>
+              <PropertyTypeEdit
+                propertyType={propertyType}
+                onUpdate={onUpdate}
               />
-            </IconButton>
+
+              <IconButton
+                size="small"
+                onClick={() => requestDelete(propertyType)}
+              >
+                <SvgIcon
+                  path={mdiTrashCan}
+                  className={cn(classes.deleteIcon, 'icon-button')}
+                  size={muiIconSizes.small}
+                />
+              </IconButton>
+            </div>
           </div>
         </div>
       )}

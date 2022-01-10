@@ -5,12 +5,12 @@ import { selectDealRoles } from 'reducers/deals/roles'
 
 export function useDealRoles(
   deal: IDeal | null,
-  paths?: string[]
+  whitelist?: string[]
 ): IDealRole[] {
   return useSelector<IAppState, IDealRole[]>(({ deals }) => {
     return deal
       ? (selectDealRoles(deals.roles, deal).filter((client: IDealRole) =>
-          paths ? paths.includes(client.role) : true
+          whitelist ? whitelist.includes(client.role) : true
         ) as IDealRole[])
       : []
   })

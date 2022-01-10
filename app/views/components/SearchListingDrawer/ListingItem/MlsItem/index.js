@@ -1,5 +1,5 @@
-import { Typography } from '@material-ui/core'
-import { mdiHomeOutline, mdiDrag, mdiClose } from '@mdi/js'
+import { Typography, makeStyles } from '@material-ui/core'
+import { mdiHomeOutline, mdiDrag, mdiClose, mdiDatabaseOutline } from '@mdi/js'
 import fecha from 'fecha'
 import Flex from 'styled-flex-component'
 
@@ -24,7 +24,28 @@ import {
   IconContainer
 } from '../styled'
 
+export const useStyles = makeStyles(
+  theme => ({
+    mlsSource: {
+      ...theme.typography.caption,
+      display: 'flex',
+      alignItems: 'center',
+      color: theme.palette.grey[700]
+    },
+    mlsSourceIcon: {
+      maxWidth: theme.spacing(1.75), // From figma
+      maxHeight: theme.spacing(1.75), // From figma
+      marginRight: theme.spacing(0.5)
+    }
+  }),
+  {
+    name: 'SeachListingDrawerListingItem'
+  }
+)
+
 export function MlsItem({ item, onClickRemove, ...props }) {
+  const classes = useStyles()
+
   const getStatus = () => {
     const { status, close_date } = item
 
@@ -78,8 +99,18 @@ export function MlsItem({ item, onClickRemove, ...props }) {
             >
               {getStatus()}
             </Status>
-            <Typography component="p" variant="caption" color="textSecondary">
-              Listed by: {item.mls_display_name}
+            <Typography
+              component="p"
+              variant="caption"
+              color="textSecondary"
+              title="Listing Provider (MLS) Source"
+              className={classes.mlsSource}
+            >
+              <SvgIcon
+                path={mdiDatabaseOutline}
+                className={classes.mlsSourceIcon}
+              />{' '}
+              {item.mls_display_name}
             </Typography>
           </MlsDetailsContainer>
 
