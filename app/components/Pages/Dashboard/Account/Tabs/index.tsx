@@ -53,6 +53,10 @@ const tabs: ItemsShape[] = [
     label: 'Calendar Export',
     to: '/dashboard/account/exportCalendar',
     isHidden: hasNotAccessToCRM
+  },
+  {
+    label: 'Campaigns',
+    to: '/dashboard/account/campaigns'
   }
 ]
 
