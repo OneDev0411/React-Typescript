@@ -1,6 +1,12 @@
 import { useCallback } from 'react'
 
-import { Button, makeStyles, Typography, Link } from '@material-ui/core'
+import {
+  Button,
+  makeStyles,
+  Typography,
+  Link,
+  CircularProgress
+} from '@material-ui/core'
 import { mdiPlus } from '@mdi/js'
 import classNames from 'classnames'
 import pluralize from 'pluralize'
@@ -137,7 +143,13 @@ function SuperCampaignEnrollManuallyButton({
         }
         <Button
           color="primary"
-          startIcon={<SvgIcon path={mdiPlus} size={muiIconSizes.small} />}
+          startIcon={
+            isSaving ? (
+              <CircularProgress color="inherit" size={muiIconSizes.small} />
+            ) : (
+              <SvgIcon path={mdiPlus} size={muiIconSizes.small} />
+            )
+          }
           size="small"
           onClick={handleOpenTeamAgentsDrawer}
           disabled={isSaving}
@@ -145,7 +157,7 @@ function SuperCampaignEnrollManuallyButton({
           Add
         </Button>
       </div>
-      {isTeamAgentsDrawerOpen && (
+      {isTeamAgentsDrawerOpen && !isSaving && (
         <TeamAgentsDrawer
           isPrimaryAgent
           multiSelection
