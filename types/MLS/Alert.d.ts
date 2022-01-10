@@ -28,7 +28,7 @@ declare interface AlertFilters {
   minimum_sold_date?: Nullable<number>
   excluded_listing_ids?: Nullable<UUID[]>
   mls_areas?: Nullable<unknown[]>
-  postal_codes?: Nullable<unknown[]>
+  postal_codes?: Nullable<string[]>
   search?: Nullable<string>
   limit?: Nullable<number>
   agents?: Nullable<UUID[]>

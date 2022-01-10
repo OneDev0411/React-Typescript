@@ -65,4 +65,4 @@ ssh "dokku@$REVIEW_HOST" apps:unlock $APP || true
 git push "dokku@$REVIEW_HOST:$APP" $CI_COMMIT_REF_SLUG:master --force
 
 # Generate Certificates. Due do some race conditions we should do this last.
-ssh "dokku@$REVIEW_HOST" letsencrypt $APP
+ssh "dokku@$REVIEW_HOST" letsencrypt:enable $APP

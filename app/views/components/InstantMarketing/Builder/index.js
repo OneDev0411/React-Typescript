@@ -28,7 +28,6 @@ import { getBrandColors } from 'utils/get-brand-colors'
 import { loadJS, unloadJS } from 'utils/load-js'
 import {
   isAdmin,
-  getBrandByType,
   getActiveTeamSettings,
   getActiveBrand
 } from 'utils/user-teams'
@@ -175,11 +174,11 @@ class Builder extends React.Component {
     const { load: loadAssetManagerPlugin } = await import('./AssetManager')
     const { load: loadStyleManagerPlugin } = await import('./StyleManager')
 
-    const brand = getBrandByType(this.props.user, 'Brokerage')
+    const activeBrand = getActiveBrand(this.props.user)
     const colors =
       this.selectedTemplateColors.length > 0
         ? this.selectedTemplateColors
-        : getBrandColors(brand)
+        : getBrandColors(activeBrand)
 
     await Promise.all([
       loadAssetManagerPlugin(),
@@ -324,11 +323,11 @@ class Builder extends React.Component {
   }
 
   loadCKEditorRTE = async () => {
-    const brand = getBrandByType(this.props.user, 'Brokerage')
+    const activeBrand = getActiveBrand(this.props.user)
     const colors =
       this.selectedTemplateColors.length > 0
         ? this.selectedTemplateColors
-        : getBrandColors(brand)
+        : getBrandColors(activeBrand)
 
     return attachCKEditor(this.editor, [], colors, undefined, () => {
       const templateFonts = this.selectedTemplateFonts
@@ -550,8 +549,8 @@ class Builder extends React.Component {
 
     this.emailBlocksRegistered = true
 
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
+    const activeBrand = getActiveBrand(this.props.user)
+    const renderData = getTemplateRenderData(activeBrand)
 
     removeUnusedBlocks(this.editor)
 
@@ -574,8 +573,8 @@ class Builder extends React.Component {
   }
 
   async registerSocialBlocks() {
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
+    const activeBrand = getActiveBrand(this.props.user)
+    const renderData = getTemplateRenderData(activeBrand)
 
     const templateBlockOptions = await getTemplateBlockOptions(
       this.selectedTemplate,
@@ -601,8 +600,8 @@ class Builder extends React.Component {
 
     this.websiteBlocksRegistered = true
 
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
+    const activeBrand = getActiveBrand(this.props.user)
+    const renderData = getTemplateRenderData(activeBrand)
 
     const dynamicBlocksOptions = this.getBlocksOptions()
     const blocksOptions = {
@@ -966,8 +965,7 @@ class Builder extends React.Component {
 
   generateBrandedTemplate = (templateMarkup, data) => {
     const activeBrand = getActiveBrand(this.props.user)
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
+    const renderData = getTemplateRenderData(activeBrand)
 
     return nunjucks.renderString(templateMarkup, {
       ...data,

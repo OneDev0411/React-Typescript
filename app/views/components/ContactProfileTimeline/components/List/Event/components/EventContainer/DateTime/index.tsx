@@ -8,7 +8,7 @@ interface Props {
 
 export function DateTime({ event }: Props) {
   if (event.all_day) {
-    return <span>All day</span>
+    return <span>All Day</span>
   }
 
   const timeFormat = 'hh:mmA'

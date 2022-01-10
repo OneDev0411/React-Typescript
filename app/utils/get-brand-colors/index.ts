@@ -1,25 +1,29 @@
-import flattenBrand from 'utils/flatten-brand'
-
 const DEFAULT_COLORS = ['#fff', '#ccc', '#999', '#666', '#333', '#000']
 
 export function getBrandColors(brand: IBrand): string[] {
-  const flattedBrand = flattenBrand(brand)
+  const colors: string[] = []
 
-  if (
-    !flattedBrand ||
-    !flattedBrand.settings ||
-    !flattedBrand.settings.marketing_palette
-  ) {
-    return DEFAULT_COLORS
+  if (brand.settings?.marketing_palette) {
+    colors.push(...getColorsFromPalette(brand.settings.marketing_palette))
   }
 
-  const brandPalette = flattedBrand.settings
-    .marketing_palette as BrandMarketingPalette
+  while (brand.parent) {
+    if (brand.parent.settings?.marketing_palette) {
+      colors.push(
+        ...getColorsFromPalette(brand.parent.settings.marketing_palette)
+      )
+    }
 
-  const colorKeys = Object.keys(brandPalette).filter(key =>
-    key.includes('color')
-  )
-  const brandColors = colorKeys.map(key => brandPalette[key])
+    brand = brand.parent
+  }
 
-  return [...new Set(brandColors)]
+  const uniqueColors = [...new Set(colors)]
+
+  return uniqueColors.length === 0 ? DEFAULT_COLORS : uniqueColors
+}
+
+function getColorsFromPalette(palette: BrandMarketingPalette): string[] {
+  return Object.keys(palette)
+    .filter(key => key.includes('color'))
+    .map(key => palette[key])
 }
