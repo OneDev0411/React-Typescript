@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { changeUrl } from '@app/utils/change-url'
 import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 import TableColumnProperty, {
   TableColumnPropertyProps
@@ -16,9 +17,15 @@ function ListingsListColumnProperty({
 }: ListingsListColumnPropertyProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const openModal = () => setIsOpen(true)
+  const closeModal = () => {
+    window.history.back()
+    setIsOpen(false)
+  }
 
-  const closeModal = () => setIsOpen(false)
+  const openModal = () => {
+    changeUrl(`/dashboard/mls/${listingId}`)
+    setIsOpen(true)
+  }
 
   return (
     <>
