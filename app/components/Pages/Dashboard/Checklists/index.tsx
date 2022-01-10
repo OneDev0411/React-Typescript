@@ -186,7 +186,7 @@ export default function ChecklistsPage({ location }: Props) {
           {isFormOpen && (
             <PropertyTypeForm
               isOpen
-              onSave={handleCreatePropertyType}
+              onCreate={handleCreatePropertyType}
               onClose={() => setIsFormOpen(false)}
             />
           )}
