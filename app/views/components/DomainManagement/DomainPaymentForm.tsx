@@ -79,6 +79,8 @@ function DomainPaymentForm({
           onPayClick(result.customer.id, done)
         }
 
+        wizard.setLoading(false)
+
         return result
       } catch (error: unknown) {
         wizard.setLoading(false)

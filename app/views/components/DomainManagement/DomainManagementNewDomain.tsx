@@ -97,7 +97,6 @@ function DomainManagementNewDomain({
         await purchaseDomain(stripeCustomerId, domainName, domainAgreementKeys)
         handleAddDomainToHost(domainName, wizard)
       } catch (_: unknown) {
-        wizard.setLoading(false)
         dispatch(
           notify({
             message:
@@ -107,6 +106,7 @@ function DomainManagementNewDomain({
         )
       }
 
+      wizard.setLoading(false)
       done?.()
     })
   }
