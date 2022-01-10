@@ -1,5 +1,5 @@
 function stripTags(html: string): string {
-  let tmp = document.createElement('DIV')
+  const tmp = document.createElement('DIV')
 
   tmp.innerHTML = html
 
