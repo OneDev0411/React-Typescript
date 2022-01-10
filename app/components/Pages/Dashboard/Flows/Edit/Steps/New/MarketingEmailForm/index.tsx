@@ -3,6 +3,10 @@ import { memo } from 'react'
 import { Box } from '@material-ui/core'
 import { mdiNewspaperVariantOutline } from '@mdi/js'
 import { Form } from 'react-final-form'
+import { useSelector } from 'react-redux'
+
+import { selectActiveBrand } from '@app/selectors/brand'
+import { selectUser } from '@app/selectors/user'
 
 import { Description } from '../components/BaseFields/Description'
 import { TemplateInctance } from '../components/BaseFields/TemplateInctance'
@@ -24,16 +28,19 @@ function MarketingEmailForm({
   makeDirtyStep,
   onMoveDownStep
 }: BaseFormProps) {
+  const user = useSelector(selectUser)
+  const brand = useSelector(selectActiveBrand)
+
   return (
     <Form
-      onSubmit={(data: MarketingEmailFormData) => {
+      onSubmit={async (data: MarketingEmailFormData) => {
         const order = prevStepOrder ? prevStepOrder + 1 : index
 
-        const newStep: IBrandFlowStepInput = marketingEmailFormPreSaveFormat(
-          order,
-          data,
-          step
-        )
+        const newStep: IBrandFlowStepInput =
+          await marketingEmailFormPreSaveFormat(order, data, step ?? null, {
+            user,
+            brand
+          })
 
         // Update step
         if (step) {
@@ -78,8 +85,9 @@ function MarketingEmailForm({
             <Box mb={2}>
               <TemplateInctance
                 disabled={disableEdit}
-                currentBrandTemplate={step?.template || null}
-                currentTemplateInstance={step?.template_instance || null}
+                currentTemplate={
+                  step?.template_instance ?? step?.template ?? null
+                }
               />
             </Box>
           </BaseFormLayout>

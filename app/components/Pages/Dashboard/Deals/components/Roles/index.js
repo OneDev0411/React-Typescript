@@ -21,9 +21,10 @@ import { getNameInitials } from 'utils/helpers'
 
 import { SectionTitle } from '../../Dashboard/Factsheet/styled'
 import { getAvatarTitle } from '../../utils/get-avatar-title'
-import { roleName, getLegalFullName, isPrimaryAgent } from '../../utils/roles'
+import { getLegalFullName, isPrimaryAgent } from '../../utils/roles'
 
 import AddRole from './AddRole'
+import { RoleName } from './RoleName'
 import {
   RolesContainer,
   RoleItem,
@@ -228,7 +229,7 @@ class Roles extends React.Component {
                 </Flex>
 
                 <RoleType>
-                  {roleName(role.role)}
+                  <RoleName name={role.role} />
                   {this.props.showEmail && role.user && ` . ${role.user.email}`}
                 </RoleType>
               </Flex>

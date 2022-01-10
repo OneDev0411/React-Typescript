@@ -1,8 +1,9 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
+import { useDealsRolesContext } from '@app/contexts/deals-roles-definitions/use-deals-roles-context'
 import { QuickSuggestion } from 'components/EmailRecipientsChipsInput/types'
 import { getContactsCount } from 'models/contacts/get-contacts-count'
 import { IAppState } from 'reducers'
@@ -66,11 +67,14 @@ export function EmailRecipientQuickSuggestions({
     dealRoles: selectDealRoles(roles, deal),
     contactsInfo: contacts.list
   }))
+  const { dealRolesByName } = useDealsRolesContext()
 
   const confirmationModal = useContext(ConfirmationModalContext)
 
   const quickSuggestions: QuickSuggestion[] = [
-    ...dealRoles.filter(({ email }) => !!email).map(dealRoleToSuggestion),
+    ...dealRoles
+      .filter(({ email }) => !!email)
+      .map(name => dealRoleToSuggestion(name, dealRolesByName)),
     {
       recipient: {
         recipient_type: 'AllContacts'

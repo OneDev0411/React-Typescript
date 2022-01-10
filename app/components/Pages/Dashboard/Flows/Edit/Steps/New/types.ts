@@ -37,8 +37,5 @@ export interface BasicEmailFormData extends BaseFormData {
 }
 
 export interface MarketingEmailFormData extends BaseFormData {
-  template: Nullable<{
-    id: UUID
-    isInstance: boolean
-  }>
+  template: Nullable<IMarketingTemplateInstance | IBrandMarketingTemplate>
 }

@@ -63,7 +63,9 @@ export async function prepareAndSendUserData(
   // Normally what we should be doing here is to call Appcues.Page(), but
   // behind the scenes, Appcues.identify() also invokes that function.
   // Reac more: https://docs.appcues.com/article/161-javascript-api
-  window.AppcuesReady(() => {
-    window.Appcues.identify(userId, userData)
-  })
+  if (window.AppcuesReady && window.Appcues) {
+    window.AppcuesReady(() => {
+      window.Appcues.identify(userId, userData)
+    })
+  }
 }

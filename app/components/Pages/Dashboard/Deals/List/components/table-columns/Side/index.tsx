@@ -6,7 +6,8 @@ import { Avatar } from 'components/Avatar'
 import PopOver from 'components/Popover'
 import { getSide } from 'models/Deal/helpers/context/get-side'
 
-import { roleName, getLegalFullName } from '../../../../utils/roles'
+import { RoleName } from '../../../../components/Roles/RoleName'
+import { getLegalFullName } from '../../../../utils/roles'
 
 interface Props {
   deal: IDeal
@@ -55,7 +56,9 @@ export function Side({ deal, roles, rowId, rowsCount }: Props) {
                   <div className="role-name-container">
                     <div className="name">{`${getLegalFullName(role)},`}</div>
 
-                    <div className="role">{roleName(role.role)}</div>
+                    <div className="role">
+                      <RoleName name={role.role} />
+                    </div>
                   </div>
                   {role.user && <div className="email">{role.user.email}</div>}
                 </div>
