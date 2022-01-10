@@ -8,7 +8,6 @@ import useAsync from 'hooks/use-async'
 import getDomainAgreements from 'models/domains/get-domain-agreements'
 
 import DomainLoading from './DomainLoading'
-import { sanitizeDomainAgreement } from './helpers'
 
 const useStyles = makeStyles(
   theme => ({
@@ -52,11 +51,7 @@ function DomainAgreement({
 
   useEffect(() => {
     setChecked(false)
-    run(async () => {
-      const agreements = await getDomainAgreements(domainName)
-
-      return agreements.map(sanitizeDomainAgreement)
-    })
+    run(async () => getDomainAgreements(domainName))
   }, [run, domainName])
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
