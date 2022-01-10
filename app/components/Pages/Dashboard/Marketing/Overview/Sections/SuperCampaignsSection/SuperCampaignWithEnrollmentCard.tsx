@@ -28,12 +28,12 @@ function SuperCampaignWithEnrollmentCard({
   const closePreviewDrawer = () => setIsPreviewOpen(false)
 
   const getBestDescriptionLineCount = () => {
-    if (hasManageAccess) {
-      return 6
-    }
-
     if (enrollment) {
       return 3
+    }
+
+    if (hasManageAccess) {
+      return 6
     }
 
     return 4
