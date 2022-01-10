@@ -1,8 +1,6 @@
 import { differenceInDays } from 'date-fns'
 
 import { ACL } from '@app/constants/acl'
-import { OAuthProvider } from 'constants/contacts'
-import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
 
 import { AppcuesUserInfo, AppcuesUserAccessList } from './types'
 
@@ -48,12 +46,9 @@ export function createAppcuesUserData(
 export async function prepareAndSendUserData(
   accessList: IPermission[],
   userId: string,
-  userInfo: AppcuesUserInfo
+  userInfo: AppcuesUserInfo,
+  gmailOrOutlookSynced: boolean
 ) {
-  const google = await getOAuthAccounts(OAuthProvider.Google)
-  const outlook = await getOAuthAccounts(OAuthProvider.Outlook)
-  const gmailOrOutlookSynced = Boolean(google.length || outlook.length)
-
   const appcuesAccessList = createAppcuesAccessList(
     accessList,
     DEFAULT_APPCUES_USER_ACL
@@ -68,7 +63,9 @@ export async function prepareAndSendUserData(
   // Normally what we should be doing here is to call Appcues.Page(), but
   // behind the scenes, Appcues.identify() also invokes that function.
   // Reac more: https://docs.appcues.com/article/161-javascript-api
-  window.AppcuesReady(() => {
-    window.Appcues.identify(userId, userData)
-  })
+  if (window.AppcuesReady && window.Appcues) {
+    window.AppcuesReady(() => {
+      window.Appcues.identify(userId, userData)
+    })
+  }
 }

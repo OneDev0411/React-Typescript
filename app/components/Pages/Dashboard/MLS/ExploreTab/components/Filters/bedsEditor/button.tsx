@@ -24,7 +24,7 @@ export const BedsButton = ({
       onClick={onClick}
       color={isActive ? 'primary' : undefined}
       variant="outlined"
-      size="medium"
+      size="small"
       startIcon={<SvgIcon path={mdiBedKingOutline} size={muiIconSizes.small} />}
     >
       {isActive ? (

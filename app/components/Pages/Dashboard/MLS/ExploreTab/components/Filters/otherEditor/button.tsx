@@ -20,7 +20,8 @@ const otherFiltersGroups: Partial<Record<keyof AlertFilters, string>> = {
   pool: 'pool',
   listing_statuses: 'status',
   open_house: 'open_house',
-  minimum_parking_spaces: 'parking_spaces'
+  minimum_parking_spaces: 'parking_spaces',
+  postal_codes: 'postal_codes'
 
   // Update filters to unifying them across all MLSs
   // https://gitlab.com/rechat/web/-/issues/5673
@@ -62,7 +63,7 @@ export const OtherButton = ({
       onClick={onClick}
       color={isActive ? 'primary' : undefined}
       variant="outlined"
-      size="medium"
+      size="small"
       startIcon={<SvgIcon path={mdiTune} size={muiIconSizes.small} />}
     >
       More Filters{' '}

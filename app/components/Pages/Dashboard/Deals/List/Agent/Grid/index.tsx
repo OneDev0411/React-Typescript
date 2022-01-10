@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
+import { useMakeOriginQueryParamFromLocation } from '@app/hooks/use-make-origin-query-param-from-location'
 import { goTo } from '@app/utils/go-to'
 import Grid from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
@@ -79,6 +80,16 @@ function AgentGrid(props: Props & WithRouterProps) {
   const brandChecklists = useBrandChecklists(getActiveTeamId(user)!)
 
   const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
+  const originQueryParam = useMakeOriginQueryParamFromLocation()
+
+  const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
+    return {
+      onClick: () => {
+        goTo(`/dashboard/deals/${deal.id}?${originQueryParam}`)
+        onDealOpened()
+      }
+    }
+  }
 
   const columns = [
     {
@@ -94,6 +105,7 @@ function AgentGrid(props: Props & WithRouterProps) {
           notificationsCount={
             deal.new_notifications ? deal.new_notifications.length : 0
           }
+          originQueryParam={originQueryParam}
         />
       )
     },
@@ -151,15 +163,6 @@ function AgentGrid(props: Props & WithRouterProps) {
   }, [deals, statuses, props.activeFilter])
 
   useDealsListsLuckyMode(data, isFetchingDeals)
-
-  const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
-    return {
-      onClick: () => {
-        goTo(`/dashboard/deals/${deal.id}`)
-        onDealOpened()
-      }
-    }
-  }
 
   return (
     <Grid<IDeal>

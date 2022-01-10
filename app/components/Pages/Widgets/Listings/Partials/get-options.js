@@ -27,15 +27,18 @@ export function getOptions(brokerage, agent, type, brandId, user, limit = 12) {
     ]
   }
 
-  if (brokerage) {
+  // These 'undefined' checks added because of this issue:
+  // https://rechathq.slack.com/archives/C0TUXR9GQ/p1638973321493300
+
+  if (brokerage && brokerage !== 'undefined') {
     options.list_offices = [brokerage]
   }
 
-  if (agent) {
+  if (agent && agent !== 'undefined') {
     options.agents = [agent]
   }
 
-  if (brandId) {
+  if (brandId && brandId !== 'undefined') {
     options.brand = brandId
   }
 

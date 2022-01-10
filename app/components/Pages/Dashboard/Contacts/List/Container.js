@@ -94,38 +94,10 @@ class ContactsList extends React.Component {
   componentDidMount() {
     const globalButtonDispatch = this.context
 
-    const { parkedContactsCount, searchInputValue } = this.state
+    const { parkedContactsCount } = this.state
     const { user, fetchTags, getContactsTags } = this.props
-    const sortFieldSetting = getUserSettingsInActiveTeam(
-      user,
-      SORT_FIELD_SETTING_KEY
-    )
-    const relevanceSortKey = '-last_touch_rank'
 
-    const order = searchInputValue
-      ? relevanceSortKey
-      : sortFieldSetting && sortFieldSetting !== relevanceSortKey
-      ? sortFieldSetting
-      : '-last_touch'
-
-    this.fetchContactsAndJumpToSelected()
-    this.getDuplicateClusterCount()
-
-    this.setState({
-      viewMode:
-        getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) ||
-        'table',
-      sortOrder: order
-    })
-
-    if (globalButtonDispatch) {
-      globalButtonDispatch({
-        type: SET_CREATE_CALLBACK_HANDLER,
-        handlers: {
-          onCreateAndAddNewContact: this.onCreateContact
-        }
-      })
-    }
+    this.loadTableData()
 
     if (!parkedContactsCount) {
       this.getParkedContactCount()
@@ -135,7 +107,22 @@ class ContactsList extends React.Component {
       getContactsTags()
     }
 
+    this.getDuplicateClusterCount()
     this.setSelectedShortcutFilter()
+
+    const viewMode =
+      getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) || 'table'
+
+    this.setState({ viewMode })
+
+    if (globalButtonDispatch) {
+      globalButtonDispatch({
+        type: SET_CREATE_CALLBACK_HANDLER,
+        handlers: {
+          onCreateAndAddNewContact: this.handleOnCreateContact
+        }
+      })
+    }
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -170,6 +157,14 @@ class ContactsList extends React.Component {
     }
 
     setContactsListTextFilter(this.state.searchInputValue)
+  }
+
+  loadTableData = () => {
+    const sortOrder = this.getTeamSortOrder()
+
+    this.fetchContactsAndJumpToSelected(sortOrder)
+
+    this.setState({ sortOrder })
   }
 
   setSelectedShortcutFilter = () => {
@@ -250,7 +245,7 @@ class ContactsList extends React.Component {
     }
   }
 
-  async fetchContactsAndJumpToSelected() {
+  async fetchContactsAndJumpToSelected(sortOrder = '-last_touch') {
     this.setState({
       isFetchingMoreContacts: true
     })
@@ -260,7 +255,7 @@ class ContactsList extends React.Component {
 
     this.scrollToSelector(idSelector)
 
-    await this.fetchList(start)
+    await this.fetchList(start, false, false, sortOrder)
 
     this.setState({
       isFetchingMoreContacts: false
@@ -325,10 +320,31 @@ class ContactsList extends React.Component {
   hasSearchState = () =>
     this.props.filters || this.state.searchInputValue || this.state.sortOrder
 
+  getTeamSortOrder = () => {
+    const { searchInputValue } = this.state
+    const { user } = this.props
+
+    // load previous sorting settings from active team
+    const sortFieldSetting = getUserSettingsInActiveTeam(
+      user,
+      SORT_FIELD_SETTING_KEY
+    )
+
+    const relevanceSortKey = '-last_touch_rank'
+    const sortOrder = searchInputValue
+      ? relevanceSortKey
+      : sortFieldSetting && sortFieldSetting !== relevanceSortKey
+      ? sortFieldSetting
+      : '-last_touch'
+
+    return sortOrder
+  }
+
   fetchList = async (
     start = 0,
     loadMoreBefore = false,
-    resetLoadedRanges = false
+    resetLoadedRanges = false,
+    sortOrder = undefined
   ) => {
     if (start === 0 && !loadMoreBefore) {
       this.resetSelectedRows()
@@ -336,12 +352,19 @@ class ContactsList extends React.Component {
 
     try {
       if (this.hasSearchState()) {
+        sortOrder = sortOrder || this.getTeamSortOrder()
+
+        if (sortOrder !== this.state.sortOrder) {
+          this.setState({ sortOrder })
+        }
+
         await this.handleFilterChange(
           {
             start,
             prependResult: loadMoreBefore
           },
-          resetLoadedRanges
+          resetLoadedRanges,
+          sortOrder
         )
       } else {
         this.addLoadedRange(start)
@@ -468,18 +491,17 @@ class ContactsList extends React.Component {
     })
   }
 
-  changeSortOrder = ({ value: order }) => {
-    if (order === this.state.sortOrder) {
+  handleChangeSortOrder = ({ value: sortOrder }) => {
+    if (sortOrder === this.state.sortOrder) {
       return
     }
 
     const { user, getUserTeams, setUserSetting } = this.props
 
-    this.setState({
-      sortOrder: order
-    })
-    setUserSetting(SORT_FIELD_SETTING_KEY, order)
-    this.handleFilterChange({}, true)
+    setUserSetting(SORT_FIELD_SETTING_KEY, sortOrder)
+    this.setState({ sortOrder })
+    this.handleFilterChange({}, true, sortOrder)
+
     getUserTeams(user)
   }
 
@@ -818,7 +840,7 @@ class ContactsList extends React.Component {
           }
         }}
         sortProps={{
-          onChange: this.changeSortOrder,
+          onChange: this.handleChangeSortOrder,
           currentOrder: sortOrder,
           searchValue: searchInputValue
         }}
@@ -959,7 +981,17 @@ class ContactsList extends React.Component {
                 })}
               >
                 <ViewMode enabled={isBoardMode}>
-                  <Board searchTerm={this.state.searchInputValue || ''} />
+                  {isBoardMode && (
+                    <Board
+                      criteria={{
+                        searchTerm: state.searchInputValue,
+                        filters: props.filters,
+                        flows: props.flows,
+                        crmTasks: props.crmTasks,
+                        conditionOperator: props.conditionOperator
+                      }}
+                    />
+                  )}
                 </ViewMode>
 
                 <ViewMode enabled={isTableMode}>

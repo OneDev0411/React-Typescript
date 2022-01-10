@@ -30,6 +30,11 @@ const tabs: ItemsShape[] = [
     isHidden: hasNotAccessToCRM
   },
   {
+    label: 'Triggers',
+    to: '/dashboard/account/triggers',
+    isHidden: hasNotAccessToCRM
+  },
+  {
     label: 'Email Signature',
     to: '/dashboard/account/email-signature',
     isHidden: hasNotAccessToCRM

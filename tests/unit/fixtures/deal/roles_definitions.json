@@ -1,0 +1,231 @@
+{
+  "definitions": [
+    {
+      "title": "Buyer",
+      "checklist_types": [
+        "Offer",
+        "Buying"
+      ],
+      "transaction_type": [
+        "Sale"
+      ],
+      "role": "Buyer",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Buyer Agent",
+      "checklist_types": [
+        "Offer",
+        "Buying"
+      ],
+      "lease": true,
+      "sale": true,
+      "transaction_type": [
+        "Sale",
+        "Lease"
+      ],
+      "role": "BuyerAgent",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Co Buyer Agent",
+      "checklist_types": [
+        "Offer",
+        "Buying"
+      ],
+      "transaction_type": [
+        "Sale",
+        "Lease"
+      ],
+      "role": "CoBuyerAgent",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Buyer Power Of Attorney",
+      "checklist_types": [
+        "Offer",
+        "Buying"
+      ],
+      "transaction_type": [
+        "Sale"
+      ],
+      "role": "BuyerPowerOfAttorney",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Buyer Lawyer",
+      "checklist_types": [
+        "Offer",
+        "Buying"
+      ],
+      "transaction_type": [
+        "Sale"
+      ],
+      "role": "BuyerLawyer",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Buyer Referral",
+      "checklist_types": [
+        "Offer",
+        "Buying"
+      ],
+      "transaction_type": [
+        "Sale"
+      ],
+      "role": "BuyerReferral",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Buyer Broker",
+      "checklist_types": [
+        "Offer",
+        "Buying"
+      ],
+      "transaction_type": [
+        "Sale",
+        "Lease"
+      ],
+      "role": "BuyerBroker",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Seller",
+      "checklist_types": [
+        "Selling"
+      ],
+      "transaction_type": [
+        "Sale"
+      ],
+      "role": "Seller",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Seller Agent",
+      "checklist_types": [
+        "Selling"
+      ],
+      "transaction_type": [
+        "Sale",
+        "Lease"
+      ],
+      "role": "SellerAgent",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Co Seller Agent",
+      "checklist_types": [
+        "Selling"
+      ],
+      "transaction_type": [
+        "Sale",
+        "Lease"
+      ],
+      "role": "CoSellerAgent",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Seller Power Of Attorney",
+      "checklist_types": [
+        "Selling"
+      ],
+      "transaction_type": [
+        "Sale"
+      ],
+      "role": "SellerPowerOfAttorney",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Seller Lawyer",
+      "checklist_types": [
+        "Selling"
+      ],
+      "transaction_type": [
+        "Sale"
+      ],
+      "role": "SellerLawyer",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Seller Referral",
+      "checklist_types": [
+        "Selling"
+      ],
+      "transaction_type": [
+        "Sale"
+      ],
+      "role": "SellerReferral",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Seller Broker",
+      "checklist_types": [
+        "Selling"
+      ],
+      "transaction_type": [
+        "Sale",
+        "Lease"
+      ],
+      "role": "SellerBroker",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Escrow Officer",
+      "checklist_types": [
+        "Offer",
+        "Buying"
+      ],
+      "transaction_type": [
+        "Sale"
+      ],
+      "role": "Title",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Tenant",
+      "checklist_types": [
+        "Offer",
+        "Buying"
+      ],
+      "transaction_type": [
+        "Lease"
+      ],
+      "role": "Tenant",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Tenant Power Of Attorney",
+      "checklist_types": [
+        "Offer",
+        "Buying"
+      ],
+      "transaction_type": [
+        "Lease"
+      ],
+      "role": "TenantPowerOfAttorney",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Landlord",
+      "checklist_types": [
+        "Selling"
+      ],
+      "transaction_type": [
+        "Lease"
+      ],
+      "role": "Landlord",
+      "type": "deal_role_definition"
+    },
+    {
+      "title": "Landlord Power Of Attorney",
+      "checklist_types": [
+        "Selling"
+      ],
+      "transaction_type": [
+        "Lease"
+      ],
+      "role": "LandlordPowerOfAttorney",
+      "type": "deal_role_definition"
+    }
+  ]
+}

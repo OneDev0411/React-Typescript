@@ -6,7 +6,7 @@ export default async function getListing(
 ): Promise<IListing<'proposed_agent'>> {
   try {
     const req = new Fetch().get(`/listings/${listingId}/`).query({
-      associations: 'listing.proposed_agent'
+      'associations[]': ['listing.proposed_agent', 'agent.office']
     })
 
     if (brandId) {

@@ -3,6 +3,7 @@ import React, { ComponentProps, useState, useMemo } from 'react'
 import { Field } from 'react-final-form'
 import { useSelector, useDispatch } from 'react-redux'
 
+import { DealRolesProvider } from '@app/contexts/deals-roles-definitions/provider'
 import { confirmation } from 'actions/confirmation'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
@@ -161,17 +162,18 @@ export function SingleEmailComposeForm({
     // to we can move this context provider into the EmailComposeForm and
     // add the recipient context by a prop to it.
     <TemplateExpressionContext.Provider value={expressionContext}>
-      <EmailComposeForm
-        hasSignatureByDefault
-        {...otherProps}
-        initialValues={initialValues}
-        deal={deal}
-        isSubmitDisabled={isLoadingAccounts}
-        sendEmail={handleSendEmail}
-        onSelectMarketingTemplate={handleSelectMarketingTemplate}
-        renderCollapsedFields={(values: EmailFormValues) => (
-          <>
-            {/*
+      <DealRolesProvider>
+        <EmailComposeForm
+          hasSignatureByDefault
+          {...otherProps}
+          initialValues={initialValues}
+          deal={deal}
+          isSubmitDisabled={isLoadingAccounts}
+          sendEmail={handleSendEmail}
+          onSelectMarketingTemplate={handleSelectMarketingTemplate}
+          renderCollapsedFields={(values: EmailFormValues) => (
+            <>
+              {/*
             This is kind of a hack for a behavior in react-final-form.
             When `initialValues` are changed, it updates `values` but only
             those fields that have a corresponding field rendered at that
@@ -180,30 +182,31 @@ export function SingleEmailComposeForm({
             therefore, the changes are never reflected to `values` in this case.
             we render two dummy fields to prevent this issue.
             */}
-            <Field name="cc" render={() => null} />
-            <Field name="to" render={() => null} />
+              <Field name="cc" render={() => null} />
+              <Field name="to" render={() => null} />
 
-            <CollapsedEmailRecipients
-              to={values.to || []}
-              cc={values.cc || []}
-              bcc={values.bcc || []}
-            />
-          </>
-        )}
-        renderFields={values => (
-          <>
-            <EmailRecipientsFields
-              values={values}
-              disableAddNewRecipient={disableAddNewRecipient}
-              individualMode={individualMode}
-              deal={deal}
-              senderAccounts={allAccounts}
-              onToFieldChange={setToFieldValue}
-              users={activeBrandUsers}
-            />
-          </>
-        )}
-      />
+              <CollapsedEmailRecipients
+                to={values.to || []}
+                cc={values.cc || []}
+                bcc={values.bcc || []}
+              />
+            </>
+          )}
+          renderFields={values => (
+            <>
+              <EmailRecipientsFields
+                values={values}
+                disableAddNewRecipient={disableAddNewRecipient}
+                individualMode={individualMode}
+                deal={deal}
+                senderAccounts={allAccounts}
+                onToFieldChange={setToFieldValue}
+                users={activeBrandUsers}
+              />
+            </>
+          )}
+        />
+      </DealRolesProvider>
     </TemplateExpressionContext.Provider>
   )
 }
