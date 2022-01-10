@@ -352,13 +352,19 @@ class ContactsList extends React.Component {
 
     try {
       if (this.hasSearchState()) {
+        sortOrder = sortOrder || this.getTeamSortOrder()
+
+        if (sortOrder !== this.state.sortOrder) {
+          this.setState({ sortOrder })
+        }
+
         await this.handleFilterChange(
           {
             start,
             prependResult: loadMoreBefore
           },
           resetLoadedRanges,
-          sortOrder || this.getTeamSortOrder()
+          sortOrder
         )
       } else {
         this.addLoadedRange(start)
