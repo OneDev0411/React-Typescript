@@ -67,13 +67,20 @@ function DomainPaymentForm({
 
     const done = () => setFieldDisabledSafe(false)
 
-    run(async () => createStripeToken(stripe, cardElement, lastPaymentId)).then(
-      result => {
+    run(async () => {
+      try {
+        const result = await createStripeToken(
+          stripe,
+          cardElement,
+          lastPaymentId
+        )
+
         if (result.customer) {
           onPayClick(result.customer.id, done)
         }
-      },
-      () => {
+
+        return result
+      } catch (error: unknown) {
         wizard.setLoading(false)
         done()
         dispatch(
@@ -83,8 +90,9 @@ function DomainPaymentForm({
             status: 'error'
           })
         )
+        throw error
       }
-    )
+    })
   }
 
   const handleCardChange: DomainPaymentFormCardFieldProps['onChange'] =
