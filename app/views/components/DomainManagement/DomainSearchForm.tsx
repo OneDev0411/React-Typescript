@@ -40,10 +40,10 @@ function DomainSearchForm({
   }
 
   useEffect(() => {
-    if (!disabled) {
+    if (!isLoading) {
       inputRef.current?.focus()
     }
-  }, [disabled])
+  }, [isLoading])
 
   return (
     <form onSubmit={handleSearch}>
