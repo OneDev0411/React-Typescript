@@ -48,6 +48,11 @@ export function getSidebarSections(): SidebarSection[] {
         label: 'Brand Name'
       },
       {
+        names: ['phone_number'],
+        type: 'text',
+        label: 'Phone Number'
+      },
+      {
         names: ['website'],
         type: 'text',
         label: 'Website'
