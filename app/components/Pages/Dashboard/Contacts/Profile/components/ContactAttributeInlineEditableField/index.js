@@ -232,7 +232,7 @@ class MasterField extends Component {
     }
   }
 
-  handleValidationBeforeSave = () => {
+  handleValidationBeforeSave = async () => {
     const { attribute, trigger: triggerFromParent } = this.props
 
     if (!this.isDirty) {
@@ -241,7 +241,10 @@ class MasterField extends Component {
       return error
     }
 
-    const error = validationAttrFields(this.attribute_def, this.state.value)
+    const error = await validationAttrFields(
+      this.attribute_def,
+      this.state.value
+    )
 
     if (error) {
       return error
@@ -372,7 +375,7 @@ class MasterField extends Component {
   }
 
   save = async (callback = noop) => {
-    const error = this.handleValidationBeforeSave()
+    const error = await this.handleValidationBeforeSave()
 
     if (error) {
       return this.setState({ error })
