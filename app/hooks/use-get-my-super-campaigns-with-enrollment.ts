@@ -21,7 +21,6 @@ interface UseGetMySuperCampaignsWithEnrollment {
   ) => void
 }
 
-// eslint-disable-next-line max-len
 export function useGetMySuperCampaignsWithEnrollment(
   limit?: number
 ): UseGetMySuperCampaignsWithEnrollment {
