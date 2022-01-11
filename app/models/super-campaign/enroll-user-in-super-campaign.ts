@@ -2,7 +2,7 @@ import Fetch from 'services/fetch'
 
 import { defaultAssociations } from './get-super-campaign-enrollments'
 
-async function enrollUserInSuperCampaign(
+export async function enrollUserInSuperCampaign(
   superCampaignId: UUID,
   enrollments: ISuperCampaignEnrollmentInput[]
 ): Promise<ISuperCampaignEnrollment<'user' | 'brand'>[]> {
@@ -15,5 +15,3 @@ async function enrollUserInSuperCampaign(
       .send({ enrollments })
   ).body.data
 }
-
-export default enrollUserInSuperCampaign

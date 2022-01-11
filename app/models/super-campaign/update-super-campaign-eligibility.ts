@@ -1,6 +1,6 @@
 import Fetch from 'services/fetch'
 
-async function updateSuperCampaignEligibility(
+export async function updateSuperCampaignEligibility(
   superCampaignId: UUID,
   eligibleBrands: UUID[]
 ): Promise<ISuperCampaign> {
@@ -10,5 +10,3 @@ async function updateSuperCampaignEligibility(
       .send({ eligible_brands: eligibleBrands })
   ).body.data
 }
-
-export default updateSuperCampaignEligibility

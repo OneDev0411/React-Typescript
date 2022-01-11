@@ -1,6 +1,6 @@
 import Fetch from 'services/fetch'
 
-async function getMySuperCampaigns(
+export async function getMySuperCampaigns(
   limit?: number
 ): Promise<ISuperCampaign<'template_instance' | 'created_by'>[]> {
   const superCampaigns = (
@@ -22,5 +22,3 @@ async function getMySuperCampaigns(
 
   return superCampaigns.slice(0, limit) // TODO: Use the limit param on the request if possible later
 }
-
-export default getMySuperCampaigns

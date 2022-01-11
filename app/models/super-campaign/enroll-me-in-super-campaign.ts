@@ -1,6 +1,6 @@
 import Fetch from 'services/fetch'
 
-async function enrollMeInSuperCampaign(
+export async function enrollMeInSuperCampaign(
   superCampaignId: UUID,
   tags: string[]
 ): Promise<ISuperCampaignEnrollment> {
@@ -10,5 +10,3 @@ async function enrollMeInSuperCampaign(
       .send({ tags })
   ).body.data
 }
-
-export default enrollMeInSuperCampaign

@@ -1,6 +1,6 @@
 import Fetch from '@app/services/fetch'
 
-async function getSuperCampaignEligibleAgents(
+export async function getSuperCampaignEligibleAgents(
   superCampaignId: UUID
 ): Promise<IBrand[]> {
   const response = await new Fetch()
@@ -16,5 +16,3 @@ async function getSuperCampaignEligibleAgents(
 
   return response.body.data
 }
-
-export default getSuperCampaignEligibleAgents

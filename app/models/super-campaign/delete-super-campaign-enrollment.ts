@@ -1,1 +1,1 @@
-export { default } from './unenroll-user-from-super-campaign'
+export { unenrollUserFromSuperCampaign as deleteSuperCampaignEnrollment } from './unenroll-user-from-super-campaign'

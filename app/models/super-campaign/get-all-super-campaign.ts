@@ -5,7 +5,7 @@ export type FetchRange = {
   limit: number
 }
 
-async function getAllSuperCampaign(
+export async function getAllSuperCampaign(
   range: FetchRange,
   order?: string[]
 ): Promise<ISuperCampaign[]> {
@@ -15,5 +15,3 @@ async function getAllSuperCampaign(
 
   return response.body.data
 }
-
-export default getAllSuperCampaign
