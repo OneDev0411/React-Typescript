@@ -350,7 +350,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
         </Grid>
 
         <Grid container className={classes.main}>
-          {mapIsInitialized && mapIsShown && (
+          {mapIsInitialized && (
             <Grid
               item
               className={cn({

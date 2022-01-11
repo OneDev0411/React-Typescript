@@ -39,8 +39,12 @@ function DomainPayment({
   })
 
   useEffect(() => {
-    run(getStripeCustomers).then(customers => {
+    run(async () => {
+      const customers = await getStripeCustomers()
+
       setShowForm(!customers.length)
+
+      return customers
     })
   }, [run])
 
