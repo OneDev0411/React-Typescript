@@ -6,9 +6,10 @@ import Fetch from '../../../services/fetch'
   and this return active user role (aka active team)
 */
 const DEFAULT_ASSOCIATIONS = [
-  'brand.roles',
   'brand_role.users',
-  'brand.settings'
+  'brand.children',
+  'brand.settings',
+  'brand.roles'
 ]
 
 export async function getActiveTeam(): Promise<IUserTeam> {
