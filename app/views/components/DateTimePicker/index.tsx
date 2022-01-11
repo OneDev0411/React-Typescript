@@ -86,7 +86,10 @@ export function DateTimePicker({
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
 
+  const handleSave = () => {
+    handleClose()
     onClose(date)
   }
 
@@ -166,7 +169,7 @@ export function DateTimePicker({
               variant="outlined"
               color="primary"
               data-test="date-picker-done"
-              onClick={handleClose}
+              onClick={handleSave}
               disabled={!!validationError}
             >
               {saveCaption}
