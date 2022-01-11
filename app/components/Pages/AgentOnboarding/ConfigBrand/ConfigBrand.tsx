@@ -82,7 +82,7 @@ export function ConfigBrand() {
         ]
       )
 
-      const teams = await getTeams(user)
+      const teams = await getTeams()
       const personalTeam = teams.find(
         team => team.brand.brand_type === 'Personal'
       )

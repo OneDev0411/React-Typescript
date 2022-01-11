@@ -10,7 +10,7 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useActiveTeamPalette } from '@app/hooks/team'
 import { selectUser } from '@app/selectors/user'
-import { getUserTeams } from 'actions/user/teams'
+import { fetchActiveTeam } from 'actions/active-team'
 import Acl from 'components/Acl'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import PageLayout from 'components/GlobalPageLayout'
@@ -93,7 +93,7 @@ Are you sure?`,
     await invalidateThumbnails(activeBrandId)
     setDefaultSettings(null)
     setIsLoading(false)
-    dispatch(getUserTeams(user))
+    dispatch(fetchActiveTeam())
   }
 
   const handleImageUpload = useCallback(

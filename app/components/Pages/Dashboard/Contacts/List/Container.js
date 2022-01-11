@@ -14,7 +14,6 @@ import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-te
 import { updateFilterSegment } from 'actions/filter-segments'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
-import { getUserTeams } from 'actions/user/teams'
 import { Callout } from 'components/Callout'
 import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
@@ -491,13 +490,11 @@ class ContactsList extends React.Component {
       return
     }
 
-    const { user, getUserTeams, setActiveTeamSetting } = this.props
+    const { setActiveTeamSetting } = this.props
 
     setActiveTeamSetting(SORT_FIELD_SETTING_KEY, sortOrder)
     this.setState({ sortOrder })
     this.handleFilterChange({}, true, sortOrder)
-
-    getUserTeams(user)
   }
 
   handleLoadMore = async () => {
@@ -1088,7 +1085,6 @@ export default withRouter(
     confirmation,
     setContactsListTextFilter,
     getContactsTags,
-    getUserTeams,
     resetActiveFilters,
     changeActiveFilterSegment,
     setActiveTeamSetting,

@@ -69,7 +69,7 @@ export default function UserTeams({
         return
       }
 
-      const availableTeamToUser = await getTeams(user)
+      const availableTeamToUser = await getTeams()
 
       setBrandsWithMembers(
         availableTeamToUser.map(team => {
@@ -84,7 +84,7 @@ export default function UserTeams({
     }
 
     fetchBrandsWithMembers()
-  }, [activeTeam, user])
+  }, [activeTeam])
 
   useEffect(() => {
     if (!searchQuery) {

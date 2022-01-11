@@ -9,25 +9,6 @@ const userReducer = (state: IUserState = null, action) => {
     case SIGNIN_SUCCESS:
       return action.user
 
-    case actionTypes.FETCH_USER_TEAMS_SUCCESS:
-      return {
-        ...state,
-        teams: action.teams,
-        is_fetching_teams: false
-      }
-
-    case actionTypes.FETCH_USER_TEAMS_REQUEST:
-      return {
-        ...state,
-        is_fetching_teams: true
-      }
-
-    case actionTypes.FETCH_USER_TEAMS_FAILURE:
-      return {
-        ...state,
-        is_fetching_teams: false
-      }
-
     case actionTypes.UPDATE_USER:
     case actionTypes.EDIT_USER_SUCCESS:
     case actionTypes.UPLOAD_AVATAR_SUCCESS:
@@ -48,5 +29,3 @@ const userReducer = (state: IUserState = null, action) => {
 }
 
 export default userReducer
-
-export const isFetchingSelectedTeam = state => state.is_fetching_teams
