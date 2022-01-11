@@ -28,7 +28,15 @@ function renderWithTheme(node, container) {
 export const load = async colors => {
   const { Grapesjs } = await loadGrapesjs()
 
-  Grapesjs.plugins.add('style-manager', (editor, options) => {
+  // GrapesJS plugins system works with a global variable.
+  // It does not add the plugin again with the new values passed
+  // to this load function, if it was added once before.
+  // It also doesn't provide the remove function to remove the plugin.
+  // So we need to manually mutate the global plugins variable with this hack.
+  // See more: https://github.com/artf/grapesjs/blob/dev/src/plugin_manager/index.js#L28
+  const plugins = Grapesjs.plugins.getAll()
+
+  plugins['style-manager'] = (editor, options) => {
     let styleManagerContainer
     let fontSizePickerContainer
     let fontWeightPickerContainer
@@ -423,5 +431,5 @@ export const load = async colors => {
         }
       }
     })
-  })
+  }
 }
