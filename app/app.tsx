@@ -1,14 +1,13 @@
-import React from 'react'
-
 import { useDispatch } from 'react-redux'
 import { browserHistory, Router } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import { IntercomProvider } from 'react-use-intercom'
 import smoothscroll from 'smoothscroll-polyfill'
 
-import ConfirmationModal from 'components/ConfirmationModal'
-import ConfirmationModalProvider from 'components/ConfirmationModal/context/Provider'
-import { GlobalActionsProvider } from 'components/GlobalActionsButton/context/provider'
+import ConfirmationModal from '@app/views/components/ConfirmationModal'
+import ConfirmationModalProvider from '@app/views/components/ConfirmationModal/context/Provider'
+import { GlobalActionsProvider } from '@app/views/components/GlobalActionsButton/context/provider'
+import { ReactQueryProvider } from '@app/views/components/ReactQueryProvider'
 import { useAppcues } from 'services/appcues/use-appcues'
 
 import config from '../config/public'
@@ -48,23 +47,25 @@ const App = () => {
   useAppcues()
 
   return (
-    <AppTheme>
-      <IntercomProvider
-        appId={config.intercom.app_id}
-        onShow={() => dispatch(activateIntercom())}
-      >
-        <GlobalActionsProvider>
-          <ConfirmationModalProvider>
-            <Router history={history}>{routes}</Router>
-            <ConfirmationModal />
-          </ConfirmationModalProvider>
+    <ReactQueryProvider>
+      <AppTheme>
+        <IntercomProvider
+          appId={config.intercom.app_id}
+          onShow={() => dispatch(activateIntercom())}
+        >
+          <GlobalActionsProvider>
+            <ConfirmationModalProvider>
+              <Router history={history}>{routes}</Router>
+              <ConfirmationModal />
+            </ConfirmationModalProvider>
 
-          <ReduxConfirmationModal />
+            <ReduxConfirmationModal />
 
-          <Notifications />
-        </GlobalActionsProvider>
-      </IntercomProvider>
-    </AppTheme>
+            <Notifications />
+          </GlobalActionsProvider>
+        </IntercomProvider>
+      </AppTheme>
+    </ReactQueryProvider>
   )
 }
 
