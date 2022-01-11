@@ -36,6 +36,7 @@ export function useMarketingBuilderActions(
 
   // Check user access
   const isAdmin = useAcl(ACL.ADMIN)
+  const hasBetaAccess = useAcl(ACL.BETA)
 
   // Check buttons
   const shouldShowCreateSuperCampaignButton = hasCreateSuperCampaignButton(
@@ -44,12 +45,9 @@ export function useMarketingBuilderActions(
     isAdmin,
     isEmailMedium
   )
-  const shouldShowSaveAsTemplateButton = hasSaveAsTemplateButton(
-    bareMode,
-    !!template,
-    isAdmin,
-    isOpenHouseMedium
-  )
+  const shouldShowSaveAsTemplateButton =
+    hasBetaAccess &&
+    hasSaveAsTemplateButton(bareMode, !!template, isAdmin, isOpenHouseMedium)
 
   return {
     isWebsiteMedium,
