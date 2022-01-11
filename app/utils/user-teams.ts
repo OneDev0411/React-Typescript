@@ -181,16 +181,14 @@ export function getUserRoles(team: IBrand, userId: string) {
 }
 
 export function getBrandByType(
-  user: IUser | null,
+  team: Nullable<IUserTeam>,
   type: IBrandType
-): IBrand | null {
-  const team = getActiveTeam(user)
-
-  if (team === null) {
+): Nullable<IBrand> {
+  if (!team) {
     return null
   }
 
-  let brand: IBrand | null = team.brand
+  let brand: Nullable<IBrand> = team.brand
 
   do {
     if (brand.brand_type === type) {
