@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
+
 import {
   Theme,
   ThemeOptions,
@@ -6,16 +7,13 @@ import {
   StylesProvider,
   responsiveFontSizes
 } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 import { ThemeProvider as StyledComponentsThemeProvider } from 'styled-components'
 
-import { useSelector } from 'react-redux'
-
-import { getBrandTheme } from './utils/get-brand-theme'
-
-import { IAppState } from './reducers'
-
-import { themeGenerator } from './theme'
 import { MaterialUiGlobalOverrides } from './material-ui-global-overrides'
+import { IAppState } from './reducers'
+import { themeGenerator } from './theme'
+import { getBrandTheme } from './utils/get-brand-theme'
 
 export const AppTheme = ({ children }) => {
   const brand = useSelector<IAppState, IBrand>(
