@@ -18,9 +18,9 @@ import { mdiClose, mdiNewBox } from '@mdi/js'
 import cn from 'classnames'
 import pluralize from 'pluralize'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { TeamContactSelect } from '@app/views/components/TeamContact/TeamContactSelect'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { goTo } from 'utils/go-to'
 import { isSoloActiveTeam } from 'utils/user-teams'
 

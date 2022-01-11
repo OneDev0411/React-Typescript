@@ -11,8 +11,8 @@ import {
 import { Alert } from '@material-ui/lab'
 import { mdiPlayCircleOutline } from '@mdi/js'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { hasUserAccessToBrandSettings } from 'utils/acl'
 
 interface StylesProps {

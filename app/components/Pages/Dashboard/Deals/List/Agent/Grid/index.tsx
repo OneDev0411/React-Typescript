@@ -4,6 +4,7 @@ import { TableCellProps } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useActiveTeam } from '@app/hooks/team/use-active-team'
 import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
 import { useMakeOriginQueryParamFromLocation } from '@app/hooks/use-make-origin-query-param-from-location'
 import { goTo } from '@app/utils/go-to'
@@ -20,7 +21,6 @@ import {
   isClosedDeal,
   isPendingDeal
 } from 'deals/List/helpers/statuses'
-import { useActiveTeam } from 'hooks/team/use-active-team'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import {
   getStatus,

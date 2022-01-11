@@ -15,9 +15,9 @@ import {
 import { useDropzone } from 'dropzone'
 import { useSelector, useDispatch } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { confirmation } from 'actions/confirmation'
 import Masonry from 'components/Masonry'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { selectUser } from 'selectors/user'
 
 import { isGifImage } from '../../helpers'

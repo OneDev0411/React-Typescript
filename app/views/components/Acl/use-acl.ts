@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-use'
 
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { selectUserIsSignedIn } from 'selectors/user'
 import { goTo } from 'utils/go-to'
 

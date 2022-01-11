@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { searchDeals, getDeals } from 'actions/deals'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 
 import { DEAL_GRID_FILTER_SETTING_KEY } from '../../../constants/settings'
 import { getClosingsFilterQuery } from '../../helpers/closings'

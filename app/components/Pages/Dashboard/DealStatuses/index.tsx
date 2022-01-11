@@ -12,6 +12,7 @@ import Fuse from 'fuse.js'
 import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useBrandStatuses } from '@app/hooks/use-brand-statuses'
 import useNotify from '@app/hooks/use-notify'
 import { confirmation } from '@app/store_actions/confirmation'
@@ -20,7 +21,6 @@ import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import Grid from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 
 import { StatusForm } from './StatusForm'
 

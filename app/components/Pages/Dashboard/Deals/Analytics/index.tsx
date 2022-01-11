@@ -1,11 +1,11 @@
 import { Typography } from '@material-ui/core'
 import { WithRouterProps } from 'react-router'
 
+import { useActiveBrand } from '@app/hooks/brand/use-active-brand'
 import PageLayout from 'components/GlobalPageLayout'
 import MetabaseDashboard from 'components/MetabaseIFrame'
 import { PageTabs } from 'components/PageTabs'
 import dashboards, { IDashboard } from 'constants/metabase'
-import { useActiveBrand } from 'hooks/brand/use-active-brand'
 
 import AnalyticsDropdownTab from './DropdownTab'
 

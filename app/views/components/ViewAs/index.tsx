@@ -4,7 +4,7 @@ import { Avatar, Popover, makeStyles, Tooltip, Theme } from '@material-ui/core'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 import { useSelector } from 'react-redux'
 
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { getContactNameInitials } from 'models/contacts/helpers'
 import { selectUser } from 'selectors/user'
 import { isBackOffice } from 'utils/acl'

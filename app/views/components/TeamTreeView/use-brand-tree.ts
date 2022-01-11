@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { getBrands } from 'models/BrandConsole/Brands'
 
 export function useBrandTree() {

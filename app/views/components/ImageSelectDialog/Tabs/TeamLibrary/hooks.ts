@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { deleteBrandAsset } from 'models/brand/delete-brand-asset'
 import { getBrandAssets } from 'models/brand/get-brand-assets'
 import { uploadBrandAsset } from 'models/brand/upload-asset'

@@ -4,7 +4,7 @@ import { TextFieldProps } from '@material-ui/core'
 import { Field } from 'react-final-form'
 import { useSelector } from 'react-redux'
 
-import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 import { selectUser } from 'selectors/user'

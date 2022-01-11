@@ -2,9 +2,9 @@ import { useState, ReactNode } from 'react'
 
 import { Box } from '@material-ui/core'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import useAsync from 'hooks/use-async'
 import useNotify from 'hooks/use-notify'
 import addShowingRole from 'models/showing/add-showing-role'

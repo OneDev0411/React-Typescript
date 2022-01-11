@@ -5,7 +5,7 @@ import { Location } from 'history'
 import { useSelector, useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 
 import * as actionsType from '../../../../constants/auth/signin'
 import signin from '../../../../models/auth/signin'

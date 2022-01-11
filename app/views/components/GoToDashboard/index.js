@@ -1,7 +1,7 @@
 import { browserHistory } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 
 import { getUserDefaultHomepage } from '../../../utils/get-default-home-page'
 

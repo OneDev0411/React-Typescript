@@ -9,10 +9,10 @@ import {
   makeStyles
 } from '@material-ui/core'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import CardSkeleton from 'components/CardSkeleton'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
 import TemplateAction from 'components/TemplatesList/TemplateAction'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 
 import { useTemplates } from '../../../hooks/use-templates'
 import LinkSectionAction from '../LinkSectionAction'

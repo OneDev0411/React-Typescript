@@ -3,8 +3,8 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useAsync } from 'react-use'
 
+import { useActiveBrand } from '@app/hooks/brand/use-active-brand'
 import dashboards, { IDashboard } from 'constants/metabase'
-import { useActiveBrand } from 'hooks/brand/use-active-brand'
 import { selectUser } from 'selectors/user'
 
 export function useMetaBaseDashboard(key: string) {

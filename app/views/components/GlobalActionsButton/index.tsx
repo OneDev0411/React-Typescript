@@ -2,7 +2,7 @@ import { MouseEvent, useState, useMemo, memo } from 'react'
 
 import { useSelector } from 'react-redux'
 
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { selectUserUnsafe } from 'selectors/user'
 import {
   hasUserAccessToCrm,

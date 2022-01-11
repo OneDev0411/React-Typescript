@@ -13,9 +13,9 @@ import {
 import { mdiArrowDown } from '@mdi/js'
 import moment from 'moment'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { BaseDropdown } from 'components/BaseDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

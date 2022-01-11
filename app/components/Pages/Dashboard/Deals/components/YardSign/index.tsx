@@ -4,9 +4,9 @@ import { Popover } from '@material-ui/core'
 import { PopoverActions } from '@material-ui/core/Popover'
 import { useDispatch } from 'react-redux'
 
+import { useActiveBrandSettings } from '@app/hooks/brand/use-active-brand-settings'
 import { setSelectedTask } from 'actions/deals'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
-import { useActiveBrandSettings } from 'hooks/brand/use-active-brand-settings'
 
 import Form from './Create'
 import List from './List'

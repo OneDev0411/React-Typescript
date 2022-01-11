@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Alert from '@material-ui/lab/Alert'
 import PropTypes from 'prop-types'
 
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { addToFlow } from 'models/flows/add-to-flow'
 import { getBrandFlows } from 'models/flows/get-brand-flows'
 import { noop } from 'utils/helpers'

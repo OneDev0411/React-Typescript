@@ -4,10 +4,10 @@ import { Grid, Theme, useTheme } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { getContextsByBrand } from 'actions/deals'
 import ActionButton from 'components/Button/ActionButton'
 import { addNotification } from 'components/notification'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { forcePushReminderNotificationSettings } from 'models/reminder-notifications/force-push-reminder-notification-settings'
 import {
   ReminderNotificationSetting,

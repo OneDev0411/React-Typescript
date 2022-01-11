@@ -1,4 +1,4 @@
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 
 import { normalizeTeams } from './helpers/normalize-teams'
 import { NormalizedBrand } from './types'

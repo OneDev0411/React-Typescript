@@ -6,10 +6,10 @@ import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import PageLayout from 'components/GlobalPageLayout'
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { getSettingsInActiveTeam } from 'utils/user-teams'
 
 import SortField from './SortField'

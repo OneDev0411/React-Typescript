@@ -5,6 +5,7 @@ import moment from 'moment'
 import { useSelector } from 'react-redux'
 import { WithRouterProps, withRouter } from 'react-router'
 
+import { useActiveTeam } from '@app/hooks/team/use-active-team'
 import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
 import { useMakeOriginQueryParamFromLocation } from '@app/hooks/use-make-origin-query-param-from-location'
 import { goTo } from '@app/utils/go-to'
@@ -12,7 +13,6 @@ import { TrProps } from '@app/views/components/Grid/Table/types'
 import Grid from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
 import { getGridSort } from 'deals/List/helpers/sorting'
-import { useActiveTeam } from 'hooks/team/use-active-team'
 import {
   getStatus,
   getFormattedPrice,

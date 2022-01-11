@@ -9,6 +9,7 @@ import {
   LISTING_TEMPLATE_TYPES
 } from '@app/components/Pages/Dashboard/Marketing/Wizard/constants'
 import { ACL } from '@app/constants/acl'
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useLoadingEntities } from '@app/hooks/use-loading'
 import useNotify from '@app/hooks/use-notify'
 import { useUniqueMediums } from '@app/hooks/use-unique-mediums'
@@ -24,7 +25,6 @@ import LoadingContainer from '@app/views/components/LoadingContainer'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { meetingRoomOutlined } from '@app/views/components/SvgIcons/icons'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 
 import { OpenHouseDrawer } from '../open-house/OpenHouseDrawer'
 

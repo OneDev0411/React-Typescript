@@ -2,8 +2,8 @@ import { useEffect, useMemo } from 'react'
 
 import { useSelector } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { getMlsDrawerInitialDeals } from 'components/InstantMarketing/helpers/get-mls-drawer-initial-deals'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import useAsync from 'hooks/use-async'
 import { getBrandListings } from 'models/listings/search/get-brand-listings'
 import { selectDealsList } from 'selectors/deals'

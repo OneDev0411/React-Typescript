@@ -17,11 +17,11 @@ import {
 import { useDispatch } from 'react-redux'
 import { browserHistory, Link } from 'react-router'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { confirmation } from 'actions/confirmation'
 import { addNotification as notify } from 'components/notification'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { deletePropertyType } from 'models/property-types/delete-property-type'
 
 import { getChecklistPageLink } from '../helpers/get-checklist-page-link'

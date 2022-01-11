@@ -1,10 +1,10 @@
 import { Box, Grid, Typography, makeStyles } from '@material-ui/core'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import LoadingContainer from 'components/LoadingContainer'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
 import { MarketingTemplatePickerProps } from 'components/MarketingTemplatePickers/types'
 import Masonry from 'components/Masonry'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { useInfinitePagination } from 'hooks/use-infinite-pagination'
 
 import { useTemplates } from '../../../../components/Pages/Dashboard/Marketing/hooks/use-templates'

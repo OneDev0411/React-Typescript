@@ -14,11 +14,11 @@ import { useDeepCompareEffect } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { areEqual } from 'react-window'
 
+import { useViewAs } from '@app/hooks/team/use-view-as'
 import { searchContacts } from '@app/models/contacts/search-contacts'
 import { IAppState } from '@app/reducers'
 import VirtualList, { LoadingPosition } from '@app/views/components/VirtualList'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useViewAs } from 'hooks/team/use-view-as'
 
 import { Tags } from '../constants'
 import { useColumnList } from '../hooks/use-column-list'

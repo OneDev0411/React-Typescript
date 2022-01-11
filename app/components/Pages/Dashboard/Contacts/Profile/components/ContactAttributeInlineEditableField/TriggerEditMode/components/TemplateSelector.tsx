@@ -5,9 +5,9 @@ import cn from 'classnames'
 import { useSelector } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
-import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import {
   getTemplateInstance,

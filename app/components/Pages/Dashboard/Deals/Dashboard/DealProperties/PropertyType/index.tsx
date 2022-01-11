@@ -2,11 +2,11 @@ import { Button, MenuItem, makeStyles, Theme } from '@material-ui/core'
 import { mdiChevronDown } from '@mdi/js'
 import { useDispatch } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { updatePropertyType } from 'actions/deals'
 import { BaseDropdown } from 'components/BaseDropdown'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 
 import { ItemValue } from '../../Factsheet/styled'

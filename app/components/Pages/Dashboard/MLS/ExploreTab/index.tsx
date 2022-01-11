@@ -5,12 +5,12 @@ import { useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { useEffectOnce, useLocalStorage } from 'react-use'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { getPlace } from '@app/models/listings/search/get-place'
 import { confirmation } from '@app/store_actions/confirmation'
 import { getLocationErrorMessage } from '@app/utils/map'
 import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
 import GlobalPageLayout from '@app/views/components/GlobalPageLayout'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 
 import {
   FILTERS_INITIAL_VALUES,

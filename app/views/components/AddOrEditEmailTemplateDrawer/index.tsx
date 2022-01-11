@@ -7,12 +7,12 @@ import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { createEmailTemplate } from 'actions/email-templates/create-email-template'
 import { updateEmailTemplate } from 'actions/email-templates/update-email-template'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { addNotification } from 'components/notification'
 import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 
 import EmailBody from '../EmailCompose/components/EmailBody'
 import { FinalFormDrawer } from '../FinalFormDrawer'

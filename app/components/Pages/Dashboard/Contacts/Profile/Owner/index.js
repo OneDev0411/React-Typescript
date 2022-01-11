@@ -1,6 +1,6 @@
 import { Box, Typography, Tooltip, makeStyles } from '@material-ui/core'
 
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { isSoloActiveTeam } from 'utils/user-teams'
 
 import { ItemChangelog } from '../../../../../../views/components/TeamContact/ItemChangelog'

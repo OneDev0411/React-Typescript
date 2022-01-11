@@ -5,6 +5,7 @@ import { PopoverActions } from '@material-ui/core/Popover'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useActiveBrandSettings } from '@app/hooks/brand/use-active-brand-settings'
 import {
   setSelectedTask,
   updateTask,
@@ -13,7 +14,6 @@ import {
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { createTaskComment } from 'deals/utils/create-task-comment'
-import { useActiveBrandSettings } from 'hooks/brand/use-active-brand-settings'
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { selectUser } from 'selectors/user'

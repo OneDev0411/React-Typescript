@@ -3,8 +3,8 @@ import { useState } from 'react'
 import { Popover, Theme, makeStyles } from '@material-ui/core'
 import usePromise from 'react-use-promise'
 
+import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
 import { getBrandChecklists } from '@app/models/BrandConsole/Checklists'
-import { useUnsafeActiveBrandId } from 'hooks/brand/use-unsafe-active-brand-id'
 import { IUserState } from 'reducers/user'
 
 import ToggleButton from './ToggleButton'

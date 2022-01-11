@@ -2,8 +2,8 @@ import { useRef, useState } from 'react'
 
 import { useSelector } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { ACL } from 'constants/acl'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { selectDealRoles } from 'selectors/deals'
 import { getBrandUsers } from 'utils/user-teams'
 

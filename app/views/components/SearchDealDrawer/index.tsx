@@ -2,8 +2,8 @@ import React, { ComponentProps } from 'react'
 
 import { useSelector } from 'react-redux'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import Drawer from 'components/OverlayDrawer'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { IAppState } from 'reducers'
 import { selectDeals } from 'reducers/deals/list'
 

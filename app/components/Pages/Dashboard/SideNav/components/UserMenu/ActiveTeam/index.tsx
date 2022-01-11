@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { mdiAccountGroupOutline } from '@mdi/js'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { switchActiveTeam } from '@app/models/user/switch-active-team'
 import {
   NodeRenderer,
@@ -10,7 +11,6 @@ import {
 } from '@app/views/components/BrandSelector'
 import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
 
 import { TeamSwitchBrandSelectorRenderer as Brand } from './components/TeamSwitchBrandSelectorRenderer'
 

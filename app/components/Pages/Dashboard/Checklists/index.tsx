@@ -6,11 +6,11 @@ import { browserHistory, RouteComponentProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import { DealRolesProvider } from '@app/contexts/deals-roles-definitions/provider'
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { reorder } from '@app/utils/dnd-reorder'
 import Acl from 'components/Acl'
 import { PageTabs, TabLink } from 'components/PageTabs'
 import { Container, Content } from 'components/SlideMenu'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 
 import { ChecklistCreate } from './components/ChecklistCreate'

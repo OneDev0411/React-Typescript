@@ -2,10 +2,10 @@ import { MenuItem } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 
 import AnalyticsDropdownTab from '../../../Analytics/DropdownTab'
 import { getGridSortLabel, getActiveSort } from '../../helpers/sorting'

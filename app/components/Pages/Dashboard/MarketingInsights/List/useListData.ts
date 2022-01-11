@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useReducer } from 'react'
 
-import { useUnsafeActiveBrandId } from 'hooks/brand/use-unsafe-active-brand-id'
+import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 

@@ -5,11 +5,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { searchDeals, getDeals } from 'actions/deals'
 import PageLayout from 'components/GlobalPageLayout'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { IAppState } from 'reducers'
 
 import { DEAL_GRID_FILTER_SETTING_KEY } from '../../constants/settings'

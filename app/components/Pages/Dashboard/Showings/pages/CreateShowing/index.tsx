@@ -4,9 +4,9 @@ import { Box } from '@material-ui/core'
 import { InjectedRouter, PlainRoute } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import PageLayout from 'components/GlobalPageLayout'
 import { QuestionWizard } from 'components/QuestionWizard'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import useAsync from 'hooks/use-async'
 import createShowing from 'models/showing/create-showing'
 

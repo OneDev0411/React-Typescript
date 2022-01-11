@@ -1,8 +1,8 @@
 import { useDeepCompareEffect } from 'react-use'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import useAsync from '@app/hooks/use-async'
 import Deal from '@app/models/Deal'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 
 import { extractDealsInboxFilters } from '../helpers/get-deals-inbox-filters'
 

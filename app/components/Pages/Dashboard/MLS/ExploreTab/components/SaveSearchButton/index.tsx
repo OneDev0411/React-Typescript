@@ -12,10 +12,10 @@ import {
 } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { selectUserUnsafe } from '@app/selectors/user'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { getSettingsInActiveTeam } from '@app/utils/user-teams'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 
 import { SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY } from '../../../constants'
 

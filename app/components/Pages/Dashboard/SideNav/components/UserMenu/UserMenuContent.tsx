@@ -11,10 +11,10 @@ import {
 import { mdiLogoutVariant, mdiCogOutline } from '@mdi/js'
 import { browserHistory } from 'react-router'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { hasUserAccessToBrandSettings } from '@app/utils/acl'
 import Acl from '@app/views/components/Acl'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { noop } from 'utils/helpers'
 
 import { ActiveTeam } from './ActiveTeam'

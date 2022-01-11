@@ -4,10 +4,10 @@ import { makeStyles } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { confirmation } from '@app/store_actions/confirmation'
 import { getLocationErrorMessage } from '@app/utils/map'
 import GlobalPageLayout from '@app/views/components/GlobalPageLayout'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 
 import { USER_LOCATION_ZOOM_LEVEL } from '../constants'
 import { ListingsUiContext } from '../context'

@@ -9,8 +9,8 @@ import {
 import PropTypes from 'prop-types'
 import Joyride from 'react-joyride'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { OnboardingStepCard } from 'components/Onboarding/OnboardingStepCard'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getSettingsInActiveTeam } from 'utils/user-teams'
 

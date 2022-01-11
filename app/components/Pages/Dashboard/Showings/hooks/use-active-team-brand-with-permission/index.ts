@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 
 function useActiveTeamBrandWithPermission(
   permission: IPermission

@@ -1,6 +1,6 @@
 import { useState, useEffect, ReactNode } from 'react'
 
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { getAgents } from 'models/Deal/agent'
 
 import { getBrand } from './helpers/get-brand'

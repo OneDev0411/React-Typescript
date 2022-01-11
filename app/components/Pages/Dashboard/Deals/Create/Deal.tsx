@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { browserHistory, withRouter, Route, InjectedRouter } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { getBrandChecklists } from '@app/models/BrandConsole/Checklists'
 import {
   createDeal,
@@ -15,7 +16,6 @@ import {
   upsertContexts
 } from 'actions/deals'
 import { QuestionWizard } from 'components/QuestionWizard'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 import Deal from 'models/Deal'

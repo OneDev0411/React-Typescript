@@ -1,5 +1,5 @@
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
-import { useActiveTeamBrands } from 'hooks/team/use-active-team-brands'
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
+import { useActiveTeamBrands } from '@app/hooks/team/use-active-team-brands'
 
 import { ListingTab } from './types'
 import useListingsIsLeafBrand from './use-listings-is-leaf-brand'

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { useDeepCompareEffect } from 'react-use'
 
-import { useActiveBrand } from 'hooks/brand/use-active-brand'
+import { useActiveBrand } from '@app/hooks/brand/use-active-brand'
 import { selectUser } from 'selectors/user'
 
 import publicConfig from '../../../../config/public'

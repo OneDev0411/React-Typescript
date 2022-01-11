@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { useUnsafeActiveBrandId } from 'hooks/brand/use-unsafe-active-brand-id'
+import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
 import { useLoadingEntities } from 'hooks/use-loading'
 import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 

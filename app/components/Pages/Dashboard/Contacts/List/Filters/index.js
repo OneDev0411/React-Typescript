@@ -8,13 +8,13 @@ import {
 import cn from 'classnames'
 import { connect } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import Filters from 'components/Grid/Filters'
 import { OperatorAndOperandFilter } from 'components/Grid/Filters/FilterTypes/OparatorAndOperand'
 import { SimpleList } from 'components/Grid/Filters/FilterTypes/SimpleList'
 import SaveSegment from 'components/Grid/SavedSegments/Create'
 import { SELECTION__TOGGLE_ENTIRE_ROWS } from 'components/Grid/Table/context/constants'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { selectTags } from 'reducers/contacts/tags'
 

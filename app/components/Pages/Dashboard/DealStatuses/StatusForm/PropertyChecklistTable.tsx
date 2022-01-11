@@ -10,7 +10,7 @@ import {
 import cn from 'classnames'
 import { Controller, Control, FieldValues } from 'react-hook-form'
 
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 
 const useStyles = makeStyles(

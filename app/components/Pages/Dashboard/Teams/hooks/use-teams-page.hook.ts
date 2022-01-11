@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { getBrands } from 'models/BrandConsole/Brands'
 
 import { getUpdatedRootTeam } from '../helpers/get-updated-root-team'

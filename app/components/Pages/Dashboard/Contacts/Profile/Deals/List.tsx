@@ -2,8 +2,8 @@ import React, { useMemo } from 'react'
 
 import { useTheme, Theme } from '@material-ui/core'
 
+import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
 import { ShowMoreLess } from 'components/ShowMoreLess'
-import { useUnsafeActiveBrandId } from 'hooks/brand/use-unsafe-active-brand-id'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { sortDealsStatus } from 'utils/sort-deals-status'
 

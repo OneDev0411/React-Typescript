@@ -3,10 +3,10 @@ import { useState, useEffect, ComponentProps } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { useInView } from 'react-intersection-observer'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { PdfThumbnail } from 'components/PdfThumbnail'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import TemplateThumbnail from 'components/TemplateThumbnail'
-import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
 import { getFileType } from 'utils/file-utils/get-file-type'
 import { getTemplateImage } from 'utils/marketing-center/helpers'
 

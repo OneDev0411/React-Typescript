@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 
+import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
 import { getDealsListings } from '@app/models/listings/listing/get-deals-listings'
 import {
   getBrandListings,
   GetBrandListingsOptions
 } from '@app/models/listings/search/get-brand-listings'
-import { useUnsafeActiveBrandId } from 'hooks/brand/use-unsafe-active-brand-id'
 
 export function useBrandListings(
   options?: GetBrandListingsOptions

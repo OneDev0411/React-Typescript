@@ -25,13 +25,13 @@ import _map from 'lodash/map'
 import { useSelector } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { useViewAs } from '@app/hooks/team/use-view-as'
 import { selectUser } from '@app/selectors/user'
 import {
   CrmEventType,
   ApiOptions,
   FetchOptions
 } from 'components/ContactProfileTimeline/types'
-import { useViewAs } from 'hooks/team/use-view-as'
 import { getCalendar, FilterQuery } from 'models/calendar/get-calendar'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { updateTask } from 'models/tasks'

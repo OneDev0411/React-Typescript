@@ -1,6 +1,6 @@
 import Button from '@material-ui/core/Button'
 
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 
 interface Props {
   event: ICalendarEvent

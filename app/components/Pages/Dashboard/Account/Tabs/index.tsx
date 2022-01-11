@@ -2,8 +2,8 @@ import { ReactNode } from 'react'
 
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { PageTabs, TabLink } from 'components/PageTabs'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { hasUserAccessToCrm, hasUserAccessToDeals } from 'utils/acl'
 
 type IsHiddenType = { team: Nullable<IUserTeam>; user?: IUser }

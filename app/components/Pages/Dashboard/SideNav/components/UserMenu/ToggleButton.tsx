@@ -2,8 +2,8 @@ import { Box, Typography, Tooltip } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { mdiDotsVertical } from '@mdi/js'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
-import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

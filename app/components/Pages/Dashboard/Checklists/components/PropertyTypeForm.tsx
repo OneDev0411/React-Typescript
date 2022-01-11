@@ -16,8 +16,8 @@ import {
 import { mdiClose } from '@mdi/js'
 import { useForm, Controller } from 'react-hook-form'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import {
   createPropertyType,
   PropertyTypeData

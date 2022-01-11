@@ -1,9 +1,9 @@
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import {
   SectionsEnum,
   Section,
   SectionItem
 } from 'components/PageSideNav/types'
-import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { hasUserAccess } from 'utils/acl'
 import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
 
