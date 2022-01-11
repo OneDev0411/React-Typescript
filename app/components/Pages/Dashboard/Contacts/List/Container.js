@@ -159,20 +159,10 @@ class ContactsList extends React.Component {
   }
 
   loadTableData = () => {
-    const { searchInputValue } = this.state
-    const { getSetting } = this.props
-
-    // load previous sorting settings from active team
-    const sortFieldSetting = getSetting(SORT_FIELD_SETTING_KEY)
-
-    const relevanceSortKey = '-last_touch_rank'
-    const sortOrder = searchInputValue
-      ? relevanceSortKey
-      : sortFieldSetting && sortFieldSetting !== relevanceSortKey
-      ? sortFieldSetting
-      : '-last_touch'
+    const sortOrder = this.getTeamSortOrder()
 
     this.fetchContactsAndJumpToSelected(sortOrder)
+
     this.setState({ sortOrder })
   }
 
@@ -329,11 +319,28 @@ class ContactsList extends React.Component {
   hasSearchState = () =>
     this.props.filters || this.state.searchInputValue || this.state.sortOrder
 
+  getTeamSortOrder = () => {
+    const { searchInputValue } = this.state
+    const { getSetting } = this.props
+
+    // load previous sorting settings from active team
+    const sortFieldSetting = getSetting(SORT_FIELD_SETTING_KEY)
+
+    const relevanceSortKey = '-last_touch_rank'
+    const sortOrder = searchInputValue
+      ? relevanceSortKey
+      : sortFieldSetting && sortFieldSetting !== relevanceSortKey
+      ? sortFieldSetting
+      : '-last_touch'
+
+    return sortOrder
+  }
+
   fetchList = async (
     start = 0,
     loadMoreBefore = false,
     resetLoadedRanges = false,
-    sortOrder = '-last_touch'
+    sortOrder = undefined
   ) => {
     if (start === 0 && !loadMoreBefore) {
       this.resetSelectedRows()
@@ -341,6 +348,12 @@ class ContactsList extends React.Component {
 
     try {
       if (this.hasSearchState()) {
+        sortOrder = sortOrder || this.getTeamSortOrder()
+
+        if (sortOrder !== this.state.sortOrder) {
+          this.setState({ sortOrder })
+        }
+
         await this.handleFilterChange(
           {
             start,
