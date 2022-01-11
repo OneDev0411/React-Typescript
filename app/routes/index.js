@@ -538,7 +538,7 @@ const AsyncSuperCampaign = withAcl(
         '../components/Pages/Dashboard/MarketingInsights/SuperCampaign' /* webpackChunkName: "email_insight_super_campaign" */
       )
   }),
-  { oneOf: [ACL.MARKETING, ACL.CRM] }
+  [{ oneOf: [ACL.MARKETING, ACL.CRM] }, ACL.BETA]
 )
 /* ==================================== */
 //  Chatroom
@@ -751,13 +751,14 @@ const AsyncCreateShowing = withAcl.showings(
 //  Super Campaigns
 /* ==================================== */
 
-const AsyncSuperCampaignDetail = withAcl.admin(
+const AsyncSuperCampaignDetail = withAcl(
   Load({
     loader: () =>
       import(
         '../components/Pages/Dashboard/SuperCampaigns/pages/SuperCampaignDetail' /* webpackChunkName: "super_campaign_detail" */
       )
-  })
+  }),
+  [ACL.ADMIN, ACL.BETA]
 )
 
 /* ==================================== */
