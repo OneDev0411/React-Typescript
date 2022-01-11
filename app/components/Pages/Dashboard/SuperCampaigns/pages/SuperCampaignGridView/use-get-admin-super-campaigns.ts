@@ -1,9 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react'
 
 import useAsync from '@app/hooks/use-async'
-import getAllSuperCampaign, {
-  FetchRange
-} from '@app/models/super-campaign/get-all-super-campaign'
+import { getAllSuperCampaign, FetchRange } from '@app/models/super-campaign'
 
 interface UseGetSuperCampaign {
   isLoading: boolean

@@ -1,5 +1,5 @@
 import useAsync from '@app/hooks/use-async'
-import createSuperCampaignModel from '@app/models/super-campaign/create-super-campaign'
+import { createSuperCampaign as createSuperCampaignModel } from '@app/models/super-campaign'
 
 interface UseCreateSuperCampaign {
   isCreatingSuperCampaign: boolean

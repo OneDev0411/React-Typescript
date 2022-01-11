@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useMemo } from 'react'
 import { useDeepCompareEffect } from 'react-use'
 
 import useAsync from '@app/hooks/use-async'
-import getSuperCampaignEnrollments from '@app/models/super-campaign/get-super-campaign-enrollments'
+import { getSuperCampaignEnrollments } from '@app/models/super-campaign'
 
 export type SuperCampaignEnrollmentItem =
   | ISuperCampaignEnrollment<'user' | 'brand'>

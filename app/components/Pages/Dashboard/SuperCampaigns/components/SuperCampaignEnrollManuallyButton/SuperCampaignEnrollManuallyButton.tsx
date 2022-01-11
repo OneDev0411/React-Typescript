@@ -12,7 +12,7 @@ import classNames from 'classnames'
 import pluralize from 'pluralize'
 
 import useSafeState from '@app/hooks/use-safe-state'
-import getSuperCampaignEligibleAgents from '@app/models/super-campaign/get-super-campaign-eligible-agents'
+import { getSuperCampaignEligibleAgents } from '@app/models/super-campaign'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import type {

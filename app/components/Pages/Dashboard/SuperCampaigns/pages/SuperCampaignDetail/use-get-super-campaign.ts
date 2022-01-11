@@ -4,7 +4,7 @@ import { Response } from 'superagent'
 
 import useAsync from '@app/hooks/use-async'
 import useNotify from '@app/hooks/use-notify'
-import getSuperCampaign from '@app/models/super-campaign/get-super-campaign'
+import { getSuperCampaign } from '@app/models/super-campaign'
 import { goTo } from '@app/utils/go-to'
 
 import { useGetSuperCampaignBackUrl } from './use-get-super-campaign-back-url'

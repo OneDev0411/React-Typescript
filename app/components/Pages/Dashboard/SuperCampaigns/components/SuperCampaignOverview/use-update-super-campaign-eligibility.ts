@@ -1,5 +1,5 @@
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import updateSuperCampaignEligibilityModel from '@app/models/super-campaign/update-super-campaign-eligibility'
+import { updateSuperCampaignEligibility as updateSuperCampaignEligibilityModel } from '@app/models/super-campaign'
 
 type UseUpdateSuperCampaignEligibility = (
   eligibleBrands: UUID[]

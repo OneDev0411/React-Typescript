@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react'
 
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import enrollUserInSuperCampaign from '@app/models/super-campaign/enroll-user-in-super-campaign'
+import { enrollUserInSuperCampaign } from '@app/models/super-campaign'
 
 type UseAddSuperCampaignEnrollment = (
   data: ISuperCampaignEnrollmentInput[]

@@ -1,5 +1,5 @@
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import unenrollMeFromSuperCampaignModel from '@app/models/super-campaign/unenroll-me-from-super-campaign'
+import { unenrollMeFromSuperCampaign as unenrollMeFromSuperCampaignModel } from '@app/models/super-campaign'
 
 type UseUnenrollMeFromSuperCampaign = {
   isDeleting: boolean
