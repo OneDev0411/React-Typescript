@@ -78,11 +78,16 @@ export function DateTimePicker({
 
   const validationError = showTimePicker ? validate(date) : null
 
+  const isOpen = !!anchorEl
+
   useEffect(() => {
-    if (initialSelectedDate.current.getTime() !== selectedDate.getTime()) {
+    if (
+      isOpen &&
+      initialSelectedDate.current.getTime() !== selectedDate.getTime()
+    ) {
       setDate(selectedDate)
     }
-  }, [selectedDate])
+  }, [selectedDate, isOpen])
 
   const handleClose = () => {
     setAnchorEl(null)
@@ -132,7 +137,7 @@ export function DateTimePicker({
 
       <Popover
         id={anchorEl ? 'datepicker-popover' : undefined}
-        open={Boolean(anchorEl)}
+        open={isOpen}
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
