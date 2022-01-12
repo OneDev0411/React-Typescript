@@ -6,7 +6,7 @@ import { toggleChatbar } from '../../../../../store_actions/chatroom'
 
 import SideNavButtonItem from './SideNavButtonItem'
 
-export default function MessageDrawerTrigger() {
+export default function MessageDrawerTrigger({ children }) {
   const dispatch = useDispatch()
 
   const openDrawer = () => {
@@ -15,5 +15,5 @@ export default function MessageDrawerTrigger() {
     }
   }
 
-  return <SideNavButtonItem onClick={openDrawer}>Chat</SideNavButtonItem>
+  return <SideNavButtonItem onClick={openDrawer}>{children}</SideNavButtonItem>
 }

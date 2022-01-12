@@ -9,11 +9,12 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      padding: theme.spacing(0, 2.5),
-      marginBottom: theme.spacing(3)
+      padding: theme.spacing(0, 2),
+      marginBottom: theme.spacing(3.375)
     },
     root: {
-      borderRadius: '50px'
+      borderRadius: '6px',
+      fontSize: theme.typography.body2.fontSize
     }
   })
 )

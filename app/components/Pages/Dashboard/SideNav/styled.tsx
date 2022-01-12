@@ -19,37 +19,124 @@ export const Sidenav = styled.aside`
 `
 
 export const SidenavListGroup = styled.ul`
-  margin: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 0, 2, 0)};
+  margin: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 2, 1, 2)};
   padding: 0;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  border-bottom: ${(props: ThemeProps<Theme>) =>
+    '1px solid rgba(255,255,255,0.2)'};
+
+  & .MuiAccordion-root {
+    background-color: transparent;
+
+    &.Mui-expanded {
+      margin: 0 !important;
+    }
+  }
+
+  & .MuiAccordionSummary-root {
+    padding: 0;
+    min-height: 48px !important;
+
+    &.Mui-expanded {
+      min-height: 48px !important;
+    }
+
+    svg.MuiSvgIcon-root {
+        color: ${(props: ThemeProps<Theme>) =>
+          props.theme.palette.common.white};
+      }
+    }
+  }
+
+  & .MuiAccordionSummary-content {
+    display: flex;
+    justify-content: flex-start;
+    margin: 6px 0 !important;
+
+    a {
+      width:100%;
+      display: flex;
+      justify-content: space-between
+
+      div {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    &.Mui-expanded {
+      margin: 6px 0 !important;
+
+      svg {
+          color: ${(props: ThemeProps<Theme>) =>
+            props.theme.palette.primary.light};
+        }
+      }
+    }
+  }
+
+  & .MuiAccordionDetails-root {
+    padding: 0px 0px 8px;
+    flex-direction: column;
+  }
 `
 
 export const SideNavItem = styled.li`
   cursor: pointer;
   transition: background-color 0.2s ease-in;
+  width: 100%;
   margin-bottom: ${(props: ThemeProps<Theme>) => props.theme.spacing(1)}px;
+
+  & .MuiBadge-root {
+    width: 100%;
+    align-items: center;
+
+    & .MuiBadge-anchorOriginTopRightRectangle {
+      left: auto;
+      right: 0;
+      padding: 0 4px;
+    }
+  }
+`
+
+export const SideNavItemLabel = styled.div`
+  padding-left: ${(props: ThemeProps<Theme>) => props.theme.spacing(3.25)}px;
 `
 
 const itemStyle = css`
-  padding-left: ${(props: ThemeProps<Theme>) => props.theme.spacing(2.5)}px;
-  border-radius: 0;
-  border-left: 4px solid transparent;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  padding-top: ${(props: ThemeProps<Theme>) => props.theme.spacing(0.5)}px;
+  padding-right: ${(props: ThemeProps<Theme>) => props.theme.spacing(0)}px;
+  padding-bottom: ${(props: ThemeProps<Theme>) => props.theme.spacing(0.5)}px;
+  padding-left: ${(props: ThemeProps<Theme>) => props.theme.spacing(1)}px;
   color: ${(props: ThemeProps<Theme>) =>
-    alpha(props.theme.palette.navbar.contrastText, 0.7)};
+    alpha(props.theme.palette.navbar.contrastText, 1)};
   &:hover,
   &:focus {
     text-decoration: none;
-    color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
-  }
+    color: ${(props: ThemeProps<Theme>) => props.theme.palette.common.black};
+    background-color: ${(props: ThemeProps<Theme>) =>
+      props.theme.palette.common.white};
 
+    svg {
+      color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
+    }
+  }
   ${({ active }: ThemeProps<Theme> & { active: boolean }) =>
     active &&
     css`
-      color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.light};
-      border-left-color: ${(props: ThemeProps<Theme>) =>
-        props.theme.palette.primary.light};
+      color: ${(props: ThemeProps<Theme>) => props.theme.palette.common.black};
+      background-color: ${(props: ThemeProps<Theme>) =>
+        props.theme.palette.common.white};
+
+      svg {
+        color: ${(props: ThemeProps<Theme>) =>
+          props.theme.palette.primary.main};
+      }
     `}
 `
 
@@ -59,6 +146,7 @@ interface SidenavLinkPorps extends LinkProps {
 
 const linkStyle = css`
   display: inline-block;
+  width: 100%;
   font-size: ${(props: ThemeProps<Theme>) =>
     props.theme.typography.body1.fontSize};
   line-height: ${(props: ThemeProps<Theme>) =>

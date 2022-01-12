@@ -1,6 +1,23 @@
+import React from 'react'
+
+import Accordion from '@material-ui/core/Accordion'
+import AccordionDetails from '@material-ui/core/AccordionDetails'
+import AccordionSummary from '@material-ui/core/AccordionSummary'
+import {
+  mdiViewGridOutline,
+  mdiAccountSupervisorOutline,
+  mdiChartArc,
+  mdiChatProcessingOutline,
+  mdiAlarmLightOutline,
+  mdiHelpCircleOutline,
+  mdiPhoneOutline,
+  mdiMenuUp,
+  mdiMenuDown
+} from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
 import { GlobalActionsButton } from 'components/GlobalActionsButton'
 import { InlineBadge } from 'components/InlineBadge'
@@ -19,6 +36,7 @@ import { ScrollableArea } from 'views/components/ScrollableArea'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
+// import SideNavAccordion from './components/Accordion'
 import Logo from './components/Logo'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
 import PoweredBy from './components/PoweredBy'
@@ -28,7 +46,9 @@ import { UserMenu } from './components/UserMenu'
 import {
   Sidenav,
   SidenavBlankLink,
+  SidenavLink,
   SideNavItem,
+  SideNavItemLabel,
   SidenavListGroup
 } from './styled'
 import { scrollableAreaShadowColor } from './variables'
@@ -69,6 +89,13 @@ export function Menu() {
 
   useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
 
+  const [expanded, setExpanded] = React.useState<string | false>(false)
+
+  const handleChange =
+    (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false)
+    }
+
   return (
     <Sidenav>
       <Logo />
@@ -79,146 +106,296 @@ export function Menu() {
         hasThinnerScrollbar
       >
         <SidenavListGroup data-test="side-nav-list">
-          <Acl access={dashboardAccess}>
-            <SideNavLinkItem to="/dashboard/overview" tourId="nav-dashboard">
-              Dashboard
-            </SideNavLinkItem>
-          </Acl>
-          <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/inbox" tourId="nav-inbox">
-              <InlineBadge
-                badgeContent={inboxNotificationNumber}
-                color="primary"
-              >
-                Inbox
-              </InlineBadge>
-            </SideNavLinkItem>
-          </Acl.Crm>
-
-          <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/calendar" tourId="nav-calendar">
-              Calendar
-            </SideNavLinkItem>
-          </Acl.Crm>
-
-          <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/contacts" tourId="nav-contacts">
-              Contacts
-            </SideNavLinkItem>
-          </Acl.Crm>
+          <Accordion
+            expanded={expanded === 'nav-dashboard'}
+            onChange={handleChange('nav-dashboard')}
+          >
+            <AccordionSummary
+              aria-controls="nav-dashboard-content"
+              id="nav-dashboard-header"
+            >
+              <Acl access={dashboardAccess}>
+                <SidenavLink
+                  active={false}
+                  to="/dashboard/overview"
+                  data-tour-id="nav-dashboard"
+                >
+                  <div>
+                    <SvgIcon
+                      path={mdiViewGridOutline}
+                      size="16px"
+                      rightMargined
+                    />
+                    Dashboard
+                  </div>
+                </SidenavLink>
+              </Acl>
+            </AccordionSummary>
+          </Accordion>
         </SidenavListGroup>
 
         <SidenavListGroup>
-          <Acl.Marketing>
-            <SideNavLinkItem to="/dashboard/marketing" tourId="nav-marketing">
-              Marketing
-            </SideNavLinkItem>
-          </Acl.Marketing>
-
-          <Acl.Marketing>
-            <SideNavLinkItem to="/dashboard/flows" tourId="nav-flows">
-              Flows
-            </SideNavLinkItem>
-          </Acl.Marketing>
-
-          <SideNavLinkItem to="/dashboard/mls" tourId="nav-properties">
-            Properties
-          </SideNavLinkItem>
-
-          <Acl.AgentNetwork>
-            <SideNavLinkItem
-              to="/dashboard/agent-network"
-              tourId="nav-agent-network"
+          <Accordion
+            expanded={expanded === 'nav-people'}
+            onChange={handleChange('nav-people')}
+          >
+            <AccordionSummary
+              aria-controls="nav-people-content"
+              id="nav-people-header"
             >
-              Agent Network
-            </SideNavLinkItem>
-          </Acl.AgentNetwork>
+              <Acl access={dashboardAccess}>
+                <SidenavLink active={false} to="" data-tour-id="nav-people">
+                  <div>
+                    <SvgIcon
+                      path={mdiAccountSupervisorOutline}
+                      size="16px"
+                      rightMargined
+                    />
+                    People
+                  </div>
+                  {expanded === 'nav-people' ? (
+                    <SvgIcon path={mdiMenuUp} size="24px" />
+                  ) : (
+                    <SvgIcon path={mdiMenuDown} size="24px" />
+                  )}
+                </SidenavLink>
+              </Acl>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Acl.Crm>
+                <SideNavLinkItem to="/dashboard/inbox" tourId="nav-inbox">
+                  <InlineBadge
+                    badgeContent={inboxNotificationNumber}
+                    color="primary"
+                  >
+                    <SideNavItemLabel>Inbox</SideNavItemLabel>
+                  </InlineBadge>
+                </SideNavLinkItem>
+              </Acl.Crm>
 
-          <Acl access={insightAccess}>
-            <SideNavLinkItem to="/dashboard/insights" tourId="nav-insight">
-              Insight
-            </SideNavLinkItem>
-          </Acl>
+              <Acl.Crm>
+                <SideNavLinkItem to="/dashboard/calendar" tourId="nav-calendar">
+                  <SideNavItemLabel>Calendar</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl.Crm>
 
-          <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/tours" tourId="nav-tours">
-              Tours
-            </SideNavLinkItem>
-          </Acl.Crm>
+              <Acl.Crm>
+                <SideNavLinkItem to="/dashboard/contacts" tourId="nav-contacts">
+                  <SideNavItemLabel>Contacts</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl.Crm>
+            </AccordionDetails>
+          </Accordion>
+          <Accordion
+            expanded={expanded === 'nav-marketing'}
+            onChange={handleChange('nav-marketing')}
+          >
+            <AccordionSummary
+              aria-controls="nav-marketing-content"
+              id="nav-marketing-header"
+            >
+              <Acl.Marketing>
+                <SidenavLink active={false} to="" data-tour-id="nav-marketing">
+                  <div>
+                    <SvgIcon path={mdiChartArc} size="16px" rightMargined />
+                    Marketing
+                  </div>
+                  {expanded === 'nav-marketing' ? (
+                    <SvgIcon path={mdiMenuUp} size="24px" />
+                  ) : (
+                    <SvgIcon path={mdiMenuDown} size="24px" />
+                  )}
+                </SidenavLink>
+              </Acl.Marketing>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Acl.Marketing>
+                <SideNavLinkItem to="/dashboard/flows" tourId="nav-flows">
+                  <SideNavItemLabel>Flows</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl.Marketing>
 
-          <Acl access={openHouseAccess}>
-            <SideNavLinkItem to="/dashboard/open-house" tourId="nav-open-house">
-              Open House
-            </SideNavLinkItem>
-          </Acl>
+              <SideNavLinkItem to="/dashboard/mls" tourId="nav-properties">
+                <SideNavItemLabel>Properties</SideNavItemLabel>
+              </SideNavLinkItem>
 
-          <Acl access={dealsAccess}>
-            <SideNavLinkItem to="/dashboard/deals" tourId="nav-deals">
-              <InlineBadge
-                badgeContent={dealsNotificationsNumber}
-                color="primary"
-              >
-                Deals
-              </InlineBadge>
-            </SideNavLinkItem>
-          </Acl>
+              <Acl.AgentNetwork>
+                <SideNavLinkItem
+                  to="/dashboard/agent-network"
+                  tourId="nav-agent-network"
+                >
+                  <SideNavItemLabel>Agent Network</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl.AgentNetwork>
 
-          <Acl access={listingsAccess}>
-            <SideNavLinkItem to="/dashboard/listings" tourId="nav-listings">
-              Listings
-            </SideNavLinkItem>
-          </Acl>
+              <Acl access={insightAccess}>
+                <SideNavLinkItem to="/dashboard/insights" tourId="nav-insight">
+                  <SideNavItemLabel>Insight</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl>
 
-          <Acl access={ACL.WEBSITES}>
-            <SideNavLinkItem to="/dashboard/websites" tourId="nav-websites">
-              Websites
-            </SideNavLinkItem>
-          </Acl>
+              <Acl.Crm>
+                <SideNavLinkItem to="/dashboard/tours" tourId="nav-tours">
+                  <SideNavItemLabel>Tours</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl.Crm>
 
-          <Acl access={ACL.SHOWINGS}>
-            <SideNavLinkItem to="/dashboard/showings">
-              <InlineBadge
-                badgeContent={showingsTotalNotificationCount}
-                color="primary"
-              >
-                Showings
-              </InlineBadge>
-            </SideNavLinkItem>
-          </Acl>
+              <Acl access={openHouseAccess}>
+                <SideNavLinkItem
+                  to="/dashboard/open-house"
+                  tourId="nav-open-house"
+                >
+                  <SideNavItemLabel>Open House</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl>
+
+              <Acl access={dealsAccess}>
+                <SideNavLinkItem to="/dashboard/deals" tourId="nav-deals">
+                  <InlineBadge
+                    badgeContent={dealsNotificationsNumber}
+                    color="primary"
+                  >
+                    <SideNavItemLabel>Deals</SideNavItemLabel>
+                  </InlineBadge>
+                </SideNavLinkItem>
+              </Acl>
+
+              <Acl access={listingsAccess}>
+                <SideNavLinkItem to="/dashboard/listings" tourId="nav-listings">
+                  <SideNavItemLabel>Listings</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl>
+
+              <Acl access={ACL.WEBSITES}>
+                <SideNavLinkItem to="/dashboard/websites" tourId="nav-websites">
+                  <SideNavItemLabel>Websites</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl>
+
+              <Acl access={ACL.SHOWINGS}>
+                <SideNavLinkItem to="/dashboard/showings">
+                  <InlineBadge
+                    badgeContent={showingsTotalNotificationCount}
+                    color="primary"
+                  >
+                    <SideNavItemLabel>Showings</SideNavItemLabel>
+                  </InlineBadge>
+                </SideNavLinkItem>
+              </Acl>
+            </AccordionDetails>
+          </Accordion>
         </SidenavListGroup>
 
         <SidenavListGroup>
           {user && (
-            <SideNavItem>
-              <InlineBadge
-                badgeContent={chatRoomsNotificationsNumber}
-                color="primary"
+            <Accordion
+              expanded={expanded === 'nav-chat'}
+              onChange={handleChange('nav-chat')}
+            >
+              <AccordionSummary
+                aria-controls="nav-chat-content"
+                id="nav-chat-header"
               >
-                <MessagesDrawerTrigger />
-              </InlineBadge>
-            </SideNavItem>
+                <SideNavItem>
+                  <MessagesDrawerTrigger>
+                    <InlineBadge
+                      badgeContent={chatRoomsNotificationsNumber}
+                      color="primary"
+                    >
+                      <SvgIcon
+                        path={mdiChatProcessingOutline}
+                        size="16px"
+                        rightMargined
+                      />
+                      Chat
+                    </InlineBadge>
+                  </MessagesDrawerTrigger>
+                </SideNavItem>
+              </AccordionSummary>
+            </Accordion>
           )}
 
           {user && (
-            <SideNavLinkItem to="/dashboard/notifications">
-              <InlineBadge badgeContent={appNotifications} color="primary">
-                Notifications
-              </InlineBadge>
-            </SideNavLinkItem>
+            <Accordion
+              expanded={expanded === 'nav-notifications'}
+              onChange={handleChange('nav-notifications')}
+            >
+              <AccordionSummary
+                aria-controls="nav-notifications-content"
+                id="nav-notifications-header"
+              >
+                <SidenavLink
+                  active={false}
+                  to="/dashboard/notifications"
+                  data-tour-id="nav-notifications"
+                >
+                  <div>
+                    <SvgIcon
+                      path={mdiAlarmLightOutline}
+                      size="16px"
+                      rightMargined
+                    />
+                    <InlineBadge
+                      badgeContent={appNotifications}
+                      color="primary"
+                    >
+                      Notifications
+                    </InlineBadge>
+                  </div>
+                </SidenavLink>
+              </AccordionSummary>
+            </Accordion>
           )}
         </SidenavListGroup>
         <SidenavListGroup>
-          <SideNavItem>
-            <SidenavBlankLink
-              target="_blank"
-              rel="noopener noreferrer"
-              href={brandHelpCenterURL}
+          <Accordion
+            expanded={expanded === 'nav-help-center'}
+            onChange={handleChange('nav-help-center')}
+          >
+            <AccordionSummary
+              aria-controls="nav-help-center-content"
+              id="nav-help-center-header"
             >
-              Help Center
-            </SidenavBlankLink>
-          </SideNavItem>
+              <SideNavItem>
+                <SidenavBlankLink
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={brandHelpCenterURL}
+                >
+                  <div>
+                    <SvgIcon
+                      path={mdiHelpCircleOutline}
+                      size="16px"
+                      rightMargined
+                    />
+                    Help Center
+                  </div>
+                </SidenavBlankLink>
+              </SideNavItem>
+            </AccordionSummary>
+          </Accordion>
 
-          <SupportTrigger />
+          <Accordion
+            expanded={expanded === 'nav-support'}
+            onChange={handleChange('nav-support')}
+          >
+            <AccordionSummary
+              aria-controls="nav-support-content"
+              id="nav-support-header"
+            >
+              <SideNavItem>
+                <SupportTrigger>
+                  <InlineBadge
+                    badgeContent={chatRoomsNotificationsNumber}
+                    color="primary"
+                  >
+                    <SvgIcon path={mdiPhoneOutline} size="16px" rightMargined />
+                    Support
+                  </InlineBadge>
+                </SupportTrigger>
+              </SideNavItem>
+            </AccordionSummary>
+          </Accordion>
         </SidenavListGroup>
       </ScrollableArea>
 

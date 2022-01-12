@@ -6,14 +6,23 @@ import { ButtonBaseProps } from '@material-ui/core/ButtonBase'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     button: {
-      paddingLeft: theme.spacing(3),
-      color: theme.palette.navbar.contrastText,
+      display: 'flex',
+      alignItems: 'center',
+      borderRadius: '6px',
+      padding: theme.spacing(0.5, 1, 0.5, 1),
+      color: theme.palette.common.white,
       fontSize: theme.typography.body1.fontSize,
-      lineHeight: theme.typography.body1.lineHeight,
       opacity: 1,
+      width: '100%',
 
       '&:hover': {
-        color: theme.palette.primary.main
+        textDecoration: 'none',
+        color: theme.palette.common.black,
+        backgroundColor: theme.palette.common.white,
+
+        '& svg': {
+          color: theme.palette.primary.main
+        }
       }
     }
   }),

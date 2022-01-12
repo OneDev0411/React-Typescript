@@ -5,7 +5,7 @@ import { SideNavItem } from '../styled'
 
 import SideNavButtonItem from './SideNavButtonItem'
 
-export default function SupportTrigger() {
+export default function SupportTrigger({ children }) {
   return (
     <IntercomTrigger
       render={({ activateIntercom, isIntercomActive }) => {
@@ -13,7 +13,7 @@ export default function SupportTrigger() {
 
         return (
           <SideNavItem>
-            <SideNavButtonItem onClick={onClick}>Support</SideNavButtonItem>
+            <SideNavButtonItem onClick={onClick}>{children}</SideNavButtonItem>
           </SideNavItem>
         )
       }}
