@@ -76,7 +76,7 @@ function SuperCampaignDrawer({
       ...otherValues,
       subject: subject?.trim() ?? '',
       description: description?.trim() ?? '',
-      due_at: due_at ? convertDateToTimestamp(due_at) : undefined
+      due_at: due_at ? convertDateToTimestamp(due_at) : null
     })
 
   const initialValues = useMemo<SuperCampaignFormInternalValues>(

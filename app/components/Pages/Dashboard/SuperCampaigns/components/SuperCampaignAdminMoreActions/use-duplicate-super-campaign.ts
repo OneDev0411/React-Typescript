@@ -20,7 +20,8 @@ export function useDuplicateSuperCampaign(
           description: superCampaign.description,
           template_instance: superCampaign.template_instance,
           tags: superCampaign.tags ?? undefined,
-          eligible_brands: superCampaign.eligible_brands ?? undefined
+          eligible_brands: superCampaign.eligible_brands ?? undefined,
+          due_at: null
         })
 
         onDuplicate(newSuperCampaign)

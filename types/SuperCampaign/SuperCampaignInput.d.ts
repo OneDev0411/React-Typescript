@@ -1,5 +1,5 @@
 declare interface ISuperCampaignInput {
-  due_at?: number
+  due_at: Nullable<number>
   subject?: string
   description?: string
   template_instance?: UUID

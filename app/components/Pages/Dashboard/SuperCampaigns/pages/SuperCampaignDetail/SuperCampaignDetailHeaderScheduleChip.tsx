@@ -10,7 +10,7 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 interface SuperCampaignDetailHeaderScheduleChipProps {
   className: string
   isExecuted: Boolean
-  dueAt: Optional<number>
+  dueAt: Nullable<number>
   isSaving: boolean
   children: ReactNode
 }

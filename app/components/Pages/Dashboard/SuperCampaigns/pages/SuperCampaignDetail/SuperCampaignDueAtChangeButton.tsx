@@ -12,7 +12,7 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { futureTimeValidator } from '../../helpers'
 
 export interface SuperCampaignDueAtChangeButtonProps {
-  dueAt: Optional<number>
+  dueAt: Nullable<number>
   onDueAtChange: (dueAt: number) => void
   isSaving: boolean
 }
