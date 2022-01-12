@@ -36,7 +36,7 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'MarketingAssetUploadDrawerUploadStepZeroState'
+    name: 'MarketingAssetUploadDrawerZeroState'
   }
 )
 

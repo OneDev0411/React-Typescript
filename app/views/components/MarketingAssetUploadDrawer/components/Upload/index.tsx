@@ -28,13 +28,19 @@ const useStyles = makeStyles(
       border: `1px dashed ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius
     },
+    assetsContainer: {
+      maxHeight: '100%',
+      flexWrap: 'nowrap',
+      overflowY: 'scroll',
+      paddingBottom: theme.spacing(8)
+    },
     clickToUpload: {
       color: theme.palette.primary.main,
       cursor: 'pointer'
     }
   }),
   {
-    name: 'MarketingAssetUploadDrawerUploadStepZeroState'
+    name: 'MarketingAssetUploadDrawerUpload'
   }
 )
 
@@ -194,7 +200,12 @@ export default function Upload({
           </Grid>
         </>
       )}
-      <Grid container direction="column" spacing={4}>
+      <Grid
+        container
+        direction="column"
+        spacing={4}
+        className={classes.assetsContainer}
+      >
         <Controller
           control={control}
           name="assets"
