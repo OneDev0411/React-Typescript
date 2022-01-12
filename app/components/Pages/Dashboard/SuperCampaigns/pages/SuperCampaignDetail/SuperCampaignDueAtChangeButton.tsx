@@ -11,17 +11,17 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { futureTimeValidator } from '../../helpers'
 
-export interface SuperCampaignDetailHeaderScheduleButtonProps {
+export interface SuperCampaignDueAtChangeButtonProps {
   dueAt: Optional<number>
   onDueAtChange: (dueAt: number) => void
   isSaving: boolean
 }
 
-function SuperCampaignDetailHeaderScheduleButton({
+function SuperCampaignDueAtChangeButton({
   dueAt,
   onDueAtChange,
   isSaving
-}: SuperCampaignDetailHeaderScheduleButtonProps) {
+}: SuperCampaignDueAtChangeButtonProps) {
   const selectedDate = dueAt ? convertTimestampToDate(dueAt) : new Date()
 
   const handleChange = (date: Nullable<Date>) => {
@@ -68,4 +68,4 @@ function SuperCampaignDetailHeaderScheduleButton({
   )
 }
 
-export default SuperCampaignDetailHeaderScheduleButton
+export default SuperCampaignDueAtChangeButton
