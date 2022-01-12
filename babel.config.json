@@ -18,12 +18,6 @@
       {
         "displayName": true
       }
-    ],
-    [
-      "babel-plugin-transform-runtime",
-      {
-        "regenerator": true
-      }
     ]
   ],
   "env": {
