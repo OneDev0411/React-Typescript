@@ -18,22 +18,16 @@ import ZeroState from '../ZeroState'
 const useStyles = makeStyles(
   theme => ({
     wrapper: {
-      height: '100%',
-      paddingTop: theme.spacing(3)
+      height: '100%'
     },
     uploadContainer: {
+      position: 'static',
       marginBottom: theme.spacing(2),
+      marginTop: theme.spacing(2),
       padding: theme.spacing(1.5, 2, 2),
       height: theme.spacing(7),
       border: `1px dashed ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius
-    },
-    assetsContainer: {
-      maxHeight: '100%',
-      flexWrap: 'nowrap',
-      overflowY: 'scroll',
-      overflowX: 'hidden',
-      paddingBottom: theme.spacing(8)
     },
     clickToUpload: {
       color: theme.palette.primary.main,
@@ -201,12 +195,7 @@ export default function Upload({
           </Grid>
         </>
       )}
-      <Grid
-        container
-        direction="column"
-        spacing={4}
-        className={classes.assetsContainer}
-      >
+      <Grid container direction="column" spacing={4}>
         <Controller
           control={control}
           name="assets"
