@@ -20,7 +20,7 @@ function SuperCampaignWithEnrollmentCardParticipateFooter() {
         component="div"
         tabIndex={-1}
       >
-        Participate
+        Preview and Participate
       </Button>
     </div>
   )
