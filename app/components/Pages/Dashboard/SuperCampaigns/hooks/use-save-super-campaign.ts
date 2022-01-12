@@ -30,7 +30,12 @@ export function useSaveSuperCampaign(
             subject: superCampaignData.subject ?? superCampaign.subject,
             description:
               superCampaignData.description ?? superCampaign.description,
-            due_at: superCampaignData.due_at ?? superCampaign.due_at,
+            // The undefined value is acceptable for due_at field so we have to
+            // check if the key exists instead of value
+            due_at:
+              'due_at' in superCampaignData
+                ? superCampaignData.due_at
+                : superCampaign.due_at,
             template_instance:
               superCampaignData.template_instance?.id ??
               superCampaign.template_instance?.id
