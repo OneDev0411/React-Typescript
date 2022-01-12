@@ -61,7 +61,7 @@ function SuperCampaignDueAtChangeButton({
           onClick={handleOpen}
           disabled={isSaving}
         >
-          Change
+          {!dueAt ? 'Schedule' : 'Change'}
         </Button>
       )}
     </DateTimePicker>
