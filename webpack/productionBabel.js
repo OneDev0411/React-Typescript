@@ -3,6 +3,7 @@
 const path = require('path')
 
 const SentryCliPlugin = require('@sentry/webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const moment = require('moment')
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
@@ -206,11 +207,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.optimize.AggressiveMergingPlugin(),
-    new webpack.SourceMapDevToolPlugin({
-      filename: 'sourcemaps/[name][hash].js.map'
-    }),
-    new MomentLocalesPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../app/index.html'),
       hash: false,
@@ -264,6 +260,18 @@ module.exports = {
       NODE_ENV: env,
       __DEBUG__: __DEV__,
       __PROD__: env === 'production'
+    }),
+    new webpack.optimize.AggressiveMergingPlugin(),
+    new webpack.SourceMapDevToolPlugin({
+      filename: 'sourcemaps/[name][hash].js.map'
+    }),
+    new MomentLocalesPlugin(),
+    new CompressionPlugin({
+      test: /\.(css|js)$/,
+      filename: '[path][base]',
+      deleteOriginalAssets: 'keep-source-map',
+      threshold: 0, // S3 plugin expects all js assets to be gzipped
+      minRatio: 1 // Therefore it adds a content-encoding to them all
     }),
     new SentryCliPlugin({
       release:
