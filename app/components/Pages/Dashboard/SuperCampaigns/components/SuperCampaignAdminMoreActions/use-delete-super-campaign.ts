@@ -16,6 +16,8 @@ export function useDeleteSuperCampaign(
       message: `Are you sure about deleting "${
         superCampaign.subject || 'Untitled Campaign'
       }"?`,
+      description:
+        'Please note: This campaign will also be deleted for all other participant agents.',
       confirmLabel: 'Yes, I am',
       onConfirm: async () => {
         runActionThenNotify(
