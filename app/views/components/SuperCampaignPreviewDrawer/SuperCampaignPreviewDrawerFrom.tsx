@@ -1,7 +1,7 @@
 import { Typography, makeStyles } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
-import { selectUserDisplayName } from '@app/selectors/user'
+import { selectUserDisplayName, selectUserEmail } from '@app/selectors/user'
 
 const useStyles = makeStyles(
   theme => ({
@@ -17,11 +17,12 @@ function SuperCampaignPreviewDrawerFrom() {
   const classes = useStyles()
 
   const userDisplayName = useSelector(selectUserDisplayName)
+  const userEmail = useSelector(selectUserEmail)
 
   return (
     <Typography variant="body2">
       <span className={classes.from}>From</span>
-      {userDisplayName}
+      {userDisplayName} &lt;{userEmail}&gt;
     </Typography>
   )
 }

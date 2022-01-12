@@ -1,8 +1,10 @@
 import { Card, makeStyles } from '@material-ui/core'
+import classNames from 'classnames'
 import { useSelector } from 'react-redux'
 
 import { selectActiveBrand } from '@app/selectors/brand'
 import { selectUser } from '@app/selectors/user'
+import iff from '@app/utils/iff'
 import TemplateThumbnail from 'components/TemplateThumbnail'
 
 const useStyles = makeStyles(
@@ -13,12 +15,14 @@ const useStyles = makeStyles(
 )
 
 interface SuperCampaignTemplatePreviewProps {
+  className?: string
   template: IMarketingTemplateInstance
   onClick?: () => void
   readOnly: boolean
 }
 
 function SuperCampaignTemplatePreview({
+  className,
   template,
   onClick,
   readOnly
@@ -31,7 +35,7 @@ function SuperCampaignTemplatePreview({
   return (
     <Card
       variant="outlined"
-      className={readOnly ? classes.readOnly : undefined}
+      className={classNames(className, iff(readOnly, classes.readOnly))}
     >
       <TemplateThumbnail
         template={template}
