@@ -268,11 +268,11 @@ export const getListingPricePerSquareFoot = (
 }
 
 export const isUserCoAgent = (
-  user: IUser,
+  userAgents: Nullable<IAgent[]>,
   listing: IListing | ICompactListing
 ): boolean => {
   return (
-    user.agents?.some(agent => {
+    userAgents?.some(agent => {
       return (
         agent.mls === listing.mls_display_name &&
         (agent.mlsid === listing.co_list_agent_mls_id ||

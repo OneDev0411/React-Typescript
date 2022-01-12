@@ -26,6 +26,15 @@ export function selectUser(state: IAppState): IUser {
 }
 
 /**
+ * Returns the user agents info from the redux store.
+ * @param state The app state
+ * @returns The user state
+ */
+export function selectUserAgents(state: IAppState): Nullable<IAgent[]> {
+  return selectUser(state).agents
+}
+
+/**
  * Returns the given user's settings
  * @param state The app state
  * @returns The user state
