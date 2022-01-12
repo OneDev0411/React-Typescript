@@ -25,7 +25,7 @@ export function AddRole(props) {
   )
 
   const isSingularRole =
-    props.annotation.type === 'Role' && props.roles.length > 0
+    props.annotation.type === 'Role' && Object.keys(props.values).length > 0
 
   if (
     isDynamicRole ||
