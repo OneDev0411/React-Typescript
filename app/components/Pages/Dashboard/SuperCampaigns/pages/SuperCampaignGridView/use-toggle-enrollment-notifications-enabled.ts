@@ -1,5 +1,5 @@
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import setSuperCampaignEnrollmentNotificationsEnabled from '@app/models/super-campaign/set-super-campaign-enrollment-notifications-enabled'
+import { setSuperCampaignEnrollmentNotificationsEnabled } from '@app/models/super-campaign'
 
 export function useToggleEnrollmentNotificationsEnabled(
   superCampaign: ISuperCampaignWithEnrollment,

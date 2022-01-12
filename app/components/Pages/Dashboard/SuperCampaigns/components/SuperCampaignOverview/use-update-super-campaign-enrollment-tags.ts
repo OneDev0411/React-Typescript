@@ -1,5 +1,5 @@
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import updateSuperCampaignEnrollment from '@app/models/super-campaign/update-super-campaign-enrollment'
+import { updateSuperCampaignEnrollment } from '@app/models/super-campaign'
 
 type UseUpdateSuperCampaignEnrollmentTags = (
   enrollmentId: UUID,

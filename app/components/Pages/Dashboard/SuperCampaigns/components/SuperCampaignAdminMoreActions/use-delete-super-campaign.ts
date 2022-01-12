@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import deleteSuperCampaignModel from '@app/models/super-campaign/delete-super-campaign'
+import { deleteSuperCampaign as deleteSuperCampaignModel } from '@app/models/super-campaign'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 export function useDeleteSuperCampaign(

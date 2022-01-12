@@ -1,5 +1,5 @@
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import deleteSuperCampaignEnrollmentModel from '@app/models/super-campaign/delete-super-campaign-enrollment'
+import { deleteSuperCampaignEnrollment as deleteSuperCampaignEnrollmentModel } from '@app/models/super-campaign'
 
 type UseDeleteSuperCampaignEnrollment = (enrollmentId: UUID) => Promise<void>
 

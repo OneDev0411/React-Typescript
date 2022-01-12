@@ -1,5 +1,5 @@
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import createSuperCampaign from '@app/models/super-campaign/create-super-campaign'
+import { createSuperCampaign } from '@app/models/super-campaign'
 
 interface UseDuplicateSuperCampaign {
   isDuplicating: boolean

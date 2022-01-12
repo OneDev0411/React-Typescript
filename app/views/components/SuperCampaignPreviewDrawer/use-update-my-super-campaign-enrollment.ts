@@ -1,5 +1,5 @@
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import updateMySuperCampaignEnrollmentModel from '@app/models/super-campaign/update-my-super-campaign-enrollment'
+import { updateMySuperCampaignEnrollment as updateMySuperCampaignEnrollmentModel } from '@app/models/super-campaign'
 
 type UseUpdateMySuperCampaignEnrollment = {
   isUpdating: boolean

@@ -1,5 +1,5 @@
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import updateSuperCampaignTagsModel from '@app/models/super-campaign/update-super-campaign-tags'
+import { updateSuperCampaignTags as updateSuperCampaignTagsModel } from '@app/models/super-campaign'
 
 interface UseUpdateSuperCampaignTags {
   isSaving: boolean

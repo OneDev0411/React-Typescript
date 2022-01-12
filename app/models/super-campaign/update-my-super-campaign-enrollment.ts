@@ -1,1 +1,1 @@
-export { default } from './enroll-me-in-super-campaign'
+export { enrollMeInSuperCampaign as updateMySuperCampaignEnrollment } from './enroll-me-in-super-campaign'

@@ -1,6 +1,6 @@
 import Fetch from 'services/fetch'
 
-async function updateSuperCampaign(
+export async function updateSuperCampaign(
   superCampaignId: UUID,
   data: ISuperCampaignInput
 ): Promise<ISuperCampaign> {
@@ -10,5 +10,3 @@ async function updateSuperCampaign(
       .send(data)
   ).body.data
 }
-
-export default updateSuperCampaign

@@ -1,5 +1,5 @@
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import updateSuperCampaign from '@app/models/super-campaign/update-super-campaign'
+import { updateSuperCampaign } from '@app/models/super-campaign'
 
 interface SaveSuperCampaignInput
   extends Omit<ISuperCampaignInput, 'template_instance'> {

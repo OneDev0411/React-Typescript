@@ -1,6 +1,6 @@
 import Fetch from 'services/fetch'
 
-async function getSuperCampaign(
+export async function getSuperCampaign(
   superCampaignId: UUID
 ): Promise<ISuperCampaign<'template_instance'>> {
   return (
@@ -15,5 +15,3 @@ async function getSuperCampaign(
     })
   ).body.data
 }
-
-export default getSuperCampaign

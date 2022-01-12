@@ -5,21 +5,21 @@ export const defaultAssociations = [
   'super_campaign_enrollment.brand'
 ]
 
-async function getSuperCampaignEnrollments(
+export async function getSuperCampaignEnrollments(
   superCampaignId: UUID
 ): Promise<ISuperCampaignEnrollment<'user' | 'brand'>[]>
-async function getSuperCampaignEnrollments(
+export async function getSuperCampaignEnrollments(
   superCampaignId: UUID,
   includeCampaign: true
 ): Promise<ISuperCampaignEnrollment<'user' | 'brand' | 'campaign'>[]>
-async function getSuperCampaignEnrollments(
+export async function getSuperCampaignEnrollments(
   superCampaignId: UUID,
   includeCampaign: boolean
 ): Promise<
   | ISuperCampaignEnrollment<'user' | 'brand'>[]
   | ISuperCampaignEnrollment<'user' | 'brand' | 'campaign'>[]
 >
-async function getSuperCampaignEnrollments(
+export async function getSuperCampaignEnrollments(
   superCampaignId: UUID,
   includeCampaign: boolean = false
 ): Promise<
@@ -40,5 +40,3 @@ async function getSuperCampaignEnrollments(
       })
   ).body.data
 }
-
-export default getSuperCampaignEnrollments

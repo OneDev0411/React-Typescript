@@ -5,7 +5,7 @@ interface UnenrollUserFromSuperCampaignInput {
   brand: UUID
 }
 
-async function unenrollUserFromSuperCampaign(
+export async function unenrollUserFromSuperCampaign(
   superCampaignId: UUID,
   data: UnenrollUserFromSuperCampaignInput
 ): Promise<void> {
@@ -13,5 +13,3 @@ async function unenrollUserFromSuperCampaign(
     .delete(`/email/super-campaigns/${superCampaignId}/enrollments`)
     .send(data)
 }
-
-export default unenrollUserFromSuperCampaign

@@ -1,8 +1,10 @@
 import { Dispatch, SetStateAction, useEffect } from 'react'
 
 import useAsync from '@app/hooks/use-async'
-import getMySuperCampaignEnrollments from '@app/models/super-campaign/get-my-super-campaign-enrollments'
-import getMySuperCampaigns from '@app/models/super-campaign/get-my-super-campaigns'
+import {
+  getMySuperCampaignEnrollments,
+  getMySuperCampaigns
+} from '@app/models/super-campaign'
 
 interface UseGetMySuperCampaignsWithEnrollment {
   isLoading: boolean

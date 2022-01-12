@@ -1,6 +1,6 @@
 import Fetch from 'services/fetch'
 
-async function updateSuperCampaignTags(
+export async function updateSuperCampaignTags(
   superCampaignId: UUID,
   tags: string[]
 ): Promise<ISuperCampaign> {
@@ -10,5 +10,3 @@ async function updateSuperCampaignTags(
       .send({ tags })
   ).body.data
 }
-
-export default updateSuperCampaignTags
