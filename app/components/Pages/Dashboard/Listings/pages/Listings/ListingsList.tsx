@@ -1,4 +1,4 @@
-import { Chip, Grid, makeStyles, Tooltip } from '@material-ui/core'
+import { Chip, makeStyles, Tooltip } from '@material-ui/core'
 import classNames from 'classnames'
 import { useSelector } from 'react-redux'
 
@@ -31,9 +31,6 @@ const useStyles = makeStyles(
     actions: {
       opacity: 0,
       transition: theme.transitions.create('opacity')
-    },
-    coAgentTag: {
-      marginLeft: theme.spacing(1)
     }
   }),
   { name: 'ListingsList' }
@@ -89,24 +86,27 @@ function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
       )
     },
     {
+      id: 'co-agent',
+      width: '10%',
+      primary: false,
+      render: ({ row }) => (
+        <>
+          {isUserCoAgent(user, row) && (
+            <Tooltip title="You are the co-listing agent">
+              <Chip label="Co-Agent" size="small" />
+            </Tooltip>
+          )}
+        </>
+      )
+    },
+    {
       id: 'agent',
       width: '15%',
       primary: false,
       render: ({ row }) => (
-        <Grid alignItems="center">
-          <ListingsListColumnText>
-            {row.list_agent_full_name}
-          </ListingsListColumnText>
-          {isUserCoAgent(user, row) && (
-            <Tooltip title="You are the co-listing agent">
-              <Chip
-                className={classes.coAgentTag}
-                label="Co-Agent"
-                size="small"
-              />
-            </Tooltip>
-          )}
-        </Grid>
+        <ListingsListColumnText>
+          {row.list_agent_full_name}
+        </ListingsListColumnText>
       )
     },
     {
