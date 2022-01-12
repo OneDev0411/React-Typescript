@@ -26,7 +26,7 @@ function SuperCampaignsSection() {
 
   return (
     <SectionLayout
-      title="Campaigns"
+      title="Upcoming Campaigns"
       actionNode={
         superCampaignsWithEnrollment?.length ? (
           <LinkSectionAction
