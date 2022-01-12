@@ -1,16 +1,13 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import { Button, makeStyles } from '@material-ui/core'
-import { mdiClose } from '@mdi/js'
-
-import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
-import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { makeStyles } from '@material-ui/core'
 
 import { isSuperCampaignReadOnly } from '../../helpers'
 import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
 
-import SuperCampaignDetailHeaderScheduleButton from './SuperCampaignDetailHeaderScheduleButton'
 import SuperCampaignDetailHeaderScheduleChip from './SuperCampaignDetailHeaderScheduleChip'
+import SuperCampaignDueAtChangeButton from './SuperCampaignDueAtChangeButton'
+import SuperCampaignDueAtRemoveButton from './SuperCampaignDueAtRemoveButton'
 
 const useStyles = makeStyles(
   theme => ({
@@ -61,24 +58,17 @@ function SuperCampaignDetailHeaderSchedule({
       >
         {!isExecuted && (
           <div className={classes.actions}>
-            <SuperCampaignDetailHeaderScheduleButton
+            <SuperCampaignDueAtChangeButton
               dueAt={superCampaign.due_at}
               isSaving={isSaving}
               onDueAtChange={handleDueAtChange}
             />
             {superCampaign.due_at && (
-              <Button
+              <SuperCampaignDueAtRemoveButton
                 className={classes.removeButton}
-                color="secondary"
-                size="small"
-                startIcon={
-                  <SvgIcon path={mdiClose} size={muiIconSizes.small} />
-                }
                 disabled={isSaving}
                 onClick={handleDueAtRemove}
-              >
-                Remove
-              </Button>
+              />
             )}
           </div>
         )}
