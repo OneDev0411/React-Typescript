@@ -18,11 +18,12 @@ import ZeroState from '../ZeroState'
 const useStyles = makeStyles(
   theme => ({
     wrapper: {
-      height: '100%',
-      paddingTop: theme.spacing(3)
+      height: '100%'
     },
     uploadContainer: {
+      position: 'static',
       marginBottom: theme.spacing(2),
+      marginTop: theme.spacing(2),
       padding: theme.spacing(1.5, 2, 2),
       height: theme.spacing(7),
       border: `1px dashed ${theme.palette.divider}`,
@@ -34,7 +35,7 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'MarketingAssetUploadDrawerUploadStepZeroState'
+    name: 'MarketingAssetUploadDrawerUpload'
   }
 )
 
