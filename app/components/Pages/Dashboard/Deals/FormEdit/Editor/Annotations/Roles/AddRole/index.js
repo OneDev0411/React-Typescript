@@ -28,9 +28,13 @@ export function AddRole(props) {
     props.annotation.type === 'Role' && Object.keys(props.values).length > 0
 
   if (
+    // Dynamic Roles aren't listed in the roles list
     isDynamicRole ||
+    // Primary roles are unique so don't show plus button
     isPrimaryRole ||
+    // show plus button if the type is "Role" and is blank
     isSingularRole ||
+    // make sure to show plus button for the last row if the annotation is a multi-row
     (Object.keys(props.values).length > 1 &&
       props.rectIndex < props.group.length - 1)
   ) {
