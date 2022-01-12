@@ -3,16 +3,14 @@ import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useEffectOnce, useTitle } from 'react-use'
 
-import { useLoadActiveTeam } from '@app/hooks/team/use-load-active-team'
+import { useLoadUserAndActiveTeam } from '@app/hooks/use-load-user-and-active-team'
+import getBrand from '@app/store_actions/brand'
 import { AnimatedLoader } from 'components/AnimatedLoader'
-import { useLoadUser } from 'hooks/use-load-user'
 import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 import { IAppState } from 'reducers'
 import { setupFullStory } from 'services/fullstory'
 import { setupGoogleAnalytics } from 'services/google-analytics'
 import { setupSentry } from 'services/sentry'
-
-import getBrand from '../store_actions/brand'
 
 import 'offline-js'
 
@@ -22,10 +20,9 @@ interface Props {
 
 export default function App(props: Props) {
   useTitle('Rechat')
-  useLoadActiveTeam()
 
   const brand = useSelector<IAppState, IBrand>(({ brand }) => brand)
-  const { user, isGuest } = useLoadUser()
+  const { user, isGuest } = useLoadUserAndActiveTeam()
   const dispatch = useReduxDispatch()
 
   useEffectOnce(() => {

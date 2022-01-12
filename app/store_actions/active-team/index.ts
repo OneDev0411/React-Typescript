@@ -15,7 +15,7 @@ const requestActiveTeam = () =>
 
 export type RequestActiveTeamAction = ReturnType<typeof requestActiveTeam>
 
-const setActiveTeam = (team: IUserTeam) =>
+export const setActiveTeam = (team: IUserTeam) =>
   ({
     type: SET_ACTIVE_TEAM,
     payload: team

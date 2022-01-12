@@ -12,11 +12,21 @@ const DEFAULT_ASSOCIATIONS = [
   'brand.roles'
 ]
 
-export async function getActiveTeam(): Promise<IUserTeam> {
+export async function getActiveTeam(user?: IUser): Promise<IUserTeam> {
   try {
-    const response = await new Fetch().get('/users/self/active-role').query({
-      associations: DEFAULT_ASSOCIATIONS
-    })
+    const fetchActiveTeamInstance = new Fetch()
+      .get('/users/self/active-role')
+      .query({
+        associations: DEFAULT_ASSOCIATIONS
+      })
+
+    if (user?.access_token) {
+      fetchActiveTeamInstance.set({
+        Authorization: `Bearer ${user.access_token}`
+      })
+    }
+
+    const response = await fetchActiveTeamInstance
 
     return response.body.data
   } catch (e) {
