@@ -32,6 +32,7 @@ const useStyles = makeStyles(
       maxHeight: '100%',
       flexWrap: 'nowrap',
       overflowY: 'scroll',
+      overflowX: 'hidden',
       paddingBottom: theme.spacing(8)
     },
     clickToUpload: {
