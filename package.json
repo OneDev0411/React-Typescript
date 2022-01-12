@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "87.0.5",
+  "version": "88.0.0",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -155,7 +155,7 @@
     "mapbox-gl": "^2.1.1",
     "match-sorter": "^2.3.0",
     "material-ui-color-picker": "^3.5.0",
-    "merge": "^1.2.1",
+    "merge": "^2.1.1",
     "mjml": "^4.9.0",
     "moment": "^2.23.0",
     "moment-locales-webpack-plugin": "^1.2.0",

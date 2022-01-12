@@ -1,5 +1,6 @@
 import { Grid, Typography } from '@material-ui/core'
 import { mdiTune } from '@mdi/js'
+import { isEqual } from 'lodash'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
@@ -15,11 +16,13 @@ import { PoolGroup } from './poolGroup'
 import { SquareFootageGroup } from './squareFootageGroup'
 import { StatusGroup } from './statusGroup'
 import { YearBuiltGroup } from './yearBuiltGroup'
+import { ZipcodeGroup, ZipCodeGroupProps } from './zipcodeGroup'
 
 export const OtherEditor = ({
+  hasMapDrawing,
   resultsCount,
   ...otherEditorProps
-}: FilterButtonDropDownProp<AlertFilters>) => {
+}: FilterButtonDropDownProp<AlertFilters> & ZipCodeGroupProps) => {
   const classes = useStyles()
   const defaultFilters = otherEditorProps.defaultFilters
   const filters = otherEditorProps.filters
@@ -35,7 +38,8 @@ export const OtherEditor = ({
       pool: defaultFilters.pool,
       listing_statuses: defaultFilters.listing_statuses,
       open_house: defaultFilters.open_house,
-      minimum_parking_spaces: defaultFilters.minimum_parking_spaces
+      minimum_parking_spaces: defaultFilters.minimum_parking_spaces,
+      postal_codes: defaultFilters.postal_codes
 
       // Update filters to unifying them across all MLSs
       // https://gitlab.com/rechat/web/-/issues/5673
@@ -56,36 +60,7 @@ export const OtherEditor = ({
     })
   }
 
-  const disabledReset =
-    filters.minimum_square_meters === defaultFilters.minimum_square_meters &&
-    filters.maximum_square_meters === defaultFilters.maximum_square_meters &&
-    filters.minimum_lot_square_meters ===
-      defaultFilters.minimum_lot_square_meters &&
-    filters.maximum_lot_square_meters ===
-      defaultFilters.maximum_lot_square_meters &&
-    filters.minimum_year_built === defaultFilters.minimum_year_built &&
-    filters.maximum_year_built === defaultFilters.maximum_year_built &&
-    filters.pool === defaultFilters.pool &&
-    filters.listing_statuses === defaultFilters.listing_statuses &&
-    filters.minimum_parking_spaces === defaultFilters.minimum_parking_spaces &&
-    filters.open_house === defaultFilters.open_house
-
-  // Update filters to unifying them across all MLSs
-  // https://gitlab.com/rechat/web/-/issues/5673
-
-  // filters.property_subtypes === defaultFilters.property_subtypes &&
-  // filters.architectural_styles === defaultFilters.architectural_styles &&
-  // filters.school_districts === defaultFilters.school_districts &&
-  // filters.junior_high_schools === defaultFilters.junior_high_schools &&
-  // filters.elementary_schools === defaultFilters.elementary_schools &&
-  // filters.high_schools === defaultFilters.high_schools &&
-  // filters.middle_schools === defaultFilters.middle_schools &&
-  // filters.senior_high_schools === defaultFilters.senior_high_schools &&
-  // filters.primary_schools === defaultFilters.primary_schools &&
-  // filters.intermediate_schools === defaultFilters.intermediate_schools &&
-  // filters.mls_areas === defaultFilters.mls_areas &&
-  // filters.counties === defaultFilters.counties &&
-  // filters.subdivisions === defaultFilters.subdivisions
+  const disabledReset = isEqual(filters, defaultFilters)
 
   return (
     <Grid className={classes.editorRoot}>
@@ -112,6 +87,8 @@ export const OtherEditor = ({
         {filters.property_types[0] !== 'Lots & Acreage' && (
           <YearBuiltGroup {...otherEditorProps} />
         )}
+
+        <ZipcodeGroup hasMapDrawing={hasMapDrawing} {...otherEditorProps} />
 
         {['Residential', 'Residential Lease'].includes(
           filters.property_types[0]

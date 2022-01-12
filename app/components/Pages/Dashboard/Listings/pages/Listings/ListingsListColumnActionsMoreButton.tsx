@@ -60,7 +60,7 @@ function ListingsListColumnActionsMoreButton({
             <ListItem
               button
               onClick={event => {
-                openListingsModal()
+                openListingsModal(row.id)
                 closeMenu(event)
               }}
             >

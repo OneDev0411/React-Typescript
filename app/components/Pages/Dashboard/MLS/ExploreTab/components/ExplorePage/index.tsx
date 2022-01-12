@@ -350,7 +350,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
         </Grid>
 
         <Grid container className={classes.main}>
-          {mapIsInitialized && mapIsShown && (
+          {mapIsInitialized && (
             <Grid
               item
               className={cn({
@@ -361,7 +361,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
               <Grid className={classes.mapCanvas}>
                 <Map
                   isWidget={isWidget}
-                  hasDrawingMode
+                  hasDrawingMode={!state.search.filters.postal_codes}
                   pin={state.pinMarker}
                   drawing={state.search.drawing}
                   onStartDrawingMode={onStartDrawingMode}
@@ -404,7 +404,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
         onHide={onCloseAlertModal}
         isActive={isShowAlertModal}
         alertProposedTitle={state.result.info?.proposed_title}
-        searchOptions={createValertOptions(state.search, null, QUERY_LIMIT)}
+        searchOptions={createValertOptions(state.search, QUERY_LIMIT)}
         drawingPoints={state.search.drawing.map(coordToPoint)}
       />
     </>

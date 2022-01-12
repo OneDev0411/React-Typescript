@@ -63,7 +63,7 @@ export default function useFetchListings(
         brand,
         state.search.sort
       )
-      const valertOptions = createValertOptions(state.search, null, QUERY_LIMIT)
+      const valertOptions = createValertOptions(state.search, QUERY_LIMIT)
 
       try {
         const response = await api.getListings.byValert(
