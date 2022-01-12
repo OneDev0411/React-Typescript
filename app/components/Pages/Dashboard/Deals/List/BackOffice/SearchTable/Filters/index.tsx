@@ -11,13 +11,12 @@ import {
 } from '@mdi/js'
 import { saveAs } from 'file-saver'
 import { isEqual, pickBy } from 'lodash'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useDebounce, useFirstMountState } from 'react-use'
 
+import { useActiveTeam } from '@app/hooks/team/use-active-team'
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { exportFilter } from '@app/models/Deal/deal'
-import { selectActiveBrand } from '@app/selectors/brand'
-import { selectUser } from '@app/selectors/user'
 import { Filters as BaseFilters } from '@app/views/components/Filters'
 import BaseFilterButton from '@app/views/components/Filters/FilterButton'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
@@ -61,9 +60,8 @@ export const Filters = ({ searchQuery }: Props) => {
   const sortOption: DealsOrder = DEALS_LIST_DEFUALT_ORDER
 
   const [isExporting, setIsExporting] = useState(false)
-
-  const user = useSelector(selectUser)
-  const activeBrand = useSelector(selectActiveBrand)
+  const activeTeam = useActiveTeam()
+  const activeBrand = activeTeam.brand
 
   const [userFilters, setUserFilters] = UseFiltersWithQuery()
 
@@ -103,7 +101,7 @@ export const Filters = ({ searchQuery }: Props) => {
           query: queryParamValue ?? ''
         }
 
-        dispatch(searchDeals(user, payload))
+        dispatch(searchDeals(activeTeam, payload))
       }
     },
     CHANGE_FILTERS_DEBOUNCE_MS,

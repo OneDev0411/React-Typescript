@@ -45,7 +45,9 @@ export function searchDeals(team, value) {
         notify({
           title: 'Server Error',
           message:
-            e.response && e.response.body ? e.response.body.message : null,
+            e.response && e.response.body
+              ? e.response.body.message
+              : null ?? 'Something went wrong!',
           status: 'error'
         })
       )
