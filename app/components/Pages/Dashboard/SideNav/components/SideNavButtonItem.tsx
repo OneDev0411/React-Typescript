@@ -9,11 +9,16 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       borderRadius: '6px',
-      padding: theme.spacing(0.5, 1, 0.5, 1),
+      padding: theme.spacing(0.5, 1, 0.5, 4.25),
       color: theme.palette.common.white,
       fontSize: theme.typography.body1.fontSize,
       opacity: 1,
       width: '100%',
+
+      '& svg': {
+        position: 'absolute',
+        left: '-26px'
+      },
 
       '&:hover': {
         textDecoration: 'none',

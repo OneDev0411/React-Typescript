@@ -8,12 +8,12 @@ import {
   mdiViewGridOutline,
   mdiAccountSupervisorOutline,
   mdiChartArc,
-  mdiChatProcessingOutline,
   mdiAlarmLightOutline,
   mdiHelpCircleOutline,
   mdiPhoneOutline,
   mdiMenuUp,
-  mdiMenuDown
+  mdiMenuDown,
+  mdiGoogleMaps
 } from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
@@ -151,6 +151,90 @@ export function Menu() {
 
         <SidenavListGroup>
           <Accordion
+            expanded={expanded === 'nav-marketing'}
+            onChange={handleChange('nav-marketing')}
+          >
+            <AccordionSummary
+              aria-controls="nav-marketing-content"
+              id="nav-marketing-header"
+            >
+              <Acl.Marketing>
+                <SidenavLink active={false} to="" data-tour-id="nav-marketing">
+                  <AccordionSummaryDiv>
+                    <SvgIcon path={mdiChartArc} size="14px" rightMargined />
+                    Marketing
+                  </AccordionSummaryDiv>
+                  {expanded === 'nav-marketing' ? (
+                    <SvgIcon path={mdiMenuUp} size="24px" />
+                  ) : (
+                    <SvgIcon path={mdiMenuDown} size="24px" />
+                  )}
+                </SidenavLink>
+              </Acl.Marketing>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Acl.Marketing>
+                <SideNavLinkItem
+                  to="/dashboard/marketing"
+                  tourId="nav-Overview"
+                >
+                  <SideNavItemLabel>Overview</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl.Marketing>
+
+              <Acl.Marketing>
+                <SideNavLinkItem to="/dashboard/flows" tourId="nav-flows">
+                  <SideNavItemLabel>Flows</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl.Marketing>
+
+              <Acl.AgentNetwork>
+                <SideNavLinkItem
+                  to="/dashboard/agent-network"
+                  tourId="nav-agent-network"
+                >
+                  <SideNavItemLabel>Agent Network</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl.AgentNetwork>
+
+              <Acl access={insightAccess}>
+                <SideNavLinkItem to="/dashboard/insights" tourId="nav-insight">
+                  <SideNavItemLabel>Insight</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl>
+
+              <Acl access={ACL.WEBSITES}>
+                <SideNavLinkItem to="/dashboard/websites" tourId="nav-websites">
+                  <SideNavItemLabel>Website</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl>
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion
+            expanded={expanded === 'nav-properties'}
+            onChange={handleChange('nav-properties')}
+          >
+            <AccordionSummary
+              aria-controls="nav-properties-content"
+              id="nav-properties-header"
+            >
+              <Acl.Marketing>
+                <SidenavLink
+                  active={false}
+                  to="/dashboard/mls"
+                  data-tour-id="nav-properties"
+                >
+                  <AccordionSummaryDiv>
+                    <SvgIcon path={mdiGoogleMaps} size="14px" rightMargined />
+                    Properties
+                  </AccordionSummaryDiv>
+                </SidenavLink>
+              </Acl.Marketing>
+            </AccordionSummary>
+          </Accordion>
+
+          <Accordion
             expanded={expanded === 'nav-people'}
             onChange={handleChange('nav-people')}
           >
@@ -183,7 +267,7 @@ export function Menu() {
                     badgeContent={inboxNotificationNumber}
                     color="primary"
                   >
-                    <SideNavItemLabel>Inbox</SideNavItemLabel>
+                    <SideNavItemLabel>Email</SideNavItemLabel>
                   </InlineBadge>
                 </SideNavLinkItem>
               </Acl.Crm>
@@ -199,23 +283,51 @@ export function Menu() {
                   <SideNavItemLabel>Contacts</SideNavItemLabel>
                 </SideNavLinkItem>
               </Acl.Crm>
+
+              {user && (
+                <Accordion
+                  expanded={expanded === 'nav-chat'}
+                  onChange={handleChange('nav-chat')}
+                >
+                  <AccordionSummary
+                    aria-controls="nav-chat-content"
+                    id="nav-chat-header"
+                  >
+                    <SideNavItem>
+                      <MessagesDrawerTrigger>
+                        <InlineBadge
+                          badgeContent={chatRoomsNotificationsNumber}
+                          color="primary"
+                        >
+                          Chat
+                        </InlineBadge>
+                      </MessagesDrawerTrigger>
+                    </SideNavItem>
+                  </AccordionSummary>
+                </Accordion>
+              )}
             </AccordionDetails>
           </Accordion>
+
           <Accordion
-            expanded={expanded === 'nav-marketing'}
-            onChange={handleChange('nav-marketing')}
+            expanded={expanded === 'nav-transaction'}
+            onChange={handleChange('nav-transaction')}
           >
             <AccordionSummary
-              aria-controls="nav-marketing-content"
-              id="nav-marketing-header"
+              aria-controls="nav-transaction-content"
+              id="nav-transaction-header"
             >
               <Acl.Marketing>
-                <SidenavLink active={false} to="" data-tour-id="nav-marketing">
+                <SidenavLink
+                  active={false}
+                  to=""
+                  data-tour-id="nav-transaction"
+                >
                   <AccordionSummaryDiv>
                     <SvgIcon path={mdiChartArc} size="14px" rightMargined />
-                    Marketing
+                    Transactions
                   </AccordionSummaryDiv>
-                  {expanded === 'nav-marketing' ? (
+                  {expanded === 'nav-transaction' ? (
                     <SvgIcon path={mdiMenuUp} size="24px" />
                   ) : (
                     <SvgIcon path={mdiMenuDown} size="24px" />
@@ -224,46 +336,6 @@ export function Menu() {
               </Acl.Marketing>
             </AccordionSummary>
             <AccordionDetails>
-              <Acl.Marketing>
-                <SideNavLinkItem to="/dashboard/flows" tourId="nav-flows">
-                  <SideNavItemLabel>Flows</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl.Marketing>
-
-              <SideNavLinkItem to="/dashboard/mls" tourId="nav-properties">
-                <SideNavItemLabel>Properties</SideNavItemLabel>
-              </SideNavLinkItem>
-
-              <Acl.AgentNetwork>
-                <SideNavLinkItem
-                  to="/dashboard/agent-network"
-                  tourId="nav-agent-network"
-                >
-                  <SideNavItemLabel>Agent Network</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl.AgentNetwork>
-
-              <Acl access={insightAccess}>
-                <SideNavLinkItem to="/dashboard/insights" tourId="nav-insight">
-                  <SideNavItemLabel>Insight</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl>
-
-              <Acl.Crm>
-                <SideNavLinkItem to="/dashboard/tours" tourId="nav-tours">
-                  <SideNavItemLabel>Tours</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl.Crm>
-
-              <Acl access={openHouseAccess}>
-                <SideNavLinkItem
-                  to="/dashboard/open-house"
-                  tourId="nav-open-house"
-                >
-                  <SideNavItemLabel>Open House</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl>
-
               <Acl access={dealsAccess}>
                 <SideNavLinkItem to="/dashboard/deals" tourId="nav-deals">
                   <InlineBadge
@@ -281,9 +353,18 @@ export function Menu() {
                 </SideNavLinkItem>
               </Acl>
 
-              <Acl access={ACL.WEBSITES}>
-                <SideNavLinkItem to="/dashboard/websites" tourId="nav-websites">
-                  <SideNavItemLabel>Websites</SideNavItemLabel>
+              <Acl.Crm>
+                <SideNavLinkItem to="/dashboard/tours" tourId="nav-tours">
+                  <SideNavItemLabel>Tours</SideNavItemLabel>
+                </SideNavLinkItem>
+              </Acl.Crm>
+
+              <Acl access={openHouseAccess}>
+                <SideNavLinkItem
+                  to="/dashboard/open-house"
+                  tourId="nav-open-house"
+                >
+                  <SideNavItemLabel>Open House</SideNavItemLabel>
                 </SideNavLinkItem>
               </Acl>
 
@@ -303,34 +384,6 @@ export function Menu() {
         </SidenavListGroup>
 
         <SidenavListGroup>
-          {user && (
-            <Accordion
-              expanded={expanded === 'nav-chat'}
-              onChange={handleChange('nav-chat')}
-            >
-              <AccordionSummary
-                aria-controls="nav-chat-content"
-                id="nav-chat-header"
-              >
-                <SideNavItem>
-                  <MessagesDrawerTrigger>
-                    <InlineBadge
-                      badgeContent={chatRoomsNotificationsNumber}
-                      color="primary"
-                    >
-                      <SvgIcon
-                        path={mdiChatProcessingOutline}
-                        size="14px"
-                        rightMargined
-                      />
-                      Chat
-                    </InlineBadge>
-                  </MessagesDrawerTrigger>
-                </SideNavItem>
-              </AccordionSummary>
-            </Accordion>
-          )}
-
           {user && (
             <Accordion
               expanded={expanded === 'nav-notifications'}
@@ -364,6 +417,7 @@ export function Menu() {
           )}
           <Divider className={classes.divider} />
         </SidenavListGroup>
+
         <SidenavListGroup>
           <Accordion
             expanded={expanded === 'nav-help-center'}
