@@ -87,15 +87,17 @@ export function ConfigBrand() {
         team => team.brand.brand_type === 'Personal'
       )
 
-      await putUserSetting('user_filter', [], personalTeam.brand.id)
+      if (personalTeam) {
+        await putUserSetting('user_filter', [], personalTeam.brand.id)
 
-      dispatch(
-        updateUser({
-          ...user,
-          active_brand: personalTeam.brand.id,
-          brand: personalTeam.brand.id
-        })
-      )
+        dispatch(
+          updateUser({
+            ...user,
+            active_brand: personalTeam.brand.id,
+            brand: personalTeam.brand.id
+          })
+        )
+      }
 
       browserHistory.push(getNextStep())
     } catch (error) {
