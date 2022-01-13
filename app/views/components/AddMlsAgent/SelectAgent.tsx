@@ -9,6 +9,21 @@ import {
   Link,
   FormHelperText
 } from '@material-ui/core'
+import { useSelector } from 'react-redux'
+
+import { selectUserAgents } from '@app/selectors/user'
+
+const isAgentAlreadySelected = (
+  userAgents: Nullable<IAgent[]>,
+  id: UUID,
+  mls: Optional<string>
+) => {
+  return (
+    userAgents?.some(userAgent => {
+      return userAgent.mls === mls && userAgent.id == id
+    }) || false
+  )
+}
 
 interface Props {
   agents: IAgent[]
@@ -22,6 +37,7 @@ export function SelectAgent({
   onRemoveAgentNumber
 }: Props) {
   const [selectedId, setSelectedId] = useState('')
+  const userAgents = useSelector(selectUserAgents)
 
   const handleNext = () => {
     if (!selectedId) {
@@ -35,9 +51,10 @@ export function SelectAgent({
     () =>
       agents.map(item => ({
         value: item.id,
-        label: `${item.mls} ${item.full_name ? ` - ${item.full_name}` : ''}`
+        label: `${item.mls} ${item.full_name ? ` - ${item.full_name}` : ''}`,
+        disabled: isAgentAlreadySelected(userAgents, item.id, item.mls)
       })),
-    [agents]
+    [agents, userAgents]
   )
 
   return (
@@ -55,8 +72,9 @@ export function SelectAgent({
           </MenuItem>
 
           {list.map((item, key) => (
-            <MenuItem key={key} value={item.value}>
+            <MenuItem key={key} value={item.value} disabled={item.disabled}>
               {item.label}
+              {item.disabled && <FormHelperText>[Selected]</FormHelperText>}
             </MenuItem>
           ))}
         </Select>
