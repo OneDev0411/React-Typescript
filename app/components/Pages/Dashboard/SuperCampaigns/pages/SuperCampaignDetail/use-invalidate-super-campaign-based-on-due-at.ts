@@ -12,7 +12,7 @@ const WAIT_FOR_CAMPAIGN_TIME = 5000
 // https://nodejs.org/api/timers.html#settimeoutcallback-delay-args
 const SET_TIMEOUT_MAX_VALUE = 2147483647
 
-export function useRefreshSuperCampaignBasedOnDueAt(
+export function useInvalidateSuperCampaignBasedOnDueAt(
   superCampaign: Optional<ISuperCampaign<'template_instance'>>
 ): void {
   const queryClient = useQueryClient()
