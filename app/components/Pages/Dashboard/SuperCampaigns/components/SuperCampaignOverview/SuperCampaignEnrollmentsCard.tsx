@@ -4,8 +4,8 @@ import pluralize from 'pluralize'
 import { isSuperCampaignExecuted } from '../../helpers'
 import SuperCampaignCard from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
-import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 import SuperCampaignEnrollManuallyButton from '../SuperCampaignEnrollManuallyButton'
+import { useSuperCampaign } from '../SuperCampaignProvider'
 
 import SuperCampaignEnrollmentList from './SuperCampaignEnrollmentList'
 import SuperCampaignResultList from './SuperCampaignResultList'
@@ -22,7 +22,7 @@ const useStyles = makeStyles(
 
 function SuperCampaignEnrollmentsCard() {
   const classes = useStyles()
-  const { superCampaign } = useSuperCampaignDetail()
+  const superCampaign = useSuperCampaign()
 
   const isExecuted = isSuperCampaignExecuted(superCampaign)
 

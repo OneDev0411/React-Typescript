@@ -7,7 +7,7 @@ import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
 import { isSuperCampaignDueAtTimeout } from '../../helpers'
-import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
+import { useSuperCampaign } from '../SuperCampaignProvider'
 
 import { isSuperCampaignEnrollmentOptedOut } from './helpers'
 import SuperCampaignColumnPerson from './SuperCampaignColumnPerson'
@@ -48,7 +48,7 @@ function SuperCampaignEnrollmentList({
   superCampaignEnrollments,
   setSuperCampaignEnrollments
 }: SuperCampaignEnrollmentListProps) {
-  const { superCampaign } = useSuperCampaignDetail()
+  const superCampaign = useSuperCampaign()
   const isCampaignDueAtTimeout = isSuperCampaignDueAtTimeout(superCampaign)
 
   const classes = useStyles()

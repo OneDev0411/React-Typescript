@@ -4,7 +4,7 @@ import { TestBed } from 'tests/unit/TestBed'
 import { makeControlledAsync } from 'tests/unit/utils/controllable-promise'
 
 import templateInstance from 'fixtures/marketing-center/template-instance.json'
-import { SuperCampaignDetailProvider } from '../SuperCampaignDetailProvider'
+import { SuperCampaignProvider } from '../SuperCampaignProvider'
 import SuperCampaignOverviewDetail from './SuperCampaignOverviewDetail'
 
 const mockUpdateCampaignModel = makeControlledAsync(jest.fn())
@@ -50,12 +50,9 @@ interface Props {
 function Test({ superCampaign, setSuperCampaign }: Props) {
   return (
     <TestBed>
-      <SuperCampaignDetailProvider
-        superCampaign={superCampaign}
-        setSuperCampaign={setSuperCampaign}
-      >
+      <SuperCampaignProvider superCampaign={superCampaign}>
         <SuperCampaignOverviewDetail />
-      </SuperCampaignDetailProvider>
+      </SuperCampaignProvider>
     </TestBed>
   )
 }
