@@ -17,7 +17,7 @@ const useStyles = makeStyles(
 
 interface SuperCampaignListColumnSubjectProps {
   subject: Optional<string>
-  dueAt: Optional<number>
+  dueAt: Nullable<number>
 }
 
 function SuperCampaignListColumnSubject({

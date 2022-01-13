@@ -4,7 +4,7 @@ declare interface ISuperCampaign<A extends ISuperCampaignAssociations = ''>
   extends IModel<'super_campaign'> {
   created_by: 'created_by' extends A ? IUser : UUID
   brand: UUID
-  due_at?: number
+  due_at: Nullable<number>
   executed_at?: number
   subject?: string
   description?: string

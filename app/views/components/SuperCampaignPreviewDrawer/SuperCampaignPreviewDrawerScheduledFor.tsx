@@ -15,7 +15,7 @@ const useStyles = makeStyles(
 )
 
 interface SuperCampaignPreviewDrawerScheduledForProps {
-  time: Optional<number>
+  time: Nullable<number>
 }
 
 function SuperCampaignPreviewDrawerScheduledFor({

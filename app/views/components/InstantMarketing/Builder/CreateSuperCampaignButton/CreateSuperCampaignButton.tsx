@@ -47,7 +47,8 @@ function CreateSuperCampaignButton({
         const superCampaign = await createSuperCampaign({
           subject: '',
           description: '',
-          template_instance: templateInstance.id
+          template_instance: templateInstance.id,
+          due_at: null
         })
 
         goTo(
