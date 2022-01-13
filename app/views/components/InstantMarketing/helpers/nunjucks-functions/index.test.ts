@@ -59,4 +59,60 @@ describe('nunjucks-functions/get', () => {
       DEFAULT_BRAND_PALETTE['body-bg-color']
     )
   })
+
+  it('should not count null or undefined values as proper values on brands with null keys', () => {
+    const brandWithNullPalette: IBrand = {
+      ...MOCK_BRAND_1,
+      settings: {
+        marketing_palette: null
+      },
+      parent: {
+        ...MOCK_BRAND_2
+      }
+    } as IBrand
+
+    // @ts-ignore
+    const brandWithUndefinedPalette: IBrand = {
+      ...MOCK_BRAND_1,
+      settings: {
+        marketing_palette: undefined
+      },
+      parent: {
+        ...MOCK_BRAND_2
+      }
+    } as IBrand
+
+    // @ts-ignore
+    const brandWithNullKeyInPalette: IBrand = {
+      ...MOCK_BRAND_1,
+      settings: {
+        marketing_palette: {
+          ...DEFAULT_BRAND_PALETTE,
+          'body-bg-color': null
+        }
+      },
+      parent: {
+        ...MOCK_BRAND_2
+      }
+    } as IBrand
+
+    // @ts-ignore
+    const brandWithUndefinedKeyInPalette: IBrand = {
+      ...MOCK_BRAND_1,
+      settings: {
+        marketing_palette: {
+          ...DEFAULT_BRAND_PALETTE,
+          'body-bg-color': null
+        }
+      },
+      parent: {
+        ...MOCK_BRAND_2
+      }
+    } as IBrand
+
+    expect(get(brandWithNullPalette, 'body-bg-color')).toBe('#aabbcc')
+    expect(get(brandWithUndefinedPalette, 'body-bg-color')).toBe('#aabbcc')
+    expect(get(brandWithNullKeyInPalette, 'body-bg-color')).toBe('#aabbcc')
+    expect(get(brandWithUndefinedKeyInPalette, 'body-bg-color')).toBe('#aabbcc')
+  })
 })

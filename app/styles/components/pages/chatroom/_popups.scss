@@ -7,7 +7,7 @@
   background-color: #fff;
   box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.15);
   border-radius: 4px 4px 0 0;
-  z-index: 101;
+  z-index: 1000; // based on MUI Modal z-index (1001 - 1)
   color: #4a494a;
   @media (max-width: 738px) {
     display: none !important;
@@ -229,8 +229,11 @@
 
 %popup-message-recommendation {
   .listing {
-    width: 160px;
+    width: 100%;
     min-height: 150px;
+    border-radius: 4px;
+    background: url('/static/images/listing/small-01.jpg') no-repeat;
+    background-size: cover;
     .info {
       bottom: 2px;
       .status {
