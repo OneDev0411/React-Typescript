@@ -5,7 +5,7 @@ import classNames from 'classnames'
 
 import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/Table/components/LoadingComponent'
 import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
-import { useGetSuperCampaigns } from '@app/models/super-campaign'
+import { useGetAllSuperCampaigns } from '@app/models/super-campaign'
 import { goTo } from '@app/utils/go-to'
 import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
@@ -38,7 +38,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
 
-  const { data, isFetching, fetchNextPage } = useGetSuperCampaigns(
+  const { data, isFetching, fetchNextPage } = useGetAllSuperCampaigns(
     sortDir === 'ASC' ? SORT_ASC : SORT_DESC
   )
 

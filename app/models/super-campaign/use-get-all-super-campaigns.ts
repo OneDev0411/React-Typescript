@@ -11,7 +11,7 @@ const initialRange: FetchRange = {
   limit: numberOfLoadSuperCampaignInRequest
 }
 
-export function useGetSuperCampaigns(
+export function useGetAllSuperCampaigns(
   order?: string[]
 ): UseInfiniteQueryResult<ISuperCampaign[], unknown> {
   return useInfiniteQuery(
