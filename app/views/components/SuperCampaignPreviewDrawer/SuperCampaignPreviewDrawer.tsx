@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 
-import { Box, Button, TextField } from '@material-ui/core'
+import { Button, TextField, makeStyles } from '@material-ui/core'
 
 import SuperCampaignTemplatePreview from '@app/components/Pages/Dashboard/SuperCampaigns/components/SuperCampaignTemplate/SuperCampaignTemplatePreview'
 import OverlayDrawer, { OverlayDrawerProps } from 'components/OverlayDrawer'
 
+import SuperCampaignPreviewDrawerDescription from './SuperCampaignPreviewDrawerDescription'
 import SuperCampaignPreviewDrawerFrom from './SuperCampaignPreviewDrawerFrom'
 import SuperCampaignPreviewDrawerOptOutButton from './SuperCampaignPreviewDrawerOptOutButton'
 import SuperCampaignPreviewDrawerScheduledFor from './SuperCampaignPreviewDrawerScheduledFor'
@@ -13,6 +14,17 @@ import { useHandleSuperCampaignOptOutAndCopy } from './use-handle-super-campaign
 import { useLoadExistingTags } from './use-load-existing-tags'
 import { useMarketingEmailTemplateEditor } from './use-marketing-email-template-editor'
 import { useUpdateMySuperCampaignEnrollment } from './use-update-my-super-campaign-enrollment'
+
+const useStyles = makeStyles(
+  theme => ({
+    wrapper: { margin: theme.spacing(3, 0) },
+    description: { marginBottom: theme.spacing(4) },
+    tags: { margin: theme.spacing(1, 0) },
+    optOutButton: { margin: theme.spacing(0, 1) },
+    templatePreview: { margin: theme.spacing(2, 0) }
+  }),
+  { name: 'SuperCampaignPreviewDrawer' }
+)
 
 export interface SuperCampaignPreviewDrawerProps extends OverlayDrawerProps {
   superCampaign: ISuperCampaign<'template_instance' | 'created_by'>
@@ -33,6 +45,8 @@ function SuperCampaignPreviewDrawer({
   hasUnenroll,
   initialSelectedTags
 }: SuperCampaignPreviewDrawerProps) {
+  const classes = useStyles()
+
   const initialTags =
     initialSelectedTags ?? superCampaign.tags ?? DEFAULT_SELECTED_TAGS
 
@@ -93,9 +107,15 @@ function SuperCampaignPreviewDrawer({
           closeButtonDisabled={isWorking}
         />
         <OverlayDrawer.Body>
-          <Box my={3}>
+          <div className={classes.wrapper}>
+            {superCampaign.description && (
+              <SuperCampaignPreviewDrawerDescription
+                className={classes.description}
+                description={superCampaign.description}
+              />
+            )}
             <SuperCampaignPreviewDrawerFrom />
-            <Box my={1}>
+            <div className={classes.tags}>
               <SuperCampaignTagsField
                 value={selectedTags}
                 onChange={setSelectedTags}
@@ -106,7 +126,7 @@ function SuperCampaignPreviewDrawer({
                   hasError ? 'Please select at least a tag' : undefined
                 }
               />
-            </Box>
+            </div>
             <TextField
               label="Email Subject"
               data-test="subject"
@@ -115,30 +135,18 @@ function SuperCampaignPreviewDrawer({
               margin="normal"
               disabled
             />
-            {superCampaign.description && (
-              <TextField
-                label="Campaign Description"
-                data-test="description"
-                multiline
-                value={superCampaign.description}
-                fullWidth
-                margin="normal"
-                disabled
+            {superCampaign.template_instance && (
+              <SuperCampaignTemplatePreview
+                className={classes.templatePreview}
+                template={superCampaign.template_instance}
+                readOnly
               />
             )}
-            <Box my={2}>
-              {superCampaign.template_instance && (
-                <SuperCampaignTemplatePreview
-                  template={superCampaign.template_instance}
-                  readOnly
-                />
-              )}
-            </Box>
-          </Box>
+          </div>
         </OverlayDrawer.Body>
         <OverlayDrawer.Footer>
           <SuperCampaignPreviewDrawerScheduledFor time={superCampaign.due_at} />
-          <Box mx={1}>
+          <div className={classes.optOutButton}>
             {hasUnenroll && (
               <SuperCampaignPreviewDrawerOptOutButton
                 disabled={isWorking}
@@ -146,7 +154,7 @@ function SuperCampaignPreviewDrawer({
                 onOptOutAndCopy={handleOptOutAndCopy}
               />
             )}
-          </Box>
+          </div>
           <Button
             disabled={isWorking || hasError}
             color="primary"
