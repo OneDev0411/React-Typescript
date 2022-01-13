@@ -1,7 +1,7 @@
 import {
   useQueryClient,
   MutationFunction,
-  UseMutationOptions,
+  UseMutationOptions as UseMutationOptionsOriginal,
   UseMutationResult,
   useMutation as useMutationOriginal,
   QueryKey
@@ -9,12 +9,15 @@ import {
 
 import { useQueryNotify, NotifyOptions } from './notify'
 
-interface Options<
+export interface UseMutationOptions<
   TData = unknown,
   TError = unknown,
   TVariables = void,
   TContext = unknown
-> extends UseMutationOptions<TData, TError, TVariables, TContext> {
+> extends Omit<
+    UseMutationOptionsOriginal<TData, TError, TVariables, TContext>,
+    'mutationFn'
+  > {
   notify?: NotifyOptions<TData, TError>
   invalidates?: QueryKey[]
 }
@@ -26,7 +29,7 @@ export function useMutation<
   TContext = unknown
 >(
   mutationFn: MutationFunction<TData, TVariables>,
-  options?: Omit<Options<TData, TError, TVariables, TContext>, 'mutationFn'>
+  options?: UseMutationOptions<TData, TError, TVariables, TContext>
 ): UseMutationResult<TData, TError, TVariables, TContext> {
   const notify = useQueryNotify(options?.notify)
   const queryClient = useQueryClient()
