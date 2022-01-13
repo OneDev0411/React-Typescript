@@ -15,7 +15,6 @@ import {
   updateWizardStep,
   setCurrentStepValidation
 } from '../../../../../../store_actions/contacts'
-import { getActiveTeam } from '../../../../../../utils/user-teams'
 import Button from '../../../../../../views/components/Button/ActionButton'
 import { Divider } from '../../../../../../views/components/Divider'
 import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
@@ -30,7 +29,7 @@ class SelectFile extends React.Component {
       isDropzoneActive: false
     }
 
-    this.activeTeam = getActiveTeam(props.owner)
+    this.activeTeam = props.activeTeam
   }
 
   onDropFiles = files => {
@@ -150,11 +149,12 @@ class SelectFile extends React.Component {
   }
 }
 
-function mapStateToProps({ user, contacts }) {
+function mapStateToProps({ user, contacts, activeTeam = null }) {
   const { importCsv } = contacts
   const { file } = importCsv
 
   return {
+    activeTeam,
     file,
     user
   }
