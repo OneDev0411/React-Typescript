@@ -104,7 +104,7 @@ export const SideNavItem = styled.li`
 `
 
 export const SideNavItemLabel = styled.div`
-  padding-left: ${(props: ThemeProps<Theme>) => props.theme.spacing(3.125)}px;
+  padding-left: ${(props: ThemeProps<Theme>) => props.theme.spacing(3)}px;
 `
 
 const itemStyle = css`
