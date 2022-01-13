@@ -5,7 +5,9 @@ import { useInfiniteQuery } from '@app/hooks/query'
 import { getAllSuperCampaigns, FetchRange } from './get-all-super-campaigns'
 import { getAll } from './query-keys/campaign'
 
-export type UseGetAllSuperCampaigns = UseInfiniteQueryResult<ISuperCampaign[]>
+export type UseGetAllSuperCampaigns = UseInfiniteQueryResult<
+  ISuperCampaign<'template_instance'>[]
+>
 
 const numberOfLoadSuperCampaignInRequest: number = 50
 const initialRange: FetchRange = {

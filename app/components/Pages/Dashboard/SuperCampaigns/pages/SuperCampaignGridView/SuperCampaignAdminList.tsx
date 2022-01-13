@@ -45,7 +45,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
   const superCampaigns =
     data?.pages.reduce((items, page) => [...items, ...page], []) || []
 
-  const columns: TableColumn<ISuperCampaign>[] = [
+  const columns: TableColumn<ISuperCampaign<'template_instance'>>[] = [
     {
       id: 'subject',
       primary: true,
