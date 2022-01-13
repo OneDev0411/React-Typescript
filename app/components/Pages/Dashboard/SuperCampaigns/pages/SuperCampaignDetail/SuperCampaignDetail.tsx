@@ -11,7 +11,7 @@ import SuperCampaignOverview from '../../components/SuperCampaignOverview'
 
 import SuperCampaignDetailHeader from './SuperCampaignDetailHeader'
 import SuperCampaignDetailLoading from './SuperCampaignDetailLoading'
-import { useGetSuperCampaign } from './use-get-super-campaign'
+import { useGetSuperCampaignForDetail } from './use-get-super-campaign-for-detail'
 
 const useStyles = makeStyles(
   theme => ({
@@ -40,14 +40,21 @@ function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
 
   const superCampaignId = params.id
 
-  const { isLoading, superCampaign, setSuperCampaign } =
-    useGetSuperCampaign(superCampaignId)
+  const { isFetching, data } = useGetSuperCampaignForDetail(superCampaignId)
+
+  // TODO: Fix these items
+  const superCampaign = data ?? null
+  const setSuperCampaign = () => {
+    throw new Error('Not implemented')
+  }
 
   return (
     <PageLayout gutter={0}>
       <div className={classes.header}>
         <PageLayout.Header
-          title={isLoading ? '' : superCampaign?.subject || 'Untitled Campaign'}
+          title={
+            isFetching ? '' : superCampaign?.subject || 'Untitled Campaign'
+          }
         >
           <SuperCampaignDetailHeader
             superCampaign={superCampaign}
@@ -57,7 +64,7 @@ function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
       </div>
       <PageLayout.Main mt={0} pt={2} pb={4} className={classes.body}>
         <Box px={4}>
-          {isLoading || !superCampaign ? (
+          {isFetching || !superCampaign ? (
             <SuperCampaignDetailLoading />
           ) : (
             <SuperCampaignDetailProvider
