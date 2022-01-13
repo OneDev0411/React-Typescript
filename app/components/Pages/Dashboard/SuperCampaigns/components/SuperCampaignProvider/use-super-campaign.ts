@@ -2,7 +2,7 @@ import { useContext } from 'react'
 
 import { SuperCampaignDetailContext } from './context'
 
-export function useSuperCampaignDetail() {
+export function useSuperCampaign() {
   const context = useContext(SuperCampaignDetailContext)
 
   if (!context) {
