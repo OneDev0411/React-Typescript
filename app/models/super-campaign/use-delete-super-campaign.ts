@@ -1,14 +1,18 @@
 import { useContext } from 'react'
 
+import { UseMutationResult } from 'react-query'
+
 import { useMutation } from '@app/hooks/query'
 import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
 
 import { deleteSuperCampaign } from './delete-super-campaign'
 import { getAll } from './query-keys/campaign'
 
+export type UseDeleteSuperCampaign = UseMutationResult<void>
+
 export function useDeleteSuperCampaign(
   superCampaign: Pick<ISuperCampaign, 'id' | 'subject'>
-) {
+): UseDeleteSuperCampaign {
   const confirmation = useContext(ConfirmationModalContext)
   const { mutate, ...other } = useMutation(
     async () => deleteSuperCampaign(superCampaign.id),

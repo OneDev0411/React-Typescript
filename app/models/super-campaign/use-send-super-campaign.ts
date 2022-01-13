@@ -1,5 +1,7 @@
 import { useContext } from 'react'
 
+import { UseMutationResult } from 'react-query'
+
 import { useMutation } from '@app/hooks/query'
 import { convertDateToTimestamp } from '@app/utils/date-utils'
 import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
@@ -7,7 +9,11 @@ import ConfirmationModalContext from '@app/views/components/ConfirmationModal/co
 import { getAll } from './query-keys/campaign'
 import { updateSuperCampaign } from './update-super-campaign'
 
-export function useSendSuperCampaign(superCampaign: ISuperCampaign) {
+export type UseSendSuperCampaign = UseMutationResult<ISuperCampaign>
+
+export function useSendSuperCampaign(
+  superCampaign: ISuperCampaign
+): UseSendSuperCampaign {
   const confirmation = useContext(ConfirmationModalContext)
   const { mutate, ...other } = useMutation(
     async () =>

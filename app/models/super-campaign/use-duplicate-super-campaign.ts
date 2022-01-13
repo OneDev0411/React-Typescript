@@ -1,9 +1,15 @@
+import { UseMutationResult } from 'react-query'
+
 import { useMutation } from '@app/hooks/query'
 
 import { createSuperCampaign } from './create-super-campaign'
 import { getAll } from './query-keys/campaign'
 
-export function useDuplicateSuperCampaign(superCampaign: ISuperCampaign) {
+export type UseDuplicateSuperCampaign = UseMutationResult<ISuperCampaign>
+
+export function useDuplicateSuperCampaign(
+  superCampaign: ISuperCampaign
+): UseDuplicateSuperCampaign {
   return useMutation(
     async () =>
       createSuperCampaign({

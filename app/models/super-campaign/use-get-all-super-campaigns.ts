@@ -5,6 +5,8 @@ import { useInfiniteQuery } from '@app/hooks/query'
 import { getAllSuperCampaigns, FetchRange } from './get-all-super-campaigns'
 import { getAll } from './query-keys/campaign'
 
+export type UseGetAllSuperCampaigns = UseInfiniteQueryResult<ISuperCampaign[]>
+
 const numberOfLoadSuperCampaignInRequest: number = 50
 const initialRange: FetchRange = {
   start: 0,
@@ -13,7 +15,7 @@ const initialRange: FetchRange = {
 
 export function useGetAllSuperCampaigns(
   order?: string[]
-): UseInfiniteQueryResult<ISuperCampaign[], unknown> {
+): UseGetAllSuperCampaigns {
   return useInfiniteQuery(
     getAll(order),
     async ({ pageParam }: { pageParam?: FetchRange }) => {
