@@ -14,9 +14,9 @@ const AttributeTypes: CsvImportAttributeType[] = [
 ]
 
 export function useAttributes(): IAttribute[] {
-  const { byId } = useAttributeDefs()
+  const { list } = useAttributeDefs()
 
-  const attributeDefinitions = Object.values(byId).map(({ id }) => ({
+  const attributeDefinitions = (list ?? []).map(({ id }) => ({
     type: 'attribute_def',
     attribute_def: id
   }))

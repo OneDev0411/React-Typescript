@@ -1,7 +1,16 @@
 import { useAttributeDefs as useAttributeDefsQuery } from '@app/models/contacts/get-attribute-defs/use-attribute-defs'
 
 export function useAttributeDefs() {
-  const { normalized } = useAttributeDefsQuery()
+  const { data } = useAttributeDefsQuery()
 
-  return normalized
+  if (!data) {
+    return {
+      list: [],
+      byId: {},
+      byName: {},
+      bySection: {}
+    }
+  }
+
+  return data
 }

@@ -4,9 +4,9 @@ import { useAttributeDefs } from '../use-attribute-defs'
 const Options = ['first_name', 'last_name', 'email', 'phone_number', 'birthday']
 
 export function usePartnerOptions(): AttributeOption[] {
-  const { byId, byName } = useAttributeDefs()
+  const { list, byId, byName } = useAttributeDefs()
 
-  if (Object.keys(byId).length === 0) {
+  if (list.length === 0) {
     return []
   }
 
