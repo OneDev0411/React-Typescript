@@ -59,11 +59,6 @@ export const SidenavListGroup = styled.ul`
       width:100%;
       display: flex;
       justify-content: space-between
-
-      div {
-        display: flex;
-        align-items: center;
-      }
     }
 
     &.Mui-expanded {
@@ -199,3 +194,8 @@ export const Divider = styled.div`
     props.theme.palette.divider};
 `
 export const ListItemDivider = Divider.withComponent('li')
+
+export const AccordionSummaryDiv = styled.div`
+  display: flex;
+  align-items: center;
+`

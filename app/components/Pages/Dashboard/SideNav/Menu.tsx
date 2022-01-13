@@ -49,7 +49,8 @@ import {
   SidenavLink,
   SideNavItem,
   SideNavItemLabel,
-  SidenavListGroup
+  SidenavListGroup,
+  AccordionSummaryDiv
 } from './styled'
 import { scrollableAreaShadowColor } from './variables'
 
@@ -133,14 +134,14 @@ export function Menu() {
                   to="/dashboard/overview"
                   data-tour-id="nav-dashboard"
                 >
-                  <div>
+                  <AccordionSummaryDiv>
                     <SvgIcon
                       path={mdiViewGridOutline}
                       size="14px"
                       rightMargined
                     />
                     Dashboard
-                  </div>
+                  </AccordionSummaryDiv>
                 </SidenavLink>
               </Acl>
             </AccordionSummary>
@@ -159,14 +160,14 @@ export function Menu() {
             >
               <Acl access={dashboardAccess}>
                 <SidenavLink active={false} to="" data-tour-id="nav-people">
-                  <div>
+                  <AccordionSummaryDiv>
                     <SvgIcon
                       path={mdiAccountSupervisorOutline}
                       size="14px"
                       rightMargined
                     />
                     People
-                  </div>
+                  </AccordionSummaryDiv>
                   {expanded === 'nav-people' ? (
                     <SvgIcon path={mdiMenuUp} size="24px" />
                   ) : (
@@ -210,10 +211,10 @@ export function Menu() {
             >
               <Acl.Marketing>
                 <SidenavLink active={false} to="" data-tour-id="nav-marketing">
-                  <div>
+                  <AccordionSummaryDiv>
                     <SvgIcon path={mdiChartArc} size="14px" rightMargined />
                     Marketing
-                  </div>
+                  </AccordionSummaryDiv>
                   {expanded === 'nav-marketing' ? (
                     <SvgIcon path={mdiMenuUp} size="24px" />
                   ) : (
@@ -344,7 +345,7 @@ export function Menu() {
                   to="/dashboard/notifications"
                   data-tour-id="nav-notifications"
                 >
-                  <div>
+                  <AccordionSummaryDiv>
                     <SvgIcon
                       path={mdiAlarmLightOutline}
                       size="14px"
@@ -356,7 +357,7 @@ export function Menu() {
                     >
                       Notifications
                     </InlineBadge>
-                  </div>
+                  </AccordionSummaryDiv>
                 </SidenavLink>
               </AccordionSummary>
             </Accordion>
@@ -378,14 +379,14 @@ export function Menu() {
                   rel="noopener noreferrer"
                   href={brandHelpCenterURL}
                 >
-                  <div>
+                  <AccordionSummaryDiv>
                     <SvgIcon
                       path={mdiHelpCircleOutline}
                       size="14px"
                       rightMargined
                     />
                     Help Center
-                  </div>
+                  </AccordionSummaryDiv>
                 </SidenavBlankLink>
               </SideNavItem>
             </AccordionSummary>
