@@ -13,18 +13,6 @@ import { useSelector } from 'react-redux'
 
 import { selectUserAgents } from '@app/selectors/user'
 
-const isAgentAlreadySelected = (
-  userAgents: Nullable<IAgent[]>,
-  id: UUID,
-  mls: Optional<string>
-) => {
-  return (
-    userAgents?.some(userAgent => {
-      return userAgent.mls === mls && userAgent.id == id
-    }) || false
-  )
-}
-
 interface Props {
   agents: IAgent[]
   onSelectAgent: (agent: IAgent) => void
@@ -52,7 +40,10 @@ export function SelectAgent({
       agents.map(item => ({
         value: item.id,
         label: `${item.mls} ${item.full_name ? ` - ${item.full_name}` : ''}`,
-        disabled: isAgentAlreadySelected(userAgents, item.id, item.mls)
+        disabled:
+          userAgents?.some(
+            userAgent => userAgent.mls === item.mls && userAgent.id == item.id
+          ) || false
       })),
     [agents, userAgents]
   )
