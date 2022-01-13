@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 
 import { selectActiveBrand } from '@app/selectors/brand'
 import { selectUser } from '@app/selectors/user'
-import iff from '@app/utils/iff'
 import TemplateThumbnail from 'components/TemplateThumbnail'
 
 const useStyles = makeStyles(
@@ -35,7 +34,7 @@ function SuperCampaignTemplatePreview({
   return (
     <Card
       variant="outlined"
-      className={classNames(className, iff(readOnly, classes.readOnly))}
+      className={classNames(className, readOnly && classes.readOnly)}
     >
       <TemplateThumbnail
         template={template}
