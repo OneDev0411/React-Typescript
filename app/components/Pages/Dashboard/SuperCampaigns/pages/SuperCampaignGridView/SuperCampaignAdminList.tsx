@@ -5,6 +5,7 @@ import classNames from 'classnames'
 
 import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/Table/components/LoadingComponent'
 import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
+import { useGetAllSuperCampaigns } from '@app/models/super-campaign'
 import { goTo } from '@app/utils/go-to'
 import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
@@ -18,7 +19,6 @@ import SuperCampaignAdminListColumnStats from './SuperCampaignAdminListColumnSta
 import SuperCampaignAdminListColumnUserCount from './SuperCampaignAdminListColumnUserCount'
 import SuperCampaignListColumnSubject from './SuperCampaignListColumnSubject'
 import SuperCampaignListColumnTags from './SuperCampaignListColumnTags'
-import { useGetAdminSuperCampaigns } from './use-get-admin-super-campaigns'
 
 const useStyles = makeStyles(
   theme => ({
@@ -37,8 +37,13 @@ const SORT_DESC = ['-due_at', '-updated_at', '-created_at']
 function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
-  const { isLoading, superCampaigns, setSuperCampaigns, loadMore } =
-    useGetAdminSuperCampaigns(sortDir === 'ASC' ? SORT_ASC : SORT_DESC)
+
+  const { data, isFetching, fetchNextPage } = useGetAllSuperCampaigns(
+    sortDir === 'ASC' ? SORT_ASC : SORT_DESC
+  )
+
+  const superCampaigns =
+    data?.pages.reduce((items, page) => [...items, ...page], []) || []
 
   const handleSendNow = (newSuperCampaign: ISuperCampaign) =>
     setSuperCampaigns(superCampaigns =>
@@ -118,7 +123,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
       rows={superCampaigns}
       totalRows={superCampaigns.length}
       columns={columns}
-      loading={isLoading ? 'middle' : null}
+      loading={isFetching ? 'middle' : null}
       getTrProps={() => ({
         className: classNames(gridClasses.row, classes.row)
       })}
@@ -132,7 +137,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
       LoadingStateComponent={LoadingComponent}
       infiniteScrolling={{
         onReachStart: noop,
-        onReachEnd: loadMore
+        onReachEnd: fetchNextPage
       }}
       EmptyStateComponent={() => (
         <EmailInsightsZeroState
