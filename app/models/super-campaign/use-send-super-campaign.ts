@@ -1,15 +1,18 @@
 import { useContext } from 'react'
 
+import { UseMutationResult } from 'react-query'
+
 import { convertDateToTimestamp } from '@app/utils/date-utils'
 import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
 
 import {
-  UseUpdateSuperCampaign,
   UseUpdateSuperCampaignOptions,
   useUpdateSuperCampaign
 } from './use-update-super-campaign'
 
-export type UseSendSuperCampaign = UseUpdateSuperCampaign
+export type UseSendSuperCampaign = UseMutationResult<
+  ISuperCampaign<'template_instance'>
+>
 
 export type UseSendSuperCampaignOptions = Omit<
   UseUpdateSuperCampaignOptions,
