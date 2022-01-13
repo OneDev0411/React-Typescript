@@ -18,21 +18,35 @@ import { isSuperCampaignReadOnly } from '../../helpers'
 
 interface SuperCampaignAdminMoreActionsProps {
   className?: string
-  superCampaign: ISuperCampaign
+  superCampaign: ISuperCampaign<'template_instance'>
   displaySendNow?: boolean
+  onDeleteSuccess?: () => void
+  onDuplicateSuccess?: (
+    superCampaign: ISuperCampaign<'template_instance'>
+  ) => void
+  onSendSuccess?: (superCampaign: ISuperCampaign<'template_instance'>) => void
 }
 
 function SuperCampaignAdminMoreActions({
   className,
   superCampaign,
-  displaySendNow = true
+  displaySendNow = true,
+  onDeleteSuccess,
+  onDuplicateSuccess,
+  onSendSuccess
 }: SuperCampaignAdminMoreActionsProps) {
   const { mutate: deleteSuperCampaign, isLoading: isDeleting } =
-    useDeleteSuperCampaign(superCampaign)
+    useDeleteSuperCampaign(superCampaign, { onSuccess: onDeleteSuccess })
+
   const { mutate: duplicateSuperCampaign, isLoading: isDuplicating } =
-    useDuplicateSuperCampaign(superCampaign)
+    useDuplicateSuperCampaign(superCampaign, {
+      onSuccess: onDuplicateSuccess
+    })
+
   const { mutate: sendSuperCampaign, isLoading: isSending } =
-    useSendSuperCampaign(superCampaign)
+    useSendSuperCampaign(superCampaign, {
+      onSuccess: onSendSuccess
+    })
 
   const isExecuted = isSuperCampaignReadOnly(superCampaign)
 
@@ -60,15 +74,15 @@ function SuperCampaignAdminMoreActions({
       renderMenu={({ close }) => (
         <div onClick={close}>
           {!isExecuted && displaySendNow && (
-            <MenuItem onClick={() => sendSuperCampaign()}>
+            <MenuItem onClick={sendSuperCampaign}>
               <Typography variant="body2">Send Now</Typography>
             </MenuItem>
           )}
-          <MenuItem onClick={() => duplicateSuperCampaign()}>
+          <MenuItem onClick={duplicateSuperCampaign}>
             <Typography variant="body2">Duplicate this campaign</Typography>
           </MenuItem>
           {!isExecuted && (
-            <MenuItem onClick={() => deleteSuperCampaign()}>
+            <MenuItem onClick={deleteSuperCampaign}>
               <Typography variant="body2">Delete</Typography>
             </MenuItem>
           )}
