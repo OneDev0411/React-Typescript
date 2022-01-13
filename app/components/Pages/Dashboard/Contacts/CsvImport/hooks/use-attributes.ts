@@ -1,12 +1,6 @@
-import { useSelector } from 'react-redux'
+import type { CsvImportAttributeType, IAttribute } from '../types'
 
-import type { IAppState } from '@app/reducers'
-
-import type {
-  CsvImportAttributeDefinition,
-  CsvImportAttributeType,
-  IAttribute
-} from '../types'
+import { useAttributeDefs } from './use-attribute-defs'
 
 const AttributeTypes: CsvImportAttributeType[] = [
   {
@@ -20,15 +14,12 @@ const AttributeTypes: CsvImportAttributeType[] = [
 ]
 
 export function useAttributes(): IAttribute[] {
-  const attributeDefinitions = useSelector<
-    IAppState,
-    CsvImportAttributeDefinition[]
-  >(({ contacts }) =>
-    Object.values(contacts.attributeDefs.byId).map(({ id }) => ({
-      type: 'attribute_def',
-      attribute_def: id
-    }))
-  )
+  const { byId } = useAttributeDefs()
+
+  const attributeDefinitions = Object.values(byId).map(({ id }) => ({
+    type: 'attribute_def',
+    attribute_def: id
+  }))
 
   return [...attributeDefinitions, ...AttributeTypes] as IAttribute[]
 }

@@ -1,10 +1,7 @@
-import { useSelector } from 'react-redux'
-
-import { IAppState } from '@app/reducers'
-import { IAttributeDefsState } from '@app/reducers/contacts/attributeDefs'
+import { useAttributeDefs as useAttributeDefsQuery } from '@app/models/contacts/get-attribute-defs/use-attribute-defs'
 
 export function useAttributeDefs() {
-  return useSelector<IAppState, IAttributeDefsState>(
-    ({ contacts }) => contacts.attributeDefs
-  )
+  const { normalized } = useAttributeDefsQuery()
+
+  return normalized
 }
