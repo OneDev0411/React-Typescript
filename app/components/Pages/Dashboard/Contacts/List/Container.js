@@ -108,15 +108,17 @@ class ContactsList extends React.Component {
       ? sortFieldSetting
       : '-last_touch'
 
-    this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
 
-    this.setState({
-      viewMode:
-        getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) ||
-        'table',
-      sortOrder: order
-    })
+    this.setState(
+      {
+        viewMode:
+          getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) ||
+          'table',
+        sortOrder: order
+      },
+      () => this.fetchContactsAndJumpToSelected()
+    )
 
     if (globalButtonDispatch) {
       globalButtonDispatch({
@@ -475,11 +477,13 @@ class ContactsList extends React.Component {
 
     const { user, getUserTeams, setUserSetting } = this.props
 
-    this.setState({
-      sortOrder: order
-    })
+    this.setState(
+      {
+        sortOrder: order
+      },
+      () => this.handleFilterChange({}, true)
+    )
     setUserSetting(SORT_FIELD_SETTING_KEY, order)
-    this.handleFilterChange({}, true)
     getUserTeams(user)
   }
 
