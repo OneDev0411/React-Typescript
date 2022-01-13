@@ -5,7 +5,7 @@ import classNames from 'classnames'
 
 import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/Table/components/LoadingComponent'
 import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
-import { useGetAllSuperCampaigns } from '@app/models/super-campaign'
+import { useGetSuperCampaigns } from '@app/models/super-campaign'
 import { goTo } from '@app/utils/go-to'
 import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
@@ -38,33 +38,12 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
 
-  const { data, isFetching, fetchNextPage } = useGetAllSuperCampaigns(
+  const { data, isFetching, fetchNextPage } = useGetSuperCampaigns(
     sortDir === 'ASC' ? SORT_ASC : SORT_DESC
   )
 
   const superCampaigns =
     data?.pages.reduce((items, page) => [...items, ...page], []) || []
-
-  const handleSendNow = (newSuperCampaign: ISuperCampaign) =>
-    setSuperCampaigns(superCampaigns =>
-      superCampaigns.map(superCampaign => {
-        if (newSuperCampaign.id !== superCampaign.id) {
-          return superCampaign
-        }
-
-        return newSuperCampaign
-      })
-    )
-
-  const handleDelete = (superCampaignId: UUID) =>
-    setSuperCampaigns(superCampaigns =>
-      superCampaigns.filter(
-        superCampaign => superCampaign.id !== superCampaignId
-      )
-    )
-
-  const handleDuplicate = (newSuperCampaign: ISuperCampaign) =>
-    setSuperCampaigns(superCampaigns => [newSuperCampaign, ...superCampaigns])
 
   const columns: TableColumn<ISuperCampaign>[] = [
     {
@@ -106,9 +85,6 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
       render: ({ row }) => (
         <SuperCampaignAdminMoreActions
           superCampaign={row}
-          onSendNow={handleSendNow}
-          onDelete={() => handleDelete(row.id)}
-          onDuplicate={handleDuplicate}
           // TODO: The sent item needs to display the real campaign stats when it is executed. This means
           // we need to have a socket or pulling mechanism to get the stats and update the list.
           // I hid the send now option temporarily because of my limited time but I'll enable it soon.
