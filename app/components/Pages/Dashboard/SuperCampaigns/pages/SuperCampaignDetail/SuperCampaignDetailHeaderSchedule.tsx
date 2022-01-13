@@ -46,7 +46,7 @@ function SuperCampaignDetailHeaderSchedule({
   const handleDueAtChange = (dueAt: number) =>
     saveSuperCampaign({ due_at: dueAt })
 
-  const handleDueAtRemove = () => saveSuperCampaign({ due_at: undefined })
+  const handleDueAtRemove = () => saveSuperCampaign({ due_at: null })
 
   return (
     <>
