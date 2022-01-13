@@ -1,32 +1,79 @@
-import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import { updateSuperCampaignEligibility as updateSuperCampaignEligibilityModel } from '@app/models/super-campaign'
+import { UseMutationResult, useQueryClient } from 'react-query'
+import { ResponseError } from 'superagent'
 
-type UseUpdateSuperCampaignEligibility = (
-  eligibleBrands: UUID[]
-) => Promise<void>
+import { useMutation, UseMutationOptions } from '@app/hooks/query'
+
+import { getAll, getOne } from './query-keys/campaign'
+import { updateSuperCampaignEligibility } from './update-super-campaign-eligibility'
+
+export type UseUpdateSuperCampaignEligibility = UseMutationResult<
+  ISuperCampaign,
+  ResponseError,
+  UUID[],
+  { previousSuperCampaign?: ISuperCampaign<'template_instance'> }
+>
+
+export type UseUpdateSuperCampaignEligibilityOptions = Omit<
+  UseMutationOptions<
+    ISuperCampaign,
+    ResponseError,
+    UUID[],
+    { previousSuperCampaign?: ISuperCampaign<'template_instance'> }
+  >,
+  'notify' | 'invalidates' | 'onMutate'
+>
 
 export function useUpdateSuperCampaignEligibility(
-  superCampaign: ISuperCampaign<'template_instance'>,
-  setSuperCampaign: (superCampaign: ISuperCampaign<'template_instance'>) => void
+  superCampaign: Pick<ISuperCampaign, 'id'>,
+  options?: UseUpdateSuperCampaignEligibilityOptions
 ): UseUpdateSuperCampaignEligibility {
-  const { runActionThenNotify } = useRunActionThenNotify()
+  const queryClient = useQueryClient()
 
-  const updateSuperCampaignEligibility = async (eligibleBrands: UUID[]) =>
-    runActionThenNotify(
-      async () => {
-        const updatedSuperCampaign = await updateSuperCampaignEligibilityModel(
-          superCampaign.id,
-          eligibleBrands
+  return useMutation(
+    async eligibleBrands =>
+      updateSuperCampaignEligibility(superCampaign.id, eligibleBrands),
+    {
+      ...options,
+      notify: {
+        onSuccess: 'The eligible brands were updated',
+        onError:
+          'Something went wrong while saving the eligible brands. Please try again.'
+      },
+      invalidates: [getAll()],
+      onMutate: async eligibleBrands => {
+        await queryClient.cancelQueries(getOne(superCampaign.id))
+
+        const previousSuperCampaign = queryClient.getQueryData<
+          ISuperCampaign<'template_instance'>
+        >(getOne(superCampaign.id))
+
+        if (!previousSuperCampaign) {
+          return {}
+        }
+
+        queryClient.setQueryData<ISuperCampaign<'template_instance'>>(
+          getOne(superCampaign.id),
+          { ...previousSuperCampaign, eligible_brands: eligibleBrands }
         )
 
-        setSuperCampaign({
-          ...updatedSuperCampaign,
-          template_instance: superCampaign.template_instance
-        })
+        return { previousSuperCampaign }
       },
-      'The eligible brands were updated',
-      'Something went wrong while saving the eligible brands. Please try again.'
-    )
+      onError: (error, eligibleBrands, context) => {
+        if (!context?.previousSuperCampaign) {
+          return
+        }
 
-  return updateSuperCampaignEligibility
+        queryClient.setQueryData(
+          getOne(superCampaign.id),
+          context.previousSuperCampaign
+        )
+
+        options?.onError?.(error, eligibleBrands, context)
+      },
+      onSettled: (...args) => {
+        queryClient.invalidateQueries(getOne(superCampaign.id))
+        options?.onSettled?.(...args)
+      }
+    }
+  )
 }

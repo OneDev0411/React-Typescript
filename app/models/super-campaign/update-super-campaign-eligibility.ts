@@ -1,4 +1,4 @@
-import Fetch from 'services/fetch'
+import Fetch from '@app/services/fetch'
 
 export async function updateSuperCampaignEligibility(
   superCampaignId: UUID,
