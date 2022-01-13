@@ -587,7 +587,6 @@ class OpenHouseDrawerInternal extends React.Component {
                             <AssigneesField
                               buttonText="Assignee"
                               name="assignees"
-                              owner={user}
                             />
                           )}
                         </Flex>

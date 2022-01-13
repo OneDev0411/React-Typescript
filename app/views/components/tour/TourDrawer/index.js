@@ -309,7 +309,6 @@ class TourDrawerRaw extends Component {
                         <AssigneesField
                           buttonText="Assignee"
                           name="assignees"
-                          owner={user}
                         />
                       )}
                     </Flex>

@@ -466,7 +466,7 @@ class EventDrawerContainer extends Component {
                               />
                             </Flex>
                           )}
-                          <AssigneesField name="assignees" owner={user} />
+                          <AssigneesField name="assignees" />
                         </Flex>
                         <ActionButton
                           appearance="secondary"
