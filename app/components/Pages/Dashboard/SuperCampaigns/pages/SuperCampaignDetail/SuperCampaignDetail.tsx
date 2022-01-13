@@ -6,8 +6,8 @@ import { useTitle } from 'react-use'
 
 import PageLayout from 'components/GlobalPageLayout'
 
-import { SuperCampaignDetailProvider } from '../../components/SuperCampaignDetailProvider'
 import SuperCampaignOverview from '../../components/SuperCampaignOverview'
+import { SuperCampaignProvider } from '../../components/SuperCampaignProvider'
 
 import SuperCampaignDetailHeader from './SuperCampaignDetailHeader'
 import SuperCampaignDetailLoading from './SuperCampaignDetailLoading'
@@ -40,13 +40,8 @@ function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
 
   const superCampaignId = params.id
 
-  const { isFetching, data } = useGetSuperCampaignForDetail(superCampaignId)
-
-  // TODO: Fix these items
-  const superCampaign = data ?? null
-  const setSuperCampaign = () => {
-    throw new Error('Not implemented')
-  }
+  const { isFetching, data: superCampaign } =
+    useGetSuperCampaignForDetail(superCampaignId)
 
   return (
     <PageLayout gutter={0}>
@@ -56,10 +51,9 @@ function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
             isFetching ? '' : superCampaign?.subject || 'Untitled Campaign'
           }
         >
-          <SuperCampaignDetailHeader
-            superCampaign={superCampaign}
-            setSuperCampaign={setSuperCampaign}
-          />
+          {superCampaign && (
+            <SuperCampaignDetailHeader superCampaign={superCampaign} />
+          )}
         </PageLayout.Header>
       </div>
       <PageLayout.Main mt={0} pt={2} pb={4} className={classes.body}>
@@ -67,12 +61,9 @@ function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
           {isFetching || !superCampaign ? (
             <SuperCampaignDetailLoading />
           ) : (
-            <SuperCampaignDetailProvider
-              superCampaign={superCampaign}
-              setSuperCampaign={setSuperCampaign}
-            >
+            <SuperCampaignProvider superCampaign={superCampaign}>
               <SuperCampaignOverview />
-            </SuperCampaignDetailProvider>
+            </SuperCampaignProvider>
           )}
         </Box>
       </PageLayout.Main>
