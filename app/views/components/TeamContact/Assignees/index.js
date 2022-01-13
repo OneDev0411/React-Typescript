@@ -43,7 +43,7 @@ class PresentationalAssignees extends Component {
     try {
       this.setState({ isFetching: true })
 
-      const members = await getMembers(activeTeam?.brand?.id)
+      const members = await getMembers(activeTeam?.brand.id)
 
       this.setState({
         isFetching: false,
