@@ -20,7 +20,7 @@ export const BathsEditor = ({
 }: FilterButtonDropDownProp<AlertFilters>) => {
   const classes = useStyles()
 
-  const handleChange = (event: any, value: Nullable<number>) => {
+  const handleChange = (_: unknown, value: Nullable<number>) => {
     const fieldValue = value ? Number(value) : null
 
     updateFilters({

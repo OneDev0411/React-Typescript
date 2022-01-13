@@ -53,13 +53,12 @@ function DomainManagementNewDomain({
   const handleAddDomainToHost = (domainName: string, wizard: IWizardState) => {
     wizard.setLoading(true)
 
-    run(async () =>
-      addHostnameToWebsite(websiteId, {
-        hostname: domainName,
-        is_default: true
-      })
-    ).then(
-      () => {
+    run(async () => {
+      try {
+        await addHostnameToWebsite(websiteId, {
+          hostname: domainName,
+          is_default: true
+        })
         handleAddDomain(domainName, true)
         dispatch(
           notify({
@@ -67,8 +66,7 @@ function DomainManagementNewDomain({
             status: 'success'
           })
         )
-      },
-      () => {
+      } catch (_: unknown) {
         dispatch(
           notify({
             message: 'An error occurred on adding the domain, please try again',
@@ -77,7 +75,7 @@ function DomainManagementNewDomain({
         )
         wizard.setLoading(false)
       }
-    )
+    })
   }
 
   const handleSelectDomainName = (domainName: string, price: string) => {
@@ -94,14 +92,23 @@ function DomainManagementNewDomain({
     done?: () => void
   ) => {
     wizard.setLoading(true)
-    run(async () =>
-      purchaseDomain(stripeCustomerId, domainName, domainAgreementKeys)
-    )
-      .then(
-        () => handleAddDomainToHost(domainName, wizard),
-        () => wizard.setLoading(false)
-      )
-      .finally(() => done?.())
+    run(async () => {
+      try {
+        await purchaseDomain(stripeCustomerId, domainName, domainAgreementKeys)
+        handleAddDomainToHost(domainName, wizard)
+      } catch (_: unknown) {
+        dispatch(
+          notify({
+            message:
+              'Something went wrong while purchasing the domain. Please try again.',
+            status: 'error'
+          })
+        )
+      }
+
+      wizard.setLoading(false)
+      done?.()
+    })
   }
 
   return (

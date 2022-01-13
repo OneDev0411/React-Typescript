@@ -21,12 +21,11 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 const useStyles = makeStyles(
   theme => ({
     wrapper: {
-      height: '100%'
+      height: '100%',
+      padding: theme.spacing(2, 0)
     },
     container: {
-      height: '94%',
-      margin: theme.spacing(3, 0),
-      padding: theme.spacing(3, 3, 5),
+      height: '100%',
       border: `1px dashed ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius
     },
@@ -36,7 +35,7 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'MarketingAssetUploadDrawerUploadStepZeroState'
+    name: 'MarketingAssetUploadDrawerZeroState'
   }
 )
 

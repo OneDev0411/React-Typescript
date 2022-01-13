@@ -57,8 +57,9 @@ function DomainManagementListItem({
   const { isLoading: isWorking, run } = useAsync()
 
   const handleDeleteHostname = (hostname: string) => {
-    run(async () => deleteHostnameFromWebsite(websiteId, { hostname })).then(
-      () => {
+    run(async () => {
+      try {
+        await deleteHostnameFromWebsite(websiteId, { hostname })
         onDelete(hostname)
         dispatch(
           notify({
@@ -66,8 +67,7 @@ function DomainManagementListItem({
             status: 'success'
           })
         )
-      },
-      () => {
+      } catch (_: unknown) {
         dispatch(
           notify({
             message:
@@ -76,7 +76,7 @@ function DomainManagementListItem({
           })
         )
       }
-    )
+    })
   }
 
   return (
