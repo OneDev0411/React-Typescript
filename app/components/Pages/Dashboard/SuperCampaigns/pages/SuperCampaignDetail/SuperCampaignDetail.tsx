@@ -40,16 +40,14 @@ function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
 
   const superCampaignId = params.id
 
-  const { isFetching, data: superCampaign } =
+  const { isLoading, data: superCampaign } =
     useGetSuperCampaignForDetail(superCampaignId)
 
   return (
     <PageLayout gutter={0}>
       <div className={classes.header}>
         <PageLayout.Header
-          title={
-            isFetching ? '' : superCampaign?.subject || 'Untitled Campaign'
-          }
+          title={isLoading ? '' : superCampaign?.subject || 'Untitled Campaign'}
         >
           {superCampaign && (
             <SuperCampaignDetailHeader superCampaign={superCampaign} />
@@ -58,7 +56,7 @@ function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
       </div>
       <PageLayout.Main mt={0} pt={2} pb={4} className={classes.body}>
         <Box px={4}>
-          {isFetching || !superCampaign ? (
+          {isLoading || !superCampaign ? (
             <SuperCampaignDetailLoading />
           ) : (
             <SuperCampaignProvider superCampaign={superCampaign}>
