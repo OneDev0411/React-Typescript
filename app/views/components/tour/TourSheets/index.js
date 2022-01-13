@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo } from 'react'
 
 import PropTypes from 'prop-types'
 
@@ -20,17 +20,16 @@ TourSheets.propTypes = {
 export function TourSheets(props) {
   const { tour, listings, handleClose } = props
   const pageTitle = 'Tour Sheets Preview'
-  let agent = tour && tour.created_by
 
-  if (!agent || agent.id === props.agent.id) {
-    agent = props.agent
-  } else if (agent && agent.active_brand === props.agent.active_brand) {
-    agent.teams = props.agent.teams
-  }
+  const tourSheetAgent = useMemo(() => {
+    let agent = tour && tour.created_by
 
-  if (!agent.teams) {
-    agent.teams = props.agent.teams
-  }
+    if (!agent || agent.id === props.agent.id) {
+      agent = props.agent
+    }
+
+    return agent
+  }, [props.agent, tour])
 
   return (
     <BareModal
@@ -45,14 +44,14 @@ export function TourSheets(props) {
         handleClose={handleClose}
         title={pageTitle}
       />
-      <CoverPage tour={tour} listings={listings} agent={agent} />
+      <CoverPage tour={tour} listings={listings} agent={tourSheetAgent} />
       {listings.map((listing, index) => (
         <LocationPage
           key={index}
           index={index}
           listing={listing}
           tour={tour}
-          agent={agent}
+          agent={tourSheetAgent}
         />
       ))}
     </BareModal>

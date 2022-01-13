@@ -1,14 +1,12 @@
-import React from 'react'
-
 import PropTypes from 'prop-types'
+
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 
 import Brand from '../../../../../controllers/Brand'
 import { getUserTitle } from '../../../../../models/user/helpers/get-user-title'
-import { getActiveTeam } from '../../../../../utils/user-teams'
 import { H1 } from '../../../Typography/headings'
 import { Map } from '../../Map'
 import { getFormatedDueDate } from '../helpers/get-formated-due-date'
-
 import '../styles/shared.scss'
 import './style.scss'
 
@@ -23,12 +21,12 @@ const COVER_PAGE_CSS_NAME = 'c-tour-sheets-cover'
 export function CoverPage(props) {
   const { agent, tour } = props
   const { description } = tour
-  const activeTeam = getActiveTeam(agent)
+  const activeBrand = useUnsafeActiveBrand()
 
   let officeLogoSrc = ''
 
-  if (activeTeam && activeTeam.brand) {
-    const marketingLogos = Brand.asset('marketing', null, activeTeam.brand)
+  if (activeBrand) {
+    const marketingLogos = Brand.asset('marketing', null, activeBrand)
 
     officeLogoSrc = marketingLogos && marketingLogos['logo-wide-alpha']
   }
