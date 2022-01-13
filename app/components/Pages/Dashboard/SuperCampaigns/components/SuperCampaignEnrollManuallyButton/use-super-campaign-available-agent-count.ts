@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useDeepCompareEffect } from 'react-use'
 
 import useAsync from '@app/hooks/use-async'
 
@@ -13,7 +13,7 @@ export function useSuperCampaignAvailableAgentCount(
     isLoading
   } = useAsync({ data: 0, status: 'pending' })
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     run(async () => {
       const brands = await teamAgentsModelFn()
 

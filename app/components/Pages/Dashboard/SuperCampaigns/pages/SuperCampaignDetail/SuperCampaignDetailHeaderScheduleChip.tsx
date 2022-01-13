@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 import { Chip, CircularProgress } from '@material-ui/core'
 import { mdiCheck, mdiEmailCheck, mdiEmailOutline } from '@mdi/js'
 import format from 'date-fns/format'
@@ -8,15 +10,17 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 interface SuperCampaignDetailHeaderScheduleChipProps {
   className: string
   isExecuted: Boolean
-  dueAt: Optional<number>
+  dueAt: Nullable<number>
   isSaving: boolean
+  children: ReactNode
 }
 
 function SuperCampaignDetailHeaderScheduleChip({
   className,
   isExecuted,
   dueAt,
-  isSaving
+  isSaving,
+  children
 }: SuperCampaignDetailHeaderScheduleChipProps) {
   const getLabelIcon = () => {
     if (!dueAt) {
@@ -49,8 +53,12 @@ function SuperCampaignDetailHeaderScheduleChip({
   return (
     <Chip
       className={className}
-      label={label}
-      size="small"
+      label={
+        <>
+          {label}
+          {children}
+        </>
+      }
       icon={
         isSaving ? (
           <CircularProgress size={16} color="inherit" />
