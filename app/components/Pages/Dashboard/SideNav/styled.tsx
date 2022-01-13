@@ -24,8 +24,6 @@ export const SidenavListGroup = styled.ul`
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  border-bottom: ${(props: ThemeProps<Theme>) =>
-    '1px solid rgba(255,255,255,0.2)'};
 
   & .MuiAccordion-root {
     background-color: transparent;
@@ -37,15 +35,17 @@ export const SidenavListGroup = styled.ul`
 
   & .MuiAccordionSummary-root {
     padding: 0;
-    min-height: 48px !important;
+    min-height: 45px !important;
 
     &.Mui-expanded {
-      min-height: 48px !important;
+      min-height: 45px !important;
     }
 
     svg.MuiSvgIcon-root {
         color: ${(props: ThemeProps<Theme>) =>
           props.theme.palette.common.white};
+        position: relative;
+        top: -2px;
       }
     }
   }
@@ -53,7 +53,7 @@ export const SidenavListGroup = styled.ul`
   & .MuiAccordionSummary-content {
     display: flex;
     justify-content: flex-start;
-    margin: 6px 0 !important;
+    margin: 0 !important;
 
     a {
       width:100%;
@@ -69,9 +69,11 @@ export const SidenavListGroup = styled.ul`
     &.Mui-expanded {
       margin: 6px 0 !important;
 
-      svg {
-          color: ${(props: ThemeProps<Theme>) =>
-            props.theme.palette.primary.light};
+      div {
+        svg {
+            color: ${(props: ThemeProps<Theme>) =>
+              props.theme.palette.primary.light};
+            }
         }
       }
     }
@@ -102,15 +104,16 @@ export const SideNavItem = styled.li`
 `
 
 export const SideNavItemLabel = styled.div`
-  padding-left: ${(props: ThemeProps<Theme>) => props.theme.spacing(3.25)}px;
+  padding-left: ${(props: ThemeProps<Theme>) => props.theme.spacing(3.125)}px;
 `
 
 const itemStyle = css`
   display: flex;
+  font-size: 0.875rem;
   align-items: center;
   border-radius: 6px;
   padding-top: ${(props: ThemeProps<Theme>) => props.theme.spacing(0.5)}px;
-  padding-right: ${(props: ThemeProps<Theme>) => props.theme.spacing(0)}px;
+  padding-right: ${(props: ThemeProps<Theme>) => props.theme.spacing(1)}px;
   padding-bottom: ${(props: ThemeProps<Theme>) => props.theme.spacing(0.5)}px;
   padding-left: ${(props: ThemeProps<Theme>) => props.theme.spacing(1)}px;
   color: ${(props: ThemeProps<Theme>) =>
@@ -122,8 +125,11 @@ const itemStyle = css`
     background-color: ${(props: ThemeProps<Theme>) =>
       props.theme.palette.common.white};
 
-    svg {
-      color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
+    div {
+      svg {
+        color: ${(props: ThemeProps<Theme>) =>
+          props.theme.palette.primary.main};
+      }
     }
   }
   ${({ active }: ThemeProps<Theme> & { active: boolean }) =>
@@ -132,12 +138,12 @@ const itemStyle = css`
       color: ${(props: ThemeProps<Theme>) => props.theme.palette.common.black};
       background-color: ${(props: ThemeProps<Theme>) =>
         props.theme.palette.common.white};
-
-      svg {
-        color: ${(props: ThemeProps<Theme>) =>
-          props.theme.palette.primary.main};
-      }
     `}
+
+  svg {
+    position: relative;
+    top: -2px;
+  }
 `
 
 interface SidenavLinkPorps extends LinkProps {

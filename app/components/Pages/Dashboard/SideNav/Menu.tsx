@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { Divider, makeStyles } from '@material-ui/core'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
@@ -36,7 +37,6 @@ import { ScrollableArea } from 'views/components/ScrollableArea'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
-// import SideNavAccordion from './components/Accordion'
 import Logo from './components/Logo'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
 import PoweredBy from './components/PoweredBy'
@@ -53,6 +53,18 @@ import {
 } from './styled'
 import { scrollableAreaShadowColor } from './variables'
 
+const useStyles = makeStyles(
+  theme => ({
+    divider: {
+      backgroundColor: theme.palette.grey[800],
+      margin: theme.spacing(0, 1)
+    }
+  }),
+  {
+    name: 'SideNavMenu'
+  }
+)
+
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
 const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
 const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
@@ -60,6 +72,7 @@ const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
 const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 export function Menu() {
+  const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
   const brand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
@@ -123,7 +136,7 @@ export function Menu() {
                   <div>
                     <SvgIcon
                       path={mdiViewGridOutline}
-                      size="16px"
+                      size="14px"
                       rightMargined
                     />
                     Dashboard
@@ -132,6 +145,7 @@ export function Menu() {
               </Acl>
             </AccordionSummary>
           </Accordion>
+          <Divider className={classes.divider} />
         </SidenavListGroup>
 
         <SidenavListGroup>
@@ -148,7 +162,7 @@ export function Menu() {
                   <div>
                     <SvgIcon
                       path={mdiAccountSupervisorOutline}
-                      size="16px"
+                      size="14px"
                       rightMargined
                     />
                     People
@@ -197,7 +211,7 @@ export function Menu() {
               <Acl.Marketing>
                 <SidenavLink active={false} to="" data-tour-id="nav-marketing">
                   <div>
-                    <SvgIcon path={mdiChartArc} size="16px" rightMargined />
+                    <SvgIcon path={mdiChartArc} size="14px" rightMargined />
                     Marketing
                   </div>
                   {expanded === 'nav-marketing' ? (
@@ -284,6 +298,7 @@ export function Menu() {
               </Acl>
             </AccordionDetails>
           </Accordion>
+          <Divider className={classes.divider} />
         </SidenavListGroup>
 
         <SidenavListGroup>
@@ -304,7 +319,7 @@ export function Menu() {
                     >
                       <SvgIcon
                         path={mdiChatProcessingOutline}
-                        size="16px"
+                        size="14px"
                         rightMargined
                       />
                       Chat
@@ -332,7 +347,7 @@ export function Menu() {
                   <div>
                     <SvgIcon
                       path={mdiAlarmLightOutline}
-                      size="16px"
+                      size="14px"
                       rightMargined
                     />
                     <InlineBadge
@@ -346,6 +361,7 @@ export function Menu() {
               </AccordionSummary>
             </Accordion>
           )}
+          <Divider className={classes.divider} />
         </SidenavListGroup>
         <SidenavListGroup>
           <Accordion
@@ -365,7 +381,7 @@ export function Menu() {
                   <div>
                     <SvgIcon
                       path={mdiHelpCircleOutline}
-                      size="16px"
+                      size="14px"
                       rightMargined
                     />
                     Help Center
@@ -389,7 +405,7 @@ export function Menu() {
                     badgeContent={chatRoomsNotificationsNumber}
                     color="primary"
                   >
-                    <SvgIcon path={mdiPhoneOutline} size="16px" rightMargined />
+                    <SvgIcon path={mdiPhoneOutline} size="14px" rightMargined />
                     Support
                   </InlineBadge>
                 </SupportTrigger>

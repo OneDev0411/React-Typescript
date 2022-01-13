@@ -3,6 +3,7 @@ import React, { createContext, useState } from 'react'
 import { Box, Theme, makeStyles } from '@material-ui/core'
 
 import SideNav from './SideNav'
+import { appSidenavWidth } from './SideNav/variables'
 
 interface Props {
   children: React.ReactNode
@@ -19,7 +20,7 @@ const useStyles = makeStyles(
       // I'm currently a release blocker and don't have time to
       // properly fix it.
       // TODO
-      width: 'calc(100% - 192px)'
+      width: `calc(100% - ${appSidenavWidth}px)`
     }
   }),
   { name: 'MainWrapper' }

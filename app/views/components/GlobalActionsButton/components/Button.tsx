@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       padding: theme.spacing(0, 2),
-      marginBottom: theme.spacing(3.375)
+      marginBottom: theme.spacing(2.5)
     },
     root: {
       borderRadius: '6px',
