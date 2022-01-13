@@ -5,46 +5,6 @@ import { DEFAULT_BRAND_PALETTE } from './constants'
 import flattenBrand from './flatten-brand'
 import { notDeleted } from './not-deleted'
 
-function getActiveTeamFromUser(user) {
-  return user.active_brand || user.brand
-}
-
-export function getActiveTeam(user: Partial<IUser> | null): IUserTeam | null {
-  if (user == null || user.teams == null) {
-    return null
-  }
-
-  const { teams } = user
-
-  let activeTeam = teams.find(
-    team => team.brand.id === getActiveTeamFromUser(user)
-  )
-
-  if (!activeTeam && teams) {
-    activeTeam = teams[0]
-  }
-
-  return activeTeam || null
-}
-
-export function getActiveTeamId(user: IUser | null): UUID | null {
-  if (user == null) {
-    return null
-  }
-
-  if (user.active_brand) {
-    return user.active_brand
-  }
-
-  const activeTeam = getActiveTeam(user)
-
-  if (!activeTeam) {
-    return user.brand
-  }
-
-  return activeTeam.brand.id
-}
-
 export function isSoloActiveTeam(team: Nullable<IUserTeam>): boolean {
   if (!team) {
     return false
