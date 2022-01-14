@@ -936,7 +936,8 @@ class ContactsList extends React.Component {
             display: 'flex',
             flexDirection: 'column',
             flex: '1 1 auto',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            mt: 0
           })}
         >
           {this.state.syncStatus === 'pending' && (
