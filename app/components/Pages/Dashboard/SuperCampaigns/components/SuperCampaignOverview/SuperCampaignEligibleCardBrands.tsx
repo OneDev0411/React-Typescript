@@ -16,7 +16,7 @@ function SuperCampaignEligibleCardBrands() {
   const superCampaign = useSuperCampaign()
   const isReadOnly = isSuperCampaignReadOnly(superCampaign)
 
-  const { mutateAsync } = useUpdateSuperCampaignEligibility(superCampaign, {
+  const { mutateAsync } = useUpdateSuperCampaignEligibility({
     onSuccess: () => closeBrandSelector()
   })
 
@@ -25,7 +25,10 @@ function SuperCampaignEligibleCardBrands() {
   const closeBrandSelector = () => setIsBrandSelectorOpen(false)
 
   const handleSelectedBrandSave = async (brandsId: UUID[]) => {
-    await mutateAsync(brandsId)
+    await mutateAsync({
+      superCampaignId: superCampaign.id,
+      eligibleBrands: brandsId
+    })
   }
 
   const eligibleBrands: UUID[] = superCampaign.eligible_brands ?? []
