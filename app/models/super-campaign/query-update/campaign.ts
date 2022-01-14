@@ -1,6 +1,7 @@
 import { QueryClient } from 'react-query'
 
 import {
+  infiniteDataDeleteCacheActions,
   infiniteDataUpdateCacheActions,
   updateCacheActions,
   UpdateCachePromise
@@ -34,5 +35,16 @@ export async function updateCacheAll(
     superCampaign => {
       Object.assign(superCampaign, update)
     }
+  )
+}
+
+export async function deleteFromCacheAll(
+  queryClient: QueryClient,
+  superCampaignId: UUID
+): UpdateCachePromise {
+  return infiniteDataDeleteCacheActions<ISuperCampaign<'template_instance'>>(
+    queryClient,
+    getAll(),
+    superCampaign => superCampaignId === superCampaign.id
   )
 }
