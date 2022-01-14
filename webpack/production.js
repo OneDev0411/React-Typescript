@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 const SentryCliPlugin = require('@sentry/webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const moment = require('moment')
@@ -10,7 +12,11 @@ const S3Plugin = require('webpack-s3-plugin')
 const common = require('./base')
 
 const postcssOptions = {
-  plugins: [require('postcss-preset-env')()]
+  plugins: [
+    require('postcss-preset-env')(),
+    require('postcss-browser-reporter')(),
+    require('postcss-reporter')()
+  ]
 }
 
 const config = {
@@ -18,7 +24,8 @@ const config = {
   devtool: false,
   output: {
     pathinfo: false,
-    publicPath: process.env.ASSETS_BASEURL
+    publicPath: process.env.ASSETS_BASEURL,
+    globalObject: 'this'
   },
   optimization: {
     minimize: true,
