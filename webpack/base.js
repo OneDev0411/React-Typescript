@@ -1,6 +1,6 @@
+// @ts-nocheck
 const path = require('path')
 
-const { ESBuildPlugin } = require('esbuild-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
@@ -11,10 +11,12 @@ function resolvePath(dirPath) {
   return path.resolve(__dirname, dirPath)
 }
 
-const ESBUILD_COMMON_OPTIONS = {
-  jsxFactory: 'React.createElement',
-  jsxFragment: 'React.Fragment',
-  sourcemap: false
+const postcssOptions = {
+  plugins: [
+    require('postcss-preset-env')(),
+    require('postcss-browser-reporter')(),
+    require('postcss-reporter')()
+  ]
 }
 
 module.exports = {
@@ -24,10 +26,10 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: __DEV__ ? '[name].js' : '[name].[hash].js',
+    filename: __DEV__ ? '[name].bundle.js' : '[name].[hash].js',
     chunkFilename: '[name].[chunkhash].js',
     publicPath: '/',
-    globalObject: 'this'
+    globalObject: 'self'
   },
   resolve: {
     modules: [resolvePath('../app'), 'node_modules'],
@@ -76,7 +78,6 @@ module.exports = {
     new webpack.ProvidePlugin({
       React: 'react'
     }),
-    new ESBuildPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(env),
@@ -128,43 +129,20 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.m?js/,
-        resolve: {
-          fullySpecified: false
-        }
-      },
-      {
-        test: /\.jsx?$/,
+        test: /\.(ts|tsx|js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'esbuild-loader',
-          options: {
-            ...ESBUILD_COMMON_OPTIONS,
-            loader: 'jsx'
+        use: [
+          {
+            loader: require.resolve('babel-loader'),
+            options: {
+              cacheDirectory: true,
+              cacheCompression: false,
+              plugins: [
+                __DEV__ && require.resolve('react-refresh/babel')
+              ].filter(Boolean)
+            }
           }
-        }
-      },
-      {
-        test: /\.ts$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'esbuild-loader',
-          options: {
-            ...ESBUILD_COMMON_OPTIONS,
-            loader: 'ts'
-          }
-        }
-      },
-      {
-        test: /\.tsx$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'esbuild-loader',
-          options: {
-            ...ESBUILD_COMMON_OPTIONS,
-            loader: 'tsx'
-          }
-        }
+        ]
       },
       {
         test: /\.woff(\?.*)?$/,
@@ -250,6 +228,23 @@ module.exports = {
             loader: 'raw-loader'
           }
         ]
+      },
+      {
+        test: /\.css/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions
+            }
+          }
+        ]
+      },
+      {
+        test: /\.scss/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
       }
     ]
   }
