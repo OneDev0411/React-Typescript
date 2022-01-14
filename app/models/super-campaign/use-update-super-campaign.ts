@@ -31,7 +31,7 @@ export type UseUpdateSuperCampaignOptions = Omit<
     DataInput,
     { cache: UpdateCacheActions }
   >,
-  'invalidates' | 'onMutate'
+  'onMutate'
 >
 
 export function useUpdateSuperCampaign(

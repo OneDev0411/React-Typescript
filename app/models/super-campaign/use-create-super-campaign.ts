@@ -59,7 +59,9 @@ export function useCreateSuperCampaign<
     variables => createSuperCampaign(getSuperCampaignInput(variables)),
     {
       ...options,
-      invalidates: [getAll()] // TODO: use optimistic update if possible
+      // Just invalidate the lists of campaigns because we dont know the list sort logic
+      // at this stage so having an optimistic update is not easy
+      invalidates: [getAll()]
     }
   )
 }

@@ -2,10 +2,9 @@ import { UseMutationResult, useQueryClient } from 'react-query'
 import { ResponseError } from 'superagent'
 
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
-import { UpdateCacheActions } from '@app/utils/react-query'
+import { UpdateCacheActions, updateCacheComposer } from '@app/utils/react-query'
 
-import { getAll } from './query-keys/campaign'
-import { updateCacheOne } from './query-update/campaign'
+import { updateCacheAll, updateCacheOne } from './query-update/campaign'
 import { updateSuperCampaignEligibility } from './update-super-campaign-eligibility'
 
 interface DataInput {
@@ -27,7 +26,7 @@ export type UseUpdateSuperCampaignEligibilityOptions = Omit<
     DataInput,
     { cache: UpdateCacheActions }
   >,
-  'notify' | 'invalidates' | 'onMutate'
+  'notify' | 'onMutate'
 >
 
 export function useUpdateSuperCampaignEligibility(
@@ -45,11 +44,15 @@ export function useUpdateSuperCampaignEligibility(
         onError:
           'Something went wrong while saving the eligible brands. Please try again.'
       },
-      invalidates: [getAll()],
       onMutate: async ({ superCampaignId, eligibleBrands }) => ({
-        cache: await updateCacheOne(queryClient, superCampaignId, {
-          eligible_brands: eligibleBrands
-        })
+        cache: await updateCacheComposer(
+          updateCacheOne(queryClient, superCampaignId, {
+            eligible_brands: eligibleBrands
+          }),
+          updateCacheAll(queryClient, superCampaignId, {
+            eligible_brands: eligibleBrands
+          })
+        )
       }),
       onError: (error, variables, context) => {
         context?.cache.revert()

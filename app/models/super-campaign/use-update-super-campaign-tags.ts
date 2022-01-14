@@ -2,10 +2,9 @@ import { UseMutationResult, useQueryClient } from 'react-query'
 import { ResponseError } from 'superagent'
 
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
-import { UpdateCacheActions } from '@app/utils/react-query'
+import { UpdateCacheActions, updateCacheComposer } from '@app/utils/react-query'
 
-import { getAll } from './query-keys/campaign'
-import { updateCacheOne } from './query-update/campaign'
+import { updateCacheAll, updateCacheOne } from './query-update/campaign'
 import { updateSuperCampaignTags } from './update-super-campaign-tags'
 
 interface DataInput {
@@ -27,7 +26,7 @@ export type UseUpdateSuperCampaignTagsOptions = Omit<
     DataInput,
     { cache: UpdateCacheActions }
   >,
-  'notify' | 'invalidates' | 'onMutate'
+  'notify' | 'onMutate'
 >
 
 export function useUpdateSuperCampaignTags(
@@ -44,11 +43,15 @@ export function useUpdateSuperCampaignTags(
         onSuccess: 'The tags were updated',
         onError: 'Something went wrong while saving the tags. Please try again.'
       },
-      invalidates: [getAll()],
       onMutate: async ({ superCampaignId, tags }) => ({
-        cache: await updateCacheOne(queryClient, superCampaignId, {
-          tags
-        })
+        cache: await updateCacheComposer(
+          updateCacheOne(queryClient, superCampaignId, {
+            tags
+          }),
+          updateCacheAll(queryClient, superCampaignId, {
+            tags
+          })
+        )
       }),
       onError: (error, variables, context) => {
         context?.cache.revert()
