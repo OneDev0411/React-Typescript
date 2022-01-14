@@ -35,8 +35,12 @@ export async function updateCacheComposer(
 export async function infiniteDataUpdateCacheActions<TData>(
   queryClient: QueryClient,
   queryKey: QueryKey,
-  predictor: (data: Draft<TData>) => boolean,
-  modifier: (data: Draft<TData>) => void
+  predictor: (data: TData) => boolean,
+  modifier: (
+    data: Draft<TData>,
+    items: Draft<TData>[],
+    itemIndex: number
+  ) => void
 ): UpdateCachePromise {
   await queryClient.cancelQueries(queryKey, { exact: false })
 
@@ -49,14 +53,18 @@ export async function infiniteDataUpdateCacheActions<TData>(
     queryClient.setQueryData(
       queryKey,
       produce(infiniteData, draftPages => {
-        draftPages.pages.forEach(items => {
-          const item = items.find(item => predictor(item))
+        infiniteData.pages.forEach((items, pageIndex) => {
+          const itemIndex = items.findIndex(item => predictor(item))
 
-          if (!item) {
+          if (itemIndex === -1) {
             return
           }
 
-          modifier(item)
+          modifier(
+            draftPages.pages[pageIndex][itemIndex],
+            draftPages.pages[pageIndex],
+            itemIndex
+          )
         })
       })
     )
@@ -105,4 +113,27 @@ export async function updateCacheActions<TData>(
     },
     invalidate: () => queryClient.invalidateQueries(queryKey)
   }
+}
+
+/**
+ * Delete something from an infiniteData cache and returns revert and invalidate functions
+ * @param queryClient
+ * @param queryKey
+ * @param predictor
+ * @param modifier
+ * @returns
+ */
+export async function infiniteDataDeleteCacheActions<TData>(
+  queryClient: QueryClient,
+  queryKey: QueryKey,
+  predictor: (data: TData) => boolean
+): UpdateCachePromise {
+  return infiniteDataUpdateCacheActions<TData>(
+    queryClient,
+    queryKey,
+    predictor,
+    (_, items, itemIndex) => {
+      items.splice(itemIndex, 1)
+    }
+  )
 }
