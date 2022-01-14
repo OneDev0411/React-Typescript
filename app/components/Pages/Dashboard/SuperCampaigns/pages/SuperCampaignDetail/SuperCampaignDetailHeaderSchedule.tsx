@@ -33,11 +33,19 @@ function SuperCampaignDetailHeaderSchedule({
 
   const isExecuted = isSuperCampaignReadOnly(superCampaign)
 
-  const { mutate, isLoading } = useUpdateSuperCampaign(superCampaign)
+  const { mutate, isLoading } = useUpdateSuperCampaign()
 
-  const handleDueAtChange = (dueAt: number) => mutate({ due_at: dueAt })
+  const handleDueAtChange = (dueAt: number) =>
+    mutate({
+      superCampaign,
+      inputData: { due_at: dueAt }
+    })
 
-  const handleDueAtRemove = () => mutate({ due_at: null })
+  const handleDueAtRemove = () =>
+    mutate({
+      superCampaign,
+      inputData: { due_at: null }
+    })
 
   return (
     <>

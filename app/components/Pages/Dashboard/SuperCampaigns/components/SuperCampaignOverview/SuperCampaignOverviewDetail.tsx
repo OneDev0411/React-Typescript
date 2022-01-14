@@ -32,7 +32,7 @@ function SuperCampaignOverviewDetail() {
   const classes = useStyles()
   const superCampaign = useSuperCampaign()
 
-  const { isLoading, mutateAsync } = useUpdateSuperCampaign(superCampaign)
+  const { isLoading, mutateAsync } = useUpdateSuperCampaign()
   const [editDrawerParam, setEditDrawerParam, deleteEditDrawerParam] =
     useReplaceQueryParam('edit-drawer')
 
@@ -43,13 +43,16 @@ function SuperCampaignOverviewDetail() {
   const closeDrawer = () => deleteEditDrawerParam()
 
   const handleTemplateChange = async (template: IMarketingTemplateInstance) => {
-    await mutateAsync({ template_instance: template })
+    await mutateAsync({
+      superCampaign,
+      inputData: { template_instance: template }
+    })
   }
 
   const handleSuperCampaignConfirm = async (
     formValues: SuperCampaignFormValues
   ) => {
-    await mutateAsync(formValues)
+    await mutateAsync({ superCampaign, inputData: formValues })
     closeDrawer()
   }
 

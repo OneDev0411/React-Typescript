@@ -14,7 +14,7 @@ import {
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import { isSuperCampaignReadOnly } from '../../helpers'
+import { isSuperCampaignReadOnly, toRawSuperCampaign } from '../../helpers'
 
 interface SuperCampaignAdminMoreActionsProps {
   className?: string
@@ -36,15 +36,15 @@ function SuperCampaignAdminMoreActions({
   onSendSuccess
 }: SuperCampaignAdminMoreActionsProps) {
   const { mutate: deleteSuperCampaign, isLoading: isDeleting } =
-    useDeleteSuperCampaign(superCampaign, { onSuccess: onDeleteSuccess })
+    useDeleteSuperCampaign({ onSuccess: onDeleteSuccess })
 
   const { mutate: duplicateSuperCampaign, isLoading: isDuplicating } =
-    useDuplicateSuperCampaign(superCampaign, {
+    useDuplicateSuperCampaign({
       onSuccess: onDuplicateSuccess
     })
 
   const { mutate: sendSuperCampaign, isLoading: isSending } =
-    useSendSuperCampaign(superCampaign, {
+    useSendSuperCampaign({
       onSuccess: onSendSuccess
     })
 
@@ -74,15 +74,19 @@ function SuperCampaignAdminMoreActions({
       renderMenu={({ close }) => (
         <div onClick={close}>
           {!isExecuted && displaySendNow && (
-            <MenuItem onClick={sendSuperCampaign}>
+            <MenuItem onClick={() => sendSuperCampaign(superCampaign)}>
               <Typography variant="body2">Send Now</Typography>
             </MenuItem>
           )}
-          <MenuItem onClick={duplicateSuperCampaign}>
+          <MenuItem
+            onClick={() =>
+              duplicateSuperCampaign(toRawSuperCampaign(superCampaign))
+            }
+          >
             <Typography variant="body2">Duplicate this campaign</Typography>
           </MenuItem>
           {!isExecuted && (
-            <MenuItem onClick={deleteSuperCampaign}>
+            <MenuItem onClick={() => deleteSuperCampaign(superCampaign)}>
               <Typography variant="body2">Delete</Typography>
             </MenuItem>
           )}
