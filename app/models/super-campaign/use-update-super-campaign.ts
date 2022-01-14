@@ -74,7 +74,7 @@ export function useUpdateSuperCampaign(
 
         return { previousSuperCampaign }
       },
-      onError: (error, tags, context) => {
+      onError: (error, variables, context) => {
         if (!context?.previousSuperCampaign) {
           return
         }
@@ -84,7 +84,7 @@ export function useUpdateSuperCampaign(
           context.previousSuperCampaign
         )
 
-        options?.onError?.(error, tags, context)
+        options?.onError?.(error, variables, context)
       },
       onSettled: (...args) => {
         queryClient.invalidateQueries(getOne(superCampaign.id))
