@@ -887,18 +887,21 @@ class ContactsList extends React.Component {
 
     return (
       <PageLayout
+        gutter={0}
         {...(isBoardMode && {
           display: 'flex',
           flexDirection: 'column',
           height: '100vh',
-          oferflow: 'hidden',
+          overflow: 'hidden',
           pb: 1
         })}
       >
         <PageLayout.HeaderWithSearch
+          p={3}
           flex="0 1 auto"
           title={title}
           onSearch={this.handleSearch}
+          noPadding={false}
           SearchInputProps={{
             defaultValue: this.state.searchInputValue || '',
             placeholder: 'Search Contacts'
@@ -968,10 +971,11 @@ class ContactsList extends React.Component {
           {isZeroState && <ContactsZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
-              {this.state.viewMode === 'table' &&
-                this.renderOtherContactsBadge()}
-
-              {this.renderTabs()}
+              <Box px={3}>
+                {this.state.viewMode === 'table' &&
+                  this.renderOtherContactsBadge()}
+                {this.renderTabs()}
+              </Box>
 
               <Box
                 mt={2}

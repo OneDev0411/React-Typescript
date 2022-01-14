@@ -11,8 +11,9 @@ export const RowContainer = styled.div<{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    ${theme.typography.body2};
+    letter-spacing: 0.15px;
     background-color: transparent;
+    ${theme.typography.body2};
 
     .column:first-child {
       padding-left: ${theme.spacing(4)}px;
