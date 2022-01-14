@@ -1,9 +1,6 @@
 import { useState, ChangeEvent } from 'react'
 
 import { Divider, makeStyles } from '@material-ui/core'
-import Accordion from '@material-ui/core/Accordion'
-import AccordionDetails from '@material-ui/core/AccordionDetails'
-import AccordionSummary from '@material-ui/core/AccordionSummary'
 import {
   mdiViewGridOutline,
   mdiAccountSupervisorOutline,
@@ -22,7 +19,10 @@ import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
 import { GlobalActionsButton } from 'components/GlobalActionsButton'
-import { InlineBadge } from 'components/InlineBadge'
+import { MenuAccordion as Accordion } from 'components/MenuAccordion'
+import { MenuAccordionDetails as AccordionDetails } from 'components/MenuAccordionDetails'
+import { MenuAccordionSummary as AccordionSummary } from 'components/MenuAccordionSummary'
+import { MenuBadge } from 'components/MenuBadge'
 import { ACL } from 'constants/acl'
 import { useChatRoomsNotificationsNumber } from 'hooks/use-chat-rooms-notifications-number'
 import { useDealsNotificationsNumber } from 'hooks/use-deals-notifications-number'
@@ -59,7 +59,7 @@ const useStyles = makeStyles(
   theme => ({
     divider: {
       backgroundColor: theme.palette.grey[800],
-      margin: theme.spacing(0, 1)
+      margin: theme.spacing(0.75, 1)
     }
   }),
   {
@@ -284,12 +284,12 @@ export function Menu() {
             <AccordionDetails>
               <Acl.Crm>
                 <SideNavLinkItem to="/dashboard/inbox" tourId="nav-inbox">
-                  <InlineBadge
+                  <MenuBadge
                     badgeContent={inboxNotificationNumber}
                     color="primary"
                   >
                     <SideNavItemLabel>Email</SideNavItemLabel>
-                  </InlineBadge>
+                  </MenuBadge>
                 </SideNavLinkItem>
               </Acl.Crm>
 
@@ -316,12 +316,12 @@ export function Menu() {
                   >
                     <SideNavItem>
                       <MessagesDrawerTrigger>
-                        <InlineBadge
+                        <MenuBadge
                           badgeContent={chatRoomsNotificationsNumber}
                           color="primary"
                         >
                           Chat
-                        </InlineBadge>
+                        </MenuBadge>
                       </MessagesDrawerTrigger>
                     </SideNavItem>
                   </AccordionSummary>
@@ -363,12 +363,12 @@ export function Menu() {
             <AccordionDetails>
               <Acl access={dealsAccess}>
                 <SideNavLinkItem to="/dashboard/deals" tourId="nav-deals">
-                  <InlineBadge
+                  <MenuBadge
                     badgeContent={dealsNotificationsNumber}
                     color="primary"
                   >
                     <SideNavItemLabel>Deals</SideNavItemLabel>
-                  </InlineBadge>
+                  </MenuBadge>
                 </SideNavLinkItem>
               </Acl>
 
@@ -395,12 +395,12 @@ export function Menu() {
 
               <Acl access={ACL.SHOWINGS}>
                 <SideNavLinkItem to="/dashboard/showings">
-                  <InlineBadge
+                  <MenuBadge
                     badgeContent={showingsTotalNotificationCount}
                     color="primary"
                   >
                     <SideNavItemLabel>Showings</SideNavItemLabel>
-                  </InlineBadge>
+                  </MenuBadge>
                 </SideNavLinkItem>
               </Acl>
             </AccordionDetails>
@@ -424,17 +424,14 @@ export function Menu() {
                   data-tour-id="nav-notifications"
                 >
                   <AccordionSummaryDiv>
-                    <SvgIcon
-                      path={mdiAlarmLightOutline}
-                      size={muiIconSizes.small}
-                      rightMargined
-                    />
-                    <InlineBadge
-                      badgeContent={appNotifications}
-                      color="primary"
-                    >
+                    <MenuBadge badgeContent={appNotifications} color="primary">
+                      <SvgIcon
+                        path={mdiAlarmLightOutline}
+                        size={muiIconSizes.small}
+                        rightMargined
+                      />
                       Notifications
-                    </InlineBadge>
+                    </MenuBadge>
                   </AccordionSummaryDiv>
                 </SidenavLink>
               </AccordionSummary>
@@ -481,7 +478,7 @@ export function Menu() {
             >
               <SideNavItem>
                 <SupportTrigger>
-                  <InlineBadge
+                  <MenuBadge
                     badgeContent={chatRoomsNotificationsNumber}
                     color="primary"
                   >
@@ -491,7 +488,7 @@ export function Menu() {
                       rightMargined
                     />
                     Support
-                  </InlineBadge>
+                  </MenuBadge>
                 </SupportTrigger>
               </SideNavItem>
             </AccordionSummary>
