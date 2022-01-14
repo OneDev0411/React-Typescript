@@ -19,12 +19,12 @@ function SuperCampaignEligibleCardTags() {
 
   const superCampaign = useSuperCampaign()
 
-  const { isLoading, mutateAsync } = useUpdateSuperCampaignTags(superCampaign)
+  const { isLoading, mutateAsync } = useUpdateSuperCampaignTags()
 
   const isReadOnly = isSuperCampaignReadOnly(superCampaign)
 
   const handleTagsChange = async (tags: string[]) => {
-    await mutateAsync(tags)
+    await mutateAsync({ superCampaignId: superCampaign.id, tags })
   }
 
   return (
