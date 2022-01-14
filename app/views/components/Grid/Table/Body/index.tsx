@@ -98,7 +98,7 @@ export function Body<Row>({
             key={row.id || rowIndex}
             index={rowIndex}
             style={{
-              height: theme.spacing(8)
+              height: theme.spacing(5)
             }}
             data={{
               rows,
@@ -122,7 +122,7 @@ export function Body<Row>({
           <FixedSizeList
             ref={listRef}
             itemCount={rows.length}
-            itemSize={theme.spacing(8)}
+            itemSize={theme.spacing(5)}
             width={width}
             height={windowHeight}
             overscanCount={8}
