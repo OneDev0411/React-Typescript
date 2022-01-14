@@ -1,6 +1,11 @@
-import React from 'react'
-
-import { makeStyles, useTheme } from '@material-ui/core'
+import { Box, makeStyles, useTheme } from '@material-ui/core'
+import {
+  mdiCalendarOutline,
+  mdiEmailOutline,
+  mdiLightningBoltOutline,
+  mdiPhoneOutline,
+  mdiTagMultipleOutline
+} from '@mdi/js'
 import cn from 'classnames'
 
 import { Table } from 'components/Grid/Table'
@@ -20,6 +25,7 @@ import LastTouched from './columns/LastTouched'
 import Name from './columns/Name'
 import TagsString from './columns/Tags'
 import { LoadingComponent } from './components/LoadingComponent'
+import ColumnHeaderCell from './grid/ColumnHeaderCell'
 
 const useCustomGridStyles = makeStyles(theme => ({
   row: {
@@ -85,7 +91,14 @@ const ContactsList = props => {
   const columns = [
     {
       id: 'name',
-      headerName: ({ rows }) => <>{getSelectedInfo(rows.length)}</>,
+      headerName: ({ rows }) => (
+        <Box sx={{ paddingLeft: '8px' }}>
+          <ColumnHeaderCell
+            title={getSelectedInfo(rows.length)}
+            sortEnabled={false}
+          />
+        </Box>
+      ),
       primary: true,
       width: '220px',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
@@ -93,7 +106,13 @@ const ContactsList = props => {
     },
     {
       id: 'tag',
-      headerName: 'Tags',
+      headerName: () => (
+        <ColumnHeaderCell
+          title="Tags"
+          iconPath={mdiTagMultipleOutline}
+          sortEnabled={false}
+        />
+      ),
       width: '300px',
       class: 'opaque tags',
       render: ({ row: contact }) => (
@@ -109,7 +128,13 @@ const ContactsList = props => {
     },
     {
       id: 'phone',
-      headerName: 'Phone number',
+      headerName: () => (
+        <ColumnHeaderCell
+          title="Phone Number"
+          iconPath={mdiPhoneOutline}
+          sortEnabled={false}
+        />
+      ),
       width: '200px',
       renderInlineEdit: ({ row: contact }) => <div>{contact.phone_number}</div>,
       render: ({ row: contact }) => {
@@ -138,7 +163,13 @@ const ContactsList = props => {
     },
     {
       id: 'email',
-      headerName: 'Email',
+      headerName: () => (
+        <ColumnHeaderCell
+          title="Email"
+          iconPath={mdiEmailOutline}
+          sortEnabled={false}
+        />
+      ),
       width: '200px',
       renderInlineEdit: ({ row: contact }) => <div>{contact.email}</div>,
       render: ({ row: contact }) => {
@@ -167,16 +198,26 @@ const ContactsList = props => {
     },
     {
       id: 'last_touched',
-      headerName: 'Last touched',
-      sortable: false,
+      headerName: () => (
+        <ColumnHeaderCell
+          title="Last Touch"
+          iconPath={mdiCalendarOutline}
+          sortEnabled={false}
+        />
+      ),
       width: '200px',
       class: 'opaque',
       render: ({ row: contact }) => <LastTouched contact={contact} />
     },
     {
       id: 'flows',
-      headerName: 'Flows',
-      sortable: false,
+      headerName: () => (
+        <ColumnHeaderCell
+          title="Flows"
+          iconPath={mdiLightningBoltOutline}
+          sortEnabled={false}
+        />
+      ),
       width: '90px',
       class: 'opaque flows',
       render: ({ row: contact }) => (
