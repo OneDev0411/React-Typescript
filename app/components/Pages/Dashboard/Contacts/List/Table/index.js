@@ -76,6 +76,21 @@ const ContactsList = props => {
       render: ({ row: contact }) => <Name contact={contact} />
     },
     {
+      id: 'tag',
+      width: !isParkTabActive ? '34%' : '22%',
+      class: 'opaque tags',
+      render: ({ row: contact }) => (
+        <TagsString
+          contact={contact}
+          reloadContacts={props.reloadContacts}
+          hasAttributeFilters={
+            (props.filters?.attributeFilters || []).length > 0
+          }
+          isParkTabActive={isParkTabActive}
+        />
+      )
+    },
+    {
       id: 'cta',
       primary: true,
       width: '12%',
@@ -104,21 +119,6 @@ const ContactsList = props => {
             props.reloadContacts()
           }}
           flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
-        />
-      )
-    },
-    {
-      id: 'tag',
-      width: !isParkTabActive ? '34%' : '22%',
-      class: 'opaque tags',
-      render: ({ row: contact }) => (
-        <TagsString
-          contact={contact}
-          reloadContacts={props.reloadContacts}
-          hasAttributeFilters={
-            (props.filters?.attributeFilters || []).length > 0
-          }
-          isParkTabActive={isParkTabActive}
         />
       )
     },
