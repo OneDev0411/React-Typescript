@@ -1,42 +1,52 @@
 import { useContext } from 'react'
 
 import { UseMutationResult } from 'react-query'
+import { ResponseError } from 'superagent'
 
+import { UseMutationOptions } from '@app/hooks/query'
 import { convertDateToTimestamp } from '@app/utils/date-utils'
 import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
 
-import {
-  UseUpdateSuperCampaignOptions,
-  useUpdateSuperCampaign
-} from './use-update-super-campaign'
+import { useUpdateSuperCampaign } from './use-update-super-campaign'
 
-export type UseSendSuperCampaign = UseMutationResult<
-  ISuperCampaign<'template_instance'>
+export type UseSendSuperCampaign = Pick<
+  UseMutationResult<
+    ISuperCampaign<'template_instance'>,
+    ResponseError,
+    ISuperCampaign<'template_instance'>
+  >,
+  'mutate' | 'isLoading'
 >
 
-export type UseSendSuperCampaignOptions = Omit<
-  UseUpdateSuperCampaignOptions,
-  'notify'
+export type UseSendSuperCampaignOptions = Pick<
+  UseMutationOptions<
+    ISuperCampaign<'template_instance'>,
+    ResponseError,
+    ISuperCampaign<'template_instance'>
+  >,
+  'onSuccess' | 'onError'
 >
 
 export function useSendSuperCampaign(
-  superCampaign: ISuperCampaign<'template_instance'>,
   options?: UseSendSuperCampaignOptions
 ): UseSendSuperCampaign {
   const confirmation = useContext(ConfirmationModalContext)
 
-  const mutation = useUpdateSuperCampaign(superCampaign, {
-    ...options,
+  const mutation = useUpdateSuperCampaign({
     notify: {
       onSuccess: 'The campaign was sent',
       onError:
         'Something went wrong while sending the campaign. Please try again.'
-    }
+    },
+    onSuccess: (data, variables, context) =>
+      options?.onSuccess?.(data, variables.superCampaign, context),
+    onError: (error, variables, context) =>
+      options?.onError?.(error, variables.superCampaign, context)
   })
 
   return {
     ...mutation,
-    mutate: () => {
+    mutate: superCampaign => {
       confirmation.setConfirmationModal({
         message: `Are you sure you want to send "${
           superCampaign.subject || 'Untitled Campaign'
@@ -44,7 +54,10 @@ export function useSendSuperCampaign(
         confirmLabel: 'Yes, I am',
         onConfirm: () =>
           mutation.mutate({
-            due_at: convertDateToTimestamp(new Date())
+            superCampaign,
+            inputData: {
+              due_at: convertDateToTimestamp(new Date())
+            }
           })
       })
     }
