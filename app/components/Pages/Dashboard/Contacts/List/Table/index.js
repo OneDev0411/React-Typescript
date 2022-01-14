@@ -120,6 +120,35 @@ const ContactsList = props => {
       }
     },
     {
+      id: 'email',
+      headerName: 'Email',
+      width: '200px',
+      renderInlineEdit: ({ row: contact }) => <div>{contact.email}</div>,
+      render: ({ row: contact }) => {
+        let emailAddress
+        let emailAddressLabel
+
+        contact.attributes?.filter(attr => {
+          if (!attr.is_partner && attr.attribute_type === 'email') {
+            emailAddress = attr.text
+            emailAddressLabel = attr.is_primary
+              ? 'Main'
+              : (emailAddressLabel = attr.label)
+
+            return true
+          }
+
+          return false
+        })
+
+        return (
+          <div>
+            {emailAddress} {emailAddressLabel && `(${emailAddressLabel})`}
+          </div>
+        )
+      }
+    },
+    {
       id: 'cta',
       primary: true,
       width: '100px',
