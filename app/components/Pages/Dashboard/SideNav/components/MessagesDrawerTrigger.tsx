@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { useDispatch } from 'react-redux'
 
@@ -6,7 +6,11 @@ import { toggleChatbar } from '../../../../../store_actions/chatroom'
 
 import SideNavButtonItem from './SideNavButtonItem'
 
-export default function MessageDrawerTrigger({ children }) {
+interface Props {
+  children: ReactNode
+}
+
+export default function MessageDrawerTrigger({ children }: Props) {
   const dispatch = useDispatch()
 
   const openDrawer = () => {

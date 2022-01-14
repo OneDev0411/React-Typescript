@@ -34,9 +34,7 @@ const useStyles = makeStyles(
     arrowIcon: {
       color: theme.palette.common.white,
       marginLeft: theme.spacing(0.5),
-      alignSelf: 'flex-end',
-      width: `${theme.spacing(2)}px !important`,
-      height: `${theme.spacing(2)}px !important`
+      alignSelf: 'flex-end'
     },
     arrowIconRotated: {
       transform: 'rotateX(0)'

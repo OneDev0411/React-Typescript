@@ -8,7 +8,7 @@ const useStyles = makeStyles(
     button: {
       display: 'flex',
       alignItems: 'center',
-      borderRadius: '6px',
+      borderRadius: theme.shape.borderRadius,
       padding: theme.spacing(0.5, 1, 0.5, 4.25),
       color: theme.palette.common.white,
       fontSize: theme.typography.body1.fontSize,

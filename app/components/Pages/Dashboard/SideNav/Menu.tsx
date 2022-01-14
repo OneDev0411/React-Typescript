@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, ChangeEvent } from 'react'
 
 import { Divider, makeStyles } from '@material-ui/core'
 import Accordion from '@material-ui/core/Accordion'
@@ -18,6 +18,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
 import { GlobalActionsButton } from 'components/GlobalActionsButton'
@@ -72,6 +73,18 @@ const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
 const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
 const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
+type ExpandedMenu =
+  | null
+  | 'nav-dashboard'
+  | 'nav-marketing'
+  | 'nav-properties'
+  | 'nav-people'
+  | 'nav-chat'
+  | 'nav-transaction'
+  | 'nav-notifications'
+  | 'nav-help-center'
+  | 'nav-support'
+
 export function Menu() {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
@@ -103,11 +116,11 @@ export function Menu() {
 
   useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
 
-  const [expanded, setExpanded] = React.useState<string | false>(false)
+  const [expandedMenu, setExpandedMenu] = useState<ExpandedMenu>(null)
 
   const handleChange =
-    (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false)
+    (panel: ExpandedMenu) => (event: ChangeEvent<{}>, isExpanded: boolean) => {
+      setExpandedMenu(isExpanded ? panel : null)
     }
 
   return (
@@ -121,7 +134,7 @@ export function Menu() {
       >
         <SidenavListGroup data-test="side-nav-list">
           <Accordion
-            expanded={expanded === 'nav-dashboard'}
+            expanded={expandedMenu === 'nav-dashboard'}
             onChange={handleChange('nav-dashboard')}
           >
             <AccordionSummary
@@ -137,7 +150,7 @@ export function Menu() {
                   <AccordionSummaryDiv>
                     <SvgIcon
                       path={mdiViewGridOutline}
-                      size="14px"
+                      size={muiIconSizes.small}
                       rightMargined
                     />
                     Dashboard
@@ -151,7 +164,7 @@ export function Menu() {
 
         <SidenavListGroup>
           <Accordion
-            expanded={expanded === 'nav-marketing'}
+            expanded={expandedMenu === 'nav-marketing'}
             onChange={handleChange('nav-marketing')}
           >
             <AccordionSummary
@@ -161,10 +174,14 @@ export function Menu() {
               <Acl.Marketing>
                 <SidenavLink active={false} to="" data-tour-id="nav-marketing">
                   <AccordionSummaryDiv>
-                    <SvgIcon path={mdiChartArc} size="14px" rightMargined />
+                    <SvgIcon
+                      path={mdiChartArc}
+                      size={muiIconSizes.small}
+                      rightMargined
+                    />
                     Marketing
                   </AccordionSummaryDiv>
-                  {expanded === 'nav-marketing' ? (
+                  {expandedMenu === 'nav-marketing' ? (
                     <SvgIcon path={mdiMenuUp} size="24px" />
                   ) : (
                     <SvgIcon path={mdiMenuDown} size="24px" />
@@ -212,7 +229,7 @@ export function Menu() {
           </Accordion>
 
           <Accordion
-            expanded={expanded === 'nav-properties'}
+            expanded={expandedMenu === 'nav-properties'}
             onChange={handleChange('nav-properties')}
           >
             <AccordionSummary
@@ -226,7 +243,11 @@ export function Menu() {
                   data-tour-id="nav-properties"
                 >
                   <AccordionSummaryDiv>
-                    <SvgIcon path={mdiGoogleMaps} size="14px" rightMargined />
+                    <SvgIcon
+                      path={mdiGoogleMaps}
+                      size={muiIconSizes.small}
+                      rightMargined
+                    />
                     Properties
                   </AccordionSummaryDiv>
                 </SidenavLink>
@@ -235,7 +256,7 @@ export function Menu() {
           </Accordion>
 
           <Accordion
-            expanded={expanded === 'nav-people'}
+            expanded={expandedMenu === 'nav-people'}
             onChange={handleChange('nav-people')}
           >
             <AccordionSummary
@@ -247,12 +268,12 @@ export function Menu() {
                   <AccordionSummaryDiv>
                     <SvgIcon
                       path={mdiAccountSupervisorOutline}
-                      size="14px"
+                      size={muiIconSizes.small}
                       rightMargined
                     />
                     People
                   </AccordionSummaryDiv>
-                  {expanded === 'nav-people' ? (
+                  {expandedMenu === 'nav-people' ? (
                     <SvgIcon path={mdiMenuUp} size="24px" />
                   ) : (
                     <SvgIcon path={mdiMenuDown} size="24px" />
@@ -286,7 +307,7 @@ export function Menu() {
 
               {user && (
                 <Accordion
-                  expanded={expanded === 'nav-chat'}
+                  expanded={expandedMenu === 'nav-chat'}
                   onChange={handleChange('nav-chat')}
                 >
                   <AccordionSummary
@@ -310,7 +331,7 @@ export function Menu() {
           </Accordion>
 
           <Accordion
-            expanded={expanded === 'nav-transaction'}
+            expanded={expandedMenu === 'nav-transaction'}
             onChange={handleChange('nav-transaction')}
           >
             <AccordionSummary
@@ -324,10 +345,14 @@ export function Menu() {
                   data-tour-id="nav-transaction"
                 >
                   <AccordionSummaryDiv>
-                    <SvgIcon path={mdiChartArc} size="14px" rightMargined />
+                    <SvgIcon
+                      path={mdiChartArc}
+                      size={muiIconSizes.small}
+                      rightMargined
+                    />
                     Transactions
                   </AccordionSummaryDiv>
-                  {expanded === 'nav-transaction' ? (
+                  {expandedMenu === 'nav-transaction' ? (
                     <SvgIcon path={mdiMenuUp} size="24px" />
                   ) : (
                     <SvgIcon path={mdiMenuDown} size="24px" />
@@ -386,7 +411,7 @@ export function Menu() {
         <SidenavListGroup>
           {user && (
             <Accordion
-              expanded={expanded === 'nav-notifications'}
+              expanded={expandedMenu === 'nav-notifications'}
               onChange={handleChange('nav-notifications')}
             >
               <AccordionSummary
@@ -401,7 +426,7 @@ export function Menu() {
                   <AccordionSummaryDiv>
                     <SvgIcon
                       path={mdiAlarmLightOutline}
-                      size="14px"
+                      size={muiIconSizes.small}
                       rightMargined
                     />
                     <InlineBadge
@@ -420,7 +445,7 @@ export function Menu() {
 
         <SidenavListGroup>
           <Accordion
-            expanded={expanded === 'nav-help-center'}
+            expanded={expandedMenu === 'nav-help-center'}
             onChange={handleChange('nav-help-center')}
           >
             <AccordionSummary
@@ -436,7 +461,7 @@ export function Menu() {
                   <AccordionSummaryDiv>
                     <SvgIcon
                       path={mdiHelpCircleOutline}
-                      size="14px"
+                      size={muiIconSizes.small}
                       rightMargined
                     />
                     Help Center
@@ -447,7 +472,7 @@ export function Menu() {
           </Accordion>
 
           <Accordion
-            expanded={expanded === 'nav-support'}
+            expanded={expandedMenu === 'nav-support'}
             onChange={handleChange('nav-support')}
           >
             <AccordionSummary
@@ -460,7 +485,11 @@ export function Menu() {
                     badgeContent={chatRoomsNotificationsNumber}
                     color="primary"
                   >
-                    <SvgIcon path={mdiPhoneOutline} size="14px" rightMargined />
+                    <SvgIcon
+                      path={mdiPhoneOutline}
+                      size={muiIconSizes.small}
+                      rightMargined
+                    />
                     Support
                   </InlineBadge>
                 </SupportTrigger>

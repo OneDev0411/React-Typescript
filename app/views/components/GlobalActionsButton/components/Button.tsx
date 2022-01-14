@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2.5)
     },
     root: {
-      borderRadius: '6px',
+      borderRadius: theme.shape.borderRadius,
       fontSize: theme.typography.body2.fontSize
     }
   })

@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import IntercomTrigger from '../../../../../views/components/IntercomTrigger'
 import { SideNavItem } from '../styled'
 
 import SideNavButtonItem from './SideNavButtonItem'
 
-export default function SupportTrigger({ children }) {
+interface Props {
+  children: ReactNode
+}
+
+export default function SupportTrigger({ children }: Props) {
   return (
     <IntercomTrigger
       render={({ activateIntercom, isIntercomActive }) => {

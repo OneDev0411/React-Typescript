@@ -6,6 +6,6 @@ export const InlineBadge = withStyles((theme: Theme) => ({
     right: 'auto',
     left: `calc(100% + ${theme.spacing(1)}px)`,
     transform: 'scale(1) translateY(50%)',
-    borderRadius: '6px'
+    borderRadius: theme.shape.borderRadius
   }
 }))(Badge)
