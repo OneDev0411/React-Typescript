@@ -45,7 +45,6 @@ export const styles = (theme: Theme) =>
       ...theme.typography.body2,
 
       '& > div': {
-        borderRight: `1px solid ${theme.palette.grey[100]}`,
         height: '100%',
         display: 'flex',
         alignSelf: 'center',
