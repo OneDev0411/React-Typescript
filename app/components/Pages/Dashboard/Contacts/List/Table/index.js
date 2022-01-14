@@ -151,7 +151,7 @@ const ContactsList = props => {
     {
       id: 'cta',
       primary: true,
-      width: '100px',
+      width: '130px',
       class: 'visible-on-hover',
       render: ({ row: contact }) => {
         return !contact?.parked ? <CtaAction contact={contact} /> : null
