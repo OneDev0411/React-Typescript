@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { connect } from 'react-redux'
+import { Typography } from '@material-ui/core'
 
 import { Avatar } from 'components/Avatar'
 import {
@@ -8,34 +6,27 @@ import {
   getContactNameInitials,
   getContactOnlineStatus
 } from 'models/contacts/helpers'
-import { IAppState } from 'reducers'
-import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
-
-interface StateProps {
-  attributeDefs: IAttributeDefsState
-}
 
 interface Props {
   contact: INormalizedContact
 }
 
-function ContactAvatar({ contact, attributeDefs }: Props & StateProps) {
+function ContactAvatar({ contact }: Props) {
   const name = getAttributeFromSummary(contact, 'display_name')
 
   return (
     <Avatar
+      size="small"
       alt={name}
       contact={contact}
       showStatus
       isOnline={getContactOnlineStatus(contact)}
     >
-      {getContactNameInitials(contact)}
+      <Typography variant="overline">
+        {getContactNameInitials(contact)}
+      </Typography>
     </Avatar>
   )
 }
 
-function mapStateToProps({ contacts }: IAppState) {
-  return { attributeDefs: contacts.attributeDefs }
-}
-
-export default connect(mapStateToProps)(ContactAvatar)
+export default ContactAvatar
