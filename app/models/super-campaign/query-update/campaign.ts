@@ -1,40 +1,38 @@
 import { QueryClient } from 'react-query'
 
-import { getOne } from '../query-keys/campaign'
+import {
+  infiniteDataUpdateCacheActions,
+  updateCacheActions,
+  UpdateCachePromise
+} from '@app/utils/react-query'
 
-export type UpdateCacheActions = {
-  revert: () => void
-  invalidate: () => void
-}
-
-export type UpdateCacheReturn = Promise<UpdateCacheActions>
+import { getOne, getAll } from '../query-keys/campaign'
 
 export async function updateCacheOne(
   queryClient: QueryClient,
   superCampaignId: UUID,
   update: Partial<ISuperCampaign<'template_instance'>>
-): UpdateCacheReturn {
-  await queryClient.cancelQueries(getOne(superCampaignId))
+): UpdateCachePromise {
+  return updateCacheActions<ISuperCampaign<'template_instance'>>(
+    queryClient,
+    getOne(superCampaignId),
+    superCampaign => {
+      Object.assign(superCampaign, update)
+    }
+  )
+}
 
-  const previousSuperCampaign = queryClient.getQueryData<
-    ISuperCampaign<'template_instance'>
-  >(getOne(superCampaignId))
-
-  if (previousSuperCampaign) {
-    queryClient.setQueryData<ISuperCampaign<'template_instance'>>(
-      getOne(superCampaignId),
-      { ...previousSuperCampaign, ...update }
-    )
-  }
-
-  return {
-    revert: () => {
-      if (!previousSuperCampaign) {
-        return
-      }
-
-      queryClient.setQueryData(getOne(superCampaignId), previousSuperCampaign)
-    },
-    invalidate: () => queryClient.invalidateQueries(getOne(superCampaignId))
-  }
+export async function updateCacheAll(
+  queryClient: QueryClient,
+  superCampaignId: UUID,
+  update: Partial<ISuperCampaign<'template_instance'>>
+): UpdateCachePromise {
+  return infiniteDataUpdateCacheActions<ISuperCampaign<'template_instance'>>(
+    queryClient,
+    getAll(),
+    superCampaign => superCampaignId === superCampaign.id,
+    superCampaign => {
+      Object.assign(superCampaign, update)
+    }
+  )
 }
