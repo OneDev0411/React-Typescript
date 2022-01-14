@@ -91,6 +91,35 @@ const ContactsList = props => {
       )
     },
     {
+      id: 'phone',
+      headerName: 'Phone number',
+      width: '200px',
+      renderInlineEdit: ({ row: contact }) => <div>{contact.phone_number}</div>,
+      render: ({ row: contact }) => {
+        let phoneNumber
+        let phoneNumberLabel
+
+        contact.attributes?.filter(attr => {
+          if (!attr.is_partner && attr.attribute_type === 'phone_number') {
+            phoneNumber = attr.text
+            phoneNumberLabel = attr.is_primary
+              ? 'Main'
+              : (phoneNumberLabel = attr.label)
+
+            return true
+          }
+
+          return false
+        })
+
+        return (
+          <div>
+            {phoneNumber} {phoneNumberLabel && `(${phoneNumberLabel})`}
+          </div>
+        )
+      }
+    },
+    {
       id: 'cta',
       primary: true,
       width: '100px',
