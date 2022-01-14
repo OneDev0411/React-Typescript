@@ -19,7 +19,9 @@ export interface UseMutationOptions<
     'mutationFn'
   > {
   notify?: NotifyOptions<TData, TError>
-  invalidates?: QueryKey[]
+  invalidates?:
+    | QueryKey[]
+    | ((data: TData, variables: TVariables, context: TContext) => QueryKey[])
 }
 
 export function useMutation<
@@ -53,7 +55,12 @@ export function useMutation<
     // No-op if options.notify is undefined
     notify.success(data)
 
-    options?.invalidates?.forEach?.(key => queryClient.invalidateQueries(key))
+    const invalidates =
+      typeof options?.invalidates === 'function'
+        ? options?.invalidates(data, variables, context)
+        : options?.invalidates
+
+    invalidates?.forEach?.(key => queryClient.invalidateQueries(key))
 
     return options?.onSuccess?.(data, variables, context)
   }
