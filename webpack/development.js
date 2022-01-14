@@ -62,7 +62,7 @@ const config = {
         sockIntegration: 'whm'
       }
     })
-  ].filter(Boolean)
+  ]
 }
 
 module.exports = merge(common, config)

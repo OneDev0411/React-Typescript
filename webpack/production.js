@@ -93,7 +93,7 @@ const config = {
       },
       noCdnizer: true
     })
-  ].filter(Boolean),
+  ],
   module: {
     rules: [
       {
