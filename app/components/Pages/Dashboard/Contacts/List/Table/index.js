@@ -71,13 +71,13 @@ const ContactsList = props => {
     {
       id: 'name',
       primary: true,
-      width: '21%',
+      width: '220px',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
       render: ({ row: contact }) => <Name contact={contact} />
     },
     {
       id: 'tag',
-      width: !isParkTabActive ? '34%' : '22%',
+      width: '300px',
       class: 'opaque tags',
       render: ({ row: contact }) => (
         <TagsString
@@ -93,7 +93,7 @@ const ContactsList = props => {
     {
       id: 'cta',
       primary: true,
-      width: '12%',
+      width: '100px',
       class: 'visible-on-hover',
       render: ({ row: contact }) => {
         return !contact?.parked ? <CtaAction contact={contact} /> : null
@@ -102,14 +102,14 @@ const ContactsList = props => {
     {
       id: 'last_touched',
       sortable: false,
-      width: '17%',
+      width: '200px',
       class: 'opaque',
       render: ({ row: contact }) => <LastTouched contact={contact} />
     },
     {
       id: 'flows',
       sortable: false,
-      width: '7%',
+      width: '90px',
       class: 'opaque flows',
       render: ({ row: contact }) => (
         <FlowCell
@@ -140,7 +140,7 @@ const ContactsList = props => {
     {
       id: 'delete-contact',
       sortable: false,
-      width: '5%',
+      width: '100px',
       class: 'visible-on-hover',
       render: ({ row: contact }) => (
         <Menu contactId={contact.id} handleOnDelete={props.onRequestDelete} />
