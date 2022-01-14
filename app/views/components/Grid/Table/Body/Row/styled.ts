@@ -7,21 +7,19 @@ export const RowContainer = styled.div<{
   theme: Theme
 }>`
   ${({ theme, index, selected }) => css`
+    border-bottom: 1px solid ${theme.palette.grey[100]};
     display: flex;
     align-items: center;
     justify-content: space-between;
     ${theme.typography.body2};
-
-    background-color: ${index % 2 === 0
-      ? theme.palette.grey[50]
-      : 'transparent'};
+    background-color: transparent;
 
     .column:first-child {
-      padding-left: ${theme.spacing(1)}px;
+      padding-left: ${theme.spacing(4)}px;
     }
 
     &:hover {
-      background-color: ${theme.palette.action.hover};
+      background-color: ${theme.palette.grey[50]};
     }
 
     &:hover .primary {
