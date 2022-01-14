@@ -2,9 +2,9 @@ import { UseMutationResult, useQueryClient } from 'react-query'
 import { ResponseError } from 'superagent'
 
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
+import { UpdateCacheActions, updateCacheComposer } from '@app/utils/react-query'
 
-import { getAll } from './query-keys/campaign'
-import { updateCacheOne, UpdateCacheActions } from './query-update/campaign'
+import { updateCacheOne, updateCacheAll } from './query-update/campaign'
 import { updateSuperCampaign } from './update-super-campaign'
 
 interface DataInput {
@@ -60,11 +60,15 @@ export function useUpdateSuperCampaign(
           options?.notify?.onError ??
           'Something went wrong while saving the campaign. Please try again.'
       },
-      invalidates: [getAll()], // TODO: use optimistic update if possible
       onMutate: async ({ inputData, superCampaign }) => ({
-        cache: await updateCacheOne(queryClient, superCampaign.id, {
-          ...inputData
-        })
+        cache: await updateCacheComposer(
+          updateCacheOne(queryClient, superCampaign.id, {
+            ...inputData
+          }),
+          updateCacheAll(queryClient, superCampaign.id, {
+            ...inputData
+          })
+        )
       }),
       onError: (error, variables, context) => {
         context?.cache.revert()

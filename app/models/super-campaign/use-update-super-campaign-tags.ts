@@ -2,9 +2,10 @@ import { UseMutationResult, useQueryClient } from 'react-query'
 import { ResponseError } from 'superagent'
 
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
+import { UpdateCacheActions } from '@app/utils/react-query'
 
 import { getAll } from './query-keys/campaign'
-import { updateCacheOne, UpdateCacheActions } from './query-update/campaign'
+import { updateCacheOne } from './query-update/campaign'
 import { updateSuperCampaignTags } from './update-super-campaign-tags'
 
 interface DataInput {
