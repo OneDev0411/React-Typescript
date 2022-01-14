@@ -3,7 +3,8 @@ import { ResponseError } from 'superagent'
 
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
 
-import { getAll, getOne } from './query-keys/campaign'
+import { getAll } from './query-keys/campaign'
+import { UpdateCacheActions, updateCacheOne } from './query-update/campaign'
 import { updateSuperCampaignEligibility } from './update-super-campaign-eligibility'
 
 interface DataInput {
@@ -15,7 +16,7 @@ export type UseUpdateSuperCampaignEligibility = UseMutationResult<
   ISuperCampaign,
   ResponseError,
   DataInput,
-  { previousSuperCampaign?: ISuperCampaign<'template_instance'> }
+  { cache: UpdateCacheActions }
 >
 
 export type UseUpdateSuperCampaignEligibilityOptions = Omit<
@@ -23,7 +24,7 @@ export type UseUpdateSuperCampaignEligibilityOptions = Omit<
     ISuperCampaign,
     ResponseError,
     DataInput,
-    { previousSuperCampaign?: ISuperCampaign<'template_instance'> }
+    { cache: UpdateCacheActions }
   >,
   'notify' | 'invalidates' | 'onMutate'
 >
@@ -44,38 +45,17 @@ export function useUpdateSuperCampaignEligibility(
           'Something went wrong while saving the eligible brands. Please try again.'
       },
       invalidates: [getAll()],
-      onMutate: async ({ superCampaignId, eligibleBrands }) => {
-        await queryClient.cancelQueries(getOne(superCampaignId))
-
-        const previousSuperCampaign = queryClient.getQueryData<
-          ISuperCampaign<'template_instance'>
-        >(getOne(superCampaignId))
-
-        if (!previousSuperCampaign) {
-          return {}
-        }
-
-        queryClient.setQueryData<ISuperCampaign<'template_instance'>>(
-          getOne(superCampaignId),
-          { ...previousSuperCampaign, eligible_brands: eligibleBrands }
-        )
-
-        return { previousSuperCampaign }
-      },
+      onMutate: async ({ superCampaignId, eligibleBrands }) => ({
+        cache: await updateCacheOne(queryClient, superCampaignId, {
+          eligible_brands: eligibleBrands
+        })
+      }),
       onError: (error, variables, context) => {
-        if (!context?.previousSuperCampaign) {
-          return
-        }
-
-        queryClient.setQueryData(
-          getOne(variables.superCampaignId),
-          context.previousSuperCampaign
-        )
-
+        context?.cache.revert()
         options?.onError?.(error, variables, context)
       },
       onSettled: (data, error, variables, context) => {
-        queryClient.invalidateQueries(getOne(variables.superCampaignId))
+        context?.cache.invalidate()
         options?.onSettled?.(data, error, variables, context)
       }
     }
