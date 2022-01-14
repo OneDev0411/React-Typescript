@@ -57,6 +57,7 @@ export function GridTable<Row>({
   getTdProps,
   getTrProps,
   virtualize = true,
+  hasHeader = false,
   summary = null,
   loading = null,
   selection = null,
@@ -120,6 +121,9 @@ export function GridTable<Row>({
           <Body<Row>
             columns={newColumns}
             rows={newRows}
+            totalRows={totalRows}
+            selection={selection}
+            hasHeader={hasHeader}
             classes={classes}
             virtualize={virtualize}
             getTdProps={getTdProps}

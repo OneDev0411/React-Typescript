@@ -26,17 +26,22 @@ import {
   GridClasses,
   TrProps,
   TdProps,
-  InfiniteScrollingOptions
+  InfiniteScrollingOptions,
+  GridSelectionOptions
 } from '../types'
 
+import Header from './Header'
 import Row from './Row'
 
 interface Props<Row> {
   columns: TableColumn<Row>[]
   rows: (Row & { id?: UUID })[]
+  totalRows: number
   classes: GridClasses
   virtualize: boolean
   infiniteScrolling: InfiniteScrollingOptions | null
+  selection: GridSelectionOptions<Row> | null
+  hasHeader?: boolean
   getTrProps?: (data: TrProps<Row>) => object
   getTdProps?: (data: TdProps<Row>) => object
 }
@@ -44,9 +49,12 @@ interface Props<Row> {
 export function Body<Row>({
   columns,
   rows,
+  totalRows,
   classes,
   virtualize,
   infiniteScrolling,
+  hasHeader,
+  selection,
   getTdProps = () => ({}),
   getTrProps = () => ({})
 }: Props<Row>) {
@@ -93,6 +101,14 @@ export function Body<Row>({
   if (!virtualize) {
     return (
       <>
+        {hasHeader && (
+          <Header
+            columns={columns}
+            rows={rows}
+            selection={selection}
+            totalRows={totalRows}
+          />
+        )}
         {rows.map((row, rowIndex) => (
           <Row
             key={row.id || rowIndex}
@@ -117,6 +133,14 @@ export function Body<Row>({
 
   return (
     <>
+      {hasHeader && (
+        <Header
+          columns={columns}
+          rows={rows}
+          selection={selection}
+          totalRows={totalRows}
+        />
+      )}
       <AutoSizer disableHeight>
         {({ width }) => (
           <FixedSizeList
@@ -134,6 +158,7 @@ export function Body<Row>({
               {
                 rows,
                 columns,
+                selection,
                 state,
                 classes,
                 getTrProps,

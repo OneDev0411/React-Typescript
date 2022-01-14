@@ -29,6 +29,7 @@ export type ColumnSortType = 'number' | 'string'
 export interface TableColumn<Row> {
   id: string
   header?: string | ColumnHeaderFunction<Row>
+  headerName?: string | ColumnHeaderFunction<Row>
   primary?: boolean
   align?: TableCellProps['align']
   width?: string

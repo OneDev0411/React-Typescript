@@ -67,9 +67,28 @@ const ContactsList = props => {
     }
   }
 
+  const getSelectedInfo = contactCount => {
+    const {
+      selection: { selectedRowIds, isEntireRowsSelected, excludedRows }
+    } = state
+
+    let selectedCount
+
+    if (isEntireRowsSelected) {
+      selectedCount = contactCount - excludedRows.length
+    } else if (selectedRowIds.length > 0) {
+      selectedCount = selectedRowIds.length
+    }
+
+    return selectedCount
+      ? `${selectedCount} of ${contactCount} selected`
+      : `${contactCount} CONTACTS`
+  }
+
   const columns = [
     {
       id: 'name',
+      headerName: ({ rows }) => <>{getSelectedInfo(rows.length)}</>,
       primary: true,
       width: '220px',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
@@ -77,6 +96,7 @@ const ContactsList = props => {
     },
     {
       id: 'tag',
+      headerName: 'Tags',
       width: '300px',
       class: 'opaque tags',
       render: ({ row: contact }) => (
@@ -151,6 +171,7 @@ const ContactsList = props => {
     {
       id: 'cta',
       primary: true,
+      headerName: 'CTA',
       width: '130px',
       class: 'visible-on-hover',
       render: ({ row: contact }) => {
@@ -159,6 +180,7 @@ const ContactsList = props => {
     },
     {
       id: 'last_touched',
+      headerName: 'Last touched',
       sortable: false,
       width: '200px',
       class: 'opaque',
@@ -166,6 +188,7 @@ const ContactsList = props => {
     },
     {
       id: 'flows',
+      headerName: 'Flows',
       sortable: false,
       width: '90px',
       class: 'opaque flows',
@@ -197,6 +220,7 @@ const ContactsList = props => {
     },
     {
       id: 'delete-contact',
+      headerName: 'Action',
       sortable: false,
       width: '100px',
       class: 'visible-on-hover',
@@ -251,6 +275,7 @@ const ContactsList = props => {
   return (
     <>
       <Table
+        hasHeader
         rows={props.data}
         totalRows={props.totalRows}
         loading={getLoading()}

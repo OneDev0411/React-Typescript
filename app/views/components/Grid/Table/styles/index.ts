@@ -32,6 +32,31 @@ export const styles = (theme: Theme) =>
           color: theme.palette.secondary.main
         }
       }
+    },
+    header: {
+      backgroundColor: `${theme.palette.grey[50]}`,
+      height: '50px',
+      display: 'flex',
+      flexDirection: 'row',
+      borderTop: `1px solid ${theme.palette.grey[100]}`,
+      borderLeft: `1px solid ${theme.palette.grey[100]}`,
+      alignItems: 'stretch',
+      justifyContent: 'space-between',
+      ...theme.typography.body2,
+
+      '& > div': {
+        borderRight: `1px solid ${theme.palette.grey[100]}`,
+        height: '100%',
+        display: 'flex',
+        alignSelf: 'center',
+        alignItems: 'center',
+        paddingLeft: `${theme.spacing(2)}px`
+      }
+    },
+    headerHasSelected: {
+      '& > div:first-child': {
+        borderRight: 'none'
+      }
     }
   })
 
