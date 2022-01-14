@@ -15,13 +15,10 @@ import { PARKED_CONTACTS_LIST_ID } from '../constants'
 
 import { TableActions } from './Actions'
 import Avatar from './columns/Avatar'
-import CtaAction from './columns/Cta'
 import FlowCell from './columns/Flows'
 import LastTouched from './columns/LastTouched'
-import Menu from './columns/Menu'
 import Name from './columns/Name'
 import TagsString from './columns/Tags'
-import { UnparkContact } from './columns/UnparkContact'
 import { LoadingComponent } from './components/LoadingComponent'
 
 const useCustomGridStyles = makeStyles(theme => ({
@@ -169,16 +166,6 @@ const ContactsList = props => {
       }
     },
     {
-      id: 'cta',
-      primary: true,
-      headerName: 'CTA',
-      width: '130px',
-      class: 'visible-on-hover',
-      render: ({ row: contact }) => {
-        return !contact?.parked ? <CtaAction contact={contact} /> : null
-      }
-    },
-    {
       id: 'last_touched',
       headerName: 'Last touched',
       sortable: false,
@@ -201,31 +188,6 @@ const ContactsList = props => {
           }}
           flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
         />
-      )
-    },
-    {
-      id: 'unpark-contact',
-      class: 'opaque',
-      render: ({ row: contact }) => {
-        return contact?.parked ? (
-          <UnparkContact
-            contactId={contact.id}
-            callback={() => {
-              resetSelectedRow()
-              props.reloadContacts()
-            }}
-          />
-        ) : null
-      }
-    },
-    {
-      id: 'delete-contact',
-      headerName: 'Action',
-      sortable: false,
-      width: '100px',
-      class: 'visible-on-hover',
-      render: ({ row: contact }) => (
-        <Menu contactId={contact.id} handleOnDelete={props.onRequestDelete} />
       )
     }
   ]
@@ -256,16 +218,7 @@ const ContactsList = props => {
     }
   }
   const getColumnProps = ({ column }) => {
-    if (
-      [
-        'name',
-        'cta',
-        'flows',
-        'tag',
-        'delete-contact',
-        'unpark-contact'
-      ].includes(column.id)
-    ) {
+    if (['name', 'flows', 'tag'].includes(column.id)) {
       return {
         onClick: e => e.stopPropagation()
       }
