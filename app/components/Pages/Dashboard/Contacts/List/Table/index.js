@@ -10,6 +10,7 @@ import cn from 'classnames'
 
 import { Table } from 'components/Grid/Table'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
+import { TextInlineEdit } from 'components/Grid/Table/features/inline-edit/Text'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import { useGridStyles } from 'components/Grid/Table/styles'
 import { getAttributeFromSummary } from 'models/contacts/helpers'
@@ -136,7 +137,16 @@ const ContactsList = props => {
         />
       ),
       width: '200px',
-      renderInlineEdit: ({ row: contact }) => <div>{contact.phone_number}</div>,
+      renderInlineEdit: ({ row: contact }, close) => (
+        <TextInlineEdit
+          value={contact.phone_number}
+          onSave={() =>
+            // TODO: validate phone number?
+            // TODO: save the contact's new phone number
+            close()
+          }
+        />
+      ),
       render: ({ row: contact }) => {
         let phoneNumber
         let phoneNumberLabel
@@ -171,7 +181,16 @@ const ContactsList = props => {
         />
       ),
       width: '200px',
-      renderInlineEdit: ({ row: contact }) => <div>{contact.email}</div>,
+      renderInlineEdit: ({ row: contact }, close) => (
+        <TextInlineEdit
+          value={contact.email}
+          onSave={() =>
+            // TODO: validate email?
+            // TODO: save the contact's new email
+            close()
+          }
+        />
+      ),
       render: ({ row: contact }) => {
         let emailAddress
         let emailAddressLabel

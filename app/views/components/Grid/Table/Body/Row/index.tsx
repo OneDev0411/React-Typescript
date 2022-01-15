@@ -5,6 +5,7 @@ import cn from 'classnames'
 import { StateContext } from '../../context'
 import { TableColumn, TrProps, TdProps, GridClasses } from '../../types'
 
+import { InlineEdit } from './InlineEdit'
 import { RowContainer } from './styled'
 
 interface Props<Row> {
@@ -60,7 +61,8 @@ function Row<T>({
           <div
             key={columnIndex}
             className={cn('column', column.class, {
-              primary: column.primary === true
+              primary: column.primary === true,
+              'inline-edit': !!column.renderInlineEdit
             })}
             style={{
               width: columnsSize[columnIndex],
@@ -76,6 +78,14 @@ function Row<T>({
             })}
           >
             {getCell(column, row, rowIndex, columnIndex, rows.length)}
+
+            <InlineEdit<T>
+              column={column}
+              row={row}
+              rowIndex={rowIndex}
+              columnIndex={columnIndex}
+              totalRows={rows.length}
+            />
           </div>
         ))}
     </RowContainer>
