@@ -5,9 +5,8 @@ export const RowContainer = styled.div<{
   index: number
   selected: boolean
   theme: Theme
-  hasSelection: boolean
 }>`
-  ${({ theme, index, selected, hasSelection }) => `
+  ${({ theme, index, selected }) => `
     border-bottom: 1px solid ${theme.palette.divider};
     border-left: 1px solid ${theme.palette.divider};
     display: flex;
@@ -30,15 +29,6 @@ export const RowContainer = styled.div<{
       line-height: ${theme.typography.body2.lineHeight};
     }
 
-    ${
-      hasSelection &&
-      css`
-        .column:first-child {
-          border-right: none;
-        }
-      `
-    }
-    
     &:hover {
       background-color: ${theme.palette.grey[50]};
     }
