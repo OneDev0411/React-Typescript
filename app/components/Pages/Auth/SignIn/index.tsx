@@ -96,7 +96,7 @@ export default function Signin(props: Props) {
         user,
         type: actionsType.SIGNIN_SUCCESS
       })
-      await dispatch(setActiveTeam(activeTeam, 'signin'))
+      await dispatch(setActiveTeam(activeTeam))
 
       Sentry.configureScope(scope => {
         scope.setUser({
