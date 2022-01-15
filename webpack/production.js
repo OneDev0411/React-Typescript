@@ -25,7 +25,7 @@ const config = {
   output: {
     pathinfo: false,
     publicPath: process.env.ASSETS_BASEURL,
-    globalObject: 'this'
+    globalObject: 'self'
   },
   optimization: {
     minimize: true,

@@ -3,7 +3,7 @@
   "version": "88.0.1",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
-  "scripts": { 
+  "scripts": {
     "commit": "commit",
     "develop": "cross-env NODE_ENV=development TS_NODE_PROJECT='server/tsconfig.json' nodemon --watch 'server/app/**/*' --watch 'server/types/**/*' -e ts --exec node -r ts-node/register --trace-deprecation ./server/index.ts",
     "build:server": "rimraf server-dist && cross-env NODE_ENV=production tsc -p server/tsconfig.production.json",
@@ -122,7 +122,6 @@
     "express": "^4.17.1",
     "express-sslify": "^1.2.0",
     "fecha": "^2.3.3",
-    "file-loader": "^6.2.0",
     "file-saver": "^2.0.5",
     "final-form": "^4.20.2",
     "final-form-arrays": "^3.0.2",
@@ -395,7 +394,7 @@
     "eslint-plugin-react": "^7.23.0",
     "eslint-plugin-react-hooks": "^4.0.2",
     "find": "^0.3.0",
-    "html-webpack-plugin": "^5.3.1",
+    "html-webpack-plugin": "^5.5.0",
     "husky": "^4.2.5",
     "jest": "^27.3.1",
     "jest-raw-loader": "^1.0.1",
@@ -404,7 +403,6 @@
     "mockdate": "^3.0.5",
     "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
-    "raw-loader": "^4.0.2",
     "react-is": "^17.0.2",
     "react-refresh": "^0.10.0",
     "storybook-dark-mode": "^1.0.3",
