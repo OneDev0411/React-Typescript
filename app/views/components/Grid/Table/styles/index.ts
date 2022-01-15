@@ -41,7 +41,6 @@ export const styles = (theme: Theme) =>
       borderTop: `1px solid ${theme.palette.grey[100]}`,
       borderLeft: `1px solid ${theme.palette.grey[100]}`,
       alignItems: 'stretch',
-      justifyContent: 'space-between',
       ...theme.typography.body2,
 
       '& > div': {
