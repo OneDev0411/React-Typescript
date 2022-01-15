@@ -34,14 +34,13 @@ export const styles = (theme: Theme) =>
       }
     },
     header: {
-      backgroundColor: `${theme.palette.grey[50]}`,
-      height: '50px',
+      height: '40px',
+      opacity: '75%',
       display: 'flex',
       flexDirection: 'row',
       borderTop: `1px solid ${theme.palette.grey[100]}`,
       borderLeft: `1px solid ${theme.palette.grey[100]}`,
       alignItems: 'stretch',
-      justifyContent: 'space-between',
       ...theme.typography.body2,
 
       '& > div': {
@@ -49,11 +48,15 @@ export const styles = (theme: Theme) =>
         display: 'flex',
         alignSelf: 'center',
         alignItems: 'center',
-        paddingLeft: `${theme.spacing(2)}px`
+        paddingLeft: `${theme.spacing(2)}px`,
+        backgroundColor: `${theme.palette.grey[50]}`,
+        borderTop: `1px solid ${theme.palette.divider}`,
+        borderRight: `1px solid ${theme.palette.divider}`
       }
     },
     headerHasSelected: {
       '& > div:first-child': {
+        borderLeft: `1px solid ${theme.palette.divider}`,
         borderRight: 'none'
       }
     }
