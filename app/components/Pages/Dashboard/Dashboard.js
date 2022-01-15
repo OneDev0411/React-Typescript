@@ -65,6 +65,8 @@ class Dashboard extends Component {
   async init() {
     const { user, activeTeam, deals, dispatch } = this.props
 
+    console.log('init of dashboard', { user, activeTeam, deals })
+
     if (!activeTeam || !user) {
       return
     }
@@ -93,7 +95,10 @@ class Dashboard extends Component {
         !searchParamValue
       ) {
         dispatch(getDeals(activeTeam))
+        console.log('get deal 1')
       } else {
+        console.log('get deal 2')
+
         dispatch(
           searchParamValue
             ? searchDeals(activeTeam, decodeURIComponent(searchParamValue))

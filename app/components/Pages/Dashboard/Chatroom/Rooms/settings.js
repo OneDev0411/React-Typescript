@@ -69,6 +69,6 @@ const RoomSettings = ({ user, room, iconSize = 17 }) => {
   )
 }
 
-export default connect(s => ({
-  user: s.data.user
+export default connect(({ user }) => ({
+  user
 }))(RoomSettings)

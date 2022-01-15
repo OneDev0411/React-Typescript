@@ -5,12 +5,13 @@ import { Location } from 'history'
 import { useSelector, useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 
-import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import signin from '@app/models/auth/signin'
+import signup from '@app/models/auth/signup'
+import { getActiveTeam } from '@app/models/user/get-active-team'
+import { lookUpUserByEmail } from '@app/models/user/lookup-user-by-email'
+import { setActiveTeam } from '@app/store_actions/active-team'
 
 import * as actionsType from '../../../../constants/auth/signin'
-import signin from '../../../../models/auth/signin'
-import signup from '../../../../models/auth/signup'
-import { lookUpUserByEmail } from '../../../../models/user/lookup-user-by-email'
 import { IAppState } from '../../../../reducers'
 import { getUserDefaultHomepage } from '../../../../utils/get-default-home-page'
 
@@ -25,7 +26,6 @@ interface Props {
 
 export default function Signin(props: Props) {
   const dispatch = useDispatch()
-  const activeTeam = useUnsafeActiveTeam()
   const brand = useSelector((state: IAppState) => state.brand)
 
   const [username, setUsername] = useState<string>(
@@ -88,11 +88,15 @@ export default function Signin(props: Props) {
       setSignInFormSubmitMsg(null)
 
       const user: IUser = await signin({ ...values, username })
+      const activeTeam: IUserTeam = await getActiveTeam(user)
 
-      dispatch({
+      console.log('handleSignin', { user, activeTeam })
+
+      await dispatch({
         user,
         type: actionsType.SIGNIN_SUCCESS
       })
+      await dispatch(setActiveTeam(activeTeam, 'signin'))
 
       Sentry.configureScope(scope => {
         scope.setUser({

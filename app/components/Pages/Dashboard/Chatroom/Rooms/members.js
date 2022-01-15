@@ -120,8 +120,8 @@ const ManageMembers = ({
 }
 
 export default connect(
-  s => ({
-    user: s.data.user
+  ({ user }) => ({
+    user
   }),
   {
     addRecipients,
