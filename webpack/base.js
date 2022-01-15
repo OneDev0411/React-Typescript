@@ -29,7 +29,8 @@ module.exports = {
     filename: __DEV__ ? '[name].bundle.js' : '[name].[hash].js',
     chunkFilename: '[name].[chunkhash].js',
     publicPath: '/',
-    globalObject: 'self'
+    globalObject: 'self'.
+    assetModuleFilename: '[hash][ext]' // Webpack bby default includes [query] in this, S3 file upload plugin can't handle it.
   },
   resolve: {
     modules: [resolvePath('../app'), 'node_modules'],
