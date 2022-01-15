@@ -38,7 +38,6 @@ export const styles = (theme: Theme) =>
       opacity: '75%',
       display: 'flex',
       flexDirection: 'row',
-      borderTop: `1px solid ${theme.palette.grey[100]}`,
       borderLeft: `1px solid ${theme.palette.grey[100]}`,
       alignItems: 'stretch',
       ...theme.typography.body2,
@@ -48,18 +47,16 @@ export const styles = (theme: Theme) =>
         display: 'flex',
         alignSelf: 'center',
         alignItems: 'center',
-        paddingLeft: `${theme.spacing(2)}px`,
         backgroundColor: `${theme.palette.grey[50]}`,
         borderTop: `1px solid ${theme.palette.divider}`,
         borderRight: `1px solid ${theme.palette.divider}`
-      }
-    },
-    headerHasSelected: {
+      },
       '& > div:first-child': {
         borderLeft: `1px solid ${theme.palette.divider}`,
         borderRight: 'none'
       }
-    }
+    },
+    headerHasSelected: {}
   })
 
 export const useGridStyles = makeStyles(styles, {
