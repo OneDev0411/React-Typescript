@@ -26,7 +26,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: __DEV__ ? '[name].bundle.js' : '[name].[hash].js',
+    filename: __DEV__ ? '[name].bundle.js' : '[name].[fullhash].js',
     chunkFilename: '[name].[chunkhash].js',
     publicPath: '/',
     globalObject: 'self',
@@ -130,7 +130,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(ts|tsx|js|jsx)$/,
+        test: /\.(ts|tsx|js|jsx)$/i,
         exclude: /(node_modules|bower_components)/,
         use: [
           {
@@ -146,11 +146,12 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|jpg|gif|svg|eot|ttf|otf|woff|woff2)/,
+        test: /\.(png|jpg|gif|svg|eot|ttf|otf|woff|woff2)$/i,
         type: 'asset/resource'
       },
       {
         test: /\.(mjml|njk|html)$/,
+        exclude: /index\.html/, // This should be excluded so HtmlWebpackPlugin can read it. https://github.com/webpack/webpack/discussions/14847
         type: 'asset/source'
       },
       {
