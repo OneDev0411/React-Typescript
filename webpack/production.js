@@ -93,28 +93,7 @@ const config = {
       },
       noCdnizer: true
     })
-  ],
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions
-            }
-          }
-        ]
-      },
-      {
-        test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
-      }
-    ]
-  }
+  ]
 }
 
 module.exports = merge(common, config)
