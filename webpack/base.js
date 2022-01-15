@@ -146,89 +146,12 @@ module.exports = {
         ]
       },
       {
-        test: /\.woff(\?.*)?$/,
-        use: [
-          {
-            loader:
-              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/font-woff'
-          }
-        ]
+        test: /\.(png|jpg|gif|svg|eot|ttf|otf|woff|woff2)/,
+        type: 'asset/resource'
       },
       {
-        test: /\.woff2(\?.*)?$/,
-        use: [
-          {
-            loader:
-              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/font-woff2'
-          }
-        ]
-      },
-      {
-        test: /\.otf(\?.*)?$/,
-        use: [
-          {
-            loader:
-              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=font/opentype'
-          }
-        ]
-      },
-      {
-        test: /\.ttf(\?.*)?$/,
-        use: [
-          {
-            loader:
-              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/octet-stream'
-          }
-        ]
-      },
-      {
-        test: /\.eot(\?.*)?$/,
-        use: [
-          {
-            loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]'
-          }
-        ]
-      },
-      {
-        test: /\.svg(\?.*)?$/,
-        use: [
-          {
-            loader:
-              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=image/svg+xml'
-          }
-        ]
-      },
-      {
-        test: /\.(png|jpg|gif|svg)$/,
-        use: [
-          {
-            loader: 'file-loader'
-          }
-        ]
-      },
-      {
-        test: /\.(mjml)$/,
-        use: [
-          {
-            loader: 'raw-loader'
-          }
-        ]
-      },
-      {
-        test: /\.(njk)$/,
-        use: [
-          {
-            loader: 'raw-loader'
-          }
-        ]
-      },
-      {
-        test: /\.(html)$/,
-        use: [
-          {
-            loader: 'raw-loader'
-          }
-        ]
+        test: /\.(mjml|njk|html)$/,
+        type: 'asset/source'
       },
       {
         test: /\.css/,
