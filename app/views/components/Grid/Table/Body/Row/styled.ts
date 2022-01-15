@@ -1,24 +1,44 @@
-import { Theme } from '@material-ui/core'
+import { alpha, Theme } from '@material-ui/core'
 import styled, { css } from 'styled-components'
 
 export const RowContainer = styled.div<{
   index: number
   selected: boolean
   theme: Theme
+  hasSelection: boolean
 }>`
-  ${({ theme, index, selected }) => css`
-    border-bottom: 1px solid ${theme.palette.grey[100]};
+  ${({ theme, index, selected, hasSelection }) => `
+    border-bottom: 1px solid ${theme.palette.divider};
+    border-left: 1px solid ${theme.palette.divider};
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    letter-spacing: 0.15px;
+    align-items: stretch;
     background-color: transparent;
-    ${theme.typography.body2};
 
-    .column:first-child {
-      padding-left: ${theme.spacing(4)}px;
+    &:first-child {
+      border-top: 1px solid ${theme.palette.divider};
     }
 
+    .column {
+      border-right: 1px solid ${alpha(theme.palette.divider, 0.06)};
+      height: 100%;
+      display: flex;
+      align-items: center;
+      color: ${theme.palette.grey[700]};
+      font-family: "${theme.typography.body2.fontFamily}";
+      font-weight: ${theme.typography.body2.fontWeight};
+      font-size: ${theme.typography.body2.fontSize};
+      line-height: ${theme.typography.body2.lineHeight};
+    }
+
+    ${
+      hasSelection &&
+      css`
+        .column:first-child {
+          border-right: none;
+        }
+      `
+    }
+    
     &:hover {
       background-color: ${theme.palette.grey[50]};
     }
@@ -40,9 +60,12 @@ export const RowContainer = styled.div<{
       display: block !important;
     }
 
-    ${selected &&
-    css`
-      background-color: ${theme.palette.action.selected};
-    `}
+    ${
+      selected &&
+      css`
+        background-color: ${theme.palette.action.selected};
+      `
+    }    
+
   `}
 `
