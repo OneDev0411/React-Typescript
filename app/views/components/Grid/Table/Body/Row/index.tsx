@@ -5,12 +5,13 @@ import cn from 'classnames'
 import { StateContext } from '../../context'
 import { TableColumn, TrProps, TdProps, GridClasses } from '../../types'
 
-import { RowContainer } from './styled'
+import { RowContainer as ListRowContainer, GridRowContainer } from './styled'
 
 interface Props<Row> {
   index: number
   style: CSSProperties
   data: {
+    inlineGridEnabled?: boolean
     rows: Row[]
     columns: TableColumn<Row>[]
     state: StateContext
@@ -25,6 +26,7 @@ function Row<T>({
   index: rowIndex,
   style,
   data: {
+    inlineGridEnabled,
     columns,
     rows,
     state,
@@ -40,6 +42,8 @@ function Row<T>({
     state.selection.isAllRowsSelected ||
     state.selection.isEntireRowsSelected ||
     state.selection.selectedRowIds.includes(row.id || rowIndex.toString())
+
+  const RowContainer = inlineGridEnabled ? GridRowContainer : ListRowContainer
 
   return (
     <RowContainer

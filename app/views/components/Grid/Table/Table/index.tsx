@@ -56,6 +56,8 @@ export function GridTable<Row>({
   totalRows,
   getTdProps,
   getTrProps,
+  itemSize = null,
+  inlineGridEnabled = false,
   virtualize = true,
   hasHeader = false,
   summary = null,
@@ -119,11 +121,13 @@ export function GridTable<Row>({
       <div className={gridClasses.tableContainer}>
         {rows && rows.length > 0 && (
           <Body<Row>
+            inlineGridEnabled={inlineGridEnabled}
             columns={newColumns}
             rows={newRows}
             totalRows={totalRows}
             selection={selection}
             hasHeader={hasHeader}
+            itemSize={itemSize}
             classes={classes}
             virtualize={virtualize}
             getTdProps={getTdProps}
