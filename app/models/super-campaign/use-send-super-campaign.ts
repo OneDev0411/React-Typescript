@@ -34,7 +34,7 @@ export function useSendSuperCampaign(
 
   const mutation = useUpdateSuperCampaign({
     notify: {
-      onSuccess: 'The campaign was sent',
+      onSuccess: 'The campaign is scheduled to be sent',
       onError:
         'Something went wrong while sending the campaign. Please try again.'
     },
