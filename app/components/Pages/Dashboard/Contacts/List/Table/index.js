@@ -53,7 +53,7 @@ const useCustomGridStyles = makeStyles(theme => ({
 
 const ContactsList = props => {
   const [state, dispatch] = useGridContext()
-  const gridClasses = useGridStyles()
+  const gridClasses = useGridStyles(true)
   const customGridClasses = useCustomGridStyles()
   const theme = useTheme()
   const isParkTabActive = props.activeSegment?.id === PARKED_CONTACTS_LIST_ID
@@ -293,6 +293,8 @@ const ContactsList = props => {
         totalRows={props.totalRows}
         loading={getLoading()}
         columns={columns}
+        inlineGridEnabled
+        itemSize={theme.spacing(5)}
         LoadingStateComponent={LoadingComponent}
         getTrProps={getRowProps}
         getTdProps={getColumnProps}

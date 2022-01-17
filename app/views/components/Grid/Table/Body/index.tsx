@@ -34,11 +34,13 @@ import Header from './Header'
 import Row from './Row'
 
 interface Props<Row> {
+  inlineGridEnabled?: boolean
   columns: TableColumn<Row>[]
   rows: (Row & { id?: UUID })[]
   totalRows: number
   classes: GridClasses
   virtualize: boolean
+  itemSize?: any
   infiniteScrolling: InfiniteScrollingOptions | null
   selection: GridSelectionOptions<Row> | null
   hasHeader?: boolean
@@ -47,11 +49,13 @@ interface Props<Row> {
 }
 
 export function Body<Row>({
+  inlineGridEnabled = false,
   columns,
   rows,
   totalRows,
   classes,
   virtualize,
+  itemSize,
   infiniteScrolling,
   hasHeader,
   selection,
@@ -114,7 +118,7 @@ export function Body<Row>({
             key={row.id || rowIndex}
             index={rowIndex}
             style={{
-              height: theme.spacing(5)
+              height: itemSize || theme.spacing(8)
             }}
             data={{
               rows,
@@ -123,7 +127,8 @@ export function Body<Row>({
               classes,
               getTrProps,
               getTdProps,
-              columnsSize
+              columnsSize,
+              inlineGridEnabled
             }}
           />
         ))}
@@ -146,7 +151,7 @@ export function Body<Row>({
           <FixedSizeList
             ref={listRef}
             itemCount={rows.length}
-            itemSize={theme.spacing(5)}
+            itemSize={itemSize || theme.spacing(8)}
             width={width}
             height={windowHeight}
             overscanCount={8}
@@ -163,7 +168,8 @@ export function Body<Row>({
                 classes,
                 getTrProps,
                 getTdProps,
-                columnsSize
+                columnsSize,
+                inlineGridEnabled
               } as ComponentProps<typeof Row>['data']
             }
             style={{
