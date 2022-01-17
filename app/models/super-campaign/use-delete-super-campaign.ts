@@ -9,7 +9,7 @@ import ConfirmationModalContext from '@app/views/components/ConfirmationModal/co
 
 import { deleteSuperCampaign } from './delete-super-campaign'
 import { detail } from './query-keys/campaign'
-import { deleteFromCacheAll } from './query-update/campaign'
+import { deleteFromCacheList } from './query-update/campaign'
 
 export type UseDeleteSuperCampaign = Omit<
   UseMutationResult<
@@ -47,7 +47,7 @@ export function useDeleteSuperCampaign(
       },
       invalidates: (_, superCampaign) => [detail(superCampaign.id)], // TODO: use optimistic update if possible
       onMutate: async superCampaign => ({
-        cache: await deleteFromCacheAll(queryClient, superCampaign.id)
+        cache: await deleteFromCacheList(queryClient, superCampaign.id)
       }),
       onError: (error, variables, context) => {
         context?.cache.revert()

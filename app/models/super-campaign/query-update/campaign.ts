@@ -38,7 +38,7 @@ export async function updateCacheList(
   )
 }
 
-export async function deleteFromCacheAll(
+export async function deleteFromCacheList(
   queryClient: QueryClient,
   superCampaignId: UUID
 ): UpdateCachePromise {
