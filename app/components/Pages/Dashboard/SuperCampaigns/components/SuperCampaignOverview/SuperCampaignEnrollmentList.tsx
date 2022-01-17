@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react'
-
 import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 
@@ -16,7 +14,6 @@ import SuperCampaignEnrollmentListColumnTags from './SuperCampaignEnrollmentList
 import SuperCampaignListEmptyState from './SuperCampaignListEmptyState'
 import SuperCampaignListLoadingState from './SuperCampaignListLoadingState'
 import { useSuperCampaignListStyles } from './use-super-campaign-list-styles'
-import { useUpdateSuperCampaignEnrollmentTags } from './use-update-super-campaign-enrollment-tags'
 
 const useStyles = makeStyles(
   theme => ({
@@ -37,28 +34,17 @@ const useStyles = makeStyles(
 interface SuperCampaignEnrollmentListProps {
   isLoading: boolean
   superCampaignEnrollments: ISuperCampaignEnrollment<'user' | 'brand'>[]
-  setSuperCampaignEnrollments: Dispatch<
-    SetStateAction<ISuperCampaignEnrollment<'user' | 'brand'>[]>
-  >
 }
 
 function SuperCampaignEnrollmentList({
   isLoading,
-  superCampaignEnrollments,
-  setSuperCampaignEnrollments
+  superCampaignEnrollments
 }: SuperCampaignEnrollmentListProps) {
   const superCampaign = useSuperCampaign()
   const isCampaignDueAtTimeout = isSuperCampaignDueAtTimeout(superCampaign)
 
   const classes = useStyles()
   const listClasses = useSuperCampaignListStyles()
-
-  const updateSuperCampaignEnrollmentTags =
-    useUpdateSuperCampaignEnrollmentTags(
-      superCampaign.id,
-      superCampaignEnrollments,
-      setSuperCampaignEnrollments
-    )
 
   const columns: TableColumn<ISuperCampaignEnrollment<'user' | 'brand'>>[] = [
     {
@@ -79,11 +65,7 @@ function SuperCampaignEnrollmentList({
       sortable: false,
       class: classes.tags,
       render: ({ row }) => (
-        <SuperCampaignEnrollmentListColumnTags
-          isOptedOut={isSuperCampaignEnrollmentOptedOut(row)}
-          tags={row.tags}
-          onTagsChange={tags => updateSuperCampaignEnrollmentTags(row.id, tags)}
-        />
+        <SuperCampaignEnrollmentListColumnTags superCampaignEnrollment={row} />
       )
     },
     {

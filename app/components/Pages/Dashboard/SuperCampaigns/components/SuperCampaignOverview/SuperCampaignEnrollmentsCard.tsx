@@ -1,5 +1,9 @@
+import { useMemo } from 'react'
+
 import { makeStyles } from '@material-ui/core'
 import pluralize from 'pluralize'
+
+import { useGetSuperCampaignEnrollments } from '@app/models/super-campaign'
 
 import { isSuperCampaignExecuted } from '../../helpers'
 import SuperCampaignCard from '../SuperCampaignCard'
@@ -9,8 +13,6 @@ import { useSuperCampaign } from '../SuperCampaignProvider'
 
 import SuperCampaignEnrollmentList from './SuperCampaignEnrollmentList'
 import SuperCampaignResultList from './SuperCampaignResultList'
-import { useAddSuperCampaignEnrollment } from './use-add-super-campaign-enrollment'
-import { useGetSuperCampaignEnrollments } from './use-get-super-campaign-enrollments'
 
 const useStyles = makeStyles(
   theme => ({
@@ -26,20 +28,15 @@ function SuperCampaignEnrollmentsCard() {
 
   const isExecuted = isSuperCampaignExecuted(superCampaign)
 
-  const {
-    superCampaignEnrollments,
-    setSuperCampaignEnrollments,
-    isLoading,
-    enrolledAgentCount
-  } = useGetSuperCampaignEnrollments(
-    superCampaign.id,
-    superCampaign.tags,
-    isExecuted
-  )
+  const { data: superCampaignEnrollments, isLoading } =
+    useGetSuperCampaignEnrollments(superCampaign.id, isExecuted)
 
-  const addSuperCampaignEnrollment = useAddSuperCampaignEnrollment(
-    superCampaign.id,
-    setSuperCampaignEnrollments
+  const enrolledAgentCount = useMemo(
+    () =>
+      superCampaignEnrollments?.filter(
+        superCampaignEnrollment => !superCampaignEnrollment.deleted_at
+      ).length || 0,
+    [superCampaignEnrollments]
   )
 
   return (
@@ -59,14 +56,13 @@ function SuperCampaignEnrollmentsCard() {
             className={classes.manualAdd}
             superCampaignId={superCampaign.id}
             superCampaignTags={superCampaign.tags}
-            onEnroll={addSuperCampaignEnrollment}
             // I used Number.POSITIVE_INFINITY to make sure the manual button does not calculate the available
             // agent count if the enrolledAgentCount is not ready
             enrolledAgentCount={
               isLoading ? Number.POSITIVE_INFINITY : enrolledAgentCount
             }
             eligibleBrands={superCampaign.eligible_brands}
-            superCampaignEnrollments={superCampaignEnrollments}
+            superCampaignEnrollments={superCampaignEnrollments as any} // TODO: fix this
           />
           <SuperCampaignCardHeader
             className={classes.title}
@@ -84,7 +80,6 @@ function SuperCampaignEnrollmentsCard() {
                 'user' | 'brand'
               >[]
             }
-            setSuperCampaignEnrollments={setSuperCampaignEnrollments}
           />
         </>
       )}
