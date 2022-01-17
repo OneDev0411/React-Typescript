@@ -267,6 +267,21 @@ export const getListingPricePerSquareFoot = (
   })
 }
 
+export const isUserCoAgent = (
+  userAgents: Nullable<IAgent[]>,
+  listing: IListing | ICompactListing
+): boolean => {
+  return (
+    userAgents?.some(agent => {
+      return (
+        agent.mls === listing.mls_display_name &&
+        (agent.mlsid === listing.co_list_agent_mls_id ||
+          agent.mlsid === listing.co_selling_agent_mls_id)
+      )
+    }) || false
+  )
+}
+
 export default {
   getStatusColor,
   getStatusColorClass,
@@ -281,5 +296,6 @@ export default {
   getResizeUrl,
   squareMetersToAcres,
   isLeaseProperty,
+  isUserCoAgent,
   getListingPrice: getListingFormatedPrice
 }
