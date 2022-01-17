@@ -1,7 +1,7 @@
 import { createStyles, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
-export const styles = (theme: Theme) =>
+export const gridStyles = (theme: Theme) =>
   createStyles({
     row: {
       '& .column': {
@@ -37,7 +37,7 @@ export const styles = (theme: Theme) =>
     headerHasSelected: {}
   })
 
-const gridStyles = (theme: Theme) =>
+const inlineGridStyles = (theme: Theme) =>
   createStyles({
     row: {
       '& .column': {
@@ -95,7 +95,10 @@ const gridStyles = (theme: Theme) =>
     headerHasSelected: {}
   })
 
-export const useGridStyles = (inlineGridEnabled = false) =>
-  makeStyles(inlineGridEnabled ? gridStyles : styles, {
-    name: 'grid-default-styles'
-  })()
+export const useGridStyles = makeStyles(gridStyles, {
+  name: 'grid-default-styles'
+})
+
+export const useInlineGridStyles = makeStyles(inlineGridStyles, {
+  name: 'inline-grid-default-styles'
+})

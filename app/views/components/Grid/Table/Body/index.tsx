@@ -40,7 +40,7 @@ interface Props<Row> {
   totalRows: number
   classes: GridClasses
   virtualize: boolean
-  itemSize?: any
+  itemSize?: number
   infiniteScrolling: InfiniteScrollingOptions | null
   selection: GridSelectionOptions<Row> | null
   hasHeader?: boolean
