@@ -90,7 +90,9 @@ const gridStyles = (theme: Theme) =>
           color: theme.palette.secondary.main
         }
       }
-    }
+    },
+    header: {},
+    headerHasSelected: {}
   })
 
 export const useGridStyles = (inlineGridEnabled = false) =>
