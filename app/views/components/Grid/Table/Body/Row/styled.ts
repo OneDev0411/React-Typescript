@@ -49,10 +49,11 @@ export const RowContainer = styled.div<{
 `
 
 export const GridRowContainer = styled.div<{
+  index: number
   selected: boolean
   theme: Theme
 }>`
-  ${({ theme, selected }) => css`
+  ${({ theme, index, selected }) => css`
     border-bottom: 1px solid ${theme.palette.grey[100]};
     display: flex;
     align-items: center;
