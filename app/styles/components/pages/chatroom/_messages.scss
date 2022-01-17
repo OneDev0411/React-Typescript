@@ -407,6 +407,9 @@ $left-w: 44px;
     width: 360px;
     max-height: 260px;
     min-height: 200px;
+    background: url('/static/images/listing/small-01.jpg') no-repeat;
+    background-size: cover;
+    border-radius: 4px;
     img {
       width: 100%;
       min-height: 150px;

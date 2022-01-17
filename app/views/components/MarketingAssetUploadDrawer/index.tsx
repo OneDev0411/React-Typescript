@@ -215,7 +215,7 @@ export default function MarketingAssetUploadDrawer({
       <OverlayDrawer.Body>
         <FormProvider {...formMethods}>
           <form
-            style={{ height: '100%', overflow: 'hidden' }}
+            style={{ height: '100%' }}
             onSubmit={formMethods.handleSubmit(onSubmit)}
           >
             {renderActiveStep()}

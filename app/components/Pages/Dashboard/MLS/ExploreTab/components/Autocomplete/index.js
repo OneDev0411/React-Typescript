@@ -6,6 +6,7 @@ import { browserHistory } from 'react-router'
 
 import { getPlace } from '@app/models/listings/search/get-place'
 import { searchListings } from '@app/models/listings/search/search-listings'
+import { changeUrl } from '@app/utils/change-url'
 import { getListingAddress } from '@app/utils/listing'
 import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch/SearchInput'
 import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
@@ -142,7 +143,7 @@ class MlsAutocompleteSearch extends Component {
 
   handleSelectedListing = item => {
     if (!this.props.isWidget) {
-      window.history.replaceState({}, '', `/dashboard/mls/${item.id}`)
+      changeUrl(`/dashboard/mls/${item.id}`)
     }
 
     this.setState({
@@ -153,7 +154,7 @@ class MlsAutocompleteSearch extends Component {
 
   closeListingDetailsModal = () => {
     if (!this.props.isWidget) {
-      window.history.replaceState({}, '', '/dashboard/mls')
+      window.history.back()
     }
 
     this.setState({
