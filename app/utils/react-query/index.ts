@@ -25,6 +25,39 @@ export async function updateCacheComposer(
 }
 
 /**
+ * Update the query cache for one object and returns revert and invalidate functions
+ * @param queryClient
+ * @param queryKey
+ * @param modifier
+ * @returns
+ */
+export async function updateCacheActions<TData>(
+  queryClient: QueryClient,
+  queryKey: QueryKey,
+  modifier: (data: Draft<TData>) => void
+): UpdateCachePromise {
+  await queryClient.cancelQueries(queryKey)
+
+  const matchedData = queryClient.getQueriesData<TData>(queryKey)
+
+  matchedData.forEach(([queryKey, previousData]) => {
+    queryClient.setQueryData<TData>(
+      queryKey,
+      produce(previousData, draft => modifier(draft))
+    )
+  })
+
+  return {
+    revert: () => {
+      matchedData.forEach(([queryKey, previousData]) => {
+        queryClient.setQueryData(queryKey, previousData)
+      })
+    },
+    invalidate: () => queryClient.invalidateQueries(queryKey)
+  }
+}
+
+/**
  * Update an infiniteData cache and returns revert and invalidate functions
  * @param queryClient
  * @param queryKey
@@ -77,41 +110,6 @@ export async function infiniteDataUpdateCacheActions<TData>(
       })
     },
     invalidate: () => queryClient.invalidateQueries(queryKey, { exact: false })
-  }
-}
-
-/**
- * Update the query cache for one object and returns revert and invalidate functions
- * @param queryClient
- * @param queryKey
- * @param modifier
- * @returns
- */
-export async function updateCacheActions<TData>(
-  queryClient: QueryClient,
-  queryKey: QueryKey,
-  modifier: (data: Draft<TData>) => void
-): UpdateCachePromise {
-  await queryClient.cancelQueries(queryKey)
-
-  const previousData = queryClient.getQueryData<TData>(queryKey)
-
-  if (previousData) {
-    queryClient.setQueryData<TData>(
-      queryKey,
-      produce(previousData, draft => modifier(draft))
-    )
-  }
-
-  return {
-    revert: () => {
-      if (!previousData) {
-        return
-      }
-
-      queryClient.setQueryData(queryKey, previousData)
-    },
-    invalidate: () => queryClient.invalidateQueries(queryKey)
   }
 }
 
