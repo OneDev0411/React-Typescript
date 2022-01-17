@@ -12,6 +12,10 @@ export const RowContainer = styled.div<{
     justify-content: space-between;
     ${theme.typography.body2};
 
+    background-color: ${index % 2 === 0
+      ? theme.palette.grey[50]
+      : 'transparent'};
+
     .column:first-child {
       padding-left: ${theme.spacing(1)}px;
     }
@@ -45,11 +49,10 @@ export const RowContainer = styled.div<{
 `
 
 export const GridRowContainer = styled.div<{
-  index: number
   selected: boolean
   theme: Theme
 }>`
-  ${({ theme, index, selected }) => css`
+  ${({ theme, selected }) => css`
     border-bottom: 1px solid ${theme.palette.grey[100]};
     display: flex;
     align-items: center;
