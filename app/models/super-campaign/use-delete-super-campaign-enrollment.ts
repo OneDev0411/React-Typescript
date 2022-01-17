@@ -1,47 +1,75 @@
-import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import { deleteSuperCampaignEnrollment as deleteSuperCampaignEnrollmentModel } from '@app/models/super-campaign'
+import { UseMutationResult, useQueryClient } from 'react-query'
+import { ResponseError } from 'superagent'
 
-type UseDeleteSuperCampaignEnrollment = (enrollmentId: UUID) => Promise<void>
+import { useMutation, UseMutationOptions } from '@app/hooks/query'
+import { updateCacheActions, UpdateCacheActions } from '@app/utils/react-query'
+
+import { deleteSuperCampaignEnrollment } from './delete-super-campaign-enrollment'
+import { list } from './query-keys/enrollment'
+
+interface DataInput {
+  superCampaignId: UUID
+  userId: UUID
+  brandId: UUID
+}
+
+type UseDeleteSuperCampaignEnrollment = UseMutationResult<
+  void,
+  ResponseError,
+  DataInput,
+  { cache: UpdateCacheActions }
+>
+
+type UseDeleteSuperCampaignEnrollmentOptions = Omit<
+  UseMutationOptions<
+    void,
+    ResponseError,
+    DataInput,
+    { cache: UpdateCacheActions }
+  >,
+  'notify'
+>
 
 export function useDeleteSuperCampaignEnrollment(
-  superCampaignId: UUID,
-  superCampaignEnrollments: ISuperCampaignEnrollment<'user' | 'brand'>[],
-  setSuperCampaignEnrollments: (
-    superCampaignEnrollments: ISuperCampaignEnrollment<'user' | 'brand'>[]
-  ) => void
+  options?: UseDeleteSuperCampaignEnrollmentOptions
 ): UseDeleteSuperCampaignEnrollment {
-  const { runActionThenNotify } = useRunActionThenNotify()
+  const queryClient = useQueryClient()
 
-  const deleteSuperCampaignEnrollment = async (enrollmentId: UUID) =>
-    runActionThenNotify(
-      async () => {
-        const enrollmentIndex = superCampaignEnrollments.findIndex(
-          enrollment => enrollment.id === enrollmentId
-        )
-
-        if (enrollmentIndex === -1) {
-          return
-        }
-
-        const enrollment = superCampaignEnrollments[enrollmentIndex]
-
-        await deleteSuperCampaignEnrollmentModel(superCampaignId, {
-          user: enrollment.user.id,
-          brand: enrollment.brand.id
-        })
-
-        const newSuperCampaignEnrollments = [...superCampaignEnrollments]
-
-        newSuperCampaignEnrollments.splice(enrollmentIndex, 1, {
-          ...enrollment,
-          deleted_at: new Date().getTime() / 1000
-        })
-
-        setSuperCampaignEnrollments(newSuperCampaignEnrollments)
+  return useMutation(
+    async ({ superCampaignId, userId, brandId }) =>
+      deleteSuperCampaignEnrollment(superCampaignId, {
+        user: userId,
+        brand: brandId
+      }),
+    {
+      ...options,
+      notify: {
+        onSuccess: 'The enrollment was deleted',
+        onError: 'Something went wrong while deleting the enrollment'
       },
-      'The enrollment was deleted',
-      'Something went wrong while deleting the enrollment'
-    )
+      onMutate: async ({ superCampaignId, userId, brandId }) => ({
+        cache: await updateCacheActions<
+          ISuperCampaignEnrollment<'user' | 'brand'>[]
+        >(queryClient, list(superCampaignId), prevEnrollments => {
+          const enrollment = prevEnrollments.find(
+            prevEnrollment =>
+              prevEnrollment.user.id === userId &&
+              prevEnrollment.brand.id === brandId
+          )
 
-  return deleteSuperCampaignEnrollment
+          if (enrollment) {
+            enrollment.deleted_at = new Date().getTime() / 1000
+          }
+        })
+      }),
+      onError: (error, variables, context) => {
+        context?.cache.revert()
+        options?.onError?.(error, variables, context)
+      },
+      onSettled: (data, error, variables, context) => {
+        context?.cache.invalidate()
+        options?.onSettled?.(data, error, variables, context)
+      }
+    }
+  )
 }

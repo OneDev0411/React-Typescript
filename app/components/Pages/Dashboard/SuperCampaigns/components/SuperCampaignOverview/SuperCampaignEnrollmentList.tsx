@@ -15,7 +15,6 @@ import SuperCampaignEnrollmentListColumnActions from './SuperCampaignEnrollmentL
 import SuperCampaignEnrollmentListColumnTags from './SuperCampaignEnrollmentListColumnTags'
 import SuperCampaignListEmptyState from './SuperCampaignListEmptyState'
 import SuperCampaignListLoadingState from './SuperCampaignListLoadingState'
-import { useDeleteSuperCampaignEnrollment } from './use-delete-super-campaign-enrollment'
 import { useSuperCampaignListStyles } from './use-super-campaign-list-styles'
 import { useUpdateSuperCampaignEnrollmentTags } from './use-update-super-campaign-enrollment-tags'
 
@@ -61,12 +60,6 @@ function SuperCampaignEnrollmentList({
       setSuperCampaignEnrollments
     )
 
-  const deleteSuperCampaignEnrollment = useDeleteSuperCampaignEnrollment(
-    superCampaign.id,
-    superCampaignEnrollments,
-    setSuperCampaignEnrollments
-  )
-
   const columns: TableColumn<ISuperCampaignEnrollment<'user' | 'brand'>>[] = [
     {
       id: 'person',
@@ -105,7 +98,7 @@ function SuperCampaignEnrollmentList({
           <SuperCampaignEnrollmentListColumnActions
             className={!isOptedOut ? classes.hide : undefined}
             isOptedOut={isOptedOut}
-            onDelete={() => deleteSuperCampaignEnrollment(row.id)}
+            superCampaignEnrollment={row}
           />
         )
       }
