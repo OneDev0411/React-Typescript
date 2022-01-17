@@ -3,7 +3,7 @@ import { UseInfiniteQueryResult } from 'react-query'
 import { useInfiniteQuery } from '@app/hooks/query'
 
 import { getAllSuperCampaigns, FetchRange } from './get-all-super-campaigns'
-import { getAll } from './query-keys/campaign'
+import { list } from './query-keys/campaign'
 
 export type UseGetAllSuperCampaigns = UseInfiniteQueryResult<
   ISuperCampaign<'template_instance'>[]
@@ -19,7 +19,7 @@ export function useGetAllSuperCampaigns(
   order?: string[]
 ): UseGetAllSuperCampaigns {
   return useInfiniteQuery(
-    getAll(order),
+    list(order),
     async ({ pageParam }: { pageParam?: FetchRange }) => {
       return getAllSuperCampaigns(pageParam ?? initialRange, order)
     },

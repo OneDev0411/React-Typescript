@@ -2,14 +2,26 @@ import { QueryKey } from 'react-query'
 
 const TYPE = 'super_campaign'
 
-export function getAll(order?: string[]): QueryKey {
-  if (!order) {
-    return [TYPE, 'getAll']
-  }
-
-  return [TYPE, 'getAll', { order }]
+export function all(): QueryKey {
+  return [TYPE]
 }
 
-export function getOne(id: UUID): QueryKey {
-  return [TYPE, 'getOne', id]
+export function lists(): QueryKey {
+  return [...all(), 'list']
+}
+
+export function list(order?: string[]): QueryKey {
+  if (!order) {
+    return [...lists()]
+  }
+
+  return [...lists(), { order }]
+}
+
+export function details(): QueryKey {
+  return [...all(), 'detail']
+}
+
+export function detail(id: UUID): QueryKey {
+  return [...details(), id]
 }

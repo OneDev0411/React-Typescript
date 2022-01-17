@@ -7,30 +7,30 @@ import {
   UpdateCachePromise
 } from '@app/utils/react-query'
 
-import { getOne, getAll } from '../query-keys/campaign'
+import { detail, list } from '../query-keys/campaign'
 
-export async function updateCacheOne(
+export async function updateCacheDetail(
   queryClient: QueryClient,
   superCampaignId: UUID,
   update: Partial<ISuperCampaign<'template_instance'>>
 ): UpdateCachePromise {
   return updateCacheActions<ISuperCampaign<'template_instance'>>(
     queryClient,
-    getOne(superCampaignId),
+    detail(superCampaignId),
     superCampaign => {
       Object.assign(superCampaign, update)
     }
   )
 }
 
-export async function updateCacheAll(
+export async function updateCacheList(
   queryClient: QueryClient,
   superCampaignId: UUID,
   update: Partial<ISuperCampaign<'template_instance'>>
 ): UpdateCachePromise {
   return infiniteDataUpdateCacheActions<ISuperCampaign<'template_instance'>>(
     queryClient,
-    getAll(),
+    list(),
     superCampaign => superCampaignId === superCampaign.id,
     superCampaign => {
       Object.assign(superCampaign, update)
@@ -44,7 +44,7 @@ export async function deleteFromCacheAll(
 ): UpdateCachePromise {
   return infiniteDataDeleteCacheActions<ISuperCampaign<'template_instance'>>(
     queryClient,
-    getAll(),
+    list(),
     superCampaign => superCampaignId === superCampaign.id
   )
 }

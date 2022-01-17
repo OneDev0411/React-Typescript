@@ -4,7 +4,7 @@ import { ResponseError } from 'superagent'
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
 import { UpdateCacheActions, updateCacheComposer } from '@app/utils/react-query'
 
-import { updateCacheAll, updateCacheOne } from './query-update/campaign'
+import { updateCacheList, updateCacheDetail } from './query-update/campaign'
 import { updateSuperCampaignTags } from './update-super-campaign-tags'
 
 interface DataInput {
@@ -45,10 +45,10 @@ export function useUpdateSuperCampaignTags(
       },
       onMutate: async ({ superCampaignId, tags }) => ({
         cache: await updateCacheComposer(
-          updateCacheOne(queryClient, superCampaignId, {
+          updateCacheDetail(queryClient, superCampaignId, {
             tags
           }),
-          updateCacheAll(queryClient, superCampaignId, {
+          updateCacheList(queryClient, superCampaignId, {
             tags
           })
         )

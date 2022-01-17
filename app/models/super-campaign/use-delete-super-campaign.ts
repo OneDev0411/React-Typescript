@@ -8,7 +8,7 @@ import { UpdateCacheActions } from '@app/utils/react-query'
 import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
 
 import { deleteSuperCampaign } from './delete-super-campaign'
-import { getOne } from './query-keys/campaign'
+import { detail } from './query-keys/campaign'
 import { deleteFromCacheAll } from './query-update/campaign'
 
 export type UseDeleteSuperCampaign = Omit<
@@ -45,7 +45,7 @@ export function useDeleteSuperCampaign(
         onError:
           'Something went wrong while deleting the campaign. Please try again.'
       },
-      invalidates: (_, superCampaign) => [getOne(superCampaign.id)], // TODO: use optimistic update if possible
+      invalidates: (_, superCampaign) => [detail(superCampaign.id)], // TODO: use optimistic update if possible
       onMutate: async superCampaign => ({
         cache: await deleteFromCacheAll(queryClient, superCampaign.id)
       }),
