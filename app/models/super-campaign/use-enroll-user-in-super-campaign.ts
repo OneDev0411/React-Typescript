@@ -7,7 +7,7 @@ type UseAddSuperCampaignEnrollment = (
   data: ISuperCampaignEnrollmentInput[]
 ) => Promise<void>
 
-export function useAddSuperCampaignEnrollment(
+export function useEnrollUserInSuperCampaign(
   superCampaignId: UUID,
   setSuperCampaignEnrollments: Dispatch<
     SetStateAction<ISuperCampaignEnrollment<'user' | 'brand'>[]>
