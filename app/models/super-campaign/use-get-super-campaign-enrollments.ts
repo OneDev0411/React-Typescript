@@ -1,57 +1,24 @@
-import { Dispatch, SetStateAction, useMemo } from 'react'
+import { UseQueryResult } from 'react-query'
 
-import { useDeepCompareEffect } from 'react-use'
-
-import useAsync from '@app/hooks/use-async'
+import { useQuery } from '@app/hooks/query'
 import { getSuperCampaignEnrollments } from '@app/models/super-campaign'
+
+import { list } from './query-keys/enrollment'
 
 export type SuperCampaignEnrollmentItem =
   | ISuperCampaignEnrollment<'user' | 'brand'>
   | ISuperCampaignEnrollment<'user' | 'brand' | 'campaign'>
 
-interface UseGetSuperCampaignEnrollments {
-  isLoading: boolean
-  superCampaignEnrollments: SuperCampaignEnrollmentItem[]
-  setSuperCampaignEnrollments: Dispatch<
-    SetStateAction<SuperCampaignEnrollmentItem[]>
-  >
-  enrolledAgentCount: number
-}
+type UseGetSuperCampaignEnrollments = UseQueryResult<
+  SuperCampaignEnrollmentItem[]
+>
 
 export function useGetSuperCampaignEnrollments(
   superCampaignId: UUID,
-  superCampaignTags: Nullable<string[]>,
   includeCampaign: boolean
 ): UseGetSuperCampaignEnrollments {
-  const {
-    run,
-    data: superCampaignEnrollments,
-    setData: setSuperCampaignEnrollments,
-    isLoading
-  } = useAsync<SuperCampaignEnrollmentItem[]>({
-    data: [],
-    status: 'pending'
-  })
-
-  useDeepCompareEffect(() => {
-    run(async () =>
-      getSuperCampaignEnrollments(superCampaignId, includeCampaign)
-    )
-  }, [run, superCampaignId, includeCampaign, superCampaignTags])
-
-  // Count the number of non-opted-out people
-  const enrolledAgentCount = useMemo(
-    () =>
-      superCampaignEnrollments.filter(
-        superCampaignEnrollment => !superCampaignEnrollment.deleted_at
-      ).length,
-    [superCampaignEnrollments]
+  return useQuery<SuperCampaignEnrollmentItem[]>(
+    list(superCampaignId, includeCampaign),
+    async () => getSuperCampaignEnrollments(superCampaignId, includeCampaign)
   )
-
-  return {
-    isLoading,
-    superCampaignEnrollments,
-    setSuperCampaignEnrollments,
-    enrolledAgentCount
-  }
 }
