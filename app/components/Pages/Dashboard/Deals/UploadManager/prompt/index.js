@@ -291,7 +291,11 @@ class UploadModal extends React.Component {
           offOverflow
         >
           <ModalHeader
-            closeHandler={this.isFinished ? undefined : () => this.closeModal()}
+            closeHandler={
+              this.isFinished && taskIds.length > 0
+                ? undefined
+                : () => this.closeModal()
+            }
             className="modal-header"
             title={`${filesCount} Documents`}
           />

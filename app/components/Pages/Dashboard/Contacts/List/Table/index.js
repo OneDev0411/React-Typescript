@@ -255,6 +255,8 @@ const ContactsList = props => {
         totalRows={props.totalRows}
         loading={getLoading()}
         columns={columns}
+        inlineGridEnabled={false}
+        itemSize={theme.spacing(8)}
         LoadingStateComponent={LoadingComponent}
         getTrProps={getRowProps}
         getTdProps={getColumnProps}
