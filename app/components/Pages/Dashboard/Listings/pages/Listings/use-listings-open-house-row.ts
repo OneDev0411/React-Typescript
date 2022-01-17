@@ -11,7 +11,12 @@ function useListingsOpenHouseRow(
   const openHouses = useListingsOpenHouseRows()
 
   return useMemo(
-    () => openHouses.find(openHouse => openHouse.listings.includes(listingId)),
+    () =>
+      openHouses.find(openHouse => {
+        const listings = openHouse.listings || []
+
+        return listings.includes(listingId)
+      }),
     [listingId, openHouses]
   )
 }

@@ -10,6 +10,7 @@ import {
 import Pagination from '@material-ui/lab/Pagination'
 import pluralize from 'pluralize'
 
+import { changeUrl } from '@app/utils/change-url'
 import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
 import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
@@ -23,8 +24,6 @@ import { ShareListings } from '../ShareListings'
 import ZeroState from '../ZeroState'
 
 import { Address } from './columns/Address'
-
-const BASE_URL = '/dashboard/mls'
 
 const useStyles = makeStyles(
   theme => ({
@@ -53,13 +52,13 @@ const ListView = props => {
     useState(false)
 
   const closeListingDetailsModal = useCallback(() => {
-    window.history.replaceState({}, '', BASE_URL)
+    window.history.back()
     setIsListingDetailsModalOpen(false)
     setSelectedListingId(null)
   }, [])
 
   const openListingDetailsModal = useCallback(id => {
-    window.history.replaceState({}, '', `${BASE_URL}/${id}`)
+    changeUrl(`/dashboard/mls/${id}`)
     setIsListingDetailsModalOpen(true)
     setSelectedListingId(id)
   }, [])

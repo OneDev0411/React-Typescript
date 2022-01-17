@@ -9,6 +9,9 @@ import {
   Link,
   FormHelperText
 } from '@material-ui/core'
+import { useSelector } from 'react-redux'
+
+import { selectUserAgents } from '@app/selectors/user'
 
 interface Props {
   agents: IAgent[]
@@ -22,6 +25,7 @@ export function SelectAgent({
   onRemoveAgentNumber
 }: Props) {
   const [selectedId, setSelectedId] = useState('')
+  const userAgents = useSelector(selectUserAgents)
 
   const handleNext = () => {
     if (!selectedId) {
@@ -35,9 +39,13 @@ export function SelectAgent({
     () =>
       agents.map(item => ({
         value: item.id,
-        label: `${item.mls} ${item.full_name ? ` - ${item.full_name}` : ''}`
+        label: `${item.mls} ${item.full_name ? ` - ${item.full_name}` : ''}`,
+        disabled:
+          userAgents?.some(
+            userAgent => userAgent.mls === item.mls && userAgent.id === item.id
+          ) || false
       })),
-    [agents]
+    [agents, userAgents]
   )
 
   return (
@@ -55,8 +63,9 @@ export function SelectAgent({
           </MenuItem>
 
           {list.map((item, key) => (
-            <MenuItem key={key} value={item.value}>
+            <MenuItem key={key} value={item.value} disabled={item.disabled}>
               {item.label}
+              {item.disabled && <FormHelperText>[Selected]</FormHelperText>}
             </MenuItem>
           ))}
         </Select>
