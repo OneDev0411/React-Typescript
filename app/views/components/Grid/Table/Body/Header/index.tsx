@@ -28,7 +28,13 @@ function Header<Row>({ columns, rows, selection, totalRows }: Props<Row>) {
     >
       {columns.map((column, columnIndex) => {
         if (selection && column.id === 'row-selection') {
-          return <ToggleEntireRows key={columnIndex} rows={rows} />
+          return (
+            <ToggleEntireRows
+              key={columnIndex}
+              rows={rows}
+              totalRows={totalRows}
+            />
+          )
         }
 
         let headerCell

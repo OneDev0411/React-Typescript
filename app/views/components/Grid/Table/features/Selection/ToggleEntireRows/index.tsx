@@ -11,16 +11,18 @@ const useStyles = makeStyles(
       overflow: 'initial'
     }
   }),
-  { name: 'ColumnSelector' }
+  { name: 'ToggleEntireRows' }
 )
 
 interface Props<Row> {
   rows: (Row & { id?: UUID })[]
+  totalRows: number
 }
 
-export function ToggleEntireRows<Row>({ rows }: Props<Row>) {
+export function ToggleEntireRows<Row>({ rows, totalRows }: Props<Row>) {
   const classes = useStyles()
   const [state, dispatch] = useGridContext()
+
   const {
     isAllRowsSelected,
     isEntireRowsSelected,
@@ -39,10 +41,7 @@ export function ToggleEntireRows<Row>({ rows }: Props<Row>) {
       selectedRowIds.length < rows.length) ||
     (isEntireRowsSelected && excludedRows.length > 0)
 
-  const tooltipTitle =
-    isAllSelected || isEntireRowsSelected
-      ? 'Deselect All Rows'
-      : 'Select All Rows'
+  const verbText = isAllSelected || isEntireRowsSelected ? 'Deselect' : 'Select'
 
   const handleToggleEntireRows = () => {
     dispatch({
@@ -55,12 +54,16 @@ export function ToggleEntireRows<Row>({ rows }: Props<Row>) {
 
   const isSelectAllDisable = Number(rows.length) === 0
 
+  if (rows && rows.length === totalRows) {
+    return null
+  }
+
   return (
     <div className={classes.container}>
       <Checkbox
         size="small"
         disableRipple
-        tooltipTitle={tooltipTitle}
+        tooltipTitle={`${verbText} all ${totalRows} Rows`}
         disabled={isSelectAllDisable}
         checked={defaultSelectAllValue}
         indeterminate={isSomeRowsSelected}
