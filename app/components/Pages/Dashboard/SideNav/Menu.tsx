@@ -42,18 +42,18 @@ import Logo from './components/Logo'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
 import PoweredBy from './components/PoweredBy'
 import SideNavLinkItem from './components/SideNavLinkItem'
+import SideNavLinkSummary from './components/SideNavLinkSummary'
 import SupportTrigger from './components/SupportTrigger'
 import { UserMenu } from './components/UserMenu'
 import {
   Sidenav,
   SidenavBlankLink,
-  SidenavLink,
   SideNavItem,
   SideNavItemLabel,
   SidenavListGroup,
   AccordionSummaryDiv
 } from './styled'
-import { scrollableAreaShadowColor } from './variables'
+import { ExpandedMenu, scrollableAreaShadowColor } from './variables'
 
 const useStyles = makeStyles(
   theme => ({
@@ -72,18 +72,6 @@ const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
 const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
 const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
 const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
-
-type ExpandedMenu =
-  | null
-  | 'nav-dashboard'
-  | 'nav-marketing'
-  | 'nav-properties'
-  | 'nav-people'
-  | 'nav-chat'
-  | 'nav-transaction'
-  | 'nav-notifications'
-  | 'nav-help-center'
-  | 'nav-support'
 
 export function Menu() {
   const classes = useStyles()
@@ -142,10 +130,10 @@ export function Menu() {
               id="nav-dashboard-header"
             >
               <Acl access={dashboardAccess}>
-                <SidenavLink
-                  active={false}
-                  to="/dashboard/overview"
-                  data-tour-id="nav-dashboard"
+                <SideNavLinkSummary
+                  to={['/dashboard/overview']}
+                  tourId="nav-dashboard"
+                  onClick={setExpandedMenu}
                 >
                   <AccordionSummaryDiv>
                     <SvgIcon
@@ -155,7 +143,7 @@ export function Menu() {
                     />
                     Dashboard
                   </AccordionSummaryDiv>
-                </SidenavLink>
+                </SideNavLinkSummary>
               </Acl>
             </AccordionSummary>
           </Accordion>
@@ -172,7 +160,17 @@ export function Menu() {
               id="nav-marketing-header"
             >
               <Acl.Marketing>
-                <SidenavLink active={false} to="" data-tour-id="nav-marketing">
+                <SideNavLinkSummary
+                  to={[
+                    '/dashboard/marketing',
+                    '/dashboard/flows',
+                    '/dashboard/agent-network',
+                    '/dashboard/insights',
+                    '/dashboard/websites'
+                  ]}
+                  tourId="nav-marketing"
+                  onClick={setExpandedMenu}
+                >
                   <AccordionSummaryDiv>
                     <SvgIcon
                       path={mdiChartArc}
@@ -186,7 +184,7 @@ export function Menu() {
                   ) : (
                     <SvgIcon path={mdiMenuDown} size="24px" />
                   )}
-                </SidenavLink>
+                </SideNavLinkSummary>
               </Acl.Marketing>
             </AccordionSummary>
             <AccordionDetails>
@@ -237,10 +235,10 @@ export function Menu() {
               id="nav-properties-header"
             >
               <Acl.Marketing>
-                <SidenavLink
-                  active={false}
-                  to="/dashboard/mls"
-                  data-tour-id="nav-properties"
+                <SideNavLinkSummary
+                  to={['/dashboard/mls']}
+                  tourId="nav-properties"
+                  onClick={setExpandedMenu}
                 >
                   <AccordionSummaryDiv>
                     <SvgIcon
@@ -250,7 +248,7 @@ export function Menu() {
                     />
                     Properties
                   </AccordionSummaryDiv>
-                </SidenavLink>
+                </SideNavLinkSummary>
               </Acl.Marketing>
             </AccordionSummary>
           </Accordion>
@@ -264,7 +262,15 @@ export function Menu() {
               id="nav-people-header"
             >
               <Acl access={dashboardAccess}>
-                <SidenavLink active={false} to="" data-tour-id="nav-people">
+                <SideNavLinkSummary
+                  to={[
+                    '/dashboard/inbox',
+                    '/dashboard/calendar',
+                    '/dashboard/contacts'
+                  ]}
+                  tourId="nav-people"
+                  onClick={setExpandedMenu}
+                >
                   <AccordionSummaryDiv>
                     <SvgIcon
                       path={mdiAccountSupervisorOutline}
@@ -278,7 +284,7 @@ export function Menu() {
                   ) : (
                     <SvgIcon path={mdiMenuDown} size="24px" />
                   )}
-                </SidenavLink>
+                </SideNavLinkSummary>
               </Acl>
             </AccordionSummary>
             <AccordionDetails>
@@ -339,10 +345,16 @@ export function Menu() {
               id="nav-transaction-header"
             >
               <Acl.Marketing>
-                <SidenavLink
-                  active={false}
-                  to=""
-                  data-tour-id="nav-transaction"
+                <SideNavLinkSummary
+                  to={[
+                    '/dashboard/deals',
+                    '/dashboard/listings',
+                    '/dashboard/tours',
+                    '/dashboard/open-house',
+                    '/dashboard/showings'
+                  ]}
+                  tourId="nav-transaction"
+                  onClick={setExpandedMenu}
                 >
                   <AccordionSummaryDiv>
                     <SvgIcon
@@ -357,7 +369,7 @@ export function Menu() {
                   ) : (
                     <SvgIcon path={mdiMenuDown} size="24px" />
                   )}
-                </SidenavLink>
+                </SideNavLinkSummary>
               </Acl.Marketing>
             </AccordionSummary>
             <AccordionDetails>
@@ -418,10 +430,10 @@ export function Menu() {
                 aria-controls="nav-notifications-content"
                 id="nav-notifications-header"
               >
-                <SidenavLink
-                  active={false}
-                  to="/dashboard/notifications"
-                  data-tour-id="nav-notifications"
+                <SideNavLinkSummary
+                  to={['/dashboard/notifications']}
+                  tourId="nav-notifications"
+                  onClick={setExpandedMenu}
                 >
                   <AccordionSummaryDiv>
                     <MenuBadge badgeContent={appNotifications} color="primary">
@@ -433,7 +445,7 @@ export function Menu() {
                       Notifications
                     </MenuBadge>
                   </AccordionSummaryDiv>
-                </SidenavLink>
+                </SideNavLinkSummary>
               </AccordionSummary>
             </Accordion>
           )}
