@@ -9,7 +9,7 @@ import { updateCacheEnrollments } from './query-update/enrollment'
 
 interface DataInput {
   superCampaignId: UUID
-  enrollments: ISuperCampaignEnrollmentInput[]
+  enrollment: ISuperCampaignEnrollmentInput
 }
 
 type UseEnrollUserInSuperCampaign = UseMutationResult<
@@ -29,27 +29,27 @@ type UseEnrollUserInSuperCampaignOptions = Omit<
   'notify'
 >
 
-export function useEnrollUserInSuperCampaign(
+export function useUpdateSuperCampaignEnrollmentTags(
   options?: UseEnrollUserInSuperCampaignOptions
 ): UseEnrollUserInSuperCampaign {
   const queryClient = useQueryClient()
 
   return useMutation(
-    async ({ superCampaignId, enrollments }) =>
-      enrollUserInSuperCampaign(superCampaignId, enrollments),
+    async ({ superCampaignId, enrollment }) =>
+      enrollUserInSuperCampaign(superCampaignId, [enrollment]),
     {
       ...options,
       notify: {
-        onSuccess: 'The user was enrolled successfully',
-        onError: 'Something went wrong while adding the enrollment'
+        onSuccess: 'The tags were updated',
+        onError: 'Something went wrong while updating the tags'
       },
-      onMutate: async ({ superCampaignId, enrollments }) => ({
+      onMutate: async ({ superCampaignId, enrollment }) => ({
         cache: await updateCacheEnrollments(
           queryClient,
           superCampaignId,
-          enrollments,
+          [enrollment],
           prevEnrollment => {
-            prevEnrollment.deleted_at = undefined
+            prevEnrollment.tags = enrollment.tags
           }
         )
       }),
