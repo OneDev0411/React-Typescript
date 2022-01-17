@@ -32,20 +32,24 @@ import {
 import Row from './Row'
 
 interface Props<Row> {
+  inlineGridEnabled?: boolean
   columns: TableColumn<Row>[]
   rows: (Row & { id?: UUID })[]
   classes: GridClasses
   virtualize: boolean
+  itemSize?: any
   infiniteScrolling: InfiniteScrollingOptions | null
   getTrProps?: (data: TrProps<Row>) => object
   getTdProps?: (data: TdProps<Row>) => object
 }
 
 export function Body<Row>({
+  inlineGridEnabled = false,
   columns,
   rows,
   classes,
   virtualize,
+  itemSize,
   infiniteScrolling,
   getTdProps = () => ({}),
   getTrProps = () => ({})
@@ -98,7 +102,7 @@ export function Body<Row>({
             key={row.id || rowIndex}
             index={rowIndex}
             style={{
-              height: theme.spacing(8)
+              height: itemSize || theme.spacing(8)
             }}
             data={{
               rows,
@@ -107,7 +111,8 @@ export function Body<Row>({
               classes,
               getTrProps,
               getTdProps,
-              columnsSize
+              columnsSize,
+              inlineGridEnabled
             }}
           />
         ))}
@@ -122,7 +127,7 @@ export function Body<Row>({
           <FixedSizeList
             ref={listRef}
             itemCount={rows.length}
-            itemSize={theme.spacing(8)}
+            itemSize={itemSize || theme.spacing(8)}
             width={width}
             height={windowHeight}
             overscanCount={8}
@@ -138,7 +143,8 @@ export function Body<Row>({
                 classes,
                 getTrProps,
                 getTdProps,
-                columnsSize
+                columnsSize,
+                inlineGridEnabled
               } as ComponentProps<typeof Row>['data']
             }
             style={{
