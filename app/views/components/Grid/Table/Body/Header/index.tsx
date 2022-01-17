@@ -19,7 +19,7 @@ interface Props<Row> {
 
 function Header<Row>({ columns, rows, selection, totalRows }: Props<Row>) {
   const columnsSize = useMemo(() => getColumnsSize<Row>(columns), [columns])
-  const gridClasses = useGridStyles()
+  const gridClasses = useGridStyles(true)
   const [state, dispatch] = useGridContext()
   const {
     isAllRowsSelected,
