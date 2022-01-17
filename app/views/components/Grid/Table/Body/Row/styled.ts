@@ -1,7 +1,7 @@
 import { Theme } from '@material-ui/core'
 import styled, { css } from 'styled-components'
 
-export const GridRowContainer = styled.div<{
+export const RowContainer = styled.div<{
   index: number
   selected: boolean
   theme: Theme
@@ -11,10 +11,6 @@ export const GridRowContainer = styled.div<{
     align-items: center;
     justify-content: space-between;
     ${theme.typography.body2};
-
-    background-color: ${index % 2 === 0
-      ? theme.palette.grey[50]
-      : 'transparent'};
 
     .column:first-child {
       padding-left: ${theme.spacing(1)}px;
@@ -48,7 +44,7 @@ export const GridRowContainer = styled.div<{
   `}
 `
 
-export const RowContainer = styled.div<{
+export const GridRowContainer = styled.div<{
   index: number
   selected: boolean
   theme: Theme
