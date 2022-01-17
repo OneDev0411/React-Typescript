@@ -37,7 +37,7 @@ interface Props<Row> {
   rows: (Row & { id?: UUID })[]
   classes: GridClasses
   virtualize: boolean
-  itemSize?: any
+  itemSize?: number
   infiniteScrolling: InfiniteScrollingOptions | null
   getTrProps?: (data: TrProps<Row>) => object
   getTdProps?: (data: TdProps<Row>) => object
