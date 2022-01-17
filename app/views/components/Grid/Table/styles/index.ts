@@ -69,7 +69,7 @@ const gridStyles = (theme: Theme) =>
     }
   })
 
-export const useGridStyles = ({ inlineGridEnabled = false }) =>
+export const useGridStyles = (inlineGridEnabled = false) =>
   makeStyles(inlineGridEnabled ? gridStyles : styles, {
     name: 'grid-default-styles'
   })()
