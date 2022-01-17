@@ -12,7 +12,10 @@ import classNames from 'classnames'
 import pluralize from 'pluralize'
 
 import useSafeState from '@app/hooks/use-safe-state'
-import { getSuperCampaignEligibleAgents } from '@app/models/super-campaign'
+import {
+  getSuperCampaignEligibleAgents,
+  useEnrollUserInSuperCampaign
+} from '@app/models/super-campaign'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import type {
@@ -43,7 +46,6 @@ interface SuperCampaignEnrollManuallyButtonProps {
   className: string
   superCampaignId: UUID
   superCampaignTags: ISuperCampaign<'template_instance'>['tags']
-  onEnroll: (data: ISuperCampaignEnrollmentInput[]) => Promise<void>
   enrolledAgentCount: number
   eligibleBrands: Nullable<string[]>
   superCampaignEnrollments: Pick<
@@ -56,19 +58,19 @@ function SuperCampaignEnrollManuallyButton({
   className,
   superCampaignId,
   superCampaignTags,
-  onEnroll,
   enrolledAgentCount,
   eligibleBrands,
   superCampaignEnrollments
 }: SuperCampaignEnrollManuallyButtonProps) {
   const classes = useStyles()
-  const [isSaving, setIsSaving] = useSafeState(false)
 
   const [isTeamAgentsDrawerOpen, setIsTeamAgentsDrawerOpen] =
     useSafeState(false)
 
   const handleOpenTeamAgentsDrawer = () => setIsTeamAgentsDrawerOpen(true)
   const handleCloseTeamAgentsDrawer = () => setIsTeamAgentsDrawerOpen(false)
+
+  const { isLoading, mutateAsync } = useEnrollUserInSuperCampaign()
 
   const handleEnroll = async (agents: Agent[]) => {
     const enrollments: ISuperCampaignEnrollmentInput[] = agents.map(
@@ -79,9 +81,7 @@ function SuperCampaignEnrollManuallyButton({
       })
     )
 
-    setIsSaving(true)
-    await onEnroll(enrollments)
-    setIsSaving(false)
+    await mutateAsync({ superCampaignId, enrollments })
     handleCloseTeamAgentsDrawer()
   }
 
@@ -144,7 +144,7 @@ function SuperCampaignEnrollManuallyButton({
         <Button
           color="primary"
           startIcon={
-            isSaving ? (
+            isLoading ? (
               <CircularProgress color="inherit" size={muiIconSizes.small} />
             ) : (
               <SvgIcon path={mdiPlus} size={muiIconSizes.small} />
@@ -152,12 +152,12 @@ function SuperCampaignEnrollManuallyButton({
           }
           size="small"
           onClick={handleOpenTeamAgentsDrawer}
-          disabled={isSaving}
+          disabled={isLoading}
         >
           Add
         </Button>
       </div>
-      {isTeamAgentsDrawerOpen && !isSaving && (
+      {isTeamAgentsDrawerOpen && !isLoading && (
         <TeamAgentsDrawer
           isPrimaryAgent
           multiSelection

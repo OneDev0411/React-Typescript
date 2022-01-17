@@ -1,57 +1,73 @@
-import { Dispatch, SetStateAction } from 'react'
+import { UseMutationResult, useQueryClient } from 'react-query'
+import { ResponseError } from 'superagent'
 
-import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
+import { useMutation, UseMutationOptions } from '@app/hooks/query'
 import { enrollUserInSuperCampaign } from '@app/models/super-campaign'
+import { UpdateCacheActions, updateCacheActions } from '@app/utils/react-query'
 
-type UseAddSuperCampaignEnrollment = (
-  data: ISuperCampaignEnrollmentInput[]
-) => Promise<void>
+import { list } from './query-keys/enrollment'
+
+interface DataInput {
+  superCampaignId: UUID
+  enrollments: ISuperCampaignEnrollmentInput[]
+}
+
+type UseEnrollUserInSuperCampaign = UseMutationResult<
+  ISuperCampaignEnrollment<'user' | 'brand'>[],
+  ResponseError,
+  DataInput,
+  { cache: UpdateCacheActions }
+>
+
+type UseEnrollUserInSuperCampaignOptions = Omit<
+  UseMutationOptions<
+    ISuperCampaignEnrollment<'user' | 'brand'>[],
+    ResponseError,
+    DataInput,
+    { cache: UpdateCacheActions }
+  >,
+  'notify'
+>
 
 export function useEnrollUserInSuperCampaign(
-  superCampaignId: UUID,
-  setSuperCampaignEnrollments: Dispatch<
-    SetStateAction<ISuperCampaignEnrollment<'user' | 'brand'>[]>
-  >
-): UseAddSuperCampaignEnrollment {
-  const { runActionThenNotify } = useRunActionThenNotify()
+  options?: UseEnrollUserInSuperCampaignOptions
+): UseEnrollUserInSuperCampaign {
+  const queryClient = useQueryClient()
 
-  const addSuperCampaignEnrollment = async (
-    data: ISuperCampaignEnrollmentInput[]
-  ) =>
-    runActionThenNotify(
-      async () => {
-        const newEnrollments = await enrollUserInSuperCampaign(
-          superCampaignId,
-          data
-        )
-
-        setSuperCampaignEnrollments(prevEnrollments => {
-          return [
-            // Append the new items on the top but exclude the existing ones to avoid duplications
-            ...newEnrollments.filter(
-              newEnrollment =>
-                !prevEnrollments.find(
-                  prevEnrollment => prevEnrollment.id === newEnrollment.id
-                )
-            ),
-            // Update the existing items and replace them with a new one if there is
-            ...prevEnrollments.map(prevEnrollment => {
-              const newEnrollment = newEnrollments.find(
-                item => item.id === prevEnrollment.id
-              )
-
-              if (newEnrollment) {
-                return newEnrollment
-              }
-
-              return prevEnrollment
-            })
-          ]
-        })
+  return useMutation(
+    async ({ superCampaignId, enrollments }) =>
+      enrollUserInSuperCampaign(superCampaignId, enrollments),
+    {
+      ...options,
+      notify: {
+        onSuccess: 'The user was enrolled successfully',
+        onError: 'Something went wrong while adding the enrollment'
       },
-      'The user was enrolled successfully',
-      'Something went wrong while adding the enrollment'
-    )
+      onMutate: async ({ superCampaignId, enrollments }) => ({
+        cache: await updateCacheActions<
+          ISuperCampaignEnrollment<'user' | 'brand'>[]
+        >(queryClient, list(superCampaignId), previousEnrollments => {
+          previousEnrollments.forEach(previousEnrollment => {
+            const found = !!enrollments.find(
+              item =>
+                item.user === previousEnrollment.user.id &&
+                item.brand === previousEnrollment.brand.id
+            )
 
-  return addSuperCampaignEnrollment
+            if (found) {
+              previousEnrollment.deleted_at = undefined
+            }
+          })
+        })
+      }),
+      onError: (error, variables, context) => {
+        context?.cache.revert()
+        options?.onError?.(error, variables, context)
+      },
+      onSettled: (data, error, variables, context) => {
+        context?.cache.invalidate()
+        options?.onSettled?.(data, error, variables, context)
+      }
+    }
+  )
 }
