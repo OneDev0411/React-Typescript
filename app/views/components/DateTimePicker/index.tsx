@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react'
 
-import { Button, Popover } from '@material-ui/core'
-import DayPicker from 'react-day-picker'
-import Flex from 'styled-flex-component'
+import { Button, Popover, Typography, makeStyles } from '@material-ui/core'
+import DayPicker, { DayPickerProps } from 'react-day-picker'
+
+import iff from '@app/utils/iff'
 
 import { getTime } from '../../../utils/get-time'
 import { setTime } from '../../../utils/set-time'
@@ -11,6 +12,26 @@ import TimeInput from '../TimeInput'
 
 import { isToday, formatDate } from './helpers'
 import { PickerContainer } from './styled'
+
+const useStyles = makeStyles(
+  theme => ({
+    footer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    },
+    inputError: {
+      // I know this is not ideal to override the styles of an styled-component like this, but
+      // I dont know about that styling method and found no solution to do it in a better way.
+      '&&': { borderColor: theme.palette.error.main }
+    },
+    error: {
+      marginTop: theme.spacing(0.5),
+      color: theme.palette.error.main
+    }
+  }),
+  { name: 'DateTimePicker' }
+)
 
 interface RenderProps {
   rowDate: Date
@@ -21,8 +42,8 @@ interface RenderProps {
 
 interface Props {
   style?: React.CSSProperties
-  datePickerModifiers?: object
-  defaultlSelectedDate?: Date
+  datePickerModifiers?: DayPickerProps['modifiers']
+  defaultSelectedDate?: Date
   selectedDate?: Date
   showTimePicker?: boolean
   saveCaption?: string
@@ -30,36 +51,50 @@ interface Props {
   children?(renderParams: RenderProps): React.ReactNode
   onChange?(date: Date): void
   onClose?(date: Date | null): void
+  validate?: (date: Date) => Optional<string>
 }
 
 export function DateTimePicker({
   style,
   showTimePicker = true,
   datePickerModifiers = {},
-  defaultlSelectedDate = new Date(),
+  defaultSelectedDate = new Date(),
   selectedDate = new Date(),
   children,
   defaultAnchorElement = null,
   saveCaption = 'Done',
   onChange = () => {},
-  onClose = () => {}
+  onClose = () => {},
+  validate = () => ''
 }: Props) {
-  const [date, setDate] = useState<Date>(defaultlSelectedDate)
-  const initialSelectedDate = useRef<Date>(defaultlSelectedDate)
+  const classes = useStyles()
+
+  const [date, setDate] = useState<Date>(defaultSelectedDate)
+  const initialSelectedDate = useRef<Date>(defaultSelectedDate)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(
     defaultAnchorElement
   )
   const formattedDate = formatDate(date, showTimePicker)
 
+  const validationError = showTimePicker ? validate(date) : null
+
+  const isOpen = !!anchorEl
+
   useEffect(() => {
-    if (initialSelectedDate.current.getTime() !== selectedDate.getTime()) {
+    if (
+      isOpen &&
+      initialSelectedDate.current.getTime() !== selectedDate.getTime()
+    ) {
       setDate(selectedDate)
     }
-  }, [selectedDate])
+  }, [selectedDate, isOpen])
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
 
+  const handleSave = () => {
+    handleClose()
     onClose(date)
   }
 
@@ -71,8 +106,9 @@ export function DateTimePicker({
     onChange(date)
   }
 
-  const handleDate = (date: Date) => {
-    const nextDate = setTime(date, getTime(selectedDate) as number)
+  const handleDate = (selectedDate: Date) => {
+    // Pick the time from the internal state and set it to the selected date.
+    const nextDate = setTime(selectedDate, getTime(date) as number)
 
     setDate(nextDate)
     onChange(nextDate)
@@ -101,7 +137,7 @@ export function DateTimePicker({
 
       <Popover
         id={anchorEl ? 'datepicker-popover' : undefined}
-        open={Boolean(anchorEl)}
+        open={isOpen}
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
@@ -123,22 +159,32 @@ export function DateTimePicker({
 
           <Divider margin="0.5em 0" />
 
-          <Flex alignCenter justifyBetween>
+          <div className={classes.footer}>
             <div>
               {showTimePicker && (
-                <TimeInput initialDate={date} onChange={handleChangeTime} />
+                <TimeInput
+                  className={iff(!!validationError, classes.inputError)}
+                  initialDate={date}
+                  onChange={handleChangeTime}
+                />
               )}
             </div>
 
             <Button
-              variant="text"
-              color="secondary"
+              variant="outlined"
+              color="primary"
               data-test="date-picker-done"
-              onClick={handleClose}
+              onClick={handleSave}
+              disabled={!!validationError}
             >
               {saveCaption}
             </Button>
-          </Flex>
+          </div>
+          {validationError && (
+            <Typography className={classes.error} variant="body2">
+              {validationError}
+            </Typography>
+          )}
         </PickerContainer>
       </Popover>
     </div>

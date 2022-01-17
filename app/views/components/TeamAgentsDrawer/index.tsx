@@ -6,15 +6,16 @@ import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
 import Drawer from 'components/OverlayDrawer'
-import TeamAgents from 'components/TeamAgents'
+import TeamAgents, { TeamAgentsProps } from 'components/TeamAgents'
 import { Agent, BrandedUser } from 'components/TeamAgents/types'
 import { searchContacts } from 'models/contacts/search-contacts'
 
 import { AgentsList } from './List'
 
-interface Props {
+interface Props
+  extends Pick<TeamAgentsProps, 'teamAgentsModelFn' | 'filterTeamsFn'> {
   title: string
-  multiSelection: boolean
+  multiSelection?: boolean
   withRelatedContacts?: boolean
   flattened?: boolean
   isPrimaryAgent?: boolean
@@ -31,7 +32,9 @@ export function TeamAgentsDrawer({
   isPrimaryAgent = false,
   isDrawerOpen = true,
   onClose,
-  onSelectAgents
+  onSelectAgents,
+  teamAgentsModelFn,
+  filterTeamsFn
 }: Props) {
   const [selectedAgents, setSelectedAgents] = useState<BrandedUser[]>([])
   const [isSearchingContacts, setIsSearchingContacts] = useState<boolean>(false)
@@ -49,11 +52,15 @@ export function TeamAgentsDrawer({
 
   const handleSelectAgent = async (user: BrandedUser) => {
     if (multiSelection) {
-      const isSelected = selectedAgents.some(agent => agent.id === user.id)
+      const isSelected = selectedAgents.some(
+        agent => agent.id === user.id && agent.brand_id === user.brand_id
+      )
 
       setSelectedAgents(
         isSelected
-          ? selectedAgents.filter(agent => agent.id !== user.id)
+          ? selectedAgents.filter(
+              agent => agent.id !== user.id || agent.brand_id !== user.brand_id
+            )
           : [...selectedAgents, user]
       )
 
@@ -104,6 +111,8 @@ export function TeamAgentsDrawer({
           flattenTeams={flattened}
           isPrimaryAgent={isPrimaryAgent}
           criteria={searchCriteria}
+          teamAgentsModelFn={teamAgentsModelFn}
+          filterTeamsFn={filterTeamsFn}
         >
           {({ isLoading, isEmptyState, teams }) => (
             <>

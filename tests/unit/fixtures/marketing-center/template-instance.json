@@ -4,6 +4,7 @@
   "template": {
     "id": "86eaa400-b03a-11e9-bb3b-1663bb1b90f0",
     "created_at": 1564210102.96269,
+    "brand": "123",
     "name": "Event",
     "template_type": "Birthday",
     "deleted_at": null,
@@ -14,12 +15,25 @@
     "inputs": [
       "user"
     ],
+    "variables": [],
     "mjml": false,
     "type": "template",
     "updated_at": 1564210102.96269
   },
-  "html": "\n      <!doctype html>\n      <html style=\"box-sizing: border-box; background-image: initial; background-position-x: initial; background-position-y: initial; background-size: initial; background-repeat-x: initial; background-repeat-y: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(243, 243, 243);\">\n        <head>\n          <style>\na:hover {\n  color: rgb(20, 125, 194);\n}\na:active {\n  color: rgb(20, 125, 194);\n}\na:visited {\n  col...",
-  "file": "Object",
+  "html": "<html><body><div>Hello, World!</body></html>",
+  "file": {
+    "id": "1235",
+    "created_at": 1,
+    "updated_at": 1,
+    "type": "file",
+    "created_by": "123",
+    "mime": "text/html",
+    "name": "tpl1",
+    "path": "/123",
+    "preview_url": "https://localhost/",
+    "public": false,
+    "url": "https://localhost/"
+  },
   "created_by": "29f259b4-626a-11e9-a064-0a95998482ac",
   "branch": "https://1sv7.app.link/4IYKuY0v2Z",
   "updated_at": 1568669751.63658,

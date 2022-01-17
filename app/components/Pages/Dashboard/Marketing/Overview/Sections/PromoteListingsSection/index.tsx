@@ -19,8 +19,12 @@ export default function PromoteListingsSection() {
     <SectionLayout
       title="Promote Your Listings"
       actionNode={
-        <LinkSectionAction title="View all" url="/dashboard/listings" />
+        <LinkSectionAction
+          title="View all your listings"
+          url="/dashboard/listings"
+        />
       }
+      headerGridProps={{ justifyContent: 'space-between' }}
     >
       {isLoading && (
         <>

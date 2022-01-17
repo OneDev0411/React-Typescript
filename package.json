@@ -311,6 +311,7 @@
     "@storybook/theming": "^6.3.12",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
     "@types/backbone": "^1.4.10",
     "@types/chart.js": "^2.9.31",
     "@types/classnames": "^2.2.7",

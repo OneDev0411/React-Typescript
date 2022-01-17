@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 import {
   Grid,
@@ -8,11 +8,19 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
+import classNames from 'classnames'
+
+import iff from '@app/utils/iff'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       marginBottom: theme.spacing(8)
+    },
+    containerGray: {
+      '&&': { padding: theme.spacing(3) }, // TODO: Find a better way to override the padding value
+      backgroundColor: theme.palette.grey[100],
+      borderRadius: theme.shape.borderRadius
     },
     headerContainer: {
       paddingBottom: theme.spacing(2)
@@ -30,14 +38,24 @@ interface Props {
   title: string
   children: ReactNode
   actionNode?: ReactNode
-  gridProps?: GridProps
+  containerGridProps?: Omit<
+    GridProps,
+    'container' | 'item' | 'direction' | 'className'
+  >
+  headerGridProps?: Omit<
+    GridProps,
+    'container' | 'item' | 'alignItems' | 'direction' | 'className'
+  >
+  grayMode?: boolean
 }
 
 export default function SectionLayout({
   title,
   children,
   actionNode,
-  gridProps = {}
+  containerGridProps,
+  headerGridProps,
+  grayMode = false
 }: Props) {
   const classes = useStyles()
 
@@ -46,8 +64,11 @@ export default function SectionLayout({
       container
       item
       direction="column"
-      className={classes.container}
-      {...gridProps}
+      className={classNames(
+        classes.container,
+        iff(grayMode, classes.containerGray)
+      )}
+      {...containerGridProps}
     >
       <Grid
         container
@@ -55,6 +76,7 @@ export default function SectionLayout({
         alignItems="center"
         direction="row"
         className={classes.headerContainer}
+        {...headerGridProps}
       >
         <Grid item className={classes.titleContainer}>
           <Box pr={1}>

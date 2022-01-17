@@ -10,7 +10,7 @@ import { ARTICLES_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
-import { TemplateBlockOptions } from '../../types'
+import { TemplateBlockOptions, RegisterBlockSelectHandler } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 import { baseView, isComponent } from '../utils'
 
@@ -24,13 +24,13 @@ export const articleTopBlockName = `${typeArticle}-top`
 export const articleLeftBlockName = `${typeArticle}-left`
 export const articleRightBlockName = `${typeArticle}-right`
 
+interface ArticleRenderData {
+  articles: ArticleMetadata[]
+}
+
 export interface ArticleBlocksOptions {
   articleClassNames?: string
   onArticleDrop: (model: Model) => void
-}
-
-interface ArticleBlocks {
-  selectHandler: (articles?: ArticleMetadata[]) => void
 }
 
 export default function registerArticleBlocks(
@@ -38,7 +38,7 @@ export default function registerArticleBlocks(
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
   { articleClassNames, onArticleDrop }: ArticleBlocksOptions
-): ArticleBlocks {
+): RegisterBlockSelectHandler<ArticleMetadata[]> {
   editor.DomComponents.addType(typeArticle, {
     isComponent: isComponent(typeArticle),
     view: { ...baseView(articleClassNames) }
@@ -98,10 +98,10 @@ export default function registerArticleBlocks(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent(
+  return handleBlockDragStopEvent<ArticleMetadata[], ArticleRenderData>(
     editor,
     allBlocks,
-    (articles: ArticleMetadata[]) => ({
+    articles => ({
       ...renderData,
       articles
     }),
