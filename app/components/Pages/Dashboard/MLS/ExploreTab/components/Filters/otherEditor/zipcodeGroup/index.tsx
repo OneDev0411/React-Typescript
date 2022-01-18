@@ -44,9 +44,10 @@ export const ZipcodeGroup = ({
         size="small"
         multiple
         limitTags={1}
+        clearOnBlur
         value={hasMapDrawing ? [] : mapPostcodesToOptions(filters.postal_codes)}
         filterOptions={(options, params) => {
-          if (params.inputValue) {
+          if (params.inputValue?.trim()) {
             return [
               {
                 id: params.inputValue,
