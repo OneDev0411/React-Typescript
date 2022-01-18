@@ -6,10 +6,13 @@ import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
+import { ACL } from '@app/constants/acl'
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 import PageLayout from 'components/GlobalPageLayout'
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
+import { noop } from 'utils/helpers'
 import { getSettingsInActiveTeam } from 'utils/user-teams'
 
 import SortField from './SortField'
@@ -25,10 +28,11 @@ const useStyles = makeStyles(theme => ({
 const SORT_FIELD_INSIGHT_KEY = 'insight_layout_sort_field'
 
 function InsightsLayout({
-  sentCount,
-  scheduledCount,
-  onCreateEmail,
-  renderContent
+  sentCount = 0,
+  scheduledCount = 0,
+  onCreateEmail = noop,
+  renderContent,
+  hasSortFilter = true
 }) {
   const classes = useStyles()
   const activeTeam = useUnsafeActiveTeam()
@@ -39,7 +43,8 @@ function InsightsLayout({
     ascending: false
   })
   const currentUrl = window.location.pathname
-  const Items = [
+
+  const items = [
     {
       label: 'Sent',
       count: sentCount,
@@ -51,6 +56,15 @@ function InsightsLayout({
       to: urlGenerator('/scheduled')
     }
   ]
+
+  const hasBetaAccess = useAcl(ACL.BETA)
+
+  if (hasBetaAccess) {
+    items.push({
+      label: 'Campaigns',
+      to: urlGenerator('/super-campaign')
+    })
+  }
 
   useEffectOnce(() => {
     const savedSortField = getSettingsInActiveTeam(
@@ -88,36 +102,40 @@ function InsightsLayout({
         <PageLayout.Main>
           <PageTabs
             defaultValue={currentUrl}
-            tabs={Items.map(({ label, count, to }, i) => (
+            tabs={items.map(({ label, count, to }, i) => (
               <TabLink
                 key={i}
                 label={
                   <span>
                     {label}
-                    <Chip
-                      variant="outlined"
-                      size="small"
-                      label={count}
-                      className={classes.emailCount}
-                    />
+                    {Number(count) > 0 && (
+                      <Chip
+                        variant="outlined"
+                        size="small"
+                        label={count}
+                        className={classes.emailCount}
+                      />
+                    )}
                   </span>
                 }
                 to={to}
                 value={to}
               />
             ))}
-            actions={[
-              <Tab
-                key="sort-field"
-                label={
-                  <SortField
-                    component="div"
-                    sortLabel={sortField.label}
-                    onChange={handleSortChange}
-                  />
-                }
-              />
-            ]}
+            actions={
+              hasSortFilter && [
+                <Tab
+                  key="sort-field"
+                  label={
+                    <SortField
+                      component="div"
+                      sortLabel={sortField.label}
+                      onChange={handleSortChange}
+                    />
+                  }
+                />
+              ]
+            }
           />
 
           <Box mt={1.5} flex="1 1 auto">

@@ -233,7 +233,6 @@ class TourDrawerRaw extends Component {
                     >
                       <DateTimeField
                         name="dueDate"
-                        selectedDate={values.dueDate}
                         datePickerModifiers={{
                           disabled: {
                             before: new Date()

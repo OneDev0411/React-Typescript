@@ -530,7 +530,15 @@ const AsyncMarketingInsight = withAcl(
   }),
   { oneOf: [ACL.MARKETING, ACL.CRM] }
 )
-
+const AsyncSuperCampaign = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/MarketingInsights/SuperCampaign' /* webpackChunkName: "email_insight_super_campaign" */
+      )
+  }),
+  [{ oneOf: [ACL.MARKETING, ACL.CRM] }, ACL.BETA]
+)
 /* ==================================== */
 //  Chatroom
 /* ==================================== */
@@ -644,6 +652,13 @@ const AsyncUpgradeToAgent = Load({
     )
 })
 
+const AsyncCampaigns = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Account/Campaigns' /* webpackChunkName: "campaigns" */
+    )
+})
+
 // const AsyncCSS = Load({
 //   loader: () =>
 //     import(
@@ -729,6 +744,20 @@ const AsyncCreateShowing = withAcl.showings(
         '../components/Pages/Dashboard/Showings/pages/CreateShowing' /* webpackChunkName: "create_showing" */
       )
   })
+)
+
+/* ==================================== */
+//  Super Campaigns
+/* ==================================== */
+
+const AsyncSuperCampaignDetail = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/SuperCampaigns/pages/SuperCampaignDetail' /* webpackChunkName: "super_campaign_detail" */
+      )
+  }),
+  [ACL.ADMIN, ACL.BETA]
 )
 
 /* ==================================== */
@@ -944,6 +973,11 @@ export default (
         <Route path="insights">
           <IndexRoute component={AsyncMarketingInsightsList} />
           <Route path="scheduled" component={AsyncMarketingInsightsList} />
+          <Route
+            path="super-campaign/:id/detail"
+            component={AsyncSuperCampaignDetail}
+          />
+          <Route path="super-campaign" component={AsyncSuperCampaign} />
           <Route path=":id" component={AsyncMarketingInsight} />
         </Route>
 
@@ -1015,6 +1049,7 @@ export default (
             path="connected-accounts"
             component={ConnectedAccountsSetting}
           />
+          <Route path="campaigns" component={AsyncCampaigns} />
           {/* <Route path="css" component={AsyncCSS} /> */}
         </Route>
 

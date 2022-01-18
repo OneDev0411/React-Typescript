@@ -9,7 +9,7 @@ import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 import { getTemplateImage } from 'utils/marketing-center/helpers'
 
-import { SAVED_TEMPLATE_VARIANT } from '../Builder/AddToMarketingCenter/constants'
+import { SAVED_TEMPLATE_VARIANT } from '../Builder/AddToMarketingCenterButton/constants'
 
 import { Container, TemplateItem, Video, Image } from './styled'
 import TemplateTypesSelect from './TemplateTypesSelect'

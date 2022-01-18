@@ -12,6 +12,11 @@ declare interface IUserBase extends IModel<'user'> {
   email_signature: string | null
   access_token: string
   refresh_token: string
+  facebook: Nullable<string>
+  twitter: Nullable<string>
+  linkedin: Nullable<string>
+  youtube: Nullable<string>
+  instagram: Nullable<string>
 }
 declare interface IUserInput extends Partial<IUserBase> {
   agent?: UUID

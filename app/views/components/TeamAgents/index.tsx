@@ -12,19 +12,24 @@ interface RenderProps {
   isEmptyState: boolean
   teams: NormalizedBrand[]
 }
-interface Props {
+
+export interface TeamAgentsProps {
   isPrimaryAgent: boolean
   flattenTeams?: boolean
   criteria?: string
   children: (props: RenderProps) => ReactNode
+  teamAgentsModelFn?: (brandId: Nullable<UUID>) => Promise<IBrand[]>
+  filterTeamsFn?: (teams: NormalizedBrand[]) => NormalizedBrand[]
 }
 
 export default function TeamAgents({
   children,
   isPrimaryAgent,
   criteria = '',
-  flattenTeams = false
-}: Props) {
+  flattenTeams = false,
+  teamAgentsModelFn = getAgents,
+  filterTeamsFn
+}: TeamAgentsProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [teamAgents, setTeamAgents] = useState<IBrand[]>([])
   const activeTeam = useUnsafeActiveTeam()
@@ -34,7 +39,9 @@ export default function TeamAgents({
       try {
         setIsLoading(true)
 
-        const agents = await getAgents(getBrand(activeTeam, isPrimaryAgent))
+        const agents = await teamAgentsModelFn(
+          getBrand(activeTeam, isPrimaryAgent)
+        )
 
         setTeamAgents(agents || [])
       } catch (e) {
@@ -46,7 +53,7 @@ export default function TeamAgents({
     }
 
     getTeamAgents()
-  }, [isPrimaryAgent, activeTeam])
+  }, [isPrimaryAgent, activeTeam, teamAgentsModelFn])
 
   const isEmptyState = !isLoading && teamAgents.length === 0
   const teams = useTeamAgentsSearch(teamAgents, criteria, flattenTeams)
@@ -56,7 +63,7 @@ export default function TeamAgents({
       {children({
         isLoading,
         isEmptyState,
-        teams
+        teams: filterTeamsFn ? filterTeamsFn(teams) : teams
       })}
     </>
   )

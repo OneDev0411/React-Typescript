@@ -24,6 +24,14 @@ export function selectUser(state: IAppState): IUser {
   return selectUserUnsafe(state)!
 }
 
+/* Returns the user agents info from the redux store.
+ * @param state The app state
+ * @returns The user state
+ */
+export function selectUserAgents(state: IAppState): Nullable<IAgent[]> {
+  return selectUser(state).agents
+}
+
 /**
  * Returns the phone number for the current user
  * @param state The app state

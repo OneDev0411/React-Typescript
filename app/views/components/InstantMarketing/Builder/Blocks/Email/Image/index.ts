@@ -8,7 +8,7 @@ import { TemplateRenderData } from 'components/InstantMarketing/Builder/utils/ge
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
-import { TemplateBlockOptions } from '../../types'
+import { RegisterBlockSelectHandler, TemplateBlockOptions } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 
 import template from './template.mjml'
@@ -19,8 +19,8 @@ export interface Options {
   onDrop: (model: Model) => void
 }
 
-interface ImageBlock {
-  selectHandler: (selectedImageUrl?: Image) => void
+interface ImageRenderData {
+  image: Image
 }
 
 export default function registerImageBlock(
@@ -28,7 +28,7 @@ export default function registerImageBlock(
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
   { onDrop }: Options
-): ImageBlock {
+): RegisterBlockSelectHandler<Image> {
   const imageBlocks = {
     [blockName]: templateBlockOptions.blocks[blockName]?.template || template
   }
@@ -53,10 +53,10 @@ export default function registerImageBlock(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent(
+  return handleBlockDragStopEvent<Image, ImageRenderData>(
     editor,
     allBlocks,
-    (selectedImageUrl: Image) => ({
+    selectedImageUrl => ({
       ...renderData,
       image: selectedImageUrl
     }),

@@ -7,7 +7,8 @@ import {
   ChipProps
 } from '@material-ui/core'
 import Autocomplete, {
-  createFilterOptions
+  createFilterOptions,
+  AutocompleteRenderInputParams
 } from '@material-ui/lab/Autocomplete'
 import { useSelector } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -25,17 +26,23 @@ const filter = createFilterOptions<SelectorOption>({
 })
 
 export interface Props {
+  className?: string
   value?: SelectorOption[]
   chipProps?: ChipProps
-  textFiledProps?: TextFieldProps
+  textFieldProps?: (
+    params: AutocompleteRenderInputParams
+  ) => Partial<TextFieldProps>
   onChange: (tags: SelectorOption[], hasNewTag: boolean) => void
+  disabled?: boolean
 }
 
 export const BaseTagSelector = ({
+  className,
   value = [],
   onChange,
   chipProps = {},
-  textFiledProps = {}
+  textFieldProps,
+  disabled
 }: Props) => {
   const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
   const [availableTags, setAvailableTags] = useState<SelectorOption[]>([])
@@ -74,6 +81,7 @@ export const BaseTagSelector = ({
 
   return (
     <Autocomplete
+      className={className}
       multiple
       freeSolo
       clearOnBlur
@@ -84,15 +92,15 @@ export const BaseTagSelector = ({
       ChipProps={chipProps}
       options={autocompleteOptions}
       value={selectedTags}
+      disabled={disabled}
       id="multiple-crm-tags"
       renderOption={option => (
         <Typography variant="body2">{option.title}</Typography>
       )}
       renderInput={params => (
         <TextField
-          {...textFiledProps}
-          {...params}
           placeholder="Type a tag name"
+          {...(textFieldProps ? textFieldProps(params) : params)}
         />
       )}
       onChange={(event, value: SelectorOption[]) => {
@@ -120,43 +128,45 @@ export const BaseTagSelector = ({
                 ? availableTags[originalTitle].value!
                 : baseValue
           } else if (lastValue && lastValue.value) {
-            tagValue = lastValue.value.trim()
+            tagValue = lastValue.value
           }
 
           let normalizedLastValue: SelectorOption = {
-            value: tagValue,
-            title: tagValue
+            value: tagValue.trim(),
+            title: tagValue.trim()
           }
 
-          if (normalizedLastValue) {
-            if (
-              /*
-               we're doing ts-ignore because the type of event is set to
-               ChangeEvent which keyCode doesn't exist there so
-               it cause error but if user press some key like
-               enter the keyCode value would be there in
-               event object so we need for checking it
-              */
-              // @ts-ignore
-              event.keyCode === 13 && // avoid set tag on enter if tag exist
-              normalizedLastValue.value &&
-              selectedTagKeys.includes(normalizedLastValue.value.toLowerCase())
-            ) {
-              return
-            }
-
-            if (hasNewTag && normalizedLastValue.value) {
-              setAvailableTagKeys([
-                ...availableTagKeys,
-                normalizedLastValue.value.toLowerCase()
-              ])
-            }
-
-            newValues = [
-              ...newValues.splice(0, newValues.length - 1),
-              normalizedLastValue
-            ]
+          // Avoid processing an empty tag
+          if (!normalizedLastValue.value) {
+            return
           }
+
+          if (
+            /*
+             we're doing ts-ignore because the type of event is set to
+             ChangeEvent which keyCode doesn't exist there so
+             it cause error but if user press some key like
+             enter the keyCode value would be there in
+             event object so we need for checking it
+            */
+            // @ts-ignore
+            event.keyCode === 13 && // avoid set tag on enter if tag exist
+            selectedTagKeys.includes(normalizedLastValue.value.toLowerCase())
+          ) {
+            return
+          }
+
+          if (hasNewTag) {
+            setAvailableTagKeys([
+              ...availableTagKeys,
+              normalizedLastValue.value.toLowerCase()
+            ])
+          }
+
+          newValues = [
+            ...newValues.splice(0, newValues.length - 1),
+            normalizedLastValue
+          ]
         }
 
         setSelectedTags(newValues)
@@ -168,13 +178,15 @@ export const BaseTagSelector = ({
         const allTagKeys = [...availableTagKeys, ...selectedTagKeys]
 
         // Suggest the creation of a new value
+        const sanitizedValue = params.inputValue.trim()
+
         if (
-          params.inputValue !== '' &&
-          !allTagKeys.includes(params.inputValue.trim().toLowerCase())
+          sanitizedValue !== '' &&
+          !allTagKeys.includes(sanitizedValue.toLowerCase())
         ) {
           filtered.push({
-            value: params.inputValue,
-            title: `Add "${params.inputValue}"`,
+            value: sanitizedValue,
+            title: `Add "${sanitizedValue}"`,
             isNewTag: true
           })
         }

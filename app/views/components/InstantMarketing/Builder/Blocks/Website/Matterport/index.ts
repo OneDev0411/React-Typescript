@@ -8,7 +8,7 @@ import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
-import { TemplateBlockOptions } from '../../types'
+import { TemplateBlockOptions, RegisterBlockSelectHandler } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 import { baseView, isComponent } from '../utils'
 
@@ -17,15 +17,15 @@ import template from './template.njk'
 const typeEmbedMatterport = 'embed-matterport'
 export const embedMatterportBlockName = typeEmbedMatterport
 
+interface MatterportRenderData {
+  src: string
+}
+
 export interface MatterportBlockOptions {
   embedMatterportClassNames?: string
   onMatterportDrop: (model: Model) => void
   onMatterportDoubleClick: (model: Model) => void
   onEmptyMatterportClick: (model: Model) => void
-}
-
-interface MatterportBlock {
-  selectHandler: (modelId?: string) => void
 }
 
 const isMatterportComponent = isComponent(typeEmbedMatterport)
@@ -43,7 +43,7 @@ export default function registerMatterportBlock(
     onMatterportDoubleClick,
     onEmptyMatterportClick
   }: MatterportBlockOptions
-): MatterportBlock {
+): RegisterBlockSelectHandler<string> {
   const ImageComponent = editor.DomComponents.getType('image')
   const ImageModel = ImageComponent!.model
   const ImageView = ImageComponent!.view
@@ -242,10 +242,10 @@ export default function registerMatterportBlock(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent(
+  return handleBlockDragStopEvent<string, MatterportRenderData>(
     editor,
     allBlocks,
-    (modelId: string) => ({
+    modelId => ({
       ...renderData,
       src: `https://my.matterport.com/show/?m=${modelId}`
     }),
