@@ -15,13 +15,20 @@ interface Props {
   children?: ReactElement<any>
   menu?: ReactElement<any>
   style?: CSSProperties
+  closeButtonDisabled?: boolean
 }
 
 const throwMissingDrawerContextError = () => {
   throw new Error('Drawer.Header must be used inside drawer')
 }
 
-const Header = ({ title, menu, style, children }: Props) => {
+const Header = ({
+  title,
+  menu,
+  style,
+  children,
+  closeButtonDisabled
+}: Props) => {
   const { onClose } = useDrawerContext() || {
     onClose: throwMissingDrawerContextError
   }
@@ -39,6 +46,7 @@ const Header = ({ title, menu, style, children }: Props) => {
           <IconButton
             onClick={event => onClose(event, 'closeButtonClick')}
             style={{ marginLeft: menu ? '1rem' : 0 }}
+            disabled={closeButtonDisabled}
           >
             <SvgIcon path={mdiClose} />
           </IconButton>

@@ -42,7 +42,7 @@ export function SelectAgent({
         label: `${item.mls} ${item.full_name ? ` - ${item.full_name}` : ''}`,
         disabled:
           userAgents?.some(
-            userAgent => userAgent.mls === item.mls && userAgent.id == item.id
+            userAgent => userAgent.mls === item.mls && userAgent.id === item.id
           ) || false
       })),
     [agents, userAgents]

@@ -98,7 +98,9 @@ export function UserAgentSelect({ agents, defaultAgent, onChange }: Props) {
               label={
                 <Box display="flex" alignItems="center">
                   <span className={cn(classes.status, agent.status)} />{' '}
-                  <Typography variant="body2">{agent.status}</Typography>
+                  <Typography variant="body2">
+                    {agent.status || 'Unknown'}
+                  </Typography>
                 </Box>
               }
             />

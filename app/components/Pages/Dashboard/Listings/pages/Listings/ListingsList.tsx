@@ -1,8 +1,11 @@
-import { makeStyles } from '@material-ui/core'
+import { Chip, makeStyles, Tooltip } from '@material-ui/core'
 import classNames from 'classnames'
+import { useSelector } from 'react-redux'
 
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
 import { GetBrandListingsOptions } from '@app/models/listings/search/get-brand-listings'
+import { selectUserAgents } from '@app/selectors/user'
+import { isUserCoAgent } from '@app/utils/listing'
 import { Table } from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
@@ -46,6 +49,9 @@ interface ListingsListProps
 function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
+
+  const userAgents = useSelector(selectUserAgents)
+
   const { listings: rows, isLoading } = useBrandAndDealsListings(
     brandId,
     OPTIONS
@@ -77,6 +83,20 @@ function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
       primary: false,
       render: ({ row }) => (
         <ListingsListColumnText>{row.status}</ListingsListColumnText>
+      )
+    },
+    {
+      id: 'co-agent',
+      width: '10%',
+      primary: false,
+      render: ({ row }) => (
+        <>
+          {isUserCoAgent(userAgents, row) && (
+            <Tooltip title="You are the co-listing agent">
+              <Chip label="Co-Agent" size="small" />
+            </Tooltip>
+          )}
+        </>
       )
     },
     {
