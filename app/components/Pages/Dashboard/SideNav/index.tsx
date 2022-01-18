@@ -2,7 +2,7 @@ import React from 'react'
 
 import { makeStyles, Theme, Hidden } from '@material-ui/core'
 
-import { Menu } from './Menu'
+import Menu from './Menu'
 import { appSidenavWidth } from './variables'
 
 const useStyles = makeStyles((theme: Theme) => ({

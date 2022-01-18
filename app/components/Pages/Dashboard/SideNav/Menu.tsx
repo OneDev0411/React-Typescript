@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent, useEffect, useRef } from 'react'
 
 import { Divider, makeStyles } from '@material-ui/core'
 import {
@@ -13,6 +13,7 @@ import {
   mdiGoogleMaps
 } from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
+import { browserHistory, withRouter, WithRouterProps } from 'react-router'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
@@ -73,8 +74,11 @@ const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
 const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
 const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
-export function Menu() {
+function Menu(props: WithRouterProps) {
   const classes = useStyles()
+  const {
+    location: { pathname }
+  } = props
   const user = useSelector(selectUserUnsafe)
   const brand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
@@ -110,6 +114,20 @@ export function Menu() {
     (panel: ExpandedMenu) => (event: ChangeEvent<{}>, isExpanded: boolean) => {
       setExpandedMenu(isExpanded ? panel : null)
     }
+
+  const mounted: any = useRef()
+
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true
+
+      const lastVisitedRoute = localStorage.getItem('last-visited-route')
+
+      lastVisitedRoute && browserHistory.push(lastVisitedRoute)
+    } else {
+      localStorage.setItem('last-visited-route', pathname)
+    }
+  })
 
   return (
     <Sidenav>
@@ -513,3 +531,5 @@ export function Menu() {
     </Sidenav>
   )
 }
+
+export default withRouter(Menu)
