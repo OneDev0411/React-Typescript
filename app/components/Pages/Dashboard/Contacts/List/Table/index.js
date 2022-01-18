@@ -10,7 +10,7 @@ import cn from 'classnames'
 
 import { Table } from 'components/Grid/Table'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import { TextInlineEdit } from 'components/Grid/Table/features/inline-edit/Text'
+import EditTextCell from 'components/Grid/Table/features/cells/EditTextCell'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import {
   useGridStyles,
@@ -26,7 +26,6 @@ import { TableActions } from './Actions'
 import Avatar from './columns/Avatar'
 import FlowCell from './columns/Flows'
 import LastTouched from './columns/LastTouched'
-import Name from './columns/Name'
 import TagsString from './columns/Tags'
 import { LoadingComponent } from './components/LoadingComponent'
 import ColumnHeaderCell from './grid/ColumnHeaderCell'
@@ -107,10 +106,13 @@ const ContactsList = props => {
           />
         </Box>
       ),
-      primary: true,
       width: '220px',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
-      render: ({ row: contact }) => <Name contact={contact} />
+      render: ({ row: contact }) => {
+        const name = getAttributeFromSummary(contact, 'display_name')
+
+        return <EditTextCell text={name} isPrimary />
+      }
     },
     {
       id: 'tag',
@@ -144,16 +146,6 @@ const ContactsList = props => {
         />
       ),
       width: '200px',
-      renderInlineEdit: ({ row: contact }, close) => (
-        <TextInlineEdit
-          value={contact.phone_number}
-          onSave={() =>
-            // TODO: validate phone number?
-            // TODO: save the contact's new phone number
-            close()
-          }
-        />
-      ),
       render: ({ row: contact }) => {
         let phoneNumber
         let phoneNumberLabel
@@ -188,16 +180,6 @@ const ContactsList = props => {
         />
       ),
       width: '200px',
-      renderInlineEdit: ({ row: contact }, close) => (
-        <TextInlineEdit
-          value={contact.email}
-          onSave={() =>
-            // TODO: validate email?
-            // TODO: save the contact's new email
-            close()
-          }
-        />
-      ),
       render: ({ row: contact }) => {
         let emailAddress
         let emailAddressLabel

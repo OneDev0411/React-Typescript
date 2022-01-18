@@ -1,5 +1,3 @@
-import { MouseEvent } from 'react'
-
 import { TableCellProps } from '@material-ui/core/TableCell'
 
 type StringOrNumber = string | number
@@ -45,10 +43,6 @@ export interface TableColumn<Row> {
   sortFn?: (rows: Row[]) => Row[]
   accessor?: (row: Row) => StringOrNumber | null | undefined
   render?: (data: RenderProps<Row>) => React.ReactNode | string
-  renderInlineEdit?: (
-    data: RenderProps<Row>,
-    close: (e: MouseEvent<HTMLButtonElement>) => void
-  ) => React.ReactNode
 }
 
 export type GridHookPlugin<Row, Options> = (
