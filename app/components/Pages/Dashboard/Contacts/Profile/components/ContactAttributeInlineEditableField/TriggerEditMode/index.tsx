@@ -188,6 +188,7 @@ const TriggerEditModeComponent = ({
     return (
       <div className={classes.senderContainer}>
         <TeamContactSelect
+          /* @ts-ignore */
           disabled={disabled || !isActive || isSaving}
           owner={sender}
           user={sender}
