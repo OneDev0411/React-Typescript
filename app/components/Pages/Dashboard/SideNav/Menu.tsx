@@ -115,11 +115,13 @@ function Menu(props: WithRouterProps) {
       setExpandedMenu(isExpanded ? panel : null)
     }
 
-  const mounted: any = useRef()
+  // Because of saving the last visited route to localStorage,
+  // I had to use useRef here to implement componentDidUpdate
+  const didMountRef: any = useRef()
 
   useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true
+    if (!didMountRef.current) {
+      didMountRef.current = true
 
       const lastVisitedRoute = localStorage.getItem('last-visited-route')
 
