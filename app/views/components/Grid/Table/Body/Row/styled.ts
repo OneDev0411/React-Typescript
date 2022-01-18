@@ -60,10 +60,6 @@ export const GridRowContainer = styled.div<{
     align-items: stretch;
     background-color: transparent;
 
-    &:first-child {
-      border-top: 1px solid ${theme.palette.divider};
-    }
-
     .column {
       border-right: 1px solid ${alpha(theme.palette.divider, 0.06)};
       height: 100%;
@@ -74,6 +70,9 @@ export const GridRowContainer = styled.div<{
       font-weight: ${theme.typography.body2.fontWeight};
       font-size: ${theme.typography.body2.fontSize};
       line-height: ${theme.typography.body2.lineHeight};
+    }
+    .column:first-child {
+      border-right: none;
     }
 
     &:hover {
