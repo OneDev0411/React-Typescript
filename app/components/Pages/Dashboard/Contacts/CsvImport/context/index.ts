@@ -6,7 +6,7 @@ import { MappedField } from '../types'
 
 interface StateContext {
   file: Nullable<File>
-  csv: Nullable<ParseResult<unknown>>
+  csv: Nullable<ParseResult>
   owner: Nullable<IUser>
   mappedFields: Record<string, Nullable<MappedField>>
 }

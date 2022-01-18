@@ -17,7 +17,7 @@ interface CompareMatches {
 }
 
 export function useAutoMapFields(
-  csv: Nullable<ParseResult<unknown>>
+  csv: Nullable<ParseResult>
 ): [
   Record<string, Nullable<MappedField>>,
   typeof setList,

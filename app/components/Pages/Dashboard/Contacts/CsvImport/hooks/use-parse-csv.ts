@@ -12,7 +12,7 @@ export function useParseCsv(
     onError: (error: ParseError) => void
   }
 ): [typeof results, typeof error] {
-  const [results, setResults] = useState<Nullable<ParseResult<unknown>>>(null)
+  const [results, setResults] = useState<Nullable<ParseResult>>(null)
   const [error, setError] = useState<Nullable<ParseError>>(null)
   const notify = useNotify()
 
@@ -21,9 +21,9 @@ export function useParseCsv(
       return
     }
 
-    parse<unknown, File>(file, {
+    parse(file, {
       skipEmptyLines: true,
-      complete: (data: ParseResult<unknown>) => {
+      complete: (data: ParseResult) => {
         if (data.errors.length) {
           setError(data.errors[0])
           onError(data.errors[0])

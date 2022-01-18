@@ -14,7 +14,7 @@ import { MappedField, AttributeOption } from '../types'
 import { useOptions } from './attribute-options/use-attribute-options'
 
 export function useAttributeMap(
-  csv: Nullable<ParseResult<unknown>>
+  csv: Nullable<ParseResult>
 ): [
   Record<string, Nullable<MappedField>>,
   typeof setList,

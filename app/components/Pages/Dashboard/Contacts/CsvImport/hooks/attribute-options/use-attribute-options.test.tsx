@@ -23,7 +23,7 @@ describe('test Csv Import attribute options', () => {
   })
 
   it('should create spouse/partner options', () => {
-    const { result, waitForNextUpdate } = renderHook(
+    const { result } = renderHook(
       () => useOptions({}, ''), {
       wrapper: ReactQueryTestBed
     })
@@ -52,7 +52,7 @@ describe('test Csv Import attribute options', () => {
       }
     } as Record<string, MappedField>
 
-    const { result, waitForNextUpdate } = renderHook(() => useOptions(fields, ''), {
+    const { result } = renderHook(() => useOptions(fields, ''), {
       wrapper: ReactQueryTestBed
     })
 
