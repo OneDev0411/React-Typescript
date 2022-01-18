@@ -1,5 +1,5 @@
-import { SIGNIN_SUCCESS } from '../../constants/auth/signin'
-import * as actionTypes from '../../constants/user'
+import { SIGNIN_SUCCESS } from '@app/constants/auth/signin'
+import * as actionTypes from '@app/constants/user'
 
 export type IUserState = Nullable<IUser>
 
@@ -8,6 +8,9 @@ const userReducer = (state: IUserState = null, action) => {
   switch (action.type) {
     case SIGNIN_SUCCESS:
       return action.user
+
+    case actionTypes.SET_USER_AND_ACTIVE_TEAM:
+      return action.payload.user
 
     case actionTypes.UPDATE_USER:
     case actionTypes.EDIT_USER_SUCCESS:

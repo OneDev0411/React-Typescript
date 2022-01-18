@@ -9,9 +9,8 @@ import signin from '@app/models/auth/signin'
 import signup from '@app/models/auth/signup'
 import { getActiveTeam } from '@app/models/user/get-active-team'
 import { lookUpUserByEmail } from '@app/models/user/lookup-user-by-email'
-import { setActiveTeam } from '@app/store_actions/active-team'
+import { setUserAndActiveTeam } from '@app/store_actions/active-team'
 
-import * as actionsType from '../../../../constants/auth/signin'
 import { IAppState } from '../../../../reducers'
 import { getUserDefaultHomepage } from '../../../../utils/get-default-home-page'
 
@@ -90,13 +89,7 @@ export default function Signin(props: Props) {
       const user: IUser = await signin({ ...values, username })
       const activeTeam: IUserTeam = await getActiveTeam(user)
 
-      console.log('handleSignin', { user, activeTeam })
-
-      await dispatch({
-        user,
-        type: actionsType.SIGNIN_SUCCESS
-      })
-      await dispatch(setActiveTeam(activeTeam))
+      dispatch(setUserAndActiveTeam(user, activeTeam))
 
       Sentry.configureScope(scope => {
         scope.setUser({

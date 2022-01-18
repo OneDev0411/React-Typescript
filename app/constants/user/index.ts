@@ -25,5 +25,6 @@ export const DISCONNECT_DOCUSIGN = 'DISCONNECT_DOCUSIGN'
 
 // these are related to the getting active user role (aka team in web)
 export const UPDATE_ACTIVE_TEAM_SETTING = 'UPDATE_ACTIVE_TEAM_SETTING'
+export const SET_USER_AND_ACTIVE_TEAM = 'SET_USER_AND_ACTIVE_TEAM'
 export const ACTIVE_TEAM_REQUEST = 'ACTIVE_TEAM_REQUEST'
 export const SET_ACTIVE_TEAM = 'SET_ACTIVE_TEAM'

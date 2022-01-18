@@ -20,7 +20,7 @@ import {
 } from '@app/components/helpers/get-dashboard-access-list'
 import syncOpenHouseData from '@app/components/helpers/sync-open-house-offline-registers'
 import { useLoadUserAndActiveTeam } from '@app/hooks/use-load-user-and-active-team'
-import asyncComponentLoader from '@app/loader'
+// import asyncComponentLoader from '@app/loader'
 import { IAppState } from '@app/reducers'
 import {
   isLoadedContactAttrDefs,
@@ -48,9 +48,9 @@ import Intercom from '@app/views/components/Intercom'
 
 import { DashboardLayout } from './DashboardLayout'
 
-const InstantChat = asyncComponentLoader({
-  loader: () => import('./Chatroom/InstantChat')
-})
+// const InstantChat = asyncComponentLoader({
+//   loader: () => import('./Chatroom/InstantChat')
+// })
 
 // TODO: fix type which is set to unknown
 type DashboardState = {
@@ -68,12 +68,10 @@ interface DashboardProps
 export function Dashboard({ params, children, location }: DashboardProps) {
   useTitle('Rechat | Dashboard')
 
-  const { user, activeTeam, ...ff } = useLoadUserAndActiveTeam()
-
-  console.log({ user, activeTeam, ff })
+  const { user, activeTeam } = useLoadUserAndActiveTeam('Dashboard')
 
   const {
-    rooms,
+    // rooms,
     deals,
     isFetchingDeals,
     contactsAttributeDefs
@@ -96,6 +94,8 @@ export function Dashboard({ params, children, location }: DashboardProps) {
   )
 
   const handleOnlineEvent = useCallback(() => {
+    console.log('handleOnlineEvent')
+
     // update the number of unread emails in Inbox nav link notification badge
     dispatch(fetchUnreadEmailThreadsCount())
   }, [dispatch])
@@ -119,7 +119,7 @@ export function Dashboard({ params, children, location }: DashboardProps) {
 
   useEffectOnce(() => {
     const init = async () => {
-      // console.log('init of new dashboard', { user, activeTeam, deals })
+      console.log('init of new dashboard', { user, activeTeam, deals })
 
       if (!activeTeam || !user) {
         return
@@ -142,10 +142,7 @@ export function Dashboard({ params, children, location }: DashboardProps) {
           !searchParamValue
         ) {
           dispatch(getDeals(activeTeam))
-          console.log('get deal 1')
         } else {
-          console.log('get deal 2')
-
           dispatch(
             searchParamValue
               ? searchDeals(activeTeam, decodeURIComponent(searchParamValue))
@@ -204,7 +201,7 @@ export function Dashboard({ params, children, location }: DashboardProps) {
           <EmailVerificationBanner show email={user.email} />
         )}
 
-        {user && <InstantChat user={user} rooms={rooms} />}
+        {/* user && <InstantChat user={user} rooms={rooms} /> */}
 
         <DashboardLayout>
           {cloneElement(children, {

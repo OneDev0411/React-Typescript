@@ -4,6 +4,7 @@ import { getActiveTeam } from '@app/models/user/get-active-team'
 import { putUserSetting } from '@app/models/user/put-user-setting'
 import {
   UPDATE_ACTIVE_TEAM_SETTING,
+  SET_USER_AND_ACTIVE_TEAM,
   ACTIVE_TEAM_REQUEST,
   SET_ACTIVE_TEAM
 } from 'constants/user'
@@ -22,6 +23,14 @@ export const setActiveTeam = (team: IUserTeam) =>
   } as const)
 
 export type SetActiveTeamAction = ReturnType<typeof setActiveTeam>
+
+export const setUserAndActiveTeam = (user: IUser, team: IUserTeam) =>
+  ({
+    type: SET_USER_AND_ACTIVE_TEAM,
+    payload: { user, team }
+  } as const)
+
+export type SetUserAndActiveTeamAction = ReturnType<typeof setUserAndActiveTeam>
 
 const updateActiveTeamSetting = (key: string, value: any) =>
   ({
