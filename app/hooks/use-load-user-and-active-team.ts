@@ -27,9 +27,7 @@ type UseLoadUserAndActiveTeamReturn = {
   isGuest: boolean
 }
 
-export function useLoadUserAndActiveTeam(
-  ff: any = 'default'
-): UseLoadUserAndActiveTeamReturn {
+export function useLoadUserAndActiveTeam(): UseLoadUserAndActiveTeamReturn {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Nullable<string>>(null)
   const [isGuest, setIsGuest] = useState(false)
