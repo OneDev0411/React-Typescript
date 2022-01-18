@@ -111,6 +111,7 @@ export function Body<Row>({
             rows={rows}
             selection={selection}
             totalRows={totalRows}
+            inlineGridEnabled={inlineGridEnabled}
           />
         )}
         {rows.map((row, rowIndex) => (
@@ -144,6 +145,7 @@ export function Body<Row>({
           rows={rows}
           selection={selection}
           totalRows={totalRows}
+          inlineGridEnabled={inlineGridEnabled}
         />
       )}
       <AutoSizer disableHeight>
