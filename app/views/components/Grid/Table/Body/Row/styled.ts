@@ -62,10 +62,6 @@ export const GridRowContainer = styled.div<{
     background-color: transparent;
     ${theme.typography.body2};
 
-    .column:first-child {
-      padding-left: ${theme.spacing(4)}px;
-    }
-
     &:hover {
       background-color: ${theme.palette.grey[50]};
     }
