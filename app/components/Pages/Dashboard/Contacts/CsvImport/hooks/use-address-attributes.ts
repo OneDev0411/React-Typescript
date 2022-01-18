@@ -16,7 +16,7 @@ export function useAddressAttributes() {
   const isAddressAttribute = (attribute: IAttribute) => {
     const definition = getAttributeDefinition(attribute)
 
-    return definition.section === AddressSectionName
+    return definition?.section === AddressSectionName
   }
 
   return { getAddressAttributes, isAddressAttribute }

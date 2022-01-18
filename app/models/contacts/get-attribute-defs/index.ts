@@ -8,7 +8,6 @@ export async function getAttributeDefs(): Promise<{
 }> {
   try {
     const response = await new Fetch().get('/contacts/attribute_defs')
-
     const { data } = response.body
 
     return {
