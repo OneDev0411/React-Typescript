@@ -48,7 +48,8 @@ export default function CsvImport() {
   const [uploadContacts, isUploadingContacts] = useUploadContacts(
     owner,
     file,
-    mappedFields
+    mappedFields,
+    parsedCsv
   )
 
   return (
