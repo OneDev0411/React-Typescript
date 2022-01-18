@@ -86,10 +86,18 @@ export const GridRowContainer = styled.div<{
     }
 
     .column {
+      height: 100%;
       display: flex;
       align-items: center;
-      height: 100%;
       border-right: 1px solid ${alpha(theme.palette.divider, 0.06)};
+      font-family: "${theme.typography.body2.fontFamily}";
+      font-weight: ${theme.typography.body2.fontWeight};
+      font-size: ${theme.typography.body2.fontSize};
+      line-height: ${theme.typography.body2.lineHeight};
+      color: ${theme.palette.grey[700]};
+    }
+    .column:first-child {
+      border-right: none;
     }
 
     ${
