@@ -40,7 +40,7 @@ interface Props<Row> {
   totalRows: number
   classes: GridClasses
   virtualize: boolean
-  itemSize?: any
+  itemSize?: number
   infiniteScrolling: InfiniteScrollingOptions | null
   selection: GridSelectionOptions<Row> | null
   hasHeader?: boolean
@@ -111,6 +111,7 @@ export function Body<Row>({
             rows={rows}
             selection={selection}
             totalRows={totalRows}
+            inlineGridEnabled={inlineGridEnabled}
           />
         )}
         {rows.map((row, rowIndex) => (
@@ -144,6 +145,7 @@ export function Body<Row>({
           rows={rows}
           selection={selection}
           totalRows={totalRows}
+          inlineGridEnabled={inlineGridEnabled}
         />
       )}
       <AutoSizer disableHeight>

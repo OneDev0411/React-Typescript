@@ -17,7 +17,7 @@ import {
 export interface Props<Row> {
   inlineGridEnabled?: boolean
   columns: TableColumn<Row>[]
-  itemSize?: any
+  itemSize?: number
   rows: Row[]
   totalRows: number
   virtualize?: boolean

@@ -54,7 +54,7 @@ export function GridTable<Row>({
   totalRows,
   getTdProps,
   getTrProps,
-  itemSize = null,
+  itemSize,
   inlineGridEnabled = false,
   virtualize = true,
   hasHeader = false,

@@ -12,7 +12,10 @@ import { Table } from 'components/Grid/Table'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 import { TextInlineEdit } from 'components/Grid/Table/features/inline-edit/Text'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
-import { useGridStyles } from 'components/Grid/Table/styles'
+import {
+  useGridStyles,
+  useInlineGridStyles
+} from 'components/Grid/Table/styles'
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 import { goTo } from 'utils/go-to'
 
@@ -53,9 +56,13 @@ const useCustomGridStyles = makeStyles(theme => ({
 
 const ContactsList = props => {
   const [state, dispatch] = useGridContext()
-  const gridClasses = useGridStyles(true)
-  const customGridClasses = useCustomGridStyles()
   const theme = useTheme()
+
+  const inlineGridEnabled = true
+  const gridClasses = useGridStyles()
+  const inlineGridClasses = useInlineGridStyles()
+  const customGridClasses = useCustomGridStyles()
+
   const isParkTabActive = props.activeSegment?.id === PARKED_CONTACTS_LIST_ID
   const resetSelectedRow = () => {
     const {
@@ -293,7 +300,7 @@ const ContactsList = props => {
         totalRows={props.totalRows}
         loading={getLoading()}
         columns={columns}
-        inlineGridEnabled
+        inlineGridEnabled={inlineGridEnabled}
         itemSize={theme.spacing(5)}
         LoadingStateComponent={LoadingComponent}
         getTrProps={getRowProps}
@@ -306,7 +313,11 @@ const ContactsList = props => {
           showSelectAll: false
         }}
         classes={{
-          row: cn(gridClasses.row, customGridClasses.row)
+          row: cn({
+            [gridClasses.row]: !inlineGridEnabled,
+            [inlineGridClasses.row]: inlineGridEnabled,
+            [customGridClasses.row]: true
+          })
         }}
         infiniteScrolling={{
           onReachEnd: props.onRequestLoadMore,

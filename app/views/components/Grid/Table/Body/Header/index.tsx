@@ -2,7 +2,10 @@ import { memo, useMemo } from 'react'
 
 import cn from 'classnames'
 
-import { useGridStyles } from 'components/Grid/Table/styles'
+import {
+  useGridStyles,
+  useInlineGridStyles
+} from 'components/Grid/Table/styles'
 
 import { ToggleEntireRows } from '../../features/Selection/ToggleEntireRows'
 import { getColumnsSize } from '../../helpers/get-columns-size'
@@ -13,17 +16,28 @@ interface Props<Row> {
   rows: (Row & { id?: UUID })[]
   totalRows: number
   selection: GridSelectionOptions<Row> | null
+  inlineGridEnabled?: boolean
 }
 
-function Header<Row>({ columns, rows, selection, totalRows }: Props<Row>) {
+function Header<Row>({
+  columns,
+  rows,
+  selection,
+  totalRows,
+  inlineGridEnabled = false
+}: Props<Row>) {
   const columnsSize = useMemo(() => getColumnsSize<Row>(columns), [columns])
-  const gridClasses = useGridStyles(true)
+
+  const gridClasses = useGridStyles()
+  const inlineGridClasses = useInlineGridStyles()
 
   return (
     <div
       className={cn({
-        [gridClasses.header]: true,
-        [gridClasses.headerHasSelected]: !!selection
+        [inlineGridClasses.header]: inlineGridEnabled,
+        [inlineGridClasses.headerHasSelected]: inlineGridEnabled && !!selection,
+        [gridClasses.header]: !inlineGridEnabled,
+        [gridClasses.headerHasSelected]: !inlineGridEnabled && !!selection
       })}
     >
       {columns.map((column, columnIndex) => {
