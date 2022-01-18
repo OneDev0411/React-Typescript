@@ -3,7 +3,7 @@ import attributeDefs from 'fixtures/contacts/attribute-definitions.json'
 import { ReactQueryTestBed } from 'tests/unit/ReactQueryTestBed'
 import nock from 'nock'
 
-import { useAddressAttributes } from '../use-address-attributes'
+import { useAddressAttributes } from '.'
 
 describe('test Csv Import address attributes', () => {
   nock(/.*/)
