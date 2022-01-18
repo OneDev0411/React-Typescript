@@ -15,10 +15,6 @@ export function useAttributeDefinition() {
         return attributeTypesByName[attribute.attribute_type]
       }
 
-      if (!attributeDefsById[attribute.attribute_def]) {
-        console.log('$', attributeDefsById)
-      }
-
       return attributeDefsById[attribute.attribute_def]
     },
     [attributeDefsById, attributeTypesByName]
