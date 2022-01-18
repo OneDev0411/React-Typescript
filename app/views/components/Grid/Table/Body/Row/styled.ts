@@ -64,18 +64,6 @@ export const GridRowContainer = styled.div<{
       border-top: 1px solid ${theme.palette.divider};
     }
 
-    .column {
-      border-right: 1px solid ${alpha(theme.palette.divider, 0.06)};
-      height: 100%;
-      display: flex;
-      align-items: center;
-      color: ${theme.palette.grey[700]};
-      font-family: "${theme.typography.body2.fontFamily}";
-      font-weight: ${theme.typography.body2.fontWeight};
-      font-size: ${theme.typography.body2.fontSize};
-      line-height: ${theme.typography.body2.lineHeight};
-    }
-
     &:hover {
       background-color: ${theme.palette.grey[50]};
     }
@@ -95,6 +83,13 @@ export const GridRowContainer = styled.div<{
 
     &:hover .selection--checkbox {
       display: block !important;
+    }
+
+    .column {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      border-right: 1px solid ${alpha(theme.palette.divider, 0.06)};
     }
 
     ${

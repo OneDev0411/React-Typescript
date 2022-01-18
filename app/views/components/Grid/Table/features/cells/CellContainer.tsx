@@ -1,12 +1,10 @@
-import { MouseEvent, useState } from 'react'
+import { useState } from 'react'
 
 import { makeStyles, IconButton, Tooltip } from '@material-ui/core'
 import { mdiPencilOutline } from '@mdi/js'
 
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-
-import { RenderProps } from '../../types'
 
 //----
 
@@ -18,14 +16,11 @@ interface Action {
   onClick: (e: any) => void
   iconPath: string
 }
-interface Props<Row> {
+interface Props {
   text?: string
   enableActions?: boolean
-  renderInlineEdit?: (
-    data: RenderProps<Row>,
-    close: (e: MouseEvent<HTMLButtonElement>) => void
-  ) => React.ReactNode
-  renderCellContent: () => JSX.Element
+  renderInlineEdit?: () => React.ReactNode
+  renderCellContent: () => React.ReactNode
   onEnterEdit?: (isEditing: boolean) => void
   actions?: Record<string, Action>
 }
