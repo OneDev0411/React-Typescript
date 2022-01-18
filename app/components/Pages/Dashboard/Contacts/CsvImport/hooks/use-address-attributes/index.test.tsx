@@ -27,6 +27,48 @@ describe('test Csv Import address attributes', () => {
       expect(list.filter(item => item.type === 'attribute_type').length).toBe(1)
     })
   })
+
+  it('should return "true" when attribute is an address', async () => {
+    const { result } = renderHook(
+      () => useAddressAttributes(), {
+      wrapper: ReactQueryTestBed
+    })
+
+    act(() => {
+      expect(result.current.isAddressAttribute({
+        type: 'attribute_def',
+        attribute_def: '348e18e8-31f3-423f-b501-8a24a606d83b'
+      })).toBe(true)
+    })
+
+    act(() => {
+      expect(result.current.isAddressAttribute({
+        type: 'attribute_type',
+        attribute_type: 'full_address'
+      })).toBe(true)
+    })
+  })
+
+  it('should return "false" when attribute is an address', async () => {
+    const { result } = renderHook(
+      () => useAddressAttributes(), {
+      wrapper: ReactQueryTestBed
+    })
+
+    act(() => {
+      expect(result.current.isAddressAttribute({
+        type: 'attribute_def',
+        attribute_def: 'edf3d7e0-440f-439d-ae0c-2226eda3785a'
+      })).toBe(false)
+    })
+
+    act(() => {
+      expect(result.current.isAddressAttribute({
+        type: 'attribute_type',
+        attribute_type: 'tag'
+      })).toBe(false)
+    })
+  })
 })
 
 export {}
