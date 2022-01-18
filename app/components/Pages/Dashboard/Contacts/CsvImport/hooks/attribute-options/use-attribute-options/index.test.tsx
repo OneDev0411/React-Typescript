@@ -1,9 +1,9 @@
-import { renderHook, act } from '@testing-library/react-hooks'
-import { useOptions } from '../use-attribute-options'
+import { renderHook } from '@testing-library/react-hooks'
 import attributeDefs from 'fixtures/contacts/attribute-definitions.json'
 import { ReactQueryTestBed } from 'tests/unit/ReactQueryTestBed'
 import nock from 'nock'
 import { MappedField } from '../../../types'
+import { useOptions } from '.'
 
 describe('test Csv Import attribute options', () => {
   nock(/.*/)
