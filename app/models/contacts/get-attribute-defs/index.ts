@@ -18,6 +18,7 @@ export async function getAttributeDefs(): Promise<{
       bySection: groupBySection(data)
     }
   } catch (error) {
+    console.log('!!!', error)
     throw error
   }
 }
