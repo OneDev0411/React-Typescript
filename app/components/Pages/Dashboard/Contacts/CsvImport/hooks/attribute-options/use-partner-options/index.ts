@@ -1,5 +1,5 @@
-import type { AttributeOption } from '../../types'
-import { useAttributeDefs } from '../use-attribute-defs'
+import type { AttributeOption } from '../../../types'
+import { useAttributeDefs } from '../../use-attribute-defs'
 
 const Options = ['first_name', 'last_name', 'email', 'phone_number', 'birthday']
 

@@ -2,20 +2,19 @@ import { useCallback, useMemo } from 'react'
 
 import Fuse from 'fuse.js'
 
-import { convertOptionToAttribute } from '../../helpers/convert-option-to-attribute'
-import { isAttributesEqual } from '../../helpers/is-attributes-equal'
+import { convertOptionToAttribute } from '../../../helpers/convert-option-to-attribute'
+import { isAttributesEqual } from '../../../helpers/is-attributes-equal'
 import {
   IAttribute,
   AttributeOption,
   MappedField,
   IContactAttributeType
-} from '../../types'
-import { useAddressAttributes } from '../use-address-attributes'
-import { useAttributeDefinition } from '../use-attribute-definition'
-import { useAttributes } from '../use-attributes'
-
-import { useAddressOptions } from './use-address-options'
-import { usePartnerOptions } from './use-partner-options'
+} from '../../../types'
+import { useAddressAttributes } from '../../use-address-attributes'
+import { useAttributeDefinition } from '../../use-attribute-definition'
+import { useAttributes } from '../../use-attributes'
+import { useAddressOptions } from '../use-address-options'
+import { usePartnerOptions } from '../use-partner-options'
 
 export function useOptions(
   fields: Record<string, Nullable<MappedField>>,

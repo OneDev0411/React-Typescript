@@ -1,8 +1,8 @@
 import { maxBy } from 'lodash'
 
-import type { AttributeOption, MappedField } from '../../types'
-import { useAddressAttributes } from '../use-address-attributes'
-import { useAttributeDefinition } from '../use-attribute-definition'
+import type { AttributeOption, MappedField } from '../../../types'
+import { useAddressAttributes } from '../../use-address-attributes'
+import { useAttributeDefinition } from '../../use-attribute-definition'
 
 export function useAddressOptions(
   fields: Record<string, Nullable<MappedField>>

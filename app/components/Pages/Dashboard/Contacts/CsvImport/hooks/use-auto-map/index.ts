@@ -5,11 +5,10 @@ import useDeepCompareEffect from 'use-deep-compare-effect'
 
 import { compareTwoStrings } from 'utils/dice-coefficient'
 
-import { getCsvColumns } from '../helpers/get-csv-columns'
-import type { IAttribute, MappedField } from '../types'
-
-import { useAttributeDefinition } from './use-attribute-definition'
-import { useAttributes } from './use-attributes'
+import { getCsvColumns } from '../../helpers/get-csv-columns'
+import type { IAttribute, MappedField } from '../../types'
+import { useAttributeDefinition } from '../use-attribute-definition'
+import { useAttributes } from '../use-attributes'
 
 interface CompareMatches {
   attribute: IAttribute

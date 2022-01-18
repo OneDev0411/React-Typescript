@@ -1,8 +1,7 @@
 import { useCallback } from 'react'
 
-import { MappedField } from '../types'
-
-import { useAttributeDefinition } from './use-attribute-definition'
+import { MappedField } from '../../types'
+import { useAttributeDefinition } from '../use-attribute-definition'
 
 export function useAttributeLabel() {
   const getAttributeDefinition = useAttributeDefinition()

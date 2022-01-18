@@ -1,4 +1,4 @@
-import { IContactAttributeType } from '../types'
+import { IContactAttributeType } from '../../types'
 
 export function useAttributeTypes(): Record<string, IContactAttributeType> {
   return {

@@ -1,6 +1,5 @@
-import type { CsvImportAttributeType, IAttribute } from '../types'
-
-import { useAttributeDefs } from './use-attribute-defs'
+import type { CsvImportAttributeType, IAttribute } from '../../types'
+import { useAttributeDefs } from '../use-attribute-defs'
 
 const AttributeTypes: CsvImportAttributeType[] = [
   {

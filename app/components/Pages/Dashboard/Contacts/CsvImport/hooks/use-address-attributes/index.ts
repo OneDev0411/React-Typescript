@@ -1,7 +1,6 @@
-import { IAttribute } from '../types'
-
-import { useAttributeDefinition } from './use-attribute-definition'
-import { useAttributes } from './use-attributes'
+import { IAttribute } from '../../types'
+import { useAttributeDefinition } from '../use-attribute-definition'
+import { useAttributes } from '../use-attributes'
 
 const AddressSectionName = 'Addresses'
 

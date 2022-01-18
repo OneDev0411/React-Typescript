@@ -7,11 +7,10 @@ import useDeepCompareEffect from 'use-deep-compare-effect'
 import useNotify from '@app/hooks/use-notify'
 import config from 'config'
 
-import { convertOptionToAttribute } from '../helpers/convert-option-to-attribute'
-import { getCsvColumns } from '../helpers/get-csv-columns'
-import { MappedField, AttributeOption } from '../types'
-
-import { useOptions } from './attribute-options/use-attribute-options'
+import { convertOptionToAttribute } from '../../helpers/convert-option-to-attribute'
+import { getCsvColumns } from '../../helpers/get-csv-columns'
+import { MappedField, AttributeOption } from '../../types'
+import { useOptions } from '../attribute-options/use-attribute-options'
 
 export function useAttributeMap(
   csv: Nullable<ParseResult>

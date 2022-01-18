@@ -6,8 +6,8 @@ import useNotify from '@app/hooks/use-notify'
 import { importCsv } from '@app/models/contacts/import-csv'
 import { uploadCsvFile } from '@app/models/contacts/upload-csv'
 
-import { normalizeMappedFields } from '../helpers/normalize-mapped-fields'
-import { MappedField } from '../types'
+import { normalizeMappedFields } from '../../helpers/normalize-mapped-fields'
+import { MappedField } from '../../types'
 
 export function useUploadContacts(
   owner: IUser,
