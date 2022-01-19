@@ -1,19 +1,25 @@
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook } from '@testing-library/react-hooks'
 import attributeDefs from 'fixtures/contacts/attribute-definitions.json'
 import csvFile from 'fixtures/contacts/file.csv'
-import { ReactQueryTestBed } from 'tests/unit/ReactQueryTestBed'
+import { ReactQueryTestBed, queryClient } from 'tests/unit/ReactQueryTestBed'
 import nock from 'nock'
-
-import { useParseCsv } from '.'
 import { ParseError } from 'papaparse'
 import { TestBed } from 'tests/unit/TestBed'
 
+import { useParseCsv } from '.'
+
 describe('test Csv Import attribute label', () => {
-  nock(/.*/)
-    .get('/contacts/attribute_defs')
-    .reply(200, {
-      data: attributeDefs
-    })
+  beforeEach(() => {
+    nock(/.*/)
+      .get('/contacts/attribute_defs')
+      .reply(200, {
+        data: attributeDefs
+      })
+  })
+
+  afterEach(() => {
+    queryClient.clear()
+  })
 
   it('should parse csv file', async () => {
     const { result, waitForNextUpdate } = renderHook(

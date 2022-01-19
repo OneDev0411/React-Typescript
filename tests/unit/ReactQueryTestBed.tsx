@@ -1,9 +1,15 @@
-import { ReactQueryProvider } from '../../app/views/components/ReactQueryProvider'
+import { QueryClient, QueryClientProvider } from 'react-query'
+
+export const queryClient = new QueryClient({
+  defaultOptions: {}
+})
 
 interface Props {
   children: React.ReactNode
 }
 
 export function ReactQueryTestBed({ children }: Props) {
-  return <ReactQueryProvider>{children}</ReactQueryProvider>
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  )
 }

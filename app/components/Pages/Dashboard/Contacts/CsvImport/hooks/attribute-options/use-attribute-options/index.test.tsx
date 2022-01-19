@@ -1,16 +1,24 @@
+
 import { renderHook } from '@testing-library/react-hooks'
-import attributeDefs from 'fixtures/contacts/attribute-definitions.json'
-import { ReactQueryTestBed } from 'tests/unit/ReactQueryTestBed'
 import nock from 'nock'
+
+import attributeDefs from 'fixtures/contacts/attribute-definitions.json'
+import { ReactQueryTestBed, queryClient } from 'tests/unit/ReactQueryTestBed'
 import { MappedField } from '../../../types'
 import { useOptions } from '.'
 
 describe('test Csv Import attribute options', () => {
-  nock(/.*/)
-    .get('/contacts/attribute_defs')
-    .reply(200, {
-      data: attributeDefs
-    })
+  beforeEach(() => {
+    nock(/.*/)
+      .get('/contacts/attribute_defs')
+      .reply(200, {
+        data: attributeDefs
+      })
+  })
+
+  afterEach(async () => {
+    queryClient.clear()
+  })
 
   it('should create options when mapping is empty', async () => {
     const { result, waitForNextUpdate } = renderHook(
@@ -22,11 +30,13 @@ describe('test Csv Import attribute options', () => {
     expect(result.current.length).toBe(44)
   })
 
-  it('should create spouse/partner options', () => {
-    const { result } = renderHook(
+  it('should create spouse/partner options', async () => {
+    const { result, waitForNextUpdate } = renderHook(
       () => useOptions({}, ''), {
       wrapper: ReactQueryTestBed
     })
+
+    await waitForNextUpdate()
 
     const list = result.current
 
@@ -52,9 +62,11 @@ describe('test Csv Import attribute options', () => {
       }
     } as Record<string, MappedField>
 
-    const { result } = renderHook(() => useOptions(fields, ''), {
+    const { result, waitForNextUpdate } = renderHook(() => useOptions(fields, ''), {
       wrapper: ReactQueryTestBed
     })
+
+    await waitForNextUpdate()
 
     const list = result.current
     expect(list.length).toBe(55)
@@ -81,9 +93,11 @@ describe('test Csv Import attribute options', () => {
       }
     } as Record<string, MappedField>
 
-    const { result } = renderHook(() => useOptions(fields, ''), {
+    const { result, waitForNextUpdate } = renderHook(() => useOptions(fields, ''), {
       wrapper: ReactQueryTestBed
     })
+
+    await waitForNextUpdate()
 
     const list = result.current
     expect(list.length).toBe(66)
@@ -93,11 +107,13 @@ describe('test Csv Import attribute options', () => {
     expect(list.filter(item => item.label.includes('Full Address')).length).toBe(3)
   })
 
-  it('should search attribute options', () => {
+  it('should search attribute options', async () => {
     const searchTerm = 'spouse'
-    const { result } = renderHook(() => useOptions({}, searchTerm), {
+    const { result, waitForNextUpdate } = renderHook(() => useOptions({}, searchTerm), {
       wrapper: ReactQueryTestBed
     })
+
+    await waitForNextUpdate()
 
     const list = result.current
     expect(list.length).toBe(5)

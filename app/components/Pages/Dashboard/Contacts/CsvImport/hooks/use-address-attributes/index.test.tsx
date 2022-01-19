@@ -1,16 +1,23 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import attributeDefs from 'fixtures/contacts/attribute-definitions.json'
-import { ReactQueryTestBed } from 'tests/unit/ReactQueryTestBed'
 import nock from 'nock'
+
+import attributeDefs from 'fixtures/contacts/attribute-definitions.json'
+import { ReactQueryTestBed, queryClient } from 'tests/unit/ReactQueryTestBed'
 
 import { useAddressAttributes } from '.'
 
 describe('test Csv Import address attributes', () => {
-  nock(/.*/)
-    .get('/contacts/attribute_defs')
-    .reply(200, {
-      data: attributeDefs
-    })
+  beforeEach(() => {
+    nock(/.*/)
+      .get('/contacts/attribute_defs')
+      .reply(200, {
+        data: attributeDefs
+      })
+  })
+
+  afterEach(() => {
+    queryClient.clear()
+  })
 
   it('should return list of all address attributes', async () => {
     const { result, waitForNextUpdate } = renderHook(
@@ -29,10 +36,12 @@ describe('test Csv Import address attributes', () => {
   })
 
   it('should return "true" when attribute is an address', async () => {
-    const { result } = renderHook(
+    const { result, waitForNextUpdate } = renderHook(
       () => useAddressAttributes(), {
       wrapper: ReactQueryTestBed
     })
+
+    await waitForNextUpdate()
 
     act(() => {
       expect(result.current.isAddressAttribute({
@@ -50,10 +59,12 @@ describe('test Csv Import address attributes', () => {
   })
 
   it('should return "false" when attribute is an address', async () => {
-    const { result } = renderHook(
+    const { result, waitForNextUpdate } = renderHook(
       () => useAddressAttributes(), {
       wrapper: ReactQueryTestBed
     })
+
+    await waitForNextUpdate()
 
     act(() => {
       expect(result.current.isAddressAttribute({

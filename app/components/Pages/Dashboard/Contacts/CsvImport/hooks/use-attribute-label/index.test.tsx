@@ -1,16 +1,23 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import attributeDefs from 'fixtures/contacts/attribute-definitions.json'
-import { ReactQueryTestBed } from 'tests/unit/ReactQueryTestBed'
 import nock from 'nock'
+
+import attributeDefs from 'fixtures/contacts/attribute-definitions.json'
+import { ReactQueryTestBed, queryClient } from 'tests/unit/ReactQueryTestBed'
 
 import { useAttributeLabel } from '.'
 
 describe('test Csv Import attribute label', () => {
-  nock(/.*/)
-    .get('/contacts/attribute_defs')
-    .reply(200, {
-      data: attributeDefs
-    })
+  beforeEach(() => {
+    nock(/.*/)
+      .get('/contacts/attribute_defs')
+      .reply(200, {
+        data: attributeDefs
+      })
+  })
+
+  afterEach(() => {
+    queryClient.clear()
+  })
 
   it('should return correct label of the attributes', async () => {
     const { result, waitForNextUpdate } = renderHook(
@@ -45,6 +52,8 @@ describe('test Csv Import attribute label', () => {
       wrapper: ReactQueryTestBed
     })
 
+    await waitForNextUpdate()
+
     act(() => {
       const label = result.current({
         type: 'attribute_def',
@@ -61,6 +70,8 @@ describe('test Csv Import attribute label', () => {
       () => useAttributeLabel(), {
       wrapper: ReactQueryTestBed
     })
+
+    await waitForNextUpdate()
 
     act(() => {
       const label = result.current({
@@ -79,6 +90,8 @@ describe('test Csv Import attribute label', () => {
       () => useAttributeLabel(), {
       wrapper: ReactQueryTestBed
     })
+
+    await waitForNextUpdate()
 
     act(() => {
       const label = result.current({
