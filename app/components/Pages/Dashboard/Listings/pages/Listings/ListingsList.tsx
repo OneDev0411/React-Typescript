@@ -48,6 +48,7 @@ function ListingsList({ searchTerm }: Props) {
   const gridClasses = useGridStyles()
   const activeTeamBrandId = useSelector(selectActiveTeam).brand.id
 
+  const isSearching = searchTerm.trim().length > 0
   const userAgents = useSelector(selectUserAgents)
 
   const { listings: rows, isLoading } = useBrandAndDealsListings(
@@ -146,7 +147,14 @@ function ListingsList({ searchTerm }: Props) {
       })}
       EmptyStateComponent={() => (
         <ListingsListEmptyState
-          message={searchTerm ? 'No results' : 'There are no listings.'}
+          title={
+            isSearching ? 'No Results ' : 'You don’t have any listings yet.'
+          }
+          subtitle={
+            isSearching
+              ? 'Make sure you have searched for the right address or try adding your other MLS Accounts using the button at the top'
+              : 'Use the “Add MLS Account” button at top to connect all your MLS accounts and let us retrieve your listings.'
+          }
         />
       )}
     />
