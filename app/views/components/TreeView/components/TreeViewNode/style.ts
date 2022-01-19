@@ -70,6 +70,10 @@ export const useStyles = makeStyles(
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap'
+    },
+    selectCheckbox: {
+      padding: 0,
+      marginRight: theme.spacing(1)
     }
   }),
   {
