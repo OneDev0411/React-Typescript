@@ -21,7 +21,6 @@ import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import { Header } from '../components/PageHeader'
 import Tabs from '../components/Tabs'
-import { formatListing } from '../helpers/format-listing'
 import {
   parseSortIndex,
   getDefaultSort,
@@ -161,7 +160,7 @@ class SavedSearch extends React.Component {
   sortListings = memoize(
     (listings, index, ascending) => {
       const formattedListings = listings.data.map(listing =>
-        formatListing(normalizeListingLocation(listing), this.props.user)
+        normalizeListingLocation(listing)
       )
 
       return formattedListings.sort((a, b) =>

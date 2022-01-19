@@ -6,7 +6,6 @@ import { useDebounce } from 'use-debounce'
 
 import useNotify from '@app/hooks/use-notify'
 import api from '@app/models/listings/search'
-import { selectUser } from '@app/selectors/user'
 import { IAppState } from 'reducers'
 
 import {
@@ -14,7 +13,6 @@ import {
   QUERY_LIMIT,
   SEARCH_DEBOUNCE_MS
 } from '../../constants'
-import { formatListing } from '../../helpers/format-listing'
 import {
   createValertOptions,
   createValertQueryString
@@ -36,7 +34,6 @@ export default function useFetchListings(
   })
   const notify = useNotify()
   const brand = useSelector<IAppState, IBrand>(({ brand }) => brand)
-  const user = useSelector(selectUser)
 
   // TO fix calling GoogleMap onChange at initialization
   // https://github.com/google-map-react/google-map-react/blob/master/DOC.md
@@ -71,10 +68,8 @@ export default function useFetchListings(
           valertQueryString
         )
 
-        const listings = response.entities.listings
-          ? Object.values(response.entities.listings).map(
-              (listing: ICompactListing) => formatListing(listing, user)
-            )
+        const listings: ICompactListing[] = response.entities.listings
+          ? Object.values(response.entities.listings)
           : []
 
         dispatch(setListings(listings, response.info))
