@@ -41,7 +41,7 @@ export const ZipcodeGroup = ({
   }
 
   return (
-    <EditorGroup title="Zipcode">
+    <EditorGroup title="ZIP Code">
       <Autocomplete
         disabled={hasMapDrawing}
         className={classes.select}
