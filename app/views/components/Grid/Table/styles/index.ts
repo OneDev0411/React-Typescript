@@ -64,7 +64,6 @@ const inlineGridStyles = (theme: Theme) =>
       opacity: '75%',
       display: 'flex',
       flexDirection: 'row',
-      borderLeft: `1px solid ${theme.palette.grey[100]}`,
       alignItems: 'stretch',
       ...theme.typography.body2,
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { makeStyles, IconButton, Tooltip } from '@material-ui/core'
+import { makeStyles, IconButton, Tooltip, alpha } from '@material-ui/core'
 import { mdiPencilOutline } from '@mdi/js'
 
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
@@ -32,7 +32,8 @@ const useStyles = makeStyles(
       height: '100%',
       width: '100%',
       overflow: 'hidden',
-      textOverflow: 'ellipsis'
+      textOverflow: 'ellipsis',
+      borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`
     },
     inlineViewContainer: {
       position: 'relative',
