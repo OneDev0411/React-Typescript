@@ -77,7 +77,9 @@ export const getSettingsInActiveTeam = (
   return getActiveTeamSetting(team)(key, defaultValue)
 }
 
-export function getActiveTeamPalette(team: IUserTeam): BrandMarketingPalette {
+export function getActiveTeamPalette(
+  team: Nullable<IUserTeam>
+): BrandMarketingPalette {
   if (!team || !team.brand) {
     return DEFAULT_BRAND_PALETTE
   }
