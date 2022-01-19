@@ -1,10 +1,15 @@
 import Fetch from 'services/fetch'
 
-export async function setSuperCampaignEnrollmentNotificationsEnabled(
+export interface DataInput {
+  notifications_enabled?: boolean
+  tags?: string[]
+}
+
+export async function updateMySuperCampaignEnrollment(
   superCampaignId: UUID,
-  enabled: boolean
+  data: DataInput
 ): Promise<void> {
   await new Fetch()
     .patch(`/email/super-campaigns/${superCampaignId}/enrollments/self`)
-    .send({ notifications_enabled: enabled })
+    .send(data)
 }
