@@ -2,9 +2,9 @@ import { UseMutationResult, useQueryClient } from 'react-query'
 import { ResponseError } from 'superagent'
 
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
-import { enrollUserInSuperCampaign } from '@app/models/super-campaign'
 import { UpdateCacheActions } from '@app/utils/react-query'
 
+import { enrollUserInSuperCampaign } from './enroll-user-in-super-campaign'
 import { updateCacheEnrollments } from './query-update/enrollment'
 
 interface DataInput {
