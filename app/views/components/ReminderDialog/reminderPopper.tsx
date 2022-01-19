@@ -66,7 +66,7 @@ export function ReminderPopper({
 
   return (
     <Popper
-      open={open}
+      open={open && !!anchorEl}
       anchorEl={anchorEl}
       placement={placement}
       className={classes.popup}
