@@ -46,13 +46,13 @@ interface Props {
 function ListingsList({ searchTerm }: Props) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
-  const activeTeamBrandId = useSelector(selectActiveTeam).brand.id
+  const activeTeamBrand = useSelector(selectActiveTeam).brand
 
   const isSearching = searchTerm.trim().length > 0
   const userAgents = useSelector(selectUserAgents)
 
   const { listings: rows, isLoading } = useBrandAndDealsListings(
-    activeTeamBrandId,
+    activeTeamBrand.id,
     OPTIONS
   )
 
@@ -72,6 +72,7 @@ function ListingsList({ searchTerm }: Props) {
               ? row.address.street_address
               : row.property.address.street_address
           }
+          mlsSource={row.mls_display_name}
           listingId={row.id}
         />
       )
