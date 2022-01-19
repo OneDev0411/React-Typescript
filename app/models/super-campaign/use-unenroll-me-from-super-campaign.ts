@@ -1,27 +1,62 @@
-import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import { unenrollMeFromSuperCampaign as unenrollMeFromSuperCampaignModel } from '@app/models/super-campaign'
+import { UseMutationResult, useQueryClient } from 'react-query'
+import { ResponseError } from 'superagent'
 
-type UseUnenrollMeFromSuperCampaign = {
-  isDeleting: boolean
-  unenrollMeFromSuperCampaign: () => Promise<void>
-}
+import { useMutation, UseMutationOptions } from '@app/hooks/query'
+import { updateCacheActions, UpdateCacheActions } from '@app/utils/react-query'
+
+import { myList } from './query-keys/enrollment'
+import { unenrollMeFromSuperCampaign } from './unenroll-me-from-super-campaign'
+
+export type UseUnenrollMeFromSuperCampaign = UseMutationResult<
+  void,
+  ResponseError,
+  UUID,
+  { cache: UpdateCacheActions }
+>
+
+export type UseUnenrollMeFromSuperCampaignOptions = Omit<
+  UseMutationOptions<void, ResponseError, UUID, { cache: UpdateCacheActions }>,
+  'notify' | 'onMutate'
+>
 
 export function useUnenrollMeFromSuperCampaign(
-  superCampaignId: UUID,
-  onUnenroll: () => void
+  options?: UseUnenrollMeFromSuperCampaignOptions
 ): UseUnenrollMeFromSuperCampaign {
-  const { isRunning, runActionThenNotify } = useRunActionThenNotify()
+  const queryClient = useQueryClient()
 
-  const unenrollMeFromSuperCampaign = () =>
-    runActionThenNotify(
-      async () => {
-        await unenrollMeFromSuperCampaignModel(superCampaignId)
-
-        onUnenroll()
+  return useMutation(
+    async superCampaignId => unenrollMeFromSuperCampaign(superCampaignId),
+    {
+      ...options,
+      notify: {
+        onSuccess: 'You have been opted-out from the campaign',
+        onError: 'Something went wrong while opting-out the campaign'
       },
-      'You have been opted-out from the campaign',
-      'Something went wrong while opting-out the campaign'
-    )
+      onMutate: async superCampaignId => ({
+        cache: await updateCacheActions<ISuperCampaignEnrollment[]>(
+          queryClient,
+          myList(),
+          enrollments => {
+            const index = enrollments.findIndex(
+              element => element.super_campaign === superCampaignId
+            )
 
-  return { isDeleting: isRunning, unenrollMeFromSuperCampaign }
+            if (index === -1) {
+              return
+            }
+
+            enrollments.splice(index, 1)
+          }
+        )
+      }),
+      onError: (error, variables, context) => {
+        context?.cache.revert()
+        options?.onError?.(error, variables, context)
+      },
+      onSettled: (data, error, variables, context) => {
+        context?.cache.invalidate()
+        options?.onSettled?.(data, error, variables, context)
+      }
+    }
+  )
 }

@@ -9,12 +9,8 @@ import { SUPER_CAMPAIGN_CARDS_COUNT } from './constants'
 import SuperCampaignsSectionContent from './SuperCampaignsSectionContent'
 
 function SuperCampaignsSection() {
-  const {
-    isLoading,
-    superCampaignsWithEnrollment,
-    enrollToSuperCampaign,
-    unenrollFromSuperCampaign
-  } = useGetMySuperCampaignsWithEnrollment(SUPER_CAMPAIGN_CARDS_COUNT)
+  const { isLoading, superCampaignsWithEnrollment } =
+    useGetMySuperCampaignsWithEnrollment(SUPER_CAMPAIGN_CARDS_COUNT)
 
   const hasBetaAccess = useAcl(ACL.BETA)
 
@@ -42,8 +38,6 @@ function SuperCampaignsSection() {
         isEmpty={isEmpty}
         isLoading={isLoading}
         superCampaignsWithEnrollment={superCampaignsWithEnrollment}
-        onEnroll={enrollToSuperCampaign}
-        onUnenroll={unenrollFromSuperCampaign}
       />
     </SectionLayout>
   )
