@@ -12,6 +12,7 @@ import { Table } from 'components/Grid/Table'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 import EditTextCell from 'components/Grid/Table/features/cells/EditTextCell'
 import EmailCell from 'components/Grid/Table/features/cells/EmailCell'
+import FlowsCell from 'components/Grid/Table/features/cells/FlowsCell'
 import PhoneNumberCell from 'components/Grid/Table/features/cells/PhoneNumberCell'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import {
@@ -26,7 +27,6 @@ import { PARKED_CONTACTS_LIST_ID } from '../constants'
 
 import { TableActions } from './Actions'
 import Avatar from './columns/Avatar'
-import FlowCell from './columns/Flows'
 import LastTouched from './columns/LastTouched'
 import TagsString from './columns/Tags'
 import { LoadingComponent } from './components/LoadingComponent'
@@ -187,8 +187,8 @@ const ContactsList = props => {
       width: '90px',
       class: 'opaque flows',
       render: ({ row: contact }) => (
-        <FlowCell
-          contactId={contact.id}
+        <FlowsCell
+          contact={contact}
           callback={() => {
             resetSelectedRow()
             props.reloadContacts()

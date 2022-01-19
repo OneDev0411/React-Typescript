@@ -26,7 +26,7 @@ const useStyles = makeStyles(
   { name: 'Email-cell' }
 )
 
-const EmailCell = ({ contact, onSave }: Props) => {
+const EmailCell = ({ contact }: Props) => {
   const classes = useStyles()
 
   let primaryEmail
