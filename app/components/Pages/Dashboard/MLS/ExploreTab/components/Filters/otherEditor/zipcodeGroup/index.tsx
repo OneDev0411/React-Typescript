@@ -25,11 +25,18 @@ export const ZipcodeGroup = ({
   const classes = useStyles()
 
   const onZipcodeChange = (_: unknown, values: ZipcodeOption[]) => {
-    const selectedValues =
-      values && values.length ? values.map(item => item.id) : null
+    // Remove [null] or spaces from selected items
+    const selectedValues = values.reduce((acc, item) => {
+      if (item.id) {
+        return [...acc, item.id.trim()]
+      }
+
+      return acc
+    }, [])
 
     updateFilters({
-      postal_codes: selectedValues
+      // postal_codes could be an array of strings or null ,it should not be an empty array
+      postal_codes: selectedValues?.length ? selectedValues : null
     })
   }
 
@@ -45,6 +52,8 @@ export const ZipcodeGroup = ({
         multiple
         limitTags={1}
         clearOnBlur
+        selectOnFocus
+        handleHomeEndKeys
         value={hasMapDrawing ? [] : mapPostcodesToOptions(filters.postal_codes)}
         filterOptions={(options, params) => {
           if (params.inputValue?.trim()) {
