@@ -105,5 +105,3 @@ describe('test Csv Import attribute label', () => {
     })
   })
 })
-
-export {}

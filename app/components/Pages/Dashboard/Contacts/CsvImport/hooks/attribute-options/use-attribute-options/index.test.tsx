@@ -123,5 +123,3 @@ describe('test Csv Import attribute options', () => {
     }
   })
 })
-
-export {}

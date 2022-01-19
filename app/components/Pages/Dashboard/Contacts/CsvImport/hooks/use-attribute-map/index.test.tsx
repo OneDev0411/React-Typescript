@@ -146,11 +146,9 @@ describe('test Csv Import auto mapping', () => {
     })
 
     expect(result.current[2]).toBe('doing')
-    
+
     await waitForNextUpdate()
     
     expect(result.current[2]).toBe('done')
   })
 })
-
-export {}
