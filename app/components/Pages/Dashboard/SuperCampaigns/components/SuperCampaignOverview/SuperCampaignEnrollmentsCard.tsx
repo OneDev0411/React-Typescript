@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { makeStyles } from '@material-ui/core'
 import pluralize from 'pluralize'
 
-import { useGetSuperCampaignEnrollments } from '@app/models/super-campaign'
+import { useGetAllSuperCampaignEnrollments } from '@app/models/super-campaign'
 
 import { isSuperCampaignExecuted } from '../../helpers'
 import SuperCampaignCard from '../SuperCampaignCard'
@@ -29,7 +29,7 @@ function SuperCampaignEnrollmentsCard() {
   const isExecuted = isSuperCampaignExecuted(superCampaign)
 
   const { data: superCampaignEnrollments, isLoading } =
-    useGetSuperCampaignEnrollments(superCampaign.id, isExecuted)
+    useGetAllSuperCampaignEnrollments(superCampaign.id, isExecuted)
 
   const enrolledAgentCount = useMemo(
     () =>

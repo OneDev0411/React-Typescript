@@ -1,6 +1,6 @@
 import Fetch from 'services/fetch'
 
-import { defaultAssociations } from './get-super-campaign-enrollments'
+import { defaultAssociations } from './get-all-super-campaign-enrollments'
 
 export async function enrollUserInSuperCampaign(
   superCampaignId: UUID,
