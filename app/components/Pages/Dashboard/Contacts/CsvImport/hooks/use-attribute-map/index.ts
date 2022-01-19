@@ -31,7 +31,6 @@ export function useAttributeMap(
     }
 
     const request = async () => {
-      console.log('Start Mapping...')
       setStatus('doing')
 
       try {
