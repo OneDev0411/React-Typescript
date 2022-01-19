@@ -1,8 +1,7 @@
 import { useContext } from 'react'
 
+import { useUnenrollMeFromSuperCampaign } from '@app/models/super-campaign'
 import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
-
-import { useUnenrollMeFromSuperCampaign } from './use-unenroll-me-from-super-campaign'
 
 interface UseOptOutAndCopySuperCampaign {
   isDeleting: boolean
