@@ -23,13 +23,8 @@ function SuperCampaignAgentList() {
   // actions column needs it
   useLoadExistingTags()
 
-  const {
-    superCampaignsWithEnrollment,
-    isLoading,
-    enrollToSuperCampaign,
-    unenrollFromSuperCampaign,
-    setEnrollmentNotificationsEnabled
-  } = useGetMySuperCampaignsWithEnrollment()
+  const { superCampaignsWithEnrollment, isLoading } =
+    useGetMySuperCampaignsWithEnrollment()
 
   const [selectedSuperCampaignId, setSelectedSuperCampaignId] =
     useState<Nullable<UUID>>(null)
@@ -51,22 +46,6 @@ function SuperCampaignAgentList() {
     setSelectedSuperCampaignId(superCampaign.id)
 
   const closePreviewDrawer = () => setSelectedSuperCampaignId(null)
-
-  const handleEnroll = (enrollment: ISuperCampaignEnrollment) => {
-    if (!selectedSuperCampaignId) {
-      return
-    }
-
-    enrollToSuperCampaign(selectedSuperCampaignId, enrollment)
-  }
-
-  const handleUnenroll = () => {
-    if (!selectedSuperCampaignId) {
-      return
-    }
-
-    unenrollFromSuperCampaign(selectedSuperCampaignId)
-  }
 
   const columns: TableColumn<ISuperCampaignWithEnrollment>[] = [
     {
@@ -105,10 +84,6 @@ function SuperCampaignAgentList() {
         <SuperCampaignAgentListColumnActions
           superCampaign={row}
           onParticipateClick={() => setSelectedSuperCampaignId(row.id)}
-          onNotificationsEnabledChange={checked =>
-            setEnrollmentNotificationsEnabled(row.id, checked)
-          }
-          onUnenroll={() => unenrollFromSuperCampaign(row.id)}
         />
       )
     }
@@ -141,8 +116,6 @@ function SuperCampaignAgentList() {
           open
           onClose={closePreviewDrawer}
           superCampaign={selectedSuperCampaign}
-          onEnroll={handleEnroll}
-          onUnenroll={handleUnenroll}
           hasUnenroll={!!selectedSuperCampaign.enrollment}
           initialSelectedTags={selectedSuperCampaign.enrollment?.tags}
         />
