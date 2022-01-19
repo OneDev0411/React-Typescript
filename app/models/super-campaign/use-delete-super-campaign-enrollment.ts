@@ -2,10 +2,10 @@ import { UseMutationResult, useQueryClient } from 'react-query'
 import { ResponseError } from 'superagent'
 
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
-import { updateCacheActions, UpdateCacheActions } from '@app/utils/react-query'
+import { UpdateCacheActions } from '@app/utils/react-query'
 
 import { deleteSuperCampaignEnrollment } from './delete-super-campaign-enrollment'
-import { allList } from './query-keys/enrollment'
+import { updateCacheAllList } from './query-update/enrollment'
 
 interface DataInput {
   superCampaignId: UUID
@@ -48,19 +48,14 @@ export function useDeleteSuperCampaignEnrollment(
         onError: 'Something went wrong while deleting the enrollment'
       },
       onMutate: async ({ superCampaignId, userId, brandId }) => ({
-        cache: await updateCacheActions<
-          ISuperCampaignEnrollment<'user' | 'brand'>[]
-        >(queryClient, allList(superCampaignId), prevEnrollments => {
-          const enrollment = prevEnrollments.find(
-            prevEnrollment =>
-              prevEnrollment.user.id === userId &&
-              prevEnrollment.brand.id === brandId
-          )
-
-          if (enrollment) {
+        cache: await updateCacheAllList(
+          queryClient,
+          superCampaignId,
+          [{ brand: brandId, user: userId }],
+          enrollment => {
             enrollment.deleted_at = new Date().getTime() / 1000
           }
-        })
+        )
       }),
       onError: (error, variables, context) => {
         context?.cache.revert()

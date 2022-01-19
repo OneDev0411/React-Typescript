@@ -8,7 +8,7 @@ import { allList } from '../query-keys/enrollment'
 export async function updateCacheAllList(
   queryClient: QueryClient,
   superCampaignId: UUID,
-  enrollments: ISuperCampaignEnrollmentInput[],
+  enrollments: Omit<ISuperCampaignEnrollmentInput, 'tags'>[],
   modifier: (
     enrollment: Draft<ISuperCampaignEnrollment<'user' | 'brand'>>
   ) => void
