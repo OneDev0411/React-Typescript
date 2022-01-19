@@ -11,6 +11,7 @@ import cn from 'classnames'
 import { Table } from 'components/Grid/Table'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 import EditTextCell from 'components/Grid/Table/features/cells/EditTextCell'
+import EmailCell from 'components/Grid/Table/features/cells/EmailCell'
 import PhoneNumberCell from 'components/Grid/Table/features/cells/PhoneNumberCell'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import {
@@ -159,29 +160,7 @@ const ContactsList = props => {
         />
       ),
       width: '200px',
-      render: ({ row: contact }) => {
-        let emailAddress
-        let emailAddressLabel
-
-        contact.attributes?.filter(attr => {
-          if (!attr.is_partner && attr.attribute_type === 'email') {
-            emailAddress = attr.text
-            emailAddressLabel = attr.is_primary
-              ? 'Main'
-              : (emailAddressLabel = attr.label)
-
-            return true
-          }
-
-          return false
-        })
-
-        return (
-          <div>
-            {emailAddress} {emailAddressLabel && `(${emailAddressLabel})`}
-          </div>
-        )
-      }
+      render: ({ row: contact }) => <EmailCell contact={contact} />
     },
     {
       id: 'last_touched',
