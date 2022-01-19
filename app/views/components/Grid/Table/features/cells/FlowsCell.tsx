@@ -3,7 +3,6 @@ import { mdiLightningBolt } from '@mdi/js'
 import styled from 'styled-components'
 
 import AddToFlowButton from 'components/AddToFlowButton'
-import ALinkToClosable from 'components/ALinkToClosable'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -17,12 +16,6 @@ const commonStyle = `
     width: 1em;
     height: 1em;
     margin-right: 0.25rem;
-  }
-`
-const Link = styled(ALinkToClosable)`
-  ${commonStyle}
-  &:hover {
-    text-decoration: none;
   }
 `
 
@@ -56,23 +49,7 @@ const FlowsCell = ({ contact, callback, flowsCount }: Props) => {
       )
     }
 
-    const params = new URL(document.location).searchParams
-
-    return (
-      <Link
-        noStyle
-        to={{
-          pathname: `/dashboard/contacts/${contact.id}`,
-          state: {
-            id: contact.id,
-            s: parseInt(params.get('s'), 10)
-          }
-        }}
-      >
-        <SvgIcon size={muiIconSizes.small} path={mdiLightningBolt} />
-        {flowsCount}
-      </Link>
-    )
+    return <>{`in ${flowsCount} flow${flowsCount === 1 ? '' : 's'}`}</>
   }
 
   return (

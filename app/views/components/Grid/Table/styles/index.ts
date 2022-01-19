@@ -44,22 +44,12 @@ const inlineGridStyles = (theme: Theme) =>
         '& a:not([role="button"])': {
           color: theme.palette.text.primary
         },
-        '&.opaque': {
-          color: theme.palette.grey['500']
-        },
         '&.visible-on-hover > *': {
           visibility: 'hidden'
         }
       },
       '&:hover .column': {
         cursor: 'pointer',
-        '&.primary a': {
-          color: theme.palette.secondary.main,
-          textDecoration: 'underline'
-        },
-        '&.opaque': {
-          color: theme.palette.text.primary
-        },
         '&.visible-on-hover > *': {
           visibility: 'visible'
         },

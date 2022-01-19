@@ -13,6 +13,7 @@ import { resetRows } from 'components/Grid/Table/context/actions/selection/reset
 import EditTextCell from 'components/Grid/Table/features/cells/EditTextCell'
 import EmailCell from 'components/Grid/Table/features/cells/EmailCell'
 import FlowsCell from 'components/Grid/Table/features/cells/FlowsCell'
+import LastTouchCell from 'components/Grid/Table/features/cells/LastTouchCell'
 import PhoneNumberCell from 'components/Grid/Table/features/cells/PhoneNumberCell'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import {
@@ -27,7 +28,6 @@ import { PARKED_CONTACTS_LIST_ID } from '../constants'
 
 import { TableActions } from './Actions'
 import Avatar from './columns/Avatar'
-import LastTouched from './columns/LastTouched'
 import TagsString from './columns/Tags'
 import { LoadingComponent } from './components/LoadingComponent'
 import ColumnHeaderCell from './grid/ColumnHeaderCell'
@@ -126,7 +126,7 @@ const ContactsList = props => {
         />
       ),
       width: '300px',
-      class: 'opaque tags',
+      class: 'tags',
       render: ({ row: contact }) => (
         <TagsString
           contact={contact}
@@ -172,8 +172,7 @@ const ContactsList = props => {
         />
       ),
       width: '200px',
-      class: 'opaque',
-      render: ({ row: contact }) => <LastTouched contact={contact} />
+      render: ({ row: contact }) => <LastTouchCell contact={contact} />
     },
     {
       id: 'flows',
@@ -185,7 +184,7 @@ const ContactsList = props => {
         />
       ),
       width: '90px',
-      class: 'opaque flows',
+      class: 'flows',
       render: ({ row: contact }) => (
         <FlowsCell
           contact={contact}

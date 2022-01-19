@@ -94,10 +94,10 @@ export const GridRowContainer = styled.div<{
       font-weight: ${theme.typography.body2.fontWeight};
       font-size: ${theme.typography.body2.fontSize};
       line-height: ${theme.typography.body2.lineHeight};
-      color: ${theme.palette.grey[700]};
     }
     .column:first-child {
       border-right: none;
+      border-left: none;
     }
 
     ${
