@@ -19,7 +19,6 @@ interface Action {
 interface Props {
   text?: string
   enableActions?: boolean
-  renderInlineEdit?: () => React.ReactNode
   renderCellContent: () => React.ReactNode
   onEnterEdit?: (isEditing: boolean) => void
   actions?: Record<string, Action>
@@ -62,7 +61,6 @@ const useStyles = makeStyles(
 const CellContainer = ({
   enableActions = true,
   renderCellContent,
-  renderInlineEdit,
   onEnterEdit,
   actions = {}
 }: Props) => {
@@ -123,12 +121,7 @@ const CellContainer = ({
     )
   }
 
-  return (
-    <div className={classes.container}>
-      {isEditing && renderInlineEdit!()}
-      {!isEditing && renderInlineContent()}
-    </div>
-  )
+  return <div className={classes.container}>{renderInlineContent()}</div>
 }
 
 export default CellContainer

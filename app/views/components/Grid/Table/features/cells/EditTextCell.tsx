@@ -1,7 +1,5 @@
 import { makeStyles } from '@material-ui/core'
 
-import { TextInlineEdit } from '@app/views/components/Grid/Table/features/inline-edit/Text'
-
 import CellContainer from './CellContainer'
 
 const useStyles = makeStyles(
@@ -31,17 +29,9 @@ interface Props {
 
 const EditTextCell = ({ text = '', isPrimary = false, onSave }: Props) => {
   const classes = useStyles({ isPrimary })
-  const renderInlineEdit = () => (
-    <TextInlineEdit
-      value={text}
-      isSaving={false}
-      onSave={e => onSave && onSave(e)}
-    />
-  )
 
   return (
     <CellContainer
-      renderInlineEdit={renderInlineEdit}
       renderCellContent={() => <div className={classes.cellText}>{text}</div>}
     />
   )
