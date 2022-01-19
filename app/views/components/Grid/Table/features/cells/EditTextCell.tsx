@@ -17,7 +17,7 @@ const useStyles = makeStyles(
       lineHeight: `${theme.spacing(3)}px`
     })
   }),
-  { name: 'EditTextCell' }
+  { name: 'EditText-cell' }
 )
 
 interface Props {

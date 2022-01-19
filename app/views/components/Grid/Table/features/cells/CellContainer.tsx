@@ -51,7 +51,17 @@ const useStyles = makeStyles(
       top: '50%',
       transform: 'translate(-50%, -50%)',
       visibility: isHovered ? 'visible' : 'hidden'
-    })
+    }),
+    iconButton: {
+      border: `1px solid ${theme.palette.action.disabledBackground}`,
+      borderRadius: theme.spacing(4),
+      boxSizing: 'border-box',
+      boxShadow:
+        '0px 0.1px 0.3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.2) !important',
+      '&:hover': {
+        backgroundColor: theme.palette.grey['200']
+      }
+    }
   }),
   { name: 'CellContainer' }
 )
@@ -92,7 +102,11 @@ const CellContainer = ({
         placement="bottom"
         key={name}
       >
-        <IconButton size="small" onClick={onClick}>
+        <IconButton
+          className={classes.iconButton}
+          size="small"
+          onClick={onClick}
+        >
           <SvgIcon path={iconPath} size={muiIconSizes.small} />
         </IconButton>
       </Tooltip>
