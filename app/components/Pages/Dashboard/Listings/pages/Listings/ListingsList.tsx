@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
 import { GetBrandListingsOptions } from '@app/models/listings/search/get-brand-listings'
+import { selectActiveTeam } from '@app/selectors/team'
 import { selectUserAgents } from '@app/selectors/user'
 import { isUserCoAgent } from '@app/utils/listing'
 import { Table } from '@app/views/components/Grid/Table'
@@ -12,9 +13,7 @@ import { TableColumn } from '@app/views/components/Grid/Table/types'
 import LoadingContainer from '@app/views/components/LoadingContainer'
 import { getFormattedPrice } from 'models/Deal/helpers/context'
 
-import ListingsListColumnActions, {
-  ListingsListColumnActionsProps
-} from './ListingsListColumnActions'
+import ListingsListColumnActions from './ListingsListColumnActions'
 import ListingsListColumnProperty from './ListingsListColumnProperty'
 import ListingsListColumnText from './ListingsListColumnText'
 import ListingsListEmptyState from './ListingsListEmptyState'
@@ -40,20 +39,19 @@ const OPTIONS: GetBrandListingsOptions = {
   status: ['Active']
 }
 
-interface ListingsListProps
-  extends Pick<ListingsListColumnActionsProps, 'hasActions'> {
-  brandId: UUID
+interface Props {
   searchTerm: string
 }
 
-function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
+function ListingsList({ searchTerm }: Props) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
+  const activeTeamBrandId = useSelector(selectActiveTeam).brand.id
 
   const userAgents = useSelector(selectUserAgents)
 
   const { listings: rows, isLoading } = useBrandAndDealsListings(
-    brandId,
+    activeTeamBrandId,
     OPTIONS
   )
 
@@ -128,7 +126,7 @@ function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
         <ListingsListColumnActions
           className={classes.actions}
           row={row}
-          hasActions={hasActions}
+          hasActions
         />
       )
     }

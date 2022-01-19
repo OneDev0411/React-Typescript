@@ -5,6 +5,7 @@ import { mdiPlus } from '@mdi/js'
 import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { goTo } from '@app/utils/go-to'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import { ReminderDialog } from '@app/views/components/ReminderDialog'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -12,10 +13,7 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import SearchTextField from '../../components/SearchTextField'
 
 import ListingsList from './ListingsList'
-import ListingsLoading from './ListingsLoading'
 import ListingsOpenHouseProvider from './ListingsOpenHouseProvider'
-import ListingsTabs from './ListingsTabs'
-import useListingsTabs from './use-listings-tabs'
 
 type ListingsProps = WithRouterProps<{ brandId?: UUID }, {}>
 
@@ -26,11 +24,13 @@ function Listings({ params }: ListingsProps) {
   useTitle('Listings | Rechat')
 
   const addMlsAccountButtonRef = useRef<Nullable<HTMLButtonElement>>(null)
-  const { tabs, tab } = useListingsTabs(params.brandId)
   const [searchTerm, setSearchTerm] = useState('')
 
   const handleAddMlsAccountClick = () => {
-    // TODO: go to settings and open add MLS account dialog
+    // Go to settings and open add MLS account dialog
+    goTo('/dashboard/account/connected-accounts', null, {
+      action: 'add-mls-account'
+    })
   }
 
   return (
@@ -61,21 +61,9 @@ function Listings({ params }: ListingsProps) {
         </Grid>
       </PageLayout.Header>
       <PageLayout.Main>
-        {tab ? (
-          <>
-            <ListingsTabs tabs={tabs} value={tab.value} />
-            <ListingsOpenHouseProvider>
-              <ListingsList
-                key={tab.value}
-                brandId={tab.value}
-                hasActions={tab.hasActions}
-                searchTerm={searchTerm}
-              />
-            </ListingsOpenHouseProvider>
-          </>
-        ) : (
-          <ListingsLoading />
-        )}
+        <ListingsOpenHouseProvider>
+          <ListingsList searchTerm={searchTerm} />
+        </ListingsOpenHouseProvider>
       </PageLayout.Main>
     </PageLayout>
   )
