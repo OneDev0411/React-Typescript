@@ -15,6 +15,7 @@ import EmailCell from 'components/Grid/Table/features/cells/EmailCell'
 import FlowsCell from 'components/Grid/Table/features/cells/FlowsCell'
 import LastTouchCell from 'components/Grid/Table/features/cells/LastTouchCell'
 import PhoneNumberCell from 'components/Grid/Table/features/cells/PhoneNumberCell'
+import TagsCell from 'components/Grid/Table/features/cells/TagsCell'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import {
   useGridStyles,
@@ -28,7 +29,6 @@ import { PARKED_CONTACTS_LIST_ID } from '../constants'
 
 import { TableActions } from './Actions'
 import Avatar from './columns/Avatar'
-import TagsString from './columns/Tags'
 import { LoadingComponent } from './components/LoadingComponent'
 import ColumnHeaderCell from './grid/ColumnHeaderCell'
 
@@ -128,7 +128,7 @@ const ContactsList = props => {
       width: '300px',
       class: 'tags',
       render: ({ row: contact }) => (
-        <TagsString
+        <TagsCell
           contact={contact}
           reloadContacts={props.reloadContacts}
           hasAttributeFilters={
@@ -246,9 +246,7 @@ const ContactsList = props => {
         getTdProps={getColumnProps}
         selection={{
           defaultRender: ({ row }) => <Avatar contact={row} />,
-          columnProps: {
-            width: theme.spacing(7)
-          },
+          columnProps: {},
           showSelectAll: false
         }}
         classes={{
