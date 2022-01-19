@@ -52,12 +52,7 @@ const FlowsCell = ({ contact, callback, flowsCount }: Props) => {
     return <>{`in ${flowsCount} flow${flowsCount === 1 ? '' : 's'}`}</>
   }
 
-  return (
-    <CellContainer
-      enableActions={false}
-      renderCellContent={renderCellContent}
-    />
-  )
+  return <CellContainer renderCellContent={renderCellContent} />
 }
 
 export default FlowsCell

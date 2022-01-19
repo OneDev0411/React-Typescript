@@ -37,7 +37,7 @@ export const gridStyles = (theme: Theme) =>
     headerHasSelected: {}
   })
 
-const inlineGridStyles = (theme: Theme) =>
+export const inlineGridStyles = (theme: Theme) =>
   createStyles({
     row: {
       '& .column': {
@@ -77,7 +77,6 @@ const inlineGridStyles = (theme: Theme) =>
         borderRight: `1px solid ${theme.palette.divider}`
       },
       '& > div:first-child': {
-        borderLeft: `1px solid ${theme.palette.divider}`,
         borderRight: 'none'
       }
     },

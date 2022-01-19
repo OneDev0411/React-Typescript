@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useMemo } from 'react'
 
 import { Box, Chip, makeStyles } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
@@ -59,7 +59,6 @@ const TagsCell = ({
 }: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const [, setIsEditing] = useState(false)
 
   const showingTags: string[] = []
   const tags = useMemo(() => contact?.tags || [], [contact?.tags])
@@ -91,26 +90,24 @@ const TagsCell = ({
 
   const renderPopOverTagSelector = () => {
     const renderTagsStrip = () => (
-      <>
-        <div className={classes.tagLabel}>
-          <span>{showingTags.join(', ')}</span>
-          {invisibleTagsCount > 0 && (
-            <Chip
-              variant="outlined"
-              size="small"
-              label={`${invisibleTagsCount} more`}
-            />
-          )}
-        </div>
-      </>
+      <div className={classes.tagLabel}>
+        <span>{showingTags.join(', ')}</span>
+        {invisibleTagsCount > 0 && (
+          <Chip
+            variant="outlined"
+            size="small"
+            label={`${invisibleTagsCount} more`}
+          />
+        )}
+      </div>
     )
 
     const renderCellContent = onClick => (
       <Box
         className={classes.container}
-        onClick={event => {
-          event.stopPropagation()
-          onClick(event)
+        onClick={e => {
+          e.stopPropagation()
+          onClick(e)
         }}
       >
         {tagsCount === 0 && <div className={classes.noTag}>Add Tags</div>}
@@ -134,12 +131,7 @@ const TagsCell = ({
 
   //----
 
-  return (
-    <CellContainer
-      onEnterEdit={setIsEditing}
-      renderCellContent={renderPopOverTagSelector}
-    />
-  )
+  return <CellContainer renderCellContent={renderPopOverTagSelector} />
 }
 
 export default memo(TagsCell)

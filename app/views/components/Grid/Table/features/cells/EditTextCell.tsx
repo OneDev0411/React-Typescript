@@ -27,7 +27,7 @@ interface Props {
   renderCellContent?: () => React.ReactElement
 }
 
-const EditTextCell = ({ text = '', isPrimary = false, onSave }: Props) => {
+const EditTextCell = ({ text = '', isPrimary = false }: Props) => {
   const classes = useStyles({ isPrimary })
 
   return (
