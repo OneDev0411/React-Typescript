@@ -5,7 +5,7 @@ import { useMutation, UseMutationOptions } from '@app/hooks/query'
 import { updateCacheActions, UpdateCacheActions } from '@app/utils/react-query'
 
 import { deleteSuperCampaignEnrollment } from './delete-super-campaign-enrollment'
-import { list } from './query-keys/enrollment'
+import { allList } from './query-keys/enrollment'
 
 interface DataInput {
   superCampaignId: UUID
@@ -50,7 +50,7 @@ export function useDeleteSuperCampaignEnrollment(
       onMutate: async ({ superCampaignId, userId, brandId }) => ({
         cache: await updateCacheActions<
           ISuperCampaignEnrollment<'user' | 'brand'>[]
-        >(queryClient, list(superCampaignId), prevEnrollments => {
+        >(queryClient, allList(superCampaignId), prevEnrollments => {
           const enrollment = prevEnrollments.find(
             prevEnrollment =>
               prevEnrollment.user.id === userId &&

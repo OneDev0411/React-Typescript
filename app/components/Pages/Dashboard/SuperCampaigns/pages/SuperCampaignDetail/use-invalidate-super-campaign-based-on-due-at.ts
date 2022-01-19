@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { useQueryClient } from 'react-query'
 
-import { detail, list } from '@app/models/super-campaign/query-keys/campaign'
+import { detail, allList } from '@app/models/super-campaign/query-keys/campaign'
 
 import { getSuperCampaignDueAtRemainingTimeInMilliSeconds } from '../../helpers'
 
@@ -27,7 +27,7 @@ export function useInvalidateSuperCampaignBasedOnDueAt(
 
     const invalidate = () => {
       queryClient.invalidateQueries(detail(superCampaign.id))
-      queryClient.invalidateQueries(list(), { exact: false })
+      queryClient.invalidateQueries(allList(), { exact: false })
     }
 
     let timer: Nullable<NodeJS.Timer> = null

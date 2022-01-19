@@ -4,7 +4,7 @@ import { ResponseError } from 'superagent'
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
 import { UpdateCacheActions, updateCacheComposer } from '@app/utils/react-query'
 
-import { list as enrollmentList } from './query-keys/enrollment'
+import { allList } from './query-keys/enrollment'
 import { updateCacheList, updateCacheDetail } from './query-update/campaign'
 import { updateSuperCampaignTags } from './update-super-campaign-tags'
 
@@ -45,7 +45,7 @@ export function useUpdateSuperCampaignTags(
         onError: 'Something went wrong while saving the tags. Please try again.'
       },
       invalidates: (_, { superCampaignId }) => [
-        enrollmentList(superCampaignId) // We need to invalidate the enrollment list when the tags were changed
+        allList(superCampaignId) // We need to invalidate the enrollment list when the tags were changed
       ],
       onMutate: async ({ superCampaignId, tags }) => ({
         cache: await updateCacheComposer(

@@ -3,7 +3,7 @@ import { QueryClient } from 'react-query'
 
 import { updateCacheActions, UpdateCachePromise } from '@app/utils/react-query'
 
-import { list } from '../query-keys/enrollment'
+import { allList } from '../query-keys/enrollment'
 
 export async function updateCacheEnrollments(
   queryClient: QueryClient,
@@ -15,7 +15,7 @@ export async function updateCacheEnrollments(
 ): UpdateCachePromise {
   return updateCacheActions<ISuperCampaignEnrollment<'user' | 'brand'>[]>(
     queryClient,
-    list(superCampaignId),
+    allList(superCampaignId),
     prevEnrollments =>
       prevEnrollments.forEach(prevEnrollment => {
         const found = !!enrollments.find(

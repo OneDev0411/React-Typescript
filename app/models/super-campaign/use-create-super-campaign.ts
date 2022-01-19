@@ -4,7 +4,7 @@ import { ResponseError } from 'superagent'
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
 
 import { createSuperCampaign } from './create-super-campaign'
-import { list } from './query-keys/campaign'
+import { allList } from './query-keys/campaign'
 
 export type UseCreateSuperCampaign<
   TVariables extends ISuperCampaignInput | ISuperCampaign = ISuperCampaignInput
@@ -61,7 +61,7 @@ export function useCreateSuperCampaign<
       ...options,
       // Just invalidate the lists of campaigns because we dont know the list sort logic
       // at this stage so having an optimistic update is not easy
-      invalidates: [list()]
+      invalidates: [allList()]
     }
   )
 }

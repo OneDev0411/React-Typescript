@@ -1,5 +1,5 @@
+import { useGetMySuperCampaignsWithEnrollment } from '@app/components/Pages/Dashboard/SuperCampaigns/pages/use-get-my-super-campaigns-with-enrollment'
 import { ACL } from '@app/constants/acl'
-import { useGetMySuperCampaignsWithEnrollment } from '@app/hooks/use-get-my-super-campaigns-with-enrollment'
 import { useAcl } from '@app/views/components/Acl/use-acl'
 
 import LinkSectionAction from '../LinkSectionAction'

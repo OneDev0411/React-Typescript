@@ -9,7 +9,7 @@ import { ResponseError } from 'superagent'
 import { useQuery } from '@app/hooks/query'
 
 import { getSuperCampaign } from './get-super-campaign'
-import { detail, list } from './query-keys/campaign'
+import { detail, allList } from './query-keys/campaign'
 
 export type UseGetSuperCampaign = UseQueryResult<
   ISuperCampaign<'template_instance'>,
@@ -35,7 +35,7 @@ export function useGetSuperCampaign(
         const pages =
           queryClient.getQueryData<
             InfiniteData<ISuperCampaign<'template_instance'>[]>
-          >(list(), { exact: false })?.pages ?? []
+          >(allList(), { exact: false })?.pages ?? []
 
         const superCampaigns = pages.reduce(
           (items, page) => [...items, ...page],

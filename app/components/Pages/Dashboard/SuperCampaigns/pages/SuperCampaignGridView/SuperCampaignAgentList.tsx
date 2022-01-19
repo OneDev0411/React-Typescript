@@ -2,13 +2,14 @@ import { memo, useMemo, useState } from 'react'
 
 import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/Table/components/LoadingComponent'
 import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
-import { useGetMySuperCampaignsWithEnrollment } from '@app/hooks/use-get-my-super-campaigns-with-enrollment'
 import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 import SuperCampaignPreviewDrawer, {
   useLoadExistingTags
 } from '@app/views/components/SuperCampaignPreviewDrawer'
+
+import { useGetMySuperCampaignsWithEnrollment } from '../use-get-my-super-campaigns-with-enrollment'
 
 import SuperCampaignAgentListColumnActions from './SuperCampaignAgentListColumnActions'
 import SuperCampaignAgentListColumnCreatedBy from './SuperCampaignAgentListColumnCreatedBy'
