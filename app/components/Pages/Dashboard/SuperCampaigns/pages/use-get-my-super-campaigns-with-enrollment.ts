@@ -42,7 +42,7 @@ export function useGetMySuperCampaignsWithEnrollment(
   }, [mySuperCampaignEnrollments, mySuperCampaigns])
 
   return {
-    isLoading: isSuperCampaignsLoading && isSuperCampaignEnrollmentsLoading,
+    isLoading: isSuperCampaignsLoading || isSuperCampaignEnrollmentsLoading,
     superCampaignsWithEnrollment
   }
 }
