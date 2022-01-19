@@ -10,15 +10,15 @@ export function lists(): QueryKey {
   return [...all(), 'list']
 }
 
-export function list(
+export function allList(
   superCampaignId: UUID,
   includeCampaign?: boolean
 ): QueryKey {
   if (includeCampaign === undefined) {
-    return [...lists(), superCampaignId]
+    return [...lists(), 'all', superCampaignId]
   }
 
-  return [...lists(), superCampaignId, { includeCampaign }]
+  return [...lists(), 'all', superCampaignId, { includeCampaign }]
 }
 
 export function details(): QueryKey {
@@ -27,4 +27,8 @@ export function details(): QueryKey {
 
 export function detail(id: UUID): QueryKey {
   return [...details(), id]
+}
+
+export function myList(): QueryKey {
+  return [...lists(), 'my']
 }

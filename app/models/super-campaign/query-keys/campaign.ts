@@ -10,12 +10,12 @@ export function lists(): QueryKey {
   return [...all(), 'list']
 }
 
-export function list(order?: string[]): QueryKey {
+export function allList(order?: string[]): QueryKey {
   if (!order) {
-    return [...lists()]
+    return [...lists(), 'all']
   }
 
-  return [...lists(), { order }]
+  return [...lists(), 'all', { order }]
 }
 
 export function details(): QueryKey {
@@ -24,4 +24,12 @@ export function details(): QueryKey {
 
 export function detail(id: UUID): QueryKey {
   return [...details(), id]
+}
+
+export function myList(limit?: number): QueryKey {
+  if (!limit) {
+    return [...lists(), 'my']
+  }
+
+  return [...lists(), 'my', { limit }]
 }
