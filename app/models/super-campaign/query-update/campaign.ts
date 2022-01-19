@@ -23,7 +23,7 @@ export async function updateCacheDetail(
   )
 }
 
-export async function updateCacheList(
+export async function updateCacheAllList(
   queryClient: QueryClient,
   superCampaignId: UUID,
   update: Partial<ISuperCampaign<'template_instance'>>

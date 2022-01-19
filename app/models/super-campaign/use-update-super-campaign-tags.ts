@@ -5,7 +5,7 @@ import { useMutation, UseMutationOptions } from '@app/hooks/query'
 import { UpdateCacheActions, updateCacheComposer } from '@app/utils/react-query'
 
 import { allList } from './query-keys/enrollment'
-import { updateCacheList, updateCacheDetail } from './query-update/campaign'
+import { updateCacheAllList, updateCacheDetail } from './query-update/campaign'
 import { updateSuperCampaignTags } from './update-super-campaign-tags'
 
 interface DataInput {
@@ -52,7 +52,7 @@ export function useUpdateSuperCampaignTags(
           updateCacheDetail(queryClient, superCampaignId, {
             tags
           }),
-          updateCacheList(queryClient, superCampaignId, {
+          updateCacheAllList(queryClient, superCampaignId, {
             tags
           })
         )

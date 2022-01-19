@@ -5,7 +5,7 @@ import { updateCacheActions, UpdateCachePromise } from '@app/utils/react-query'
 
 import { allList } from '../query-keys/enrollment'
 
-export async function updateCacheEnrollments(
+export async function updateCacheAllList(
   queryClient: QueryClient,
   superCampaignId: UUID,
   enrollments: ISuperCampaignEnrollmentInput[],
