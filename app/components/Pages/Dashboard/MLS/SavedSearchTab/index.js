@@ -13,6 +13,7 @@ import { putUserSetting } from '@app/models/user/put-user-setting'
 import { selectAlert } from '@app/reducers/listings/alerts/list'
 import getAlerts from '@app/store_actions/listings/alerts/get-alerts'
 import { getUserTeams } from '@app/store_actions/user/teams'
+import { changeUrl } from '@app/utils/change-url'
 import { normalizeListingLocation } from '@app/utils/map'
 import Avatars from '@app/views/components/Avatars'
 import GlobalPageLayout from '@app/views/components/GlobalPageLayout'
@@ -21,6 +22,7 @@ import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import { Header } from '../components/PageHeader'
 import Tabs from '../components/Tabs'
+import { DEFAULT_VIEW } from '../constants'
 import {
   parseSortIndex,
   getDefaultSort,
@@ -93,7 +95,7 @@ class SavedSearch extends React.Component {
         ascending
       },
       isFetching: false,
-      activeView: props.location.query.view || 'cards'
+      activeView: props.location.query.view || DEFAULT_VIEW
     }
   }
 
@@ -157,6 +159,25 @@ class SavedSearch extends React.Component {
     this.props.dispatch(getUserTeams(this.props.user))
   }
 
+  onToggleListingModal = (id, isOpen) => {
+    if (!this.props.isWidget) {
+      if (isOpen) {
+        changeUrl(`/dashboard/mls/${id}`)
+      } else {
+        // Inject view param to url
+        const viewQueryParam =
+          this.state.activeView !== DEFAULT_VIEW
+            ? { view: this.state.activeView }
+            : {}
+
+        changeUrl(
+          `/dashboard/mls/saved-searches/${this.props.params.id}`,
+          viewQueryParam
+        )
+      }
+    }
+  }
+
   sortListings = memoize(
     (listings, index, ascending) => {
       const formattedListings = listings.data.map(listing =>
@@ -195,6 +216,7 @@ class SavedSearch extends React.Component {
             onToggleView={this.onToggleView}
             onChangeSort={this.onChangeSort}
             activeSort={this.state.activeSort}
+            onToggleListingModal={this.onToggleListingModal}
             Map={
               <Map
                 savedSearch={this.props.savedSearch}
