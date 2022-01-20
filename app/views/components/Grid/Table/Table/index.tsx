@@ -60,7 +60,6 @@ export function GridTable<Row>({
   totalRows,
   getTdProps,
   getTrProps,
-  itemSize,
   inlineGridEnabled = false,
   virtualize = true,
   rowSize,
@@ -128,7 +127,6 @@ export function GridTable<Row>({
             inlineGridEnabled={inlineGridEnabled}
             columns={newColumns}
             rows={newRows}
-            itemSize={itemSize}
             classes={classes}
             virtualize={virtualize}
             rowSize={rowSize}
