@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { getUserWithOnBehalfVariable } from '@app/utils/marketing-center/get-user-with-on-behalf-variable'
 import { TemplateData } from '@app/utils/marketing-center/render-branded-template'
 
 import type { UseMarketingBuilderActions } from './use-marketing-builder-actions'
@@ -11,21 +12,6 @@ interface UseMarketingTemplatePurposeState {
     templatePurpose: IMarketingTemplatePurpose
   ) => void
   correctedTemplateData: TemplateData
-}
-
-function getUserWithVariableFields(user: IUser): IUser {
-  return {
-    ...user,
-    profile_image_url: '{{user.profile_image_url}}',
-    display_name: '{{user.display_name}}',
-    phone_number: '{{user.phone_number}}',
-    email: '{{user.email}}',
-    facebook: '{{user.facebook}}',
-    twitter: '{{user.twitter}}',
-    linkedin: '{{user.linkedin}}',
-    youtube: '{{user.youtube}}',
-    instagram: '{{user.instagram}}'
-  }
 }
 
 export function useMarketingTemplatePurposeState(
@@ -74,7 +60,7 @@ export function useMarketingTemplatePurposeState(
     ['ForOtherAgents', 'ForCampaigns'].includes(templatePurpose)
       ? {
           ...templateData,
-          user: getUserWithVariableFields(templateData.user)
+          user: getUserWithOnBehalfVariable(templateData.user)
         }
       : templateData
 
