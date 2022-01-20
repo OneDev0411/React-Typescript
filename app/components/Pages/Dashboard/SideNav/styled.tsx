@@ -73,7 +73,7 @@ const itemStyle = css`
 
   svg {
     position: relative;
-    top: ${(props: ThemeProps<Theme>) => props.theme.spacing(-0.25)}px;
+    top: ${(props: ThemeProps<Theme>) => props.theme.spacing(-0.125)}px;
   }
 `
 

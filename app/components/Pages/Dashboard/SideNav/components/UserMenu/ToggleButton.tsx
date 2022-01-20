@@ -17,7 +17,7 @@ const useStyles = makeStyles(
       display: 'flex',
       width: `calc(100% - ${theme.spacing(3)}px)`,
       color: theme.palette.common.white,
-      alignItems: 'flex-end'
+      alignItems: 'center'
     },
     userDetails: {
       textAlign: 'left',
@@ -26,15 +26,16 @@ const useStyles = makeStyles(
     avatar: {
       width: theme.spacing(4),
       height: theme.spacing(4),
-      marginRight: theme.spacing(0.5)
+      marginRight: theme.spacing(1)
     },
     userDisplayName: {
-      color: theme.palette.common.white
+      color: theme.palette.common.white,
+      lineHeight: 1.3
     },
     arrowIcon: {
       color: theme.palette.common.white,
       marginLeft: theme.spacing(0.5),
-      alignSelf: 'flex-end'
+      alignSelf: 'center'
     },
     arrowIconRotated: {
       transform: 'rotateX(0)'
