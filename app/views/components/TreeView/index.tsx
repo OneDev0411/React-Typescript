@@ -40,7 +40,7 @@ export default memo(function TreeView<NodeType = any>({
     props.onExpandedNodesChanged,
     props.initialExpandedNodes || []
   )
-  const selectedNodeIds = useMemo(
+  const selectedNodeIds: UUID[] = useMemo(
     () => selectedNodes.map(node => getNodeId(node)),
     [selectedNodes, getNodeId]
   )
@@ -60,26 +60,25 @@ export default memo(function TreeView<NodeType = any>({
 
   const onCheckNode = useCallback(
     (node: NodeType) => {
-      // if (!props.multiSelectable) {
-      //   return
-      // }
-
-      const nodeId = getNodeId(node)
-
-      if (!nodeId) {
+      if (!props.multiSelectable) {
         return
       }
 
-      setSelectedNodes((state: NodeType[]) => {
+      const newSelectedNodes = generateNewSelecedNode()
+
+      setSelectedNodes(newSelectedNodes)
+
+      function generateNewSelecedNode(): NodeType[] {
+        const nodeId = getNodeId(node)
+
         if (selectedNodeIds.includes(nodeId)) {
-          return state.filter(n => getNodeId(n) !== nodeId)
+          return selectedNodes.filter(n => getNodeId(n) !== nodeId)
         }
 
-        return [...state, node]
-      })
-      console.log({ selectedNodes })
+        return [...selectedNodes, node]
+      }
     },
-    [getNodeId, selectedNodeIds, selectedNodes]
+    [getNodeId, props.multiSelectable, selectedNodeIds, selectedNodes]
   )
 
   useEffect(() => {

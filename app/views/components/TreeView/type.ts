@@ -7,7 +7,7 @@ export interface BaseTreeViewNodeProps<NodeType> {
   selectable?: boolean
   multiSelectable?: boolean
   getNodeId: (node: NodeType) => string
-  onCheckNode: (node: NodeType) => void
+  onCheckNode?: (node: NodeType) => void
   getChildNodes: TreeFn<NodeType>
   expandedNodes: string[]
 }

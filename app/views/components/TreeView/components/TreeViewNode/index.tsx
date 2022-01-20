@@ -1,4 +1,4 @@
-import { useCallback, memo } from 'react'
+import { useCallback, memo, ChangeEvent } from 'react'
 
 import { Checkbox } from '@material-ui/core'
 import { mdiChevronRight, mdiChevronDown } from '@mdi/js'
@@ -30,13 +30,18 @@ export const TreeViewNode = memo(function TreeViewNode<
     [node, onToggleExpanded]
   )
 
-  const handleCheckNode = useCallback(
-    () => onCheckNode(node),
-    [node, onCheckNode]
-  )
+  const handleCheckNode = (e: ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation()
 
-  const renderNoder = () => {
-    const checkbox = (
+    if (!props.multiSelectable || !onCheckNode) {
+      return
+    }
+
+    onCheckNode(node)
+  }
+
+  const renderNode = () => {
+    const checkbox = props.multiSelectable && (
       <Checkbox
         size="small"
         classes={{
@@ -77,7 +82,7 @@ export const TreeViewNode = memo(function TreeViewNode<
 
   return (
     <div className={classes.container}>
-      {renderNoder()}
+      {renderNode()}
       {expandable && expanded && (
         <div className={classes.childrenContainer}>
           {childNodes.map(node => (
@@ -85,7 +90,7 @@ export const TreeViewNode = memo(function TreeViewNode<
               key={props.getNodeId(node)}
               node={node}
               onToggleExpanded={onToggleExpanded}
-              onCheckNode={handleCheckNode}
+              onCheckNode={onCheckNode}
               {...props}
             />
           ))}
