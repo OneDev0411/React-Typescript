@@ -69,7 +69,11 @@ const useStyles = makeStyles(
       margin: theme.spacing(0.75, 1)
     },
     accordionRoot: {
-      backgroundColor: 'transparent'
+      backgroundColor: 'transparent',
+      boxShadow: 'none',
+      '&:before': {
+        height: '0'
+      }
     },
     accordionExpanded: {
       // I had to add !important to force accordion styles to change

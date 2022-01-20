@@ -6,7 +6,7 @@ import cn from 'classnames'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import Badge from 'components/Badge'
+import { MenuBadge } from 'components/MenuBadge'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import UserAvatar from 'components/UserAvatar'
@@ -204,11 +204,11 @@ class Rooms extends React.Component {
 
                     <Grid item sm={1} xs={1} className="notifications vcenter">
                       {room.new_notifications > 0 && (
-                        <Badge>
+                        <MenuBadge>
                           {room.new_notifications > 99
-                            ? '99+'
+                            ? '+99'
                             : room.new_notifications}
-                        </Badge>
+                        </MenuBadge>
                       )}
                     </Grid>
                   </Grid>

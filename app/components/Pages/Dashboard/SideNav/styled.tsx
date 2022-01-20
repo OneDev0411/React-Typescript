@@ -31,6 +31,7 @@ export const SideNavItem = styled.li`
   transition: background-color 0.2s ease-in;
   width: 100%;
   margin-bottom: ${(props: ThemeProps<Theme>) => props.theme.spacing(1)}px;
+  list-style: none;
 `
 
 export const SideNavItemLabel = styled.div`

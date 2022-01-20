@@ -30,12 +30,18 @@ const useStyles = makeStyles(
     },
     userDisplayName: {
       color: theme.palette.common.white,
-      lineHeight: 1.3
+      lineHeight: 1.3,
+      '&:hover': {
+        color: theme.palette.primary.main
+      }
     },
     arrowIcon: {
       color: theme.palette.common.white,
       marginLeft: theme.spacing(0.5),
       alignSelf: 'center'
+    },
+    tooltipArrow: {
+      marginLeft: `${theme.spacing(-1.25)}px !important`
     },
     arrowIconRotated: {
       transform: 'rotateX(0)'
@@ -61,7 +67,11 @@ export default function ToggleButton(props: Props) {
   const tooltipTitle = `${display_name} ${brandName ? `(${brandName})` : ''}`
 
   return (
-    <Tooltip placement="right" title={tooltipTitle}>
+    <Tooltip
+      placement="right"
+      title={tooltipTitle}
+      classes={{ arrow: classes.tooltipArrow }}
+    >
       <DropdownToggleButton
         id={props.id}
         onClick={props.onClick}
