@@ -42,14 +42,12 @@ export default function MyDesignsSection() {
         actionNode={
           templates.length ? (
             <LinkSectionAction
-              title="View all"
+              title="View all my design"
               url="/dashboard/marketing/designs"
             />
           ) : null
         }
-        gridProps={{
-          sm: 6
-        }}
+        containerGridProps={{ sm: 6 }}
       >
         <>
           {isLoading && (

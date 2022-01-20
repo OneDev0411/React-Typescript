@@ -1,14 +1,19 @@
 import { ZeroState } from 'partials/ZeroState'
 
-export function EmailInsightsZeroState() {
+interface Props {
+  title?: string
+  subTitle?: string
+}
+
+export function EmailInsightsZeroState({
+  title = 'No insights to show, yet.',
+  subTitle = 'Try sending your first campaign using "Create" button and clicking on "Email".'
+}: Props) {
   return (
     <ZeroState
       imageUrl="/static/images/zero-state/insights.png"
-      title="No insights to show, yet."
-      subTitle={
-        // eslint-disable-next-line max-len
-        'Try sending your first campaign using "Create" button and clicking on "Email".'
-      }
+      title={title}
+      subTitle={subTitle}
     />
   )
 }

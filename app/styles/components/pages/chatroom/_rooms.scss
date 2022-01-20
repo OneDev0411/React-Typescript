@@ -96,7 +96,7 @@
       margin-left: 0;
       svg {
         display: flex;
-        align-items: center;        
+        align-items: center;
         vertical-align: middle;
       }
     }
@@ -148,6 +148,11 @@
       span {
         font-weight: bold;
         color: $brand-primary;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        display: block;
+        max-width: 95%;
       }
     }
     .message-typing {

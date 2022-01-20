@@ -1,10 +1,10 @@
-import { IMapPosition, IFormattedCompactListing } from '../../../types'
+import { IMapPosition } from '../../../types'
 import { Actions } from '../actions'
 
 export interface FavoritesState {
   map: IMapPosition
   result: {
-    listings: IFormattedCompactListing[]
+    listings: ICompactListing[]
     info: Nullable<ICompactListingInfo>
   }
   isLoading: boolean

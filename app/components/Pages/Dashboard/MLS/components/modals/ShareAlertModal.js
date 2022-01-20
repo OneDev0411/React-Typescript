@@ -8,6 +8,7 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import Flex from 'styled-flex-component'
 
+import Chatroom from '@app/components/Pages/Dashboard/Chatroom/Util/chatroom'
 import { createRoom } from '@app/store_actions/chatroom/room'
 import createAlert from '@app/store_actions/listings/alerts/create-alert'
 import { hasRecipients } from '@app/utils/helpers'
@@ -106,6 +107,7 @@ export default compose(
               onHide()
               setSuccessModalIsActive(true)
               setTimeout(() => setSuccessModalIsActive(false), 2000)
+              Chatroom.openChat(room)
             })
             .catch(() => {
               setIsSharing(false)

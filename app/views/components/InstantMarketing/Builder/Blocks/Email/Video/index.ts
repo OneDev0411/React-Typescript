@@ -8,19 +8,20 @@ import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
-import { TemplateBlockOptions } from '../../types'
+import { RegisterBlockSelectHandler, TemplateBlockOptions } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 
 import template from './template.mjml'
 
 const blockName = 'rechat-video'
 
-export interface Options {
-  onDrop: (model: Model) => void
+interface VideoRenderData {
+  url: string
+  image: Optional<string>
 }
 
-interface VideoBlock {
-  selectHandler: (selectedVideo?: Video) => void
+export interface Options {
+  onDrop: (model: Model) => void
 }
 
 export default function registerVideoBlock(
@@ -28,7 +29,7 @@ export default function registerVideoBlock(
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
   { onDrop }: Options
-): VideoBlock {
+): RegisterBlockSelectHandler<Video> {
   const videoBlocks = {
     [blockName]: templateBlockOptions.blocks[blockName]?.template || template
   }
@@ -52,10 +53,10 @@ export default function registerVideoBlock(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent(
+  return handleBlockDragStopEvent<Video, VideoRenderData>(
     editor,
     allBlocks,
-    (selectedVideo: Video) => ({
+    selectedVideo => ({
       ...renderData,
       url: selectedVideo.url,
       image: selectedVideo.thumbnail

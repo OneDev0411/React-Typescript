@@ -118,6 +118,7 @@ const MapView = props => {
               listing={listing}
               tags={listing.new ? [listing.new] : undefined}
               selected={selections.some(item => item.id === listing.id)}
+              onToggleListingModal={props.onToggleListingModal}
               onToggleSelection={() => toggleItem(listing)}
             />
           </Box>

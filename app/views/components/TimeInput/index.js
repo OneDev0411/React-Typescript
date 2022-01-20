@@ -11,6 +11,7 @@ import { TimeInputContainer } from './styled'
 import useTime from './useTime'
 
 TimeInput.propTypes = {
+  className: PropTypes.string,
   id: PropTypes.string,
   defaultDate: PropTypes.instanceOf(Date),
   initialDate: PropTypes.instanceOf(Date),
@@ -28,7 +29,7 @@ function TimeInput(props) {
   })
 
   return (
-    <TimeInputContainer>
+    <TimeInputContainer className={props.className}>
       <span className="icon">
         <SvgIcon path={mdiClockOutline} size={muiIconSizes.small} />
       </span>
