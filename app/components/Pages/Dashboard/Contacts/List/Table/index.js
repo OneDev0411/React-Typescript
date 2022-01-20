@@ -205,7 +205,7 @@ const ContactsList = props => {
         loading={getLoading()}
         columns={columns}
         inlineGridEnabled={inlineGridEnabled}
-        itemSize={theme.spacing(8)}
+        rowSize={8}
         LoadingStateComponent={LoadingComponent}
         getTrProps={getRowProps}
         getTdProps={getColumnProps}
