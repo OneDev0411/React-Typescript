@@ -1,7 +1,7 @@
 import { Theme } from '@material-ui/core'
 import styled, { css } from 'styled-components'
 
-export const GridRowContainer = styled.div<{
+export const RowContainer = styled.div<{
   index: number
   selected: boolean
   theme: Theme
@@ -48,7 +48,7 @@ export const GridRowContainer = styled.div<{
   `}
 `
 
-export const RowContainer = styled.div<{
+export const GridRowContainer = styled.div<{
   index: number
   selected: boolean
   theme: Theme
