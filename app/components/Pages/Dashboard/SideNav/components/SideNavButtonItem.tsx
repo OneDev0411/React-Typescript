@@ -8,25 +8,15 @@ const useStyles = makeStyles(
     button: {
       alignItems: 'center',
       borderRadius: theme.shape.borderRadius,
-      borderLeft: '2px solid transparent',
-      padding: theme.spacing(0.5, 1, 0.5, 4),
+      borderLeft: `${theme.spacing(0.25)}px solid transparent`,
+      padding: theme.spacing(0.5, 1),
       color: theme.palette.common.white,
       fontSize: theme.typography.body1.fontSize,
       opacity: 1,
       width: '100%',
 
-      '& svg': {
-        position: 'absolute',
-        left: '-26px'
-      },
-
       '&:hover': {
-        textDecoration: 'none',
-        color: theme.palette.primary.main,
-
-        '& svg': {
-          color: theme.palette.primary.main
-        }
+        color: theme.palette.primary.main
       }
     }
   }),

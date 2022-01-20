@@ -1,6 +1,12 @@
 import { useState, ChangeEvent, useEffect, useRef } from 'react'
 
-import { Divider, makeStyles, Accordion } from '@material-ui/core'
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Divider,
+  makeStyles
+} from '@material-ui/core'
 import {
   mdiViewGridOutline,
   mdiAccountSupervisorOutline,
@@ -20,8 +26,6 @@ import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
 import { GlobalActionsButton } from 'components/GlobalActionsButton'
-import { MenuAccordionDetails as AccordionDetails } from 'components/MenuAccordionDetails'
-import { MenuAccordionSummary as AccordionSummary } from 'components/MenuAccordionSummary'
 import { MenuBadge } from 'components/MenuBadge'
 import { ACL } from 'constants/acl'
 import { useChatRoomsNotificationsNumber } from 'hooks/use-chat-rooms-notifications-number'
@@ -53,7 +57,8 @@ import {
   SidenavListGroup,
   AccordionSummaryDiv,
   AccordionSummaryDot,
-  AccordionSummaryLabel
+  AccordionSummaryLabel,
+  SideNavButtonWithoutIconLabel
 } from './styled'
 import { ExpandedMenu, scrollableAreaShadowColor } from './variables'
 
@@ -67,7 +72,29 @@ const useStyles = makeStyles(
       backgroundColor: 'transparent'
     },
     accordionExpanded: {
+      // I had to add !important to force accordion styles to change
       margin: '0 !important'
+    },
+    accordionSummaryRoot: {
+      padding: 0,
+      // I had to add !important to force accordionSummary styles to change
+      minHeight: `${theme.spacing(5.5)}px !important`
+    },
+    accordionSummaryRootExpanded: {
+      // Added primary color to the root menu's svg-icon, when it is expanded
+      '& svg:first-child': {
+        color: theme.palette.primary.main
+      }
+    },
+    accordionSummaryContent: {
+      display: 'flex',
+      justifyContent: 'flex-start',
+      // I had to add !important to force accordionSummary styles to change
+      margin: '0 !important'
+    },
+    AccordionDetailsRoot: {
+      padding: 0,
+      flexDirection: 'column'
     }
   }),
   {
@@ -159,6 +186,11 @@ function Menu(props: WithRouterProps) {
             <AccordionSummary
               aria-controls="nav-dashboard-content"
               id="nav-dashboard-header"
+              classes={{
+                root: classes.accordionSummaryRoot,
+                expanded: classes.accordionSummaryRootExpanded,
+                content: classes.accordionSummaryContent
+              }}
             >
               <Acl access={dashboardAccess}>
                 <SideNavLinkSummary
@@ -193,6 +225,11 @@ function Menu(props: WithRouterProps) {
             <AccordionSummary
               aria-controls="nav-marketing-content"
               id="nav-marketing-header"
+              classes={{
+                root: classes.accordionSummaryRoot,
+                expanded: classes.accordionSummaryRootExpanded,
+                content: classes.accordionSummaryContent
+              }}
             >
               <Acl.Marketing>
                 <SideNavLinkSummary
@@ -222,7 +259,11 @@ function Menu(props: WithRouterProps) {
                 </SideNavLinkSummary>
               </Acl.Marketing>
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails
+              classes={{
+                root: classes.AccordionDetailsRoot
+              }}
+            >
               <Acl.Marketing>
                 <SideNavLinkItem
                   to="/dashboard/marketing"
@@ -272,6 +313,11 @@ function Menu(props: WithRouterProps) {
             <AccordionSummary
               aria-controls="nav-properties-content"
               id="nav-properties-header"
+              classes={{
+                root: classes.accordionSummaryRoot,
+                expanded: classes.accordionSummaryRootExpanded,
+                content: classes.accordionSummaryContent
+              }}
             >
               <Acl.Marketing>
                 <SideNavLinkSummary
@@ -303,6 +349,11 @@ function Menu(props: WithRouterProps) {
             <AccordionSummary
               aria-controls="nav-people-content"
               id="nav-people-header"
+              classes={{
+                root: classes.accordionSummaryRoot,
+                expanded: classes.accordionSummaryRootExpanded,
+                content: classes.accordionSummaryContent
+              }}
             >
               <Acl access={dashboardAccess}>
                 <SideNavLinkSummary
@@ -338,7 +389,11 @@ function Menu(props: WithRouterProps) {
                 </SideNavLinkSummary>
               </Acl>
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails
+              classes={{
+                root: classes.AccordionDetailsRoot
+              }}
+            >
               <Acl.Crm>
                 <SideNavLinkItem to="/dashboard/inbox" tourId="nav-inbox">
                   <MenuBadge
@@ -374,6 +429,11 @@ function Menu(props: WithRouterProps) {
                   <AccordionSummary
                     aria-controls="nav-chat-content"
                     id="nav-chat-header"
+                    classes={{
+                      root: classes.accordionSummaryRoot,
+                      expanded: classes.accordionSummaryRootExpanded,
+                      content: classes.accordionSummaryContent
+                    }}
                   >
                     <SideNavItem>
                       <MessagesDrawerTrigger>
@@ -381,7 +441,9 @@ function Menu(props: WithRouterProps) {
                           badgeContent={chatRoomsNotificationsNumber}
                           color="primary"
                         >
-                          Chat
+                          <SideNavButtonWithoutIconLabel>
+                            Chat
+                          </SideNavButtonWithoutIconLabel>
                         </MenuBadge>
                       </MessagesDrawerTrigger>
                     </SideNavItem>
@@ -402,6 +464,11 @@ function Menu(props: WithRouterProps) {
             <AccordionSummary
               aria-controls="nav-transaction-content"
               id="nav-transaction-header"
+              classes={{
+                root: classes.accordionSummaryRoot,
+                expanded: classes.accordionSummaryRootExpanded,
+                content: classes.accordionSummaryContent
+              }}
             >
               <Acl.Marketing>
                 <SideNavLinkSummary
@@ -439,7 +506,11 @@ function Menu(props: WithRouterProps) {
                 </SideNavLinkSummary>
               </Acl.Marketing>
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails
+              classes={{
+                root: classes.AccordionDetailsRoot
+              }}
+            >
               <Acl access={dealsAccess}>
                 <SideNavLinkItem to="/dashboard/deals" tourId="nav-deals">
                   <MenuBadge
@@ -500,6 +571,11 @@ function Menu(props: WithRouterProps) {
               <AccordionSummary
                 aria-controls="nav-notifications-content"
                 id="nav-notifications-header"
+                classes={{
+                  root: classes.accordionSummaryRoot,
+                  expanded: classes.accordionSummaryRootExpanded,
+                  content: classes.accordionSummaryContent
+                }}
               >
                 <SideNavLinkSummary
                   to={['/dashboard/notifications']}
@@ -538,6 +614,11 @@ function Menu(props: WithRouterProps) {
             <AccordionSummary
               aria-controls="nav-help-center-content"
               id="nav-help-center-header"
+              classes={{
+                root: classes.accordionSummaryRoot,
+                expanded: classes.accordionSummaryRootExpanded,
+                content: classes.accordionSummaryContent
+              }}
             >
               <SideNavItem>
                 <SidenavBlankLink
@@ -570,6 +651,11 @@ function Menu(props: WithRouterProps) {
             <AccordionSummary
               aria-controls="nav-support-content"
               id="nav-support-header"
+              classes={{
+                root: classes.accordionSummaryRoot,
+                expanded: classes.accordionSummaryRootExpanded,
+                content: classes.accordionSummaryContent
+              }}
             >
               <SideNavItem>
                 <SupportTrigger>

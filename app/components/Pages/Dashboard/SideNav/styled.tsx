@@ -73,7 +73,7 @@ const itemStyle = css`
 
   svg {
     position: relative;
-    top: -2px;
+    top: ${(props: ThemeProps<Theme>) => props.theme.spacing(-0.25)}px;
   }
 `
 
@@ -153,4 +153,8 @@ export const AccordionSummaryDot = styled.span`
     `${props.theme.shape.borderRadius}px`};
   background-color: ${(props: ThemeProps<Theme>) =>
     props.theme.palette.primary.main};
+`
+
+export const SideNavButtonWithoutIconLabel = styled.span`
+  padding-left: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(3)}px`};
 `
