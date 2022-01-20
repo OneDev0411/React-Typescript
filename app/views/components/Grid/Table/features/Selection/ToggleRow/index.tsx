@@ -8,7 +8,12 @@ import { isRowSelected } from '../helpers/is-row-selected'
 const useStyles = makeStyles(
   theme => ({
     container: {
-      padding: theme.spacing(1, 0.5, 1, 4),
+      display: 'flex',
+      justifyContent: 'end',
+      alignItems: 'center',
+      width: theme.spacing(7.5),
+      height: '100%',
+      paddingRight: '4px',
       overflow: 'initial'
     }
   }),

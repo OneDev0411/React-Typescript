@@ -101,7 +101,7 @@ const ContactsList = props => {
     {
       id: 'name',
       headerName: ({ rows }) => (
-        <Box sx={{ paddingLeft: '8px' }}>
+        <Box pl={2}>
           <ColumnHeaderCell
             title={getSelectedInfo(rows.length)}
             sortEnabled={false}

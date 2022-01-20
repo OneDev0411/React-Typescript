@@ -7,8 +7,11 @@ import Checkbox from '../Checkbox'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      padding: theme.spacing(1, 0.5, 1, 4),
-      overflow: 'initial'
+      display: 'flex',
+      justifyContent: 'end',
+      overflow: 'initial',
+      width: theme.spacing(7.5),
+      paddingRight: theme.spacing(0.5)
     }
   }),
   { name: 'ToggleEntireRows' }
