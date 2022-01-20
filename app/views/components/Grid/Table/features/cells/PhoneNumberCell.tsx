@@ -1,6 +1,9 @@
 import { makeStyles } from '@material-ui/core'
+import cn from 'classnames'
 
 import CellContainer from '@app/views/components/Grid/Table/features/cells/CellContainer'
+
+import { CellProps } from '../../types'
 
 interface Props {
   contact: IContact
@@ -13,16 +16,28 @@ const useStyles = makeStyles(
       ...theme.typography.body2,
       color: theme.palette.grey[700],
       letterSpacing: '0.15px',
-      lineHeight: `${theme.spacing(3)}px`
+      lineHeight: `${theme.spacing(3)}px`,
+      '&.hovered': {
+        color: theme.palette.tertiary.dark
+      },
+      '&.selected': {
+        color: theme.palette.primary.main
+      }
     },
     attributeLabel: {
       ...theme.typography.body3,
       letterSpacing: '0.15px',
       lineHeight: `${theme.spacing(3)}px`,
-      color: theme.palette.grey['500']
+      color: theme.palette.grey['500'],
+      '&.hovered': {
+        color: theme.palette.tertiary.dark
+      },
+      '&.selected': {
+        color: theme.palette.tertiary.dark
+      }
     }
   }),
-  { name: 'PhoneNumber-cell' }
+  { name: 'Phone-cell' }
 )
 
 const PhoneNumberCell = ({ contact, onSave }: Props) => {
@@ -44,13 +59,31 @@ const PhoneNumberCell = ({ contact, onSave }: Props) => {
     return false
   })
 
-  const renderCellContent = () => (
+  const renderCellContent = ({
+    isHovered = false,
+    isSelected = false
+  }: CellProps) => (
     <>
       {phoneNumber && (
-        <div className={classes.attributeText}>{phoneNumber}</div>
+        <div
+          className={cn(classes.attributeText, {
+            hovered: isHovered,
+            selected: isSelected
+          })}
+        >
+          {phoneNumber}
+        </div>
       )}
+
       {phoneNumberLabel && (
-        <div className={classes.attributeLabel}>{phoneNumberLabel}</div>
+        <div
+          className={cn(classes.attributeLabel, {
+            hovered: isHovered,
+            selected: isSelected
+          })}
+        >
+          {phoneNumberLabel}
+        </div>
       )}
     </>
   )

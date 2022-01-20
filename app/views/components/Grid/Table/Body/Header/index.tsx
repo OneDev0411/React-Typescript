@@ -14,6 +14,9 @@ const useStyles = makeStyles(
       flexDirection: 'row',
       alignItems: 'stretch',
 
+      backgroundColor: `${alpha(theme.palette.grey[50], 0.75)}`,
+      borderTop: `1px solid ${theme.palette.divider}`,
+
       '& > div:first-child': {
         borderRight: 'none'
       }
@@ -23,8 +26,6 @@ const useStyles = makeStyles(
       display: 'flex',
       alignSelf: 'center',
       alignItems: 'center',
-      backgroundColor: `${alpha(theme.palette.grey[50], 0.75)}`,
-      borderTop: `1px solid ${theme.palette.divider}`,
       borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`
     }
   }),

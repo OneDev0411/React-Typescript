@@ -169,6 +169,7 @@ const ContactsList = props => {
           title="Last Touch"
           iconPath={mdiCalendarOutline}
           sortEnabled
+          sortDirection="desc"
         />
       ),
       width: '150px',

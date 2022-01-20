@@ -19,7 +19,13 @@ const useStyles = makeStyles(
     noTag: {
       ...theme.typography.body3,
       color: theme.palette.grey[700],
-      lineHeight: `${theme.spacing(3)}px`
+      lineHeight: `${theme.spacing(3)}px`,
+      '&.hovered': {
+        color: theme.palette.tertiary.dark
+      },
+      '&.selected': {
+        color: theme.palette.primary.main
+      }
     },
     tagLabel: {
       cursor: 'pointer',
@@ -28,7 +34,13 @@ const useStyles = makeStyles(
       gap: theme.spacing(1),
       color: theme.palette.grey[700],
       ...theme.typography.body3,
-      lineHeight: `${theme.spacing(3)}px`
+      lineHeight: `${theme.spacing(3)}px`,
+      '&.hovered': {
+        color: theme.palette.tertiary.dark
+      },
+      '&.selected': {
+        color: theme.palette.primary.main
+      }
     }
   }),
   { name: 'TagsCell' }

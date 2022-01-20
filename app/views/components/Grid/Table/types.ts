@@ -99,3 +99,8 @@ export interface TdProps<Row> {
   rowIndex: number
   row: Row
 }
+
+export interface CellProps {
+  isSelected?: boolean
+  isHovered?: boolean
+}

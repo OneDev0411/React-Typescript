@@ -68,15 +68,7 @@ export const GridRowContainer = styled.div<{
 
     &:hover {
       background-color: ${theme.palette.grey[50]};
-    }
-
-    &:hover .primary {
-      cursor: pointer;
-
-      a {
-        color: ${theme.palette.secondary.main};
-        text-decoration: underline;
-      }
+      color: ${theme.palette.secondary.main} !important;
     }
 
     &:hover .selection--default-value {
