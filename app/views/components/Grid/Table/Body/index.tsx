@@ -40,7 +40,7 @@ interface Props<Row> {
   totalRows: number
   classes: GridClasses
   virtualize: boolean
-  itemSize?: number
+  rowSize?: number
   infiniteScrolling: InfiniteScrollingOptions | null
   selection: GridSelectionOptions<Row> | null
   hasHeader?: boolean
@@ -55,7 +55,7 @@ export function Body<Row>({
   totalRows,
   classes,
   virtualize,
-  itemSize,
+  rowSize = 8,
   infiniteScrolling,
   hasHeader,
   selection,
@@ -119,7 +119,7 @@ export function Body<Row>({
             key={row.id || rowIndex}
             index={rowIndex}
             style={{
-              height: itemSize || theme.spacing(8)
+              height: theme.spacing(rowSize)
             }}
             data={{
               rows,
@@ -153,7 +153,7 @@ export function Body<Row>({
           <FixedSizeList
             ref={listRef}
             itemCount={rows.length}
-            itemSize={itemSize || theme.spacing(8)}
+            itemSize={theme.spacing(rowSize)}
             width={width}
             height={windowHeight}
             overscanCount={8}

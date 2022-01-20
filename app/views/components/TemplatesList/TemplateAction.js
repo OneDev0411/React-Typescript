@@ -14,7 +14,7 @@ import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard
 import ShareInstance from 'components/InstantMarketing/adapters/ShareInstance'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
-import { SAVED_TEMPLATE_VARIANT } from '../InstantMarketing/Builder/AddToMarketingCenter/constants'
+import { SAVED_TEMPLATE_VARIANT } from '../InstantMarketing/Builder/AddToMarketingCenterButton/constants'
 
 const HOLIDAY_TYPES = [
   'BackToSchool',

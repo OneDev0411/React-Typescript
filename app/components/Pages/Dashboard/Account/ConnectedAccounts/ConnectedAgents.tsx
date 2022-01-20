@@ -87,7 +87,7 @@ export default function ConnectedAgents({ user, onDelete }: Props) {
                     label={
                       <Box display="flex" alignItems="center">
                         <span className={cn(classes.status, agent.status)} />
-                        {agent.status}
+                        {agent.status || 'Unknown'}
                       </Box>
                     }
                   />

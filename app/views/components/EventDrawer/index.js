@@ -329,7 +329,6 @@ class EventDrawerContainer extends Component {
                           <FieldContainer alignCenter justifyBetween>
                             <DateTimeField
                               name="dueDate"
-                              selectedDate={values.dueDate}
                               showTimePicker={!values.allDay}
                             />
 

@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { useDispatch } from 'react-redux'
 
 import {
@@ -10,7 +12,7 @@ type UseNotifyReturn = (data: Notification) => void
 function useNotify(): UseNotifyReturn {
   const dispatch = useDispatch()
 
-  return (data: Notification) => dispatch(notify(data))
+  return useCallback((data: Notification) => dispatch(notify(data)), [dispatch])
 }
 
 export default useNotify

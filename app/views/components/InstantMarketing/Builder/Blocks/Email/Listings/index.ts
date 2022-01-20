@@ -15,7 +15,7 @@ import {
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
-import { TemplateBlockOptions } from '../../types'
+import { RegisterBlockSelectHandler, TemplateBlockOptions } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 
 import GridTwo from './grid-two.mjml'
@@ -36,16 +36,18 @@ export interface Options {
   onDrop: (model: Model) => void
 }
 
-interface ListingBlock {
-  selectHandler: (listings?: (IListing & { is_lease?: boolean })[]) => void
+type ListingItem = IListing & { is_lease?: boolean }
+
+interface ListingRenderData {
+  listings: ListingItem[]
 }
 
-export default function registerBlocks(
+export default function registerListingBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
   { onDrop }: Options
-): ListingBlock {
+): RegisterBlockSelectHandler<ListingItem[]> {
   const listingBlocks = {
     [listingImageBlockName]:
       templateBlockOptions.blocks[listingImageBlockName]?.template || Image,
@@ -141,10 +143,10 @@ export default function registerBlocks(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent(
+  return handleBlockDragStopEvent<ListingItem[], ListingRenderData>(
     editor,
     allBlocks,
-    (listings: (IListing & { is_lease?: boolean })[]) => ({
+    listings => ({
       ...renderData,
       listings: listings.map(listing => ({
         ...listing,

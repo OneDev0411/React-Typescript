@@ -1,5 +1,8 @@
 import { makeStyles } from '@material-ui/core'
+import cn from 'classnames'
 
+import { SELECTION__TOGGLE_ROW } from '../../../context/constants/selection'
+import { getRowId } from '../../../helpers/get-row-id'
 import { useGridContext } from '../../../hooks/use-grid-context'
 import { RenderProps } from '../../../types'
 import Checkbox from '../Checkbox'
@@ -15,6 +18,12 @@ const useStyles = makeStyles(
       height: '100%',
       paddingRight: '4px',
       overflow: 'initial'
+    },
+    showDefault: {
+      display: 'block'
+    },
+    hideDefault: {
+      display: 'none'
     }
   }),
   { name: 'ToggleRow' }
@@ -24,17 +33,35 @@ interface Props<Row> {
   rowItem: RenderProps<Row>
   render?: ((rowItem: RenderProps<Row>) => React.ReactNode) | null
   defaultRender?: ((rowItem: RenderProps<Row>) => React.ReactNode) | null
-  handleToggleRow: (props: RenderProps<Row>) => void
 }
 
-function ToggleRow<Row>({
-  rowItem,
-  render,
-  defaultRender,
-  handleToggleRow
-}: Props<Row>) {
-  const [state] = useGridContext()
+function ToggleRow<Row>({ rowItem, render, defaultRender }: Props<Row>) {
+  const [state, dispatch] = useGridContext()
   const classes = useStyles()
+
+  const handleToggleRow = (rowItem: RenderProps<Row>): void => {
+    const rowId = getRowId<Row>(rowItem.row, rowItem.rowIndex)
+
+    dispatch({
+      type: SELECTION__TOGGLE_ROW,
+      id: rowId,
+      totalRows: rowItem.totalRows
+    })
+  }
+
+  const selectionCheckBox = () => {
+    if (render) {
+      return render(rowItem)
+    }
+
+    return (
+      <Checkbox
+        size="small"
+        checked={isRowSelected<Row>(state, rowItem.row, rowItem.rowIndex)}
+        onChange={() => handleToggleRow(rowItem)}
+      />
+    )
+  }
 
   const showDefaultValue =
     defaultRender &&
@@ -45,28 +72,22 @@ function ToggleRow<Row>({
   return (
     <div className={classes.container}>
       <div
-        className="selection--default-value"
-        style={{
-          display: showDefaultValue ? 'block' : 'none'
-        }}
+        className={cn('selection--default-value', {
+          [classes.showDefault]: showDefaultValue,
+          [classes.hideDefault]: !showDefaultValue
+        })}
       >
         {defaultRender && defaultRender(rowItem)}
       </div>
 
       <div
-        className="selection--checkbox"
-        style={{ display: showDefaultValue ? 'none' : 'block' }}
+        className={cn('selection--checkbox', {
+          [classes.showDefault]: !showDefaultValue,
+          [classes.hideDefault]: showDefaultValue
+        })}
         onClick={e => e.stopPropagation()}
       >
-        {render ? (
-          render(rowItem)
-        ) : (
-          <Checkbox
-            size="small"
-            checked={isRowSelected<Row>(state, rowItem.row, rowItem.rowIndex)}
-            onChange={() => handleToggleRow(rowItem)}
-          />
-        )}
+        {selectionCheckBox()}
       </div>
     </div>
   )

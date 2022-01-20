@@ -32,12 +32,16 @@ import {
   getActiveBrand
 } from 'utils/user-teams'
 
+import {
+  hasCreateSuperCampaignButton,
+  hasSaveAsTemplateButton
+} from '../helpers/builder-actions'
 import getTemplateObject from '../helpers/get-template-object'
 import nunjucks from '../helpers/nunjucks'
 import Templates from '../Templates'
 
-import AddToMarketingCenter from './AddToMarketingCenter'
-import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenter/constants'
+import { AddToMarketingCenterButton } from './AddToMarketingCenterButton'
+import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenterButton/constants'
 import { registerEmailBlocks } from './Blocks/Email'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
 import { registerSocialBlocks } from './Blocks/Social'
@@ -48,6 +52,7 @@ import {
 import { registerWebsiteBlocks, websiteBlocksTraits } from './Blocks/Website'
 import { registerCommands } from './commands'
 import { BASICS_BLOCK_CATEGORY } from './constants'
+import CreateSuperCampaignButton from './CreateSuperCampaignButton'
 import DeviceManager from './DeviceManager'
 import {
   Container,
@@ -506,7 +511,14 @@ class Builder extends React.Component {
       agent: {
         onDrop: () => {
           this.setState({ isAgentDrawerOpen: true })
-        }
+        },
+        shouldUseDefaultAgents: this.isEmailTemplateForCampaigns,
+        defaultAgents: [
+          {
+            agent: this.props.user,
+            contacts: []
+          }
+        ]
       },
       image: {
         onDrop: () => {
@@ -1120,7 +1132,11 @@ class Builder extends React.Component {
   }
 
   get shouldShowEmailActions() {
-    if (this.isBareMode) {
+    if (
+      this.isBareMode ||
+      this.shouldShowSaveAsTemplateButton ||
+      this.shouldShowCreateSuperCampaignButton
+    ) {
       return false
     }
 
@@ -1147,7 +1163,11 @@ class Builder extends React.Component {
   }
 
   get shouldShowSocialShareActions() {
-    if (this.isBareMode) {
+    if (
+      this.isBareMode ||
+      this.shouldShowSaveAsTemplateButton ||
+      this.shouldShowCreateSuperCampaignButton
+    ) {
       return false
     }
 
@@ -1163,7 +1183,11 @@ class Builder extends React.Component {
   }
 
   get shouldShowPrintableActions() {
-    if (this.isBareMode) {
+    if (
+      this.isBareMode ||
+      this.shouldShowSaveAsTemplateButton ||
+      this.shouldShowCreateSuperCampaignButton
+    ) {
       return false
     }
 
@@ -1215,15 +1239,44 @@ class Builder extends React.Component {
     }))
   }
 
-  shouldShowSaveAsTemplateButton = () => {
-    if (this.isBareMode) {
+  get isTemplateForOtherAgents() {
+    return this.props.templatePurpose === 'ForOtherAgents'
+  }
+
+  get isEmailTemplateForCampaigns() {
+    return this.isEmailMedium && this.props.templatePurpose === 'ForCampaigns'
+  }
+
+  get shouldShowSaveAsTemplateButton() {
+    // We need this because we should respect the user answer on the purpose drawer
+    if (!this.isTemplateForOtherAgents) {
       return false
     }
 
-    // Only admin users should see this for now
     const isAdminUser = isAdmin(this.props.user)
 
-    return isAdminUser && this.state.selectedTemplate && !this.isOpenHouseMedium
+    return hasSaveAsTemplateButton(
+      this.isBareMode,
+      !!this.state.selectedTemplate,
+      isAdminUser,
+      this.isOpenHouseMedium
+    )
+  }
+
+  get shouldShowCreateSuperCampaignButton() {
+    // We need this because we should respect the user answer on the purpose drawer
+    if (!this.isEmailTemplateForCampaigns) {
+      return false
+    }
+
+    const isAdminUser = isAdmin(this.props.user)
+
+    return hasCreateSuperCampaignButton(
+      this.isBareMode,
+      !!this.state.selectedTemplate,
+      isAdminUser,
+      this.isEmailMedium
+    )
   }
 
   isTemplatesListEnabled = () => {
@@ -1273,6 +1326,20 @@ class Builder extends React.Component {
       : saveButton
   }
 
+  get templateInstanceData() {
+    const listingsArray = this.props.templateData.listing
+      ? [this.props.templateData.listing]
+      : this.props.templateData.listings
+
+    return {
+      contacts: this.props.templateData.contacts?.map(contact => contact.id),
+      listings: listingsArray
+        ?.filter(listing => !listing.isMock) // Remove mock listings
+        ?.map(listing => listing.id), // Collect all listing ids
+      deals: this.props.templateData.deals?.map(deal => deal.id)
+    }
+  }
+
   render() {
     if (this.state.isLoading) {
       return null
@@ -1282,7 +1349,7 @@ class Builder extends React.Component {
       <Portal root="marketing-center">
         <Container
           hideBlocks={!this.hasBlocks}
-          className="template-builder"
+          className="template-builder mui-fixed"
           style={this.props.containerStyle}
         >
           {this.state.isListingDrawerOpen && (
@@ -1513,14 +1580,23 @@ class Builder extends React.Component {
             <Actions>
               {this.props.customActions}
 
-              {this.shouldShowSaveAsTemplateButton() && (
-                <AddToMarketingCenter
+              {this.shouldShowSaveAsTemplateButton && (
+                <AddToMarketingCenterButton
                   medium={this.selectedTemplate.medium}
                   inputs={this.selectedTemplate.inputs}
-                  mjml={this.selectedTemplate.mjml}
                   originalTemplateId={this.selectedTemplate.id}
+                  mjml={this.selectedTemplate.mjml}
                   getTemplateMarkup={this.getTemplateMarkup.bind(this)}
                   disabled={this.props.actionButtonsDisabled}
+                />
+              )}
+
+              {this.shouldShowCreateSuperCampaignButton && (
+                <CreateSuperCampaignButton
+                  disabled={this.props.actionButtonsDisabled}
+                  template={this.selectedTemplate}
+                  getTemplateMarkup={this.getTemplateMarkup.bind(this)}
+                  templateInstanceData={this.templateInstanceData}
                 />
               )}
 
@@ -1610,7 +1686,8 @@ Builder.propTypes = {
   onPrintableSharing: PropTypes.func,
   actionButtonsDisabled: PropTypes.bool,
   customActions: PropTypes.node,
-  saveButtonWrapper: PropTypes.func
+  saveButtonWrapper: PropTypes.func,
+  templatePurpose: PropTypes.string
 }
 
 Builder.defaultProps = {

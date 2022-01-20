@@ -85,7 +85,7 @@ export interface ActiveSort {
   label?: string
 }
 
-export type LoadingPosition = 'top' | 'middle' | 'bottom' | null
+export type LoadingPosition = 'top' | 'middle' | 'bottom' | 'static' | null
 
 export interface TrProps<Row> {
   rowIndex: number

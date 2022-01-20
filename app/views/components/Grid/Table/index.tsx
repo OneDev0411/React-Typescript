@@ -17,11 +17,11 @@ import {
 export interface Props<Row> {
   inlineGridEnabled?: boolean
   columns: TableColumn<Row>[]
-  itemSize?: number
   rows: Row[]
   totalRows: number
   virtualize?: boolean
   hasHeader?: boolean
+  rowSize?: number
   selection?: GridSelectionOptions<Row> | null
   sorting?: GridSortingOption | null
   infiniteScrolling?: InfiniteScrollingOptions | null
