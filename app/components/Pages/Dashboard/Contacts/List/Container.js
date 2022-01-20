@@ -899,6 +899,7 @@ class ContactsList extends React.Component {
         <PageLayout.HeaderWithSearch
           flex="0 1 auto"
           title={title}
+          headerSize="h4"
           onSearch={this.handleSearch}
           gutter={4}
           noPadding={false}

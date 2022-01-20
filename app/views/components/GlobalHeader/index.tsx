@@ -44,6 +44,7 @@ const useStyles = makeStyles(styles, { name: 'GlobalHeader' })
 
 export interface GlobalHeaderProps {
   title?: string
+  headerSize?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   gutter?: number
   noPadding?: boolean
   isHiddenOnMobile?: boolean
@@ -52,6 +53,7 @@ export interface GlobalHeaderProps {
 
 export default function GlobalHeader({
   title,
+  headerSize = 'h4',
   children,
   isHiddenOnMobile = true,
   ...restProps
@@ -66,7 +68,7 @@ export default function GlobalHeader({
   return (
     <div className={classes.wrapper}>
       {title && (
-        <Typography variant="h4" noWrap className={classes.title}>
+        <Typography variant={headerSize} noWrap className={classes.title}>
           {title}
         </Typography>
       )}
