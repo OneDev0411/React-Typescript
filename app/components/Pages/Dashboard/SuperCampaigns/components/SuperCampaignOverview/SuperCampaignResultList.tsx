@@ -49,7 +49,7 @@ function SuperCampaignResultList({
       sortable: false,
       align: 'right',
       render: ({ row }) => (
-        <SuperCampaignResultListColumn value={row.campaign.sent} />
+        <SuperCampaignResultListColumn value={row.campaign?.sent} />
       )
     },
     {
@@ -59,7 +59,11 @@ function SuperCampaignResultList({
       align: 'right',
       render: ({ row }) => (
         <SuperCampaignResultListColumn
-          value={getSuperCampaignStatsLabels(row.campaign).deliveredLabel}
+          value={
+            row.campaign
+              ? getSuperCampaignStatsLabels(row.campaign).deliveredLabel
+              : undefined
+          }
         />
       )
     },
@@ -70,7 +74,11 @@ function SuperCampaignResultList({
       align: 'right',
       render: ({ row }) => (
         <SuperCampaignResultListColumn
-          value={getSuperCampaignStatsLabels(row.campaign).openedLabel}
+          value={
+            row.campaign
+              ? getSuperCampaignStatsLabels(row.campaign).openedLabel
+              : undefined
+          }
         />
       )
     },
@@ -81,7 +89,11 @@ function SuperCampaignResultList({
       align: 'right',
       render: ({ row }) => (
         <SuperCampaignResultListColumn
-          value={getSuperCampaignStatsLabels(row.campaign).clickedLabel}
+          value={
+            row.campaign
+              ? getSuperCampaignStatsLabels(row.campaign).clickedLabel
+              : undefined
+          }
         />
       )
     }
