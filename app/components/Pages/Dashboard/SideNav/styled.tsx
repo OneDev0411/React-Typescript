@@ -31,9 +31,6 @@ export const SideNavItem = styled.li`
   transition: background-color 0.2s ease-in;
   width: 100%;
   margin-bottom: ${(props: ThemeProps<Theme>) => props.theme.spacing(1)}px;
-  a {
-    padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0.75, 1, 0.5)};
-  }
 `
 
 export const SideNavItemLabel = styled.div`
@@ -42,6 +39,8 @@ export const SideNavItemLabel = styled.div`
 
 const itemStyle = css`
   display: flex;
+  padding: ${(props: ThemeProps<Theme>) =>
+    props.theme.spacing(0.75, 0.5, 0.5, 1)};
   font-size: ${(props: ThemeProps<Theme>) =>
     props.theme.typography.body2.fontSize};
   align-items: center;
@@ -49,19 +48,27 @@ const itemStyle = css`
     `${props.theme.shape.borderRadius}px`};
   color: ${(props: ThemeProps<Theme>) =>
     alpha(props.theme.palette.navbar.contrastText, 1)};
-  &:hover,
+  &:hover {
+    text-decoration: none;
+    color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
+  }
   &:focus {
     text-decoration: none;
-    color: ${(props: ThemeProps<Theme>) => props.theme.palette.common.black};
-    background-color: ${(props: ThemeProps<Theme>) =>
-      props.theme.palette.common.white};
+    color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main}};
   }
   ${({ active }: ThemeProps<Theme> & { active: boolean }) =>
     active &&
+    // !important was added to prevent :hover and :focus to change :active item
     css`
-      color: ${(props: ThemeProps<Theme>) => props.theme.palette.common.black};
+      color: ${(props: ThemeProps<Theme>) =>
+        props.theme.palette.common.black} !important;
       background-color: ${(props: ThemeProps<Theme>) =>
         props.theme.palette.common.white};
+
+      svg {
+        color: ${(props: ThemeProps<Theme>) =>
+          props.theme.palette.primary.main}};
+      }
     `}
 
   svg {
@@ -95,7 +102,6 @@ export const SidenavLink = styled(WrappedRouterLink)<SidenavLinkPorps>`
 `
 
 export const SidenavBlankLink = styled(Link)`
-  padding: 0 !important;
   ${linkStyle}
 `
 
@@ -130,12 +136,21 @@ export const AccordionSummaryDiv = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0.75, 1, 0.5)};
+`
 
-  &:hover,
-  &:focus {
-    svg {
-      color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
-    }
-  }
+export const AccordionSummaryLabel = styled.span`
+  position: relative;
+`
+
+export const AccordionSummaryDot = styled.span`
+  display: inline-block;
+  width: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.5)}px`};
+  height: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.5)}px`};
+  position: absolute;
+  top: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.5)}px`};
+  right: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(-1)}px`};
+  border-radius: ${(props: ThemeProps<Theme>) =>
+    `${props.theme.shape.borderRadius}px`};
+  background-color: ${(props: ThemeProps<Theme>) =>
+    props.theme.palette.primary.main};
 `

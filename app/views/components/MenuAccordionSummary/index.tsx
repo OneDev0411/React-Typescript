@@ -3,10 +3,10 @@ import { AccordionSummary, withStyles, Theme } from '@material-ui/core'
 export const MenuAccordionSummary = withStyles((theme: Theme) => ({
   root: {
     padding: 0,
-    minHeight: '44px',
+    minHeight: '46px',
 
     '&.Mui-expanded': {
-      minHeight: '44px'
+      minHeight: '46px'
     },
 
     'svg.MuiSvgIcon-root': {
@@ -23,7 +23,17 @@ export const MenuAccordionSummary = withStyles((theme: Theme) => ({
     '& a': {
       width: '100%',
       display: 'flex',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+
+      '&:active,&:focus': {
+        textDecoration: 'none',
+        backgroundColor: theme.palette.common.white,
+        color: theme.palette.common.black,
+
+        '& svg': {
+          color: theme.palette.primary.main
+        }
+      }
     },
 
     '&.Mui-expanded': {

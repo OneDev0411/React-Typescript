@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, useEffect, useRef } from 'react'
 
-import { Divider, makeStyles } from '@material-ui/core'
+import { Divider, makeStyles, Accordion } from '@material-ui/core'
 import {
   mdiViewGridOutline,
   mdiAccountSupervisorOutline,
@@ -20,7 +20,6 @@ import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
 import { GlobalActionsButton } from 'components/GlobalActionsButton'
-import { MenuAccordion as Accordion } from 'components/MenuAccordion'
 import { MenuAccordionDetails as AccordionDetails } from 'components/MenuAccordionDetails'
 import { MenuAccordionSummary as AccordionSummary } from 'components/MenuAccordionSummary'
 import { MenuBadge } from 'components/MenuBadge'
@@ -52,7 +51,9 @@ import {
   SideNavItem,
   SideNavItemLabel,
   SidenavListGroup,
-  AccordionSummaryDiv
+  AccordionSummaryDiv,
+  AccordionSummaryDot,
+  AccordionSummaryLabel
 } from './styled'
 import { ExpandedMenu, scrollableAreaShadowColor } from './variables'
 
@@ -61,6 +62,12 @@ const useStyles = makeStyles(
     divider: {
       backgroundColor: theme.palette.grey[800],
       margin: theme.spacing(0.75, 1)
+    },
+    accordionRoot: {
+      backgroundColor: 'transparent'
+    },
+    accordionExpanded: {
+      margin: '0 !important'
     }
   }),
   {
@@ -144,6 +151,10 @@ function Menu(props: WithRouterProps) {
           <Accordion
             expanded={expandedMenu === 'nav-dashboard'}
             onChange={handleChange('nav-dashboard')}
+            classes={{
+              root: classes.accordionRoot,
+              expanded: classes.accordionExpanded
+            }}
           >
             <AccordionSummary
               aria-controls="nav-dashboard-content"
@@ -174,6 +185,10 @@ function Menu(props: WithRouterProps) {
           <Accordion
             expanded={expandedMenu === 'nav-marketing'}
             onChange={handleChange('nav-marketing')}
+            classes={{
+              root: classes.accordionRoot,
+              expanded: classes.accordionExpanded
+            }}
           >
             <AccordionSummary
               aria-controls="nav-marketing-content"
@@ -197,12 +212,12 @@ function Menu(props: WithRouterProps) {
                       size={muiIconSizes.small}
                       rightMargined
                     />
-                    Marketing
+                    <AccordionSummaryLabel>Marketing</AccordionSummaryLabel>
                   </AccordionSummaryDiv>
                   {expandedMenu === 'nav-marketing' ? (
-                    <SvgIcon path={mdiMenuUp} size="24px" />
+                    <SvgIcon path={mdiMenuUp} />
                   ) : (
-                    <SvgIcon path={mdiMenuDown} size="24px" />
+                    <SvgIcon path={mdiMenuDown} />
                   )}
                 </SideNavLinkSummary>
               </Acl.Marketing>
@@ -249,6 +264,10 @@ function Menu(props: WithRouterProps) {
           <Accordion
             expanded={expandedMenu === 'nav-properties'}
             onChange={handleChange('nav-properties')}
+            classes={{
+              root: classes.accordionRoot,
+              expanded: classes.accordionExpanded
+            }}
           >
             <AccordionSummary
               aria-controls="nav-properties-content"
@@ -266,7 +285,7 @@ function Menu(props: WithRouterProps) {
                       size={muiIconSizes.small}
                       rightMargined
                     />
-                    Properties
+                    <AccordionSummaryLabel>Properties</AccordionSummaryLabel>
                   </AccordionSummaryDiv>
                 </SideNavLinkSummary>
               </Acl.Marketing>
@@ -276,6 +295,10 @@ function Menu(props: WithRouterProps) {
           <Accordion
             expanded={expandedMenu === 'nav-people'}
             onChange={handleChange('nav-people')}
+            classes={{
+              root: classes.accordionRoot,
+              expanded: classes.accordionExpanded
+            }}
           >
             <AccordionSummary
               aria-controls="nav-people-content"
@@ -297,12 +320,20 @@ function Menu(props: WithRouterProps) {
                       size={muiIconSizes.small}
                       rightMargined
                     />
-                    People
+                    <AccordionSummaryLabel>
+                      People
+                      {inboxNotificationNumber ||
+                      chatRoomsNotificationsNumber ? (
+                        <AccordionSummaryDot />
+                      ) : (
+                        ''
+                      )}
+                    </AccordionSummaryLabel>
                   </AccordionSummaryDiv>
                   {expandedMenu === 'nav-people' ? (
-                    <SvgIcon path={mdiMenuUp} size="24px" />
+                    <SvgIcon path={mdiMenuUp} />
                   ) : (
-                    <SvgIcon path={mdiMenuDown} size="24px" />
+                    <SvgIcon path={mdiMenuDown} />
                   )}
                 </SideNavLinkSummary>
               </Acl>
@@ -335,6 +366,10 @@ function Menu(props: WithRouterProps) {
                 <Accordion
                   expanded={expandedMenu === 'nav-chat'}
                   onChange={handleChange('nav-chat')}
+                  classes={{
+                    root: classes.accordionRoot,
+                    expanded: classes.accordionExpanded
+                  }}
                 >
                   <AccordionSummary
                     aria-controls="nav-chat-content"
@@ -359,6 +394,10 @@ function Menu(props: WithRouterProps) {
           <Accordion
             expanded={expandedMenu === 'nav-transaction'}
             onChange={handleChange('nav-transaction')}
+            classes={{
+              root: classes.accordionRoot,
+              expanded: classes.accordionExpanded
+            }}
           >
             <AccordionSummary
               aria-controls="nav-transaction-content"
@@ -382,12 +421,20 @@ function Menu(props: WithRouterProps) {
                       size={muiIconSizes.small}
                       rightMargined
                     />
-                    Transactions
+                    <AccordionSummaryLabel>
+                      Transactions
+                      {dealsNotificationsNumber ||
+                      showingsTotalNotificationCount ? (
+                        <AccordionSummaryDot />
+                      ) : (
+                        ''
+                      )}
+                    </AccordionSummaryLabel>
                   </AccordionSummaryDiv>
                   {expandedMenu === 'nav-transaction' ? (
-                    <SvgIcon path={mdiMenuUp} size="24px" />
+                    <SvgIcon path={mdiMenuUp} />
                   ) : (
-                    <SvgIcon path={mdiMenuDown} size="24px" />
+                    <SvgIcon path={mdiMenuDown} />
                   )}
                 </SideNavLinkSummary>
               </Acl.Marketing>
@@ -445,6 +492,10 @@ function Menu(props: WithRouterProps) {
             <Accordion
               expanded={expandedMenu === 'nav-notifications'}
               onChange={handleChange('nav-notifications')}
+              classes={{
+                root: classes.accordionRoot,
+                expanded: classes.accordionExpanded
+              }}
             >
               <AccordionSummary
                 aria-controls="nav-notifications-content"
@@ -462,7 +513,10 @@ function Menu(props: WithRouterProps) {
                         size={muiIconSizes.small}
                         rightMargined
                       />
-                      Notifications
+
+                      <AccordionSummaryLabel>
+                        Notifications
+                      </AccordionSummaryLabel>
                     </MenuBadge>
                   </AccordionSummaryDiv>
                 </SideNavLinkSummary>
@@ -476,6 +530,10 @@ function Menu(props: WithRouterProps) {
           <Accordion
             expanded={expandedMenu === 'nav-help-center'}
             onChange={handleChange('nav-help-center')}
+            classes={{
+              root: classes.accordionRoot,
+              expanded: classes.accordionExpanded
+            }}
           >
             <AccordionSummary
               aria-controls="nav-help-center-content"
@@ -493,7 +551,8 @@ function Menu(props: WithRouterProps) {
                       size={muiIconSizes.small}
                       rightMargined
                     />
-                    Help Center
+
+                    <AccordionSummaryLabel>Help Center</AccordionSummaryLabel>
                   </AccordionSummaryDiv>
                 </SidenavBlankLink>
               </SideNavItem>
@@ -503,6 +562,10 @@ function Menu(props: WithRouterProps) {
           <Accordion
             expanded={expandedMenu === 'nav-support'}
             onChange={handleChange('nav-support')}
+            classes={{
+              root: classes.accordionRoot,
+              expanded: classes.accordionExpanded
+            }}
           >
             <AccordionSummary
               aria-controls="nav-support-content"
@@ -519,7 +582,8 @@ function Menu(props: WithRouterProps) {
                       size={muiIconSizes.small}
                       rightMargined
                     />
-                    Support
+
+                    <AccordionSummaryLabel>Support</AccordionSummaryLabel>
                   </MenuBadge>
                 </SupportTrigger>
               </SideNavItem>
