@@ -6,13 +6,12 @@ import CellContainer from './CellContainer'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     noTouch: {
-      ...theme.typography.body2
-    },
-    lastTouchLabel: {
-      ...theme.typography.body2
+      ...theme.typography.body2,
+      color: theme.palette.grey[700]
     },
     lastTouchValue: {
-      ...theme.typography.body2
+      ...theme.typography.body2,
+      color: theme.palette.grey[700]
     }
   })
 )
@@ -38,9 +37,7 @@ const LastTouchCell = ({ contact }: Props) => {
     // const formattedLastTouch = moment(lastTouch).format('ll')
 
     const content = (
-      <div className={classes.lastTouchLabel}>
-        <span className={classes.lastTouchValue}>{formattedLastTouch}</span>
-      </div>
+      <div className={classes.lastTouchValue}>{formattedLastTouch}</div>
     )
 
     if (nextTouch) {

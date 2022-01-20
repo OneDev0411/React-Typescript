@@ -12,8 +12,8 @@ const useStyles = makeStyles(
       width: '100%'
     },
     iconContainer: {
-      color: `${theme.palette.grey[500]}`,
       padding: theme.spacing(1.25, 0, 1.25, 2),
+      color: `${theme.palette.grey[500]}`,
       maxWidth: '40px',
       fontSize: theme.spacing(0.75)
     },

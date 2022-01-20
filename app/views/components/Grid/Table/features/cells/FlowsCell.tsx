@@ -1,6 +1,6 @@
-import { Tooltip } from '@material-ui/core'
+import { makeStyles, Tooltip } from '@material-ui/core'
 import { mdiLightningBolt } from '@mdi/js'
-import styled from 'styled-components'
+import cn from 'classnames'
 
 import AddToFlowButton from 'components/AddToFlowButton'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -8,20 +8,27 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import CellContainer from './CellContainer'
 
-const commonStyle = `
-  display: inline-flex;
-  align-items: center;
-  cursor: pointer;
-  > svg {
-    width: 1em;
-    height: 1em;
-    margin-right: 0.25rem;
-  }
-`
+const useStyles = makeStyles(
+  theme => ({
+    button: {
+      ...theme.typography.body2,
+      color: theme.palette.grey[700],
+      letterSpacing: '0.15px',
+      lineHeight: `${theme.spacing(3)}px`,
 
-const AddFlow = styled.span`
-  ${commonStyle}
-`
+      display: 'inline-flex',
+      alignItems: 'center',
+      cursor: 'pointer'
+    },
+    icon: {
+      color: theme.palette.grey[700],
+      width: '1em',
+      height: '1em',
+      marginRight: '0.25rem'
+    }
+  }),
+  { name: 'Flows-cell' }
+)
 
 //----
 
@@ -32,17 +39,24 @@ interface Props {
 }
 
 const FlowsCell = ({ contact, callback, flowsCount }: Props) => {
+  const classes = useStyles()
+
   const renderCellContent = () => {
     if (flowsCount === 0) {
       return (
         <AddToFlowButton
           contacts={{ ids: [contact.id] }}
           callback={callback}
-          buttonRenderer={buttonProps => (
+          buttonRenderer={({ className, ...buttonProps }) => (
             <Tooltip title="Add to flow">
-              <AddFlow {...buttonProps}>
-                <SvgIcon size={muiIconSizes.small} path={mdiLightningBolt} />+
-              </AddFlow>
+              <span className={cn(className, classes.button)} {...buttonProps}>
+                <SvgIcon
+                  className={classes.icon}
+                  size={muiIconSizes.small}
+                  path={mdiLightningBolt}
+                />
+                +
+              </span>
             </Tooltip>
           )}
         />

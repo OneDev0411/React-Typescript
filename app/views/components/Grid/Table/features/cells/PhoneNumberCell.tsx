@@ -11,6 +11,7 @@ const useStyles = makeStyles(
   theme => ({
     attributeText: {
       ...theme.typography.body2,
+      color: theme.palette.grey[700],
       letterSpacing: '0.15px',
       lineHeight: `${theme.spacing(3)}px`
     },

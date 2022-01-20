@@ -18,6 +18,7 @@ const useStyles = makeStyles(
     },
     noTag: {
       ...theme.typography.body3,
+      color: theme.palette.grey[700],
       lineHeight: `${theme.spacing(3)}px`
     },
     tagLabel: {
@@ -25,6 +26,7 @@ const useStyles = makeStyles(
       display: 'flex',
       flexDirection: 'row',
       gap: theme.spacing(1),
+      color: theme.palette.grey[700],
       ...theme.typography.body3
     }
   }),

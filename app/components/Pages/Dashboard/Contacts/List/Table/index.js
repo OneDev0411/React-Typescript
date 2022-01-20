@@ -142,7 +142,7 @@ const ContactsList = props => {
       id: 'phone',
       headerName: () => (
         <ColumnHeaderCell
-          title="Phone Number"
+          title="Phone"
           iconPath={mdiPhoneOutline}
           sortEnabled={false}
         />
