@@ -1,4 +1,4 @@
-import { Box, makeStyles, useTheme } from '@material-ui/core'
+import { Box, makeStyles } from '@material-ui/core'
 import {
   mdiCalendarOutline,
   mdiEmailOutline,
@@ -57,7 +57,6 @@ const useCustomGridStyles = makeStyles(theme => ({
 
 const ContactsList = props => {
   const [state, dispatch] = useGridContext()
-  const theme = useTheme()
 
   const inlineGridEnabled = true
   const gridClasses = useGridStyles()
@@ -241,7 +240,7 @@ const ContactsList = props => {
         loading={getLoading()}
         columns={columns}
         inlineGridEnabled={inlineGridEnabled}
-        itemSize={theme.spacing(5)}
+        rowSize={5}
         LoadingStateComponent={LoadingComponent}
         getTrProps={getRowProps}
         getTdProps={getColumnProps}
