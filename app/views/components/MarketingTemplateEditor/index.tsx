@@ -6,10 +6,10 @@ import InstantMarketing, {
 import { convertToTemplate } from 'utils/marketing-center/helpers'
 import { TemplateData } from 'utils/marketing-center/render-branded-template'
 
-interface Props
+export interface MarketingTemplateEditorProps
   extends Pick<
     InstantMarketingProps,
-    'actionButtonsDisabled' | 'customActions' | 'assets'
+    'actionButtonsDisabled' | 'customActions' | 'assets' | 'templatePurpose'
   > {
   /**
    * The marketing template or template instance to render inside the template editor
@@ -65,8 +65,9 @@ export default function MarketingTemplateEditor({
   actionButtonsDisabled,
   customActions,
   saveButtonWrapper,
-  assets = []
-}: Props) {
+  assets = [],
+  templatePurpose
+}: MarketingTemplateEditorProps) {
   // We need to convert template instance to a brand marketing template
   // Our MC editor is dumb and it only works with brand marketing templates
   const brandMarketingTemplate: IBrandMarketingTemplate =
@@ -92,6 +93,7 @@ export default function MarketingTemplateEditor({
       actionButtonsDisabled={actionButtonsDisabled}
       customActions={customActions}
       saveButtonWrapper={saveButtonWrapper}
+      templatePurpose={templatePurpose}
     />
   )
 }

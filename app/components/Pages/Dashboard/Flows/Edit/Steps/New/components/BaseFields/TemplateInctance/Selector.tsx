@@ -272,6 +272,7 @@ export const TemplateSelector = ({
         <MarketingTemplateEditor
           template={selectedTemplate}
           templateData={{ user }}
+          templatePurpose="ForOtherAgents"
           onSave={handleEditTemplate}
           onClose={() => handleShowBuilder(false)}
         />

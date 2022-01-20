@@ -29,6 +29,10 @@ const useStyles = makeStyles(
       position: 'relative'
     },
     loading: ({ loading }: { loading: LoadingPosition }) => {
+      if (loading === 'static') {
+        return {}
+      }
+
       let top: number | string = '50%'
 
       if (loading === 'top') {
@@ -59,6 +63,7 @@ export function GridTable<Row>({
   itemSize,
   inlineGridEnabled = false,
   virtualize = true,
+  rowSize,
   summary = null,
   loading = null,
   selection = null,
@@ -126,6 +131,7 @@ export function GridTable<Row>({
             itemSize={itemSize}
             classes={classes}
             virtualize={virtualize}
+            rowSize={rowSize}
             getTdProps={getTdProps}
             getTrProps={getTrProps}
             infiniteScrolling={infiniteScrolling}

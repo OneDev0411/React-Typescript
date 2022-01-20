@@ -19,10 +19,13 @@ export default function SentEmailsSection() {
       title="Sent Emails"
       actionNode={
         campaigns?.length ? (
-          <LinkSectionAction title="View all" url="/dashboard/insights" />
+          <LinkSectionAction
+            title="View Email Insight"
+            url="/dashboard/insights"
+          />
         ) : null
       }
-      gridProps={{
+      containerGridProps={{
         sm: 6
       }}
     >

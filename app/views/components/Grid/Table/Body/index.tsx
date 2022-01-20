@@ -37,7 +37,7 @@ interface Props<Row> {
   rows: (Row & { id?: UUID })[]
   classes: GridClasses
   virtualize: boolean
-  itemSize?: number
+  rowSize?: number
   infiniteScrolling: InfiniteScrollingOptions | null
   getTrProps?: (data: TrProps<Row>) => object
   getTdProps?: (data: TdProps<Row>) => object
@@ -49,7 +49,7 @@ export function Body<Row>({
   rows,
   classes,
   virtualize,
-  itemSize,
+  rowSize = 8,
   infiniteScrolling,
   getTdProps = () => ({}),
   getTrProps = () => ({})
@@ -102,7 +102,7 @@ export function Body<Row>({
             key={row.id || rowIndex}
             index={rowIndex}
             style={{
-              height: itemSize || theme.spacing(8)
+              height: theme.spacing(rowSize)
             }}
             data={{
               rows,
@@ -127,7 +127,7 @@ export function Body<Row>({
           <FixedSizeList
             ref={listRef}
             itemCount={rows.length}
-            itemSize={itemSize || theme.spacing(8)}
+            itemSize={theme.spacing(rowSize)}
             width={width}
             height={windowHeight}
             overscanCount={8}

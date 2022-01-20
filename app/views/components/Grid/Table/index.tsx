@@ -21,6 +21,7 @@ export interface Props<Row> {
   rows: Row[]
   totalRows: number
   virtualize?: boolean
+  rowSize?: number
   selection?: GridSelectionOptions<Row> | null
   sorting?: GridSortingOption | null
   infiniteScrolling?: InfiniteScrollingOptions | null

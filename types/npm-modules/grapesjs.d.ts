@@ -24,6 +24,7 @@ declare module 'grapesjs' {
     parent(): Model | undefined
     append(model: Model | string, opts?: object): Model[]
     remove(): Model
+    clone(): Model
   }
 
   export interface Editor {
@@ -245,7 +246,7 @@ declare module 'grapesjs' {
   export interface BlockManager {
     getConfig(): BlockManagerConfig | object
     onLoad(): void
-    add(id: string, opts: BlockOptions): void
+    add(id: string, opts: BlockOptions | Model): void
     get(id: string): Model | undefined
     getAll(): Array<object>
     getAllVisible(): Array<object>

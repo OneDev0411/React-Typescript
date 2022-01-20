@@ -8,7 +8,7 @@ import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
-import { TemplateBlockOptions } from '../../types'
+import { TemplateBlockOptions, RegisterBlockSelectHandler } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 import { baseView, isComponent } from '../utils'
 
@@ -18,13 +18,13 @@ const typeImage = 'image'
 const typeImageBg = 'image-bg'
 export const imageBlockName = typeImage
 
+interface ImageRenderData {
+  image: string
+}
+
 export interface ImageBlockOptions {
   imageClassNames?: string
   onImageDrop: (model: Model) => void
-}
-
-interface ImageBlock {
-  selectHandler: (selectedImage?: Image) => void
 }
 
 export default function registerImageBlock(
@@ -32,7 +32,7 @@ export default function registerImageBlock(
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
   { imageClassNames, onImageDrop }: ImageBlockOptions
-): ImageBlock {
+): RegisterBlockSelectHandler<Image> {
   const resizable = {
     tl: 0,
     tr: 0,
@@ -89,12 +89,12 @@ export default function registerImageBlock(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent(
+  return handleBlockDragStopEvent<Image, ImageRenderData>(
     editor,
     allBlocks,
-    (selectedImage: Image) => ({
+    selectedImage => ({
       ...renderData,
-      image: selectedImage
+      image: selectedImage.url
     }),
     onImageDrop
   )
