@@ -27,7 +27,8 @@ const useStyles = makeStyles(
       flexDirection: 'row',
       gap: theme.spacing(1),
       color: theme.palette.grey[700],
-      ...theme.typography.body3
+      ...theme.typography.body3,
+      lineHeight: `${theme.spacing(3)}px`
     }
   }),
   { name: 'TagsCell' }

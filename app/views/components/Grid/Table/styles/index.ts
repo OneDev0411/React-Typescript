@@ -73,7 +73,7 @@ export const inlineGridStyles = (theme: Theme) =>
         alignItems: 'center',
         backgroundColor: `${alpha(theme.palette.grey[50], 0.75)}`,
         borderTop: `1px solid ${theme.palette.divider}`,
-        borderRight: `1px solid ${theme.palette.divider}`
+        borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`
       },
       '& > div:first-child': {
         borderRight: 'none'

@@ -9,26 +9,31 @@ const useStyles = makeStyles(
     container: {
       display: 'flex',
       height: '100%',
-      width: '100%'
+      width: '100%',
+      gap: theme.spacing(1)
     },
     iconContainer: {
-      padding: theme.spacing(1.25, 0, 1.25, 2),
+      width: theme.spacing(4),
+      fontSize: theme.spacing(0.75),
       color: `${theme.palette.grey[500]}`,
-      maxWidth: '40px',
-      fontSize: theme.spacing(0.75)
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'end'
     },
     titleContainer: {
+      display: 'flex',
       flex: '1 0 auto',
-      padding: theme.spacing(1.25, 0, 1.25, 1),
+      alignItems: 'center',
       color: `${theme.palette.grey[700]}`,
       letterSpacing: '0.15px',
-      ...theme.typography.body2,
-      lineHeight: 1.1
+      ...theme.typography.body2
     },
     sortActionContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      width: theme.spacing(4),
+      justifyContent: 'center',
       color: `${theme.palette.grey[500]}`,
-      padding: theme.spacing(1.5, 1),
-      maxWidth: '32px',
       fontSize: theme.spacing(0.75)
     }
   }),

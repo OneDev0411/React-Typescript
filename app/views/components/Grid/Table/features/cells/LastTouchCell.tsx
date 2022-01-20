@@ -7,10 +7,12 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     noTouch: {
       ...theme.typography.body2,
+      lineHeight: `${theme.spacing(3)}px`,
       color: theme.palette.grey[700]
     },
     lastTouchValue: {
       ...theme.typography.body2,
+      lineHeight: `${theme.spacing(3)}px`,
       color: theme.palette.grey[700]
     }
   })

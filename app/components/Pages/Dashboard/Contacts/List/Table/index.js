@@ -125,7 +125,7 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '300px',
+      width: '230px',
       class: 'tags',
       render: ({ row: contact }) => (
         <TagsCell
@@ -147,7 +147,7 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '200px',
+      width: '220px',
       render: ({ row: contact }) => <PhoneNumberCell contact={contact} />
     },
     {
@@ -159,7 +159,7 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '200px',
+      width: '220px',
       render: ({ row: contact }) => <EmailCell contact={contact} />
     },
     {
@@ -168,10 +168,10 @@ const ContactsList = props => {
         <ColumnHeaderCell
           title="Last Touch"
           iconPath={mdiCalendarOutline}
-          sortEnabled={false}
+          sortEnabled
         />
       ),
-      width: '200px',
+      width: '150px',
       render: ({ row: contact }) => <LastTouchCell contact={contact} />
     },
     {
@@ -183,7 +183,7 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '90px',
+      width: '120px',
       class: 'flows',
       render: ({ row: contact }) => (
         <FlowsCell

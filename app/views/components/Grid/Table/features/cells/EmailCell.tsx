@@ -19,9 +19,7 @@ const useStyles = makeStyles(
       ...theme.typography.body3,
       letterSpacing: '0.15px',
       lineHeight: `${theme.spacing(3)}px`,
-      color: theme.palette.grey['500'],
-      marginRight: theme.spacing(1.5),
-      paddingLeft: theme.spacing(1)
+      color: theme.palette.grey['500']
     }
   }),
   { name: 'Email-cell' }
