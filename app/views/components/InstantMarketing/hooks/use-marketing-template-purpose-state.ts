@@ -1,8 +1,7 @@
 import { useState } from 'react'
 
+import { getUserWithOnBehalfVariable } from '@app/utils/marketing-center/get-user-with-on-behalf-variable'
 import { TemplateData } from '@app/utils/marketing-center/render-branded-template'
-
-import { getUserWithOnBehalfVariable } from '../helpers/get-user-with-on-behalf-variable'
 
 import type { UseMarketingBuilderActions } from './use-marketing-builder-actions'
 

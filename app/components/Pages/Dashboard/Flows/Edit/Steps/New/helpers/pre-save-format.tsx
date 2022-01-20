@@ -1,5 +1,5 @@
 import { createTemplateInstance } from '@app/models/instant-marketing/triggers/helpers'
-import { getUserWithOnBehalfVariable } from '@app/views/components/InstantMarketing/helpers/get-user-with-on-behalf-variable'
+import { getUserWithOnBehalfVariable } from '@app/utils/marketing-center/get-user-with-on-behalf-variable'
 
 import { convertToServerInput } from '../components/BaseFields/WaitFor/helpers'
 import {
