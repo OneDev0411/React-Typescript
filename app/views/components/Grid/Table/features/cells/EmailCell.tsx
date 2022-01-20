@@ -16,7 +16,6 @@ const useStyles = makeStyles(
       lineHeight: `${theme.spacing(3)}px`
     },
     attributeLabel: {
-      ...theme.typography.body3,
       letterSpacing: '0.15px',
       lineHeight: `${theme.spacing(3)}px`,
       color: theme.palette.grey['500']
@@ -28,24 +27,15 @@ const useStyles = makeStyles(
 const EmailCell = ({ contact }: Props) => {
   const classes = useStyles()
 
-  let primaryEmail
-  let otherEmail
-  let emailLabel
+  let emailAddress
+  let emailAddressLabel
 
   contact.attributes?.filter(attr => {
-    if (attr.is_partner) {
-      return false
-    }
-
-    if (attr.attribute_type === 'email') {
-      otherEmail = attr.text
-
-      if (attr.is_primary) {
-        emailLabel = 'Main'
-        primaryEmail = otherEmail
-      } else {
-        emailLabel = attr.label
-      }
+    if (!attr.is_partner && attr.attribute_type === 'email') {
+      emailAddress = attr.text
+      emailAddressLabel = attr.is_primary
+        ? 'Main'
+        : (emailAddressLabel = attr.label)
 
       return true
     }
@@ -55,8 +45,12 @@ const EmailCell = ({ contact }: Props) => {
 
   const renderCellContent = () => (
     <>
-      <div className={classes.attributeText}>{primaryEmail || otherEmail}</div>
-      {emailLabel && <div className={classes.attributeLabel}>{emailLabel}</div>}
+      {emailAddress && (
+        <div className={classes.attributeText}>{emailAddress}</div>
+      )}
+      {emailAddressLabel && (
+        <div className={classes.attributeLabel}>{emailAddressLabel}</div>
+      )}
     </>
   )
 

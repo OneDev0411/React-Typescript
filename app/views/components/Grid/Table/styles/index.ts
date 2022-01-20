@@ -1,4 +1,4 @@
-import { alpha, createStyles, Theme } from '@material-ui/core'
+import { createStyles, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
 export const gridStyles = (theme: Theme) =>
@@ -59,26 +59,7 @@ export const inlineGridStyles = (theme: Theme) =>
         }
       }
     },
-    header: {
-      height: '40px',
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'stretch',
-      ...theme.typography.body2,
-
-      '& > div': {
-        height: '100%',
-        display: 'flex',
-        alignSelf: 'center',
-        alignItems: 'center',
-        backgroundColor: `${alpha(theme.palette.grey[50], 0.75)}`,
-        borderTop: `1px solid ${theme.palette.divider}`,
-        borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`
-      },
-      '& > div:first-child': {
-        borderRight: 'none'
-      }
-    },
+    header: {},
     headerHasSelected: {}
   })
 

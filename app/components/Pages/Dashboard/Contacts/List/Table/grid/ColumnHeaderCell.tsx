@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 import { mdiDotsVertical, mdiSortAscending, mdiSortDescending } from '@mdi/js'
 
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
@@ -25,8 +25,7 @@ const useStyles = makeStyles(
       flex: '1 0 auto',
       alignItems: 'center',
       color: `${theme.palette.grey[700]}`,
-      letterSpacing: '0.15px',
-      ...theme.typography.body2
+      letterSpacing: '0.15px'
     },
     sortActionContainer: {
       display: 'flex',
@@ -63,7 +62,7 @@ const ColumnHeaderCell = ({
         </div>
       )}
       <div className={classes.titleContainer}>
-        <span className="text">{title}</span>
+        <Typography variant="body2">{title}</Typography>
       </div>
       {sortEnabled && (
         <div className={classes.sortActionContainer}>

@@ -27,24 +27,16 @@ const useStyles = makeStyles(
 
 const PhoneNumberCell = ({ contact, onSave }: Props) => {
   const classes = useStyles()
-  let primaryPhoneNumber
-  let otherPhoneNumber
+
+  let phoneNumber
   let phoneNumberLabel
 
   contact.attributes?.filter(attr => {
-    if (attr.is_partner) {
-      return false
-    }
-
-    if (attr.attribute_type === 'phone_number') {
-      otherPhoneNumber = attr.text
-
-      if (attr.is_primary) {
-        phoneNumberLabel = 'Main'
-        primaryPhoneNumber = otherPhoneNumber
-      } else {
-        phoneNumberLabel = attr.label
-      }
+    if (!attr.is_partner && attr.attribute_type === 'phone_number') {
+      phoneNumber = attr.text
+      phoneNumberLabel = attr.is_primary
+        ? 'Main'
+        : (phoneNumberLabel = attr.label)
 
       return true
     }
@@ -52,20 +44,18 @@ const PhoneNumberCell = ({ contact, onSave }: Props) => {
     return false
   })
 
-  return (
-    <CellContainer
-      renderCellContent={() => (
-        <>
-          <div className={classes.attributeText}>
-            {primaryPhoneNumber || otherPhoneNumber}
-          </div>
-          {phoneNumberLabel && (
-            <div className={classes.attributeLabel}>{phoneNumberLabel}</div>
-          )}
-        </>
+  const renderCellContent = () => (
+    <>
+      {phoneNumber && (
+        <div className={classes.attributeText}>{phoneNumber}</div>
       )}
-    />
+      {phoneNumberLabel && (
+        <div className={classes.attributeLabel}>{phoneNumberLabel}</div>
+      )}
+    </>
   )
+
+  return <CellContainer renderCellContent={renderCellContent} />
 }
 
 export default PhoneNumberCell
