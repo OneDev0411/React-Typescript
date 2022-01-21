@@ -512,13 +512,17 @@ class Builder extends React.Component {
         onDrop: () => {
           this.setState({ isAgentDrawerOpen: true })
         },
-        shouldUseDefaultAgents: this.isEmailTemplateForCampaigns,
-        defaultAgents: [
-          {
-            agent: this.props.user,
-            contacts: []
-          }
-        ]
+        shouldUseDefaultAgents:
+          this.isEmailTemplateForCampaigns || this.isTemplateForOtherAgents,
+        defaultAgents:
+          this.props.templateData && this.props.templateData.user
+            ? [
+                {
+                  agent: this.props.templateData.user,
+                  contacts: []
+                }
+              ]
+            : []
       },
       image: {
         onDrop: () => {
