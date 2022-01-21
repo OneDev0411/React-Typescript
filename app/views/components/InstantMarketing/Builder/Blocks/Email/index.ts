@@ -1,7 +1,7 @@
 import { Editor } from 'grapesjs'
 
 import { TemplateRenderData } from '../../utils/get-template-render-data'
-import { extendsMjImageToSupportFallbackSrc } from '../extensions/mj-image'
+import { addFallbackSrcToMjImage } from '../extensions/add-fallback-src-to-mj-image'
 import { BlockOptions, TemplateBlockOptions } from '../types'
 import { collapseBlockCategories, reorderBlocks } from '../utils'
 
@@ -104,7 +104,7 @@ export function registerEmailBlocks(
     }
   })
 
-  extendsMjImageToSupportFallbackSrc(editor)
+  addFallbackSrcToMjImage(editor)
 
   registerStaticBlocks(editor, renderData, templateBlockOptions)
 

@@ -7,7 +7,7 @@ function getDefaultFallbackSrc(model: Model): Optional<string> {
   }
 }
 
-export function extendsMjImageToSupportFallbackSrc(editor: Editor) {
+export function addFallbackSrcToMjImage(editor: Editor) {
   editor.DomComponents.addType('mj-image', {
     extendFnView: ['render'],
     view: {
