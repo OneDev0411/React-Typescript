@@ -41,7 +41,7 @@ import {
   clearImportingGoogleContacts,
   getNewConnectedGoogleAccount
 } from 'utils/oauth-provider'
-import { viewAs, getActiveTeamSetting } from 'utils/user-teams'
+import { viewAs, getTeamSetting } from 'utils/user-teams'
 
 import { Board } from '../Board'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
@@ -1049,7 +1049,7 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
     filter => filter.id === OPEN_HOUSE_FILTER_ID
   )
   const viewAsUsers = viewAs(restOfState.activeTeam ?? null)
-  const getSetting = getActiveTeamSetting(restOfState.activeTeam ?? null)
+  const getSetting = getTeamSetting(restOfState.activeTeam ?? null)
 
   return {
     tags: tags.byId,

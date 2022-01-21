@@ -21,7 +21,7 @@ import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 import { putUserSetting } from 'models/user/put-user-setting'
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-import { getSettingsInActiveTeam } from 'utils/user-teams'
+import { getSettingFromTeam } from 'utils/user-teams'
 
 import { ConnectedAccount } from './ConnectedAccount'
 import { useStyles } from './styles'
@@ -47,7 +47,7 @@ export function ImportContactsButton({
   const classes = useStyles()
 
   const isTooltipOpen =
-    !getSettingsInActiveTeam(activeTeam, IMPORT_TOOLTIP_VISITED_SETTINGS_KEY) &&
+    !getSettingFromTeam(activeTeam, IMPORT_TOOLTIP_VISITED_SETTINGS_KEY) &&
     accounts.length === 0
 
   useEffect(() => {

@@ -60,7 +60,7 @@ export function viewAs(
   return allTeamMemberIds
 }
 
-export const getActiveTeamSetting =
+export const getTeamSetting =
   (team: Nullable<IUserTeam>) => (key: string, defaultValue?: any) => {
     if (!team) {
       return defaultValue
@@ -69,12 +69,12 @@ export const getActiveTeamSetting =
     return team?.settings?.[key] ?? defaultValue
   }
 
-export const getSettingsInActiveTeam = (
+export const getSettingFromTeam = (
   team: Nullable<IUserTeam>,
   key: string,
   defaultValue?: any
 ): any => {
-  return getActiveTeamSetting(team)(key, defaultValue)
+  return getTeamSetting(team)(key, defaultValue)
 }
 
 export function getActiveTeamPalette(

@@ -1,4 +1,4 @@
-import { getSettingsInActiveTeam } from 'utils/user-teams'
+import { getSettingFromTeam } from 'utils/user-teams'
 
 interface SortSetting {
   id: string
@@ -10,7 +10,7 @@ export function parseSortSetting(
   settingKey: string,
   defaultValue = ''
 ): SortSetting {
-  const rawSortSetting: string = getSettingsInActiveTeam(
+  const rawSortSetting: string = getSettingFromTeam(
     team,
     settingKey,
     defaultValue

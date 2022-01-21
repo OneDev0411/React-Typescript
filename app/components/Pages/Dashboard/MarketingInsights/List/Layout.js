@@ -13,7 +13,7 @@ import { useAcl } from '@app/views/components/Acl/use-acl'
 import PageLayout from 'components/GlobalPageLayout'
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import { noop } from 'utils/helpers'
-import { getSettingsInActiveTeam } from 'utils/user-teams'
+import { getSettingFromTeam } from 'utils/user-teams'
 
 import SortField from './SortField'
 
@@ -67,7 +67,7 @@ function InsightsLayout({
   }
 
   useEffectOnce(() => {
-    const savedSortField = getSettingsInActiveTeam(
+    const savedSortField = getSettingFromTeam(
       activeTeam,
       SORT_FIELD_INSIGHT_KEY
     )

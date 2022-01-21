@@ -12,7 +12,7 @@ import Joyride from 'react-joyride'
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { OnboardingStepCard } from 'components/Onboarding/OnboardingStepCard'
 import { putUserSetting } from 'models/user/put-user-setting'
-import { getSettingsInActiveTeam } from 'utils/user-teams'
+import { getSettingFromTeam } from 'utils/user-teams'
 
 const ONBOARDING_SETTING_KEY_PREFIX = 'onboarding_'
 
@@ -33,7 +33,7 @@ function Onboarding({
 }) {
   const activeTeam = useUnsafeActiveTeam()
   const SETTING_KEY = `${ONBOARDING_SETTING_KEY_PREFIX}_${tourId}`
-  const alreadyShown = getSettingsInActiveTeam(activeTeam, SETTING_KEY)
+  const alreadyShown = getSettingFromTeam(activeTeam, SETTING_KEY)
 
   const [shown, toggle] = useState(alreadyShown == null)
 

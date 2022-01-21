@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
-import { getSettingsInActiveTeam } from '@app/utils/user-teams'
+import { getSettingFromTeam } from '@app/utils/user-teams'
 
 const SUPER_CAMPAIGN_ADMIN_PERMISSION = 'super_campaign_admin_permission'
 
@@ -33,7 +33,7 @@ function Campaigns() {
   const dispatch = useDispatch()
   const { isRunning, runActionThenNotify } = useRunActionThenNotify()
 
-  const superCampaignAdminPermission = getSettingsInActiveTeam(
+  const superCampaignAdminPermission = getSettingFromTeam(
     activeTeam,
     SUPER_CAMPAIGN_ADMIN_PERMISSION
   )
