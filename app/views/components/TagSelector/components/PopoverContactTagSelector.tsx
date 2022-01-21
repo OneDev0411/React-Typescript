@@ -74,7 +74,7 @@ const useStyles = makeStyles(
 export interface PopoverContactTagSelectorProps
   extends Omit<BaseTagSelectorProps, 'onChange'> {
   label?: string
-  filter?: ContactFilterGenerator
+  filter: ContactFilterGenerator
   popoverProps?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
   showManageTags?: boolean
   anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
@@ -130,12 +130,10 @@ export const PopoverContactTagSelector = ({
     try {
       setIsSaving(true)
 
-      if (filter) {
-        const tags = selectedTags.map(tag => tag.title)
-        const bulkFilter = generateContactFilters(filter)
+      const tags = selectedTags.map(tag => tag.title)
+      const bulkFilter = generateContactFilters(filter)
 
-        await bulkTag(tags, bulkFilter)
-      }
+      await bulkTag(tags, bulkFilter)
 
       if (hasNewTag) {
         dispatch(getContactsTags())
