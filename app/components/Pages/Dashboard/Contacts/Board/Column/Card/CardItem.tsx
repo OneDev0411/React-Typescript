@@ -182,7 +182,7 @@ export function CardItem({
           filter={{
             selectedIds: [contact.id]
           }}
-          callback={handleChangeTag}
+          onSave={handleChangeTag}
           anchorRenderer={onClick => (
             <Box display="flex" alignItems="center" mt={2} onClick={onClick}>
               {(contact.tags || []).length > 0 ? (
