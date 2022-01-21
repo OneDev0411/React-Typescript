@@ -1,4 +1,11 @@
-import type { Editor } from 'grapesjs'
+import type { Editor, Model } from 'grapesjs'
+
+function getDefaultFallbackSrc(model: Model): Optional<string> {
+  // Check if the model is an avatar
+  if (model.getAttributes()['rechat-assets'] === 'avatar') {
+    return '/static/images/marketing/editor/default-avatar.svg'
+  }
+}
 
 export function extendsMjImageToSupportFallbackSrc(editor: Editor) {
   editor.DomComponents.addType('mj-image', {
@@ -16,13 +23,16 @@ export function extendsMjImageToSupportFallbackSrc(editor: Editor) {
           return
         }
 
-        const fallbackSrc = model.getAttributes()['fallback-src']
-        const src = model.getAttributes().src
+        const defaultFallbackSrc = getDefaultFallbackSrc(model)
+        const fallbackSrc =
+          model.getAttributes()['fallback-src'] || defaultFallbackSrc
 
         // Do not continue if there is no fallback src
         if (!fallbackSrc) {
           return
         }
+
+        const src = model.getAttributes().src
 
         const variableRegex = /^{{.*}}$/i
 
