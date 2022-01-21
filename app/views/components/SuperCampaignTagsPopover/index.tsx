@@ -34,11 +34,6 @@ function SuperCampaignTagsPopover({
         title: tag,
         value: tag
       }))}
-      filter={
-        {
-          // selectedIds: [contact.id] // TODO: Hamed jan, please do not forget to fix this
-        }
-      }
       callback={handleTagsChange}
       disabled={isSaving}
     />
