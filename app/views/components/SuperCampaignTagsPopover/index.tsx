@@ -1,6 +1,6 @@
 import useSafeState from '@app/hooks/use-safe-state'
 import {
-  PopoverContactTagSelector,
+  PopoverTagSelector,
   PopoverContactTagSelectorProps
 } from '@app/views/components/TagSelector'
 import { SelectorOption } from '@app/views/components/TagSelector/type'
@@ -28,14 +28,14 @@ function SuperCampaignTagsPopover({
   }
 
   return (
-    <PopoverContactTagSelector
+    <PopoverTagSelector
       {...otherProps}
       value={tags.map(tag => ({
         title: tag,
         value: tag
       }))}
-      callback={handleTagsChange}
-      disabled={isSaving}
+      onSave={handleTagsChange}
+      saveButtonDisabled={isSaving}
     />
   )
 }
