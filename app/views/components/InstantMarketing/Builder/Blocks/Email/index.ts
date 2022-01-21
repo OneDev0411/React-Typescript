@@ -1,7 +1,7 @@
 import { Editor } from 'grapesjs'
 
 import { TemplateRenderData } from '../../utils/get-template-render-data'
-import { extendsMjImageToSupportFallbackSrc } from '../extend-components'
+import { extendsMjImageToSupportFallbackSrc } from '../extensions/mj-image'
 import { BlockOptions, TemplateBlockOptions } from '../types'
 import { collapseBlockCategories, reorderBlocks } from '../utils'
 
