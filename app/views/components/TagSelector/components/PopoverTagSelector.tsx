@@ -69,8 +69,8 @@ export interface PopoverTagSelectorProps
   popoverProps?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
   showManageTags?: boolean
   anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
-  onSave: (tags: SelectorOption[]) => void | Promise<void>
-  onChange?: (tags: SelectorOption[], newTag: boolean) => void
+  onSave: (tags: SelectorOption[]) => Promise<void>
+  onChange?: BaseTagSelectorProps['onChange']
   defaultIsDirty?: boolean
   minimumTag?: number
   saveButtonLabel?: string
@@ -84,7 +84,7 @@ export const PopoverTagSelector = ({
   onChange,
   anchorRenderer,
   value = [],
-  label,
+  label = 'Tags',
   defaultIsDirty = false,
   minimumTag = 0,
   saveButtonLabel = 'Done',
@@ -140,7 +140,7 @@ export const PopoverTagSelector = ({
       >
         <Box className={classes.container}>
           <Typography variant="button" className={classes.label}>
-            {label || 'Tags'}
+            {label}
           </Typography>
           <BaseTagSelector
             {...props}
