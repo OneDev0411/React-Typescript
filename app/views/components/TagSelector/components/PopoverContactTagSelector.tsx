@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { useDispatch } from 'react-redux'
 
 import { getContactsTags } from 'actions/contacts'
@@ -17,36 +15,23 @@ import {
 } from './PopoverTagSelector'
 
 export interface PopoverContactTagSelectorProps
-  extends Omit<
-    PopoverTagSelectorProps,
-    'onSave' | 'saveButtonDisabled' | 'saveButtonDisabled'
-  > {
+  extends Omit<PopoverTagSelectorProps, 'onSave'> {
   filter: ContactFilterGenerator
   onSave?: PopoverTagSelectorProps['onSave']
 }
 
 export const PopoverContactTagSelector = ({
   filter,
-  onChange,
   onSave,
   ...props
 }: PopoverContactTagSelectorProps) => {
   const dispatch = useDispatch()
-  const [hasNewTag, setHasNewTag] = useState<boolean>(false)
-  const [isSaving, setIsSaving] = useState<boolean>(false)
 
-  const handleChange = (tags: SelectorOption[], newTag: boolean) => {
-    if (newTag !== hasNewTag) {
-      setHasNewTag(newTag)
-    }
-
-    onChange?.(tags, newTag)
-  }
-
-  const handleSave = async (selectedTags: SelectorOption[]) => {
+  const handleSave = async (
+    selectedTags: SelectorOption[],
+    hasNewTag: boolean
+  ) => {
     try {
-      setIsSaving(true)
-
       const tags = selectedTags.map(tag => tag.title)
       const bulkFilter = generateContactFilters(filter)
 
@@ -57,20 +42,10 @@ export const PopoverContactTagSelector = ({
       }
     } catch (err) {
       console.error(err)
-    } finally {
-      setIsSaving(false)
     }
 
-    return onSave?.(selectedTags)
+    return onSave?.(selectedTags, hasNewTag)
   }
 
-  return (
-    <PopoverTagSelector
-      {...props}
-      onChange={handleChange}
-      onSave={handleSave}
-      saveButtonDisabled={isSaving}
-      saveButtonLabel={isSaving ? 'Save' : 'Done'}
-    />
-  )
+  return <PopoverTagSelector {...props} onSave={handleSave} />
 }
