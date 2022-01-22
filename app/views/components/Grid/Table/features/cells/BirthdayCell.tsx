@@ -1,9 +1,9 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 
 import { makeStyles } from '@material-ui/core'
+import cn from 'classnames'
 import fecha from 'fecha'
-
-import { getAttributeFromSummary } from '@app/models/contacts/helpers'
+import moment from 'moment'
 
 import CellContainer from './CellContainer'
 
@@ -18,7 +18,7 @@ const useStyles = makeStyles(
         color: theme.palette.tertiary.dark
       },
       '&.selected': {
-        color: theme.palette.primary.main
+        color: theme.palette.tertiary.dark
       },
       '&.rowSelected': {
         color: theme.palette.tertiary.dark
@@ -43,18 +43,17 @@ const useStyles = makeStyles(
   { name: 'Birthday-cell' }
 )
 
-//---
+//--
 
-function formatDate(
-  timestamp: number,
-  format: string = 'MMM DD, YYYY'
-): string {
-  const date = new Date(timestamp * 1000)
-  const year = date.getUTCFullYear()
-  const month = date.getUTCMonth()
-  const day = date.getUTCDate()
+const getDate = (datetime: Date = new Date()) =>
+  new Date(
+    datetime.getUTCFullYear(),
+    datetime.getUTCMonth(),
+    datetime.getUTCDate()
+  )
 
-  const utcDate = new Date(year, month, day)
+const formatDate = (date: Date, format: string = 'MMM D'): string => {
+  const utcDate = getDate(date)
 
   if (utcDate.getFullYear() === 1800) {
     return fecha.format(utcDate, 'MMM DD')
@@ -63,7 +62,21 @@ function formatDate(
   return fecha.format(utcDate, format)
 }
 
-//---
+const birthdayThisYear = (bithday: Date): Date =>
+  new Date(
+    new Date().getUTCFullYear(),
+    bithday.getUTCMonth(),
+    bithday.getUTCDate()
+  )
+
+const birthdayNextYear = (bithday: Date): Date =>
+  new Date(
+    new Date().getUTCFullYear() + 1,
+    bithday.getUTCMonth(),
+    bithday.getUTCDate()
+  )
+
+//--
 
 interface Props {
   contact: IContact
@@ -74,28 +87,66 @@ interface Props {
 const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
   const classes = useStyles()
 
-  let inputFormattedDate: string
-  let daysToBirthday: number
+  //
 
-  // const now: Date = new Date()
-  const birthday: Date = new Date(getAttributeFromSummary(contact, 'birthday'))
-  // const daysToBirthday: number = moment.duration(now.getTime() - birthday.getTime()).asDays()
+  const getDateOfBirth = () => {
+    let birthday
 
-  if (birthday) {
-    console.log('birthday', birthday)
+    contact.attributes?.filter(attr => {
+      if (!attr.is_partner && attr.attribute_type === 'birthday') {
+        birthday = new Date(attr.date * 1000)
 
-    inputFormattedDate = formatDate(birthday.getTime())
+        return true
+      }
+
+      return false
+    })
+
+    return birthday
   }
+
+  const daysToNextBirthday = () => {
+    if (!birthday) {
+      return
+    }
+
+    let dateDiff: number =
+      birthdayThisYear(birthday).getTime() - today.getTime()
+
+    if (dateDiff > 0) {
+      return moment.duration(dateDiff).asDays()
+    }
+
+    dateDiff = birthdayNextYear(birthday).getTime() - today.getTime()
+
+    return moment.duration(dateDiff).asDays()
+  }
+
+  //
+
+  const today: Date = useMemo(getDate, [])
+  const birthday: Date = useMemo(getDateOfBirth, [contact.attributes])
+  const daysToBirthday = useMemo(daysToNextBirthday, [today, birthday])
+  const inputFormattedDate: string = useMemo(
+    () => formatDate(birthday),
+    [birthday]
+  )
+
+  //
 
   const renderCellContent = () => (
     <>
       {daysToBirthday && (
-        <div className={classes.dateDiffValue}>
+        <div
+          className={cn(classes.dateDiffValue, { rowSelected: isRowSelected })}
+        >
           {`in ${daysToBirthday} day${daysToBirthday == 1 ? '' : 's'}`}
         </div>
       )}
-      {inputFormattedDate && (
-        <div className={classes.dateValue}>{`(${inputFormattedDate})`}</div>
+      {daysToBirthday && inputFormattedDate && (
+        <div
+          className={cn(classes.dateValue, { rowSelected: isRowSelected })}
+        >{`(${inputFormattedDate})`}</div>
       )}
     </>
   )
