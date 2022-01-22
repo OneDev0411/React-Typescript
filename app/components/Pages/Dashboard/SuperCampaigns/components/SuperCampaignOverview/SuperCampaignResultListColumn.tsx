@@ -16,12 +16,12 @@ const useStyles = makeStyles(
 
 interface SuperCampaignResultListColumnProps {
   label?: string
-  value: number | string
+  value: Optional<number | string>
 }
 
 function SuperCampaignResultListColumn({
   label,
-  value
+  value = 0
 }: SuperCampaignResultListColumnProps) {
   const classes = useStyles()
 

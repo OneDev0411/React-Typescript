@@ -1,7 +1,6 @@
 import {
   Typography,
   FormControlLabel,
-  Link,
   RadioGroup,
   makeStyles,
   Radio
@@ -67,14 +66,15 @@ function Campaigns() {
           label={
             <>
               Allow admin to send campaigns on my behalf using my tags.
-              <Link
+              {/* TODO: Uncomment this when the doc link provided by Sahar */}
+              {/* <Link
                 className={classes.link}
                 color="primary"
                 href="#"
                 target="_blank"
               >
                 Learn More...
-              </Link>
+              </Link> */}
             </>
           }
           disabled={isRunning}

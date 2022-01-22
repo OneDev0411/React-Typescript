@@ -5,7 +5,6 @@ import Pagination from '@material-ui/lab/Pagination'
 import hash from 'object-hash'
 import { memoize } from 'underscore'
 
-import { formatListing } from '@app/components/Pages/Dashboard/MLS/helpers/format-listing'
 import { sortByIndex } from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
 import { noop } from '@app/utils/helpers'
 import { normalizeListingLocation } from '@app/utils/map'
@@ -94,7 +93,7 @@ const sortListings = memoize(
     user: IUser
   ): ICompactListing[] => {
     const formattedListings = listings.map(listing =>
-      formatListing(normalizeListingLocation(listing), user)
+      normalizeListingLocation(listing)
     )
 
     return formattedListings.sort((a, b) => sortByIndex(a, b, index, ascending))

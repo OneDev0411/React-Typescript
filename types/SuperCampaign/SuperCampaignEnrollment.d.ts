@@ -12,7 +12,7 @@ declare interface ISuperCampaignEnrollment<
   super_campaign: UUID
   brand: 'brand' extends A ? IBrand : never
   user: 'user' extends A ? IUser : never
-  campaign: 'campaign' extends A ? IEmailCampaign : never
+  campaign: 'campaign' extends A ? Nullable<IEmailCampaign> : never
   tags: string[]
   notifications_enabled: boolean
 }

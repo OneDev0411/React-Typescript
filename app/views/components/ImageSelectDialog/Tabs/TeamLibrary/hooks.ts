@@ -64,15 +64,17 @@ export function useTeamLibrary(
 
     const currentBrandAssets = brandAssets ?? []
 
-    const newUploadedAsset = await uploadBrandAsset([brandId], file, {
+    const newUploadedAssets = await uploadBrandAsset([brandId], file, {
       label
-    })[0]
+    })
 
-    setBrandAssets([newUploadedAsset, ...currentBrandAssets])
+    const uploadedAsset = newUploadedAssets[0]
+
+    setBrandAssets([uploadedAsset, ...currentBrandAssets])
 
     setIsUploading(false)
 
-    return newUploadedAsset
+    return uploadedAsset
   }
 
   useEffect(() => {
