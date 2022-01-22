@@ -1,4 +1,4 @@
-import React, { ReactNode, MouseEvent, useState } from 'react'
+import { ReactNode, MouseEvent, useState } from 'react'
 
 import {
   Box,
@@ -12,6 +12,7 @@ import {
 import { mdiCogOutline } from '@mdi/js'
 import { Link } from 'react-router'
 
+import useStateSafe from '@app/hooks/use-safe-state'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -69,31 +70,27 @@ export interface PopoverTagSelectorProps
   popoverProps?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
   showManageTags?: boolean
   anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
-  onSave: (tags: SelectorOption[]) => Promise<void>
-  onChange?: BaseTagSelectorProps['onChange']
+  onSave: (tags: SelectorOption[], hasNewTag: boolean) => Promise<void>
   defaultIsDirty?: boolean
   minimumTag?: number
-  saveButtonLabel?: string
-  saveButtonDisabled?: boolean
 }
 
 export const PopoverTagSelector = ({
   showManageTags = false,
   popoverProps = {},
   onSave,
-  onChange,
   anchorRenderer,
   value = [],
   label = 'Tags',
   defaultIsDirty = false,
   minimumTag = 0,
-  saveButtonLabel = 'Done',
-  saveButtonDisabled = false,
   ...props
 }: PopoverTagSelectorProps) => {
   const classes = useStyles()
-  const [isDirty, setIsDirty] = useState<boolean>(defaultIsDirty)
-  const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
+  const [isDirty, setIsDirty] = useStateSafe<boolean>(defaultIsDirty)
+  const [isSaving, setIsSaving] = useStateSafe<boolean>(defaultIsDirty)
+  const [anchorEl, setAnchorEl] = useStateSafe<Nullable<HTMLElement>>(null)
+  const [hasNewTag, setHasNewTag] = useState<boolean>(false)
   const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
 
   const handleClick = (e: MouseEvent<HTMLElement>) => {
@@ -106,14 +103,18 @@ export const PopoverTagSelector = ({
   const handleChange = (tags: SelectorOption[], newTag: boolean) => {
     setIsDirty(true)
 
-    setSelectedTags(tags)
+    if (newTag !== hasNewTag) {
+      setHasNewTag(newTag)
+    }
 
-    onChange?.(tags, newTag)
+    setSelectedTags(tags)
   }
 
   const handleSave = async () => {
     setIsDirty(false)
-    await onSave(selectedTags)
+    setIsSaving(true)
+    await onSave(selectedTags, hasNewTag)
+    setIsSaving(false)
     setAnchorEl(null)
   }
 
@@ -165,13 +166,11 @@ export const PopoverTagSelector = ({
                 color="secondary"
                 size="small"
                 disabled={
-                  !isDirty ||
-                  minimumTag > selectedTags.length ||
-                  saveButtonDisabled
+                  !isDirty || isSaving || minimumTag > selectedTags.length
                 }
                 onClick={handleSave}
               >
-                {saveButtonLabel}
+                {isSaving ? 'Saving' : 'Done'}
               </Button>
             </Box>
             <Box flexGrow={1} mr={0.5}>
