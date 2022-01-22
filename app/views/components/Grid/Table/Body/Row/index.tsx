@@ -1,4 +1,4 @@
-import React, { CSSProperties, memo } from 'react'
+import { CSSProperties, memo, useMemo } from 'react'
 
 import cn from 'classnames'
 
@@ -38,10 +38,13 @@ function Row<T>({
 }: Props<T & { id?: string }>) {
   const row = rows[rowIndex]
 
-  const isRowSelected =
-    state.selection.isAllRowsSelected ||
-    state.selection.isEntireRowsSelected ||
-    state.selection.selectedRowIds.includes(row.id || rowIndex.toString())
+  const isRowSelected = useMemo(
+    () =>
+      state.selection.isAllRowsSelected ||
+      state.selection.isEntireRowsSelected ||
+      state.selection.selectedRowIds.includes(row.id || rowIndex.toString()),
+    [state.selection, row.id, rowIndex]
+  )
 
   const RowContainer = inlineGridEnabled ? GridRowContainer : ListRowContainer
 
@@ -79,7 +82,14 @@ function Row<T>({
               row
             })}
           >
-            {getCell(column, row, rowIndex, columnIndex, rows.length)}
+            {getCell(
+              column,
+              row,
+              rowIndex,
+              columnIndex,
+              rows.length,
+              isRowSelected
+            )}
           </div>
         ))}
     </RowContainer>
@@ -91,14 +101,16 @@ function getCell<Row>(
   row: Row,
   rowIndex: number,
   columnIndex: number,
-  totalRows: number
+  totalRows: number,
+  isRowSelected: boolean
 ) {
   if (column.render) {
     return column.render({
       row,
       totalRows,
       rowIndex,
-      columnIndex
+      columnIndex,
+      isRowSelected
     })
   }
 

@@ -1,12 +1,15 @@
 import { memo, useMemo } from 'react'
 
 import { Box, Chip, makeStyles } from '@material-ui/core'
+import cn from 'classnames'
 import { useDispatch } from 'react-redux'
 
 import { getContact } from '@app/models/contacts/get-contact'
 import { updateContactTags } from '@app/store_actions/contacts/update-contact-tags'
 import { PopoverContactTagSelector } from '@app/views/components/TagSelector/components/PopoverContactTagSelector'
 import { SelectorOption } from '@app/views/components/TagSelector/type'
+
+import { CellProps } from '../../types'
 
 import CellContainer from './CellContainer'
 
@@ -25,21 +28,27 @@ const useStyles = makeStyles(
       },
       '&.selected': {
         color: theme.palette.primary.main
+      },
+      '&.rowSelected': {
+        color: theme.palette.tertiary.dark
       }
     },
     tagLabel: {
-      cursor: 'pointer',
       display: 'flex',
       flexDirection: 'row',
       gap: theme.spacing(1),
-      color: theme.palette.grey[700],
       ...theme.typography.body3,
+      color: theme.palette.grey[700],
       lineHeight: `${theme.spacing(3)}px`,
+
       '&.hovered': {
         color: theme.palette.tertiary.dark
       },
       '&.selected': {
         color: theme.palette.primary.main
+      },
+      '&.rowSelected': {
+        color: theme.palette.tertiary.dark
       }
     }
   }),
@@ -51,6 +60,7 @@ interface Props {
   isParkTabActive: boolean
   hasAttributeFilters: boolean
   reloadContacts: () => void
+  isRowSelected: boolean
 }
 
 function getCurrentTags(tags, showingTags) {
@@ -70,7 +80,8 @@ const TagsCell = ({
   contact,
   hasAttributeFilters,
   isParkTabActive,
-  reloadContacts
+  reloadContacts,
+  isRowSelected
 }: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -103,9 +114,18 @@ const TagsCell = ({
 
   //----
 
-  const renderPopOverTagSelector = () => {
+  const renderPopOverTagSelector = ({
+    isHovered = false,
+    isSelected = false
+  }: CellProps) => {
     const renderTagsStrip = () => (
-      <div className={classes.tagLabel}>
+      <div
+        className={cn(classes.tagLabel, {
+          rowSelected: isRowSelected,
+          hovered: isHovered,
+          selected: isSelected
+        })}
+      >
         <span>{showingTags.join(', ')}</span>
         {invisibleTagsCount > 0 && (
           <Chip
@@ -125,7 +145,17 @@ const TagsCell = ({
           onClick(e)
         }}
       >
-        {tagsCount === 0 && <div className={classes.noTag}>Add Tags</div>}
+        {tagsCount === 0 && (
+          <div
+            className={cn(classes.noTag, {
+              rowSelected: isRowSelected,
+              hovered: isHovered,
+              selected: isSelected
+            })}
+          >
+            Add Tags
+          </div>
+        )}
         {tagsCount > 0 && renderTagsStrip()}
       </Box>
     )

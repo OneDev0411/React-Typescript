@@ -1,5 +1,6 @@
 import { Box, makeStyles } from '@material-ui/core'
 import {
+  mdiCake,
   mdiCalendarOutline,
   mdiEmailOutline,
   mdiLightningBoltOutline,
@@ -8,8 +9,10 @@ import {
 } from '@mdi/js'
 import cn from 'classnames'
 
+import { goTo } from '@app/utils/go-to'
 import { Table } from 'components/Grid/Table'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
+import BirthdayCell from 'components/Grid/Table/features/cells/BirthdayCell'
 import EditTextCell from 'components/Grid/Table/features/cells/EditTextCell'
 import EmailCell from 'components/Grid/Table/features/cells/EmailCell'
 import FlowsCell from 'components/Grid/Table/features/cells/FlowsCell'
@@ -22,7 +25,6 @@ import {
   useInlineGridStyles
 } from 'components/Grid/Table/styles'
 import { getAttributeFromSummary } from 'models/contacts/helpers'
-import { goTo } from 'utils/go-to'
 
 import NoSearchResults from '../../../../../Partials/no-search-results'
 import { PARKED_CONTACTS_LIST_ID } from '../constants'
@@ -93,7 +95,7 @@ const ContactsList = props => {
 
     return selectedCount
       ? `${selectedCount} of ${contactCount} selected`
-      : `${contactCount} CONTACTS`
+      : `${contactCount} Contacts`
   }
 
   const columns = [
@@ -107,12 +109,14 @@ const ContactsList = props => {
           />
         </Box>
       ),
-      width: '220px',
+      width: '250px',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
-      render: ({ row: contact }) => {
+      render: ({ row: contact, isRowSelected }) => {
         const name = getAttributeFromSummary(contact, 'display_name')
 
-        return <EditTextCell text={name} isPrimary />
+        return (
+          <EditTextCell text={name} isPrimary isRowSelected={isRowSelected} />
+        )
       }
     },
     {
@@ -124,9 +128,9 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '230px',
+      width: '210px',
       class: 'tags',
-      render: ({ row: contact }) => (
+      render: ({ row: contact, isRowSelected }) => (
         <TagsCell
           contact={contact}
           reloadContacts={props.reloadContacts}
@@ -134,6 +138,7 @@ const ContactsList = props => {
             (props.filters?.attributeFilters || []).length > 0
           }
           isParkTabActive={isParkTabActive}
+          isRowSelected={isRowSelected}
         />
       )
     },
@@ -146,8 +151,10 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '220px',
-      render: ({ row: contact }) => <PhoneNumberCell contact={contact} />
+      width: '210px',
+      render: ({ row: contact, isRowSelected }) => (
+        <PhoneNumberCell contact={contact} isRowSelected={isRowSelected} />
+      )
     },
     {
       id: 'email',
@@ -158,8 +165,10 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '220px',
-      render: ({ row: contact }) => <EmailCell contact={contact} />
+      width: '260px',
+      render: ({ row: contact, isRowSelected }) => (
+        <EmailCell contact={contact} isRowSelected={isRowSelected} />
+      )
     },
     {
       id: 'last_touched',
@@ -172,7 +181,9 @@ const ContactsList = props => {
         />
       ),
       width: '150px',
-      render: ({ row: contact }) => <LastTouchCell contact={contact} />
+      render: ({ row: contact, isRowSelected }) => (
+        <LastTouchCell contact={contact} isRowSelected={isRowSelected} />
+      )
     },
     {
       id: 'flows',
@@ -185,15 +196,27 @@ const ContactsList = props => {
       ),
       width: '120px',
       class: 'flows',
-      render: ({ row: contact }) => (
+      render: ({ row: contact, isRowSelected }) => (
         <FlowsCell
           contact={contact}
           callback={() => {
             resetSelectedRow()
             props.reloadContacts()
           }}
+          isRowSelected={isRowSelected}
           flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
         />
+      )
+    },
+    {
+      id: 'birthday',
+      headerName: () => (
+        <ColumnHeaderCell title="Birthday" iconPath={mdiCake} />
+      ),
+      sortable: false,
+      width: '220px',
+      render: ({ row: contact, isRowSelected }) => (
+        <BirthdayCell contact={contact} isRowSelected={isRowSelected} />
       )
     }
   ]
@@ -224,7 +247,7 @@ const ContactsList = props => {
     }
   }
   const getColumnProps = ({ column }) => {
-    if (['name', 'flows', 'tag'].includes(column.id)) {
+    if (['flows', 'tag'].includes(column.id)) {
       return {
         onClick: e => e.stopPropagation()
       }

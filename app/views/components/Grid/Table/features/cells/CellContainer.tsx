@@ -10,6 +10,7 @@ import { CellProps } from '../../types'
 interface Props {
   text?: string
   renderCellContent: (props: CellProps) => React.ReactNode
+  onCellSelect?: (e) => void
 }
 
 //----
@@ -34,7 +35,8 @@ const useStyles = makeStyles(
       height: theme.spacing(3),
       paddingLeft: theme.spacing(2)
     },
-    cellBoundary: {
+    cellOverlay: {
+      display: 'none',
       position: 'absolute',
       height: '100%',
       width: '100%',
@@ -52,35 +54,37 @@ const useStyles = makeStyles(
 //----
 
 const CellContainer = ({ renderCellContent }: Props) => {
-  const [isHovered, setIsHovered] = useState(false)
-  const [isSelected, setIsSelected] = useState(false)
+  const classes = useStyles()
 
-  const onSelect = e => {
-    e.stopPropagation()
-    setIsSelected(!isSelected)
-  }
+  const [isHovered, setIsHovered] = useState(false)
+  const isSelected = false
+
   const onHoverIn = () => setIsHovered(true)
   const onHoverOut = () => setIsHovered(false)
 
-  const classes = useStyles()
+  //--
 
+  const renderCellOverlay = () => (
+    <div
+      className={cn(classes.cellOverlay, {
+        selected: isSelected
+      })}
+    />
+  )
   const renderInlineContent = () => (
     <>
-      <div
-        className={cn(classes.cellBoundary, {
-          selected: isSelected
-        })}
-      />
+      {renderCellOverlay()}
       <div className={classes.inlineViewContainer}>
         {renderCellContent({ isHovered, isSelected })}
       </div>
     </>
   )
 
+  //--
+
   return (
     <div
       className={classes.container}
-      onClick={onSelect}
       onMouseEnter={onHoverIn}
       onMouseLeave={onHoverOut}
     >

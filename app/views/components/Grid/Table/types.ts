@@ -7,6 +7,7 @@ export interface RenderProps<Row> {
   totalRows: number
   rowIndex: number
   columnIndex: number
+  isRowSelected: boolean
 }
 
 export interface ColumnHeaderProps<Row> {
@@ -103,4 +104,5 @@ export interface TdProps<Row> {
 export interface CellProps {
   isSelected?: boolean
   isHovered?: boolean
+  isRowSelected?: boolean
 }

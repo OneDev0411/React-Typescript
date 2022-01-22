@@ -22,7 +22,7 @@ const useStyles = makeStyles(
       }
     },
     cellContainer: {
-      height: '40px',
+      height: '100%',
       display: 'flex',
       alignSelf: 'center',
       alignItems: 'center',

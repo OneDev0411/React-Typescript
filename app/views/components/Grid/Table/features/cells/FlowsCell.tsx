@@ -25,6 +25,21 @@ const useStyles = makeStyles(
       width: '1em',
       height: '1em',
       marginRight: '0.25rem'
+    },
+    text: {
+      ...theme.typography.body2,
+      color: theme.palette.grey[700],
+      letterSpacing: '0.15px',
+      lineHeight: `${theme.spacing(3)}px`,
+      '&.hovered': {
+        color: theme.palette.tertiary.dark
+      },
+      '&.selected': {
+        color: theme.palette.tertiary.dark
+      },
+      '&.rowSelected': {
+        color: theme.palette.tertiary.dark
+      }
     }
   }),
   { name: 'Flows-cell' }
@@ -36,6 +51,7 @@ interface Props {
   contact: IContact
   callback: () => void
   flowsCount: number
+  isRowSelected?: boolean
 }
 
 const FlowsCell = ({ contact, callback, flowsCount }: Props) => {
@@ -63,7 +79,11 @@ const FlowsCell = ({ contact, callback, flowsCount }: Props) => {
       )
     }
 
-    return <>{`in ${flowsCount} flow${flowsCount === 1 ? '' : 's'}`}</>
+    return (
+      <div className={classes.text}>{`in ${flowsCount} flow${
+        flowsCount === 1 ? '' : 's'
+      }`}</div>
+    )
   }
 
   return <CellContainer renderCellContent={renderCellContent} />

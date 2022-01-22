@@ -24,6 +24,9 @@ const useStyles = makeStyles(
       },
       '&.selected': {
         color: theme.palette.primary.main
+      },
+      '&.rowSelected': {
+        color: theme.palette.tertiary.dark
       }
     }
   }),
@@ -33,10 +36,15 @@ const useStyles = makeStyles(
 interface Props {
   text?: string
   isPrimary?: boolean
-  onSave?: (e: any) => void
+  isRowSelected?: boolean
+  onCellSelect?: (e) => void
 }
 
-const EditTextCell = ({ text = '', isPrimary = false }: Props) => {
+const EditTextCell = ({
+  text = '',
+  isPrimary = false,
+  isRowSelected = false
+}: Props) => {
   const classes = useStyles()
 
   const renderCellContent = ({
@@ -47,7 +55,8 @@ const EditTextCell = ({ text = '', isPrimary = false }: Props) => {
       className={cn(classes.cellText, {
         primary: isPrimary,
         hovered: isHovered,
-        selected: isSelected
+        selected: isSelected,
+        rowSelected: isRowSelected
       })}
     >
       {text}

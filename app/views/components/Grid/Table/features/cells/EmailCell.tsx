@@ -8,6 +8,7 @@ import { CellProps } from '../../types'
 interface Props {
   contact: IContact
   onSave?: (e: any) => void
+  isRowSelected?: boolean
 }
 
 const useStyles = makeStyles(
@@ -22,6 +23,9 @@ const useStyles = makeStyles(
       },
       '&.selected': {
         color: theme.palette.primary.main
+      },
+      '&.rowSelected': {
+        color: theme.palette.tertiary.dark
       }
     },
     attributeLabel: {
@@ -34,13 +38,16 @@ const useStyles = makeStyles(
       },
       '&.selected': {
         color: theme.palette.tertiary.dark
+      },
+      '&.rowSelected': {
+        color: theme.palette.tertiary.dark
       }
     }
   }),
   { name: 'Email-cell' }
 )
 
-const EmailCell = ({ contact }: Props) => {
+const EmailCell = ({ contact, isRowSelected = false }: Props) => {
   const classes = useStyles()
 
   let emailAddress
@@ -68,7 +75,8 @@ const EmailCell = ({ contact }: Props) => {
         <div
           className={cn(classes.attributeText, {
             hovered: isHovered,
-            selected: isSelected
+            selected: isSelected,
+            rowSelected: isRowSelected
           })}
         >
           {emailAddress}
@@ -79,7 +87,8 @@ const EmailCell = ({ contact }: Props) => {
         <div
           className={cn(classes.attributeLabel, {
             hovered: isHovered,
-            selected: isSelected
+            selected: isSelected,
+            rowSelected: isRowSelected
           })}
         >
           {emailAddressLabel}

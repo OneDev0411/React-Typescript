@@ -1,5 +1,8 @@
 import { createStyles, makeStyles, Theme, Tooltip } from '@material-ui/core'
+import cn from 'classnames'
 import timeago from 'timeago.js'
+
+import { CellProps } from '../../types'
 
 import CellContainer from './CellContainer'
 
@@ -8,12 +11,30 @@ const useStyles = makeStyles((theme: Theme) =>
     noTouch: {
       ...theme.typography.body2,
       lineHeight: `${theme.spacing(3)}px`,
-      color: theme.palette.grey[700]
+      color: theme.palette.grey[700],
+      '&.hovered': {
+        color: theme.palette.tertiary.dark
+      },
+      '&.selected': {
+        color: theme.palette.primary.main
+      },
+      '&.rowSelected': {
+        color: theme.palette.tertiary.dark
+      }
     },
     lastTouchValue: {
       ...theme.typography.body2,
       lineHeight: `${theme.spacing(3)}px`,
-      color: theme.palette.grey[700]
+      color: theme.palette.grey[700],
+      '&.hovered': {
+        color: theme.palette.tertiary.dark
+      },
+      '&.selected': {
+        color: theme.palette.primary.main
+      },
+      '&.rowSelected': {
+        color: theme.palette.tertiary.dark
+      }
     }
   })
 )
@@ -23,23 +44,44 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   contact: IContact
   onSave?: (e: any) => void
+  isRowSelected?: boolean
 }
 
-const LastTouchCell = ({ contact }: Props) => {
+const LastTouchCell = ({ contact, isRowSelected = false }: Props) => {
   const classes = useStyles()
 
-  const renderCellContent = () => {
+  const renderCellContent = ({
+    isHovered = false,
+    isSelected = false
+  }: CellProps) => {
     const { last_touch: lastTouch, next_touch: nextTouch } = contact
 
     if (!lastTouch) {
-      return <span className={classes.noTouch}>No Touches</span>
+      return (
+        <div
+          className={cn(classes.noTouch, {
+            rowSelected: isRowSelected,
+            hovered: isHovered,
+            selected: isSelected
+          })}
+        >
+          No touches
+        </div>
+      )
     }
 
     const formattedLastTouch = timeago().format(lastTouch * 1000)
-    // const formattedLastTouch = moment(lastTouch).format('ll')
 
-    const content = (
-      <div className={classes.lastTouchValue}>{formattedLastTouch}</div>
+    const content = () => (
+      <div
+        className={cn(classes.lastTouchValue, {
+          rowSelected: isRowSelected,
+          hovered: isHovered,
+          selected: isSelected
+        })}
+      >
+        {formattedLastTouch}
+      </div>
     )
 
     if (nextTouch) {
@@ -53,12 +95,12 @@ const LastTouchCell = ({ contact }: Props) => {
             </span>
           }
         >
-          {content}
+          {content()}
         </Tooltip>
       )
     }
 
-    return content
+    return content()
   }
 
   return <CellContainer renderCellContent={renderCellContent} />

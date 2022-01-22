@@ -8,6 +8,7 @@ import { CellProps } from '../../types'
 interface Props {
   contact: IContact
   onSave?: (e: any) => void
+  isRowSelected?: boolean
 }
 
 const useStyles = makeStyles(
@@ -22,6 +23,9 @@ const useStyles = makeStyles(
       },
       '&.selected': {
         color: theme.palette.primary.main
+      },
+      '&.rowSelected': {
+        color: theme.palette.tertiary.dark
       }
     },
     attributeLabel: {
@@ -34,13 +38,16 @@ const useStyles = makeStyles(
       },
       '&.selected': {
         color: theme.palette.tertiary.dark
+      },
+      '&.rowSelected': {
+        color: theme.palette.tertiary.dark
       }
     }
   }),
   { name: 'Phone-cell' }
 )
 
-const PhoneNumberCell = ({ contact, onSave }: Props) => {
+const PhoneNumberCell = ({ contact, isRowSelected = false }: Props) => {
   const classes = useStyles()
 
   let phoneNumber
@@ -68,7 +75,8 @@ const PhoneNumberCell = ({ contact, onSave }: Props) => {
         <div
           className={cn(classes.attributeText, {
             hovered: isHovered,
-            selected: isSelected
+            selected: isSelected,
+            rowSelected: isRowSelected
           })}
         >
           {phoneNumber}
@@ -79,7 +87,8 @@ const PhoneNumberCell = ({ contact, onSave }: Props) => {
         <div
           className={cn(classes.attributeLabel, {
             hovered: isHovered,
-            selected: isSelected
+            selected: isSelected,
+            rowSelected: isRowSelected
           })}
         >
           {phoneNumberLabel}
