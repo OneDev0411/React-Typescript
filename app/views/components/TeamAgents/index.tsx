@@ -16,8 +16,11 @@ interface RenderProps {
 export interface TeamAgentsProps {
   isPrimaryAgent: boolean
   flattenTeams?: boolean
+  bareMode?: boolean
   criteria?: string
+  currentAgents?: IBrand[]
   children: (props: RenderProps) => ReactNode
+
   teamAgentsModelFn?: (brandId: Nullable<UUID>) => Promise<IBrand[]>
   filterTeamsFn?: (teams: NormalizedBrand[]) => NormalizedBrand[]
 }
@@ -25,14 +28,16 @@ export interface TeamAgentsProps {
 export default function TeamAgents({
   children,
   isPrimaryAgent,
-  criteria = '',
+  bareMode = false,
   flattenTeams = false,
+  criteria = '',
+  currentAgents = [],
   teamAgentsModelFn = getAgents,
   filterTeamsFn
 }: TeamAgentsProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [teamAgents, setTeamAgents] = useState<IBrand[]>([])
   const activeTeam = useUnsafeActiveTeam()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [teamAgents, setTeamAgents] = useState<IBrand[]>(() => currentAgents)
 
   useEffect(() => {
     const getTeamAgents = async () => {
@@ -43,17 +48,30 @@ export default function TeamAgents({
           getBrand(activeTeam, isPrimaryAgent)
         )
 
-        setTeamAgents(agents || [])
+        if (agents.length > 0) {
+          if (teamAgents.length > 0) {
+            setTeamAgents(prevAgents => [...prevAgents, ...agents])
+          } else {
+            setTeamAgents(agents)
+          }
+        }
       } catch (e) {
         console.log(e)
-        setTeamAgents([])
       } finally {
         setIsLoading(false)
       }
     }
 
-    getTeamAgents()
-  }, [isPrimaryAgent, activeTeam, teamAgentsModelFn])
+    if (!bareMode) {
+      getTeamAgents()
+    }
+  }, [
+    isPrimaryAgent,
+    activeTeam,
+    teamAgentsModelFn,
+    bareMode,
+    teamAgents.length
+  ])
 
   const isEmptyState = !isLoading && teamAgents.length === 0
   const teams = useTeamAgentsSearch(teamAgents, criteria, flattenTeams)

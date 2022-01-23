@@ -1411,8 +1411,8 @@ class Builder extends React.Component {
           )}
           {this.state.isAgentDrawerOpen && (
             <TeamAgentsDrawer
+              open
               multiSelection
-              user={this.props.user}
               title="Select Agents"
               onClose={() => {
                 this.blocks.agent.selectHandler()
