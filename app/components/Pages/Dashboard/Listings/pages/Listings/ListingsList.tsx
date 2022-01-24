@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
 import { GetBrandListingsOptions } from '@app/models/listings/search/get-brand-listings'
-import { selectActiveTeam } from '@app/selectors/team'
+import { selectActiveBrandId } from '@app/selectors/brand'
 import { selectUserAgents } from '@app/selectors/user'
 import { isUserCoAgent } from '@app/utils/listing'
 import { Table } from '@app/views/components/Grid/Table'
@@ -46,13 +46,13 @@ interface Props {
 function ListingsList({ searchTerm }: Props) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
-  const activeTeamBrand = useSelector(selectActiveTeam).brand
+  const activeTeamBrandId = useSelector(selectActiveBrandId)
 
   const isSearching = searchTerm.trim().length > 0
   const userAgents = useSelector(selectUserAgents)
 
   const { listings: rows, isLoading } = useBrandAndDealsListings(
-    activeTeamBrand.id,
+    activeTeamBrandId,
     OPTIONS
   )
 
