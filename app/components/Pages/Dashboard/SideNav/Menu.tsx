@@ -9,14 +9,15 @@ import {
 } from '@material-ui/core'
 import {
   mdiViewGridOutline,
-  mdiAccountSupervisorOutline,
+  mdiAccountMultiple,
   mdiChartArc,
-  mdiAlarmLightOutline,
+  mdiSwapHorizontal,
+  mdiBellOutline,
   mdiHelpCircleOutline,
   mdiPhoneOutline,
   mdiMenuUp,
   mdiMenuDown,
-  mdiGoogleMaps
+  mdiHomeCity
 } from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory, withRouter, WithRouterProps } from 'react-router'
@@ -331,7 +332,7 @@ function Menu(props: WithRouterProps) {
                 >
                   <AccordionSummaryDiv>
                     <SvgIcon
-                      path={mdiGoogleMaps}
+                      path={mdiHomeCity}
                       size={muiIconSizes.small}
                       rightMargined
                     />
@@ -371,7 +372,7 @@ function Menu(props: WithRouterProps) {
                 >
                   <AccordionSummaryDiv>
                     <SvgIcon
-                      path={mdiAccountSupervisorOutline}
+                      path={mdiAccountMultiple}
                       size={muiIconSizes.small}
                       rightMargined
                     />
@@ -488,7 +489,7 @@ function Menu(props: WithRouterProps) {
                 >
                   <AccordionSummaryDiv>
                     <SvgIcon
-                      path={mdiChartArc}
+                      path={mdiSwapHorizontal}
                       size={muiIconSizes.small}
                       rightMargined
                     />
@@ -589,7 +590,7 @@ function Menu(props: WithRouterProps) {
                   <AccordionSummaryDiv>
                     <MenuBadge badgeContent={appNotifications} color="primary">
                       <SvgIcon
-                        path={mdiAlarmLightOutline}
+                        path={mdiBellOutline}
                         size={muiIconSizes.small}
                         rightMargined
                       />
