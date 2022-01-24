@@ -34,7 +34,7 @@ export async function updateCacheComposer(
 export async function updateCacheActions<TData>(
   queryClient: QueryClient,
   queryKey: QueryKey,
-  modifier: (data: Draft<TData>) => void
+  modifier: (data: Draft<TData>, base: TData) => void
 ): UpdateCachePromise {
   await queryClient.cancelQueries(queryKey)
 
@@ -43,7 +43,7 @@ export async function updateCacheActions<TData>(
   matchedData.forEach(([queryKey, previousData]) => {
     queryClient.setQueryData<TData>(
       queryKey,
-      produce(previousData, draft => modifier(draft))
+      produce(previousData, draft => modifier(draft, previousData))
     )
   })
 
@@ -75,42 +75,25 @@ export async function infiniteDataUpdateCacheActions<TData>(
     itemIndex: number
   ) => void
 ): UpdateCachePromise {
-  await queryClient.cancelQueries(queryKey, { exact: false })
-
-  const matchedQueriesData = queryClient.getQueriesData<InfiniteData<TData[]>>({
+  return updateCacheActions<InfiniteData<TData[]>>(
+    queryClient,
     queryKey,
-    exact: false
-  })
+    (draftPages, basePages) => {
+      basePages.pages.forEach((items, pageIndex) => {
+        const itemIndex = items.findIndex(item => predictor(item))
 
-  matchedQueriesData.forEach(([queryKey, infiniteData]) => {
-    queryClient.setQueryData(
-      queryKey,
-      produce(infiniteData, draftPages => {
-        infiniteData.pages.forEach((items, pageIndex) => {
-          const itemIndex = items.findIndex(item => predictor(item))
+        if (itemIndex === -1) {
+          return
+        }
 
-          if (itemIndex === -1) {
-            return
-          }
-
-          modifier(
-            draftPages.pages[pageIndex][itemIndex],
-            draftPages.pages[pageIndex],
-            itemIndex
-          )
-        })
+        modifier(
+          draftPages.pages[pageIndex][itemIndex],
+          draftPages.pages[pageIndex],
+          itemIndex
+        )
       })
-    )
-  })
-
-  return {
-    revert: () => {
-      matchedQueriesData.forEach(([queryKey, infiniteData]) => {
-        queryClient.setQueryData(queryKey, infiniteData)
-      })
-    },
-    invalidate: () => queryClient.invalidateQueries(queryKey, { exact: false })
-  }
+    }
+  )
 }
 
 /**
