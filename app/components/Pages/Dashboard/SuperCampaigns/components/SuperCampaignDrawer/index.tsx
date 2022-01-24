@@ -170,6 +170,7 @@ function SuperCampaignDrawer({
                             }
                             onEditorOpen={hideDrawer}
                             onEditorClose={showDrawer}
+                            viewAsAdmin
                           />
                         )
                       }
