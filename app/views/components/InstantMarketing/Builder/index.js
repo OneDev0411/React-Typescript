@@ -218,6 +218,7 @@ class Builder extends React.Component {
       const iframe = this.editor.Canvas.getBody()
 
       iframe.removeEventListener('paste', this.iframePasteHandler)
+      iframe.removeEventListener('click', this.iframeClickHandler)
     }
 
     unloadJS('ckeditor')
@@ -481,6 +482,7 @@ class Builder extends React.Component {
     this.disableAssetManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
+    this.deselectComponentsOnCanvasClick()
     this.disableDefaultDeviceManager()
     this.scrollSidebarToTopOnComponentSelect()
 
@@ -512,13 +514,17 @@ class Builder extends React.Component {
         onDrop: () => {
           this.setState({ isAgentDrawerOpen: true })
         },
-        shouldUseDefaultAgents: this.isEmailTemplateForCampaigns,
-        defaultAgents: [
-          {
-            agent: this.props.user,
-            contacts: []
-          }
-        ]
+        shouldUseDefaultAgents:
+          this.isEmailTemplateForCampaigns || this.isTemplateForOtherAgents,
+        defaultAgents:
+          this.props.templateData && this.props.templateData.user
+            ? [
+                {
+                  agent: this.props.templateData.user,
+                  contacts: []
+                }
+              ]
+            : []
       },
       image: {
         onDrop: () => {
@@ -840,6 +846,12 @@ class Builder extends React.Component {
     iframe.addEventListener('paste', this.iframePasteHandler)
   }
 
+  deselectComponentsOnCanvasClick = () => {
+    const iframeBody = this.editor.Canvas.getBody()
+
+    iframeBody.addEventListener('click', this.iframeClickHandler)
+  }
+
   iframePasteHandler = ev => {
     if (!ev.target.contentEditable) {
       return
@@ -849,6 +861,17 @@ class Builder extends React.Component {
 
     ev.target.ownerDocument.execCommand('insertText', false, text)
     ev.preventDefault()
+  }
+
+  iframeClickHandler = ev => {
+    const parentNode = ev.target.parentNode
+
+    if (parentNode.id !== 'wrapper') {
+      return
+    }
+
+    this.deselectAll()
+    ev.stopPropagation()
   }
 
   setTraits = model => {
