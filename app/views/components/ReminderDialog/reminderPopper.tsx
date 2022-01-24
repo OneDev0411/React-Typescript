@@ -11,7 +11,7 @@ import {
   Typography
 } from '@material-ui/core'
 
-import { Props as ReminderDialogProps } from './index'
+import { ReminderDialogBaseProps } from './types'
 
 const useStyles = makeStyles(
   theme => ({
@@ -42,7 +42,7 @@ const useStyles = makeStyles(
   { name: 'ReminderDialog' }
 )
 
-interface Props extends Omit<ReminderDialogProps, 'userSettingsKey'> {
+interface Props extends Omit<ReminderDialogBaseProps, 'userSettingsKey'> {
   open: boolean
   onClickGotIt: (dontShwo: boolean) => void
 }
