@@ -1,17 +1,14 @@
-import { Draft } from 'immer'
 import { QueryClient } from 'react-query'
 
 import { updateCacheActions, UpdateCachePromise } from '@app/utils/react-query'
 
-import { allList } from '../query-keys/enrollment'
+import { allList, myList } from '../query-keys/enrollment'
 
 export async function updateCacheAllList(
   queryClient: QueryClient,
   superCampaignId: UUID,
   enrollments: Omit<ISuperCampaignEnrollmentInput, 'tags'>[],
-  modifier: (
-    enrollment: Draft<ISuperCampaignEnrollment<'user' | 'brand'>>
-  ) => void
+  update: Partial<ISuperCampaignEnrollment<'user' | 'brand'>>
 ): UpdateCachePromise {
   return updateCacheActions<ISuperCampaignEnrollment<'user' | 'brand'>[]>(
     queryClient,
@@ -28,7 +25,81 @@ export async function updateCacheAllList(
           return
         }
 
-        modifier(prevEnrollment)
+        Object.assign(prevEnrollment, update)
       })
+  )
+}
+
+export async function updateCacheMyList(
+  queryClient: QueryClient,
+  superCampaignId: UUID,
+  update: Partial<ISuperCampaignEnrollment>
+): UpdateCachePromise {
+  return updateCacheActions<ISuperCampaignEnrollment[]>(
+    queryClient,
+    myList(),
+    prevEnrollments =>
+      prevEnrollments.forEach(prevEnrollment => {
+        if (prevEnrollment.super_campaign !== superCampaignId) {
+          return
+        }
+
+        Object.assign(prevEnrollment, update)
+      })
+  )
+}
+
+export async function deleteFromCacheAllList(
+  queryClient: QueryClient,
+  superCampaignId: UUID
+): UpdateCachePromise {
+  return updateCacheActions<ISuperCampaignEnrollment[]>(
+    queryClient,
+    allList(superCampaignId),
+    enrollments => {
+      const index = enrollments.findIndex(
+        element => element.super_campaign === superCampaignId
+      )
+
+      if (index === -1) {
+        return
+      }
+
+      enrollments.splice(index, 1)
+    }
+  )
+}
+
+export async function deleteFromCacheMyList(
+  queryClient: QueryClient,
+  superCampaignId: UUID
+): UpdateCachePromise {
+  return updateCacheActions<ISuperCampaignEnrollment[]>(
+    queryClient,
+    myList(),
+    enrollments => {
+      const index = enrollments.findIndex(
+        element => element.super_campaign === superCampaignId
+      )
+
+      if (index === -1) {
+        return
+      }
+
+      enrollments.splice(index, 1)
+    }
+  )
+}
+
+export async function appendToCacheMyList(
+  queryClient: QueryClient,
+  enrollment: ISuperCampaignEnrollment
+): UpdateCachePromise {
+  return updateCacheActions<ISuperCampaignEnrollment[]>(
+    queryClient,
+    myList(),
+    enrollments => {
+      enrollments.push(enrollment)
+    }
   )
 }
