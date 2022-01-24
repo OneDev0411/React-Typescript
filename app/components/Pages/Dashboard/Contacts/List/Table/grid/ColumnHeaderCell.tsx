@@ -9,8 +9,7 @@ const useStyles = makeStyles(
     container: {
       display: 'flex',
       height: '100%',
-      width: '100%',
-      gap: theme.spacing(1)
+      width: '100%'
     },
     iconContainer: {
       width: theme.spacing(4),
@@ -25,6 +24,7 @@ const useStyles = makeStyles(
       flex: '1 0 auto',
       alignItems: 'center',
       color: `${theme.palette.grey[700]}`,
+      padding: theme.spacing(0, 1),
       letterSpacing: '0.15px'
     },
     sortActionContainer: {

@@ -26,14 +26,14 @@ const useStyles = makeStyles(
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`,
-      whiteSpace: 'nowrap'
+      whiteSpace: 'nowrap',
+      paddingLeft: theme.spacing(2)
     },
     inlineViewContainer: {
       display: 'flex',
       overflow: 'hidden',
       gap: theme.spacing(1),
-      height: theme.spacing(3),
-      paddingLeft: theme.spacing(2)
+      height: theme.spacing(3)
     },
     cellOverlay: {
       display: 'none',

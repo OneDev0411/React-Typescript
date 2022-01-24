@@ -39,26 +39,7 @@ export const styles = (theme: Theme) =>
 
 export const inlineGridStyles = (theme: Theme) =>
   createStyles({
-    row: {
-      '& .column': {
-        '& a:not([role="button"])': {
-          color: theme.palette.text.primary
-        },
-        '&.visible-on-hover > *': {
-          visibility: 'hidden'
-        }
-      },
-      '&:hover .column': {
-        cursor: 'pointer',
-        '&.visible-on-hover > *': {
-          visibility: 'visible'
-        },
-        '& .underline-on-hover': {
-          textDecoration: 'underline',
-          color: theme.palette.secondary.main
-        }
-      }
-    },
+    row: {},
     header: {},
     headerHasSelected: {}
   })

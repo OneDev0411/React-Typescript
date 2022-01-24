@@ -33,13 +33,7 @@ const useStyles = makeStyles(
       letterSpacing: '0.15px',
       lineHeight: `${theme.spacing(3)}px`,
       color: theme.palette.grey['500'],
-      '&.hovered': {
-        color: theme.palette.tertiary.dark
-      },
       '&.selected': {
-        color: theme.palette.tertiary.dark
-      },
-      '&.rowSelected': {
         color: theme.palette.tertiary.dark
       }
     }
@@ -86,9 +80,7 @@ const PhoneNumberCell = ({ contact, isRowSelected = false }: Props) => {
       {phoneNumberLabel && (
         <div
           className={cn(classes.attributeLabel, {
-            hovered: isHovered,
-            selected: isSelected,
-            rowSelected: isRowSelected
+            selected: isSelected
           })}
         >
           {phoneNumberLabel}

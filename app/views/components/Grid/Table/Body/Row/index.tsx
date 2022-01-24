@@ -11,7 +11,6 @@ interface Props<Row> {
   index: number
   style: CSSProperties
   data: {
-    inlineGridEnabled?: boolean
     rows: Row[]
     columns: TableColumn<Row>[]
     state: StateContext
@@ -19,6 +18,7 @@ interface Props<Row> {
     columnsSize: string[]
     getTrProps?: (data: TrProps<Row>) => object
     getTdProps?: (data: TdProps<Row>) => object
+    inlineGridEnabled?: boolean
   }
 }
 
@@ -26,14 +26,14 @@ function Row<T>({
   index: rowIndex,
   style,
   data: {
-    inlineGridEnabled,
     columns,
     rows,
     state,
     classes,
     columnsSize,
     getTrProps = () => ({}),
-    getTdProps = () => ({})
+    getTdProps = () => ({}),
+    inlineGridEnabled
   }
 }: Props<T & { id?: string }>) {
   const row = rows[rowIndex]
@@ -52,7 +52,9 @@ function Row<T>({
     <RowContainer
       index={rowIndex}
       selected={isRowSelected}
-      className={classes.row}
+      className={cn(classes.row, {
+        selected: isRowSelected & inlineGridEnabled
+      })}
       style={style}
       data-tour-id={`row-${rowIndex}`}
       {...getTrProps({
@@ -66,7 +68,8 @@ function Row<T>({
         .map((column: TableColumn<T>, columnIndex: number) => (
           <div
             key={columnIndex}
-            className={cn('column', column.class, {
+            className={cn(column.class, {
+              column: !inlineGridEnabled,
               primary: !inlineGridEnabled && column.primary === true
             })}
             style={{
@@ -102,7 +105,7 @@ function getCell<Row>(
   rowIndex: number,
   columnIndex: number,
   totalRows: number,
-  isRowSelected: boolean
+  isRowSelected: boolean = false
 ) {
   if (column.render) {
     return column.render({

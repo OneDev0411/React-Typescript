@@ -47,6 +47,16 @@ function Header<Row>({ columns, rows, selection, totalRows }: Props<Row>) {
 
   //--
 
+  const Cell = (cellContent, columnIndex) => (
+    <div
+      className={classes.cellContainer}
+      key={columnIndex}
+      style={{ width: columnsSize[columnIndex] }}
+    >
+      {cellContent}
+    </div>
+  )
+
   const getCell = (column, columnIndex) => {
     if (selection && column.id === 'row-selection') {
       return (
@@ -54,28 +64,21 @@ function Header<Row>({ columns, rows, selection, totalRows }: Props<Row>) {
       )
     }
 
-    let headerCell
-
     if (typeof column.headerName === 'string') {
-      headerCell = column.headerName
-    } else if (typeof column.headerName === 'function') {
-      headerCell = column.headerName({
-        rows,
-        column,
-        columnIndex,
-        totalRows
-      })
+      return Cell(column.headerName, columnIndex)
     }
 
-    return (
-      <div
-        className={classes.cellContainer}
-        key={columnIndex}
-        style={{ width: columnsSize[columnIndex] }}
-      >
-        {headerCell}
-      </div>
-    )
+    if (typeof column.headerName === 'function') {
+      return Cell(
+        column.headerName({
+          rows,
+          column,
+          columnIndex,
+          totalRows
+        }),
+        columnIndex
+      )
+    }
   }
 
   //--

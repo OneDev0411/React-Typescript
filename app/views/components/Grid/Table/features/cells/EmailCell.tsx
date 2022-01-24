@@ -33,13 +33,8 @@ const useStyles = makeStyles(
       letterSpacing: '0.15px',
       lineHeight: `${theme.spacing(3)}px`,
       color: theme.palette.grey['500'],
-      '&.hovered': {
-        color: theme.palette.tertiary.dark
-      },
+      '&.hovered': {},
       '&.selected': {
-        color: theme.palette.tertiary.dark
-      },
-      '&.rowSelected': {
         color: theme.palette.tertiary.dark
       }
     }

@@ -5,6 +5,8 @@ import cn from 'classnames'
 import fecha from 'fecha'
 import moment from 'moment'
 
+import { CellProps } from '../../types'
+
 import CellContainer from './CellContainer'
 
 const useStyles = makeStyles(
@@ -14,9 +16,6 @@ const useStyles = makeStyles(
       color: theme.palette.grey[700],
       letterSpacing: '0.15px',
       lineHeight: `${theme.spacing(3)}px`,
-      '&.hovered': {
-        color: theme.palette.tertiary.dark
-      },
       '&.selected': {
         color: theme.palette.tertiary.dark
       },
@@ -52,6 +51,9 @@ const getDate = (datetime: Date = new Date()) =>
     datetime.getUTCDate()
   )
 
+const getDateDiff = (date1: Date, date2: Date) =>
+  date1.getTime() - date2.getTime()
+
 const formatDate = (date: Date, format: string = 'MMM D'): string => {
   const utcDate = getDate(date)
 
@@ -75,6 +77,9 @@ const birthdayNextYear = (bithday: Date): Date =>
     bithday.getUTCMonth(),
     bithday.getUTCDate()
   )
+
+const durationAsDays = (duration: number): number =>
+  moment.duration(duration).asDays()
 
 //--
 
@@ -110,16 +115,16 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
       return
     }
 
-    let dateDiff: number =
-      birthdayThisYear(birthday).getTime() - today.getTime()
+    let dateDiff: number = getDateDiff(birthdayThisYear(birthday), today)
 
-    if (dateDiff > 0) {
-      return moment.duration(dateDiff).asDays()
+    // if bday is in the future
+    if (dateDiff >= 0) {
+      return durationAsDays(dateDiff)
     }
 
-    dateDiff = birthdayNextYear(birthday).getTime() - today.getTime()
+    dateDiff = getDateDiff(birthdayNextYear(birthday), today)
 
-    return moment.duration(dateDiff).asDays()
+    return durationAsDays(dateDiff)
   }
 
   //
@@ -134,7 +139,10 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
 
   //
 
-  const renderCellContent = () => (
+  const renderCellContent = ({
+    isHovered = false,
+    isSelected = false
+  }: CellProps) => (
     <>
       {daysToBirthday && (
         <div
@@ -145,8 +153,13 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
       )}
       {daysToBirthday && inputFormattedDate && (
         <div
-          className={cn(classes.dateValue, { rowSelected: isRowSelected })}
-        >{`(${inputFormattedDate})`}</div>
+          className={cn(classes.dateValue, {
+            hovered: isHovered,
+            selected: isSelected
+          })}
+        >
+          {`(${inputFormattedDate})`}
+        </div>
       )}
     </>
   )

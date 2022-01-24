@@ -58,17 +58,17 @@ export const GridRowContainer = styled.div<{
 }>`
   ${({ theme, index, selected }) => `
     border-bottom: 1px solid ${theme.palette.divider};
+    
     display: flex;
     align-items: stretch;
     background-color: transparent;
 
     &:first-child {
-      border-top: 1px solid ${theme.palette.divider};
+      border-top: 1px solid ${theme.palette.divider};  
     }
 
     &:hover {
       background-color: ${theme.palette.grey[50]};
-      color: ${theme.palette.secondary.main} !important;
     }
 
     &:hover .selection--default-value {
@@ -79,21 +79,6 @@ export const GridRowContainer = styled.div<{
       display: block !important;
     }
 
-    .column {
-      height: 100%;
-      display: flex;
-      align-items: center;
-    }
-    .column:first-child {
-      border-right: none;
-      border-left: none;
-    }
-
-    ${
-      selected &&
-      css`
-        background-color: ${theme.palette.action.selected};
-      `
-    }
+    ${selected && `background-color: ${theme.palette.grey[100]};`}
   `}
 `

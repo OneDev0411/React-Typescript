@@ -8,6 +8,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       display: 'flex',
+      alignItems: 'center',
       justifyContent: 'end',
       overflow: 'initial',
       width: theme.spacing(7.5),

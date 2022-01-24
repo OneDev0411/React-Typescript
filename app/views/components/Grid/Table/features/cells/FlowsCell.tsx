@@ -1,17 +1,16 @@
 import { makeStyles, Tooltip } from '@material-ui/core'
-import { mdiLightningBolt } from '@mdi/js'
 import cn from 'classnames'
 
 import AddToFlowButton from 'components/AddToFlowButton'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { CellProps } from '../../types'
 
 import CellContainer from './CellContainer'
 
 const useStyles = makeStyles(
   theme => ({
     button: {
-      ...theme.typography.body2,
+      ...theme.typography.body3,
       color: theme.palette.grey[700],
       letterSpacing: '0.15px',
       lineHeight: `${theme.spacing(3)}px`,
@@ -19,12 +18,6 @@ const useStyles = makeStyles(
       display: 'inline-flex',
       alignItems: 'center',
       cursor: 'pointer'
-    },
-    icon: {
-      color: theme.palette.grey[700],
-      width: '1em',
-      height: '1em',
-      marginRight: '0.25rem'
     },
     text: {
       ...theme.typography.body2,
@@ -54,24 +47,27 @@ interface Props {
   isRowSelected?: boolean
 }
 
-const FlowsCell = ({ contact, callback, flowsCount }: Props) => {
+const FlowsCell = ({
+  contact,
+  callback,
+  flowsCount,
+  isRowSelected = false
+}: Props) => {
   const classes = useStyles()
 
-  const renderCellContent = () => {
+  const renderCellContent = ({
+    isHovered = false,
+    isSelected = false
+  }: CellProps) => {
     if (flowsCount === 0) {
       return (
         <AddToFlowButton
           contacts={{ ids: [contact.id] }}
           callback={callback}
           buttonRenderer={({ className, ...buttonProps }) => (
-            <Tooltip title="Add to flow">
+            <Tooltip title="Click to add to flow">
               <span className={cn(className, classes.button)} {...buttonProps}>
-                <SvgIcon
-                  className={classes.icon}
-                  size={muiIconSizes.small}
-                  path={mdiLightningBolt}
-                />
-                +
+                Add to flow
               </span>
             </Tooltip>
           )}
@@ -80,9 +76,15 @@ const FlowsCell = ({ contact, callback, flowsCount }: Props) => {
     }
 
     return (
-      <div className={classes.text}>{`in ${flowsCount} flow${
-        flowsCount === 1 ? '' : 's'
-      }`}</div>
+      <div
+        className={cn(classes.text, {
+          hovered: isHovered,
+          selected: isSelected,
+          rowSelected: isRowSelected
+        })}
+      >
+        {`in ${flowsCount} flow${flowsCount === 1 ? '' : 's'}`}
+      </div>
     )
   }
 
