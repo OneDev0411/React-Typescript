@@ -11,6 +11,7 @@ import {
 } from '@app/views/components/BrandSelector'
 import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
 
 import { TeamSwitchBrandSelectorRenderer as Brand } from './components/TeamSwitchBrandSelectorRenderer'
 
@@ -52,22 +53,38 @@ export function ActiveTeam() {
   const activeBrand = useUnsafeActiveBrand()
 
   const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useState<boolean>(false)
+  const [isImpersonateUserSelectorOpen, setIsImpersonateUserSelectorOpen] =
+    useState<boolean>(false)
   const [isSwitchingActiveTeam, setIsSwitchingActiveTeam] =
     useState<boolean>(false)
+  const [selectedBrandToSwitch, setSelectedBrandToSwitch] =
+    useState<Nullable<IBrand>>(null)
 
+  // handle brand selector drawer state
   const hanldeOpenBrandSelectorDrawer = () => setIsBrandSelectorOpen(true)
   const hanldeCloseBrandSelectorDrawer = () => setIsBrandSelectorOpen(false)
 
+  // handle impersonate user selector drawer state
+  const hanldeOpenImpersonateSelectorDrawer = () =>
+    setIsImpersonateUserSelectorOpen(true)
+  const hanldeCloseImpersonateSelectorDrawer = () =>
+    setIsImpersonateUserSelectorOpen(false)
+
   const handleOnClickBrand = async (brand: IBrand) => {
     try {
-      setIsSwitchingActiveTeam(true)
-      hanldeCloseBrandSelectorDrawer()
-
-      await switchActiveTeam(brand.id)
-      window.location.reload()
+      // setIsSwitchingActiveTeam(true)
+      // hanldeCloseBrandSelectorDrawer()
+      console.log({ brand })
+      setSelectedBrandToSwitch(brand)
+      hanldeOpenImpersonateSelectorDrawer()
+      // await switchActiveTeam(brand.id)
+      // window.location.reload()
     } catch (error) {
       console.error(error)
     }
+  }
+  const handleSelectImpersonate = t => {
+    console.log(`log on ${t}`)
   }
   const renderBrandNode = ({ brand }: NodeRenderer) => {
     return (
@@ -119,6 +136,17 @@ export function ActiveTeam() {
           brandSelectorProps={{
             nodeRenderer: renderBrandNode
           }}
+        />
+      )}
+      {isImpersonateUserSelectorOpen && selectedBrandToSwitch && (
+        <TeamAgentsDrawer
+          open
+          bareMode
+          width="43rem"
+          title="Select Impersonate User"
+          currentAgents={[selectedBrandToSwitch]}
+          onSelectAgents={handleSelectImpersonate}
+          onClose={hanldeCloseImpersonateSelectorDrawer}
         />
       )}
     </>
