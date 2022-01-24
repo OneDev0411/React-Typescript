@@ -54,6 +54,7 @@ function Listings({ params }: ListingsProps) {
             <ReminderDialog
               userSettingsKey={ADD_MLS_ACCOUNT_REMINDER_DISMISSED_SETTINGS_KEY}
               anchorEl={addMlsAccountButtonRef.current}
+              image="/static/images/listing/listings-add-MLS-reminder.gif"
               title="Add all your MLS accounts to have access to all your listings."
               placement="bottom-start"
             />
