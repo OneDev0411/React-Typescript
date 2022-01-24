@@ -2,9 +2,10 @@ import { UseMutationResult, useQueryClient } from 'react-query'
 import { ResponseError } from 'superagent'
 
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
-import { updateCacheActions, UpdateCacheActions } from '@app/utils/react-query'
+import { UpdateCacheActions } from '@app/utils/react-query'
 
-import { myList } from './query-keys/enrollment'
+import { allList } from './query-keys/enrollment'
+import { deleteFromCacheMyList } from './query-update/enrollment'
 import { unenrollMeFromSuperCampaign } from './unenroll-me-from-super-campaign'
 
 export type UseUnenrollMeFromSuperCampaign = UseMutationResult<
@@ -32,22 +33,9 @@ export function useUnenrollMeFromSuperCampaign(
         onSuccess: 'You have been opted-out from the campaign',
         onError: 'Something went wrong while opting-out the campaign'
       },
+      invalidates: (_, superCampaignId) => [allList(superCampaignId)],
       onMutate: async superCampaignId => ({
-        cache: await updateCacheActions<ISuperCampaignEnrollment[]>(
-          queryClient,
-          myList(),
-          enrollments => {
-            const index = enrollments.findIndex(
-              element => element.super_campaign === superCampaignId
-            )
-
-            if (index === -1) {
-              return
-            }
-
-            enrollments.splice(index, 1)
-          }
-        )
+        cache: await deleteFromCacheMyList(queryClient, superCampaignId)
       }),
       onError: (error, variables, context) => {
         context?.cache.revert()

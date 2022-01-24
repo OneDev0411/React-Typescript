@@ -2,9 +2,10 @@ import { UseMutationResult, useQueryClient } from 'react-query'
 import { ResponseError } from 'superagent'
 
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
-import { updateCacheActions, UpdateCacheActions } from '@app/utils/react-query'
+import { UpdateCacheActions } from '@app/utils/react-query'
 
-import { myList } from './query-keys/enrollment'
+import { allList } from './query-keys/enrollment'
+import { updateCacheMyList } from './query-update/enrollment'
 import {
   updateMySuperCampaignEnrollment,
   DataInput as BaseDataInput
@@ -46,22 +47,9 @@ export function useUpdateMySuperCampaignEnrollment(
           options?.notify?.onError ??
           'Something went wrong while updating your campaign enrollment'
       },
+      invalidates: (_, { superCampaignId }) => [allList(superCampaignId)],
       onMutate: async ({ superCampaignId, data }) => ({
-        cache: await updateCacheActions<ISuperCampaignEnrollment[]>(
-          queryClient,
-          myList(),
-          enrollments => {
-            const index = enrollments.findIndex(
-              element => element.super_campaign === superCampaignId
-            )
-
-            if (index === -1) {
-              return
-            }
-
-            enrollments.splice(index, 1, { ...enrollments[index], ...data })
-          }
-        )
+        cache: await updateCacheMyList(queryClient, superCampaignId, data)
       }),
       onError: (error, variables, context) => {
         context?.cache.revert()

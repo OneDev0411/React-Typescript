@@ -5,6 +5,7 @@ import { useMutation, UseMutationOptions } from '@app/hooks/query'
 import { UpdateCacheActions } from '@app/utils/react-query'
 
 import { enrollUserInSuperCampaign } from './enroll-user-in-super-campaign'
+import { myList } from './query-keys/enrollment'
 import { updateCacheAllList } from './query-update/enrollment'
 
 interface DataInput {
@@ -43,14 +44,13 @@ export function useEnrollUserInSuperCampaign(
         onSuccess: 'The user was enrolled successfully',
         onError: 'Something went wrong while adding the enrollment'
       },
+      invalidates: [myList()],
       onMutate: async ({ superCampaignId, enrollments }) => ({
         cache: await updateCacheAllList(
           queryClient,
           superCampaignId,
           enrollments,
-          prevEnrollment => {
-            prevEnrollment.deleted_at = undefined
-          }
+          { deleted_at: undefined }
         )
       }),
       onError: (error, variables, context) => {

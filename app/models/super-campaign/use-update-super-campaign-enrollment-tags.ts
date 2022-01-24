@@ -2,10 +2,13 @@ import { UseMutationResult, useQueryClient } from 'react-query'
 import { ResponseError } from 'superagent'
 
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
-import { UpdateCacheActions } from '@app/utils/react-query'
+import { UpdateCacheActions, updateCacheComposer } from '@app/utils/react-query'
 
 import { enrollUserInSuperCampaign } from './enroll-user-in-super-campaign'
-import { updateCacheAllList } from './query-update/enrollment'
+import {
+  updateCacheAllList,
+  updateCacheMyList
+} from './query-update/enrollment'
 
 interface DataInput {
   superCampaignId: UUID
@@ -44,13 +47,13 @@ export function useUpdateSuperCampaignEnrollmentTags(
         onError: 'Something went wrong while updating the tags'
       },
       onMutate: async ({ superCampaignId, enrollment }) => ({
-        cache: await updateCacheAllList(
-          queryClient,
-          superCampaignId,
-          [enrollment],
-          prevEnrollment => {
-            prevEnrollment.tags = enrollment.tags
-          }
+        cache: await updateCacheComposer(
+          updateCacheAllList(queryClient, superCampaignId, [enrollment], {
+            tags: enrollment.tags
+          }),
+          updateCacheMyList(queryClient, superCampaignId, {
+            tags: enrollment.tags
+          })
         )
       }),
       onError: (error, variables, context) => {

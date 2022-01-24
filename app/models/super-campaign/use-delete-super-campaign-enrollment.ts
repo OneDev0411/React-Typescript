@@ -5,6 +5,7 @@ import { useMutation, UseMutationOptions } from '@app/hooks/query'
 import { UpdateCacheActions } from '@app/utils/react-query'
 
 import { deleteSuperCampaignEnrollment } from './delete-super-campaign-enrollment'
+import { myList } from './query-keys/enrollment'
 import { updateCacheAllList } from './query-update/enrollment'
 
 interface DataInput {
@@ -47,14 +48,13 @@ export function useDeleteSuperCampaignEnrollment(
         onSuccess: 'The enrollment was deleted',
         onError: 'Something went wrong while deleting the enrollment'
       },
+      invalidates: [myList()],
       onMutate: async ({ superCampaignId, userId, brandId }) => ({
         cache: await updateCacheAllList(
           queryClient,
           superCampaignId,
           [{ brand: brandId, user: userId }],
-          enrollment => {
-            enrollment.deleted_at = new Date().getTime() / 1000
-          }
+          { deleted_at: new Date().getTime() / 1000 }
         )
       }),
       onError: (error, variables, context) => {

@@ -2,11 +2,12 @@ import { UseMutationResult, useQueryClient } from 'react-query'
 import { ResponseError } from 'superagent'
 
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
-import { UpdateCacheActions, updateCacheActions } from '@app/utils/react-query'
+import { UpdateCacheActions } from '@app/utils/react-query'
 import uuid from '@app/utils/uuid'
 
 import { enrollMeInSuperCampaign } from './enroll-me-in-super-campaign'
-import { myList } from './query-keys/enrollment'
+import { allList } from './query-keys/enrollment'
+import { appendToCacheMyList } from './query-update/enrollment'
 
 interface DataInput {
   superCampaignId: UUID
@@ -48,24 +49,21 @@ export function useEnrollMeInSuperCampaign(
           options?.notify?.onError ??
           'Something went wrong while participating the campaign'
       },
-      onMutate: async ({ superCampaignId, tags }) => ({
-        cache: await updateCacheActions<ISuperCampaignEnrollment[]>(
-          queryClient,
-          myList(),
-          enrollments => {
-            const currentTime = new Date().getTime() / 1000
+      invalidates: (_, { superCampaignId }) => [allList(superCampaignId)],
+      onMutate: async ({ superCampaignId, tags }) => {
+        const currentTime = new Date().getTime() / 1000
 
-            enrollments.push({
-              id: uuid(),
-              created_at: currentTime,
-              updated_at: currentTime,
-              notifications_enabled: false,
-              super_campaign: superCampaignId,
-              tags
-            } as ISuperCampaignEnrollment)
-          }
-        )
-      }),
+        return {
+          cache: await appendToCacheMyList(queryClient, {
+            id: uuid(),
+            created_at: currentTime,
+            updated_at: currentTime,
+            notifications_enabled: false,
+            super_campaign: superCampaignId,
+            tags
+          } as ISuperCampaignEnrollment)
+        }
+      },
       onError: (error, variables, context) => {
         context?.cache.revert()
         options?.onError?.(error, variables, context)
