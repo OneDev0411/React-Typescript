@@ -4,13 +4,16 @@ import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { mdiAccountGroupOutline } from '@mdi/js'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
+import useNotify from '@app/hooks/use-notify'
 import { switchActiveTeam } from '@app/models/user/switch-active-team'
+import { setImpersonateUser } from '@app/utils/impersonate-user'
 import {
   NodeRenderer,
   BrandAvailableToUserSelectorDrawer
 } from '@app/views/components/BrandSelector'
 import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { Agent, BrandedUser } from '@app/views/components/TeamAgents/types'
 import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
 
 import { TeamSwitchBrandSelectorRenderer as Brand } from './components/TeamSwitchBrandSelectorRenderer'
@@ -50,6 +53,7 @@ const useStyles = makeStyles(
 
 export function ActiveTeam() {
   const classes = useStyles()
+  const notify = useNotify()
   const activeBrand = useUnsafeActiveBrand()
 
   const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useState<boolean>(false)
@@ -83,8 +87,18 @@ export function ActiveTeam() {
       console.error(error)
     }
   }
-  const handleSelectImpersonate = t => {
-    console.log(`log on ${t}`)
+  const handleSelectImpersonateUser = (users: Agent[]) => {
+    const selectedImpersonateUser: BrandedUser = users[0]?.agent
+
+    if (!selectedImpersonateUser) {
+      notify({
+        status: 'error',
+        message: 'The user is not valid.'
+      })
+    }
+
+    setImpersonateUser(selectedImpersonateUser)
+    console.log('handleSelectImpersonateUser', selectedImpersonateUser)
   }
   const renderBrandNode = ({ brand }: NodeRenderer) => {
     return (
@@ -145,7 +159,7 @@ export function ActiveTeam() {
           width="43rem"
           title="Select Impersonate User"
           currentAgents={[selectedBrandToSwitch]}
-          onSelectAgents={handleSelectImpersonate}
+          onSelectAgents={handleSelectImpersonateUser}
           onClose={hanldeCloseImpersonateSelectorDrawer}
         />
       )}
