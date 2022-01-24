@@ -7,7 +7,7 @@ import {
   UpdateCachePromise
 } from '@app/utils/react-query'
 
-import { detail, allList } from '../query-keys/campaign'
+import { detail, allList, myList } from '../query-keys/campaign'
 
 export async function updateCacheDetail(
   queryClient: QueryClient,
@@ -38,7 +38,7 @@ export async function updateCacheAllList(
   )
 }
 
-export async function deleteFromCacheList(
+export async function deleteFromCacheAllList(
   queryClient: QueryClient,
   superCampaignId: UUID
 ): UpdateCachePromise {
@@ -47,4 +47,46 @@ export async function deleteFromCacheList(
     allList(),
     superCampaign => superCampaignId === superCampaign.id
   )
+}
+
+export async function updateCacheMyList(
+  queryClient: QueryClient,
+  superCampaignId: UUID,
+  update: Partial<ISuperCampaign<'template_instance' | 'created_by'>>
+): UpdateCachePromise {
+  return updateCacheActions<
+    ISuperCampaign<'template_instance' | 'created_by'>[]
+  >(queryClient, myList(), superCampaigns => {
+    const index = superCampaigns.findIndex(
+      superCampaign => superCampaign.id === superCampaignId
+    )
+
+    if (index === -1) {
+      return
+    }
+
+    superCampaigns.splice(index, 1, {
+      ...superCampaigns[index],
+      ...update
+    })
+  })
+}
+
+export async function deleteFromCacheMyList(
+  queryClient: QueryClient,
+  superCampaignId: UUID
+): UpdateCachePromise {
+  return updateCacheActions<
+    ISuperCampaign<'template_instance' | 'created_by'>[]
+  >(queryClient, myList(), superCampaigns => {
+    const index = superCampaigns.findIndex(
+      superCampaign => superCampaign.id === superCampaignId
+    )
+
+    if (index === -1) {
+      return
+    }
+
+    superCampaigns.splice(index, 1)
+  })
 }
