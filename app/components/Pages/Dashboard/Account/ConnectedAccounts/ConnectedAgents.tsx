@@ -47,7 +47,7 @@ export default function ConnectedAgents({ user, onDelete }: Props) {
 
   // Automatically open the dialog when the url has the action query param
   const [isDialogOpen, setIsDialogOpen] = useState(
-    actionQueryParam && actionQueryParam === 'add-mls-account'
+    Boolean(actionQueryParam && actionQueryParam === 'add-mls-account')
   )
 
   const oncloseDialog = () => {
