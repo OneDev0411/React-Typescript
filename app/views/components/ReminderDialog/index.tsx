@@ -6,7 +6,7 @@ import { selectUserUnsafe } from '@app/selectors/user'
 import { setUserSetting } from '@app/store_actions/user/set-setting'
 import { getUserSettingsInActiveTeam } from '@app/utils/user-teams'
 
-import { ReminderPopper } from './reminderPopper'
+import { ReminderPopper } from './ReminderPopper'
 import { ReminderDialogBaseProps } from './types'
 
 export function ReminderDialog({
