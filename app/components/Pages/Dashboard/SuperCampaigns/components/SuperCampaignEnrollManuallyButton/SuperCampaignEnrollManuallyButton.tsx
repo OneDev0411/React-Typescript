@@ -4,7 +4,6 @@ import {
   Button,
   makeStyles,
   Typography,
-  Link,
   CircularProgress
 } from '@material-ui/core'
 import { mdiPlus } from '@mdi/js'
@@ -129,8 +128,8 @@ function SuperCampaignEnrollManuallyButton({
           <Typography variant="body2">
             {pluralize('user', availableAgentCount, true)} did not meet the
             criteria to enroll in this campaign.
-            {/* TODO: Fix the link below */}
-            <Link
+            {/* TODO: Uncomment this when the doc link provided by Sahar */}
+            {/* <Link
               className={classes.link}
               color="primary"
               href="#"
@@ -138,7 +137,7 @@ function SuperCampaignEnrollManuallyButton({
               rel="noopener"
             >
               Learn More
-            </Link>
+            </Link> */}
           </Typography>
         }
         <Button

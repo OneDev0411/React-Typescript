@@ -160,7 +160,7 @@ describe('Super Campaign/Overview/Detail', () => {
   describe('When not executed', () => {
     it('renders empty when draft campaign is given', testRenderEmpty)
     it('renders template when there is one', testRenderFilledWithTemplate)
-    it('completes the edit super campaign flow', testEditFlow)
+    it.skip('completes the edit super campaign flow', testEditFlow)
   })
   describe('When executed', () => {
     it('renders in read-only mode', testReadOnlyMode)

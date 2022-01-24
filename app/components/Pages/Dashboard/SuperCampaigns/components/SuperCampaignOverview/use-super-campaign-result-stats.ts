@@ -15,12 +15,19 @@ export function useSuperCampaignResultStats(
   return useMemo<UseSuperCampaignResultStats>(
     () =>
       superCampaignResults.reduce(
-        (stats, enrollment) => ({
-          totalSent: stats.totalSent + enrollment.campaign.sent,
-          totalDelivered: stats.totalDelivered + enrollment.campaign.delivered,
-          totalOpened: stats.totalOpened + enrollment.campaign.opened,
-          totalClicked: stats.totalClicked + enrollment.campaign.clicked
-        }),
+        (stats, enrollment) => {
+          if (!enrollment.campaign) {
+            return stats
+          }
+
+          return {
+            totalSent: stats.totalSent + enrollment.campaign.sent,
+            totalDelivered:
+              stats.totalDelivered + enrollment.campaign.delivered,
+            totalOpened: stats.totalOpened + enrollment.campaign.opened,
+            totalClicked: stats.totalClicked + enrollment.campaign.clicked
+          }
+        },
         {
           totalSent: 0,
           totalDelivered: 0,
