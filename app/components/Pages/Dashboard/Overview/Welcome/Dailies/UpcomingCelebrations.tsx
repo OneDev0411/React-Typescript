@@ -16,8 +16,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     boxWrapper: {
       marginLeft: theme.spacing(2),
-      flex: 1,
-      maxWidth: '600px'
+      flex: 1
     },
     boxTitle: {
       marginBottom: theme.spacing(2),
