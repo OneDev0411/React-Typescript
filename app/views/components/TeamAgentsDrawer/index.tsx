@@ -14,10 +14,7 @@ import { AgentsList } from './List'
 
 interface Props
   extends OverlayDrawerProps,
-    Pick<
-      TeamAgentsProps,
-      'teamAgentsModelFn' | 'filterTeamsFn' | 'currentAgents' | 'bareMode'
-    > {
+    Pick<TeamAgentsProps, 'teamAgentsModelFn' | 'filterTeamsFn'> {
   title: string
   multiSelection?: boolean
   withRelatedContacts?: boolean
@@ -29,8 +26,6 @@ interface Props
 export function TeamAgentsDrawer({
   title = 'Select Agent',
   multiSelection = false,
-  bareMode,
-  currentAgents,
   withRelatedContacts = true,
   flattened = false,
   isPrimaryAgent = false,
@@ -111,9 +106,7 @@ export function TeamAgentsDrawer({
 
       <Drawer.Body>
         <TeamAgents
-          bareMode={bareMode}
           flattenTeams={flattened}
-          currentAgents={currentAgents}
           isPrimaryAgent={isPrimaryAgent}
           criteria={searchCriteria}
           teamAgentsModelFn={teamAgentsModelFn}
