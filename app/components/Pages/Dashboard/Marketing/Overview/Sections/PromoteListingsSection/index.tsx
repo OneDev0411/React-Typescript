@@ -1,4 +1,4 @@
-import { Grid } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
@@ -10,14 +10,21 @@ import ListingCard from '@app/views/components/ListingCards/ListingCard'
 import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
 
-export default function PromoteListingsSection() {
+interface Props {
+  title?: string
+  emptyListing?: string
+}
+
+export default function PromoteListingsSection(props: Props) {
+  const { title = 'Promote Your Listings', emptyListing = 'No listing yet!' } =
+    props
   const brandId = useSelector(selectActiveBrandId)
 
   const { listings, isLoading } = useBrandAndDealsListings(brandId)
 
   return (
     <SectionLayout
-      title="Promote Your Listings"
+      title={title}
       actionNode={
         <LinkSectionAction
           title="View all your listings"
@@ -54,6 +61,14 @@ export default function PromoteListingsSection() {
             </Link>
           </Grid>
         ))}
+
+      {!isLoading && listings.length === 0 && (
+        <Grid item xs={12}>
+          <Typography variant="body1" color="textSecondary">
+            {emptyListing}
+          </Typography>
+        </Grid>
+      )}
     </SectionLayout>
   )
 }
