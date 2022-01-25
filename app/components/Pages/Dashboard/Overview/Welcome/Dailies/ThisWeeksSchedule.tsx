@@ -18,8 +18,7 @@ interface Props {
 const useStyles = makeStyles(
   (theme: Theme) => ({
     boxWrapper: {
-      flex: 1,
-      maxWidth: '600px'
+      flex: 1
     },
     boxTitle: {
       marginBottom: theme.spacing(2),

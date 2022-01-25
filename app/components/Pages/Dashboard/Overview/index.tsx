@@ -7,9 +7,9 @@ import Welcome from './Welcome'
 
 function OverviewDashboard() {
   return (
-    <PageLayout>
-      <PageLayout.Header title="Dashboard" />
-      <PageLayout.Main>
+    <PageLayout padding={0}>
+      <PageLayout.HeaderWithBackground title="Dashboard" />
+      <PageLayout.Main mt={4}>
         <Welcome />
         {/* <Box display="flex" mt={5} mb={5}>
           <Stats title="Production" value="$7,000,250" change={15} />
