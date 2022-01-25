@@ -10,6 +10,7 @@ import {
   setActiveTeam,
   setUserAndActiveTeam
 } from '@app/store_actions/active-team'
+import { getImpersonateUser } from '@app/store_actions/user/impersonate-user'
 import { selectActiveTeamUnsafe } from 'selectors/team'
 import { selectUserUnsafe } from 'selectors/user'
 import Fetch from 'services/fetch'
@@ -77,6 +78,7 @@ export function useLoadUserAndActiveTeam(): UseLoadUserAndActiveTeamReturn {
     }
 
     loadUser()
+    dispatch(getImpersonateUser())
   })
 
   return {

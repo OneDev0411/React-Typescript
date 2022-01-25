@@ -9,12 +9,19 @@ export const setImpersonateUser = (user: BrandedUser): void => {
   const stringifiedUserr = JSON.stringify(user)
 
   cookies.set(IMPERSOATE_USER_COOKIE_KEY, stringifiedUserr, {
-    path: '/'
+    path: '/',
+    maxAge: 7 * 86400 // max would be 7 days
   })
 }
 
 export const getImpersonateUser = (): Nullable<BrandedUser> => {
-  const user = JSON.parse(cookies.get(IMPERSOATE_USER_COOKIE_KEY))
+  const user = cookies.get(
+    IMPERSOATE_USER_COOKIE_KEY
+  ) as unknown as Optional<BrandedUser>
 
   return user ?? null
+}
+
+export const removeImpersonateUser = (): void => {
+  cookies.remove(IMPERSOATE_USER_COOKIE_KEY)
 }

@@ -4,7 +4,6 @@ import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { mdiAccountGroupOutline } from '@mdi/js'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
-import useNotify from '@app/hooks/use-notify'
 import { switchActiveTeam } from '@app/models/user/switch-active-team'
 import { setImpersonateUser } from '@app/utils/impersonate-user'
 import {
@@ -53,7 +52,6 @@ const useStyles = makeStyles(
 
 export function ActiveTeam() {
   const classes = useStyles()
-  const notify = useNotify()
   const activeBrand = useUnsafeActiveBrand()
 
   const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useState<boolean>(false)
@@ -74,31 +72,28 @@ export function ActiveTeam() {
   const hanldeCloseImpersonateSelectorDrawer = () =>
     setIsImpersonateUserSelectorOpen(false)
 
-  const handleOnClickBrand = async (brand: IBrand) => {
+  const handleOnClickBrand = (brand: IBrand) => {
+    console.log({ brand })
+    setSelectedBrandToSwitch(brand)
+    hanldeOpenImpersonateSelectorDrawer()
+  }
+  const handleSelectImpersonateUser = async (users: Agent[]) => {
+    const selectedImpersonateUser: BrandedUser = users[0]?.agent
+
+    if (!selectedBrandToSwitch || !selectedImpersonateUser) {
+      return
+    }
+
     try {
-      // setIsSwitchingActiveTeam(true)
-      // hanldeCloseBrandSelectorDrawer()
-      console.log({ brand })
-      setSelectedBrandToSwitch(brand)
-      hanldeOpenImpersonateSelectorDrawer()
-      // await switchActiveTeam(brand.id)
-      // window.location.reload()
+      hanldeCloseImpersonateSelectorDrawer()
+      hanldeCloseBrandSelectorDrawer()
+      setIsSwitchingActiveTeam(true)
+      setImpersonateUser(selectedImpersonateUser)
+      await switchActiveTeam(selectedBrandToSwitch.id)
+      window.location.reload()
     } catch (error) {
       console.error(error)
     }
-  }
-  const handleSelectImpersonateUser = (users: Agent[]) => {
-    const selectedImpersonateUser: BrandedUser = users[0]?.agent
-
-    if (!selectedImpersonateUser) {
-      notify({
-        status: 'error',
-        message: 'The user is not valid.'
-      })
-    }
-
-    setImpersonateUser(selectedImpersonateUser)
-    console.log('handleSelectImpersonateUser', selectedImpersonateUser)
   }
   const renderBrandNode = ({ brand }: NodeRenderer) => {
     return (
