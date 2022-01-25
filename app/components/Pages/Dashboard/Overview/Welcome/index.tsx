@@ -4,6 +4,8 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 import MetabaseDashboard from 'components/MetabaseIFrame'
 import Acl from 'views/components/Acl'
 
+import PromoteListingsSection from '../../Marketing/Overview/Sections/PromoteListingsSection'
+
 import { Dailies } from './Dailies'
 import { Greeting } from './Greetings'
 
@@ -52,6 +54,11 @@ function OverviewDashboard() {
           </Box>
         </Box>
       </Acl.Crm>
+      <Acl.Marketing>
+        <Box className={classes.centeredContainer}>
+          <PromoteListingsSection title="Use Pre-Rendered Marketing Material" />
+        </Box>
+      </Acl.Marketing>
       <Acl.Deals>
         <Box className={classes.centeredContainer}>
           <MetabaseDashboard dashboardId="e044be48-42c7-456f-8077-024c93feb99d" />
