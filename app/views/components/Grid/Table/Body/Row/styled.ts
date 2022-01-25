@@ -63,10 +63,6 @@ export const GridRowContainer = styled.div<{
     align-items: stretch;
     background-color: transparent;
 
-    &:first-child {
-      border-top: 1px solid ${theme.palette.divider};  
-    }
-
     &:hover {
       background-color: ${theme.palette.grey[50]};
     }

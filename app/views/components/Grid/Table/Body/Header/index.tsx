@@ -16,6 +16,7 @@ const useStyles = makeStyles(
 
       backgroundColor: `${alpha(theme.palette.grey[50], 0.75)}`,
       borderTop: `1px solid ${theme.palette.divider}`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
 
       '& > div:first-child': {
         borderRight: 'none'
@@ -58,12 +59,6 @@ function Header<Row>({ columns, rows, selection, totalRows }: Props<Row>) {
   )
 
   const getCell = (column, columnIndex) => {
-    if (selection && column.id === 'row-selection') {
-      return (
-        <ToggleEntireRows key={columnIndex} rows={rows} totalRows={totalRows} />
-      )
-    }
-
     if (typeof column.headerName === 'string') {
       return Cell(column.headerName, columnIndex)
     }
@@ -83,7 +78,12 @@ function Header<Row>({ columns, rows, selection, totalRows }: Props<Row>) {
 
   //--
 
-  return <div className={classes.rowContainer}>{columns.map(getCell)}</div>
+  return (
+    <div className={classes.rowContainer}>
+      <ToggleEntireRows key={0} rows={rows} totalRows={totalRows} />
+      {columns.map(getCell)}
+    </div>
+  )
 }
 
 export default memo(Header)

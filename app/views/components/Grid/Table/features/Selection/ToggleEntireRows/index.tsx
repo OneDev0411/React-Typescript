@@ -46,20 +46,14 @@ export function ToggleEntireRows<Row>({ rows, totalRows }: Props<Row>) {
     (isEntireRowsSelected && excludedRows.length > 0)
 
   const verbText = isAllSelected || isEntireRowsSelected ? 'Deselect' : 'Select'
+  const isSelectAllDisable = Number(rows.length) === 0
+  const defaultSelectAllValue =
+    Number(rows.length) === 0 ? false : isAllSelected
 
   const handleToggleEntireRows = () => {
     dispatch({
       type: SELECTION__TOGGLE_ENTIRE_ROWS
     })
-  }
-
-  const defaultSelectAllValue =
-    Number(rows.length) === 0 ? false : isAllSelected
-
-  const isSelectAllDisable = Number(rows.length) === 0
-
-  if (rows && rows.length === totalRows) {
-    return null
   }
 
   return (

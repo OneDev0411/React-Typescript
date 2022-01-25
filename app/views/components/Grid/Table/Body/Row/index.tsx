@@ -33,7 +33,7 @@ function Row<T>({
     columnsSize,
     getTrProps = () => ({}),
     getTdProps = () => ({}),
-    inlineGridEnabled
+    inlineGridEnabled = false
   }
 }: Props<T & { id?: string }>) {
   const row = rows[rowIndex]
@@ -53,7 +53,7 @@ function Row<T>({
       index={rowIndex}
       selected={isRowSelected}
       className={cn(classes.row, {
-        selected: isRowSelected & inlineGridEnabled
+        selected: isRowSelected && inlineGridEnabled
       })}
       style={style}
       data-tour-id={`row-${rowIndex}`}

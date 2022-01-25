@@ -13,7 +13,6 @@ export function useRowsSelection<Row>(
   const newColumns = [
     {
       id: 'row-selection',
-      class: 'opaque',
       width: 'auto', // default value
       ...(options.columnProps || {}),
       render: (rowItem: RenderProps<Row>) => {
