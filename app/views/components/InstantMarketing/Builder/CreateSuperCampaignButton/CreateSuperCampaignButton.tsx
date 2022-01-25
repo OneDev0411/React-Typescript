@@ -28,14 +28,19 @@ function CreateSuperCampaignButton({
   const { isRunning: isCreatingSuperCampaign, runActionThenNotify } =
     useRunActionThenNotify()
 
-  const createSuperCampaignAndRedirect = () =>
+  const createSuperCampaignAndRedirect = () => {
+    if (!template) {
+      return
+    }
+
+    const html = getTemplateMarkup()
+
+    if (!html) {
+      return
+    }
+
     runActionThenNotify(
       async () => {
-        if (!template) {
-          return
-        }
-
-        const html = getTemplateMarkup()
         const templateInstance = await createTemplateInstance(template.id, {
           ...templateInstanceData,
           html
@@ -55,6 +60,7 @@ function CreateSuperCampaignButton({
       'The campaign has been created',
       'Something went wrong while saving the template or creating a campaign. Please try again.'
     )
+  }
 
   return (
     <>
