@@ -7,24 +7,19 @@ import Acl from 'views/components/Acl'
 import PromoteListingsSection from '../../Marketing/Overview/Sections/PromoteListingsSection'
 
 import { Dailies } from './Dailies'
-import { Greeting } from './Greetings'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     main: {
       display: 'flex',
-      border: `1px solid ${theme.palette.grey[300]}`,
       borderRadius: theme.shape.borderRadius,
-      background: 'url(/static/images/overview/dashboard-bg.png) no-repeat 0 0',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      padding: theme.spacing(0, 6)
     },
-    centeredContainer: {
+    container: {
       display: 'flex',
-      justifyContent: 'center',
-      width: '90%',
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: theme.spacing(3, 0)
+      maxWidth: '1600px',
+      padding: theme.spacing(0, 0, 3)
     },
     greeting: {
       display: 'flex',
@@ -44,23 +39,20 @@ function OverviewDashboard() {
 
   return (
     <Box className={classes.main}>
-      <Box className={classes.greeting}>
-        <Greeting />
-      </Box>
       <Acl.Crm>
         <Box className={classes.dailies}>
-          <Box className={classes.centeredContainer}>
+          <Box className={classes.container}>
             <Dailies />
           </Box>
         </Box>
       </Acl.Crm>
       <Acl.Marketing>
-        <Box className={classes.centeredContainer}>
+        <Box className={classes.container}>
           <PromoteListingsSection title="Use Pre-Rendered Marketing Material" />
         </Box>
       </Acl.Marketing>
       <Acl.Deals>
-        <Box className={classes.centeredContainer}>
+        <Box className={classes.container}>
           <MetabaseDashboard dashboardId="e044be48-42c7-456f-8077-024c93feb99d" />
         </Box>
       </Acl.Deals>
