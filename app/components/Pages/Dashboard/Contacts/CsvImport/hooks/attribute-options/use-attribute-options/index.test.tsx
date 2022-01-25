@@ -4,6 +4,7 @@ import { groupById, groupByName, groupBySection } from '@app/models/contacts/get
 import attributeDefs from 'fixtures/contacts/attribute-definitions.json'
 import { ReactQueryTestBed, queryClient } from 'tests/unit/ReactQueryTestBed'
 import { useOptions } from '.'
+import { MappedField } from '../../../types'
 
 
 const mockAttributeDefs = {
