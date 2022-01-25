@@ -6,7 +6,7 @@ import { useLocation } from 'react-use'
 import { getActiveBrand } from '@app/utils/user-teams'
 import { OAuthProvider } from 'constants/contacts'
 import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
-import { selectUserAccessList, selectUser } from 'selectors/user'
+import { selectUserAccessList, selectUserUnsafe } from 'selectors/user'
 
 import { prepareAndSendUserData } from './helpers'
 import { AppcuesUserInfo } from './types'
@@ -19,7 +19,7 @@ export function useAppcues() {
   const accessList = useSelector(selectUserAccessList)
 
   const location = useLocation()
-  const user = useSelector(selectUser)
+  const user = useSelector(selectUserUnsafe)
   const activeBrand = getActiveBrand(user)
 
   const [gmailOrOutlookSynced, setGmailOrOutlookSynced] =
