@@ -1,8 +1,11 @@
+import { useMemo } from 'react'
+
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
 import { getSuperCampaignStatsLabels } from '../../helpers'
 
+import { isSuperCampaignEnrollmentOptedOut } from './helpers'
 import SuperCampaignColumnPerson from './SuperCampaignColumnPerson'
 import SuperCampaignListEmptyState from './SuperCampaignListEmptyState'
 import SuperCampaignListLoadingState from './SuperCampaignListLoadingState'
@@ -27,8 +30,18 @@ function SuperCampaignResultList({
 }: SuperCampaignResultListProps) {
   const classes = useSuperCampaignListStyles()
 
+  // Remove the opted-out people from the enrollments list
+  const filteredSuperCampaignResults = useMemo(
+    () =>
+      superCampaignResults.filter(
+        superCampaignResult =>
+          !isSuperCampaignEnrollmentOptedOut(superCampaignResult)
+      ),
+    [superCampaignResults]
+  )
+
   const { totalSent, totalDelivered, totalOpened, totalClicked } =
-    useSuperCampaignResultStats(superCampaignResults)
+    useSuperCampaignResultStats(filteredSuperCampaignResults)
 
   const columns: TableColumn<
     ISuperCampaignEnrollment<'user' | 'brand' | 'campaign'>
@@ -49,7 +62,7 @@ function SuperCampaignResultList({
       sortable: false,
       align: 'right',
       render: ({ row }) => (
-        <SuperCampaignResultListColumn value={row.campaign.sent} />
+        <SuperCampaignResultListColumn value={row.campaign?.sent} />
       )
     },
     {
@@ -59,7 +72,11 @@ function SuperCampaignResultList({
       align: 'right',
       render: ({ row }) => (
         <SuperCampaignResultListColumn
-          value={getSuperCampaignStatsLabels(row.campaign).deliveredLabel}
+          value={
+            row.campaign
+              ? getSuperCampaignStatsLabels(row.campaign).deliveredLabel
+              : undefined
+          }
         />
       )
     },
@@ -70,7 +87,11 @@ function SuperCampaignResultList({
       align: 'right',
       render: ({ row }) => (
         <SuperCampaignResultListColumn
-          value={getSuperCampaignStatsLabels(row.campaign).openedLabel}
+          value={
+            row.campaign
+              ? getSuperCampaignStatsLabels(row.campaign).openedLabel
+              : undefined
+          }
         />
       )
     },
@@ -81,7 +102,11 @@ function SuperCampaignResultList({
       align: 'right',
       render: ({ row }) => (
         <SuperCampaignResultListColumn
-          value={getSuperCampaignStatsLabels(row.campaign).clickedLabel}
+          value={
+            row.campaign
+              ? getSuperCampaignStatsLabels(row.campaign).clickedLabel
+              : undefined
+          }
         />
       )
     }
@@ -99,7 +124,7 @@ function SuperCampaignResultList({
     {
       header: (
         <SuperCampaignResultListHeaderParticipants
-          participantsCount={superCampaignResults.length}
+          participantsCount={filteredSuperCampaignResults.length}
         />
       )
     },
@@ -139,8 +164,8 @@ function SuperCampaignResultList({
       <SuperCampaignResultListHeader headers={headers} />
       <Table
         columns={columns}
-        rows={superCampaignResults}
-        totalRows={superCampaignResults.length}
+        rows={filteredSuperCampaignResults}
+        totalRows={filteredSuperCampaignResults.length}
         rowSize={5}
         getTrProps={() => ({ className: classes.row })}
         loading={isLoading ? 'static' : undefined}

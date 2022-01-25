@@ -1,13 +1,12 @@
-import useSafeState from '@app/hooks/use-safe-state'
 import {
-  PopoverContactTagSelector,
-  PopoverContactTagSelectorProps
+  PopoverTagSelector,
+  PopoverTagSelectorProps
 } from '@app/views/components/TagSelector'
 import { SelectorOption } from '@app/views/components/TagSelector/type'
 
 export interface SuperCampaignTagsPopoverProps
   extends Pick<
-    PopoverContactTagSelectorProps,
+    PopoverTagSelectorProps,
     'anchorRenderer' | 'defaultIsDirty' | 'minimumTag'
   > {
   tags: string[]
@@ -19,28 +18,17 @@ function SuperCampaignTagsPopover({
   onTagsChange,
   ...otherProps
 }: SuperCampaignTagsPopoverProps) {
-  const [isSaving, setIsSaving] = useSafeState(false)
-
-  const handleTagsChange = async (tags: SelectorOption[]) => {
-    setIsSaving(true)
-    await onTagsChange(tags.map(tag => tag.title))
-    setIsSaving(false)
-  }
+  const handleTagsChange = async (tags: SelectorOption[]) =>
+    onTagsChange(tags.map(tag => tag.title))
 
   return (
-    <PopoverContactTagSelector
+    <PopoverTagSelector
       {...otherProps}
       value={tags.map(tag => ({
         title: tag,
         value: tag
       }))}
-      filter={
-        {
-          // selectedIds: [contact.id] // TODO: Hamed jan, please do not forget to fix this
-        }
-      }
-      callback={handleTagsChange}
-      disabled={isSaving}
+      onSave={handleTagsChange}
     />
   )
 }
