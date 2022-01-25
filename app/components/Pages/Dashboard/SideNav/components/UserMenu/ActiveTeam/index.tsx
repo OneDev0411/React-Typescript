@@ -72,7 +72,7 @@ export function ActiveTeam() {
   const hanldeCloseImpersonateSelectorDrawer = () =>
     setIsImpersonateUserSelectorOpen(false)
 
-  const handleOnClickBrand = (brand: IBrand) => {
+  const handleSelectBrand = (brand: IBrand) => {
     console.log({ brand })
     setSelectedBrandToSwitch(brand)
     hanldeOpenImpersonateSelectorDrawer()
@@ -95,12 +95,16 @@ export function ActiveTeam() {
       console.error(error)
     }
   }
+
+  const handlePassingSelectedBrand = async (_: Nullable<UUID>) =>
+    selectedBrandToSwitch ? [selectedBrandToSwitch] : []
+
   const renderBrandNode = ({ brand }: NodeRenderer) => {
     return (
       <Brand
         brand={brand}
         isActive={brand.id === activeBrand?.id}
-        onClick={() => handleOnClickBrand(brand)}
+        onClick={() => handleSelectBrand(brand)}
       />
     )
   }
@@ -150,10 +154,9 @@ export function ActiveTeam() {
       {isImpersonateUserSelectorOpen && selectedBrandToSwitch && (
         <TeamAgentsDrawer
           open
-          bareMode
           width="43rem"
           title="Select Impersonate User"
-          currentAgents={[selectedBrandToSwitch]}
+          teamAgentsModelFn={handlePassingSelectedBrand}
           onSelectAgents={handleSelectImpersonateUser}
           onClose={hanldeCloseImpersonateSelectorDrawer}
         />
