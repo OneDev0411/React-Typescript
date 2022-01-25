@@ -1,21 +1,30 @@
 
 import { renderHook } from '@testing-library/react-hooks'
-import nock from 'nock'
-
+import { groupById, groupByName, groupBySection } from '@app/models/contacts/get-attribute-defs'
 import attributeDefs from 'fixtures/contacts/attribute-definitions.json'
 import { ReactQueryTestBed, queryClient } from 'tests/unit/ReactQueryTestBed'
-import { MappedField } from '../../../types'
 import { useOptions } from '.'
 
-describe('test Csv Import attribute options', () => {
-  beforeEach(() => {
-    nock(/.*/)
-      .get('/contacts/attribute_defs')
-      .reply(200, {
-        data: attributeDefs
-      })
-  })
 
+const mockAttributeDefs = {
+  list: attributeDefs,
+  byId: groupById(attributeDefs as IContactAttributeDef[]),
+  byName: groupByName(attributeDefs as IContactAttributeDef[]),
+  bySection: groupBySection(attributeDefs as IContactAttributeDef[]),
+}
+
+jest.mock('@app/models/contacts/get-attribute-defs', () => {
+  const originalModule = jest.requireActual('@app/models/contacts/get-attribute-defs')
+
+  return {
+    __esModule: true,
+    ...originalModule,
+    getAttributeDefs: jest.fn(() => mockAttributeDefs),
+  }
+})
+
+
+describe('test Csv Import attribute options', () => {
   afterEach(async () => {
     queryClient.clear()
   })

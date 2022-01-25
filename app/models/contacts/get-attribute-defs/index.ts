@@ -17,7 +17,6 @@ export async function getAttributeDefs(): Promise<{
       bySection: groupBySection(data)
     }
   } catch (error) {
-    console.log('!!!', error)
     throw error
   }
 }
@@ -28,7 +27,7 @@ export async function getAttributeDefs(): Promise<{
  * @param list of attribute definitions
  * @returns a record<id, attributeDef>
  */
-function groupById(
+export function groupById(
   list: IContactAttributeDef[]
 ): Record<UUID, IContactAttributeDef> {
   return list.reduce((list, item) => {
@@ -45,7 +44,9 @@ function groupById(
  * @param list of attribute definitions
  * @returns a record<string, id>
  */
-function groupByName(list: IContactAttributeDef[]): Record<string, UUID> {
+export function groupByName(
+  list: IContactAttributeDef[]
+): Record<string, UUID> {
   return list.reduce((list, item) => {
     if (!item.name) {
       return list
@@ -64,7 +65,9 @@ function groupByName(list: IContactAttributeDef[]): Record<string, UUID> {
  * @param list of attribute definitions
  * @returns a record<string, string[]>
  */
-function groupBySection(list: IContactAttributeDef[]): Record<string, UUID[]> {
+export function groupBySection(
+  list: IContactAttributeDef[]
+): Record<string, UUID[]> {
   return list.reduce((list, item) => {
     return {
       ...list,
