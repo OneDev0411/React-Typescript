@@ -144,14 +144,16 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
     isSelected = false
   }: CellProps) => (
     <>
-      {daysToBirthday && (
+      {daysToBirthday && daysToBirthday >= 0 && (
         <div
           className={cn(classes.dateDiffValue, { rowSelected: isRowSelected })}
         >
-          {`in ${daysToBirthday} day${daysToBirthday == 1 ? '' : 's'}`}
+          {daysToBirthday > 0 &&
+            `in ${daysToBirthday} day${daysToBirthday == 1 ? '' : 's'}`}
+          {daysToBirthday == 0 && 'is today'}
         </div>
       )}
-      {daysToBirthday && inputFormattedDate && (
+      {daysToBirthday && daysToBirthday >= 0 && inputFormattedDate && (
         <div
           className={cn(classes.dateValue, {
             hovered: isHovered,
