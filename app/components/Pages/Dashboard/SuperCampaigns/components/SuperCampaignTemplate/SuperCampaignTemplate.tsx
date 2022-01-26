@@ -18,6 +18,7 @@ interface SuperCampaignTemplateProps
   onEditorOpen?: () => void
   onEditorClose?: () => void
   readOnly?: boolean
+  viewAsAdmin?: boolean
 }
 
 function SuperCampaignTemplate({
@@ -28,7 +29,8 @@ function SuperCampaignTemplate({
   onTemplateChange,
   onEditorOpen,
   onEditorClose,
-  readOnly = false
+  readOnly = false,
+  viewAsAdmin
 }: SuperCampaignTemplateProps) {
   const [isEditorOpen, setIsEditorOpen] = useState(false)
 
@@ -60,6 +62,7 @@ function SuperCampaignTemplate({
         template={template}
         onClick={openEditor}
         readOnly={readOnly}
+        viewAsAdmin={viewAsAdmin}
       />
       {!readOnly && isEditorOpen && (
         <SuperCampaignTemplateEditor

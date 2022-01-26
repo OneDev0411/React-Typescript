@@ -76,6 +76,7 @@ function SuperCampaignOverviewDetail() {
           template={superCampaign.template_instance}
           onTemplateChange={handleTemplateChange}
           readOnly={isReadOnly}
+          viewAsAdmin
         />
       )}
       <SuperCampaignDrawer
