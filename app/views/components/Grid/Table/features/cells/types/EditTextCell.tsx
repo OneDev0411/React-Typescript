@@ -1,9 +1,8 @@
 import { makeStyles } from '@material-ui/core'
 import cn from 'classnames'
 
-import { CellProps } from '../../types'
-
-import CellContainer from './CellContainer'
+import { CellProps } from '../../../types'
+import CellContainer from '../CellContainer'
 
 const useStyles = makeStyles(
   theme => ({
