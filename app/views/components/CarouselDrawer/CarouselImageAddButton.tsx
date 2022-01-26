@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Button, makeStyles } from '@material-ui/core'
-import { AddPhotoAlternateOutlined } from '@material-ui/icons'
+import { mdiImageOutline } from '@mdi/js'
 
 import ImageSelectDialog from 'components/ImageSelectDialog'
 import { ImageSelectDialogProps } from 'components/ImageSelectDialog/types'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { muiIconSizes } from '../SvgIcons/icon-sizes'
 
 import CarouselImage from './CarouselImage'
 
@@ -65,7 +68,7 @@ function CarouselImageAddButton({
           onClick={openDialog}
           classes={{ label: classes.label }}
         >
-          <AddPhotoAlternateOutlined />
+          <SvgIcon path={mdiImageOutline} size={muiIconSizes.large} />
           <div className={classes.labelText}>Add Other Photos</div>
         </Button>
       </CarouselImage>

@@ -1,6 +1,8 @@
-import React from 'react'
+import { mdiPlus } from '@mdi/js'
 
-import { Add } from '@material-ui/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { muiIconSizes } from '../SvgIcons/icon-sizes'
 
 import CarouselImageItem, { CarouselImageItemProps } from './CarouselImageItem'
 
@@ -22,7 +24,7 @@ function CarouselSuggestedImageItem({
     <CarouselImageItem
       {...otherProps}
       src={src}
-      label={<Add />}
+      label={<SvgIcon path={mdiPlus} size={muiIconSizes.large} />}
       onClick={handleClick}
     />
   )
