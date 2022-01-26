@@ -63,9 +63,9 @@ const FlowsCell = ({
               })}
               {...buttonProps}
             >
-              {flowsCount === 0
-                ? 'Add to flow'
-                : `in ${flowsCount} flow${flowsCount === 1 ? '' : 's'}`}
+              {flowsCount === 0 && 'Add to flow'}
+              {flowsCount > 0 &&
+                `in ${flowsCount} flow${flowsCount === 1 ? '' : 's'}`}
             </div>
           </Tooltip>
         )}

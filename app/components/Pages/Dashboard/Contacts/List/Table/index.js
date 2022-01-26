@@ -13,12 +13,12 @@ import { goTo } from '@app/utils/go-to'
 import { Table } from 'components/Grid/Table'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 import BirthdayCell from 'components/Grid/Table/features/cells/BirthdayCell'
-import EditTextCell from 'components/Grid/Table/features/cells/EditTextCell'
 import EmailCell from 'components/Grid/Table/features/cells/EmailCell'
 import FlowsCell from 'components/Grid/Table/features/cells/FlowsCell'
 import LastTouchCell from 'components/Grid/Table/features/cells/LastTouchCell'
 import PhoneNumberCell from 'components/Grid/Table/features/cells/PhoneNumberCell'
 import TagsCell from 'components/Grid/Table/features/cells/TagsCell'
+import EditTextCell from 'components/Grid/Table/features/cells/types/EditTextCell'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import {
   useGridStyles,
