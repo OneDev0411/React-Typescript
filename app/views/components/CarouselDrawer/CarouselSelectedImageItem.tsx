@@ -1,6 +1,8 @@
-import React from 'react'
+import { mdiClose } from '@mdi/js'
 
-import { Close } from '@material-ui/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { muiIconSizes } from '../SvgIcons/icon-sizes'
 
 import CarouselImageItem, { CarouselImageItemProps } from './CarouselImageItem'
 
@@ -24,7 +26,7 @@ function CarouselSelectedImageItem({
       src={src}
       droppable
       onClick={handleRemove}
-      label={<Close />}
+      label={<SvgIcon path={mdiClose} size={muiIconSizes.large} />}
     />
   )
 }
