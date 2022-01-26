@@ -6,7 +6,7 @@ import CellContainer from '@app/views/components/Grid/Table/features/cells/CellC
 import { CellProps } from '../../../types'
 
 interface Props {
-  contact: IContact
+  attributes: IContactAttribute[]
   onSave?: (e: any) => void
   isRowSelected?: boolean
   countEnabled?: boolean
@@ -45,7 +45,7 @@ const useStyles = makeStyles(
 )
 
 const AttributeCell = ({
-  contact,
+  attributes,
   isRowSelected = false,
   countEnabled = false,
   attribute_type,
@@ -59,7 +59,7 @@ const AttributeCell = ({
 
   //--
 
-  const attributes = contact.attributes?.filter(attr => {
+  const filteredAttributes = attributes.filter(attr => {
     if (!attr.is_partner && attr.attribute_type === attribute_type) {
       if (attr.is_primary) {
         attribute = attr.text
@@ -72,13 +72,13 @@ const AttributeCell = ({
     return false
   })
 
-  if (attributes && attributes?.length > 0) {
+  if (filteredAttributes.length > 0) {
     if (!attribute) {
-      attribute = attributes[0].text
-      attributeLabel = attributes[0].label
+      attribute = filteredAttributes[0].text
+      attributeLabel = filteredAttributes[0].label || 'Other'
     }
 
-    count = attributes.length
+    count = filteredAttributes.length
   }
 
   //--
@@ -112,7 +112,7 @@ const AttributeCell = ({
         )}
 
         {countEnabled && count > 1 && (
-          <Chip variant="outlined" size="small" label={`${count} more`} />
+          <Chip variant="outlined" size="small" label={`${count - 1} more`} />
         )}
       </>
     )

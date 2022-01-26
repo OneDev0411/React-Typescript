@@ -9,7 +9,7 @@ interface Props {
 const PhoneNumberCell = ({ contact, isRowSelected = false }: Props) => {
   return (
     <AttributeCell
-      contact={contact}
+      attributes={contact.attributes || []}
       isRowSelected={isRowSelected}
       countEnabled
       attribute_type="phone_number"

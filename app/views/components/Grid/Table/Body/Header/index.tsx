@@ -80,7 +80,7 @@ function Header<Row>({ columns, rows, selection, totalRows }: Props<Row>) {
 
   return (
     <div className={classes.rowContainer}>
-      <ToggleEntireRows key={0} rows={rows} totalRows={totalRows} />
+      <ToggleEntireRows rows={rows} totalRows={totalRows} />
       {columns.map(getCell)}
     </div>
   )
