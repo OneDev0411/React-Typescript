@@ -58,6 +58,7 @@ export const GridRowContainer = styled.div<{
 }>`
   ${({ theme, index, selected }) => `
     border-bottom: 1px solid ${theme.palette.divider};
+    cursor: pointer;
     
     display: flex;
     align-items: stretch;

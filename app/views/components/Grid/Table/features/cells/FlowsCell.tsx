@@ -9,16 +9,6 @@ import CellContainer from './CellContainer'
 
 const useStyles = makeStyles(
   theme => ({
-    button: {
-      ...theme.typography.body3,
-      color: theme.palette.grey[700],
-      letterSpacing: '0.15px',
-      lineHeight: `${theme.spacing(3)}px`,
-
-      display: 'inline-flex',
-      alignItems: 'center',
-      cursor: 'pointer'
-    },
     text: {
       ...theme.typography.body2,
       color: theme.palette.grey[700],
@@ -59,32 +49,27 @@ const FlowsCell = ({
     isHovered = false,
     isSelected = false
   }: CellProps) => {
-    if (flowsCount === 0) {
-      return (
-        <AddToFlowButton
-          contacts={{ ids: [contact.id] }}
-          callback={callback}
-          buttonRenderer={({ className, ...buttonProps }) => (
-            <Tooltip title="Click to add to flow">
-              <span className={cn(className, classes.button)} {...buttonProps}>
-                Add to flow
-              </span>
-            </Tooltip>
-          )}
-        />
-      )
-    }
-
     return (
-      <div
-        className={cn(classes.text, {
-          hovered: isHovered,
-          selected: isSelected,
-          rowSelected: isRowSelected
-        })}
-      >
-        {`in ${flowsCount} flow${flowsCount === 1 ? '' : 's'}`}
-      </div>
+      <AddToFlowButton
+        contacts={{ ids: [contact.id] }}
+        callback={callback}
+        buttonRenderer={({ className, ...buttonProps }) => (
+          <Tooltip title="Click to add to flow">
+            <div
+              className={cn(className, classes.text, {
+                hovered: isHovered,
+                selected: isSelected,
+                rowSelected: isRowSelected
+              })}
+              {...buttonProps}
+            >
+              {flowsCount === 0
+                ? 'Add to flow'
+                : `in ${flowsCount} flow${flowsCount === 1 ? '' : 's'}`}
+            </div>
+          </Tooltip>
+        )}
+      />
     )
   }
 

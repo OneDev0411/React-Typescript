@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 
-import { Box, Chip, makeStyles } from '@material-ui/core'
+import { Box, Chip, makeStyles, Tooltip } from '@material-ui/core'
 import cn from 'classnames'
 import { useDispatch } from 'react-redux'
 
@@ -138,26 +138,28 @@ const TagsCell = ({
     )
 
     const renderCellContent = onClick => (
-      <Box
-        className={classes.container}
-        onClick={e => {
-          e.stopPropagation()
-          onClick(e)
-        }}
-      >
-        {tagsCount === 0 && (
-          <div
-            className={cn(classes.noTag, {
-              rowSelected: isRowSelected,
-              hovered: isHovered,
-              selected: isSelected
-            })}
-          >
-            Add Tags
-          </div>
-        )}
-        {tagsCount > 0 && renderTagsStrip()}
-      </Box>
+      <Tooltip title="Click to add tags">
+        <Box
+          className={classes.container}
+          onClick={e => {
+            e.stopPropagation()
+            onClick(e)
+          }}
+        >
+          {tagsCount === 0 && (
+            <div
+              className={cn(classes.noTag, {
+                rowSelected: isRowSelected,
+                hovered: isHovered,
+                selected: isSelected
+              })}
+            >
+              Add Tags
+            </div>
+          )}
+          {tagsCount > 0 && renderTagsStrip()}
+        </Box>
+      </Tooltip>
     )
 
     return (
