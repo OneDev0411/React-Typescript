@@ -36,8 +36,8 @@ export function addFallbackSrcToMjImage(editor: Editor) {
 
         const variableRegex = /^{{.*}}$/i
 
-        // If the src is a variable
-        if (variableRegex.test(src.trim())) {
+        // If the src is not provided or it is a variable
+        if (!src || variableRegex.test(src.trim())) {
           imgEl.src = fallbackSrc
 
           return
