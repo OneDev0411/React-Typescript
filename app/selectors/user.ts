@@ -35,12 +35,20 @@ export const selectImpersonateUser = (
 ): IAppState['impersonateUser'] => state.impersonateUser
 
 /**
+ * indicate a impersonate user exist or not
+ * @param state The app state
+ * @returns true/false
+ */
+export const selectImpersonateUserIsActive = (state: IAppState): boolean =>
+  !!selectImpersonateUser(state)
+
+/**
  * Returns an user object with priority of impersonated one
  * @param state The app state
  * @returns The user state
  */
 
-export function selectUserWithImpersonatePriority(
+export function selectUserImpersonateFirst(
   state: IAppState
 ): IAppState['impersonateUser'] | IUser {
   return selectImpersonateUser(state) ?? selectUser(state)
@@ -81,6 +89,12 @@ export const selectUserFormattedPhoneNumber = createSelector(
  */
 export const selectUserEmailSignature = (state: IAppState) =>
   selectUser(state)?.email_signature
+
+export const selectUserEmailSignatureImpersonateFirst = (state: IAppState) => {
+  const user = selectUserImpersonateFirst(state)
+
+  return user?.email_signature
+}
 
 /**
  * Returns true if the user is signed in otherwise returns false
