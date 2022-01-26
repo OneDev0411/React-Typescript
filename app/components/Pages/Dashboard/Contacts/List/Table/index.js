@@ -176,7 +176,7 @@ const ContactsList = props => {
         <ColumnHeaderCell
           title="Last Touch"
           iconPath={mdiCalendarOutline}
-          sortEnabled
+          sortEnabled={false}
           sortDirection="desc"
         />
       ),

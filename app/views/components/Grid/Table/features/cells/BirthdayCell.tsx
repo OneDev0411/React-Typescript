@@ -81,6 +81,39 @@ const birthdayNextYear = (bithday: Date): Date =>
 const durationAsDays = (duration: number): number =>
   moment.duration(duration).asDays()
 
+const getDateOfBirth = contact => {
+  let date
+
+  contact.attributes?.filter(attr => {
+    if (!attr.is_partner && attr.attribute_type === 'birthday') {
+      date = new Date(attr.date * 1000)
+
+      return true
+    }
+
+    return false
+  })
+
+  return date
+}
+
+const daysToNextBirthday = (birthday, today) => {
+  if (!birthday) {
+    return -1
+  }
+
+  let dateDiff: number = getDateDiff(birthdayThisYear(birthday), today)
+
+  // if bday is in the future
+  if (dateDiff >= 0) {
+    return durationAsDays(dateDiff)
+  }
+
+  dateDiff = getDateDiff(birthdayNextYear(birthday), today)
+
+  return durationAsDays(dateDiff)
+}
+
 //--
 
 interface Props {
@@ -92,68 +125,35 @@ interface Props {
 const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
   const classes = useStyles()
 
-  //
-
-  const getDateOfBirth = () => {
-    let birthday
-
-    contact.attributes?.filter(attr => {
-      if (!attr.is_partner && attr.attribute_type === 'birthday') {
-        birthday = new Date(attr.date * 1000)
-
-        return true
-      }
-
-      return false
-    })
-
-    return birthday
-  }
-
-  const daysToNextBirthday = () => {
-    if (!birthday) {
-      return
-    }
-
-    let dateDiff: number = getDateDiff(birthdayThisYear(birthday), today)
-
-    // if bday is in the future
-    if (dateDiff >= 0) {
-      return durationAsDays(dateDiff)
-    }
-
-    dateDiff = getDateDiff(birthdayNextYear(birthday), today)
-
-    return durationAsDays(dateDiff)
-  }
-
-  //
-
   const today: Date = useMemo(getDate, [])
-  const birthday: Date = useMemo(getDateOfBirth, [contact.attributes])
-  const daysToBirthday = useMemo(daysToNextBirthday, [today, birthday])
+  const birthday: Date = useMemo(() => getDateOfBirth(contact), [contact])
+  const daysToBirthday = useMemo(
+    () => daysToNextBirthday(birthday, today),
+    [today, birthday]
+  )
   const inputFormattedDate: string = useMemo(
     () => formatDate(birthday),
     [birthday]
   )
-
-  //
 
   const renderCellContent = ({
     isHovered = false,
     isSelected = false
   }: CellProps) => (
     <>
-      {daysToBirthday && daysToBirthday >= 0 && (
+      {daysToBirthday >= 0 && (
         <div
-          className={cn(classes.dateDiffValue, { rowSelected: isRowSelected })}
+          className={cn(classes.dateDiffValue, {
+            rowSelected: isRowSelected,
+            isToday: daysToBirthday == 0
+          })}
         >
           {daysToBirthday > 0 &&
             `in ${daysToBirthday} day${daysToBirthday == 1 ? '' : 's'}`}
           {daysToBirthday == 0 && 'is today'}
         </div>
       )}
-      {daysToBirthday && daysToBirthday >= 0 && inputFormattedDate && (
+      {daysToBirthday >= 0 && inputFormattedDate && (
         <div
           className={cn(classes.dateValue, {
             hovered: isHovered,
