@@ -11,6 +11,7 @@ import { convertOptionToAttribute } from '../../helpers/convert-option-to-attrib
 import { getCsvColumns } from '../../helpers/get-csv-columns'
 import { MappedField, AttributeOption } from '../../types'
 import { useOptions } from '../attribute-options/use-attribute-options'
+import { useIsAttributeDisabled } from '../use-is-attribute-disabled'
 
 export function useAttributeMap(
   csv: Nullable<ParseResult>
@@ -22,6 +23,7 @@ export function useAttributeMap(
   const [list, setList] = useState<Record<string, Nullable<MappedField>>>({})
   const [status, setStatus] = useState<Nullable<'doing' | 'done'>>(null)
   const options: AttributeOption[] = useOptions({}, '')
+  const isAttributeDisabled = useIsAttributeDisabled()
   const notify = useNotify()
   const columns = getCsvColumns(csv)
 
@@ -51,6 +53,10 @@ export function useAttributeMap(
             }
 
             if (rate < 0.25) {
+              return list
+            }
+
+            if (isAttributeDisabled(list, option, option.index)) {
               return list
             }
 

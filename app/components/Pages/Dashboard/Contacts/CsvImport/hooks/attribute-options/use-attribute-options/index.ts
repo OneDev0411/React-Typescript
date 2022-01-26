@@ -3,16 +3,15 @@ import { useCallback, useMemo } from 'react'
 import Fuse from 'fuse.js'
 
 import { convertOptionToAttribute } from '../../../helpers/convert-option-to-attribute'
-import { isAttributesEqual } from '../../../helpers/is-attributes-equal'
 import {
   IAttribute,
   AttributeOption,
   MappedField,
   IContactAttributeType
 } from '../../../types'
-import { useAddressAttributes } from '../../use-address-attributes'
 import { useAttributeDefinition } from '../../use-attribute-definition'
 import { useAttributes } from '../../use-attributes'
+import { useIsAttributeDisabled } from '../../use-is-attribute-disabled'
 import { useAddressOptions } from '../use-address-options'
 import { usePartnerOptions } from '../use-partner-options'
 
@@ -24,35 +23,7 @@ export function useOptions(
   const getAttributeDefinition = useAttributeDefinition()
   const partnerOptions = usePartnerOptions()
   const addressOptions = useAddressOptions(fields)
-
-  const { isAddressAttribute } = useAddressAttributes()
-
-  const isAttributeDisabled = useCallback(
-    (attribute: IAttribute, index: number) => {
-      const isSingular = (attribute: IAttribute) =>
-        getAttributeDefinition(attribute).singular
-
-      if (
-        isAddressAttribute(attribute) === false &&
-        isSingular(attribute) === false
-      ) {
-        return false
-      }
-
-      return Object.values(fields)
-        .filter(field => !!field)
-        .some((field: MappedField) => {
-          const isEqual = isAttributesEqual(field, attribute)
-
-          if (isSingular(attribute) && isEqual) {
-            return true
-          }
-
-          return isEqual && field.index === index
-        })
-    },
-    [getAttributeDefinition, isAddressAttribute, fields]
-  )
+  const isAttributeDisabled = useIsAttributeDisabled()
 
   const getOptions = useCallback((): AttributeOption[] => {
     const list = attributes
@@ -83,13 +54,14 @@ export function useOptions(
 
       return {
         ...option,
-        disabled: isAttributeDisabled(attribute, option.index)
+        disabled: isAttributeDisabled(fields, attribute, option.index)
       }
     }) as AttributeOption[]
   }, [
+    fields,
     attributes,
-    getAttributeDefinition,
     isAttributeDisabled,
+    getAttributeDefinition,
     addressOptions,
     partnerOptions
   ])
