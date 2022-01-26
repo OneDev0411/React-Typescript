@@ -165,7 +165,7 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '260px',
+      width: '320px',
       render: ({ row: contact, isRowSelected }) => (
         <EmailCell contact={contact} isRowSelected={isRowSelected} />
       )
@@ -180,7 +180,7 @@ const ContactsList = props => {
           sortDirection="desc"
         />
       ),
-      width: '150px',
+      width: '140px',
       render: ({ row: contact, isRowSelected }) => (
         <LastTouchCell contact={contact} isRowSelected={isRowSelected} />
       )
@@ -214,7 +214,7 @@ const ContactsList = props => {
         <ColumnHeaderCell title="Birthday" iconPath={mdiCake} />
       ),
       sortable: false,
-      width: '220px',
+      width: '180px',
       render: ({ row: contact, isRowSelected }) => (
         <BirthdayCell contact={contact} isRowSelected={isRowSelected} />
       )
