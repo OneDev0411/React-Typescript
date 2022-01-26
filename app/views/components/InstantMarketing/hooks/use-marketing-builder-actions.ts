@@ -39,15 +39,16 @@ export function useMarketingBuilderActions(
   const hasBetaAccess = useAcl(ACL.BETA)
 
   // Check buttons
-  const shouldShowCreateSuperCampaignButton = hasCreateSuperCampaignButton(
+  const shouldShowCreateSuperCampaignButton =
+    hasBetaAccess &&
+    hasCreateSuperCampaignButton(bareMode, !!template, isAdmin, isEmailMedium)
+
+  const shouldShowSaveAsTemplateButton = hasSaveAsTemplateButton(
     bareMode,
     !!template,
     isAdmin,
-    isEmailMedium
+    isOpenHouseMedium
   )
-  const shouldShowSaveAsTemplateButton =
-    hasBetaAccess &&
-    hasSaveAsTemplateButton(bareMode, !!template, isAdmin, isOpenHouseMedium)
 
   return {
     isWebsiteMedium,
