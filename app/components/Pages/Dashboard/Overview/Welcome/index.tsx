@@ -48,7 +48,7 @@ function OverviewDashboard() {
       </Acl.Crm>
       <Acl.Marketing>
         <Box className={classes.container}>
-          <PromoteListingsSection title="Use Pre-Rendered Marketing Material" />
+          <PromoteListingsSection title="Use Pre-Rendered Marketing Emails" />
         </Box>
       </Acl.Marketing>
       <Acl.Deals>

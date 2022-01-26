@@ -23,9 +23,7 @@ const styles = (theme: Theme) =>
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
-      },
-      backgroundColor: theme.palette.navbar.background,
-      color: theme.palette.common.white
+      }
     },
     leftSideWrapper: {},
     title: {
