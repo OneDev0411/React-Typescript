@@ -54,6 +54,8 @@ import { registerCommands } from './commands'
 import { BASICS_BLOCK_CATEGORY } from './constants'
 import CreateSuperCampaignButton from './CreateSuperCampaignButton'
 import DeviceManager from './DeviceManager'
+import { addFallbackSrcToImage } from './extensions/add-fallback-src-to-image'
+import { addFallbackSrcToMjImage } from './extensions/add-fallback-src-to-mj-image'
 import {
   Container,
   Actions,
@@ -488,11 +490,11 @@ class Builder extends React.Component {
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       await this.registerEmailBlocks()
-    }
-
-    if (this.isWebsiteTemplate) {
+    } else if (this.isWebsiteTemplate) {
       await this.registerWebsiteBlocks()
     }
+
+    this.registerComponentExtensions()
 
     this.setupImageDoubleClickHandler()
 
@@ -652,6 +654,21 @@ class Builder extends React.Component {
       templateBlockOptions,
       blocksOptions
     )
+  }
+
+  registerComponentExtensions() {
+    // We should not re-register extensions if it's already done!
+    if (this.componentExtensionsRegistered) {
+      return
+    }
+
+    this.componentExtensionsRegistered = true
+
+    if (this.isEmailTemplate && this.isMjmlTemplate) {
+      addFallbackSrcToMjImage(this.editor)
+    } else if (!this.isWebsiteTemplate) {
+      addFallbackSrcToImage(this.editor)
+    }
   }
 
   setupDependentComponents = () => {
@@ -1051,6 +1068,8 @@ class Builder extends React.Component {
     } else if (this.isWebsiteTemplate) {
       this.registerWebsiteBlocks()
     }
+
+    this.registerComponentExtensions()
   }
 
   deselectAll = () => {
