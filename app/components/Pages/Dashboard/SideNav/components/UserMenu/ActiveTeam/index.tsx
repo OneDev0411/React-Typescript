@@ -2,10 +2,16 @@ import { useState } from 'react'
 
 import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { mdiAccountGroupOutline } from '@mdi/js'
+import { useSelector } from 'react-redux'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { switchActiveTeam } from '@app/models/user/switch-active-team'
-import { setImpersonateUser } from '@app/utils/impersonate-user'
+import { selectUser } from '@app/selectors/user'
+import {
+  setImpersonateUser,
+  removeImpersonateUser
+} from '@app/utils/impersonate-user'
+import { getBrandUsers } from '@app/utils/user-teams'
 import {
   NodeRenderer,
   BrandAvailableToUserSelectorDrawer
@@ -53,6 +59,7 @@ const useStyles = makeStyles(
 export function ActiveTeam() {
   const classes = useStyles()
   const activeBrand = useUnsafeActiveBrand()
+  const user = useSelector(selectUser)
 
   const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useState<boolean>(false)
   const [isImpersonateUserSelectorOpen, setIsImpersonateUserSelectorOpen] =
@@ -72,11 +79,45 @@ export function ActiveTeam() {
   const hanldeCloseImpersonateSelectorDrawer = () =>
     setIsImpersonateUserSelectorOpen(false)
 
-  const handleSelectBrand = (brand: IBrand) => {
-    console.log({ brand })
+  const handleSwitchTeam = async (brand: IBrand, user?: BrandedUser) => {
+    try {
+      setIsSwitchingActiveTeam(true)
+
+      if (user) {
+        setImpersonateUser(user)
+      } else {
+        removeImpersonateUser()
+      }
+
+      await switchActiveTeam(brand.id)
+      window.location.reload()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleSelectBrand = async (brand: IBrand) => {
+    const selectedBrandUsers = getBrandUsers(brand)
+    const isCurrentUserExistInSelectedBrand = selectedBrandUsers.some(
+      u => u.id === user.id
+    )
+
+    if (isCurrentUserExistInSelectedBrand) {
+      await handleSwitchTeam(brand)
+
+      return
+    }
+
+    if (brand.member_count === 1) {
+      await handleSwitchTeam(brand, selectedBrandUsers[0])
+
+      return
+    }
+
     setSelectedBrandToSwitch(brand)
     hanldeOpenImpersonateSelectorDrawer()
   }
+
   const handleSelectImpersonateUser = async (users: Agent[]) => {
     const selectedImpersonateUser: BrandedUser = users[0]?.agent
 
@@ -84,16 +125,9 @@ export function ActiveTeam() {
       return
     }
 
-    try {
-      hanldeCloseImpersonateSelectorDrawer()
-      hanldeCloseBrandSelectorDrawer()
-      setIsSwitchingActiveTeam(true)
-      setImpersonateUser(selectedImpersonateUser)
-      await switchActiveTeam(selectedBrandToSwitch.id)
-      window.location.reload()
-    } catch (error) {
-      console.error(error)
-    }
+    hanldeCloseImpersonateSelectorDrawer()
+    hanldeCloseBrandSelectorDrawer()
+    await handleSwitchTeam(selectedBrandToSwitch, selectedImpersonateUser)
   }
 
   const handlePassingSelectedBrand = async (_: Nullable<UUID>) =>

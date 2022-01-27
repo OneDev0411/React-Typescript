@@ -4,14 +4,15 @@ import { BrandedUser } from '@app/views/components/TeamAgents/types'
 
 const cookies = new Cookies()
 const IMPERSOATE_USER_COOKIE_KEY = 'impersonate_user'
+const defaultOption = {
+  path: '/',
+  maxAge: 7 * 86400 // max would be 7 days
+}
 
 export const setImpersonateUser = (user: BrandedUser): void => {
   const stringifiedUserr = JSON.stringify(user)
 
-  cookies.set(IMPERSOATE_USER_COOKIE_KEY, stringifiedUserr, {
-    path: '/',
-    maxAge: 7 * 86400 // max would be 7 days
-  })
+  cookies.set(IMPERSOATE_USER_COOKIE_KEY, stringifiedUserr, defaultOption)
 }
 
 export const getImpersonateUser = (): Nullable<BrandedUser> => {
@@ -23,5 +24,5 @@ export const getImpersonateUser = (): Nullable<BrandedUser> => {
 }
 
 export const removeImpersonateUser = (): void => {
-  cookies.remove(IMPERSOATE_USER_COOKIE_KEY)
+  cookies.remove(IMPERSOATE_USER_COOKIE_KEY, defaultOption)
 }
