@@ -1,15 +1,10 @@
-import React from 'react'
+import { ReactNode } from 'react'
 
-import {
-  Typography,
-  makeStyles,
-  Theme,
-  useMediaQuery,
-  createStyles
-} from '@material-ui/core'
+import { Typography, makeStyles, Theme, createStyles } from '@material-ui/core'
 
 import { Greeting } from '@app/components/Pages/Dashboard/Overview/Welcome/Greetings'
-import { ClassesProps } from 'utils/ts-utils'
+import useIsMobile from '@app/hooks/use-is-mobile'
+import { ClassesProps } from '@app/utils/ts-utils'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -17,7 +12,7 @@ const styles = (theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       padding: ({ noPadding }: GlobalHeaderWithBackgroundProps) =>
-        !noPadding ? theme.spacing(4) : 0,
+        noPadding ? 0 : theme.spacing(4),
       width: '100%',
       [theme.breakpoints.up('md')]: {
         flexDirection: 'row',
@@ -25,9 +20,7 @@ const styles = (theme: Theme) =>
         justifyContent: 'space-between'
       }
     },
-    leftSideWrapper: {},
     title: {
-      fontWeight: 900,
       marginBottom: theme.spacing(3),
       [theme.breakpoints.up('md')]: {
         marginBottom: 0,
@@ -49,17 +42,17 @@ export interface GlobalHeaderWithBackgroundProps {
   title?: string
   noPadding?: boolean
   isHiddenOnMobile?: boolean
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
 export default function GlobalHeaderWithBackground({
   title,
   children,
   isHiddenOnMobile = true,
-  ...restProps
+  noPadding
 }: GlobalHeaderWithBackgroundProps & ClassesProps<typeof styles>) {
-  const classes = useStyles(restProps)
-  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
+  const classes = useStyles({ noPadding })
+  const isMobile = useIsMobile()
 
   if (isHiddenOnMobile && isMobile) {
     return null
@@ -67,7 +60,7 @@ export default function GlobalHeaderWithBackground({
 
   return (
     <div className={classes.wrapper}>
-      <div className={classes.leftSideWrapper}>
+      <div>
         {title && (
           <Typography variant="h5" noWrap className={classes.title}>
             {title}
