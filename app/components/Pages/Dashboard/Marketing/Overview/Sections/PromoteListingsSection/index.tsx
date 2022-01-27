@@ -12,12 +12,13 @@ import SectionLayout from '../SectionLayout'
 
 interface Props {
   title?: string
-  emptyListing?: string
+  emptyListingText?: string
 }
 
-export default function PromoteListingsSection(props: Props) {
-  const { title = 'Promote Your Listings', emptyListing = 'No listing yet!' } =
-    props
+export default function PromoteListingsSection({
+  title = 'Promote Your Listings',
+  emptyListingText = 'No listing yet!'
+}: Props) {
   const brandId = useSelector(selectActiveBrandId)
 
   const { listings, isLoading } = useBrandAndDealsListings(brandId)
@@ -65,7 +66,7 @@ export default function PromoteListingsSection(props: Props) {
       {!isLoading && listings.length === 0 && (
         <Grid item xs={12}>
           <Typography variant="body1" color="textSecondary">
-            {emptyListing}
+            {emptyListingText}
           </Typography>
         </Grid>
       )}
