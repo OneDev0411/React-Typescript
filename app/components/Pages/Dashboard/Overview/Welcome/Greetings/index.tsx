@@ -41,10 +41,9 @@ export function Greeting() {
     <Box className={classes.wrapper}>
       <Box className={classes.headline}>
         <Typography variant="body1">Welcome back,</Typography>
-        <Typography
-          variant="subtitle1"
-          className={classes.username}
-        >{` ${user.first_name}!`}</Typography>
+        <Typography variant="subtitle1" className={classes.username}>
+          {user.first_name}!
+        </Typography>
       </Box>
 
       <Box className={classes.today}>
