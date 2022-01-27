@@ -1,4 +1,4 @@
-import { MenuItem } from '@material-ui/core'
+import { makeStyles, MenuItem } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
@@ -10,11 +10,13 @@ import { selectUser } from 'selectors/user'
 import { getActiveBrand } from 'utils/user-teams'
 
 import AnalyticsDropdownTab from '../../../Analytics/DropdownTab'
+import { Notification } from '../../components/Notification'
 import { getGridSortLabel, getActiveSort } from '../../helpers/sorting'
 import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
 } from '../helpers/agent-sorting'
+import { useDealsList } from '../hooks/use-deals-list'
 
 const BASE_URL = '/dashboard/deals'
 
@@ -41,6 +43,20 @@ const TAB_ITEMS = [
   }
 ]
 
+const useStyles = makeStyles(
+  () => ({
+    notification: {
+      top: 0,
+      right: 0,
+      position: 'relative',
+      display: 'inline-block'
+    }
+  }),
+  {
+    name: 'DealsGridAgentFilters'
+  }
+)
+
 interface Props {
   deals: IDeal[]
   activeFilter: string
@@ -49,8 +65,10 @@ interface Props {
 
 const TabFilters = withRouter((props: Props & WithRouterProps) => {
   const dispatch = useDispatch()
+  const classes = useStyles()
   const user = useSelector(selectUser)
   const activeSort = getActiveSort(user, props.location, SORT_FIELD_SETTING_KEY)
+  const getDealsList = useDealsList()
 
   const handleChangeSort = async (column: SortableColumn) => {
     props.router.push(
@@ -74,12 +92,30 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
         ...TAB_ITEMS.map(({ label, link }, index: number) => {
           const url = link ? `${BASE_URL}/filter/${link}` : BASE_URL
           const urlWithQuery = `${url}${props.location.search}`
+          const deals = getDealsList(link ?? 'all')
+          const notificationsCount = deals.reduce(
+            (counter, deal) =>
+              deal.new_notifications?.length
+                ? counter + deal.new_notifications.length
+                : counter,
+            0
+          )
 
           return (
             <TabLink
               key={index}
               value={link || 'all'}
-              label={<span>{label}</span>}
+              label={
+                <span>
+                  {label}{' '}
+                  {notificationsCount > 0 && (
+                    <Notification
+                      count={notificationsCount}
+                      className={classes.notification}
+                    />
+                  )}
+                </span>
+              }
               to={urlWithQuery}
             />
           )
