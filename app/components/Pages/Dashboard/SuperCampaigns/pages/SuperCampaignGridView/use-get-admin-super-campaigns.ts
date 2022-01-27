@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react'
 
-import { Request } from 'superagent'
+import { SuperAgentRequest } from 'superagent'
 
 import useAsync from '@app/hooks/use-async'
 import { getAllSuperCampaign, FetchRange } from '@app/models/super-campaign'
@@ -22,7 +22,7 @@ export function useGetAdminSuperCampaigns(
   order: string[]
 ): UseGetSuperCampaign {
   const rangeRef = useRef<FetchRange>(initialRange)
-  const requestRef = useRef<Nullable<Request>>(null)
+  const requestRef = useRef<Nullable<SuperAgentRequest>>(null)
 
   const {
     run,
