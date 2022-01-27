@@ -664,11 +664,17 @@ class Builder extends React.Component {
 
     this.componentExtensionsRegistered = true
 
+    if (this.isWebsiteTemplate) {
+      return
+    }
+
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       addFallbackSrcToMjImage(this.editor)
-    } else if (!this.isWebsiteTemplate) {
-      addFallbackSrcToImage(this.editor)
+
+      return
     }
+
+    addFallbackSrcToImage(this.editor)
   }
 
   setupDependentComponents = () => {
