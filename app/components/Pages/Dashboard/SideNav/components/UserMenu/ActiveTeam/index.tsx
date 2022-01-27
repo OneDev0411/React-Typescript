@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 
 import { Typography, Theme, makeStyles } from '@material-ui/core'
-import { mdiAccountGroupOutline } from '@mdi/js'
+import { mdiAccountGroupOutline, mdiAccountSwitchOutline } from '@mdi/js'
 import { useSelector } from 'react-redux'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
@@ -17,6 +17,7 @@ import {
   BrandAvailableToUserSelectorDrawer
 } from '@app/views/components/BrandSelector'
 import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { Agent, BrandedUser } from '@app/views/components/TeamAgents/types'
 import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
@@ -51,6 +52,43 @@ const useStyles = makeStyles(
       color: theme.palette.primary.main,
       cursor: 'pointer',
       ...theme.typography.button
+    },
+    switchingIndicatorContainer: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      background: theme.palette.common.white,
+      zIndex: theme.zIndex.modal + 1
+    },
+    switchingIndicatorInfo: {
+      display: 'inline-block',
+      textAlign: 'center',
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)'
+    },
+    switchingIcon: {
+      width: '150px',
+      height: '150px',
+      lineHeight: '200px',
+      textAlign: 'center',
+      background: theme.palette.primary.main,
+      borderRadius: '100%',
+      color: theme.palette.common.white,
+      // TODO: these style are tmp and as soon as design team give a design will update it
+      '& svg': {
+        width: '4rem !important',
+        height: '4rem !important'
+      }
+    },
+    switchingLabel: {
+      display: 'block',
+      marginTop: theme.spacing(1),
+      color: theme.palette.common.black,
+      ...theme.typography.h4
     }
   }),
   { name: 'ActiveTeam' }
@@ -90,6 +128,12 @@ export function ActiveTeam() {
 
   const handleSwitchTeam = async (brand: IBrand, user?: BrandedUser) => {
     try {
+      hanldeCloseBrandSelectorDrawer()
+
+      if (isImpersonateUserSelectorOpen) {
+        hanldeCloseImpersonateSelectorDrawer()
+      }
+
       setIsSwitchingActiveTeam(true)
 
       if (user) {
@@ -134,8 +178,6 @@ export function ActiveTeam() {
       return
     }
 
-    hanldeCloseImpersonateSelectorDrawer()
-    hanldeCloseBrandSelectorDrawer()
     await handleSwitchTeam(selectedBrandToSwitch, selectedImpersonateUser)
   }
 
@@ -166,6 +208,19 @@ export function ActiveTeam() {
 
   return (
     <>
+      {isSwitchingActiveTeam && (
+        <div className={classes.switchingIndicatorContainer}>
+          <div className={classes.switchingIndicatorInfo}>
+            <div className={classes.switchingIcon}>
+              <SvgIcon
+                path={mdiAccountSwitchOutline}
+                size={muiIconSizes.large}
+              />
+            </div>
+            <span className={classes.switchingLabel}>Switching Team...</span>
+          </div>
+        </div>
+      )}
       <div className={classes.container}>
         <Typography variant="overline" className={classes.header}>
           You’re working on
