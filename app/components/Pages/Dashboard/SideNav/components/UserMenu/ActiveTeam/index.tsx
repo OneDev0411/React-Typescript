@@ -71,9 +71,10 @@ const useStyles = makeStyles(
       transform: 'translate(-50%, -50%)'
     },
     switchingIcon: {
+      margin: 'auto',
       width: '150px',
       height: '150px',
-      lineHeight: '200px',
+      lineHeight: '210px',
       textAlign: 'center',
       background: theme.palette.primary.main,
       borderRadius: '100%',
@@ -238,7 +239,7 @@ export function ActiveTeam() {
             className={classes.switchTeam}
             onClick={hanldeOpenBrandSelectorDrawer}
           >
-            {isSwitchingActiveTeam ? 'Switching...' : 'Change'}
+            Change
           </div>
         </div>
       </div>
@@ -258,6 +259,7 @@ export function ActiveTeam() {
           open
           width="43rem"
           title="Select Impersonate User"
+          withRelatedContacts={false}
           teamAgentsModelFn={handlePassingSelectedBrand}
           onSelectAgents={handleSelectImpersonateUser}
           onClose={hanldeCloseImpersonateSelectorDrawer}
