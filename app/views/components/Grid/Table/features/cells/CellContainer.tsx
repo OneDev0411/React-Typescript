@@ -95,8 +95,7 @@ const useStyles = makeStyles(
 const CellContainer = ({
   actionsActivated = false,
   renderCellContent,
-  renderInlineEdit,
-  onEnterEdit,
+  renderInlineEdit = () => <></>,
   actions = {}
 }: Props) => {
   const classes = useStyles()
@@ -106,26 +105,24 @@ const CellContainer = ({
   const [isSelected, setIsSelected] = useState(false)
 
   const onSelect = () => {
-    setIsSelected(!isSelected)
+    if (!isEditing) {
+      setIsSelected(!isSelected)
+      setIsEditing(false)
+    }
   }
-
   const onHoverIn = () => setIsHovered(true)
   const onHoverOut = () => setIsHovered(false)
+  const toggleEdit = () => {
+    setIsEditing(true)
+  }
 
   //--
 
-  const renderActionContent = () => {
+  const renderActionButtons = () => {
     let cellActions: Record<string, Action> = {
       edit: {
         tooltipText: 'Edit',
-        onClick: e => {
-          e.stopPropagation()
-
-          const _isEditing = !isEditing
-
-          setIsEditing(_isEditing)
-          onEnterEdit!(_isEditing)
-        },
+        onClick: toggleEdit,
         iconPath: mdiPencilOutline
       },
       ...actions
@@ -164,7 +161,8 @@ const CellContainer = ({
         selected: isSelected
       })}
     >
-      {actionsActivated && isSelected && renderActionContent()}
+      {!isEditing && actionsActivated && isSelected && renderActionButtons()}
+      {isEditing && isSelected && renderInlineEdit()}
     </div>
   )
   const renderInlineContent = () => (
