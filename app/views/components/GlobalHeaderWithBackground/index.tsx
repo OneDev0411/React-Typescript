@@ -11,7 +11,9 @@ const styles = (theme: Theme) =>
     wrapper: {
       display: 'flex',
       flexDirection: 'column',
-      padding: ({ noPadding }: GlobalHeaderWithBackgroundProps) =>
+      padding: ({
+        noPadding
+      }: Pick<GlobalHeaderWithBackgroundProps, 'noPadding'>) =>
         noPadding ? 0 : theme.spacing(4),
       width: '100%',
       [theme.breakpoints.up('md')]: {
