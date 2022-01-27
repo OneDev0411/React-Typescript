@@ -10,8 +10,9 @@ const useStyles = makeStyles(
       alignItems: 'center',
       cursor: 'pointer'
     },
-    active: {
-      cursor: 'not-allowed'
+    disabled: {
+      cursor: 'not-allowed',
+      opacity: 0.5
     },
     activeIndicator: {
       marginLeft: theme.spacing(1)
@@ -23,14 +24,15 @@ const useStyles = makeStyles(
 interface Props {
   brand: IBrand
   isActive: boolean
+  disabled: boolean
   onClick: (brand: IBrand) => void
 }
 
-function Brand({ brand, isActive, onClick }: Props) {
+function Brand({ brand, isActive, disabled, onClick }: Props) {
   const classes = useStyles()
 
   const handleOnClick = () => {
-    if (isActive) {
+    if (disabled) {
       return null
     }
 
@@ -39,7 +41,7 @@ function Brand({ brand, isActive, onClick }: Props) {
 
   return (
     <div
-      className={cn(classes.name, { [classes.active]: isActive })}
+      className={cn(classes.name, { [classes.disabled]: disabled })}
       onClick={handleOnClick}
     >
       {brand.name}

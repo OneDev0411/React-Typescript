@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
 import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { mdiAccountGroupOutline } from '@mdi/js'
@@ -68,6 +68,15 @@ export function ActiveTeam() {
     useState<boolean>(false)
   const [selectedBrandToSwitch, setSelectedBrandToSwitch] =
     useState<Nullable<IBrand>>(null)
+  const isCurrentUserExistInActiveBrand = useMemo(() => {
+    if (activeBrand) {
+      const activeBrandUsers = getBrandUsers(activeBrand)
+
+      return activeBrandUsers.some(u => u.id === user.id)
+    }
+
+    return false
+  }, [activeBrand, user.id])
 
   // handle brand selector drawer state
   const hanldeOpenBrandSelectorDrawer = () => setIsBrandSelectorOpen(true)
@@ -134,10 +143,14 @@ export function ActiveTeam() {
     selectedBrandToSwitch ? [selectedBrandToSwitch] : []
 
   const renderBrandNode = ({ brand }: NodeRenderer) => {
+    const isActive = brand.id === activeBrand?.id
+    const isDisabled = isActive && isCurrentUserExistInActiveBrand
+
     return (
       <Brand
         brand={brand}
-        isActive={brand.id === activeBrand?.id}
+        isActive={isActive}
+        disabled={isDisabled}
         onClick={() => handleSelectBrand(brand)}
       />
     )
