@@ -2,7 +2,8 @@ import * as actionTypes from '@app/constants/user'
 import type { SetImpersonateUserAction } from '@app/store_actions/user/impersonate-user'
 import { BrandedUser } from '@app/views/components/TeamAgents/types'
 
-export type IImpersonateUserState = Nullable<IUser | BrandedUser>
+export type IImpersonateUser = IUser | BrandedUser
+export type IImpersonateUserState = Nullable<IImpersonateUser>
 
 const defaultImpersonateUserState: IImpersonateUserState = null
 

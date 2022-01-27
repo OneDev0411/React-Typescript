@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 
 import { selectActiveBrandIdUnsafe } from '@app/selectors/brand'
 import { selectActiveTeamUnsafe } from '@app/selectors/team'
+import { selectUserImpersonateFirst } from '@app/selectors/user'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 import { PLACEHOLDER_IMAGE_URL } from 'components/InstantMarketing/constants'
@@ -472,12 +473,12 @@ class SendMlsListingCard extends Component {
 SendMlsListingCard.propTypes = propTypes
 SendMlsListingCard.defaultProps = defaultProps
 
-function mapStateToProps({ contacts, deals, user, ...state }) {
+function mapStateToProps({ contacts, deals, ...state }) {
   return {
-    user,
     contacts: contacts.list,
     deals: deals.list,
     attributeDefs: contacts.attributeDefs,
+    user: selectUserImpersonateFirst(state),
     activeTeam: selectActiveTeamUnsafe(state),
     activeBrandId: selectActiveBrandIdUnsafe(state)
   }
