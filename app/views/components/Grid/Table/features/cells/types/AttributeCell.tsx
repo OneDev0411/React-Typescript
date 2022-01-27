@@ -126,7 +126,9 @@ const AttributeCell = ({
     )
   }
 
-  return <CellContainer renderCellContent={renderCellContent} />
+  return (
+    <CellContainer actionsActivated renderCellContent={renderCellContent} />
+  )
 }
 
 export default AttributeCell
