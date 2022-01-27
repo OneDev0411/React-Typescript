@@ -83,7 +83,7 @@ interface ListingAgent extends IModel<'agent'> {
   nar_number: string
   office?: IAgentOffice
   office_mui: number
-  status: Nullable<'Active' | 'Inactive'>
+  status: 'Active'
   office_mlsid: string
   work_phone: string
   generational_name: string | null
