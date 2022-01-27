@@ -1,4 +1,4 @@
-import { Box, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import {
   mdiCake,
   mdiCalendarOutline,
@@ -102,12 +102,11 @@ const ContactsList = props => {
     {
       id: 'name',
       headerName: ({ rows }) => (
-        <Box pl={1}>
-          <ColumnHeaderCell
-            title={getSelectedInfo(rows.length)}
-            sortEnabled={false}
-          />
-        </Box>
+        <ColumnHeaderCell
+          title={getSelectedInfo(rows.length)}
+          isPrimary
+          sortEnabled={false}
+        />
       ),
       width: '250px',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
@@ -165,22 +164,25 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '320px',
+      width: '310px',
       render: ({ row: contact, isRowSelected }) => (
         <EmailCell contact={contact} isRowSelected={isRowSelected} />
       )
     },
     {
-      id: 'last_touched',
+      id: 'last_touch',
       headerName: () => (
         <ColumnHeaderCell
           title="Last Touch"
           iconPath={mdiCalendarOutline}
           sortEnabled={false}
-          sortDirection="desc"
+          // sortDirection={(
+          //   ["last_touch", "-last_touch"].includes(sortOrder) &&
+          //   (sortOrder.startsWith("-") ? "desc" : "asc")
+          // )}
         />
       ),
-      width: '140px',
+      width: '150px',
       render: ({ row: contact, isRowSelected }) => (
         <LastTouchCell contact={contact} isRowSelected={isRowSelected} />
       )

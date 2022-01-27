@@ -112,6 +112,7 @@ export function Body<Row>({
             selection={selection}
             totalRows={totalRows}
             inlineGridEnabled={inlineGridEnabled}
+            rowSize={rowSize}
           />
         )}
         {rows.map((row, rowIndex) => (

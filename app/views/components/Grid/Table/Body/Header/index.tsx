@@ -8,20 +8,19 @@ import { GridSelectionOptions, TableColumn } from '../../types'
 
 const useStyles = makeStyles(
   theme => ({
-    rowContainer: {
-      height: '40px',
+    rowContainer: ({ rowSize }: { rowSize: number }) => ({
+      height: theme.spacing(rowSize),
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'stretch',
 
-      backgroundColor: `${alpha(theme.palette.grey[50], 0.75)}`,
       borderTop: `1px solid ${theme.palette.divider}`,
       borderBottom: `1px solid ${theme.palette.divider}`,
 
       '& > div:first-child': {
         borderRight: 'none'
       }
-    },
+    }),
     cellContainer: {
       height: '100%',
       display: 'flex',
@@ -39,12 +38,13 @@ interface Props<Row> {
   totalRows: number
   selection: GridSelectionOptions<Row> | null
   inlineGridEnabled?: boolean
+  rowSize?: number
 }
 
-function Header<Row>({ columns, rows, selection, totalRows }: Props<Row>) {
+function Header<Row>({ columns, rows, totalRows, rowSize = 5 }: Props<Row>) {
   const columnsSize = useMemo(() => getColumnsSize<Row>(columns), [columns])
 
-  const classes = useStyles()
+  const classes = useStyles({ rowSize })
 
   //--
 

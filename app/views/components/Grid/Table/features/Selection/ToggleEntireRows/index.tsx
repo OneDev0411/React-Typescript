@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from '@material-ui/core'
+import { alpha, makeStyles, Theme } from '@material-ui/core'
 
 import { SELECTION__TOGGLE_ENTIRE_ROWS } from '../../../context/constants'
 import { useGridContext } from '../../../hooks/use-grid-context'
@@ -12,7 +12,14 @@ const useStyles = makeStyles(
       justifyContent: 'end',
       overflow: 'initial',
       width: theme.spacing(7.5),
-      paddingRight: theme.spacing(0.5)
+      paddingRight: theme.spacing(0.5),
+
+      backgroundColor: `${alpha(theme.palette.grey[50], 0.75)}`,
+      cursor: 'pointer',
+
+      '&:hover': {
+        backgroundColor: `${alpha(theme.palette.grey[100], 0.75)}`
+      }
     }
   }),
   { name: 'ToggleEntireRows' }
