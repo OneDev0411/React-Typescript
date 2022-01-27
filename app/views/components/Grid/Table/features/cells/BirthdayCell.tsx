@@ -25,7 +25,7 @@ const useStyles = makeStyles(
     },
     dateValue: {
       ...theme.typography.body3,
-      letterSpacing: '0.15px',
+      letterSpacing: '0.4px',
       lineHeight: `${theme.spacing(3)}px`,
       color: theme.palette.grey['500'],
       '&.hovered': {

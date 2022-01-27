@@ -50,6 +50,9 @@ const useStyles = makeStyles(
       '&.rowSelected': {
         color: theme.palette.tertiary.dark
       }
+    },
+    chip: {
+      letterSpacing: '0.2px'
     }
   }),
   { name: 'TagsCell' }
@@ -129,6 +132,7 @@ const TagsCell = ({
         <span>{showingTags.join(', ')}</span>
         {invisibleTagsCount > 0 && (
           <Chip
+            className={classes.chip}
             variant="outlined"
             size="small"
             label={`${invisibleTagsCount} more`}

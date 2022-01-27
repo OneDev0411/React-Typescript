@@ -9,7 +9,6 @@ import {
 } from '@mdi/js'
 import cn from 'classnames'
 
-import { goTo } from '@app/utils/go-to'
 import { Table } from 'components/Grid/Table'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 import BirthdayCell from 'components/Grid/Table/features/cells/BirthdayCell'
@@ -243,18 +242,8 @@ const ContactsList = props => {
     }
   }
 
-  const getRowProps = ({ row: contact }) => {
-    return {
-      onClick: () => goTo(`/dashboard/contacts/${contact.id}`)
-    }
-  }
-  const getColumnProps = ({ column }) => {
-    if (['flows', 'tag'].includes(column.id)) {
-      return {
-        onClick: e => e.stopPropagation()
-      }
-    }
-  }
+  const getRowProps = () => ({})
+  const getColumnProps = () => ({})
 
   return (
     <>

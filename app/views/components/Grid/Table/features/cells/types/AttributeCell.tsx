@@ -33,12 +33,15 @@ const useStyles = makeStyles(
     },
     attributeLabel: {
       ...theme.typography.body3,
-      letterSpacing: '0.15px',
+      letterSpacing: '0.4px',
       lineHeight: `${theme.spacing(3)}px`,
       color: theme.palette.grey['500'],
       '&.selected': {
         color: theme.palette.tertiary.dark
       }
+    },
+    chip: {
+      letterSpacing: '0.2px'
     }
   }),
   { name: 'Attribute-cell' }
@@ -112,7 +115,12 @@ const AttributeCell = ({
         )}
 
         {countEnabled && count > 1 && (
-          <Chip variant="outlined" size="small" label={`${count - 1} more`} />
+          <Chip
+            className={classes.chip}
+            variant="outlined"
+            size="small"
+            label={`${count - 1} more`}
+          />
         )}
       </>
     )
