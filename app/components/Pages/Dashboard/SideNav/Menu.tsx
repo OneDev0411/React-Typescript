@@ -1,8 +1,6 @@
-import { Box, Typography } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { useImpersonateUser } from '@app/hooks/use-impersonate-user'
 import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
 import { GlobalActionsButton } from 'components/GlobalActionsButton'
 import { InlineBadge } from 'components/InlineBadge'
@@ -43,7 +41,6 @@ const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 export function Menu() {
   const user = useSelector(selectUserUnsafe)
-  const impersonateUser = useImpersonateUser()
 
   const brand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
@@ -77,17 +74,6 @@ export function Menu() {
     <Sidenav>
       <Logo />
       <GlobalActionsButton />
-
-      {/* it's a dummy indicator, I'll change when I have the design */}
-      {impersonateUser && (
-        <Box mb={1.5} px={1}>
-          <Typography noWrap variant="body1" color="textSecondary">
-            Impersonate User:
-            <br />
-            {impersonateUser.display_name}
-          </Typography>
-        </Box>
-      )}
 
       <ScrollableArea
         shadowColor={scrollableAreaShadowColor}
