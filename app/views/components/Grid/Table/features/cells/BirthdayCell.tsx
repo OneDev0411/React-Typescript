@@ -79,7 +79,7 @@ const birthdayNextYear = (bithday: Date): Date =>
   )
 
 const durationAsDays = (duration: number): number =>
-  moment.duration(duration).asDays()
+  Math.floor(moment.duration(duration).asDays())
 
 const getDateOfBirth = contact => {
   let date
