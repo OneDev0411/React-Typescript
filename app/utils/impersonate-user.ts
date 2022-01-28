@@ -1,28 +1,25 @@
-import Cookies from 'universal-cookie'
-
 import { BrandedUser } from '@app/views/components/TeamAgents/types'
 
-const cookies = new Cookies()
 const IMPERSOATE_USER_COOKIE_KEY = 'impersonate_user'
-const defaultOption = {
-  path: '/',
-  maxAge: 7 * 86400 // max would be 7 days
-}
 
 export const setImpersonateUser = (user: BrandedUser): void => {
-  const stringifiedUserr = JSON.stringify(user)
+  const stringifiedUser = JSON.stringify(user)
 
-  cookies.set(IMPERSOATE_USER_COOKIE_KEY, stringifiedUserr, defaultOption)
+  localStorage.setItem(IMPERSOATE_USER_COOKIE_KEY, stringifiedUser)
 }
 
 export const getImpersonateUser = (): Nullable<BrandedUser> => {
-  const user = cookies.get(
-    IMPERSOATE_USER_COOKIE_KEY
-  ) as unknown as Optional<BrandedUser>
+  const stringifiedUser = localStorage.getItem(IMPERSOATE_USER_COOKIE_KEY)
+
+  if (!stringifiedUser) {
+    return null
+  }
+
+  const user: BrandedUser = JSON.parse(stringifiedUser)
 
   return user ?? null
 }
 
 export const removeImpersonateUser = (): void => {
-  cookies.remove(IMPERSOATE_USER_COOKIE_KEY, defaultOption)
+  localStorage.removeItem(IMPERSOATE_USER_COOKIE_KEY)
 }

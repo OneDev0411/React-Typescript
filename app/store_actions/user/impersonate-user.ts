@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
 
-import { getImpersonateUser as getImpersonateUserFromCookie } from '@app/utils/impersonate-user'
+import { getImpersonateUser as getImpersonateUserFromLocalStorage } from '@app/utils/impersonate-user'
 import { BrandedUser } from '@app/views/components/TeamAgents/types'
 import { SET_IMPERSONATE_USER } from 'constants/user'
 
@@ -24,7 +24,7 @@ export const getImpersonateUser =
     try {
       const { impersonateUser } = getState()
 
-      const user = getImpersonateUserFromCookie()
+      const user = getImpersonateUserFromLocalStorage()
 
       if (!impersonateUser && user) {
         dispatch(setImpersonateUser(user))

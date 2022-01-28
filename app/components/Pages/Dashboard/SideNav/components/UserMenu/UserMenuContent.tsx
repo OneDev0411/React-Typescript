@@ -16,6 +16,7 @@ import { hasUserAccessToBrandSettings } from '@app/utils/acl'
 import Acl from '@app/views/components/Acl'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { noop } from 'utils/helpers'
+import { removeImpersonateUser } from 'utils/impersonate-user'
 
 import { ActiveTeam } from './ActiveTeam'
 
@@ -137,6 +138,7 @@ export function UserMenuContent({ showChecklists, onClose = noop }: Props) {
           className={classes.listItem}
           onClick={() => {
             onClose()
+            removeImpersonateUser()
             window.location.pathname = 'signout'
           }}
         >
