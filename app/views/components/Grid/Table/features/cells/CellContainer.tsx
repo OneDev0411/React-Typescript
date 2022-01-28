@@ -26,6 +26,7 @@ const useStyles = makeStyles(
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
       whiteSpace: 'nowrap',
       paddingLeft: theme.spacing(2)
     },

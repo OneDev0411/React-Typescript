@@ -42,14 +42,14 @@ const useStyles = makeStyles(
 interface Props {
   title?: string
   iconPath?: string
-  sortEnabled?: boolean
+  sortable?: boolean
   sortDirection?: 'asc' | 'desc'
 }
 
 const ColumnHeaderCell = ({
   title,
   iconPath,
-  sortEnabled = false,
+  sortable = false,
   sortDirection
 }: Props) => {
   const classes = useStyles()
@@ -64,7 +64,7 @@ const ColumnHeaderCell = ({
       <div className={classes.titleContainer}>
         <Typography variant="body2">{title}</Typography>
       </div>
-      {sortEnabled && (
+      {sortable && (
         <div className={classes.sortActionContainer}>
           <SvgIcon
             size={muiIconSizes.small}

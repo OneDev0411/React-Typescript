@@ -148,12 +148,12 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
             isToday: daysToBirthday == 0
           })}
         >
-          {daysToBirthday > 0 &&
+          {daysToBirthday >= 1 &&
             `in ${daysToBirthday} day${daysToBirthday == 1 ? '' : 's'}`}
           {daysToBirthday == 0 && 'is today'}
         </div>
       )}
-      {daysToBirthday >= 0 && inputFormattedDate && (
+      {daysToBirthday >= 0 && !!inputFormattedDate && (
         <div
           className={cn(classes.dateValue, {
             hovered: isHovered,

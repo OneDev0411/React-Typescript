@@ -1,9 +1,6 @@
-import { memo, useMemo } from 'react'
-
 import { alpha, makeStyles } from '@material-ui/core'
 
 import { ToggleEntireRows } from '../../features/Selection/ToggleEntireRows'
-import { getColumnsSize } from '../../helpers/get-columns-size'
 import { GridSelectionOptions, TableColumn } from '../../types'
 
 const useStyles = makeStyles(
@@ -17,6 +14,11 @@ const useStyles = makeStyles(
       backgroundColor: `${alpha(theme.palette.grey[50], 0.75)}`,
       borderTop: `1px solid ${theme.palette.divider}`,
       borderBottom: `1px solid ${theme.palette.divider}`,
+
+      '& > div': {
+        display: 'flex',
+        flex: '0 0 auto'
+      },
 
       '& > div:first-child': {
         borderRight: 'none'
@@ -39,28 +41,31 @@ interface Props<Row> {
   totalRows: number
   selection: GridSelectionOptions<Row> | null
   inlineGridEnabled?: boolean
+  columnsSize: string[]
 }
 
-function Header<Row>({ columns, rows, selection, totalRows }: Props<Row>) {
-  const columnsSize = useMemo(() => getColumnsSize<Row>(columns), [columns])
-
+function Header<Row>({ columns, rows, totalRows }: Props<Row>) {
   const classes = useStyles()
 
   //--
 
-  const Cell = (cellContent, columnIndex) => (
+  const Cell = (cellContent, column, columnIndex) => (
     <div
       className={classes.cellContainer}
       key={columnIndex}
-      style={{ width: columnsSize[columnIndex] }}
+      style={{ width: column.width ?? '180px' }}
     >
       {cellContent}
     </div>
   )
 
   const getCell = (column, columnIndex) => {
+    if (column.isHidden) {
+      return <></>
+    }
+
     if (typeof column.headerName === 'string') {
-      return Cell(column.headerName, columnIndex)
+      return Cell(column.headerName, column, columnIndex)
     }
 
     if (typeof column.headerName === 'function') {
@@ -71,6 +76,7 @@ function Header<Row>({ columns, rows, selection, totalRows }: Props<Row>) {
           columnIndex,
           totalRows
         }),
+        column,
         columnIndex
       )
     }
@@ -86,4 +92,4 @@ function Header<Row>({ columns, rows, selection, totalRows }: Props<Row>) {
   )
 }
 
-export default memo(Header)
+export default Header

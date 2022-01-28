@@ -9,6 +9,7 @@ import {
 } from '@mdi/js'
 import cn from 'classnames'
 
+import { useBreakpoint } from '@app/hooks/use-breakpoint'
 import { goTo } from '@app/utils/go-to'
 import { Table } from 'components/Grid/Table'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
@@ -64,6 +65,7 @@ const ContactsList = props => {
   const gridClasses = useGridStyles()
   const inlineGridClasses = useInlineGridStyles()
   const customGridClasses = useCustomGridStyles()
+  const breakpoint = useBreakpoint()
 
   const isParkTabActive = props.activeSegment?.id === PARKED_CONTACTS_LIST_ID
   const resetSelectedRow = () => {
@@ -105,7 +107,7 @@ const ContactsList = props => {
         <Box pl={1}>
           <ColumnHeaderCell
             title={getSelectedInfo(rows.length)}
-            sortEnabled={false}
+            sortable={false}
           />
         </Box>
       ),
@@ -121,15 +123,16 @@ const ContactsList = props => {
     },
     {
       id: 'tag',
-      headerName: () => (
+      headerName: ({ column }) => (
         <ColumnHeaderCell
           title="Tags"
           iconPath={mdiTagMultipleOutline}
-          sortEnabled={false}
+          sortable={column.sortable}
         />
       ),
+      isHidden: ['xs', 'sm'].includes(breakpoint),
+      sortable: false,
       width: '210px',
-      class: 'tags',
       render: ({ row: contact, isRowSelected }) => (
         <TagsCell
           contact={contact}
@@ -144,13 +147,14 @@ const ContactsList = props => {
     },
     {
       id: 'phone',
-      headerName: () => (
+      headerName: ({ column }) => (
         <ColumnHeaderCell
           title="Phone"
           iconPath={mdiPhoneOutline}
-          sortEnabled={false}
+          sortable={column.sortable}
         />
       ),
+      sortable: false,
       width: '210px',
       render: ({ row: contact, isRowSelected }) => (
         <PhoneNumberCell contact={contact} isRowSelected={isRowSelected} />
@@ -158,13 +162,14 @@ const ContactsList = props => {
     },
     {
       id: 'email',
-      headerName: () => (
+      headerName: ({ column }) => (
         <ColumnHeaderCell
           title="Email"
           iconPath={mdiEmailOutline}
-          sortEnabled={false}
+          sortable={column.sortable}
         />
       ),
+      sortable: false,
       width: '320px',
       render: ({ row: contact, isRowSelected }) => (
         <EmailCell contact={contact} isRowSelected={isRowSelected} />
@@ -172,14 +177,16 @@ const ContactsList = props => {
     },
     {
       id: 'last_touched',
-      headerName: () => (
+      headerName: ({ column }) => (
         <ColumnHeaderCell
           title="Last Touch"
           iconPath={mdiCalendarOutline}
-          sortEnabled={false}
+          sortable={column.sortable}
           sortDirection="desc"
         />
       ),
+      isHidden: ['xs', 'sm', 'md'].includes(breakpoint),
+      sortable: false,
       width: '140px',
       render: ({ row: contact, isRowSelected }) => (
         <LastTouchCell contact={contact} isRowSelected={isRowSelected} />
@@ -187,15 +194,15 @@ const ContactsList = props => {
     },
     {
       id: 'flows',
-      headerName: () => (
+      headerName: ({ column }) => (
         <ColumnHeaderCell
           title="Flows"
           iconPath={mdiLightningBoltOutline}
-          sortEnabled={false}
+          sortable={column.sortable}
         />
       ),
       width: '120px',
-      class: 'flows',
+      isHidden: breakpoint !== 'xl',
       render: ({ row: contact, isRowSelected }) => (
         <FlowsCell
           contact={contact}
@@ -210,10 +217,15 @@ const ContactsList = props => {
     },
     {
       id: 'birthday',
-      headerName: () => (
-        <ColumnHeaderCell title="Birthday" iconPath={mdiCake} />
+      headerName: ({ column }) => (
+        <ColumnHeaderCell
+          title="Birthday"
+          iconPath={mdiCake}
+          sortable={column.sortable}
+        />
       ),
       sortable: false,
+      isHidden: breakpoint !== 'xl',
       width: '180px',
       render: ({ row: contact, isRowSelected }) => (
         <BirthdayCell contact={contact} isRowSelected={isRowSelected} />

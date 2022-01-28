@@ -64,7 +64,11 @@ function Row<T>({
       })}
     >
       {columns
-        .filter((column: TableColumn<T>) => column.render)
+        .filter(
+          (column: TableColumn<T>) =>
+            (inlineGridEnabled && !column.isHidden && !!column.render) ??
+            !!column.render
+        )
         .map((column: TableColumn<T>, columnIndex: number) => (
           <div
             key={columnIndex}
@@ -72,12 +76,18 @@ function Row<T>({
               column: !inlineGridEnabled,
               primary: !inlineGridEnabled && column.primary === true
             })}
-            style={{
-              width: columnsSize[columnIndex],
-              textAlign: column.align || 'left',
-              ...(column.rowStyle || {}),
-              ...(column.style || {})
-            }}
+            style={
+              inlineGridEnabled
+                ? {
+                    width: column.width ?? '180px' // columnsSize[columnIndex]
+                  }
+                : {
+                    width: columnsSize[columnIndex],
+                    textAlign: column.align || 'left',
+                    ...(column.rowStyle || {}),
+                    ...(column.style || {})
+                  }
+            }
             {...getTdProps({
               columnIndex,
               column,

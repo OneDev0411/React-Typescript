@@ -15,6 +15,7 @@ const useStyles = makeStyles(
       justifyContent: 'end',
       alignItems: 'center',
       width: theme.spacing(7.5),
+      borderBottom: `1px solid ${theme.palette.divider}`,
       height: '100%',
       paddingRight: '4px',
       overflow: 'initial'

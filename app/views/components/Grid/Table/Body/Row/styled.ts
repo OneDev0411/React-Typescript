@@ -57,8 +57,8 @@ export const GridRowContainer = styled.div<{
   theme: Theme
 }>`
   ${({ theme, index, selected }) => `
-    border-bottom: 1px solid ${theme.palette.divider};
     cursor: pointer;
+    ${selected ? `background-color: ${theme.palette.grey[100]};` : ''}
     
     display: flex;
     align-items: stretch;
@@ -75,7 +75,10 @@ export const GridRowContainer = styled.div<{
     &:hover .selection--checkbox {
       display: block !important;
     }
-
-    ${selected && `background-color: ${theme.palette.grey[100]};`}
+    
+    > div {
+      display: flex;
+      flex: 0 0 auto;
+    }
   `}
 `

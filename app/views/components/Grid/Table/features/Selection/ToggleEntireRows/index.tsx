@@ -12,7 +12,8 @@ const useStyles = makeStyles(
       justifyContent: 'end',
       overflow: 'initial',
       width: theme.spacing(7.5),
-      paddingRight: theme.spacing(0.5)
+      paddingRight: theme.spacing(0.5),
+      flex: `0 0 ${theme.spacing(7.5)}`
     }
   }),
   { name: 'ToggleEntireRows' }

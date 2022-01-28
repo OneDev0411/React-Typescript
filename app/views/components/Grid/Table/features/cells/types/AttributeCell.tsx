@@ -89,7 +89,7 @@ const AttributeCell = ({
   }: CellProps) => {
     return (
       <>
-        {attribute && (
+        {!!attribute && (
           <div
             className={cn(classes.attributeText, {
               hovered: isHovered,
@@ -101,7 +101,7 @@ const AttributeCell = ({
           </div>
         )}
 
-        {attributeLabel && (
+        {!!attributeLabel && (
           <div
             className={cn(classes.attributeLabel, {
               selected: isSelected
