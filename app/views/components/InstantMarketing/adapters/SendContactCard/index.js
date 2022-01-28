@@ -4,6 +4,8 @@ import { Button } from '@material-ui/core'
 import idx from 'idx'
 import { connect } from 'react-redux'
 
+import { selectActiveTeamUnsafe } from '@app/selectors/team'
+import { selectUserImpersonateFirst } from '@app/selectors/user'
 import { confirmation } from 'actions/confirmation'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
@@ -347,10 +349,10 @@ class SendContactCard extends Component {
   }
 }
 
-function mapStateToProps({ user, activeTeam = null }) {
+function mapStateToProps(state) {
   return {
-    user,
-    activeTeam
+    user: selectUserImpersonateFirst(state),
+    activeTeam: selectActiveTeamUnsafe(state)
   }
 }
 
