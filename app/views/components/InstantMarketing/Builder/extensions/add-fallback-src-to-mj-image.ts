@@ -1,9 +1,11 @@
 import type { Editor, Model } from 'grapesjs'
 
+export const defaultAgentAvatar = 'https://assets.rechat.com/Transparent.gif'
+
 function getDefaultFallbackSrc(model: Model): Optional<string> {
   // Check if the model is an avatar
   if (model.getAttributes()['rechat-assets'] === 'avatar') {
-    return '/static/images/marketing/editor/default-avatar.svg'
+    return defaultAgentAvatar
   }
 }
 
