@@ -154,8 +154,13 @@ function Menu(props: WithRouterProps) {
       setExpandedMenu(isExpanded ? panel : null)
     }
 
-  // Because of saving the last visited route to localStorage,
-  // I had to use useRef here to implement componentDidUpdate
+  // We need to save the last page the user visited in local storage(I defined the last-visited-route variable)
+  // to show that page to him/her on next time visited the site
+  // if the user opens several tabs, we need to save the last tab he/she closed
+  // so I count and increase the number of tabs that the user opens
+  // and save it to local storage(I defined the how-many-tabs-is-open variable)
+  // and decreased it when the user closes a tab
+  // to decide should I update last-visited-route variable or not
   const didMountRef: any = useRef()
 
   useEffect(() => {
@@ -164,9 +169,44 @@ function Menu(props: WithRouterProps) {
 
       const lastVisitedRoute = localStorage.getItem('last-visited-route')
 
+      const howManyTabsIsOpen = Number(
+        localStorage.getItem('how-many-tabs-is-open')
+      )
+
+      if (howManyTabsIsOpen > 0) {
+        // If this is not the first browser tab, it will increase the how-many-tabs-is-open variable
+        localStorage.setItem(
+          'how-many-tabs-is-open',
+          (howManyTabsIsOpen + 1).toString()
+        )
+      } else {
+        // If this is the first browser tab, it will set the how-many-tabs-is-open variable to 1
+        localStorage.setItem('how-many-tabs-is-open', '1')
+      }
+
+      // It will remove the last-visited-route variable to prevent future posibility bugs
+      localStorage.removeItem('last-visited-route')
+
       lastVisitedRoute && browserHistory.push(lastVisitedRoute)
     } else {
-      localStorage.setItem('last-visited-route', pathname)
+      // When the user clicked on the close browser tab button this function will trigger
+      window.onbeforeunload = () => {
+        const howManyTabsIsOpen = Number(
+          localStorage.getItem('how-many-tabs-is-open')
+        )
+
+        if (howManyTabsIsOpen === 1) {
+          // It saves last-visited-route and remove how-many-tabs-is-open variable when the last browser tab is closed
+          localStorage.setItem('last-visited-route', pathname)
+          localStorage.removeItem('how-many-tabs-is-open')
+        } else {
+          // If this is not the last browser tab it will decrease the how-many-tabs-is-open variable
+          localStorage.setItem(
+            'how-many-tabs-is-open',
+            (howManyTabsIsOpen - 1).toString()
+          )
+        }
+      }
     }
   })
 
