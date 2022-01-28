@@ -79,8 +79,9 @@ export function SingleEmailComposeForm({
 
   const initialValues: Partial<EmailFormValues> = getInitialValues({
     allAccounts,
-    defaultValues: otherProps.initialValues,
     defaultUser: impersonateUser ?? user,
+    impersonateUser,
+    defaultValues: otherProps.initialValues,
     preferredAccountId
   })
 
