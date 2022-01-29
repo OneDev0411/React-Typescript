@@ -25,7 +25,9 @@ export default (state = {}, action) => {
         ...state,
         [action.deal_id]: {
           ...state[action.deal_id],
-          new_notifications: null
+          new_notifications: state[action.deal_id].new_notifications.filter(
+            notification => notification.room !== null
+          )
         }
       }
 
