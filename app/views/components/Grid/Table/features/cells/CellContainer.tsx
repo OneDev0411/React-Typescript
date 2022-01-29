@@ -11,19 +11,23 @@ import { CellProps } from '../../types'
 
 //----
 
-interface Action {
+export interface CellAction {
   tooltipText?: string
   onClick: (e: any) => void
   iconPath: string
 }
+export interface InlineProps {
+  actions: Record<string, CellAction>
+}
+
 interface Props {
   text?: string
   actionsActivated?: boolean
-  renderInlineEdit?: () => JSX.Element
+  renderInlineEdit?: (props: InlineProps) => React.ReactNode
   renderCellContent: (props: CellProps) => React.ReactNode
   onCellSelect?: (e) => void
   onEnterEdit?: (isEditing: boolean) => void
-  actions?: Record<string, Action>
+  actions?: Record<string, CellAction>
 }
 
 //----
@@ -40,7 +44,10 @@ const useStyles = makeStyles(
       textOverflow: 'ellipsis',
       borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`,
       whiteSpace: 'nowrap',
-      paddingLeft: theme.spacing(2)
+      paddingLeft: theme.spacing(2),
+      '&.visibleOverflow': {
+        overflow: 'visible'
+      }
     },
     inlineViewContainer: {
       display: 'flex',
@@ -53,6 +60,10 @@ const useStyles = makeStyles(
       height: '100%',
       width: '100%',
       left: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'end',
+      paddingRight: theme.spacing(1),
 
       '&.selected': {
         border: `2px solid ${theme.palette.primary.main}`,
@@ -61,10 +72,9 @@ const useStyles = makeStyles(
       }
     },
     inlineActionIconsContainer: () => ({
-      position: 'absolute',
-      right: 0,
-      top: '50%',
-      transform: 'translate(-50%, -50%)',
+      position: 'relative',
+      display: 'flex',
+      gap: theme.spacing(1),
 
       '&.hidden': {
         visibility: 'hidden'
@@ -106,8 +116,7 @@ const CellContainer = ({
 
   const onSelect = () => {
     if (!isEditing) {
-      setIsSelected(!isSelected)
-      setIsEditing(false)
+      setIsSelected(true)
     }
   }
   const onHoverIn = () => setIsHovered(true)
@@ -119,7 +128,7 @@ const CellContainer = ({
   //--
 
   const renderActionButtons = () => {
-    let cellActions: Record<string, Action> = {
+    let cellActions: Record<string, CellAction> = {
       edit: {
         tooltipText: 'Edit',
         onClick: toggleEdit,
@@ -128,7 +137,7 @@ const CellContainer = ({
       ...actions
     }
 
-    const renderAction = (name: string, { onClick, iconPath }: Action) => (
+    const renderAction = (name: string, { onClick, iconPath }: CellAction) => (
       <Tooltip
         title={name[0].toUpperCase() + name.slice(1)}
         placement="bottom"
@@ -161,16 +170,18 @@ const CellContainer = ({
         selected: isSelected
       })}
     >
-      {!isEditing && actionsActivated && isSelected && renderActionButtons()}
-      {isEditing && isSelected && renderInlineEdit()}
+      {renderActionButtons()}
     </div>
   )
   const renderInlineContent = () => (
     <>
-      {renderCellOverlay()}
-      <div className={classes.inlineViewContainer}>
-        {renderCellContent({ isHovered, isSelected })}
-      </div>
+      {!isEditing && isSelected && actionsActivated && renderCellOverlay()}
+      {!isEditing && (
+        <div className={classes.inlineViewContainer}>
+          {renderCellContent({ isHovered, isSelected })}
+        </div>
+      )}
+      {isEditing && renderInlineEdit({ actions })}
     </>
   )
 
@@ -178,7 +189,9 @@ const CellContainer = ({
 
   return (
     <div
-      className={classes.container}
+      className={cn(classes.container, {
+        visibleOverflow: isEditing
+      })}
       onClick={onSelect}
       onMouseEnter={onHoverIn}
       onMouseLeave={onHoverOut}

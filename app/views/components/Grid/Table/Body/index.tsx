@@ -111,7 +111,6 @@ export function Body<Row>({
             rows={rows}
             selection={selection}
             totalRows={totalRows}
-            inlineGridEnabled={inlineGridEnabled}
             rowSize={rowSize}
           />
         )}
@@ -146,7 +145,6 @@ export function Body<Row>({
           rows={rows}
           selection={selection}
           totalRows={totalRows}
-          inlineGridEnabled={inlineGridEnabled}
         />
       )}
       <AutoSizer disableHeight>

@@ -37,7 +37,6 @@ interface Props<Row> {
   rows: (Row & { id?: UUID })[]
   totalRows: number
   selection: GridSelectionOptions<Row> | null
-  inlineGridEnabled?: boolean
   rowSize?: number
 }
 
