@@ -8,10 +8,10 @@ import {
 } from '@material-ui/core'
 import { mdiClose, mdiContentCopy } from '@mdi/js'
 import cn from 'classnames'
+import { omitBy } from 'lodash'
 
 import CellContainer, {
-  CellAction,
-  InlineProps
+  CellAction
 } from '@app/views/components/Grid/Table/features/cells/CellContainer'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -25,12 +25,12 @@ interface Props {
   countEnabled?: boolean
   attribute_type?: 'email' | 'phone'
   attribute_label?: string
+  actions?: Record<string, CellAction>
 }
 interface EntryProps {
   attribute: IContactAttribute
   attributeIndex: number
   attributeCategory?: 'text' | 'date' | 'number'
-  actions: Record<string, CellAction>
 }
 
 const useStyles = makeStyles(
@@ -156,7 +156,8 @@ const AttributeCell = ({
   isRowSelected = false,
   countEnabled = false,
   attribute_type,
-  attribute_label = 'Main'
+  attribute_label = 'Main',
+  actions = {}
 }: Props) => {
   const classes = useStyles()
 
@@ -165,6 +166,20 @@ const AttributeCell = ({
   let count = 0
 
   //--
+
+  const attributeActions: Record<string, CellAction> = {
+    ...actions,
+    copy: {
+      tooltipText: 'Copy Text',
+      onClick: () => console.log('copy!'),
+      iconPath: mdiContentCopy
+    },
+    delete: {
+      tooltipText: 'Delete',
+      onClick: () => console.log('delete!'),
+      iconPath: mdiClose
+    }
+  }
 
   const filteredAttributes = attributes.filter(attr => {
     if (!attr.is_partner && attr.attribute_type === attribute_type) {
@@ -230,7 +245,7 @@ const AttributeCell = ({
     )
   }
 
-  const renderAction = (
+  const renderActionButton = (
     title: string,
     index: number,
     { onClick, iconPath }: CellAction
@@ -273,32 +288,31 @@ const AttributeCell = ({
   const renderAttributeEntry = ({
     attribute,
     attributeIndex,
-    attributeCategory = 'text',
-    actions
+    attributeCategory = 'text'
   }: EntryProps) => {
     const value = attribute[attributeCategory]
-    const cellActions = Object.keys(actions).map((name, index) =>
-      renderAction(name, index, actions[name])
+    const entryActions = omitBy(attributeActions, (v, k) => k === 'edit')
+    const actionButtons = Object.keys(entryActions).map((name, index) =>
+      renderActionButton(name, index, entryActions[name])
     )
 
     return (
       <div className={classes.attributeEntry} key={attributeIndex}>
-        {renderEmptyEntry(value, cellActions)}
+        {renderEmptyEntry(value, actionButtons)}
       </div>
     )
   }
 
   const AddButton = () => <div className={classes.addAttributeButton}>Add</div>
 
-  const renderInlineEdit = ({ actions }: InlineProps) => (
+  const renderInlineEdit = () => (
     <div className={classes.attributeEditWidget}>
       <div className={classes.attributeEntries}>
         {filteredAttributes.length > 0 &&
           filteredAttributes.map((attribute, attributeIndex) =>
             renderAttributeEntry({
               attribute,
-              attributeIndex,
-              actions
+              attributeIndex
             })
           )}
         {filteredAttributes.length === 0 && (
@@ -313,25 +327,12 @@ const AttributeCell = ({
     </div>
   )
 
-  const actions: Record<string, CellAction> = {
-    copy: {
-      tooltipText: 'Copy Text',
-      onClick: () => console.log('copy!'),
-      iconPath: mdiContentCopy
-    },
-    delete: {
-      tooltipText: 'Delete',
-      onClick: () => console.log('delete!'),
-      iconPath: mdiClose
-    }
-  }
-
   return (
     <CellContainer
       actionsActivated
       renderCellContent={renderCellContent}
       renderInlineEdit={renderInlineEdit}
-      actions={actions}
+      actions={attributeActions}
     />
   )
 }

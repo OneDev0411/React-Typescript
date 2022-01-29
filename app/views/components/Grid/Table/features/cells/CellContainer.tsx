@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { makeStyles, alpha, Tooltip, IconButton } from '@material-ui/core'
 import { mdiPencilOutline } from '@mdi/js'
 import cn from 'classnames'
+import { omitBy } from 'lodash'
 
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -16,14 +17,11 @@ export interface CellAction {
   onClick: (e: any) => void
   iconPath: string
 }
-export interface InlineProps {
-  actions: Record<string, CellAction>
-}
 
 interface Props {
   text?: string
   actionsActivated?: boolean
-  renderInlineEdit?: (props: InlineProps) => React.ReactNode
+  renderInlineEdit?: () => React.ReactNode
   renderCellContent: (props: CellProps) => React.ReactNode
   onCellSelect?: (e) => void
   onEnterEdit?: (isEditing: boolean) => void
@@ -134,7 +132,7 @@ const CellContainer = ({
         onClick: toggleEdit,
         iconPath: mdiPencilOutline
       },
-      ...actions
+      ...omitBy(actions, (v, k) => k === 'delete')
     }
 
     const renderAction = (name: string, { onClick, iconPath }: CellAction) => (
@@ -173,17 +171,19 @@ const CellContainer = ({
       {renderActionButtons()}
     </div>
   )
-  const renderInlineContent = () => (
-    <>
-      {!isEditing && isSelected && actionsActivated && renderCellOverlay()}
-      {!isEditing && (
-        <div className={classes.inlineViewContainer}>
-          {renderCellContent({ isHovered, isSelected })}
-        </div>
-      )}
-      {isEditing && renderInlineEdit({ actions })}
-    </>
-  )
+  const renderInlineContent = () => {
+    return (
+      <>
+        {!isEditing && isSelected && actionsActivated && renderCellOverlay()}
+        {!isEditing && (
+          <div className={classes.inlineViewContainer}>
+            {renderCellContent({ isHovered, isSelected })}
+          </div>
+        )}
+        {isEditing && renderInlineEdit()}
+      </>
+    )
+  }
 
   //--
 
