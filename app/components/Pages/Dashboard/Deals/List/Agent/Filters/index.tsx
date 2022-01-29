@@ -1,4 +1,4 @@
-import { makeStyles, MenuItem } from '@material-ui/core'
+import { Box, makeStyles, MenuItem, Theme } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
@@ -44,12 +44,13 @@ const TAB_ITEMS = [
 ]
 
 const useStyles = makeStyles(
-  () => ({
+  (theme: Theme) => ({
     notification: {
       top: 0,
       right: 0,
       position: 'relative',
-      display: 'inline-block'
+      display: 'inline-flex',
+      marginLeft: theme.spacing(0.5)
     }
   }),
   {
@@ -106,7 +107,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
               key={index}
               value={link || 'all'}
               label={
-                <span>
+                <Box display="flex" alignItems="center">
                   {label}{' '}
                   {notificationsCount > 0 && (
                     <Notification
@@ -114,7 +115,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
                       className={classes.notification}
                     />
                   )}
-                </span>
+                </Box>
               }
               to={urlWithQuery}
             />
