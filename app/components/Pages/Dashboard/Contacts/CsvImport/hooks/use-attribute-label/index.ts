@@ -14,6 +14,10 @@ export function useAttributeLabel() {
 
       const definition = getAttributeDefinition(attribute)
 
+      if (!definition) {
+        return ''
+      }
+
       let label = definition.label
 
       if (attribute.isPartner) {

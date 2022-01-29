@@ -9,6 +9,7 @@ import {
   Theme
 } from '@material-ui/core'
 
+import { useUpdateAttributeDefs } from '@app/models/contacts/get-attribute-defs/use-update-attribute-defs'
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 
 import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
@@ -63,9 +64,18 @@ export function AttributeDropdown({
   const [searchTerm, setSearchTerm] = useState('')
   const options: AttributeOption[] = useOptions(fields, searchTerm)
 
+  /**
+   * basically we should move this hook to CustomAttributeDrawer component but
+   * because the entire crm is still based on redux, moving there might
+   * introcude some conflicts
+   */
+  const updateAttributeDefs = useUpdateAttributeDefs()
+
   const field = fields[column]
 
   const handleCreateCustomAttribute = (attribute: IContactAttributeDef) => {
+    updateAttributeDefs.mutate(attribute)
+
     onSelect({
       type: 'attribute_def',
       attribute_def: attribute.id,

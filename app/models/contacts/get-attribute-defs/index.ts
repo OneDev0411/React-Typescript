@@ -1,11 +1,13 @@
 import Fetch from '../../../services/fetch'
 
-export async function getAttributeDefs(): Promise<{
+export interface NormalizedAttributeDefs {
   list: IContactAttributeDef[]
   byId: Record<UUID, IContactAttributeDef>
   byName: Record<string, UUID>
   bySection: Record<string, UUID[]>
-}> {
+}
+
+export async function getAttributeDefs(): Promise<NormalizedAttributeDefs> {
   try {
     const response = await new Fetch().get('/contacts/attribute_defs')
     const { data } = response.body

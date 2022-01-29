@@ -10,5 +10,5 @@ export function useLabelOptions(attribute: Nullable<IAttribute>) {
 
   const definition = getAttributeDefinitions(attribute)
 
-  return definition.labels ?? []
+  return definition?.labels ?? []
 }
