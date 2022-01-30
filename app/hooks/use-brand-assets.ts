@@ -20,7 +20,7 @@ interface UseBrandAssets {
 
 export function useBrandAssets(
   brandId: UUID,
-  options: Options
+  options: Options = {}
 ): UseBrandAssets {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [assets, setAssets] = useState<IBrandAsset[]>([])

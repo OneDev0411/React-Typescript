@@ -7,6 +7,39 @@ function getDefaultFallbackSrc(model: Model): Optional<string> {
   }
 }
 
+export function handleImageFallbackSrc(
+  imgEl: Nullable<HTMLImageElement>,
+  model: Model
+): void {
+  if (!imgEl) {
+    return
+  }
+
+  const defaultFallbackSrc = getDefaultFallbackSrc(model)
+  const fallbackSrc =
+    model.getAttributes()['fallback-src'] || defaultFallbackSrc
+
+  // Do not continue if there is no fallback src
+  if (!fallbackSrc) {
+    return
+  }
+
+  const src = model.getAttributes().src
+  const variableRegex = /^{{.*}}$/i
+
+  // If the src is not provided or it is a variable
+  if (!src || variableRegex.test(src.trim())) {
+    imgEl.src = fallbackSrc
+
+    return
+  }
+
+  // Set the fallback-src value if the image src is broken
+  imgEl.onerror = () => {
+    imgEl.src = fallbackSrc
+  }
+}
+
 export function addFallbackSrcToMjImage(editor: Editor) {
   editor.DomComponents.addType('mj-image', {
     extendFnView: ['render'],
@@ -19,34 +52,7 @@ export function addFallbackSrcToMjImage(editor: Editor) {
       onRender({ el, model }) {
         const imgEl: Nullable<HTMLImageElement> = el.querySelector('img')
 
-        if (!imgEl) {
-          return
-        }
-
-        const defaultFallbackSrc = getDefaultFallbackSrc(model)
-        const fallbackSrc =
-          model.getAttributes()['fallback-src'] || defaultFallbackSrc
-
-        // Do not continue if there is no fallback src
-        if (!fallbackSrc) {
-          return
-        }
-
-        const src = model.getAttributes().src
-
-        const variableRegex = /^{{.*}}$/i
-
-        // If the src is not provided or it is a variable
-        if (!src || variableRegex.test(src.trim())) {
-          imgEl.src = fallbackSrc
-
-          return
-        }
-
-        // Set the fallback-src value if the image src is broken
-        imgEl.onerror = () => {
-          imgEl.src = fallbackSrc
-        }
+        handleImageFallbackSrc(imgEl, model)
       }
     }
   })
