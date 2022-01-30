@@ -6,7 +6,7 @@ import {
   TextField,
   Tooltip
 } from '@material-ui/core'
-import { mdiClose, mdiContentCopy } from '@mdi/js'
+import { mdiChevronDown, mdiClose, mdiContentCopy } from '@mdi/js'
 import cn from 'classnames'
 import { omitBy } from 'lodash'
 
@@ -63,7 +63,15 @@ const useStyles = makeStyles(
       letterSpacing: '0.2px'
     },
 
-    iconButton: {},
+    iconButton: {
+      color: `${theme.palette.action.disabled} !important`,
+      '&:hover': {
+        color: `${theme.palette.tertiary.main} !important`
+      }
+    },
+
+    //---
+
     attributeEditWidget: {
       boxSizing: 'border-box',
       boxShadow: `
@@ -73,50 +81,58 @@ const useStyles = makeStyles(
       borderRadius: theme.spacing(0.5),
       border: `1px solid ${theme.palette.primary.main}`,
       background: theme.palette.background.paper,
-      width: theme.spacing(41),
       position: 'absolute',
       zIndex: 10,
       left: 0,
-      top: 0
+      top: 0,
+
+      '&.phone_number': {
+        width: theme.spacing(41)
+      },
+      '&.email': {
+        width: theme.spacing(50)
+      }
     },
-    attributeEntries: {},
+    attributeEntries: {
+      display: 'flex',
+      flexDirection: 'column'
+    },
     attributeEntry: {
       borderTopLeftRadius: theme.spacing(0.5),
       borderTopRightRadius: theme.spacing(0.5),
       height: theme.spacing(5),
       display: 'flex',
       flexDirection: 'row',
-      paddingRight: theme.spacing(2),
       borderBottom: `1px solid ${theme.palette.divider}`,
+      justifyContent: 'flex-end',
+
       '&:first-child': {
         height: theme.spacing(5) - 1
       },
+      '&:last-child': {
+        borderBottomLeftRadius: theme.spacing(0.5),
+        borderBottomRightRadius: theme.spacing(0.5)
+      },
       '&:hover': {
         backgroundColor: theme.palette.grey[50]
-      }
-    },
-    addNewAttribute: {
-      ...theme.typography.body2,
-
-      height: theme.spacing(5),
-      lineHeight: `${theme.spacing(3)}px`,
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(2),
-      display: 'flex',
-      alignItems: 'center',
-
-      borderBottomLeftRadius: theme.spacing(0.5),
-      borderBottomRightRadius: theme.spacing(0.5),
-
-      letterSpacing: '0.15px',
-      color: theme.palette.primary.main,
-      '&:hover': {
-        backgroundColor: theme.palette.grey[50]
+      },
+      '&.add-new': {
+        ...theme.typography.body2,
+        color: theme.palette.primary.main,
+        letterSpacing: '0.15px',
+        lineHeight: `${theme.spacing(3)}px`,
+        height: theme.spacing(5) - 1,
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        borderBottom: 'none',
+        borderBottomLeftRadius: theme.spacing(0.5),
+        borderBottomRightRadius: theme.spacing(0.5)
       }
     },
     attributeInputContainer: {
-      flex: '0 0 auto',
-      minWidth: theme.spacing(20.375),
+      flex: '1 0 auto',
       borderRadius: theme.spacing(0.5)
     },
     attributeTypeSelect: {
@@ -126,27 +142,45 @@ const useStyles = makeStyles(
       flex: `0 0 ${theme.spacing(8.25)}px`,
       maxWidth: theme.spacing(8.25),
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      justifyContent: 'end',
+      paddingLeft: theme.spacing(1)
+    },
+    selectLabel: {
+      marginRight: 'auto'
     },
     attributeActionsContainer: {
-      flex: `0 0 ${theme.spacing(12.375)}px`,
-      minWidth: theme.spacing(8.25),
+      flex: '0 0 auto',
+      paddingRight: theme.spacing(2),
+      paddingLeft: theme.spacing(2),
 
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'end',
       gap: theme.spacing(1),
-      paddingRight: theme.spacing(2),
-      color: 'grey'
+      color: 'grey',
+
+      minWidth: theme.spacing(10),
+      '&.email': {
+        minWidth: theme.spacing(14.25)
+      }
     },
     textField: {
       ...theme.typography.body2,
       letterSpacing: '0.15px',
-      paddingLeft: theme.spacing(2),
+      paddingLeft: theme.spacing(2) - 1,
       lineHeight: `${theme.spacing(5) - 1}px`,
       borderRadius: theme.spacing(0.5)
     },
-    addAttributeButton: {}
+    addAttributeButton: {
+      ...theme.typography.body2,
+      lineHeight: `${theme.spacing(3)}px`,
+      alignItems: 'center',
+      display: 'flex',
+      textAlign: 'right',
+      letterSpacing: '0.15px',
+      color: theme.palette.primary.main
+    }
   }),
   { name: 'Attribute-cell' }
 )
@@ -203,6 +237,8 @@ const AttributeCell = ({
     count = filteredAttributes.length
   }
 
+  const isEmpty = filteredAttributes.length === 0
+
   //--
 
   const renderCellContent = ({
@@ -245,91 +281,110 @@ const AttributeCell = ({
     )
   }
 
-  const renderActionButton = (
-    title: string,
-    index: number,
-    { onClick, iconPath }: CellAction
-  ) => (
-    <Tooltip title={title} placement="bottom" key={index}>
-      <IconButton className={classes.iconButton} size="small" onClick={onClick}>
-        <SvgIcon path={iconPath} size={muiIconSizes.small} />
-      </IconButton>
-    </Tooltip>
-  )
-
-  const setFieldValue = value => console.log(value)
-
-  const renderEmptyEntry = (value, actions) => (
-    <>
-      <div className={classes.attributeInputContainer}>
-        <TextField
-          value={value}
+  const renderInlineEdit = () => {
+    const ActionButton = (
+      title: string,
+      index: number,
+      { onClick, iconPath, tooltipText = '' }: CellAction
+    ) => (
+      <Tooltip title={tooltipText} placement="bottom" key={index}>
+        <IconButton
+          className={classes.iconButton}
           size="small"
-          variant="standard"
-          fullWidth
-          onChange={e => setFieldValue(e.target.value)}
-          style={{
-            flexDirection: 'row',
-            height: '100%'
-          }}
-          InputProps={{
-            disableUnderline: true,
-            className: classes.textField
-          }}
-        />
-      </div>
+          onClick={onClick}
+        >
+          <SvgIcon path={iconPath} size={muiIconSizes.small} />
+        </IconButton>
+      </Tooltip>
+    )
 
-      <div className={classes.attributeTypeSelect}>Main</div>
+    const setFieldValue = value => console.log(value)
+    const EmptyEntry = (value, actions) => (
+      <>
+        <div className={classes.attributeInputContainer}>
+          <TextField
+            value={value}
+            size="small"
+            variant="standard"
+            fullWidth
+            onChange={e => setFieldValue(e.target.value)}
+            style={{
+              flexDirection: 'row',
+              height: '100%'
+            }}
+            InputProps={{
+              disableUnderline: true,
+              className: classes.textField
+            }}
+          />
+        </div>
 
-      <div className={classes.attributeActionsContainer}>{actions}</div>
-    </>
-  )
+        <div className={classes.attributeTypeSelect}>
+          <div className={classes.selectLabel}>Main</div>
+          <SvgIcon path={mdiChevronDown} size={muiIconSizes.small} />
+        </div>
 
-  const renderAttributeEntry = ({
-    attribute,
-    attributeIndex,
-    attributeCategory = 'text'
-  }: EntryProps) => {
-    const value = attribute[attributeCategory]
-    const entryActions = omitBy(attributeActions, (v, k) => k === 'edit')
-    const actionButtons = Object.keys(entryActions).map((name, index) =>
-      renderActionButton(name, index, entryActions[name])
+        <div className={cn(classes.attributeActionsContainer, attribute_type)}>
+          {actions}
+        </div>
+      </>
+    )
+
+    const AttributeEntry = ({
+      attribute,
+      attributeIndex,
+      attributeCategory = 'text'
+    }: EntryProps) => {
+      const value = attribute[attributeCategory]
+
+      const entryActions: Record<string, CellAction> = omitBy(
+        attributeActions,
+        (v, k) => k === 'edit'
+      )
+      const actionButtons = Object.keys(entryActions).map((name, index) =>
+        ActionButton(name, index, entryActions[name])
+      )
+
+      return (
+        <div className={classes.attributeEntry} key={attributeIndex}>
+          {EmptyEntry(value, actionButtons)}
+        </div>
+      )
+    }
+
+    const AddButton = () => (
+      <div className={classes.addAttributeButton}>Add</div>
     )
 
     return (
-      <div className={classes.attributeEntry} key={attributeIndex}>
-        {renderEmptyEntry(value, actionButtons)}
+      <div className={cn(classes.attributeEditWidget, attribute_type)}>
+        <div className={classes.attributeEntries}>
+          {filteredAttributes.length > 0 &&
+            filteredAttributes.map((attribute, attributeIndex) =>
+              AttributeEntry({
+                attribute,
+                attributeIndex
+              })
+            )}
+          {filteredAttributes.length === 0 && (
+            <div className={classes.attributeEntry}>
+              {EmptyEntry('', AddButton())}
+            </div>
+          )}
+          {filteredAttributes.length > 0 && (
+            <div className={cn(classes.attributeEntry, 'add-new')}>
+              Add Phone Number
+            </div>
+          )}
+        </div>
       </div>
     )
   }
 
-  const AddButton = () => <div className={classes.addAttributeButton}>Add</div>
-
-  const renderInlineEdit = () => (
-    <div className={classes.attributeEditWidget}>
-      <div className={classes.attributeEntries}>
-        {filteredAttributes.length > 0 &&
-          filteredAttributes.map((attribute, attributeIndex) =>
-            renderAttributeEntry({
-              attribute,
-              attributeIndex
-            })
-          )}
-        {filteredAttributes.length === 0 && (
-          <div className={classes.attributeEntry}>
-            {renderEmptyEntry(null, AddButton())}
-          </div>
-        )}
-      </div>
-      {filteredAttributes.length > 0 && (
-        <div className={classes.addNewAttribute}>Add Phone Number</div>
-      )}
-    </div>
-  )
-
   return (
     <CellContainer
       actionsActivated
+      isEmpty={isEmpty}
       renderCellContent={renderCellContent}
       renderInlineEdit={renderInlineEdit}
       actions={attributeActions}

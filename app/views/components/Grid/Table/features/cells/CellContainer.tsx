@@ -20,6 +20,7 @@ export interface CellAction {
 
 interface Props {
   text?: string
+  isEmpty?: boolean
   actionsActivated?: boolean
   renderInlineEdit?: () => React.ReactNode
   renderCellContent: (props: CellProps) => React.ReactNode
@@ -102,6 +103,7 @@ const useStyles = makeStyles(
 
 const CellContainer = ({
   actionsActivated = false,
+  isEmpty = true,
   renderCellContent,
   renderInlineEdit = () => <></>,
   actions = {}
@@ -126,21 +128,20 @@ const CellContainer = ({
   //--
 
   const renderActionButtons = () => {
-    let cellActions: Record<string, CellAction> = {
+    const cellActions: Record<string, CellAction> = {
       edit: {
         tooltipText: 'Edit',
         onClick: toggleEdit,
         iconPath: mdiPencilOutline
       },
-      ...omitBy(actions, (v, k) => k === 'delete')
+      ...(isEmpty ? {} : omitBy(actions, (v, k) => k === 'delete'))
     }
 
-    const renderAction = (name: string, { onClick, iconPath }: CellAction) => (
-      <Tooltip
-        title={name[0].toUpperCase() + name.slice(1)}
-        placement="bottom"
-        key={name}
-      >
+    const Action = (
+      name: string,
+      { onClick, iconPath, tooltipText = '' }: CellAction
+    ) => (
+      <Tooltip title={tooltipText} placement="bottom" key={name}>
         <IconButton
           className={classes.iconButton}
           size="small"
@@ -153,9 +154,7 @@ const CellContainer = ({
 
     return (
       <div className={classes.inlineActionIconsContainer}>
-        {Object.keys(cellActions).map(name =>
-          renderAction(name, cellActions[name])
-        )}
+        {Object.keys(cellActions).map(name => Action(name, cellActions[name]))}
       </div>
     )
   }
