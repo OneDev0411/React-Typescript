@@ -3,8 +3,16 @@ import { useUserRootTeams } from '../../hooks/use-user-root-teams'
 import { BaseTreeViewBrandSelector } from './components/BaseTreeViewBrandSelector'
 import { BaseBrandSelectorProps } from './type'
 
-export function BaseUserRootBrandSelector(props: BaseBrandSelectorProps) {
-  const { isError, isLoading, initialExpandedNodes, teams } = useUserRootTeams()
+export interface BaseUserRootBrandSelectorProps extends BaseBrandSelectorProps {
+  rootBrandId?: UUID
+}
+
+export function BaseUserRootBrandSelector({
+  rootBrandId,
+  ...props
+}: BaseUserRootBrandSelectorProps) {
+  const { isError, isLoading, initialExpandedNodes, teams } =
+    useUserRootTeams(rootBrandId)
 
   return (
     <BaseTreeViewBrandSelector
