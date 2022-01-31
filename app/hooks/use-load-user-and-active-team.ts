@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
 import { getActiveTeam } from '@app/models/user/get-active-team'
@@ -19,7 +19,7 @@ type UseLoadUserAndActiveTeamState = {
   activeTeam: Nullable<IUserTeam>
 }
 
-type UseLoadUserAndActiveTeamReturn = {
+interface UseLoadUserAndActiveTeam {
   user: IUserState
   activeTeam: Nullable<IUserTeam>
   error: Nullable<string>
@@ -27,17 +27,20 @@ type UseLoadUserAndActiveTeamReturn = {
   isGuest: boolean
 }
 
-export function useLoadUserAndActiveTeam(): UseLoadUserAndActiveTeamReturn {
+export function useLoadUserAndActiveTeam(): UseLoadUserAndActiveTeam {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Nullable<string>>(null)
   const [isGuest, setIsGuest] = useState(false)
   const { user, activeTeam } = useSelector<
     IAppState,
     UseLoadUserAndActiveTeamState
-  >(state => ({
-    user: selectUserUnsafe(state),
-    activeTeam: selectActiveTeamUnsafe(state)
-  }))
+  >(
+    state => ({
+      user: selectUserUnsafe(state),
+      activeTeam: selectActiveTeamUnsafe(state)
+    }),
+    shallowEqual
+  )
   const dispatch = useDispatch()
 
   useEffectOnce(() => {
