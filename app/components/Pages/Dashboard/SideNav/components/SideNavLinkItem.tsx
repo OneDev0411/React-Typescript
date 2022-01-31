@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { SideNavItem, SidenavLink } from '../styled'
+import { SideNavItem, SidenavLink, SidenavBlankLink } from '../styled'
 
 interface Props {
   children: ReactNode
@@ -15,9 +15,15 @@ function SideNavLinkItem(props: Props & WithRouterProps) {
 
   return (
     <SideNavItem>
-      <SidenavLink active={active} to={props.to} data-tour-id={props.tourId}>
-        {props.children}
-      </SidenavLink>
+      {typeof props.to === 'string' ? (
+        <SidenavLink active={active} to={props.to} data-tour-id={props.tourId}>
+          {props.children}
+        </SidenavLink>
+      ) : (
+        <SidenavBlankLink onClick={props.to} data-tour-id={props.tourId}>
+          {props.children}
+        </SidenavBlankLink>
+      )}
     </SideNavItem>
   )
 }

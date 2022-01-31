@@ -1,12 +1,6 @@
 import { useState, ChangeEvent, useEffect, useRef } from 'react'
 
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Divider,
-  makeStyles
-} from '@material-ui/core'
+import { Accordion, AccordionSummary, makeStyles } from '@material-ui/core'
 import {
   mdiViewGridOutline,
   mdiAccountMultiple,
@@ -15,14 +9,13 @@ import {
   mdiBellOutline,
   mdiHelpCircleOutline,
   mdiPhoneOutline,
-  mdiMenuUp,
-  mdiMenuDown,
   mdiHomeCity
 } from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory, withRouter, WithRouterProps } from 'react-router'
 import { ThunkDispatch } from 'redux-thunk'
 
+import { toggleChatbar } from '@app/store_actions/chatroom'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
@@ -38,28 +31,22 @@ import { selectNotificationNewCount } from 'reducers/notifications'
 import { selectShowingsTotalNotificationCount } from 'selectors/showings'
 import { selectUserUnsafe } from 'selectors/user'
 import { getBrandHelpCenterURL } from 'utils/brand'
-import Acl from 'views/components/Acl'
 import { ScrollableArea } from 'views/components/ScrollableArea'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
+import AccordionMenu from './components/AccordionMenu'
 import Logo from './components/Logo'
-import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
 import PoweredBy from './components/PoweredBy'
-import SideNavLinkItem from './components/SideNavLinkItem'
-import SideNavLinkSummary from './components/SideNavLinkSummary'
 import SupportTrigger from './components/SupportTrigger'
 import { UserMenu } from './components/UserMenu'
 import {
   Sidenav,
   SidenavBlankLink,
   SideNavItem,
-  SideNavItemLabel,
   SidenavListGroup,
   AccordionSummaryDiv,
-  AccordionSummaryDot,
-  AccordionSummaryLabel,
-  SideNavButtonWithoutIconLabel
+  AccordionSummaryLabel
 } from './styled'
 import { ExpandedMenu, scrollableAreaShadowColor } from './variables'
 
@@ -210,6 +197,160 @@ function Menu(props: WithRouterProps) {
     }
   })
 
+  const openDrawer = () => {
+    if (!window.location.pathname.includes('/recents/')) {
+      dispatch(toggleChatbar())
+    }
+  }
+
+  const MenuItems = [
+    {
+      access: dashboardAccess,
+      label: 'dashboard',
+      icon: mdiViewGridOutline,
+      hasDivider: true,
+      testId: 'side-nav-list',
+      to: ['/dashboard/overview']
+    },
+    {
+      access: ['Marketing', 'AgentNetwork'],
+      label: 'marketing',
+      icon: mdiChartArc,
+      hasDivider: false,
+      testId: '',
+      subMenu: [
+        {
+          label: 'marketing',
+
+          access: ['Marketing'],
+          to: '/dashboard/marketing'
+        },
+        {
+          label: 'flows',
+
+          access: ['Marketing'],
+          to: '/dashboard/flows'
+        },
+        {
+          label: 'agent-network',
+
+          access: ['AgentNetwork'],
+          to: '/dashboard/agent-network'
+        },
+        {
+          label: 'insights',
+
+          access: insightAccess,
+          to: '/dashboard/insights'
+        },
+        {
+          label: 'websites',
+
+          access: ACL.WEBSITES,
+          to: '/dashboard/websites'
+        }
+      ]
+    },
+    {
+      access: ['Marketing'],
+      label: 'properties',
+      icon: mdiHomeCity,
+      hasDivider: false,
+      testId: '',
+      to: ['/dashboard/mls']
+    },
+    {
+      access: dashboardAccess,
+      label: 'people',
+      icon: mdiAccountMultiple,
+      hasChildrenNotification:
+        inboxNotificationNumber || chatRoomsNotificationsNumber,
+      hasDivider: false,
+      testId: '',
+      subMenu: [
+        {
+          label: 'email',
+
+          access: ['CRM'],
+          to: '/dashboard/inbox',
+          notifCount: inboxNotificationNumber
+        },
+        {
+          label: 'calendar',
+
+          access: ['CRM'],
+          to: '/dashboard/calendar'
+        },
+        {
+          label: 'contacts',
+
+          access: ['CRM'],
+          to: '/dashboard/contacts'
+        },
+        {
+          label: 'chat',
+          isHidden: !user,
+          access: ['CRM'],
+          to: openDrawer,
+          notifCount: chatRoomsNotificationsNumber
+        }
+      ]
+    },
+    {
+      access: ['Marketing'],
+      label: 'transactions',
+      icon: mdiSwapHorizontal,
+      hasChildrenNotification:
+        dealsNotificationsNumber || showingsTotalNotificationCount,
+      hasDivider: true,
+      testId: '',
+      subMenu: [
+        {
+          label: 'deals',
+
+          access: dealsAccess,
+          to: '/dashboard/deals',
+          notifCount: dealsNotificationsNumber
+        },
+        {
+          label: 'listings',
+
+          access: listingsAccess,
+          to: '/dashboard/listings'
+        },
+        {
+          label: 'tours',
+
+          access: openHouseAccess,
+          to: '/dashboard/tours'
+        },
+        {
+          label: 'open-house',
+
+          access: ['CRM'],
+          to: '/dashboard/open-house'
+        },
+        {
+          label: 'showings',
+
+          access: ACL.SHOWINGS,
+          to: '/dashboard/showings',
+          notifCount: showingsTotalNotificationCount
+        }
+      ]
+    },
+    {
+      access: ['Marketing'],
+      isHidden: !user,
+      label: 'notifications',
+      icon: mdiBellOutline,
+      notifCount: appNotifications,
+      hasDivider: true,
+      testId: '',
+      to: ['/dashboard/notifications']
+    }
+  ]
+
   return (
     <Sidenav>
       <Logo />
@@ -219,433 +360,15 @@ function Menu(props: WithRouterProps) {
         style={{ flex: '1 1' }}
         hasThinnerScrollbar
       >
-        <SidenavListGroup data-test="side-nav-list">
-          <Accordion
-            expanded={expandedMenu === 'nav-dashboard'}
-            onChange={handleChange('nav-dashboard')}
-            classes={{
-              root: classes.accordionRoot,
-              expanded: classes.accordionExpanded
-            }}
-          >
-            <AccordionSummary
-              aria-controls="nav-dashboard-content"
-              id="nav-dashboard-header"
-              classes={{
-                root: classes.accordionSummaryRoot,
-                expanded: classes.accordionSummaryRootExpanded,
-                content: classes.accordionSummaryContent
-              }}
-            >
-              <Acl access={dashboardAccess}>
-                <SideNavLinkSummary
-                  to={['/dashboard/overview']}
-                  tourId="nav-dashboard"
-                  onClick={setExpandedMenu}
-                >
-                  <AccordionSummaryDiv>
-                    <SvgIcon
-                      path={mdiViewGridOutline}
-                      size={muiIconSizes.small}
-                      rightMargined
-                    />
-                    Dashboard
-                  </AccordionSummaryDiv>
-                </SideNavLinkSummary>
-              </Acl>
-            </AccordionSummary>
-          </Accordion>
-          <Divider className={classes.divider} />
-        </SidenavListGroup>
-
-        <SidenavListGroup>
-          <Accordion
-            expanded={expandedMenu === 'nav-marketing'}
-            onChange={handleChange('nav-marketing')}
-            classes={{
-              root: classes.accordionRoot,
-              expanded: classes.accordionExpanded
-            }}
-          >
-            <AccordionSummary
-              aria-controls="nav-marketing-content"
-              id="nav-marketing-header"
-              classes={{
-                root: classes.accordionSummaryRoot,
-                expanded: classes.accordionSummaryRootExpanded,
-                content: classes.accordionSummaryContent
-              }}
-            >
-              <Acl.Marketing>
-                <SideNavLinkSummary
-                  to={[
-                    '/dashboard/marketing',
-                    '/dashboard/flows',
-                    '/dashboard/agent-network',
-                    '/dashboard/insights',
-                    '/dashboard/websites'
-                  ]}
-                  tourId="nav-marketing"
-                  onClick={setExpandedMenu}
-                >
-                  <AccordionSummaryDiv>
-                    <SvgIcon
-                      path={mdiChartArc}
-                      size={muiIconSizes.small}
-                      rightMargined
-                    />
-                    <AccordionSummaryLabel>Marketing</AccordionSummaryLabel>
-                  </AccordionSummaryDiv>
-                  {expandedMenu === 'nav-marketing' ? (
-                    <SvgIcon path={mdiMenuUp} />
-                  ) : (
-                    <SvgIcon path={mdiMenuDown} />
-                  )}
-                </SideNavLinkSummary>
-              </Acl.Marketing>
-            </AccordionSummary>
-            <AccordionDetails
-              classes={{
-                root: classes.AccordionDetailsRoot
-              }}
-            >
-              <Acl.Marketing>
-                <SideNavLinkItem
-                  to="/dashboard/marketing"
-                  tourId="nav-Overview"
-                >
-                  <SideNavItemLabel>Overview</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl.Marketing>
-
-              <Acl.Marketing>
-                <SideNavLinkItem to="/dashboard/flows" tourId="nav-flows">
-                  <SideNavItemLabel>Flows</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl.Marketing>
-
-              <Acl.AgentNetwork>
-                <SideNavLinkItem
-                  to="/dashboard/agent-network"
-                  tourId="nav-agent-network"
-                >
-                  <SideNavItemLabel>Agent Network</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl.AgentNetwork>
-
-              <Acl access={insightAccess}>
-                <SideNavLinkItem to="/dashboard/insights" tourId="nav-insight">
-                  <SideNavItemLabel>Insight</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl>
-
-              <Acl access={ACL.WEBSITES}>
-                <SideNavLinkItem to="/dashboard/websites" tourId="nav-websites">
-                  <SideNavItemLabel>Website</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion
-            expanded={expandedMenu === 'nav-properties'}
-            onChange={handleChange('nav-properties')}
-            classes={{
-              root: classes.accordionRoot,
-              expanded: classes.accordionExpanded
-            }}
-          >
-            <AccordionSummary
-              aria-controls="nav-properties-content"
-              id="nav-properties-header"
-              classes={{
-                root: classes.accordionSummaryRoot,
-                expanded: classes.accordionSummaryRootExpanded,
-                content: classes.accordionSummaryContent
-              }}
-            >
-              <Acl.Marketing>
-                <SideNavLinkSummary
-                  to={['/dashboard/mls']}
-                  tourId="nav-properties"
-                  onClick={setExpandedMenu}
-                >
-                  <AccordionSummaryDiv>
-                    <SvgIcon
-                      path={mdiHomeCity}
-                      size={muiIconSizes.small}
-                      rightMargined
-                    />
-                    <AccordionSummaryLabel>Properties</AccordionSummaryLabel>
-                  </AccordionSummaryDiv>
-                </SideNavLinkSummary>
-              </Acl.Marketing>
-            </AccordionSummary>
-          </Accordion>
-
-          <Accordion
-            expanded={expandedMenu === 'nav-people'}
-            onChange={handleChange('nav-people')}
-            classes={{
-              root: classes.accordionRoot,
-              expanded: classes.accordionExpanded
-            }}
-          >
-            <AccordionSummary
-              aria-controls="nav-people-content"
-              id="nav-people-header"
-              classes={{
-                root: classes.accordionSummaryRoot,
-                expanded: classes.accordionSummaryRootExpanded,
-                content: classes.accordionSummaryContent
-              }}
-            >
-              <Acl access={dashboardAccess}>
-                <SideNavLinkSummary
-                  to={[
-                    '/dashboard/inbox',
-                    '/dashboard/calendar',
-                    '/dashboard/contacts'
-                  ]}
-                  tourId="nav-people"
-                  onClick={setExpandedMenu}
-                >
-                  <AccordionSummaryDiv>
-                    <SvgIcon
-                      path={mdiAccountMultiple}
-                      size={muiIconSizes.small}
-                      rightMargined
-                    />
-                    <AccordionSummaryLabel>
-                      People
-                      {inboxNotificationNumber ||
-                      chatRoomsNotificationsNumber ? (
-                        <AccordionSummaryDot />
-                      ) : (
-                        ''
-                      )}
-                    </AccordionSummaryLabel>
-                  </AccordionSummaryDiv>
-                  {expandedMenu === 'nav-people' ? (
-                    <SvgIcon path={mdiMenuUp} />
-                  ) : (
-                    <SvgIcon path={mdiMenuDown} />
-                  )}
-                </SideNavLinkSummary>
-              </Acl>
-            </AccordionSummary>
-            <AccordionDetails
-              classes={{
-                root: classes.AccordionDetailsRoot
-              }}
-            >
-              <Acl.Crm>
-                <SideNavLinkItem to="/dashboard/inbox" tourId="nav-inbox">
-                  <MenuBadge
-                    badgeContent={inboxNotificationNumber}
-                    color="primary"
-                  >
-                    <SideNavItemLabel>Email</SideNavItemLabel>
-                  </MenuBadge>
-                </SideNavLinkItem>
-              </Acl.Crm>
-
-              <Acl.Crm>
-                <SideNavLinkItem to="/dashboard/calendar" tourId="nav-calendar">
-                  <SideNavItemLabel>Calendar</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl.Crm>
-
-              <Acl.Crm>
-                <SideNavLinkItem to="/dashboard/contacts" tourId="nav-contacts">
-                  <SideNavItemLabel>Contacts</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl.Crm>
-
-              {user && (
-                <Accordion
-                  expanded={expandedMenu === 'nav-chat'}
-                  onChange={handleChange('nav-chat')}
-                  classes={{
-                    root: classes.accordionRoot,
-                    expanded: classes.accordionExpanded
-                  }}
-                >
-                  <AccordionSummary
-                    aria-controls="nav-chat-content"
-                    id="nav-chat-header"
-                    classes={{
-                      root: classes.accordionSummaryRoot,
-                      expanded: classes.accordionSummaryRootExpanded,
-                      content: classes.accordionSummaryContent
-                    }}
-                  >
-                    <SideNavItem>
-                      <MessagesDrawerTrigger>
-                        <MenuBadge
-                          badgeContent={chatRoomsNotificationsNumber}
-                          color="primary"
-                        >
-                          <SideNavButtonWithoutIconLabel>
-                            Chat
-                          </SideNavButtonWithoutIconLabel>
-                        </MenuBadge>
-                      </MessagesDrawerTrigger>
-                    </SideNavItem>
-                  </AccordionSummary>
-                </Accordion>
-              )}
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion
-            expanded={expandedMenu === 'nav-transaction'}
-            onChange={handleChange('nav-transaction')}
-            classes={{
-              root: classes.accordionRoot,
-              expanded: classes.accordionExpanded
-            }}
-          >
-            <AccordionSummary
-              aria-controls="nav-transaction-content"
-              id="nav-transaction-header"
-              classes={{
-                root: classes.accordionSummaryRoot,
-                expanded: classes.accordionSummaryRootExpanded,
-                content: classes.accordionSummaryContent
-              }}
-            >
-              <Acl.Marketing>
-                <SideNavLinkSummary
-                  to={[
-                    '/dashboard/deals',
-                    '/dashboard/listings',
-                    '/dashboard/tours',
-                    '/dashboard/open-house',
-                    '/dashboard/showings'
-                  ]}
-                  tourId="nav-transaction"
-                  onClick={setExpandedMenu}
-                >
-                  <AccordionSummaryDiv>
-                    <SvgIcon
-                      path={mdiSwapHorizontal}
-                      size={muiIconSizes.small}
-                      rightMargined
-                    />
-                    <AccordionSummaryLabel>
-                      Transactions
-                      {dealsNotificationsNumber ||
-                      showingsTotalNotificationCount ? (
-                        <AccordionSummaryDot />
-                      ) : (
-                        ''
-                      )}
-                    </AccordionSummaryLabel>
-                  </AccordionSummaryDiv>
-                  {expandedMenu === 'nav-transaction' ? (
-                    <SvgIcon path={mdiMenuUp} />
-                  ) : (
-                    <SvgIcon path={mdiMenuDown} />
-                  )}
-                </SideNavLinkSummary>
-              </Acl.Marketing>
-            </AccordionSummary>
-            <AccordionDetails
-              classes={{
-                root: classes.AccordionDetailsRoot
-              }}
-            >
-              <Acl access={dealsAccess}>
-                <SideNavLinkItem to="/dashboard/deals" tourId="nav-deals">
-                  <MenuBadge
-                    badgeContent={dealsNotificationsNumber}
-                    color="primary"
-                  >
-                    <SideNavItemLabel>Deals</SideNavItemLabel>
-                  </MenuBadge>
-                </SideNavLinkItem>
-              </Acl>
-
-              <Acl access={listingsAccess}>
-                <SideNavLinkItem to="/dashboard/listings" tourId="nav-listings">
-                  <SideNavItemLabel>Listings</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl>
-
-              <Acl.Crm>
-                <SideNavLinkItem to="/dashboard/tours" tourId="nav-tours">
-                  <SideNavItemLabel>Tours</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl.Crm>
-
-              <Acl access={openHouseAccess}>
-                <SideNavLinkItem
-                  to="/dashboard/open-house"
-                  tourId="nav-open-house"
-                >
-                  <SideNavItemLabel>Open House</SideNavItemLabel>
-                </SideNavLinkItem>
-              </Acl>
-
-              <Acl access={ACL.SHOWINGS}>
-                <SideNavLinkItem to="/dashboard/showings">
-                  <MenuBadge
-                    badgeContent={showingsTotalNotificationCount}
-                    color="primary"
-                  >
-                    <SideNavItemLabel>Showings</SideNavItemLabel>
-                  </MenuBadge>
-                </SideNavLinkItem>
-              </Acl>
-            </AccordionDetails>
-          </Accordion>
-          <Divider className={classes.divider} />
-        </SidenavListGroup>
-
-        <SidenavListGroup>
-          {user && (
-            <Accordion
-              expanded={expandedMenu === 'nav-notifications'}
-              onChange={handleChange('nav-notifications')}
-              classes={{
-                root: classes.accordionRoot,
-                expanded: classes.accordionExpanded
-              }}
-            >
-              <AccordionSummary
-                aria-controls="nav-notifications-content"
-                id="nav-notifications-header"
-                classes={{
-                  root: classes.accordionSummaryRoot,
-                  expanded: classes.accordionSummaryRootExpanded,
-                  content: classes.accordionSummaryContent
-                }}
-              >
-                <SideNavLinkSummary
-                  to={['/dashboard/notifications']}
-                  tourId="nav-notifications"
-                  onClick={setExpandedMenu}
-                >
-                  <AccordionSummaryDiv>
-                    <MenuBadge badgeContent={appNotifications} color="primary">
-                      <SvgIcon
-                        path={mdiBellOutline}
-                        size={muiIconSizes.small}
-                        rightMargined
-                      />
-
-                      <AccordionSummaryLabel>
-                        Notifications
-                      </AccordionSummaryLabel>
-                    </MenuBadge>
-                  </AccordionSummaryDiv>
-                </SideNavLinkSummary>
-              </AccordionSummary>
-            </Accordion>
-          )}
-          <Divider className={classes.divider} />
-        </SidenavListGroup>
+        {MenuItems.map((menu, index) => (
+          <AccordionMenu
+            key={index}
+            data={menu}
+            onChange={handleChange}
+            expandedMenu={expandedMenu}
+            setExpandedMenu={setExpandedMenu}
+          />
+        ))}
 
         <SidenavListGroup>
           <Accordion

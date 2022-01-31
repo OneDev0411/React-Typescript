@@ -36,6 +36,7 @@ export const SideNavItem = styled.li`
 
 export const SideNavItemLabel = styled.div`
   padding-left: ${(props: ThemeProps<Theme>) => props.theme.spacing(3)}px;
+  text-transform: capitalize;
 `
 
 const itemStyle = css`
@@ -141,6 +142,7 @@ export const AccordionSummaryDiv = styled.div`
 
 export const AccordionSummaryLabel = styled.span`
   position: relative;
+  text-transform: capitalize;
 `
 
 export const AccordionSummaryDot = styled.span`

@@ -8,7 +8,7 @@ import { ExpandedMenu } from '../variables'
 interface Props {
   children: ReactNode
   to: string[]
-  tourId: ExpandedMenu
+  tourId: any
   onClick: (panel: ExpandedMenu) => void
 }
 
