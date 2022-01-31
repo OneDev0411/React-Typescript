@@ -9,8 +9,8 @@ export const setListings = (
   }
 })
 
-export const toggleListingFavoriteState = (id: UUID) => ({
-  type: 'TOGGLE_LISTING_FAVORITE_STATE' as 'TOGGLE_LISTING_FAVORITE_STATE',
+export const removeListing = (id: UUID) => ({
+  type: 'REMOVE_LISTING' as 'REMOVE_LISTING',
   payload: {
     id
   }
@@ -33,7 +33,7 @@ export const setIsLoading = (isLoading: boolean) => ({
 
 export type Actions = ReturnType<
   | typeof setListings
-  | typeof toggleListingFavoriteState
+  | typeof removeListing
   | typeof setMapLocation
   | typeof setIsLoading
 >
