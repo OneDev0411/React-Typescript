@@ -41,6 +41,10 @@ export default class Fetch {
     endpoint: string,
     isUploadMethod: boolean = false
   ): SuperAgent.SuperAgentRequest {
+    if (process.env.NODE_ENV === 'test') {
+      return SuperAgent[method](endpoint)
+    }
+
     const { user, brand } = store.getState() as IAppState
 
     let brandId
