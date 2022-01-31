@@ -20,7 +20,7 @@ import {
 } from '@app/components/helpers/get-dashboard-access-list'
 import syncOpenHouseData from '@app/components/helpers/sync-open-house-offline-registers'
 import { useLoadUserAndActiveTeam } from '@app/hooks/use-load-user-and-active-team'
-// import asyncComponentLoader from '@app/loader'
+import asyncComponentLoader from '@app/loader'
 import { IAppState } from '@app/reducers'
 import {
   isLoadedContactAttrDefs,
@@ -48,13 +48,12 @@ import Intercom from '@app/views/components/Intercom'
 
 import { DashboardLayout } from './DashboardLayout'
 
-// const InstantChat = asyncComponentLoader({
-//   loader: () => import('./Chatroom/InstantChat')
-// })
+const InstantChat = asyncComponentLoader({
+  loader: () => import('./Chatroom/InstantChat')
+})
 
 // TODO: fix type which is set to unknown
 type DashboardState = {
-  rooms: unknown
   isFetchingDeals: boolean
   deals: Record<UUID, IDeal>
   contactsAttributeDefs: IAttributeDefsState
@@ -70,17 +69,12 @@ export function Dashboard({ params, children, location }: DashboardProps) {
 
   const { user, activeTeam } = useLoadUserAndActiveTeam()
 
-  const {
-    // rooms,
-    deals,
-    isFetchingDeals,
-    contactsAttributeDefs
-  }: DashboardState = useSelector((state: IAppState) => ({
-    rooms: state.chatroom.rooms,
-    deals: selectDealsList(state),
-    contactsAttributeDefs: selectContactAttributeDefs(state),
-    isFetchingDeals: selectDeals(state).properties.isFetchingDeals
-  }))
+  const { deals, isFetchingDeals, contactsAttributeDefs }: DashboardState =
+    useSelector((state: IAppState) => ({
+      deals: selectDealsList(state),
+      contactsAttributeDefs: selectContactAttributeDefs(state),
+      isFetchingDeals: selectDeals(state).properties.isFetchingDeals
+    }))
   const dispatch = useDispatch()
 
   const {
@@ -201,7 +195,7 @@ export function Dashboard({ params, children, location }: DashboardProps) {
           <EmailVerificationBanner show email={user.email} />
         )}
 
-        {/* user && <InstantChat user={user} rooms={rooms} /> */}
+        {user && <InstantChat user={user} />}
 
         <DashboardLayout>
           {cloneElement(children, {
