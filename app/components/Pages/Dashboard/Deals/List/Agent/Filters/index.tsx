@@ -50,6 +50,9 @@ const useStyles = makeStyles(
       right: 0,
       position: 'relative',
       display: 'inline-flex',
+      fontSize: theme.spacing(1.4),
+      width: theme.spacing(3.5),
+      height: theme.spacing(3.5),
       marginLeft: theme.spacing(0.5)
     }
   }),
