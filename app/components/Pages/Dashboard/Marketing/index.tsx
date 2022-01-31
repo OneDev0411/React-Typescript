@@ -105,11 +105,7 @@ export function MarketingLayout({
     refetch: refetchBrandAssets,
     delete: deleteBrandAsset,
     hasDeleteAccess: hasDeleteAccessOnBrandAsset
-  } = useBrandAssets(activeBrandId, {
-    templateTypes: templateTypes
-      ? (templateTypes.split(',') as IMarketingTemplateType[])
-      : []
-  })
+  } = useBrandAssets(activeBrandId)
   const mediums = useMarketingCenterMediums(templates, assets)
 
   const templateTypesWithMediums = useMarketingTemplateTypesWithMediums(
@@ -135,7 +131,15 @@ export function MarketingLayout({
     })
 
     const currentPageAssets = assets.filter(item => {
-      return currentMedium ? item.medium === currentMedium : !!item.medium
+      const mediumMatches = currentMedium
+        ? item.medium === currentMedium
+        : !!item.medium
+      const typeMatches =
+        splittedTemplateTypes.length > 0 && item.template_type
+          ? splittedTemplateTypes.includes(item.template_type)
+          : true
+
+      return mediumMatches && typeMatches
     })
 
     const currentPageTemplatesAndAssets: Array<

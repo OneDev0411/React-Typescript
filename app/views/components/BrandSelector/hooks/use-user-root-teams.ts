@@ -16,7 +16,9 @@ interface UseUserRootTeamsReturnType {
   teams: TreeFn<IBrand>
 }
 
-export function useUserRootTeams(): UseUserRootTeamsReturnType {
+export function useUserRootTeams(
+  rootBrandId?: UUID
+): UseUserRootTeamsReturnType {
   const activeTeam = useUnsafeActiveTeam()
   const {
     data: rootTeam,
@@ -27,10 +29,10 @@ export function useUserRootTeams(): UseUserRootTeamsReturnType {
 
   useEffectOnce(() => {
     run(async () => {
-      const rootBrand = getRootBrand(activeTeam)
+      const userRootBrandId = rootBrandId ?? getRootBrand(activeTeam)?.id
 
-      if (rootBrand) {
-        const { data: brandTree } = await getBrands(rootBrand.id, true, [])
+      if (userRootBrandId) {
+        const { data: brandTree } = await getBrands(userRootBrandId, true, [])
 
         return brandTree
       }

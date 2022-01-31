@@ -1,21 +1,10 @@
-import { useRef, useState, ChangeEvent } from 'react'
+import { useRef } from 'react'
 
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  makeStyles,
-  Paper,
-  Popper,
-  Typography
-} from '@material-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
+import { Button, makeStyles } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
-import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { selectUserUnsafe } from '@app/selectors/user'
-import { setActiveTeamSetting } from '@app/store_actions/active-team'
-import { getSettingFromTeam } from '@app/utils/user-teams'
+import { ReminderDialog } from '@app/views/components/ReminderDialog'
 
 import { SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY } from '../../../constants'
 
@@ -56,32 +45,6 @@ export function SaveSearchButton({ isLoading, onClick }: Props) {
   const classes = useStyles()
   const buttonRef = useRef<Nullable<HTMLButtonElement>>(null)
   const user = useSelector(selectUserUnsafe)
-  const activeTeam = useUnsafeActiveTeam()
-  const dispatch = useDispatch()
-
-  const [dontShow, setDontShow] = useState(false)
-  const [isOpenHint, setIsOpenHint] = useState(
-    activeTeam
-      ? !getSettingFromTeam(
-          activeTeam,
-          SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY
-        )
-      : false
-  )
-
-  const onClickGotIt = () => {
-    if (dontShow) {
-      dispatch(
-        setActiveTeamSetting(SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY, true)
-      )
-    }
-
-    setIsOpenHint(false)
-  }
-
-  const handleDontShowChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setDontShow(event.target.checked)
-  }
 
   return (
     <>
@@ -99,68 +62,11 @@ export function SaveSearchButton({ isLoading, onClick }: Props) {
             Save Search
           </Button>
           {!isLoading && (
-            <Popper
-              id="saveSearchButtonPopOver"
-              open={isOpenHint}
+            <ReminderDialog
+              userSettingsKey={SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY}
               anchorEl={buttonRef.current}
-              placement="bottom"
-              className={classes.popup}
-              modifiers={{
-                arrow: {
-                  enabled: true
-                }
-              }}
-            >
-              <Paper elevation={4}>
-                <Grid
-                  className={classes.container}
-                  container
-                  direction="row"
-                  spacing={3}
-                >
-                  <Grid
-                    item
-                    xs={3}
-                    container
-                    justifyContent="center"
-                    alignItems="flex-start"
-                  >
-                    <img
-                      className={classes.icon}
-                      src="/static/images/bell/bell.gif"
-                      alt="Save Search"
-                    />
-                  </Grid>
-                  <Grid item xs={9} container direction="column">
-                    <Typography className={classes.title} variant="h6">
-                      Save this search and be the first to know about new
-                      listings
-                    </Typography>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          size="small"
-                          color="primary"
-                          checked={dontShow}
-                          onChange={handleDontShowChange}
-                          name="dont_show"
-                        />
-                      }
-                      label="Don't show me this message again"
-                    />
-                    <Button
-                      className={classes.gotItButton}
-                      variant="contained"
-                      color="primary"
-                      size="medium"
-                      onClick={onClickGotIt}
-                    >
-                      Got it!
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Paper>
-            </Popper>
+              title="Save this search and be the first to know about new listings"
+            />
           )}
         </>
       )}
