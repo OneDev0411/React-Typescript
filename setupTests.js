@@ -82,8 +82,5 @@ global.getSelection = () => {
 // Using data-test instead of data-testId
 configure({ testIdAttribute: 'data-test' })
 
-// Increase async tests timeout
-configure({ asyncUtilTimeout: 20000 })
-
 // Fix mapbox-gl issue
 window.URL.createObjectURL = function () {}
