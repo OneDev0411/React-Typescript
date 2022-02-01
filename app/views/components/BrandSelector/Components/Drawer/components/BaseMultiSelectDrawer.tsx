@@ -11,6 +11,7 @@ import { BaseMultiSelectDrawer as BaseMultiSelectDrawerProps } from '../type'
 export function BaseMultiSelectDrawer({
   disabled,
   drawerTitle = 'Select Agents',
+  saveButtonText,
   brandSelectorProps = {},
   selectedBrands: currentBrands = [],
   onSave,
@@ -73,7 +74,7 @@ export function BaseMultiSelectDrawer({
             disabled={disabled || isSaving || selectedBrands.length === 0}
             onClick={handleClick}
           >
-            {isSaving ? 'Saving...' : 'Save'}
+            {saveButtonText ?? isSaving ? 'Saving...' : 'Save'}
           </Button>
         </Drawer.Footer>
       </Drawer>
