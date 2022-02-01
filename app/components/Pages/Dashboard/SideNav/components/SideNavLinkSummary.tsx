@@ -10,8 +10,6 @@ interface Props {
   to: any
   tourId: any
   onClick?: (panel: ExpandedMenu) => void
-  target?: string
-  rel?: string
   hasSubmenu?: any
 }
 
@@ -22,8 +20,6 @@ function SideNavLinkSummary(props: Props & WithRouterProps) {
     onClick = () => {},
     to,
     tourId,
-    target = '_self',
-    rel = '',
     hasSubmenu
   } = props
 
@@ -44,8 +40,6 @@ function SideNavLinkSummary(props: Props & WithRouterProps) {
       active={active && !hasSubmenu}
       to={hasSubmenu ? '' : to}
       data-tour-id={tourId}
-      target={target}
-      rel={rel}
     >
       {children}
     </SidenavLink>

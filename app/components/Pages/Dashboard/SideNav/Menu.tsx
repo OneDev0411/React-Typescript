@@ -96,6 +96,8 @@ function Menu(props: WithRouterProps) {
     !isIntercomActive && dispatch(activateIntercom(isIntercomActive))
   }
 
+  const openWebsite = link => window.open(link, '_blank', 'noopener noreferrer')
+
   const MenuItems = [
     {
       access: dashboardAccess,
@@ -228,9 +230,7 @@ function Menu(props: WithRouterProps) {
       access: ['Marketing'],
       label: 'help-center',
       icon: mdiHelpCircleOutline,
-      to: brandHelpCenterURL,
-      target: '_blank',
-      rel: 'noopener noreferrer'
+      to: () => openWebsite(brandHelpCenterURL)
     },
     {
       access: ['CRM'],

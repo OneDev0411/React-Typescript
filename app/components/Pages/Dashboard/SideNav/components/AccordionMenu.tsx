@@ -90,9 +90,7 @@ export default function AccordionMenu({
     to,
     hasDivider,
     subMenu,
-    isHidden = false,
-    target,
-    rel
+    isHidden = false
   } = data
 
   const childrenRoutes =
@@ -123,8 +121,6 @@ export default function AccordionMenu({
               to={childrenRoutes || to}
               tourId={`nav-${label}`}
               onClick={setExpandedMenu}
-              target={target}
-              rel={rel}
               hasSubmenu={subMenu}
             >
               <AccordionSummaryDiv>
@@ -176,8 +172,6 @@ export default function AccordionMenu({
                       <SideNavLinkSummary
                         to={item.to}
                         tourId={`nav-${item.label}`}
-                        target={target}
-                        rel={rel}
                       >
                         {item.notifCount ? (
                           <MenuBadge
