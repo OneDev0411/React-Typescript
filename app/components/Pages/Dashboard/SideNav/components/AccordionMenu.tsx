@@ -82,7 +82,7 @@ export default function AccordionMenu({
 }: AccordionMenuProps) {
   const classes = useStyles()
   const {
-    testId,
+    testId = '',
     label,
     access,
     icon,
@@ -91,14 +91,16 @@ export default function AccordionMenu({
     to,
     hasDivider,
     subMenu,
-    isHidden
+    isVisible = true,
+    target,
+    rel
   } = data
 
   const childrenRoutes =
     subMenu &&
     subMenu.filter(item => typeof item.to === 'string').map(item => item.to)
 
-  return !isHidden ? (
+  return isVisible ? (
     <Acl access={access}>
       <SidenavListGroup data-test={testId}>
         <Accordion
@@ -122,6 +124,8 @@ export default function AccordionMenu({
               to={childrenRoutes || to}
               tourId={`nav-${label}`}
               onClick={setExpandedMenu}
+              target={target}
+              rel={rel}
             >
               <AccordionSummaryDiv>
                 {notifCount ? (
@@ -167,11 +171,13 @@ export default function AccordionMenu({
             >
               {subMenu.map(
                 (item, index) =>
-                  !item.isHidden && (
+                  item.isVisible && (
                     <Acl access={item.access} key={index}>
                       <SideNavLinkItem
                         to={item.to}
                         tourId={`nav-${item.label}`}
+                        target={target}
+                        rel={rel}
                       >
                         {item.notifCount ? (
                           <MenuBadge

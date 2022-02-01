@@ -6,22 +6,31 @@ import { SideNavItem, SidenavLink, SidenavBlankLink } from '../styled'
 
 interface Props {
   children: ReactNode
-  to: string
+  to: any
   tourId?: string
+  target?: string
+  rel?: string
 }
 
 function SideNavLinkItem(props: Props & WithRouterProps) {
-  const active = props.location.pathname.startsWith(props.to)
+  const { target = '_self', rel = '', to, location, children, tourId } = props
+  const active = location.pathname.startsWith(to)
 
   return (
     <SideNavItem>
-      {typeof props.to === 'string' ? (
-        <SidenavLink active={active} to={props.to} data-tour-id={props.tourId}>
-          {props.children}
+      {typeof to === 'string' ? (
+        <SidenavLink
+          active={active}
+          to={to}
+          data-tour-id={tourId}
+          target={target}
+          rel={rel}
+        >
+          {children}
         </SidenavLink>
       ) : (
-        <SidenavBlankLink onClick={props.to} data-tour-id={props.tourId}>
-          {props.children}
+        <SidenavBlankLink onClick={to} data-tour-id={tourId}>
+          {children}
         </SidenavBlankLink>
       )}
     </SideNavItem>

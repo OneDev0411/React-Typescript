@@ -1,6 +1,5 @@
 import { useState, ChangeEvent, useEffect, useRef } from 'react'
 
-import { Accordion, AccordionSummary, makeStyles } from '@material-ui/core'
 import {
   mdiViewGridOutline,
   mdiAccountMultiple,
@@ -16,11 +15,9 @@ import { browserHistory, withRouter, WithRouterProps } from 'react-router'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { toggleChatbar } from '@app/store_actions/chatroom'
-import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
-import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { activateIntercom } from '@app/store_actions/intercom'
 import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
 import { GlobalActionsButton } from 'components/GlobalActionsButton'
-import { MenuBadge } from 'components/MenuBadge'
 import { ACL } from 'constants/acl'
 import { useChatRoomsNotificationsNumber } from 'hooks/use-chat-rooms-notifications-number'
 import { useDealsNotificationsNumber } from 'hooks/use-deals-notifications-number'
@@ -38,61 +35,9 @@ import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 import AccordionMenu from './components/AccordionMenu'
 import Logo from './components/Logo'
 import PoweredBy from './components/PoweredBy'
-import SupportTrigger from './components/SupportTrigger'
 import { UserMenu } from './components/UserMenu'
-import {
-  Sidenav,
-  SidenavBlankLink,
-  SideNavItem,
-  SidenavListGroup,
-  AccordionSummaryDiv,
-  AccordionSummaryLabel
-} from './styled'
+import { Sidenav } from './styled'
 import { ExpandedMenu, scrollableAreaShadowColor } from './variables'
-
-const useStyles = makeStyles(
-  theme => ({
-    divider: {
-      backgroundColor: theme.palette.grey[800],
-      margin: theme.spacing(0.75, 1)
-    },
-    accordionRoot: {
-      backgroundColor: 'transparent',
-      boxShadow: 'none',
-      '&:before': {
-        height: '0'
-      }
-    },
-    accordionExpanded: {
-      // I had to add !important to force accordion styles to change
-      margin: '0 !important'
-    },
-    accordionSummaryRoot: {
-      padding: 0,
-      // I had to add !important to force accordionSummary styles to change
-      minHeight: `${theme.spacing(5.5)}px !important`
-    },
-    accordionSummaryRootExpanded: {
-      // Added primary color to the root menu's svg-icon, when it is expanded
-      '& svg:first-child': {
-        color: theme.palette.primary.main
-      }
-    },
-    accordionSummaryContent: {
-      display: 'flex',
-      justifyContent: 'flex-start',
-      // I had to add !important to force accordionSummary styles to change
-      margin: '0 !important'
-    },
-    AccordionDetailsRoot: {
-      padding: 0,
-      flexDirection: 'column'
-    }
-  }),
-  {
-    name: 'SideNavMenu'
-  }
-)
 
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
 const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
@@ -101,7 +46,6 @@ const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
 const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 function Menu(props: WithRouterProps) {
-  const classes = useStyles()
   const {
     location: { pathname }
   } = props
@@ -135,6 +79,9 @@ function Menu(props: WithRouterProps) {
   useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
 
   const [expandedMenu, setExpandedMenu] = useState<ExpandedMenu>(null)
+  const { isActive: isIntercomActive } = useSelector(
+    (state: IAppState) => state.intercom
+  )
 
   const handleChange =
     (panel: ExpandedMenu) => (event: ChangeEvent<{}>, isExpanded: boolean) => {
@@ -203,6 +150,10 @@ function Menu(props: WithRouterProps) {
     }
   }
 
+  const openSupport = () => {
+    !isIntercomActive && dispatch(activateIntercom(isIntercomActive))
+  }
+
   const MenuItems = [
     {
       access: dashboardAccess,
@@ -210,42 +161,36 @@ function Menu(props: WithRouterProps) {
       icon: mdiViewGridOutline,
       hasDivider: true,
       testId: 'side-nav-list',
-      to: ['/dashboard/overview']
+      to: '/dashboard/overview'
     },
     {
       access: ['Marketing', 'AgentNetwork'],
       label: 'marketing',
       icon: mdiChartArc,
       hasDivider: false,
-      testId: '',
       subMenu: [
         {
           label: 'marketing',
-
           access: ['Marketing'],
           to: '/dashboard/marketing'
         },
         {
           label: 'flows',
-
           access: ['Marketing'],
           to: '/dashboard/flows'
         },
         {
           label: 'agent-network',
-
           access: ['AgentNetwork'],
           to: '/dashboard/agent-network'
         },
         {
           label: 'insights',
-
           access: insightAccess,
           to: '/dashboard/insights'
         },
         {
           label: 'websites',
-
           access: ACL.WEBSITES,
           to: '/dashboard/websites'
         }
@@ -256,8 +201,7 @@ function Menu(props: WithRouterProps) {
       label: 'properties',
       icon: mdiHomeCity,
       hasDivider: false,
-      testId: '',
-      to: ['/dashboard/mls']
+      to: '/dashboard/mls'
     },
     {
       access: dashboardAccess,
@@ -266,30 +210,26 @@ function Menu(props: WithRouterProps) {
       hasChildrenNotification:
         inboxNotificationNumber || chatRoomsNotificationsNumber,
       hasDivider: false,
-      testId: '',
       subMenu: [
         {
           label: 'email',
-
           access: ['CRM'],
           to: '/dashboard/inbox',
           notifCount: inboxNotificationNumber
         },
         {
           label: 'calendar',
-
           access: ['CRM'],
           to: '/dashboard/calendar'
         },
         {
           label: 'contacts',
-
           access: ['CRM'],
           to: '/dashboard/contacts'
         },
         {
           label: 'chat',
-          isHidden: !user,
+          isVisible: user,
           access: ['CRM'],
           to: openDrawer,
           notifCount: chatRoomsNotificationsNumber
@@ -303,36 +243,30 @@ function Menu(props: WithRouterProps) {
       hasChildrenNotification:
         dealsNotificationsNumber || showingsTotalNotificationCount,
       hasDivider: true,
-      testId: '',
       subMenu: [
         {
           label: 'deals',
-
           access: dealsAccess,
           to: '/dashboard/deals',
           notifCount: dealsNotificationsNumber
         },
         {
           label: 'listings',
-
           access: listingsAccess,
           to: '/dashboard/listings'
         },
         {
           label: 'tours',
-
           access: openHouseAccess,
           to: '/dashboard/tours'
         },
         {
           label: 'open-house',
-
           access: ['CRM'],
           to: '/dashboard/open-house'
         },
         {
           label: 'showings',
-
           access: ACL.SHOWINGS,
           to: '/dashboard/showings',
           notifCount: showingsTotalNotificationCount
@@ -341,13 +275,26 @@ function Menu(props: WithRouterProps) {
     },
     {
       access: ['Marketing'],
-      isHidden: !user,
+      isVisible: user,
       label: 'notifications',
       icon: mdiBellOutline,
       notifCount: appNotifications,
       hasDivider: true,
-      testId: '',
-      to: ['/dashboard/notifications']
+      to: '/dashboard/notifications'
+    },
+    {
+      access: ['Marketing'],
+      label: 'help-center',
+      icon: mdiHelpCircleOutline,
+      to: brandHelpCenterURL,
+      target: '_blank',
+      rel: 'noopener noreferrer'
+    },
+    {
+      access: ['CRM'],
+      label: 'support',
+      icon: mdiPhoneOutline,
+      to: openSupport
     }
   ]
 
@@ -369,81 +316,6 @@ function Menu(props: WithRouterProps) {
             setExpandedMenu={setExpandedMenu}
           />
         ))}
-
-        <SidenavListGroup>
-          <Accordion
-            expanded={expandedMenu === 'nav-help-center'}
-            onChange={handleChange('nav-help-center')}
-            classes={{
-              root: classes.accordionRoot,
-              expanded: classes.accordionExpanded
-            }}
-          >
-            <AccordionSummary
-              aria-controls="nav-help-center-content"
-              id="nav-help-center-header"
-              classes={{
-                root: classes.accordionSummaryRoot,
-                expanded: classes.accordionSummaryRootExpanded,
-                content: classes.accordionSummaryContent
-              }}
-            >
-              <SideNavItem>
-                <SidenavBlankLink
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={brandHelpCenterURL}
-                >
-                  <AccordionSummaryDiv>
-                    <SvgIcon
-                      path={mdiHelpCircleOutline}
-                      size={muiIconSizes.small}
-                      rightMargined
-                    />
-
-                    <AccordionSummaryLabel>Help Center</AccordionSummaryLabel>
-                  </AccordionSummaryDiv>
-                </SidenavBlankLink>
-              </SideNavItem>
-            </AccordionSummary>
-          </Accordion>
-
-          <Accordion
-            expanded={expandedMenu === 'nav-support'}
-            onChange={handleChange('nav-support')}
-            classes={{
-              root: classes.accordionRoot,
-              expanded: classes.accordionExpanded
-            }}
-          >
-            <AccordionSummary
-              aria-controls="nav-support-content"
-              id="nav-support-header"
-              classes={{
-                root: classes.accordionSummaryRoot,
-                expanded: classes.accordionSummaryRootExpanded,
-                content: classes.accordionSummaryContent
-              }}
-            >
-              <SideNavItem>
-                <SupportTrigger>
-                  <MenuBadge
-                    badgeContent={chatRoomsNotificationsNumber}
-                    color="primary"
-                  >
-                    <SvgIcon
-                      path={mdiPhoneOutline}
-                      size={muiIconSizes.small}
-                      rightMargined
-                    />
-
-                    <AccordionSummaryLabel>Support</AccordionSummaryLabel>
-                  </MenuBadge>
-                </SupportTrigger>
-              </SideNavItem>
-            </AccordionSummary>
-          </Accordion>
-        </SidenavListGroup>
       </ScrollableArea>
 
       <UserMenu user={user} />
