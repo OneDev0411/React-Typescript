@@ -101,141 +101,163 @@ function Menu(props: WithRouterProps) {
   const MenuItems = [
     {
       access: dashboardAccess,
-      label: 'dashboard',
-      icon: mdiViewGridOutline,
       hasDivider: true,
+      icon: mdiViewGridOutline,
+      id: 'dashboard',
+      label: 'Dashboard',
       testId: 'side-nav-list',
       to: '/dashboard/overview'
     },
     {
       access: marketingAccess,
-      label: 'marketing',
-      icon: mdiChartArc,
       hasDivider: false,
+      icon: mdiChartArc,
+      id: 'marketing',
+      label: 'Marketing',
       subMenu: [
         {
-          label: 'marketing',
           access: ['Marketing'],
+          id: 'overview',
+          label: 'Overview',
           to: '/dashboard/marketing'
         },
         {
-          label: 'flows',
           access: ['Marketing'],
+          id: 'flows',
+          label: 'Flows',
           to: '/dashboard/flows'
         },
         {
-          label: 'agent-network',
           access: ['AgentNetwork'],
+          id: 'agent-network',
+          label: 'Agent Network',
           to: '/dashboard/agent-network'
         },
         {
-          label: 'insights',
           access: insightAccess,
+          id: 'insights',
+          label: 'Insights',
           to: '/dashboard/insights'
         },
         {
-          label: 'websites',
           access: ACL.WEBSITES,
+          id: 'websites',
+          label: 'Websites',
           to: '/dashboard/websites'
         }
       ]
     },
     {
       access: ['Marketing'],
-      label: 'properties',
-      icon: mdiHomeCity,
       hasDivider: false,
+      icon: mdiHomeCity,
+      id: 'properties',
+      label: 'Properties',
       to: '/dashboard/mls'
     },
     {
       access: dashboardAccess,
-      label: 'people',
-      icon: mdiAccountMultiple,
       hasChildrenNotification:
         inboxNotificationNumber || chatRoomsNotificationsNumber,
       hasDivider: false,
+      icon: mdiAccountMultiple,
+      id: 'people',
+      label: 'People',
       subMenu: [
         {
-          label: 'email',
           access: ['CRM'],
-          to: '/dashboard/inbox',
-          notifCount: inboxNotificationNumber
+          id: 'email',
+          label: 'Email',
+          notificationCount: inboxNotificationNumber,
+          to: '/dashboard/inbox'
         },
         {
-          label: 'calendar',
           access: ['CRM'],
+          id: 'calendar',
+          label: 'Calendar',
           to: '/dashboard/calendar'
         },
         {
-          label: 'contacts',
           access: ['CRM'],
+          id: 'contacts',
+          label: 'Contacts',
           to: '/dashboard/contacts'
         },
         {
-          label: 'chat',
-          isHidden: !user,
           access: ['CRM'],
-          to: openDrawer,
-          notifCount: chatRoomsNotificationsNumber
+          id: 'chat',
+          label: 'Chat',
+          isHidden: !user,
+          notificationCount: chatRoomsNotificationsNumber,
+          to: openDrawer
         }
       ]
     },
     {
       access: ['Marketing'],
-      label: 'transactions',
-      icon: mdiSwapHorizontal,
       hasChildrenNotification:
         dealsNotificationsNumber || showingsTotalNotificationCount,
       hasDivider: true,
+      icon: mdiSwapHorizontal,
+      id: 'transactions',
+      label: 'Transactions',
       subMenu: [
         {
-          label: 'deals',
           access: dealsAccess,
-          to: '/dashboard/deals',
-          notifCount: dealsNotificationsNumber
+          id: 'deals',
+          label: 'Deals',
+          notificationCount: dealsNotificationsNumber,
+          to: '/dashboard/deals'
         },
         {
-          label: 'listings',
           access: listingsAccess,
+          id: 'listings',
+          label: 'Listings',
           to: '/dashboard/listings'
         },
         {
-          label: 'tours',
           access: openHouseAccess,
+          id: 'tours',
+          label: 'Tours',
           to: '/dashboard/tours'
         },
         {
-          label: 'open-house',
           access: ['CRM'],
+          id: 'open-house',
+          label: 'Open House',
           to: '/dashboard/open-house'
         },
         {
-          label: 'showings',
           access: ACL.SHOWINGS,
-          to: '/dashboard/showings',
-          notifCount: showingsTotalNotificationCount
+          id: 'showings',
+          label: 'Showings',
+          notificationCount: showingsTotalNotificationCount,
+          to: '/dashboard/showings'
         }
       ]
     },
     {
       access: ['Marketing'],
-      isHidden: !user,
-      label: 'notifications',
-      icon: mdiBellOutline,
-      notifCount: appNotifications,
       hasDivider: true,
+      icon: mdiBellOutline,
+      id: 'notifications',
+      isHidden: !user,
+      label: 'Notifications',
+      notificationCount: appNotifications,
       to: '/dashboard/notifications'
     },
     {
       access: ['Marketing'],
-      label: 'help-center',
       icon: mdiHelpCircleOutline,
+      id: 'help-center',
+      label: 'Help Center',
       to: () => openWebsite(brandHelpCenterURL)
     },
     {
       access: ['CRM'],
-      label: 'support',
       icon: mdiPhoneOutline,
+      id: 'support',
+      label: 'Support',
       to: openSupport
     }
   ]

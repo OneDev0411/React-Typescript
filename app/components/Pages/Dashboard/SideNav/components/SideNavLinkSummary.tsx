@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from 'react'
 
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { SidenavLink } from '../styled'
+import { SidenavLink, SidenavLinkSummary } from '../styled'
 import { ExpandedMenu } from '../variables'
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
   tourId: any
   onClick?: (panel: ExpandedMenu) => void
   hasSubmenu?: any
+  isSubmenu?: boolean
 }
 
 function SideNavLinkSummary(props: Props & WithRouterProps) {
@@ -20,7 +21,8 @@ function SideNavLinkSummary(props: Props & WithRouterProps) {
     onClick = () => {},
     to,
     tourId,
-    hasSubmenu
+    hasSubmenu,
+    isSubmenu = false
   } = props
 
   const active = hasSubmenu
@@ -31,15 +33,24 @@ function SideNavLinkSummary(props: Props & WithRouterProps) {
     active && onClick(tourId)
   }, [active, onClick, tourId])
 
-  return (
+  return isSubmenu ? (
     <SidenavLink
+      active={active}
+      to={typeof to === 'function' ? '' : to}
+      onClick={typeof to === 'function' ? to : () => false}
+      data-tour-id={tourId}
+    >
+      {children}
+    </SidenavLink>
+  ) : (
+    <SidenavLinkSummary
       active={active && !hasSubmenu}
       to={typeof to === 'function' || hasSubmenu ? '' : to}
       onClick={typeof to === 'function' ? to : () => false}
       data-tour-id={tourId}
     >
       {children}
-    </SidenavLink>
+    </SidenavLinkSummary>
   )
 }
 

@@ -82,11 +82,12 @@ export default function AccordionMenu({
   const classes = useStyles()
   const {
     testId = '',
+    id,
     label,
     access,
     icon,
     hasChildrenNotification,
-    notifCount,
+    notificationCount,
     to,
     hasDivider,
     subMenu,
@@ -101,16 +102,16 @@ export default function AccordionMenu({
     <Acl access={access}>
       <SidenavListGroup data-test={testId}>
         <Accordion
-          expanded={expandedMenu === `nav-${label}`}
-          onChange={onChange(`nav-${label}`)}
+          expanded={expandedMenu === `nav-${id}`}
+          onChange={onChange(`nav-${id}`)}
           classes={{
             root: classes.accordionRoot,
             expanded: classes.accordionExpanded
           }}
         >
           <AccordionSummary
-            aria-controls={`nav-${label}-content`}
-            id={`nav-${label}-header`}
+            aria-controls={`nav-${id}-content`}
+            id={`nav-${id}-header`}
             classes={{
               root: classes.accordionSummaryRoot,
               expanded: classes.accordionSummaryRootExpanded,
@@ -119,21 +120,20 @@ export default function AccordionMenu({
           >
             <SideNavLinkSummary
               to={childrenRoutes || to}
-              tourId={`nav-${label}`}
+              tourId={`nav-${id}`}
               onClick={setExpandedMenu}
               hasSubmenu={subMenu}
+              isSubmenu={false}
             >
               <AccordionSummaryDiv>
-                {notifCount ? (
-                  <MenuBadge badgeContent={notifCount} color="primary">
+                {notificationCount ? (
+                  <MenuBadge badgeContent={notificationCount} color="primary">
                     <SvgIcon
                       path={icon}
                       size={muiIconSizes.small}
                       rightMargined
                     />
-                    <AccordionSummaryLabel>
-                      {label.replaceAll('-', ' ')}
-                    </AccordionSummaryLabel>
+                    <AccordionSummaryLabel>{label}</AccordionSummaryLabel>
                   </MenuBadge>
                 ) : (
                   <>
@@ -143,14 +143,14 @@ export default function AccordionMenu({
                       rightMargined
                     />
                     <AccordionSummaryLabel>
-                      {label.replaceAll('-', ' ')}
+                      {label}
                       {hasChildrenNotification ? <AccordionSummaryDot /> : null}
                     </AccordionSummaryLabel>
                   </>
                 )}
               </AccordionSummaryDiv>
               {subMenu ? (
-                expandedMenu === `nav-${label}` ? (
+                expandedMenu === `nav-${id}` ? (
                   <SvgIcon path={mdiMenuUp} />
                 ) : (
                   <SvgIcon path={mdiMenuDown} />
@@ -172,20 +172,17 @@ export default function AccordionMenu({
                       <SideNavLinkSummary
                         to={item.to}
                         tourId={`nav-${item.label}`}
+                        isSubmenu
                       >
-                        {item.notifCount ? (
+                        {item.notificationCount ? (
                           <MenuBadge
-                            badgeContent={item.notifCount}
+                            badgeContent={item.notificationCount}
                             color="primary"
                           >
-                            <SideNavItemLabel>
-                              {item.label.replaceAll('-', ' ')}
-                            </SideNavItemLabel>
+                            <SideNavItemLabel>{item.label}</SideNavItemLabel>
                           </MenuBadge>
                         ) : (
-                          <SideNavItemLabel>
-                            {item.label.replaceAll('-', ' ')}
-                          </SideNavItemLabel>
+                          <SideNavItemLabel>{item.label}</SideNavItemLabel>
                         )}
                       </SideNavLinkSummary>
                     </Acl>

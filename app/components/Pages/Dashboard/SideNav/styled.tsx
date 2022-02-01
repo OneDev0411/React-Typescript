@@ -36,7 +36,6 @@ export const SideNavItem = styled.li`
 
 export const SideNavItemLabel = styled.div`
   padding-left: ${(props: ThemeProps<Theme>) => props.theme.spacing(3)}px;
-  text-transform: capitalize;
 `
 
 const itemStyle = css`
@@ -92,16 +91,21 @@ const linkStyle = css`
     props.theme.typography.body1.lineHeight};
   font-weight: ${(props: ThemeProps<Theme>) =>
     props.theme.typography.body1.fontWeight};
-  ${itemStyle}
   cursor: pointer;
+  ${itemStyle}
 `
 
 const WrappedRouterLink = ({ active, ...rest }: SidenavLinkPorps) => (
   <RouterLink {...rest} />
 )
 
+export const SidenavLinkSummary = styled(WrappedRouterLink)<SidenavLinkPorps>`
+  ${linkStyle}
+`
+
 export const SidenavLink = styled(WrappedRouterLink)<SidenavLinkPorps>`
   ${linkStyle}
+  margin-bottom: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(1)}px`};
 `
 
 export const SidenavBlankLink = styled(Link)`
