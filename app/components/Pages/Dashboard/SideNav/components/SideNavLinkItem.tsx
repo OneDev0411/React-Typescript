@@ -1,35 +1,56 @@
-import React, { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { SidenavLink, SidenavBlankLink } from '../styled'
+import { SidenavLink, SidenavLinkSummary } from '../styled'
+import { ExpandedMenu } from '../variables'
 
 interface Props {
   children: ReactNode
   to: any
-  tourId?: string
-  target?: string
-  rel?: string
+  tourId: any
+  onClick?: (panel: ExpandedMenu) => void
+  hasSubmenu?: any
+  isSubmenu?: boolean
 }
 
 function SideNavLinkItem(props: Props & WithRouterProps) {
-  const { target = '_self', rel = '', to, location, children, tourId } = props
-  const active = location.pathname.startsWith(to)
+  const {
+    children,
+    location,
+    onClick = () => {},
+    to,
+    tourId,
+    hasSubmenu,
+    isSubmenu = false
+  } = props
 
-  return typeof to === 'string' ? (
+  const active = hasSubmenu
+    ? to.some((route: string) => location.pathname.startsWith(route))
+    : location.pathname.startsWith(to)
+
+  useEffect(() => {
+    active && onClick(tourId)
+  }, [active, onClick, tourId])
+
+  return isSubmenu ? (
     <SidenavLink
       active={active}
-      to={to}
+      to={typeof to === 'function' ? '' : to}
+      onClick={typeof to === 'function' ? to : () => false}
       data-tour-id={tourId}
-      target={target}
-      rel={rel}
     >
       {children}
     </SidenavLink>
   ) : (
-    <SidenavBlankLink onClick={to} data-tour-id={tourId}>
+    <SidenavLinkSummary
+      active={active && !hasSubmenu}
+      to={typeof to === 'function' || hasSubmenu ? '' : to}
+      onClick={typeof to === 'function' ? to : () => false}
+      data-tour-id={tourId}
+    >
       {children}
-    </SidenavBlankLink>
+    </SidenavLinkSummary>
   )
 }
 

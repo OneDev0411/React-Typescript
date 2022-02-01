@@ -20,7 +20,7 @@ import {
   SidenavListGroup
 } from '../styled'
 
-import SideNavLinkSummary from './SideNavLinkSummary'
+import SideNavLinkItem from './SideNavLinkItem'
 
 const useStyles = makeStyles(
   theme => ({
@@ -118,7 +118,7 @@ export default function SideNavAccordion({
               content: classes.accordionSummaryContent
             }}
           >
-            <SideNavLinkSummary
+            <SideNavLinkItem
               to={childrenRoutes || to}
               tourId={`nav-${id}`}
               onClick={setExpandedMenu}
@@ -156,7 +156,7 @@ export default function SideNavAccordion({
                   <SvgIcon path={mdiMenuDown} />
                 )
               ) : null}
-            </SideNavLinkSummary>
+            </SideNavLinkItem>
           </AccordionSummary>
 
           {subMenu && (
@@ -169,7 +169,7 @@ export default function SideNavAccordion({
                 (item, index) =>
                   !item.isHidden && (
                     <Acl access={item.access} key={index}>
-                      <SideNavLinkSummary
+                      <SideNavLinkItem
                         to={item.to}
                         tourId={`nav-${item.label}`}
                         isSubmenu
@@ -184,7 +184,7 @@ export default function SideNavAccordion({
                         ) : (
                           <SideNavItemLabel>{item.label}</SideNavItemLabel>
                         )}
-                      </SideNavLinkSummary>
+                      </SideNavLinkItem>
                     </Acl>
                   )
               )}

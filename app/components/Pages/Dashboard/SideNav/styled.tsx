@@ -1,4 +1,3 @@
-import { Link } from '@material-ui/core'
 import { Theme, alpha } from '@material-ui/core/styles'
 import { Link as RouterLink, LinkProps } from 'react-router'
 import styled, { ThemeProps, css } from 'styled-components'
@@ -24,14 +23,6 @@ export const SidenavListGroup = styled.ul`
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-`
-
-export const SideNavItem = styled.li`
-  cursor: pointer;
-  transition: background-color 0.2s ease-in;
-  width: 100%;
-  margin-bottom: ${(props: ThemeProps<Theme>) => props.theme.spacing(1)}px;
-  list-style: none;
 `
 
 export const SideNavItemLabel = styled.div`
@@ -108,10 +99,6 @@ export const SidenavLink = styled(WrappedRouterLink)<SidenavLinkPorps>`
   margin-bottom: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(1)}px`};
 `
 
-export const SidenavBlankLink = styled(Link)`
-  ${linkStyle}
-`
-
 export const Avatar = styled.div`
   display: inline-block;
   text-align: center;
@@ -130,14 +117,6 @@ export const Avatar = styled.div`
     }
   }
 `
-export const Divider = styled.div`
-  height: 1px;
-  margin: 0;
-  overflow: hidden;
-  background-color: ${(props: ThemeProps<Theme>) =>
-    props.theme.palette.divider};
-`
-export const ListItemDivider = Divider.withComponent('li')
 
 export const AccordionSummaryDiv = styled.div`
   width: 100%;
@@ -161,8 +140,4 @@ export const AccordionSummaryDot = styled.span`
     `${props.theme.shape.borderRadius}px`};
   background-color: ${(props: ThemeProps<Theme>) =>
     props.theme.palette.primary.main};
-`
-
-export const SideNavButtonWithoutIconLabel = styled.span`
-  padding-left: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(3)}px`};
 `
