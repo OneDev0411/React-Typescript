@@ -1,3 +1,5 @@
+import { memo, useMemo } from 'react'
+
 import { mdiEmailOutline } from '@mdi/js'
 
 import { CellAction } from './CellContainer'
@@ -17,17 +19,24 @@ const EmailCell = ({ contact, isRowSelected = false }: Props) => {
       iconPath: mdiEmailOutline
     }
   }
+  const attributes: IContactAttribute[] = useMemo(
+    () => contact?.attributes || [],
+    [contact?.attributes]
+  )
 
   return (
     <AttributeCell
-      attributes={contact.attributes || []}
-      isRowSelected={isRowSelected}
+      isSelectable
       countEnabled
-      attribute_type="email"
-      attribute_label="Main"
+      attributes={attributes}
+      isRowSelected={isRowSelected}
+      attributeInputPlaceholder="john@doe.com"
+      attributeDescription="Email Address"
+      attributeType="email"
+      attributeLabel="Main"
       actions={actions}
     />
   )
 }
 
-export default EmailCell
+export default memo(EmailCell)

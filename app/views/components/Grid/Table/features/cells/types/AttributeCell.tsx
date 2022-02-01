@@ -22,9 +22,12 @@ interface Props {
   attributes: IContactAttribute[]
   onSave?: (e: any) => void
   isRowSelected?: boolean
+  isSelectable?: boolean
   countEnabled?: boolean
-  attribute_type?: 'email' | 'phone'
-  attribute_label?: string
+  attributeInputPlaceholder?: string
+  attributeDescription: string
+  attributeType: 'email' | 'phone_number'
+  attributeLabel?: string
   actions?: Record<string, CellAction>
 }
 interface EntryProps {
@@ -126,9 +129,7 @@ const useStyles = makeStyles(
         paddingRight: theme.spacing(2),
         alignItems: 'center',
         justifyContent: 'flex-start',
-        borderBottom: 'none',
-        borderBottomLeftRadius: theme.spacing(0.5),
-        borderBottomRightRadius: theme.spacing(0.5)
+        borderBottom: 'none'
       }
     },
     attributeInputContainer: {
@@ -141,26 +142,25 @@ const useStyles = makeStyles(
       lineHeight: `${theme.spacing(3)}px`,
       flex: `0 0 ${theme.spacing(8.25)}px`,
       maxWidth: theme.spacing(8.25),
+      paddingLeft: theme.spacing(2),
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'end',
-      paddingLeft: theme.spacing(1)
+      justifyContent: 'end'
     },
     selectLabel: {
       marginRight: 'auto'
     },
     attributeActionsContainer: {
-      flex: '0 0 auto',
       paddingRight: theme.spacing(2),
       paddingLeft: theme.spacing(2),
-
+      flex: '0 0 auto',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'end',
       gap: theme.spacing(1),
       color: 'grey',
-
       minWidth: theme.spacing(10),
+
       '&.email': {
         minWidth: theme.spacing(14.25)
       }
@@ -174,12 +174,12 @@ const useStyles = makeStyles(
     },
     addAttributeButton: {
       ...theme.typography.body2,
-      lineHeight: `${theme.spacing(3)}px`,
-      alignItems: 'center',
-      display: 'flex',
-      textAlign: 'right',
       letterSpacing: '0.15px',
-      color: theme.palette.primary.main
+      textAlign: 'right',
+      lineHeight: `${theme.spacing(3)}px`,
+      color: theme.palette.primary.main,
+      display: 'flex',
+      alignItems: 'center'
     }
   }),
   { name: 'Attribute-cell' }
@@ -188,15 +188,18 @@ const useStyles = makeStyles(
 const AttributeCell = ({
   attributes,
   isRowSelected = false,
+  isSelectable = false,
   countEnabled = false,
-  attribute_type,
-  attribute_label = 'Main',
+  attributeInputPlaceholder,
+  attributeDescription,
+  attributeType,
+  attributeLabel = 'Main',
   actions = {}
 }: Props) => {
   const classes = useStyles()
 
-  let attribute
-  let attributeLabel
+  let primaryAttribute
+  let primaryAttributeLabel
   let count = 0
 
   //--
@@ -216,10 +219,10 @@ const AttributeCell = ({
   }
 
   const filteredAttributes = attributes.filter(attr => {
-    if (!attr.is_partner && attr.attribute_type === attribute_type) {
+    if (!attr.is_partner && attr.attribute_type === attributeType) {
       if (attr.is_primary) {
-        attribute = attr.text
-        attributeLabel = attr.label || attribute_label
+        primaryAttribute = attr.text
+        primaryAttributeLabel = attr.label || attributeLabel
       }
 
       return true
@@ -229,9 +232,9 @@ const AttributeCell = ({
   })
 
   if (filteredAttributes.length > 0) {
-    if (!attribute) {
-      attribute = filteredAttributes[0].text
-      attributeLabel = filteredAttributes[0].label || 'Other'
+    if (!primaryAttribute) {
+      primaryAttribute = filteredAttributes[0].text
+      primaryAttributeLabel = filteredAttributes[0].label || 'Other'
     }
 
     count = filteredAttributes.length
@@ -247,7 +250,7 @@ const AttributeCell = ({
   }: CellProps) => {
     return (
       <>
-        {attribute && (
+        {primaryAttribute && (
           <div
             className={cn(classes.attributeText, {
               hovered: isHovered,
@@ -255,17 +258,17 @@ const AttributeCell = ({
               rowSelected: isRowSelected
             })}
           >
-            {attribute}
+            {primaryAttribute}
           </div>
         )}
 
-        {attributeLabel && (
+        {primaryAttributeLabel && (
           <div
             className={cn(classes.attributeLabel, {
               selected: isSelected
             })}
           >
-            {attributeLabel}
+            {primaryAttributeLabel}
           </div>
         )}
 
@@ -287,7 +290,7 @@ const AttributeCell = ({
       index: number,
       { onClick, iconPath, tooltipText = '' }: CellAction
     ) => (
-      <Tooltip title={tooltipText} placement="bottom" key={index}>
+      <Tooltip title={tooltipText} placement="bottom" key={`${title}-${index}`}>
         <IconButton
           className={classes.iconButton}
           size="small"
@@ -296,6 +299,14 @@ const AttributeCell = ({
           <SvgIcon path={iconPath} size={muiIconSizes.small} />
         </IconButton>
       </Tooltip>
+    )
+
+    const entryActions: Record<string, CellAction> = omitBy(
+      attributeActions,
+      (v, k) => k === 'edit'
+    )
+    const actionButtons = Object.keys(entryActions).map((name, index) =>
+      ActionButton(name, index, entryActions[name])
     )
 
     const setFieldValue = value => console.log(value)
@@ -307,6 +318,7 @@ const AttributeCell = ({
             size="small"
             variant="standard"
             fullWidth
+            placeholder={attributeInputPlaceholder}
             onChange={e => setFieldValue(e.target.value)}
             style={{
               flexDirection: 'row',
@@ -324,7 +336,7 @@ const AttributeCell = ({
           <SvgIcon path={mdiChevronDown} size={muiIconSizes.small} />
         </div>
 
-        <div className={cn(classes.attributeActionsContainer, attribute_type)}>
+        <div className={cn(classes.attributeActionsContainer, attributeType)}>
           {actions}
         </div>
       </>
@@ -334,30 +346,18 @@ const AttributeCell = ({
       attribute,
       attributeIndex,
       attributeCategory = 'text'
-    }: EntryProps) => {
-      const value = attribute[attributeCategory]
-
-      const entryActions: Record<string, CellAction> = omitBy(
-        attributeActions,
-        (v, k) => k === 'edit'
-      )
-      const actionButtons = Object.keys(entryActions).map((name, index) =>
-        ActionButton(name, index, entryActions[name])
-      )
-
-      return (
-        <div className={classes.attributeEntry} key={attributeIndex}>
-          {EmptyEntry(value, actionButtons)}
-        </div>
-      )
-    }
+    }: EntryProps) => (
+      <div className={classes.attributeEntry} key={attributeIndex}>
+        {EmptyEntry(attribute[attributeCategory], actionButtons)}
+      </div>
+    )
 
     const AddButton = () => (
       <div className={classes.addAttributeButton}>Add</div>
     )
 
     return (
-      <div className={cn(classes.attributeEditWidget, attribute_type)}>
+      <div className={cn(classes.attributeEditWidget, attributeType)}>
         <div className={classes.attributeEntries}>
           {filteredAttributes.length > 0 &&
             filteredAttributes.map((attribute, attributeIndex) =>
@@ -373,7 +373,7 @@ const AttributeCell = ({
           )}
           {filteredAttributes.length > 0 && (
             <div className={cn(classes.attributeEntry, 'add-new')}>
-              Add Phone Number
+              Add {attributeDescription}
             </div>
           )}
         </div>
@@ -383,6 +383,7 @@ const AttributeCell = ({
 
   return (
     <CellContainer
+      isSelectable={isSelectable}
       actionsActivated
       isEmpty={isEmpty}
       renderCellContent={renderCellContent}
