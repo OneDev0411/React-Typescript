@@ -9,33 +9,37 @@ interface Props {
   children: ReactNode
   to: any
   tourId: any
-  onClick: (panel: ExpandedMenu) => void
+  onClick?: (panel: ExpandedMenu) => void
   target?: string
   rel?: string
+  hasSubmenu?: any
 }
 
 function SideNavLinkSummary(props: Props & WithRouterProps) {
   const {
     children,
     location,
-    onClick,
+    onClick = () => {},
     to,
     tourId,
     target = '_self',
-    rel = ''
+    rel = '',
+    hasSubmenu
   } = props
 
-  const hasSubmenu = typeof to === 'object'
-
-  const active =
-    hasSubmenu &&
-    to.findIndex((route: string) => location.pathname.startsWith(route)) !== -1
+  const active = hasSubmenu
+    ? to.some((route: string) => location.pathname.startsWith(route))
+    : location.pathname.startsWith(to)
 
   useEffect(() => {
     active && onClick(tourId)
   }, [active, onClick, tourId])
 
-  return typeof to === 'string' ? (
+  return typeof to === 'function' ? (
+    <SidenavBlankLink onClick={to} data-tour-id={tourId}>
+      {children}
+    </SidenavBlankLink>
+  ) : (
     <SidenavLink
       active={active && !hasSubmenu}
       to={hasSubmenu ? '' : to}
@@ -45,10 +49,6 @@ function SideNavLinkSummary(props: Props & WithRouterProps) {
     >
       {children}
     </SidenavLink>
-  ) : (
-    <SidenavBlankLink onClick={to} data-tour-id={tourId}>
-      {children}
-    </SidenavBlankLink>
   )
 }
 

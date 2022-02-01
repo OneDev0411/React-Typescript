@@ -93,6 +93,7 @@ const linkStyle = css`
   font-weight: ${(props: ThemeProps<Theme>) =>
     props.theme.typography.body1.fontWeight};
   ${itemStyle}
+  cursor: pointer;
 `
 
 const WrappedRouterLink = ({ active, ...rest }: SidenavLinkPorps) => (

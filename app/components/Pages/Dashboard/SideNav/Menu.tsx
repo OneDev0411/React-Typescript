@@ -43,6 +43,7 @@ const openHouseAccess = [ACL.CRM, ACL.MARKETING]
 const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
 const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
 const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
+const marketingAccess = { oneOf: [ACL.MARKETING, ACL.AGENT_NETWORK] }
 const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 function Menu(props: WithRouterProps) {
@@ -105,7 +106,7 @@ function Menu(props: WithRouterProps) {
       to: '/dashboard/overview'
     },
     {
-      access: ['Marketing', 'AgentNetwork'],
+      access: marketingAccess,
       label: 'marketing',
       icon: mdiChartArc,
       hasDivider: false,
@@ -170,7 +171,7 @@ function Menu(props: WithRouterProps) {
         },
         {
           label: 'chat',
-          isVisible: user,
+          isHidden: !user,
           access: ['CRM'],
           to: openDrawer,
           notifCount: chatRoomsNotificationsNumber
@@ -216,7 +217,7 @@ function Menu(props: WithRouterProps) {
     },
     {
       access: ['Marketing'],
-      isVisible: user,
+      isHidden: !user,
       label: 'notifications',
       icon: mdiBellOutline,
       notifCount: appNotifications,

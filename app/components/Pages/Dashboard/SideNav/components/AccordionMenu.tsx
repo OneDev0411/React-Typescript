@@ -20,7 +20,6 @@ import {
   SidenavListGroup
 } from '../styled'
 
-import SideNavLinkItem from './SideNavLinkItem'
 import SideNavLinkSummary from './SideNavLinkSummary'
 
 const useStyles = makeStyles(
@@ -91,7 +90,7 @@ export default function AccordionMenu({
     to,
     hasDivider,
     subMenu,
-    isVisible = true,
+    isHidden = false,
     target,
     rel
   } = data
@@ -100,7 +99,7 @@ export default function AccordionMenu({
     subMenu &&
     subMenu.filter(item => typeof item.to === 'string').map(item => item.to)
 
-  return isVisible ? (
+  return !isHidden ? (
     <Acl access={access}>
       <SidenavListGroup data-test={testId}>
         <Accordion
@@ -126,6 +125,7 @@ export default function AccordionMenu({
               onClick={setExpandedMenu}
               target={target}
               rel={rel}
+              hasSubmenu={subMenu}
             >
               <AccordionSummaryDiv>
                 {notifCount ? (
@@ -171,9 +171,9 @@ export default function AccordionMenu({
             >
               {subMenu.map(
                 (item, index) =>
-                  item.isVisible && (
+                  !item.isHidden && (
                     <Acl access={item.access} key={index}>
-                      <SideNavLinkItem
+                      <SideNavLinkSummary
                         to={item.to}
                         tourId={`nav-${item.label}`}
                         target={target}
@@ -193,7 +193,7 @@ export default function AccordionMenu({
                             {item.label.replaceAll('-', ' ')}
                           </SideNavItemLabel>
                         )}
-                      </SideNavLinkItem>
+                      </SideNavLinkSummary>
                     </Acl>
                   )
               )}
