@@ -17,11 +17,13 @@ export function fetchOAuthAccount(provider: OAuthProvider, accountId: string) {
 
       const account = await getOAuthAccount(provider, accountId, true)
 
-      dispatch({
-        account,
-        provider,
-        type: actionTypes.FETCH_OAUTH_ACCOUNT_SUCCESS
-      })
+      if (account) {
+        dispatch({
+          account,
+          provider,
+          type: actionTypes.FETCH_OAUTH_ACCOUNT_SUCCESS
+        })
+      }
     } catch (error) {
       dispatch({
         error,
