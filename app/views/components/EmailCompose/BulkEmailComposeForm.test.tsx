@@ -27,44 +27,44 @@ describe('BulkEmailComposeForm', () => {
    * due_date should not be null when schedule is removed. null due_date means
    * draft.
    */
-  // test("Removing schedule doesn't save the email as draft", () => {
-  //   const emailId = '123'
+  test("Removing schedule doesn't save the email as draft", () => {
+    const emailId = '123'
 
-  //   const { getByTestId } = render(
-  //     <TestBed>
-  //       <BulkEmailComposeForm
-  //         emailId={emailId}
-  //         initialValues={{
-  //           to: [
-  //             {
-  //               recipient_type: 'Email',
-  //               email: 'alireza.mirian@gmail.com'
-  //             }
-  //           ],
-  //           subject: 'test',
-  //           body: 'test body',
-  //           due_at: new Date()
-  //         }}
-  //       />
-  //     </TestBed>
-  //   )
+    const { getByTestId } = render(
+      <TestBed>
+        <BulkEmailComposeForm
+          emailId={emailId}
+          initialValues={{
+            to: [
+              {
+                recipient_type: 'Email',
+                email: 'alireza.mirian@gmail.com'
+              }
+            ],
+            subject: 'test',
+            body: 'test body',
+            due_at: new Date()
+          }}
+        />
+      </TestBed>
+    )
 
-  //   fireEvent.click(getByTestId('compose-schedule-email'))
-  //   fireEvent.click(getByTestId('date-picker-remove'))
-  //   fireEvent.click(getByTestId('compose-send-email'))
+    fireEvent.click(getByTestId('compose-schedule-email'))
+    fireEvent.click(getByTestId('date-picker-remove'))
+    fireEvent.click(getByTestId('compose-send-email'))
 
-  //   // TODO: replacing it with waitFor https://testing-library.com/docs/dom-testing-library/api-async#waitfor
-  //   setTimeout(() => {
-  //     expect(mockUpdateEmailCampaign).toBeCalledWith(
-  //       emailId,
-  //       expect.objectContaining({
-  //         // It would be better if we could check the date is before current time
-  //         // Don't know if it's possible with jest.
-  //         due_at: expect.any(Date)
-  //       } as IEmailCampaignInput)
-  //     )
-  //   }, 2000)
-  // })
+    // TODO: replacing it with waitFor https://testing-library.com/docs/dom-testing-library/api-async#waitfor
+    setTimeout(() => {
+      expect(mockUpdateEmailCampaign).toBeCalledWith(
+        emailId,
+        expect.objectContaining({
+          // It would be better if we could check the date is before current time
+          // Don't know if it's possible with jest.
+          due_at: expect.any(Date)
+        } as IEmailCampaignInput)
+      )
+    }, 2000)
+  })
 
   // test('It passes template id when sending email', () => {
   //   const { getByTestId } = render(
