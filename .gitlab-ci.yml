@@ -1,4 +1,4 @@
-image: python3.10-nodejs14
+image: nikolaik/python-nodejs:python3.10-nodejs14
 
 stages:
   - test
