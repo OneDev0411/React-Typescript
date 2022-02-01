@@ -62,23 +62,23 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'AccordionMenu'
+    name: 'SideNavAccordion'
   }
 )
 
-interface AccordionMenuProps {
+interface SideNavAccordionProps {
   data: any
   onChange: any
   expandedMenu: any
   setExpandedMenu: any
 }
 
-export default function AccordionMenu({
+export default function SideNavAccordion({
   data,
   onChange,
   expandedMenu,
   setExpandedMenu
-}: AccordionMenuProps) {
+}: SideNavAccordionProps) {
   const classes = useStyles()
   const {
     testId = '',

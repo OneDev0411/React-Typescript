@@ -32,9 +32,9 @@ import { ScrollableArea } from 'views/components/ScrollableArea'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
-import AccordionMenu from './components/AccordionMenu'
 import Logo from './components/Logo'
 import PoweredBy from './components/PoweredBy'
+import SideNavAccordion from './components/SideNavAccordion'
 import { UserMenu } from './components/UserMenu'
 import { Sidenav } from './styled'
 import { ExpandedMenu, scrollableAreaShadowColor } from './variables'
@@ -45,6 +45,16 @@ const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
 const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
 const marketingAccess = { oneOf: [ACL.MARKETING, ACL.AGENT_NETWORK] }
 const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
+const allAccess = {
+  oneOf: [
+    ACL.DEALS,
+    ACL.BACK_OFFICE,
+    ACL.MARKETING,
+    ACL.CRM,
+    ACL.MARKETING,
+    ACL.AGENT_NETWORK
+  ]
+}
 
 function Menu(props: WithRouterProps) {
   const user = useSelector(selectUserUnsafe)
@@ -57,46 +67,41 @@ function Menu(props: WithRouterProps) {
   const inboxNotificationNumber = useSelector((state: IAppState) =>
     selectUnreadEmailThreadsCount(state.inbox)
   )
-  const dealsNotificationsNumber = useDealsNotificationsNumber()
-  const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
-
   const showingsTotalNotificationCount = useSelector(
     selectShowingsTotalNotificationCount
   )
-
+  const { isActive: isIntercomActive } = useSelector(
+    (state: IAppState) => state.intercom
+  )
+  const dealsNotificationsNumber = useDealsNotificationsNumber()
+  const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
   const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
 
   function handleEmailThreadEvent(): void {
     dispatch(fetchUnreadEmailThreadsCount())
   }
 
+  useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
+
   // This is initially implemented for DE because they're using a
   // white-labeled version of help.rechat.com
   const brandHelpCenterURL = getBrandHelpCenterURL(brand)
 
-  useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
-
   const [expandedMenu, setExpandedMenu] = useState<ExpandedMenu>(null)
-  const { isActive: isIntercomActive } = useSelector(
-    (state: IAppState) => state.intercom
-  )
 
   const handleChange =
     (panel: ExpandedMenu) => (event: ChangeEvent<{}>, isExpanded: boolean) => {
       setExpandedMenu(isExpanded ? panel : null)
     }
 
-  const openDrawer = () => {
-    if (!window.location.pathname.includes('/recents/')) {
-      dispatch(toggleChatbar())
-    }
-  }
+  const handleOpenChatbarDrawer = () =>
+    !window.location.pathname.includes('/recents/') && dispatch(toggleChatbar())
 
-  const openSupport = () => {
+  const handleOpenSupportDialogueBox = () =>
     !isIntercomActive && dispatch(activateIntercom(isIntercomActive))
-  }
 
-  const openWebsite = link => window.open(link, '_blank', 'noopener noreferrer')
+  const handleOpenExternalLink = link =>
+    window.open(link, '_blank', 'noopener noreferrer')
 
   const MenuItems = [
     {
@@ -189,7 +194,7 @@ function Menu(props: WithRouterProps) {
           label: 'Chat',
           isHidden: !user,
           notificationCount: chatRoomsNotificationsNumber,
-          to: openDrawer
+          to: handleOpenChatbarDrawer
         }
       ]
     },
@@ -247,18 +252,18 @@ function Menu(props: WithRouterProps) {
       to: '/dashboard/notifications'
     },
     {
-      access: ['Marketing'],
+      access: allAccess,
       icon: mdiHelpCircleOutline,
       id: 'help-center',
       label: 'Help Center',
-      to: () => openWebsite(brandHelpCenterURL)
+      to: () => handleOpenExternalLink(brandHelpCenterURL)
     },
     {
-      access: ['CRM'],
+      access: allAccess,
       icon: mdiPhoneOutline,
       id: 'support',
       label: 'Support',
-      to: openSupport
+      to: handleOpenSupportDialogueBox
     }
   ]
 
@@ -272,7 +277,7 @@ function Menu(props: WithRouterProps) {
         hasThinnerScrollbar
       >
         {MenuItems.map((menu, index) => (
-          <AccordionMenu
+          <SideNavAccordion
             key={index}
             data={menu}
             onChange={handleChange}
