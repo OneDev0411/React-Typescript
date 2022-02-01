@@ -9,7 +9,7 @@ test_unit:
   stage: test
   script:
     - apt-get update -qy
-    - apt-get install -y python3.8
+    - apt-get install -y python3.7
     - npm install -g npm@8
     - npm ci
     - npm run lint:ci
