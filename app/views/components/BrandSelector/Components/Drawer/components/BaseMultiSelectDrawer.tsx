@@ -41,6 +41,17 @@ export function BaseMultiSelectDrawer({
       return [...state, brandId]
     })
   }
+  const getButtonLabel = () => {
+    if (saveButtonText) {
+      return saveButtonText
+    }
+
+    if (isSaving) {
+      return 'Saving...'
+    }
+
+    return 'Save'
+  }
   const nodeRenderer = ({ brand }) => {
     const isSelected = selectedBrands.includes(brand.id)
 
@@ -74,7 +85,7 @@ export function BaseMultiSelectDrawer({
             disabled={disabled || isSaving || selectedBrands.length === 0}
             onClick={handleClick}
           >
-            {saveButtonText ?? isSaving ? 'Saving...' : 'Save'}
+            {getButtonLabel()}
           </Button>
         </Drawer.Footer>
       </Drawer>
