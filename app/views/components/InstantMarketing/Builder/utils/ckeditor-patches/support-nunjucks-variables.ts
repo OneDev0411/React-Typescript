@@ -4,7 +4,8 @@
  * conflicts with Nunjucks variables.
  */
 function protectNunjucksVariables(text: string): string {
-  const nunjucksVariableFormat = /{{([^}]+)}}/g
+  // Accept {{}} as valid format because our CKEditor plugin uses it for creating new variables
+  const nunjucksVariableFormat = /{{([^}]*)}}/g
 
   return text.replace(nunjucksVariableFormat, '[[[$1]]]')
 }
@@ -13,7 +14,7 @@ function protectNunjucksVariables(text: string): string {
  * Replace all [[[nunjucksVariable]]] with {{nunjucksVariable}} to recover the variables.
  */
 function recoverNunjucksVariables(text: string): string {
-  const nunjucksProtectedVariableFormat = /\[\[\[([^\]]+)\]\]\]/g
+  const nunjucksProtectedVariableFormat = /\[\[\[([^\]]*)\]\]\]/g
 
   return text.replace(nunjucksProtectedVariableFormat, '{{$1}}')
 }
