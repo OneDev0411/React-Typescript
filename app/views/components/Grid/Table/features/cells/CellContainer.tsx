@@ -21,6 +21,7 @@ export interface CellAction {
 interface Props {
   text?: string
   isEmpty?: boolean
+  isSelectable?: boolean
   actionsActivated?: boolean
   renderInlineEdit?: () => React.ReactNode
   renderCellContent: (props: CellProps) => React.ReactNode
@@ -83,13 +84,13 @@ const useStyles = makeStyles(
       }
     }),
     iconButton: {
-      border: `1px solid ${theme.palette.action.disabledBackground}`,
       background: theme.palette.background.paper,
+      border: `1px solid ${theme.palette.action.disabledBackground}`,
       borderRadius: theme.spacing(4),
       boxSizing: 'border-box',
       boxShadow: `
         0px 0.1px 0.3px ${alpha(theme.palette.tertiary.dark, 0.1)}, 
-         0px 1px 2px ${alpha(theme.palette.tertiary.dark, 0.2)} !important
+        0px 1px 2px ${alpha(theme.palette.tertiary.dark, 0.2)} !important
       `,
       '&:hover': {
         backgroundColor: theme.palette.grey['200']
@@ -104,8 +105,9 @@ const useStyles = makeStyles(
 const CellContainer = ({
   actionsActivated = false,
   isEmpty = true,
+  isSelectable = false,
   renderCellContent,
-  renderInlineEdit = () => <></>,
+  renderInlineEdit,
   actions = {}
 }: Props) => {
   const classes = useStyles()
@@ -127,16 +129,7 @@ const CellContainer = ({
 
   //--
 
-  const renderActionButtons = () => {
-    const cellActions: Record<string, CellAction> = {
-      edit: {
-        tooltipText: 'Edit',
-        onClick: toggleEdit,
-        iconPath: mdiPencilOutline
-      },
-      ...(isEmpty ? {} : omitBy(actions, (v, k) => k === 'delete'))
-    }
-
+  const InlineContent = () => {
     const Action = (
       name: string,
       { onClick, iconPath, tooltipText = '' }: CellAction
@@ -152,34 +145,38 @@ const CellContainer = ({
       </Tooltip>
     )
 
-    return (
-      <div className={classes.inlineActionIconsContainer}>
-        {Object.keys(cellActions).map(name => Action(name, cellActions[name]))}
+    const cellActions: Record<string, CellAction> = {
+      edit: {
+        tooltipText: 'Edit',
+        onClick: toggleEdit,
+        iconPath: mdiPencilOutline
+      },
+      ...(isEmpty ? {} : omitBy(actions, (v, k) => k === 'delete'))
+    }
+
+    const CellOverlay = () => (
+      <div
+        className={cn(classes.cellOverlay, {
+          selected: isSelected
+        })}
+      >
+        <div className={classes.inlineActionIconsContainer}>
+          {Object.keys(cellActions).map(name =>
+            Action(name, cellActions[name])
+          )}
+        </div>
       </div>
     )
-  }
 
-  //--
-
-  const renderCellOverlay = () => (
-    <div
-      className={cn(classes.cellOverlay, {
-        selected: isSelected
-      })}
-    >
-      {renderActionButtons()}
-    </div>
-  )
-  const renderInlineContent = () => {
     return (
       <>
-        {!isEditing && isSelected && actionsActivated && renderCellOverlay()}
+        {!isEditing && isSelected && actionsActivated && CellOverlay()}
         {!isEditing && (
           <div className={classes.inlineViewContainer}>
             {renderCellContent({ isHovered, isSelected })}
           </div>
         )}
-        {isEditing && renderInlineEdit()}
+        {isEditing && !!renderInlineEdit && renderInlineEdit()}
       </>
     )
   }
@@ -191,11 +188,11 @@ const CellContainer = ({
       className={cn(classes.container, {
         visibleOverflow: isEditing
       })}
-      onClick={onSelect}
       onMouseEnter={onHoverIn}
       onMouseLeave={onHoverOut}
+      {...(isSelectable ? { onClick: onSelect } : {})}
     >
-      {renderInlineContent()}
+      {InlineContent()}
     </div>
   )
 }
