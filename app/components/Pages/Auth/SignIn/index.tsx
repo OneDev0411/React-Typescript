@@ -32,9 +32,7 @@ export default function Signin(props: Props) {
   const { siteLogo, siteTitle, siteColor } = getBrandInfo(brand)
 
   const redirectTo =
-    props.location.state?.redirectTo ||
-    props.location.query?.redirectTo ||
-    localStorage.getItem('last-visited-route')
+    props.location.state?.redirectTo || props.location.query?.redirectTo
 
   const [isLookinUp, setIsLookingUp] = useState<boolean>(false)
   const [lookUpFormSubmitMsg, setLookUpFormSubmitMsg] =
