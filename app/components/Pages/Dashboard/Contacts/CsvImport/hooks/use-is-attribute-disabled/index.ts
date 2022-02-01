@@ -15,6 +15,10 @@ export function useIsAttributeDisabled() {
       attribute: IAttribute,
       index: number
     ) => {
+      if (Object.values(fields).length === 0 || !attribute) {
+        return false
+      }
+
       const isSingular = (attribute: IAttribute) =>
         getAttributeDefinition(attribute).singular
 

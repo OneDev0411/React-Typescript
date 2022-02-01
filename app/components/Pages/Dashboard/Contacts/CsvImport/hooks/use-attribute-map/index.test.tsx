@@ -1,12 +1,24 @@
 import { renderHook, act, cleanup } from '@testing-library/react-hooks'
 import nock from 'nock'
 
-import attributeDefs from 'fixtures/contacts/attribute-definitions.json'
 import { ReactQueryTestBed, queryClient } from 'tests/unit/ReactQueryTestBed'
 
 import { useAttributeMap } from '.'
 import { ParseResult } from 'papaparse'
 import { TestBed } from 'tests/unit/TestBed'
+import { mockAttributeDefs } from '../../tests/helpers/mock-get-attribute-def'
+
+jest.mock('@app/models/contacts/get-attribute-defs', () => {
+  const originalModule = jest.requireActual(
+    '@app/models/contacts/get-attribute-defs'
+  )
+
+  return {
+    __esModule: true,
+    ...originalModule,
+    getAttributeDefs: jest.fn(() => mockAttributeDefs)
+  }
+})
 
 const csv = {
   data: [
@@ -16,14 +28,6 @@ const csv = {
 } as ParseResult
 
 describe('test Csv Import auto mapping', () => {
-  beforeEach(() => {
-    nock(/.*/)
-      .get('/contacts/attribute_defs')
-      .reply(200, {
-        data: attributeDefs
-      })
-  })
-
   afterEach(() => {
     queryClient.clear()
     cleanup()
@@ -53,6 +57,7 @@ describe('test Csv Import auto mapping', () => {
       )
     })
 
+    await waitForNextUpdate()
     await waitForNextUpdate()
 
     expect(result.current[0]).toMatchObject({
@@ -144,6 +149,8 @@ describe('test Csv Import auto mapping', () => {
         </TestBed>
       )
     })
+
+    await waitForNextUpdate()
 
     expect(result.current[2]).toBe('doing')
 

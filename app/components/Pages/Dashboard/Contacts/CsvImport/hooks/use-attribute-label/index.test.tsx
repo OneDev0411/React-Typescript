@@ -1,20 +1,21 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import nock from 'nock'
-
-import attributeDefs from 'fixtures/contacts/attribute-definitions.json'
 import { ReactQueryTestBed, queryClient } from 'tests/unit/ReactQueryTestBed'
-
+import { mockAttributeDefs } from '../../tests/helpers/mock-get-attribute-def'
 import { useAttributeLabel } from '.'
 
-describe('test Csv Import attribute label', () => {
-  beforeEach(() => {
-    nock(/.*/)
-      .get('/contacts/attribute_defs')
-      .reply(200, {
-        data: attributeDefs
-      })
-  })
+jest.mock('@app/models/contacts/get-attribute-defs', () => {
+  const originalModule = jest.requireActual(
+    '@app/models/contacts/get-attribute-defs'
+  )
 
+  return {
+    __esModule: true,
+    ...originalModule,
+    getAttributeDefs: jest.fn(() => mockAttributeDefs)
+  }
+})
+
+describe('test Csv Import attribute label', () => {
   afterEach(() => {
     queryClient.clear()
   })
