@@ -1,4 +1,4 @@
-image: node:14
+image: python3.10-nodejs14
 
 stages:
   - test
@@ -8,8 +8,6 @@ stages:
 test_unit:
   stage: test
   script:
-    - apt-get update -qy
-    - apt-get install -y python3
     - npm install -g npm@8
     - npm ci
     - npm run lint:ci
