@@ -17,6 +17,7 @@ const PhoneNumberCell = ({ contact, isRowSelected = false }: Props) => {
   return (
     <AttributeCell
       countEnabled
+      isSelectable
       attributes={attributes}
       isRowSelected={isRowSelected}
       attributeInputPlaceholder="(123) 456 - 7890"

@@ -12,6 +12,7 @@ const useStyles = makeStyles(
   theme => ({
     container: {
       display: 'flex',
+      flex: '0 0 auto',
       justifyContent: 'end',
       alignItems: 'center',
       width: theme.spacing(7.5),

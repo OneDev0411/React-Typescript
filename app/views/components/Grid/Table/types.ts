@@ -7,7 +7,7 @@ export interface RenderProps<Row> {
   totalRows: number
   rowIndex: number
   columnIndex: number
-  isRowSelected: boolean
+  isRowSelected?: boolean
 }
 
 export interface ColumnHeaderProps<Row> {

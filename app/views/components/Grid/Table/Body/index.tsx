@@ -145,6 +145,7 @@ export function Body<Row>({
           rows={rows}
           selection={selection}
           totalRows={totalRows}
+          rowSize={rowSize}
         />
       )}
       <AutoSizer disableHeight>

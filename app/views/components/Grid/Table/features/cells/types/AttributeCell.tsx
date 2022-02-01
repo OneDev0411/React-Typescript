@@ -90,10 +90,10 @@ const useStyles = makeStyles(
       top: 0,
 
       '&.phone_number': {
-        width: theme.spacing(41)
+        minWidth: theme.spacing(41)
       },
       '&.email': {
-        width: theme.spacing(50)
+        minWidth: theme.spacing(50)
       }
     },
     attributeEntries: {
@@ -113,8 +113,12 @@ const useStyles = makeStyles(
         height: theme.spacing(5) - 1
       },
       '&:last-child': {
+        height: theme.spacing(5) - 1,
         borderBottomLeftRadius: theme.spacing(0.5),
         borderBottomRightRadius: theme.spacing(0.5)
+      },
+      '&:only-child': {
+        height: theme.spacing(5) - 2
       },
       '&:hover': {
         backgroundColor: theme.palette.grey[50]
@@ -124,7 +128,6 @@ const useStyles = makeStyles(
         color: theme.palette.primary.main,
         letterSpacing: '0.15px',
         lineHeight: `${theme.spacing(3)}px`,
-        height: theme.spacing(5) - 1,
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),
         alignItems: 'center',
@@ -140,15 +143,16 @@ const useStyles = makeStyles(
       ...theme.typography.body2,
       letterSpacing: '0.15px',
       lineHeight: `${theme.spacing(3)}px`,
-      flex: `0 0 ${theme.spacing(8.25)}px`,
-      maxWidth: theme.spacing(8.25),
+      flex: '0 0 auto',
+      minWidth: theme.spacing(8.25),
       paddingLeft: theme.spacing(2),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'end'
     },
     selectLabel: {
-      marginRight: 'auto'
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1)
     },
     attributeActionsContainer: {
       paddingRight: theme.spacing(2),
@@ -169,7 +173,7 @@ const useStyles = makeStyles(
       ...theme.typography.body2,
       letterSpacing: '0.15px',
       paddingLeft: theme.spacing(2) - 1,
-      lineHeight: `${theme.spacing(5) - 1}px`,
+      lineHeight: 'inherit',
       borderRadius: theme.spacing(0.5)
     },
     addAttributeButton: {
@@ -250,7 +254,7 @@ const AttributeCell = ({
   }: CellProps) => {
     return (
       <>
-        {primaryAttribute && (
+        {!!primaryAttribute && (
           <div
             className={cn(classes.attributeText, {
               hovered: isHovered,
@@ -262,7 +266,7 @@ const AttributeCell = ({
           </div>
         )}
 
-        {primaryAttributeLabel && (
+        {!!primaryAttributeLabel && (
           <div
             className={cn(classes.attributeLabel, {
               selected: isSelected
@@ -301,16 +305,8 @@ const AttributeCell = ({
       </Tooltip>
     )
 
-    const entryActions: Record<string, CellAction> = omitBy(
-      attributeActions,
-      (v, k) => k === 'edit'
-    )
-    const actionButtons = Object.keys(entryActions).map((name, index) =>
-      ActionButton(name, index, entryActions[name])
-    )
-
     const setFieldValue = value => console.log(value)
-    const EmptyEntry = (value, actions) => (
+    const EntryForm = (value, actions) => (
       <>
         <div className={classes.attributeInputContainer}>
           <TextField
@@ -346,11 +342,21 @@ const AttributeCell = ({
       attribute,
       attributeIndex,
       attributeCategory = 'text'
-    }: EntryProps) => (
-      <div className={classes.attributeEntry} key={attributeIndex}>
-        {EmptyEntry(attribute[attributeCategory], actionButtons)}
-      </div>
-    )
+    }: EntryProps) => {
+      const entryActions: Record<string, CellAction> = omitBy(
+        attributeActions,
+        (v, k) => k === 'edit'
+      )
+      const actionButtons = Object.keys(entryActions).map((name, index) =>
+        ActionButton(name, index, entryActions[name])
+      )
+
+      return (
+        <div className={classes.attributeEntry} key={attributeIndex}>
+          {EntryForm(attribute[attributeCategory], actionButtons)}
+        </div>
+      )
+    }
 
     const AddButton = () => (
       <div className={classes.addAttributeButton}>Add</div>
@@ -368,7 +374,7 @@ const AttributeCell = ({
             )}
           {filteredAttributes.length === 0 && (
             <div className={classes.attributeEntry}>
-              {EmptyEntry('', AddButton())}
+              {EntryForm('', AddButton())}
             </div>
           )}
           {filteredAttributes.length > 0 && (
