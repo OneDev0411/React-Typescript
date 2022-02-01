@@ -12,22 +12,26 @@ import CellContainer from './CellContainer'
 const useStyles = makeStyles(
   theme => ({
     dateDiffValue: {
-      ...theme.typography.body2,
-      color: theme.palette.grey[700],
-      letterSpacing: '0.15px',
+      ...theme.typography.body3,
+      letterSpacing: '0.4px',
       lineHeight: `${theme.spacing(3)}px`,
+      color: theme.palette.grey['500'],
       '&.selected': {
         color: theme.palette.tertiary.dark
       },
       '&.rowSelected': {
         color: theme.palette.tertiary.dark
+      },
+      '> .isToday': {
+        ...theme.typography.button,
+        color: theme.palette.primary.main
       }
     },
     dateValue: {
-      ...theme.typography.body3,
+      ...theme.typography.body2,
+      color: theme.palette.grey[700],
       letterSpacing: '0.15px',
       lineHeight: `${theme.spacing(3)}px`,
-      color: theme.palette.grey['500'],
       '&.hovered': {
         color: theme.palette.tertiary.dark
       },
@@ -79,7 +83,7 @@ const birthdayNextYear = (bithday: Date): Date =>
   )
 
 const durationAsDays = (duration: number): number =>
-  Math.floor(moment.duration(duration).asDays())
+  moment.duration(duration).asDays()
 
 const getDateOfBirth = contact => {
   let date
@@ -141,26 +145,30 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
     isSelected = false
   }: CellProps) => (
     <>
-      {daysToBirthday >= 0 && (
-        <div
-          className={cn(classes.dateDiffValue, {
-            rowSelected: isRowSelected,
-            isToday: daysToBirthday == 0
-          })}
-        >
-          {daysToBirthday >= 1 &&
-            `in ${daysToBirthday} day${daysToBirthday == 1 ? '' : 's'}`}
-          {daysToBirthday == 0 && 'is today'}
-        </div>
-      )}
-      {daysToBirthday >= 0 && !!inputFormattedDate && (
+      {!!inputFormattedDate && (
         <div
           className={cn(classes.dateValue, {
             hovered: isHovered,
             selected: isSelected
           })}
         >
-          {`(${inputFormattedDate})`}
+          {inputFormattedDate}
+        </div>
+      )}
+      {daysToBirthday >= 0 && daysToBirthday <= 30 && !!inputFormattedDate && (
+        <div
+          className={cn(classes.dateDiffValue, {
+            rowSelected: isRowSelected
+          })}
+        >
+          <span>(</span>
+          {daysToBirthday > 0 && (
+            <span>{`in ${daysToBirthday} day${
+              daysToBirthday == 1 ? '' : 's'
+            }`}</span>
+          )}
+          {daysToBirthday == 0 && <span className="isToday">It's Today</span>}
+          <span>)</span>
         </div>
       )}
     </>
