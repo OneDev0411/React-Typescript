@@ -40,10 +40,10 @@ export default function CsvImport() {
   const classes = useStyles()
   const [file, setFile] = useState<Nullable<File>>(null)
   const [owner, setOwner] = useOwner()
-  const [parsedCsv, csvError] = useParseCsv(file, {
+  const [parsedCsv, csvError, resetParsedCsv] = useParseCsv(file, {
     onError: useCallback(() => setFile(null), [])
   })
-  const [mappedFields, setMappedFields, mappingStatus] =
+  const [mappedFields, setMappedFields, mappingStatus, resetMappingStatus] =
     useAttributeMap(parsedCsv)
   const [uploadContacts, isUploadingContacts] = useUploadContacts(
     owner,
@@ -51,6 +51,12 @@ export default function CsvImport() {
     mappedFields,
     parsedCsv
   )
+
+  const handleChangeFile = () => {
+    setFile(null)
+    resetMappingStatus()
+    resetParsedCsv()
+  }
 
   return (
     <PageLayout className={classes.layout}>
@@ -97,7 +103,7 @@ export default function CsvImport() {
                 justifyContent="flex-end"
                 className={classes.footer}
               >
-                <Button onClick={() => setFile(null)}>Change File</Button>
+                <Button onClick={handleChangeFile}>Change File</Button>
                 <Button
                   variant="contained"
                   color="primary"
