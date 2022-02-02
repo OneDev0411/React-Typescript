@@ -14,7 +14,7 @@ const styles = (theme: Theme) =>
       padding: ({
         noPadding
       }: Pick<GlobalHeaderWithBackgroundProps, 'noPadding'>) =>
-        noPadding ? 0 : theme.spacing(4),
+        noPadding ? 0 : theme.spacing(6),
       width: '100%',
       [theme.breakpoints.up('md')]: {
         flexDirection: 'row',
@@ -64,7 +64,7 @@ export default function GlobalHeaderWithBackground({
     <div className={classes.wrapper}>
       <div>
         {title && (
-          <Typography variant="h5" noWrap className={classes.title}>
+          <Typography variant="h4" noWrap className={classes.title}>
             {title}
           </Typography>
         )}
