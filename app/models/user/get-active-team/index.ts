@@ -7,7 +7,6 @@ import Fetch from '../../../services/fetch'
 */
 const DEFAULT_ASSOCIATIONS = [
   'brand_role.users',
-  'brand.children',
   'brand.settings',
   'brand.roles'
 ]

@@ -4,14 +4,14 @@ import { getBrands } from 'models/BrandConsole/Brands'
 import Roles from 'models/BrandConsole/Roles'
 
 export async function updateRoles(
-  team: IBrand,
+  brand: IBrand,
   newRoles: IBrandRole[]
 ): Promise<IBrand> {
-  const removedRoles = differenceBy(team.roles, newRoles || [], 'id')
-  const addedRoles = differenceBy(newRoles, team.roles || [], 'id')
+  const removedRoles = differenceBy(brand.roles, newRoles || [], 'id')
+  const addedRoles = differenceBy(newRoles, brand.roles || [], 'id')
   const editedRoles = differenceWith(
     difference(newRoles, addedRoles),
-    team.roles || [],
+    brand.roles || [],
     (role1, role2) => {
       return isEqual([...role1.acl].sort(), [...role2.acl].sort())
     }
@@ -27,7 +27,7 @@ export async function updateRoles(
 
   const addPromises = addedRoles.map(async role => {
     try {
-      await Roles.addRole(team.id, role)
+      await Roles.addRole(brand.id, role)
     } catch (e) {
       console.error(`Could not add role ${role.role}`, e)
     }
@@ -46,11 +46,11 @@ export async function updateRoles(
   await Promise.all(allPromises)
 
   if (!allPromises.length) {
-    return team
+    return brand
   }
 
   return {
-    ...(await getBrands(team.id, false)).data,
-    children: team.children
+    ...(await getBrands(brand.id, false)).data,
+    children: brand.children
   }
 }
