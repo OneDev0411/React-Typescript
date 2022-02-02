@@ -31,8 +31,7 @@ export const SideNavItemLabel = styled.div`
 
 const itemStyle = css`
   display: flex;
-  padding: ${(props: ThemeProps<Theme>) =>
-    props.theme.spacing(0.75, 0.5, 0.5, 1)};
+  padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 0.5, 0, 1)};
   font-size: ${(props: ThemeProps<Theme>) =>
     props.theme.typography.body2.fontSize};
   align-items: center;
@@ -48,6 +47,7 @@ const itemStyle = css`
     text-decoration: none;
     color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main}};
   }
+  height:${(props: ThemeProps<Theme>) => props.theme.spacing(4)}px;
   ${({ active }: ThemeProps<Theme> & { active: boolean }) =>
     active &&
     // !important was added to prevent :hover and :focus to change :active item
