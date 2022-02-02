@@ -1,11 +1,10 @@
-import React from 'react'
-
 import { IconButton, Link, makeStyles, Typography } from '@material-ui/core'
-import { Close } from '@material-ui/icons'
+import { mdiClose } from '@mdi/js'
 import classNames from 'classnames'
 import { useDispatch } from 'react-redux'
 
 import { addNotification as notify } from 'components/notification'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useAsync from 'hooks/use-async'
 import deleteHostnameFromWebsite from 'models/website/delete-hostname-from-website'
 import { generateWebsiteUrl, isWebsiteOnSubdomain } from 'utils/website'
@@ -57,8 +56,9 @@ function DomainManagementListItem({
   const { isLoading: isWorking, run } = useAsync()
 
   const handleDeleteHostname = (hostname: string) => {
-    run(async () => deleteHostnameFromWebsite(websiteId, { hostname })).then(
-      () => {
+    run(async () => {
+      try {
+        await deleteHostnameFromWebsite(websiteId, { hostname })
         onDelete(hostname)
         dispatch(
           notify({
@@ -66,8 +66,7 @@ function DomainManagementListItem({
             status: 'success'
           })
         )
-      },
-      () => {
+      } catch (_: unknown) {
         dispatch(
           notify({
             message:
@@ -76,7 +75,7 @@ function DomainManagementListItem({
           })
         )
       }
-    )
+    })
   }
 
   return (
@@ -94,7 +93,7 @@ function DomainManagementListItem({
           onClick={() => handleDeleteHostname(hostname)}
           disabled={isWorking}
         >
-          <Close />
+          <SvgIcon path={mdiClose} />
         </IconButton>
       )}
     </li>

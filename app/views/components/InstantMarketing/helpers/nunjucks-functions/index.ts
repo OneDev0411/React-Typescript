@@ -29,8 +29,17 @@ export function getListingUrl(
 }
 
 export function get(brand: IBrand, key: BrandMarketingPaletteKey): string {
-  const defaultValue = _get(DEFAULT_BRAND_PALETTE, key)
-  const mergedBrand = flattenBrand(brand)
+  let currentBrand: Nullable<IBrand> = brand
 
-  return _get(mergedBrand, `settings.marketing_palette.${key}`, defaultValue)
+  while (currentBrand) {
+    const value = _get(currentBrand, `settings.marketing_palette.${key}`)
+
+    if (value) {
+      return value
+    }
+
+    currentBrand = currentBrand.parent
+  }
+
+  return _get(DEFAULT_BRAND_PALETTE, key)
 }

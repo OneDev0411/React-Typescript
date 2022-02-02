@@ -18,6 +18,8 @@ import { TipsBanner } from './TipsBanner'
 
 const selectFieldDefaultSelectedItem = { title: '-Select-', value: '-Select-' }
 const propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
   section: PropTypes.string,
   submitCallback: PropTypes.func
 }

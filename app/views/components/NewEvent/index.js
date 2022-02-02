@@ -96,10 +96,7 @@ export default class Task extends Component {
                         flex: 2
                       }}
                     >
-                      <DateTimeField
-                        name="dueDate"
-                        selectedDate={values.dueDate}
-                      />
+                      <DateTimeField name="dueDate" />
                       <ReminderField dueDate={values.dueDate} />
                     </FieldContainer>
                   </Flex>

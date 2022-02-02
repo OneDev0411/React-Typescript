@@ -9,7 +9,7 @@ import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
-import { TemplateBlockOptions } from '../../types'
+import { TemplateBlockOptions, RegisterBlockSelectHandler } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 import { baseView, isComponent } from '../utils'
 
@@ -22,6 +22,10 @@ import {
 
 const typeEmbedVideo = 'embed-video'
 export const embedVideoBlockName = typeEmbedVideo
+
+interface VideoRenderData {
+  url: string
+}
 
 const svgAttrs =
   'xmlns="http://www.w3.org/2000/svg" width="80" viewBox="0 0 24 24" style="fill: rgba(0,0,0,0.15); transform: scale(0.75); margin: 0 auto"'
@@ -38,10 +42,6 @@ export interface VideoBlockOptions {
   onEmptyVideoClick: (model: Model) => void
 }
 
-interface VideoBlock {
-  selectHandler: (selectedVideo?: Video) => void
-}
-
 export default function registerVideoBlock(
   editor: Editor,
   renderData: TemplateRenderData,
@@ -52,7 +52,7 @@ export default function registerVideoBlock(
     onVideoDoubleClick,
     onEmptyVideoClick
   }: VideoBlockOptions
-): VideoBlock {
+): RegisterBlockSelectHandler<Video> {
   const VideoComponent = editor.DomComponents.getType('video')!
   const VideoModel = VideoComponent.model
   const VideoView = VideoComponent.view
@@ -167,10 +167,10 @@ export default function registerVideoBlock(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent(
+  return handleBlockDragStopEvent<Video, VideoRenderData>(
     editor,
     allBlocks,
-    (selectedVideo: Video) => ({
+    selectedVideo => ({
       ...renderData,
       url: generateEmbedVideoUrl(selectedVideo.url)
     }),

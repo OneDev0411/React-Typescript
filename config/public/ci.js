@@ -41,5 +41,8 @@ export default {
   },
   showing: {
     booking_url: process.env.SHOWING_BOOKING_URL
+  },
+  nlp: {
+    server: process.env.NLP_SERVER
   }
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-import { Helmet } from 'react-helmet'
 import { shallowEqual, useSelector } from 'react-redux'
+import { useTitle } from 'react-use'
 
 import { useLoadFullDeal } from 'hooks/use-load-deal'
 import { selectDealById } from 'reducers/deals/list'
@@ -41,10 +41,6 @@ function DealDetails(props) {
     shallowEqual
   )
 
-  if (!deal) {
-    return null
-  }
-
   const getPageTitle = () => {
     const pageTitle = getDealTitle(deal)
 
@@ -53,12 +49,14 @@ function DealDetails(props) {
       : 'Show Deal | Deals | Rechat'
   }
 
+  useTitle(getPageTitle())
+
+  if (!deal) {
+    return null
+  }
+
   return (
     <DealContainer>
-      <Helmet>
-        <title>{getPageTitle()}</title>
-      </Helmet>
-
       <PageWrapper>
         <ActionContextProvider>
           <PageHeader deal={deal} isBackOffice={isBackOffice} />

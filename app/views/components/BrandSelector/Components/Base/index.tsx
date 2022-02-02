@@ -43,11 +43,13 @@ export type NodeRenderer = {
 export interface BaseBrandSelectorProps {
   nodeRenderer?: (props: NodeRenderer) => ReactNode
   onNodeClick?: (brand?: IBrand) => void
+  rootBrandId?: UUID
 }
 
 export function BaseBrandSelector({
   onNodeClick = noop,
-  nodeRenderer
+  nodeRenderer,
+  rootBrandId
 }: BaseBrandSelectorProps) {
   const user = useSelector(selectUser)
   const classes = useStyles()
@@ -55,7 +57,8 @@ export function BaseBrandSelector({
 
   const { error, loading, initialExpandedNodes, getChildNodes } = useTeam(
     user,
-    query
+    query,
+    rootBrandId
   )
 
   const [debouncedSetQuery] = useDebouncedCallback(setQuery, 400)

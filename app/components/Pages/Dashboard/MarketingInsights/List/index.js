@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
+import { useMemo, useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'

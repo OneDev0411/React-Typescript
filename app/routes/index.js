@@ -1,6 +1,4 @@
 /* eslint-disable max-len */
-import React from 'react'
-
 import { IndexRoute, Route } from 'react-router'
 
 import withAcl from 'components/Acl/with-acl'
@@ -374,11 +372,11 @@ const AsyncContactProfile = withAcl.crm(
   })
 )
 
-const AsyncContactsImportCsv = withAcl.crm(
+const AsyncContactsCsvImport = withAcl.crm(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */
+        '../components/Pages/Dashboard/Contacts/CsvImport' /* webpackChunkName: "contact_csv" */
       )
   })
 )
@@ -533,7 +531,15 @@ const AsyncMarketingInsight = withAcl(
   }),
   { oneOf: [ACL.MARKETING, ACL.CRM] }
 )
-
+const AsyncSuperCampaign = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/MarketingInsights/SuperCampaign' /* webpackChunkName: "email_insight_super_campaign" */
+      )
+  }),
+  [{ oneOf: [ACL.MARKETING, ACL.CRM] }, ACL.BETA]
+)
 /* ==================================== */
 //  Chatroom
 /* ==================================== */
@@ -647,6 +653,13 @@ const AsyncUpgradeToAgent = Load({
     )
 })
 
+const AsyncCampaigns = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Account/Campaigns' /* webpackChunkName: "campaigns" */
+    )
+})
+
 // const AsyncCSS = Load({
 //   loader: () =>
 //     import(
@@ -732,6 +745,20 @@ const AsyncCreateShowing = withAcl.showings(
         '../components/Pages/Dashboard/Showings/pages/CreateShowing' /* webpackChunkName: "create_showing" */
       )
   })
+)
+
+/* ==================================== */
+//  Super Campaigns
+/* ==================================== */
+
+const AsyncSuperCampaignDetail = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/SuperCampaigns/pages/SuperCampaignDetail' /* webpackChunkName: "super_campaign_detail" */
+      )
+  }),
+  [ACL.ADMIN, ACL.BETA]
 )
 
 /* ==================================== */
@@ -924,7 +951,7 @@ export default (
         <Route path="contacts" component={AsyncContacts} />
         <Route path="contacts/duplicates" component={AsyncDuplicateContacts} />
         <Route path="contacts/:id" component={AsyncContactProfile} />
-        <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
+        <Route path="contacts/import/csv" component={AsyncContactsCsvImport} />
 
         <Route path="marketing" component={AsyncMarketingOverview} />
         <Route path="marketing/designs" component={AsyncMarketingHistory} />
@@ -947,6 +974,11 @@ export default (
         <Route path="insights">
           <IndexRoute component={AsyncMarketingInsightsList} />
           <Route path="scheduled" component={AsyncMarketingInsightsList} />
+          <Route
+            path="super-campaign/:id/detail"
+            component={AsyncSuperCampaignDetail}
+          />
+          <Route path="super-campaign" component={AsyncSuperCampaign} />
           <Route path=":id" component={AsyncMarketingInsight} />
         </Route>
 
@@ -1018,6 +1050,7 @@ export default (
             path="connected-accounts"
             component={ConnectedAccountsSetting}
           />
+          <Route path="campaigns" component={AsyncCampaigns} />
           {/* <Route path="css" component={AsyncCSS} /> */}
         </Route>
 

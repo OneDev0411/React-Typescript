@@ -1,9 +1,12 @@
-import React, { useContext, ReactNode } from 'react'
+import { useContext, ReactNode } from 'react'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { TemplateData } from 'utils/marketing-center/render-branded-template'
 
 import Builder from './Builder'
+import MarketingTemplatePurposeDrawer from './components/MarketingTemplatePurposeDrawer'
+import { useMarketingBuilderActions } from './hooks/use-marketing-builder-actions'
+import { useMarketingTemplatePurposeState } from './hooks/use-marketing-template-purpose-state'
 
 export interface IBrandMarketingTemplateWithResult
   extends IBrandMarketingTemplate {
@@ -58,6 +61,7 @@ export interface InstantMarketingProps {
   actionButtonsDisabled?: boolean
   customActions?: ReactNode
   saveButtonWrapper?: (saveButton: ReactNode) => ReactNode
+  templatePurpose?: IMarketingTemplatePurpose
 }
 
 export default function InstantMarketing({
@@ -78,7 +82,8 @@ export default function InstantMarketing({
   onClose,
   actionButtonsDisabled = false,
   customActions,
-  saveButtonWrapper
+  saveButtonWrapper,
+  templatePurpose: initialTemplatePurpose
 }: InstantMarketingProps) {
   const confirmation = useContext(ConfirmationModalContext)
 
@@ -96,26 +101,54 @@ export default function InstantMarketing({
     onClose()
   }
 
+  const builderActions = useMarketingBuilderActions(
+    defaultTemplate,
+    templateTypes,
+    bareMode
+  )
+
+  const {
+    isPurposeDrawerOpen,
+    templatePurpose,
+    handleTemplatePurposeSelect,
+    correctedTemplateData
+  } = useMarketingTemplatePurposeState(
+    builderActions,
+    templateData,
+    initialTemplatePurpose
+  )
+
   return (
-    <Builder
-      hideTemplatesColumn={hideTemplatesColumn}
-      templateData={templateData}
-      templateTypes={templateTypes}
-      mediums={mediums}
-      assets={assets}
-      defaultTemplate={defaultTemplate}
-      containerStyle={containerStyle}
-      isTemplatesColumnHiddenDefault={isTemplatesColumnHiddenDefault}
-      bareMode={bareMode}
-      saveButtonText={saveButtonText}
-      saveButtonStartIcon={saveButtonStartIcon}
-      onClose={handleClose}
-      onSave={handleSave}
-      onSocialSharing={handleSocialSharing}
-      onPrintableSharing={handleSocialSharing}
-      actionButtonsDisabled={actionButtonsDisabled}
-      customActions={customActions}
-      saveButtonWrapper={saveButtonWrapper}
-    />
+    <>
+      <MarketingTemplatePurposeDrawer
+        open={isPurposeDrawerOpen}
+        builderActions={builderActions}
+        onPurposeSelect={handleTemplatePurposeSelect}
+        onClose={onClose}
+      />
+      {!isPurposeDrawerOpen && (
+        <Builder
+          hideTemplatesColumn={hideTemplatesColumn}
+          templateData={correctedTemplateData}
+          templateTypes={templateTypes}
+          mediums={mediums}
+          assets={assets}
+          defaultTemplate={defaultTemplate}
+          containerStyle={containerStyle}
+          isTemplatesColumnHiddenDefault={isTemplatesColumnHiddenDefault}
+          bareMode={bareMode}
+          saveButtonText={saveButtonText}
+          saveButtonStartIcon={saveButtonStartIcon}
+          onClose={handleClose}
+          onSave={handleSave}
+          onSocialSharing={handleSocialSharing}
+          onPrintableSharing={handleSocialSharing}
+          actionButtonsDisabled={actionButtonsDisabled}
+          customActions={customActions}
+          saveButtonWrapper={saveButtonWrapper}
+          templatePurpose={templatePurpose}
+        />
+      )}
+    </>
   )
 }

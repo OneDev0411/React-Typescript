@@ -10,7 +10,7 @@ import { MARKET_REPORTS_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
-import { TemplateBlockOptions } from '../../types'
+import { RegisterBlockSelectHandler, TemplateBlockOptions } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 
 import neighborhoodsGraphsTemplates from './neighborhoods-graphs.mjml'
@@ -19,19 +19,19 @@ import neighborhoodsTemplates from './neighborhoods.mjml'
 export const neighborhoodsBlockName = 'rechat-neighborhoods'
 export const neighborhoodsGraphsBlockName = 'rechat-neighborhoods-graphs'
 
+interface NeighborhoodsRenderData {
+  report: NeighborhoodsReport
+}
+
 export interface Options {
   onNeighborhoodsDrop: (model: Model) => void
   onNeighborhoodsGraphsDrop: (model: Model) => void
 }
 
-interface NeighborhoodsBlocks {
-  selectHandler: (selectedReport?: NeighborhoodsReport) => void
-}
-
 function getNeighborhoodsGraphTemplateReport(
   selectedReport: NeighborhoodsReport,
   graphBarsBackgroundColor: string = '#4d89f9'
-): any {
+): NeighborhoodsReport {
   return {
     ...selectedReport,
     metrics: selectedReport.metrics.map(metric => {
@@ -112,7 +112,7 @@ export default function registerNeighborhoodsBlocks(
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
   { onNeighborhoodsDrop, onNeighborhoodsGraphsDrop }: Options
-): NeighborhoodsBlocks {
+): RegisterBlockSelectHandler<NeighborhoodsReport> {
   const neighborhoodBlocks = {
     [neighborhoodsBlockName]:
       templateBlockOptions.blocks[neighborhoodsBlockName]?.template ||
@@ -155,10 +155,10 @@ export default function registerNeighborhoodsBlocks(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent(
+  return handleBlockDragStopEvent<NeighborhoodsReport, NeighborhoodsRenderData>(
     editor,
     allBlocks,
-    (selectedReport: NeighborhoodsReport, droppedBlockName: string) => ({
+    (selectedReport, droppedBlockName) => ({
       ...renderData,
       report:
         droppedBlockName === neighborhoodsBlockName
@@ -168,7 +168,7 @@ export default function registerNeighborhoodsBlocks(
               renderData.get('inverted-container-bg-color')
             )
     }),
-    (model: Model, blockId: string) => {
+    (model, blockId) => {
       if (blockId === neighborhoodsBlockName) {
         onNeighborhoodsDrop(model)
       } else if (blockId === neighborhoodsGraphsBlockName) {

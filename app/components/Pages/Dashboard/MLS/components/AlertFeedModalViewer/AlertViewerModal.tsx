@@ -8,8 +8,6 @@ import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 import LoadingContainer from '@app/views/components/LoadingContainer'
 import PageHeader from '@app/views/components/PageHeader'
 
-import { formatListing } from '../../helpers/format-listing'
-
 import { Card } from './styled'
 
 interface Props {
@@ -41,7 +39,7 @@ export default function AlertViewerModal(props: Props) {
           {feed.map(listing => (
             <Card key={listing.id}>
               <ListingCard
-                listing={formatListing(listing)}
+                listing={listing}
                 onClick={() => {
                   setSelectedListing(listing)
                   setShowListingModal(true)
