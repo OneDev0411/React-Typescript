@@ -1,3 +1,5 @@
+import { ChangeEvent, Dispatch, SetStateAction } from 'react'
+
 import {
   Accordion,
   AccordionSummary,
@@ -19,6 +21,7 @@ import {
   SideNavItemLabel,
   SidenavListGroup
 } from '../styled'
+import { AccordionMenu, ExpandedMenu } from '../types'
 
 import SideNavLinkItem from './SideNavLinkItem'
 
@@ -67,51 +70,52 @@ const useStyles = makeStyles(
 )
 
 interface SideNavAccordionProps {
-  data: any
-  onChange: any
-  expandedMenu: any
-  setExpandedMenu: any
+  data: AccordionMenu
+  expandedMenu: ExpandedMenu
+  onChange: (
+    panel: ExpandedMenu
+  ) => (event: ChangeEvent<{}>, isExpanded: boolean) => void
+  setExpandedMenu: Dispatch<SetStateAction<ExpandedMenu>>
 }
 
 export default function SideNavAccordion({
   data,
-  onChange,
   expandedMenu,
+  onChange,
   setExpandedMenu
 }: SideNavAccordionProps) {
   const classes = useStyles()
   const {
+    action,
     testId = '',
     id,
     label,
     access,
-    icon,
+    icon = '',
     hasChildrenNotification,
     notificationCount,
-    to,
+    to = '',
     hasDivider,
     subMenu,
     isHidden = false
   } = data
 
-  const childrenRoutes =
-    subMenu &&
-    subMenu.filter(item => typeof item.to === 'string').map(item => item.to)
+  const menuId = 'nav-'.concat(id) as ExpandedMenu
 
   return !isHidden ? (
     <Acl access={access}>
       <SidenavListGroup data-test={testId}>
         <Accordion
-          expanded={expandedMenu === `nav-${id}`}
-          onChange={onChange(`nav-${id}`)}
+          expanded={expandedMenu === menuId}
+          onChange={onChange(menuId)}
           classes={{
             root: classes.accordionRoot,
             expanded: classes.accordionExpanded
           }}
         >
           <AccordionSummary
-            aria-controls={`nav-${id}-content`}
-            id={`nav-${id}-header`}
+            aria-controls={`${menuId}-content`}
+            id={`${menuId}-header`}
             classes={{
               root: classes.accordionSummaryRoot,
               expanded: classes.accordionSummaryRootExpanded,
@@ -119,11 +123,11 @@ export default function SideNavAccordion({
             }}
           >
             <SideNavLinkItem
-              to={childrenRoutes || to}
-              tourId={`nav-${id}`}
-              onClick={setExpandedMenu}
-              hasSubmenu={subMenu}
-              isSubmenu={false}
+              onTriggerAction={action}
+              to={to}
+              tourId={menuId}
+              onExpandedMenu={setExpandedMenu}
+              subMenu={subMenu}
             >
               <AccordionSummaryDiv>
                 {notificationCount ? (
@@ -150,7 +154,7 @@ export default function SideNavAccordion({
                 )}
               </AccordionSummaryDiv>
               {subMenu ? (
-                expandedMenu === `nav-${id}` ? (
+                expandedMenu === menuId ? (
                   <SvgIcon path={mdiMenuUp} />
                 ) : (
                   <SvgIcon path={mdiMenuDown} />
@@ -170,8 +174,9 @@ export default function SideNavAccordion({
                   !item.isHidden && (
                     <Acl access={item.access} key={index}>
                       <SideNavLinkItem
+                        onTriggerAction={item.action}
                         to={item.to}
-                        tourId={`nav-${item.label}`}
+                        tourId={`nav-${item.id}` as ExpandedMenu}
                         isSubmenu
                       >
                         {item.notificationCount ? (

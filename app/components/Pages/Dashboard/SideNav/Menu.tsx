@@ -37,7 +37,8 @@ import PoweredBy from './components/PoweredBy'
 import SideNavAccordion from './components/SideNavAccordion'
 import { UserMenu } from './components/UserMenu'
 import { Sidenav } from './styled'
-import { ExpandedMenu, scrollableAreaShadowColor } from './variables'
+import { ExpandedMenu, AccordionMenu, AccordionSubMenu } from './types'
+import { scrollableAreaShadowColor } from './variables'
 
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
 const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
@@ -103,7 +104,7 @@ function Menu(props: WithRouterProps) {
   const handleOpenExternalLink = link =>
     window.open(link, '_blank', 'noopener noreferrer')
 
-  const MenuItems = [
+  const MenuItems: AccordionMenu[] = [
     {
       access: dashboardAccess,
       hasDivider: true,
@@ -162,8 +163,9 @@ function Menu(props: WithRouterProps) {
     },
     {
       access: dashboardAccess,
-      hasChildrenNotification:
-        inboxNotificationNumber || chatRoomsNotificationsNumber,
+      hasChildrenNotification: !!(
+        inboxNotificationNumber || chatRoomsNotificationsNumber
+      ),
       hasDivider: false,
       icon: mdiAccountMultiple,
       id: 'people',
@@ -194,14 +196,15 @@ function Menu(props: WithRouterProps) {
           label: 'Chat',
           isHidden: !user,
           notificationCount: chatRoomsNotificationsNumber,
-          to: handleOpenChatbarDrawer
+          action: handleOpenChatbarDrawer
         }
       ]
     },
     {
       access: ['Marketing'],
-      hasChildrenNotification:
-        dealsNotificationsNumber || showingsTotalNotificationCount,
+      hasChildrenNotification: !!(
+        dealsNotificationsNumber || showingsTotalNotificationCount
+      ),
       hasDivider: true,
       icon: mdiSwapHorizontal,
       id: 'transactions',
@@ -256,14 +259,14 @@ function Menu(props: WithRouterProps) {
       icon: mdiHelpCircleOutline,
       id: 'help-center',
       label: 'Help Center',
-      to: () => handleOpenExternalLink(brandHelpCenterURL)
+      action: () => handleOpenExternalLink(brandHelpCenterURL)
     },
     {
       access: allAccess,
       icon: mdiPhoneOutline,
       id: 'support',
       label: 'Support',
-      to: handleOpenSupportDialogueBox
+      action: handleOpenSupportDialogueBox
     }
   ]
 
@@ -276,7 +279,7 @@ function Menu(props: WithRouterProps) {
         style={{ flex: '1 1' }}
         hasThinnerScrollbar
       >
-        {MenuItems.map((menu, index) => (
+        {MenuItems.map((menu: AccordionSubMenu, index) => (
           <SideNavAccordion
             key={index}
             data={menu}
