@@ -250,6 +250,7 @@ export function ActiveTeam() {
           width="43rem"
           onClose={hanldeCloseBrandSelectorDrawer}
           brandSelectorProps={{
+            shouldExpandOnNodeClick: true,
             nodeRenderer: renderBrandNode
           }}
         />

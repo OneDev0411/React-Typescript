@@ -40,6 +40,14 @@ export const TreeViewNode = memo(function TreeViewNode<
     onCheckNode(node)
   }
 
+  const handleClickNode = () => {
+    if (!expandable || !props.shouldExpandOnNodeClick) {
+      return
+    }
+
+    handleToggleNode()
+  }
+
   const renderNode = () => {
     const checkbox = props.multiSelectable && (
       <Checkbox
@@ -72,6 +80,7 @@ export const TreeViewNode = memo(function TreeViewNode<
           [classes.isContentContainerExpanded]: expanded,
           [classes.selectableContentContainer]: props.selectable
         })}
+        onClick={handleClickNode}
       >
         {arrow}
         {checkbox}

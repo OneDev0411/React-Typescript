@@ -6,6 +6,7 @@ export interface BaseTreeViewNodeProps<NodeType> {
   renderNode: (node: NodeType) => ReactNode
   selectable?: boolean
   multiSelectable?: boolean
+  shouldExpandOnNodeClick?: boolean
   getNodeId: (node: NodeType) => string
   onCheckNode?: (node: NodeType) => void
   getChildNodes: TreeFn<NodeType>

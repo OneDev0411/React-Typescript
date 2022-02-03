@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { Chip, Theme, makeStyles } from '@material-ui/core'
+import { Button, Chip, Theme, makeStyles } from '@material-ui/core'
 import cn from 'classnames'
 
 const useStyles = makeStyles(
@@ -8,14 +8,20 @@ const useStyles = makeStyles(
     name: {
       display: 'flex',
       alignItems: 'center',
-      cursor: 'pointer'
+      justifyContent: 'space-between',
+      '&:hover $switchButton': {
+        display: 'block'
+      }
     },
     disabled: {
       cursor: 'not-allowed',
       opacity: 0.5
     },
+    switchButton: {
+      display: 'none'
+    },
     activeIndicator: {
-      marginLeft: theme.spacing(1)
+      marginLeft: theme.spacing(0.5)
     }
   }),
   { name: 'SwitchTeamNodeRenderer' }
@@ -40,17 +46,27 @@ function Brand({ brand, isActive, disabled, onClick }: Props) {
   }
 
   return (
-    <div
-      className={cn(classes.name, { [classes.disabled]: disabled })}
-      onClick={handleOnClick}
-    >
-      {brand.name}
-      {isActive && (
-        <Chip
+    <div className={cn(classes.name, { [classes.disabled]: disabled })}>
+      <div>
+        {brand.name}
+        {isActive && (
+          <Chip
+            size="small"
+            label="You're here"
+            className={classes.activeIndicator}
+          />
+        )}
+      </div>
+      {!isActive && !disabled && (
+        <Button
+          variant="contained"
+          color="primary"
           size="small"
-          label="You're here"
-          className={classes.activeIndicator}
-        />
+          onClick={handleOnClick}
+          className={classes.switchButton}
+        >
+          Select Team
+        </Button>
       )}
     </div>
   )
