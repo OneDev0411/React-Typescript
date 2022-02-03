@@ -111,7 +111,7 @@ export default function ToggleButton(props: Props) {
                 variant="body1"
                 className={classes.userDisplayName}
               >
-                {display_name ?? activeBrand?.name ?? 'Loading...'}
+                {activeBrand?.name ?? display_name ?? 'Loading...'}
               </Typography>
             </div>
           </div>

@@ -117,11 +117,11 @@ export function Menu() {
             </SideNavLinkItem>
           </Acl.Marketing>
 
-          <Acl.Marketing>
+          <Acl.Crm>
             <SideNavLinkItem to="/dashboard/flows" tourId="nav-flows">
               Flows
             </SideNavLinkItem>
-          </Acl.Marketing>
+          </Acl.Crm>
 
           <SideNavLinkItem to="/dashboard/mls" tourId="nav-properties">
             Properties
