@@ -14,7 +14,7 @@ import { TemplateRenderData } from 'components/InstantMarketing/Builder/utils/ge
 
 import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
-import { TemplateBlockOptions } from '../../types'
+import { TemplateBlockOptions, RegisterBlockSelectHandler } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 import { baseView, isComponent } from '../utils'
 
@@ -29,14 +29,14 @@ const typeCarouselImage = `${typeCarousel}-image`
 
 export const carouselBlockName = typeCarousel
 
+interface CarouselRenderData {
+  images: string[]
+}
+
 export interface CarouselBlockOptions {
   carouselClassNames?: string
   onCarouselDoubleClick: (model: Model) => void
   onCarouselDrop: (model: Model) => void
-}
-
-interface CarouselBlock {
-  selectHandler: (selectedImages?: string[]) => void
 }
 
 export default function registerCarouselBlock(
@@ -48,7 +48,7 @@ export default function registerCarouselBlock(
     onCarouselDrop,
     onCarouselDoubleClick
   }: CarouselBlockOptions
-): CarouselBlock {
+): RegisterBlockSelectHandler<string[]> {
   const DefaultComponent = editor.DomComponents.getType('default')
   const DefaultModel = DefaultComponent!.model
 
@@ -253,10 +253,10 @@ export default function registerCarouselBlock(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent(
+  return handleBlockDragStopEvent<string[], CarouselRenderData>(
     editor,
     allBlocks,
-    (selectedImages: string[]) => ({
+    selectedImages => ({
       ...renderData,
       images: selectedImages
     }),

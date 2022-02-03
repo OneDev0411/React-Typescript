@@ -10,7 +10,7 @@ import { ARTICLES_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
-import { TemplateBlockOptions } from '../../types'
+import { RegisterBlockSelectHandler, TemplateBlockOptions } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 
 import ArticleLeft from './templates/article-left.mjml'
@@ -25,8 +25,8 @@ export interface Options {
   onDrop: (model: Model) => void
 }
 
-interface ArticleBlock {
-  selectHandler: (articles?: ArticleMetadata[]) => void
+interface ArticleRenderData {
+  articles: ArticleMetadata[]
 }
 
 export default function registerArticleBlock(
@@ -34,7 +34,7 @@ export default function registerArticleBlock(
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
   { onDrop }: Options
-): ArticleBlock {
+): RegisterBlockSelectHandler<ArticleMetadata[]> {
   const articleBlocks = {
     [articleTopBlockName]:
       templateBlockOptions.blocks[articleTopBlockName]?.template || ArticleTop,
@@ -89,10 +89,10 @@ export default function registerArticleBlock(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent(
+  return handleBlockDragStopEvent<ArticleMetadata[], ArticleRenderData>(
     editor,
     allBlocks,
-    (articles: ArticleMetadata[]) => ({
+    articles => ({
       ...renderData,
       articles
     }),

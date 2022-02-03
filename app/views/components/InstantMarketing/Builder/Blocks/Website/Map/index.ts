@@ -11,7 +11,7 @@ import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
-import { TemplateBlockOptions } from '../../types'
+import { TemplateBlockOptions, RegisterBlockSelectHandler } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 import { baseView, isComponent } from '../utils'
 
@@ -21,14 +21,17 @@ import template from './template.njk'
 export const typeEmbedMap = 'embed-map'
 export const embedMapBlockName = typeEmbedMap
 
+interface MapRenderData {
+  longitude: number
+  latitude: number
+  zoom: number
+  theme: string
+}
+
 export interface MapBlockOptions {
   embedMapClassNames?: string
   onMapDrop: (model: Model) => void
   onMapDoubleClick: (model: Model) => void
-}
-
-interface MapBlock {
-  selectHandler: (mapInfo?: MapInfo) => void
 }
 
 export default function registerMapBlock(
@@ -36,7 +39,7 @@ export default function registerMapBlock(
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
   { embedMapClassNames, onMapDrop, onMapDoubleClick }: MapBlockOptions
-): MapBlock {
+): RegisterBlockSelectHandler<MapInfo> {
   const ComponentModel = editor.DomComponents.getType('default')!.model
 
   const attrKeys = ['token', 'theme', 'longitude', 'latitude', 'zoom']
@@ -105,7 +108,6 @@ export default function registerMapBlock(
           (event: CustomEvent<MapInitEventType>) => {
             const map = event.detail.map
             const marker = event.detail.marker
-            // const navigationControl = event.detail.navigationControl
 
             // The method argument is available in JS implementation, but it
             // does not exist in TS type definition, so I call the enable method
@@ -113,7 +115,6 @@ export default function registerMapBlock(
             map.scrollZoom.enable.call(map.scrollZoom, { around: 'center' })
 
             map.doubleClickZoom.disable()
-            // map.removeControl(navigationControl)
 
             map.on('move', event => {
               marker.setLngLat(event.target.getCenter())
@@ -213,10 +214,10 @@ export default function registerMapBlock(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent(
+  return handleBlockDragStopEvent<MapInfo, MapRenderData>(
     editor,
     allBlocks,
-    (mapInfo: MapInfo) => ({
+    mapInfo => ({
       ...renderData,
       longitude: mapInfo.center.longitude,
       latitude: mapInfo.center.latitude,

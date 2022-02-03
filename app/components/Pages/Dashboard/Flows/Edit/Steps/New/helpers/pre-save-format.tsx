@@ -1,4 +1,5 @@
 import { createTemplateInstance } from '@app/models/instant-marketing/triggers/helpers'
+import { getUserWithOnBehalfVariable } from '@app/utils/marketing-center/get-user-with-on-behalf-variable'
 
 import { convertToServerInput } from '../components/BaseFields/WaitFor/helpers'
 import {
@@ -72,7 +73,7 @@ export const marketingEmailFormPreSaveFormat = async (
     data.template?.type === 'template_instance'
       ? data.template
       : await createTemplateInstance(data.template!, options.brand, {
-          user: options.user
+          user: getUserWithOnBehalfVariable(options.user)
         })
 
   return {
