@@ -20,6 +20,7 @@ const useStyles = makeStyles(
       display: 'flex',
       flexDirection: 'row',
       padding: theme.spacing(0, 1),
+      overflow: 'hidden',
       '&:hover $title': {
         color: theme.palette.text.primary
       }
@@ -27,6 +28,7 @@ const useStyles = makeStyles(
     titleContainer: {
       display: 'flex',
       alignItems: 'center',
+      minWidth: theme.spacing(15),
       gap: theme.spacing(1)
     },
     title: {
@@ -36,10 +38,9 @@ const useStyles = makeStyles(
       flex: '1 0 auto',
       display: 'inline-block',
       whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textAlign: 'right',
       msTextOverflow: 'ellipsis',
       textOverflow: 'ellipsis',
+      textAlign: 'right',
       color: theme.palette.grey[900]
     },
     triggerIndicator: {
