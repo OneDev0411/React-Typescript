@@ -1,5 +1,4 @@
 import {
-  ListSubheader,
   ListItemText,
   ListItemIcon,
   makeStyles,
@@ -33,9 +32,6 @@ const useStyles = makeStyles(
       maxHeight: `calc(
         100vh - ${theme.spacing(9)}px
       )`
-    },
-    ListSubheader: {
-      ...theme.typography.overline
     },
     listItem: {
       ...theme.typography.body2
@@ -71,11 +67,6 @@ export function UserMenuContent({ showChecklists, onClose = noop }: Props) {
 
       <List disablePadding>
         <Acl.Admin>
-          {activeTeam && (
-            <ListSubheader className={classes.ListSubheader}>
-              Team Settings
-            </ListSubheader>
-          )}
           {hasAccessToBrandSettings && (
             <ListItem
               button

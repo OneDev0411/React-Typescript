@@ -91,7 +91,7 @@ export function ActiveTeam() {
     <>
       <div className={classes.container}>
         <Typography variant="overline" className={classes.header}>
-          You’re working on
+          Active Account
         </Typography>
         <div className={classes.activeTeamContainer}>
           <div className={classes.activeTeam}>
