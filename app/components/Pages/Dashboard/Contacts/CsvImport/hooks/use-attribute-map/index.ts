@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { ParseResult } from 'papaparse'
 import superagent from 'superagent'
@@ -18,7 +18,8 @@ export function useAttributeMap(
 ): [
   Record<string, Nullable<MappedField>>,
   typeof setList,
-  Nullable<'doing' | 'done'>
+  Nullable<'doing' | 'done'>,
+  () => void
 ] {
   const [list, setList] = useState<Record<string, Nullable<MappedField>>>({})
   const [status, setStatus] = useState<Nullable<'doing' | 'done'>>(null)
@@ -26,6 +27,11 @@ export function useAttributeMap(
   const isAttributeDisabled = useIsAttributeDisabled()
   const notify = useNotify()
   const columns = getCsvColumns(csv)
+
+  const reset = useCallback(() => {
+    setList({})
+    setStatus(null)
+  }, [])
 
   useDeepCompareEffect(() => {
     if (status !== null || columns.length === 0 || options.length === 0) {
@@ -87,5 +93,5 @@ export function useAttributeMap(
     request()
   }, [columns, options, notify])
 
-  return [list, setList, status]
+  return [list, setList, status, reset]
 }

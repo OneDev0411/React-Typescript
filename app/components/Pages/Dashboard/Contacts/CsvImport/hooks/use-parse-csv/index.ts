@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { parse, ParseError, ParseResult } from 'papaparse'
 
@@ -11,10 +11,15 @@ export function useParseCsv(
   }: {
     onError: (error: ParseError) => void
   }
-): [typeof results, typeof error] {
+): [typeof results, typeof error, () => void] {
   const [results, setResults] = useState<Nullable<ParseResult>>(null)
   const [error, setError] = useState<Nullable<ParseError>>(null)
   const notify = useNotify()
+
+  const reset = useCallback(() => {
+    setResults(null)
+    setError(null)
+  }, [])
 
   useEffect(() => {
     if (!file) {
@@ -41,5 +46,5 @@ export function useParseCsv(
     })
   }, [file, notify, onError])
 
-  return [results, error]
+  return [results, error, reset]
 }
