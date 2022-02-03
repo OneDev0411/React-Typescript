@@ -1,8 +1,10 @@
 import styled from 'styled-components'
 
 export const Container = styled.span`
-  margin-left: 0.25rem
-  position: relative
+  margin-left: 0.25rem;
+  position: relative;
+  display: flex;
+  align-items: center;
 `
 
 export const RolesList = styled.div`
