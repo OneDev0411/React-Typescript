@@ -21,8 +21,7 @@ const useStyles = makeStyles(
     boxTitle: {
       marginBottom: theme.spacing(2),
       display: 'flex',
-      alignItems: 'flex-start',
-      fontSize: '16px'
+      alignItems: 'flex-start'
     },
     boxContainer: {
       border: `1px solid ${theme.palette.grey[300]}`,
@@ -57,7 +56,7 @@ export function UpcomingCelebrations({ isLoading, events }: Props) {
 
   return (
     <Box className={classes.boxWrapper}>
-      <Typography variant="h6" className={classes.boxTitle}>
+      <Typography variant="subtitle1" className={classes.boxTitle}>
         <SvgIcon path={mdiGiftOutline} rightMargined />
 
         <InlineBadge badgeContent={celebrationEvents.length} color="primary">

@@ -2,7 +2,6 @@ import { ReactNode } from 'react'
 
 import { Typography, makeStyles, Theme, createStyles } from '@material-ui/core'
 
-import { Greeting } from '@app/components/Pages/Dashboard/Overview/Welcome/Greetings'
 import useIsMobile from '@app/hooks/use-is-mobile'
 import { ClassesProps } from '@app/utils/ts-utils'
 
@@ -14,7 +13,7 @@ const styles = (theme: Theme) =>
       padding: ({
         noPadding
       }: Pick<GlobalHeaderWithBackgroundProps, 'noPadding'>) =>
-        noPadding ? 0 : theme.spacing(6),
+        noPadding ? 0 : theme.spacing(4, 3),
       width: '100%',
       [theme.breakpoints.up('md')]: {
         flexDirection: 'row',
@@ -68,8 +67,6 @@ export default function GlobalHeaderWithBackground({
             {title}
           </Typography>
         )}
-
-        <Greeting />
       </div>
       {children && <div className={classes.content}>{children}</div>}
     </div>
