@@ -94,14 +94,14 @@ export default function Inbox({ params }: WithRouterProps) {
 
       <Box paddingLeft={5} flex="0 1 auto">
         {initializing || noConnectedAccounts ? (
-          <GlobalPageLayout.Header title="Inbox">
+          <GlobalPageLayout.Header title="Email">
             <ImportContactsButton
               onFetchedOAuthAccounts={onFetchedOAuthAccounts}
             />
           </GlobalPageLayout.Header>
         ) : (
           <GlobalPageLayout.HeaderWithSearch
-            title="Inbox"
+            title="Email"
             onSearch={query =>
               // Keep it undefined until there are actually some query.
               setSearchQuery(searchQuery => query || (searchQuery && query))
