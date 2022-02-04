@@ -25,12 +25,16 @@ export function AddRole(props) {
   )
 
   const isSingularRole =
-    props.annotation.type === 'Role' && props.roles.length > 0
+    props.annotation.type === 'Role' && Object.keys(props.values).length > 0
 
   if (
+    // Dynamic Roles aren't listed in the roles list
     isDynamicRole ||
+    // Primary roles are unique so don't show plus button
     isPrimaryRole ||
+    // show plus button if the type is "Role" and is blank
     isSingularRole ||
+    // make sure to show plus button for the last row if the annotation is a multi-row
     (Object.keys(props.values).length > 1 &&
       props.rectIndex < props.group.length - 1)
   ) {
@@ -81,6 +85,7 @@ export function AddRole(props) {
               showEmail={false}
               showTitle={false}
               allowDeleteRole={false}
+              disableList={props.annotation.type === 'Role'}
               showBrokerageFields={props.showBrokerageFields}
               deal={props.deal}
               filter={role => props.annotation.role.includes(role.role)}

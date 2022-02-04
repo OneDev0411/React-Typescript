@@ -13,5 +13,6 @@ export interface MultiSelectionBrandSelectorDrawer extends BaseDrawerProps {
   brandSelectorProps?: Omit<BaseBrandSelectorProps, 'nodeRenderer'>
   selectedBrands?: UUID[]
   saveButtonText?: string
+  disabled?: boolean
   onSave: (brands: UUID[]) => Promise<void>
 }

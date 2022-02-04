@@ -33,7 +33,10 @@ export function AgentsList({
       .flatMap(office => {
         const agents = office.users.map((user: IUser) => {
           const isSelected =
-            multiSelection && selectedAgents.some(agent => agent.id === user.id)
+            multiSelection &&
+            selectedAgents.some(
+              agent => agent.id === user.id && agent.brand_id === office.id
+            )
 
           return {
             type: RowType.Agent,
@@ -89,6 +92,19 @@ export function AgentsList({
       />
 
       <Box flexGrow={1}>
+        {rows.length === 0 && (
+          <Box
+            mx={1}
+            position="absolute"
+            display="flex"
+            width="100%"
+            height="100%"
+            justifyContent="center"
+            alignItems="center"
+          >
+            No Results.
+          </Box>
+        )}
         <AutoSizer>
           {({ width, height }) => (
             <VirtualList
