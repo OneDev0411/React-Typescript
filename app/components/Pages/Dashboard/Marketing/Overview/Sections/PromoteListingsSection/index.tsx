@@ -13,11 +13,13 @@ import SectionLayout from '../SectionLayout'
 interface Props {
   title?: string
   emptyListingText?: string
+  dashboardStyles?: boolean
 }
 
 export default function PromoteListingsSection({
   title = 'Promote Your Listings',
-  emptyListingText = 'No listing yet!'
+  emptyListingText = 'No listing yet!',
+  dashboardStyles = false
 }: Props) {
   const brandId = useSelector(selectActiveBrandId)
 
@@ -26,6 +28,7 @@ export default function PromoteListingsSection({
   return (
     <SectionLayout
       title={title}
+      dashboardStyles={dashboardStyles}
       actionNode={
         <LinkSectionAction
           title="View all your listings"

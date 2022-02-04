@@ -14,12 +14,12 @@ const useStyles = makeStyles(
       display: 'flex',
       borderRadius: theme.shape.borderRadius,
       flexDirection: 'column',
-      padding: theme.spacing(0, 6)
+      padding: theme.spacing(0, 3)
     },
     container: {
       display: 'flex',
       maxWidth: '1600px',
-      padding: theme.spacing(0, 0, 3)
+      padding: theme.spacing(0)
     },
     greeting: {
       display: 'flex',
@@ -48,7 +48,10 @@ function OverviewDashboard() {
       </Acl.Crm>
       <Acl.Marketing>
         <Box className={classes.container}>
-          <PromoteListingsSection title="Use Pre-Rendered Marketing Emails" />
+          <PromoteListingsSection
+            title="Use Pre-Rendered Marketing Emails"
+            dashboardStyles
+          />
         </Box>
       </Acl.Marketing>
       <Acl.Deals>
