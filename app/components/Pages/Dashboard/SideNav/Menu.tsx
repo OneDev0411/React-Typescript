@@ -109,8 +109,8 @@ function Menu(props: WithRouterProps) {
       access: dashboardAccess,
       hasDivider: true,
       icon: mdiViewGridOutline,
-      id: 'dashboard',
-      label: 'Dashboard',
+      id: 'home',
+      label: 'Home',
       testId: 'side-nav-list',
       to: '/dashboard/overview'
     },
@@ -141,8 +141,8 @@ function Menu(props: WithRouterProps) {
         },
         {
           access: insightAccess,
-          id: 'insights',
-          label: 'Insights',
+          id: 'email-insights',
+          label: 'Email Insights',
           to: '/dashboard/insights'
         },
         {
