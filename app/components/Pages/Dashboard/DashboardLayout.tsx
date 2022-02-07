@@ -3,7 +3,6 @@ import React, { createContext, useState } from 'react'
 import { Box, Theme, makeStyles } from '@material-ui/core'
 
 import SideNav from './SideNav'
-import { appSidenavWidth } from './SideNav/variables'
 
 interface Props {
   children: React.ReactNode
@@ -15,12 +14,7 @@ const useStyles = makeStyles(
       minHeight: '100vh',
       flexGrow: 1,
       display: 'flex',
-      flexDirection: 'column',
-      // I hate using calc and it's totally wrong.
-      // I'm currently a release blocker and don't have time to
-      // properly fix it.
-      // TODO
-      width: `calc(100% - ${appSidenavWidth}px)`
+      flexDirection: 'column'
     }
   }),
   { name: 'MainWrapper' }
