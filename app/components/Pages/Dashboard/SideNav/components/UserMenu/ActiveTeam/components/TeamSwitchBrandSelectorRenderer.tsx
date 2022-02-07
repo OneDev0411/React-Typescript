@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { Button, Chip, Theme, makeStyles } from '@material-ui/core'
+import { Chip, Theme, makeStyles } from '@material-ui/core'
 import cn from 'classnames'
 
 const useStyles = makeStyles(
@@ -9,15 +9,17 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
+      padding: theme.spacing(1, 0),
       '&:hover $switchButton': {
         display: 'block'
       }
     },
     disabled: {
-      cursor: 'not-allowed',
       opacity: 0.5
     },
     switchButton: {
+      color: theme.palette.primary.main,
+      cursor: 'pointer',
       display: 'none'
     },
     activeIndicator: {
@@ -58,15 +60,9 @@ function Brand({ brand, isActive, disabled, onClick }: Props) {
         )}
       </div>
       {!isActive && !disabled && (
-        <Button
-          variant="contained"
-          color="primary"
-          size="small"
-          onClick={handleOnClick}
-          className={classes.switchButton}
-        >
+        <span className={classes.switchButton} onClick={handleOnClick}>
           Select Team
-        </Button>
+        </span>
       )}
     </div>
   )

@@ -8,6 +8,7 @@ import { areRecipientsEqual } from '../../../../helpers/are-recipients-equal'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     name: {
+      padding: theme.spacing(1, 0),
       cursor: 'pointer'
     },
     disabled: {

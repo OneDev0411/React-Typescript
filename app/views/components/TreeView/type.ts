@@ -7,6 +7,7 @@ export interface BaseTreeViewNodeProps<NodeType> {
   selectable?: boolean
   multiSelectable?: boolean
   shouldExpandOnNodeClick?: boolean
+  isChildNode?: boolean
   getNodeId: (node: NodeType) => string
   onCheckNode?: (node: NodeType) => void
   getChildNodes: TreeFn<NodeType>
@@ -15,7 +16,7 @@ export interface BaseTreeViewNodeProps<NodeType> {
 
 export interface TreeViewProps<NodeType>
   extends OptionalBy<
-    Omit<BaseTreeViewNodeProps<NodeType>, 'onCheckNode'>,
+    Omit<BaseTreeViewNodeProps<NodeType>, 'onCheckNode' | 'isChildNode'>,
     'getNodeId' | 'getChildNodes' | 'expandedNodes'
   > {
   onExpandedNodesChanged?: (nodes: string[]) => void

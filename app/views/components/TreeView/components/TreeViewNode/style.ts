@@ -2,29 +2,37 @@ import { makeStyles, Theme } from '@material-ui/core'
 
 export const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {},
-    contentContainer: {
+    nodeContainer: {},
+    node: {
       display: 'flex',
       alignItems: 'center',
-      paddingTop: theme.spacing(1),
-      paddingBottom: theme.spacing(1),
-      paddingLeft: theme.spacing(4),
       color: theme.palette.grey[700],
+      paddingRight: theme.spacing(1),
       ...theme.typography.body2
     },
-    selectableContentContainer: {
+    expandableNode: {
+      paddingLeft: 0
+    },
+    rootNoneExpandableNode: {
+      paddingLeft: theme.spacing(4)
+    },
+    childNode: {
+      paddingLeft: theme.spacing(1),
+      marginLeft: theme.spacing(3)
+    },
+    isExpandableOnNodeClick: {
+      cursor: 'pointer'
+    },
+    isNodeSelectable: {
       '&:hover': {
         background: theme.palette.grey[200]
       }
     },
-    isContentContainerExpanded: {
+    isNodeExpanded: {
       color: theme.palette.common.black,
       ...theme.typography.subtitle2
     },
-    expandableContentContainer: {
-      paddingLeft: 0
-    },
-    expandButton: {
+    expandNodeButton: {
       padding: 0,
       margin: theme.spacing(0, 1),
       background: 'none',
@@ -56,7 +64,7 @@ export const useStyles = makeStyles(
         content: "''",
         zIndex: 0,
         width: 0,
-        height: `calc(100% - ${theme.spacing(1)}px)`,
+        height: '100%',
         borderLeft: `1px solid ${theme.palette.grey[100]}`
       }
     },

@@ -18,7 +18,13 @@ export interface Props<NodeType> extends BaseTreeViewNodeProps<NodeType> {
 
 export const TreeViewNode = memo(function TreeViewNode<
   NodeType extends any = any
->({ node, onToggleExpanded, onCheckNode, ...props }: Props<NodeType>) {
+>({
+  node,
+  isChildNode = false,
+  onToggleExpanded,
+  onCheckNode,
+  ...props
+}: Props<NodeType>) {
   const classes = useStyles()
   const childNodes = props.getChildNodes(node) || []
 
@@ -61,7 +67,7 @@ export const TreeViewNode = memo(function TreeViewNode<
     const arrow = expandable && (
       <button
         type="button"
-        className={cn(classes.expandButton, {
+        className={cn(classes.expandNodeButton, {
           [classes.isExpanded]: expanded
         })}
         onClick={handleToggleNode}
@@ -73,13 +79,19 @@ export const TreeViewNode = memo(function TreeViewNode<
       </button>
     )
 
+    const otherNodeContentClassNames = {
+      [classes.expandableNode]: expandable,
+      [classes.rootNoneExpandableNode]: !isChildNode && !expandable,
+      [classes.childNode]: isChildNode && !expandable,
+      [classes.isExpandableOnNodeClick]:
+        expandable && props.shouldExpandOnNodeClick,
+      [classes.isNodeExpanded]: expanded,
+      [classes.isNodeSelectable]: props.selectable
+    }
+
     return (
       <div
-        className={cn(classes.contentContainer, {
-          [classes.expandableContentContainer]: expandable,
-          [classes.isContentContainerExpanded]: expanded,
-          [classes.selectableContentContainer]: props.selectable
-        })}
+        className={cn(classes.node, otherNodeContentClassNames)}
         onClick={handleClickNode}
       >
         {arrow}
@@ -90,13 +102,14 @@ export const TreeViewNode = memo(function TreeViewNode<
   }
 
   return (
-    <div className={classes.container}>
+    <div className={classes.nodeContainer}>
       {renderNode()}
       {expandable && expanded && (
         <div className={classes.childrenContainer}>
           {childNodes.map(node => (
             <TreeViewNode
               key={props.getNodeId(node)}
+              isChildNode
               node={node}
               onToggleExpanded={onToggleExpanded}
               onCheckNode={onCheckNode}
