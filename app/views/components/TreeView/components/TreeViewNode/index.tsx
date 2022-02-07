@@ -1,4 +1,4 @@
-import { useCallback, memo, ChangeEvent } from 'react'
+import { useCallback, memo, MouseEvent, ChangeEvent } from 'react'
 
 import { Checkbox } from '@material-ui/core'
 import { mdiChevronRight, mdiChevronDown } from '@mdi/js'
@@ -46,10 +46,16 @@ export const TreeViewNode = memo(function TreeViewNode<
     onCheckNode(node)
   }
 
-  const handleClickNode = () => {
+  const handleOnNodeClick = () => {
     if (!expandable || !props.shouldExpandOnNodeClick) {
       return
     }
+
+    handleToggleNode()
+  }
+
+  const handleOnExpandButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
 
     handleToggleNode()
   }
@@ -70,7 +76,7 @@ export const TreeViewNode = memo(function TreeViewNode<
         className={cn(classes.expandNodeButton, {
           [classes.isExpanded]: expanded
         })}
-        onClick={handleToggleNode}
+        onClick={handleOnExpandButtonClick}
       >
         <SvgIcon
           path={expanded ? mdiChevronDown : mdiChevronRight}
@@ -92,7 +98,7 @@ export const TreeViewNode = memo(function TreeViewNode<
     return (
       <div
         className={cn(classes.node, otherNodeContentClassNames)}
-        onClick={handleClickNode}
+        onClick={handleOnNodeClick}
       >
         {arrow}
         {checkbox}
