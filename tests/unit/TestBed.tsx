@@ -1,13 +1,12 @@
-import * as React from 'react'
 import { ReactNode } from 'react'
 
-import { merge } from 'lodash'
 import { Provider } from 'react-redux'
-import { DeepPartial } from 'redux'
+import { applyMiddleware, createStore /* compose */, DeepPartial } from 'redux'
+import { enableBatching } from 'redux-batched-actions'
+import thunk from 'redux-thunk'
 
 import { AppTheme } from '../../app/AppTheme'
-import { IAppState } from '../../app/reducers'
-import store from '../../app/stores'
+import reducers, { IAppState } from '../../app/reducers'
 
 import user from './fixtures/users/agent.json'
 
@@ -28,7 +27,11 @@ interface Props {
  * ContactsTestBed, DealsTestBed etc.
  */
 export function TestBed({ reduxState, children }: Props) {
-  merge(store.getState(), { user }, reduxState)
+  const store = createStore(
+    enableBatching(reducers),
+    { user, ...reduxState },
+    applyMiddleware(thunk)
+  )
 
   return (
     <Provider store={store}>
