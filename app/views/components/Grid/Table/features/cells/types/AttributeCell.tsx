@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import {
   alpha,
   Chip,
@@ -101,13 +103,14 @@ const useStyles = makeStyles(
       flexDirection: 'column'
     },
     attributeEntry: {
-      borderTopLeftRadius: theme.spacing(0.5),
-      borderTopRightRadius: theme.spacing(0.5),
-      height: theme.spacing(5),
       display: 'flex',
       flexDirection: 'row',
       borderBottom: `1px solid ${theme.palette.divider}`,
       justifyContent: 'flex-end',
+      gap: theme.spacing(0.5),
+      borderTopLeftRadius: theme.spacing(0.5),
+      borderTopRightRadius: theme.spacing(0.5),
+      height: theme.spacing(5),
 
       '&:first-child': {
         height: theme.spacing(5) - 1
@@ -145,7 +148,6 @@ const useStyles = makeStyles(
       lineHeight: `${theme.spacing(3)}px`,
       flex: '0 0 auto',
       minWidth: theme.spacing(8.25),
-      paddingLeft: theme.spacing(2),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'end'
@@ -163,7 +165,7 @@ const useStyles = makeStyles(
       justifyContent: 'end',
       gap: theme.spacing(1),
       color: 'grey',
-      minWidth: theme.spacing(10),
+      minWidth: theme.spacing(11),
 
       '&.email': {
         minWidth: theme.spacing(14.25)
@@ -205,6 +207,8 @@ const AttributeCell = ({
   let primaryAttribute
   let primaryAttributeLabel
   let count = 0
+
+  const [inAddMode, setInAddMode] = useState(false)
 
   //--
 
@@ -358,9 +362,35 @@ const AttributeCell = ({
       )
     }
 
-    const AddButton = () => (
-      <div className={classes.addAttributeButton}>Add</div>
-    )
+    const AddAttribute = () => {
+      const toggleAddMode = () => setInAddMode(prevMode => !prevMode)
+
+      const AddButton = () => (
+        <div className={classes.addAttributeButton} onClick={toggleAddMode}>
+          Add
+        </div>
+      )
+      const showEntryForm = filteredAttributes.length === 0 || inAddMode
+
+      if (showEntryForm) {
+        return (
+          <div className={classes.attributeEntry}>
+            {EntryForm('', AddButton())}
+          </div>
+        )
+      }
+
+      if (!showEntryForm && filteredAttributes.length > 0) {
+        return (
+          <div
+            className={cn(classes.attributeEntry, 'add-new')}
+            onClick={toggleAddMode}
+          >
+            Add {attributeDescription}
+          </div>
+        )
+      }
+    }
 
     return (
       <div className={cn(classes.attributeEditWidget, attributeType)}>
@@ -372,16 +402,7 @@ const AttributeCell = ({
                 attributeIndex
               })
             )}
-          {filteredAttributes.length === 0 && (
-            <div className={classes.attributeEntry}>
-              {EntryForm('', AddButton())}
-            </div>
-          )}
-          {filteredAttributes.length > 0 && (
-            <div className={cn(classes.attributeEntry, 'add-new')}>
-              Add {attributeDescription}
-            </div>
-          )}
+          {AddAttribute()}
         </div>
       </div>
     )
