@@ -1,12 +1,12 @@
 import { useState, useMemo } from 'react'
 
 import { Typography, Theme, makeStyles } from '@material-ui/core'
-import { mdiAccountGroupOutline, mdiAccountSwitchOutline } from '@mdi/js'
+import { mdiAccountSwitchOutline } from '@mdi/js'
 import { useSelector } from 'react-redux'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { switchActiveTeam } from '@app/models/user/switch-active-team'
-import { selectUser } from '@app/selectors/user'
+import { selectUser, selectImpersonateUser } from '@app/selectors/user'
 import {
   setImpersonateUser,
   removeImpersonateUser
@@ -27,12 +27,11 @@ import { TeamSwitchBrandSelectorRenderer as Brand } from './components/TeamSwitc
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      padding: theme.spacing(2)
+      padding: theme.spacing(2, 2, 1, 2)
     },
     header: {
       display: 'block',
       color: theme.palette.grey[500],
-      marginBottom: theme.spacing(1),
       textTransform: 'uppercase'
     },
     activeTeamContainer: {
@@ -43,10 +42,6 @@ const useStyles = makeStyles(
     activeTeam: {
       display: 'flex',
       alignItems: 'center'
-    },
-    activeTeamIcon: {
-      color: theme.palette.common.black,
-      marginRight: theme.spacing(1.25)
     },
     switchTeam: {
       color: theme.palette.primary.main,
@@ -99,6 +94,7 @@ export function ActiveTeam() {
   const classes = useStyles()
   const activeBrand = useUnsafeActiveBrand()
   const user = useSelector(selectUser)
+  const impersonateUser = useSelector(selectImpersonateUser)
 
   const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useState<boolean>(false)
   const [isImpersonateUserSelectorOpen, setIsImpersonateUserSelectorOpen] =
@@ -223,23 +219,32 @@ export function ActiveTeam() {
         </div>
       )}
       <div className={classes.container}>
-        <Typography variant="overline" className={classes.header}>
-          Active Account
-        </Typography>
-        <div className={classes.activeTeamContainer}>
-          <div className={classes.activeTeam}>
-            <SvgIcon
-              path={mdiAccountGroupOutline}
-              className={classes.activeTeamIcon}
-            />
-
-            <Typography variant="subtitle2">{activeBrand.name}</Typography>
+        <div>
+          <Typography variant="overline" className={classes.header}>
+            Logged in User
+          </Typography>
+          <div className={classes.activeTeamContainer}>
+            <div className={classes.activeTeam}>
+              <Typography variant="subtitle2">
+                {impersonateUser?.display_name ?? user.display_name}
+              </Typography>
+            </div>
           </div>
-          <div
-            className={classes.switchTeam}
-            onClick={hanldeOpenBrandSelectorDrawer}
-          >
-            Change
+        </div>
+        <div>
+          <Typography variant="overline" className={classes.header}>
+            Active Account
+          </Typography>
+          <div className={classes.activeTeamContainer}>
+            <div className={classes.activeTeam}>
+              <Typography variant="subtitle2">{activeBrand.name}</Typography>
+            </div>
+            <div
+              className={classes.switchTeam}
+              onClick={hanldeOpenBrandSelectorDrawer}
+            >
+              Change
+            </div>
           </div>
         </div>
       </div>
