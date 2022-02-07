@@ -8,7 +8,9 @@ module.exports = {
   verbose: true,
   coverageReporters: ['cobertura', 'lcov', 'text-summary'],
   testEnvironment: 'jsdom',
-  transformIgnorePatterns: ['/node_modules/(?!(swiper|ssr-window|dom7)/)'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!(swiper|ssr-window|dom7|validator)/)'
+  ],
   transform: {
     '^.+\\.[t|j]sx?$': 'babel-jest',
     '\\.mjml$': 'jest-raw-loader',
