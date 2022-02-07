@@ -144,7 +144,8 @@ function ListingsList({ searchTerm }: Props) {
         <LoadingContainer style={{ padding: '10% 0' }} />
       )}
       getTrProps={() => ({
-        className: classNames(classes.row, gridClasses.row)
+        className: classNames(classes.row, gridClasses.row),
+        'data-test': 'table-row'
       })}
       EmptyStateComponent={() => (
         <ListingsListEmptyState

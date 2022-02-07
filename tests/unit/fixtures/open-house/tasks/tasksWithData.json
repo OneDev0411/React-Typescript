@@ -1,0 +1,22 @@
+{
+    "code": "OK",
+    "data": [
+        {
+            "id": "56e47adb-bfee-49f6-9d00-5ccd8e3066b4",
+            "created_at": 1643967211.8066,
+            "updated_at": 1643967211.8066,
+            "deleted_at": null,
+            "title": "2137 Red Mountain Road",
+            "description": null,
+            "due_date": 1643967179.216,
+            "end_date": 1643968799.216,
+            "status": "DONE",
+            "task_type": "Open House",
+            "all_day": false
+        }
+    ],
+    "info": {
+        "count": 1,
+        "total": 1
+    }
+}
