@@ -1,3 +1,5 @@
+import { formatPhoneNumber } from '@app/utils/format'
+
 import AttributeCell from './types/AttributeCell'
 
 interface Props {
@@ -14,6 +16,7 @@ const PhoneNumberCell = ({ contact, isRowSelected = false }: Props) => {
       countEnabled
       attribute_type="phone_number"
       attribute_label="Main"
+      valueFormatter={formatPhoneNumber}
     />
   )
 }

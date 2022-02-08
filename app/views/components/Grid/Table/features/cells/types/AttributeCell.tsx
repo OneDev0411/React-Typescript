@@ -12,6 +12,7 @@ interface Props {
   countEnabled?: boolean
   attribute_type?: string
   attribute_label?: string
+  valueFormatter?: (str: string) => string
 }
 
 const useStyles = makeStyles(
@@ -49,7 +50,8 @@ const AttributeCell = ({
   isRowSelected = false,
   countEnabled = false,
   attribute_type,
-  attribute_label = 'Main'
+  attribute_label = 'Main',
+  valueFormatter
 }: Props) => {
   const classes = useStyles()
 
@@ -97,7 +99,7 @@ const AttributeCell = ({
               rowSelected: isRowSelected
             })}
           >
-            {attribute}
+            {valueFormatter ? valueFormatter(attribute) : attribute}
           </div>
         )}
 
