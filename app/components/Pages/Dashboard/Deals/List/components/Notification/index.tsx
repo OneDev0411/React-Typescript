@@ -32,6 +32,14 @@ interface Props {
 
 export function Notification({ className, count }: Props) {
   const classes = useStyles()
+  const text =
+    count >= 100 ? (
+      <span>
+        99<sup>+</sup>
+      </span>
+    ) : (
+      count
+    )
 
-  return <div className={classNames(classes.root, className)}>{count}</div>
+  return <div className={classNames(classes.root, className)}>{text}</div>
 }

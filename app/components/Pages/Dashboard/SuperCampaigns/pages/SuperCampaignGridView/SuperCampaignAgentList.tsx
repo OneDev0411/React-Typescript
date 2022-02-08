@@ -9,7 +9,7 @@ import SuperCampaignPreviewDrawer, {
   useLoadExistingTags
 } from '@app/views/components/SuperCampaignPreviewDrawer'
 
-import { useGetMySuperCampaignsWithEnrollment } from '../use-get-my-super-campaigns-with-enrollment'
+import { useGetMySuperCampaignsWithEnrollment } from '../../hooks/use-get-my-super-campaigns-with-enrollment'
 
 import SuperCampaignAgentListColumnActions from './SuperCampaignAgentListColumnActions'
 import SuperCampaignAgentListColumnCreatedBy from './SuperCampaignAgentListColumnCreatedBy'
