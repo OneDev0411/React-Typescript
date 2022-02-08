@@ -55,13 +55,21 @@ const useStyles = makeStyles(
       height: theme.spacing(5),
 
       '&:first-child': {
-        height: theme.spacing(5) - 1
+        height: theme.spacing(5) - 1,
+
+        '&.focused': {
+          borderBottom: `1px solid ${theme.palette.primary.main}`
+        }
       },
       '&:last-child': {
         height: theme.spacing(5) - 1,
         borderBottomLeftRadius: theme.spacing(0.5),
         borderBottomRightRadius: theme.spacing(0.5),
-        borderBottom: 'none'
+        borderBottom: 'none',
+
+        '&.focused': {
+          borderTop: `1px solid ${theme.palette.primary.main}`
+        }
       },
       '&:only-child': {
         height: theme.spacing(5) - 2
@@ -69,6 +77,7 @@ const useStyles = makeStyles(
       '&:hover': {
         backgroundColor: theme.palette.grey[50]
       },
+
       '&.add-new': {
         ...theme.typography.body2,
         color: theme.palette.primary.main,
@@ -114,6 +123,7 @@ export default function AttributeInlineEdit({
   const classes = useStyles()
 
   const [inAddMode, setInAddMode] = useState(false)
+  const toggleAddMode = () => setInAddMode(prevMode => !prevMode)
 
   const ActionButton = (
     title: string,
@@ -154,18 +164,23 @@ export default function AttributeInlineEdit({
   }
 
   const AddNewAttribute = () => {
-    const showForm = contactAttributes.length === 0 || inAddMode
+    const showEmptyForm = contactAttributes.length === 0 || inAddMode
+    const showAppendForm = !showEmptyForm && contactAttributes.length > 0
 
-    const toggleAddMode = () => setInAddMode(prevMode => !prevMode)
     const AddButton = () => (
       <div className={classes.addAttributeButton} onClick={toggleAddMode}>
         Add
       </div>
     )
 
-    if (showForm) {
-      return (
-        <div className={classes.attributeEntry}>
+    return (
+      <div
+        className={cn(classes.attributeEntry, {
+          'add-new': showAppendForm
+        })}
+        {...(showAppendForm ? { onClick: toggleAddMode } : {})}
+      >
+        {showEmptyForm && (
           <EntryInlineForm
             value=""
             label=""
@@ -173,20 +188,10 @@ export default function AttributeInlineEdit({
             actions={AddButton()}
             inputPlaceholder={attributeInputPlaceholder}
           />
-        </div>
-      )
-    }
-
-    if (!showForm && contactAttributes.length > 0) {
-      return (
-        <div
-          className={cn(classes.attributeEntry, 'add-new')}
-          onClick={toggleAddMode}
-        >
-          Add {attributeDescription}
-        </div>
-      )
-    }
+        )}
+        {showAppendForm && <>Add {attributeDescription}</>}
+      </div>
+    )
   }
 
   return (
