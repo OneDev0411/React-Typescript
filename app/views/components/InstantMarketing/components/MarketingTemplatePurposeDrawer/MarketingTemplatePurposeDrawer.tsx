@@ -43,14 +43,16 @@ function MarketingTemplatePurposeDrawer({
               onClick={() => onPurposeSelect('ForMySelf')}
               icon={mdiAccountOutline}
               title="Schedule or Send"
-              description="Create an email to schedule or send. Best when sending on behalf of one person."
+              // TODO: Display a proper description when the new team switcher has merged and the current user is an admin that
+              // sees the option on behalf of another person.
+              description="Create to schedule or send. Best when sending or sharing on behalf of yourself."
             />
             {builderActions.shouldShowSaveAsTemplateButton && (
               <MarketingTemplatePurposeOption
                 onClick={() => onPurposeSelect('ForOtherAgents')}
                 icon={mdiAccountGroupOutline}
                 title="Add to Marketing Center"
-                description="Create an email and select users to add it to their Marketing Center so they can edit or use it."
+                description="Create a template and select users to add it to their Marketing Center so they can edit or use it."
               />
             )}
             {builderActions.shouldShowCreateSuperCampaignButton && (

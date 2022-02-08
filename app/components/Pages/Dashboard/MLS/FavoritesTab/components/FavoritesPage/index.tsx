@@ -207,7 +207,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const onMapClick = useCallback(() => {
+  const handleHidingMapMarkerPopup = useCallback(() => {
     uiDispatch(changeListingClickedState(null))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -261,7 +261,8 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
                   onChangeHoverState={changeHoverState}
                   onToggleListingModal={onToggleListingModal}
                   onMarkerClick={onMarkerClick}
-                  onMapClick={onMapClick}
+                  onMapClick={handleHidingMapMarkerPopup}
+                  onMapDrag={handleHidingMapMarkerPopup}
                   mapPosition={state.map}
                   listings={state.result.listings}
                   onToggleFavorite={onToggleFavorite}

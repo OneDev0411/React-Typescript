@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import { TableCellProps } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
@@ -15,12 +13,6 @@ import {
   SortableColumn,
   ColumnSortType
 } from 'components/Grid/Table/types'
-import {
-  isActiveDeal,
-  isArchivedDeal,
-  isClosedDeal,
-  isPendingDeal
-} from 'deals/List/helpers/statuses'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import {
   getStatus,
@@ -41,30 +33,13 @@ import CriticalDate, {
 import { getGridSort } from '../../helpers/sorting'
 import useDealsListsLuckyMode from '../../hooks/use-deals-lists-lucky-mode'
 import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
+import { useDealsList } from '../hooks/use-deals-list'
 
 import EmptyState from './EmptyState'
 
 interface Props {
   sortableColumns: SortableColumn[]
   activeFilter: string
-}
-
-const Filters = {
-  all: (deal: IDeal, statuses: IDealStatus[] = []) => {
-    return !isArchivedDeal(deal, statuses) && !isClosedDeal(deal, statuses)
-  },
-  drafts: (deal: IDeal) => {
-    return deal.is_draft === true
-  },
-  actives: (deal: IDeal, statuses: IDealStatus[] = []) => {
-    return isActiveDeal(deal, statuses)
-  },
-  pendings: (deal: IDeal, statuses: IDealStatus[] = []) => {
-    return isPendingDeal(deal, statuses)
-  },
-  archives: (deal: IDeal, statuses: IDealStatus[] = []) => {
-    return isArchivedDeal(deal, statuses) || isClosedDeal(deal, statuses)
-  }
 }
 
 function AgentGrid(props: Props & WithRouterProps) {
@@ -75,12 +50,14 @@ function AgentGrid(props: Props & WithRouterProps) {
   const isFetchingDeals = useSelector(
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
-  const deals = useSelector(({ deals }: IAppState) => deals.list)
   const roles = useSelector(({ deals }: IAppState) => deals.roles)
   const brandChecklists = useBrandChecklists(activeBrandId)
 
   const [statuses] = useBrandStatuses(activeBrandId)
   const originQueryParam = useMakeOriginQueryParamFromLocation()
+  const getDealsList = useDealsList()
+
+  const data = getDealsList(props.activeFilter)
 
   const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
     return {
@@ -146,21 +123,6 @@ function AgentGrid(props: Props & WithRouterProps) {
       }
     }
   ]
-
-  const data = useMemo<IDeal[]>(() => {
-    if (!deals) {
-      return []
-    }
-
-    const filterFn =
-      props.activeFilter && Filters[props.activeFilter]
-        ? Filters[props.activeFilter]
-        : Filters.all
-
-    return Object.values(deals).filter(deal =>
-      filterFn(deal, statuses)
-    ) as IDeal[]
-  }, [deals, statuses, props.activeFilter])
 
   useDealsListsLuckyMode(data, isFetchingDeals)
 
