@@ -6,14 +6,14 @@ import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
-import { ACL } from '@app/constants/acl'
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
-import { useAcl } from '@app/views/components/Acl/use-acl'
 import PageLayout from 'components/GlobalPageLayout'
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import { noop } from 'utils/helpers'
 import { getSettingFromTeam } from 'utils/user-teams'
+
+import { useHasSuperCampaignAccess } from '../../SuperCampaigns/hooks/use-has-super-campaign-access'
 
 import SortField from './SortField'
 
@@ -57,9 +57,9 @@ function InsightsLayout({
     }
   ]
 
-  const hasBetaAccess = useAcl(ACL.BETA)
+  const hasSuperCampaignAccess = useHasSuperCampaignAccess()
 
-  if (hasBetaAccess) {
+  if (hasSuperCampaignAccess) {
     items.push({
       label: 'Campaigns',
       to: urlGenerator('/super-campaign')
