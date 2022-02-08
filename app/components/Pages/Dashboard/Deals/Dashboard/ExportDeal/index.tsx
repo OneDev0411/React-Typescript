@@ -48,15 +48,16 @@ export function ExportDeal({ deal }: Props) {
       fullWidth
       variant="outlined"
       color="secondary"
+      disabled={isExporting}
       onClick={handleExport}
     >
       {isExporting ? (
         <>
           <CircularProgress color="secondary" size={20} />
-          <span className={classes.exportLabel}>Exporting</span>
+          <span className={classes.exportLabel}>Preparing Archive</span>
         </>
       ) : (
-        'Export / Archive'
+        'Download Archive'
       )}
     </Button>
   )

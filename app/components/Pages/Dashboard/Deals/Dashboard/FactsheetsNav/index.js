@@ -82,10 +82,10 @@ function FactsheetsSideNav(props) {
           {props.showDeleteDeal && (
             <Box mx={2}>
               <Box mb={1}>
-                <DeleteDeal deal={deal} isBackOffice={isBackOffice} />
+                <ExportDeal deal={deal} />
               </Box>
 
-              <ExportDeal deal={deal} />
+              <DeleteDeal deal={deal} isBackOffice={isBackOffice} />
             </Box>
           )}
         </>
