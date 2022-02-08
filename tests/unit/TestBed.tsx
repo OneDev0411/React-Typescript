@@ -1,14 +1,23 @@
 import { ReactNode } from 'react'
 
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider } from 'react-redux'
+import { Router, browserHistory, Route } from 'react-router'
 import { applyMiddleware, createStore /* compose */, DeepPartial } from 'redux'
 import { enableBatching } from 'redux-batched-actions'
 import thunk from 'redux-thunk'
+
+import ConfirmationModal from '@app/views/components/ConfirmationModal'
+import ConfirmationModalProvider from '@app/views/components/ConfirmationModal/context/Provider'
 
 import { AppTheme } from '../../app/AppTheme'
 import reducers, { IAppState } from '../../app/reducers'
 
 import user from './fixtures/users/agent.json'
+
+export const queryClient = new QueryClient({
+  defaultOptions: {}
+})
 
 interface Props {
   reduxState?: Partial<Omit<IAppState, 'deals' | 'contacts'>> & {
@@ -35,7 +44,16 @@ export function TestBed({ reduxState, children }: Props) {
 
   return (
     <Provider store={store}>
-      <AppTheme>{children}</AppTheme>
+      <QueryClientProvider client={queryClient}>
+        <AppTheme>
+          <ConfirmationModalProvider>
+            <Router history={browserHistory}>
+              <Route path="*" component={() => <>{children}</>} />
+            </Router>
+            <ConfirmationModal />
+          </ConfirmationModalProvider>
+        </AppTheme>
+      </QueryClientProvider>
     </Provider>
   )
 }
