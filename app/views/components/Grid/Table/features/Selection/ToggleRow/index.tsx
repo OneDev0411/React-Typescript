@@ -12,7 +12,7 @@ const useStyles = makeStyles(
   theme => ({
     container: {
       display: 'flex',
-      justifyContent: 'end',
+      justifyContent: 'flex-end',
       alignItems: 'center',
       width: theme.spacing(7.5),
       borderBottom: `1px solid ${theme.palette.divider}`,

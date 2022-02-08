@@ -17,7 +17,7 @@ const useStyles = makeStyles(
       color: `${theme.palette.grey[500]}`,
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'end'
+      justifyContent: 'flex-end'
     },
     titleContainer: {
       display: 'flex',
