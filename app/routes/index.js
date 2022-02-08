@@ -538,7 +538,11 @@ const AsyncSuperCampaign = withAcl(
         '../components/Pages/Dashboard/MarketingInsights/SuperCampaign' /* webpackChunkName: "email_insight_super_campaign" */
       )
   }),
-  [{ oneOf: [ACL.MARKETING, ACL.CRM] }, ACL.BETA]
+  [
+    { oneOf: [ACL.MARKETING, ACL.CRM] },
+    { oneOf: [ACL.ADMIN, user => user.user_type === 'Agent'] },
+    ACL.BETA
+  ]
 )
 /* ==================================== */
 //  Chatroom
