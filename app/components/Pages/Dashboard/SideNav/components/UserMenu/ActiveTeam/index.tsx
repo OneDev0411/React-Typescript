@@ -41,7 +41,8 @@ const useStyles = makeStyles(
     },
     activeTeam: {
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      maxWidth: '100%'
     },
     switchTeam: {
       color: theme.palette.primary.main,
@@ -225,7 +226,7 @@ export function ActiveTeam() {
           </Typography>
           <div className={classes.activeTeamContainer}>
             <div className={classes.activeTeam}>
-              <Typography variant="subtitle2">
+              <Typography variant="subtitle2" noWrap>
                 {impersonateUser?.display_name ?? user.display_name}
               </Typography>
             </div>
@@ -237,7 +238,9 @@ export function ActiveTeam() {
           </Typography>
           <div className={classes.activeTeamContainer}>
             <div className={classes.activeTeam}>
-              <Typography variant="subtitle2">{activeBrand.name}</Typography>
+              <Typography variant="subtitle2" noWrap>
+                {activeBrand.name}
+              </Typography>
             </div>
             <div
               className={classes.switchTeam}
