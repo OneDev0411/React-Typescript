@@ -9,6 +9,7 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import Roles from '../../components/Roles'
 import { DealProperties } from '../DealProperties'
 import DeleteDeal from '../DeleteDeal'
+import { ExportDeal } from '../ExportDeal'
 import FactsheetSection from '../Factsheet'
 
 import { Card } from './styled'
@@ -80,7 +81,11 @@ function FactsheetsSideNav(props) {
 
           {props.showDeleteDeal && (
             <Box mx={2}>
-              <DeleteDeal deal={deal} isBackOffice={isBackOffice} />
+              <Box mb={1}>
+                <DeleteDeal deal={deal} isBackOffice={isBackOffice} />
+              </Box>
+
+              <ExportDeal deal={deal} />
             </Box>
           )}
         </>
