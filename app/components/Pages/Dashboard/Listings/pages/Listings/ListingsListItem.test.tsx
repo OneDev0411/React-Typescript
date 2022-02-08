@@ -445,7 +445,7 @@ describe('Listings page / List item buttons', () => {
   })
 })
 
-describe.only('ListingsPage - add mls account', () => {
+describe('ListingsPage - add mls account', () => {
   it('should redirect to add mls account and open the modal when user clicks on the button', async () => {
     render(
       <ListingsPageTestProvider>
