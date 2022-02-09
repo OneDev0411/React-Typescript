@@ -6,21 +6,22 @@ import {
   getByText,
   queryByText
 } from '@testing-library/react'
-import Listings from './index'
+import { browserHistory } from 'react-router'
+
+import MockBrand from 'tests/unit/fixtures/brands/e44ccc36-6530-11e9-b99a-0a95998482ac.json'
+import MockBrandListingsWithData from 'tests/unit/fixtures/listing/brandListings/brandListingsWithData.json'
+import MockDealsListingsWithData from 'tests/unit/fixtures/listing/dealsListings/dealsListingsWithData.json'
+import MockListing from 'tests/unit/fixtures/listing/listingWithProposedAgent.json'
+import MockOpenHouseTasksWithData from 'tests/unit/fixtures/open-house/tasks/tasksWithData.json'
+import MockUserWithDeals from 'tests/unit/fixtures/users/agent.json'
+import MockUserWithoutDeals from 'tests/unit/fixtures/users/withoutDeals.json'
 
 import {
   ListingsPageTestProvider,
   routerProps
 } from './ListingsPageTestProvider'
-import MockBrandListingsWithData from 'tests/unit/fixtures/listing/brandListings/brandListingsWithData.json'
-import MockDealsListingsWithData from 'tests/unit/fixtures/listing/dealsListings/dealsListingsWithData.json'
-import MockOpenHouseTasksWithData from 'tests/unit/fixtures/open-house/tasks/tasksWithData.json'
-import MockListing from 'tests/unit/fixtures/listing/listingWithProposedAgent.json'
-import MockBrand from 'tests/unit/fixtures/brands/e44ccc36-6530-11e9-b99a-0a95998482ac.json'
-import MockUserWithDeals from 'tests/unit/fixtures/users/agent.json'
-import MockUserWithoutDeals from 'tests/unit/fixtures/users/agent.json'
 
-import { browserHistory } from 'react-router'
+import Listings from './index'
 
 jest.mock('react-virtualized-auto-sizer')
 jest.mock('react-window')
@@ -68,7 +69,8 @@ describe('Listings page / List item data', () => {
     )
 
     await waitFor(() => {
-      const items = screen.getAllByTestId(`table-row`)
+      const items = screen.getAllByTestId('table-row')
+
       expect(getByText(items[0], '2137 Red Mountain Road')).toBeInTheDocument()
     })
   })
@@ -80,7 +82,8 @@ describe('Listings page / List item data', () => {
     )
 
     await waitFor(() => {
-      const items = screen.getAllByTestId(`table-row`)
+      const items = screen.getAllByTestId('table-row')
+
       expect(getByText(items[0], 'AGS')).toBeInTheDocument()
     })
   })
@@ -92,7 +95,8 @@ describe('Listings page / List item data', () => {
     )
 
     await waitFor(() => {
-      const items = screen.getAllByTestId(`table-row`)
+      const items = screen.getAllByTestId('table-row')
+
       expect(getByText(items[0], 'Active')).toBeInTheDocument()
     })
   })
@@ -104,7 +108,8 @@ describe('Listings page / List item data', () => {
     )
 
     await waitFor(() => {
-      const items = screen.getAllByTestId(`table-row`)
+      const items = screen.getAllByTestId('table-row')
+
       expect(getByText(items[0], 'Krista Klees')).toBeInTheDocument()
     })
   })
@@ -116,7 +121,8 @@ describe('Listings page / List item data', () => {
     )
 
     await waitFor(() => {
-      const items = screen.getAllByTestId(`table-row`)
+      const items = screen.getAllByTestId('table-row')
+
       expect(getByText(items[0], '$49,500,000')).toBeInTheDocument()
     })
   })
@@ -128,7 +134,8 @@ describe('Listings page / List item data', () => {
     )
 
     await waitFor(() => {
-      const items = screen.getAllByTestId(`table-row`)
+      const items = screen.getAllByTestId('table-row')
+
       expect(queryByText(items[0], 'Co-Agent')).not.toBeInTheDocument()
     })
   })
@@ -154,7 +161,8 @@ describe('Listings page / List item data', () => {
     )
 
     await waitFor(() => {
-      const items = screen.getAllByTestId(`table-row`)
+      const items = screen.getAllByTestId('table-row')
+
       expect(queryByText(items[2], 'Co-Agent')).not.toBeInTheDocument()
     })
   })
@@ -199,12 +207,13 @@ describe('Listings page / List item buttons', () => {
       )
 
       await waitFor(() => {
-        const items = screen.getAllByTestId(`table-row`)
+        const items = screen.getAllByTestId('table-row')
+
         expect(getByText(items[1], 'View Deal')).toBeInTheDocument()
       })
 
       fireEvent.click(
-        getByText(screen.getAllByTestId(`table-row`)[1], 'View Deal')
+        getByText(screen.getAllByTestId('table-row')[1], 'View Deal')
       )
 
       await waitFor(() => {
@@ -224,12 +233,13 @@ describe('Listings page / List item buttons', () => {
       )
 
       await waitFor(() => {
-        const items = screen.getAllByTestId(`table-row`)
+        const items = screen.getAllByTestId('table-row')
+
         expect(getByText(items[1], 'Create Deal')).toBeInTheDocument()
       })
 
       fireEvent.click(
-        getByText(screen.getAllByTestId(`table-row`)[1], 'Create Deal')
+        getByText(screen.getAllByTestId('table-row')[1], 'Create Deal')
       )
 
       await waitFor(() => {
@@ -252,8 +262,9 @@ describe('Listings page / List item buttons', () => {
       )
 
       await waitFor(() => {
-        const items = screen.getAllByTestId(`table-row`)
+        const items = screen.getAllByTestId('table-row')
         const marketButton = getByText(items[1], 'Market Listing')
+
         expect(marketButton).toBeInTheDocument()
         expect(marketButton.closest('a')?.href).toContain(
           '/dashboard/marketing/mls/bf6088b0-e757-11e8-80d6-0a95998482ac'
@@ -271,13 +282,14 @@ describe('Listings page / List item buttons', () => {
       )
 
       await waitFor(() => {
-        const items = screen.getAllByTestId(`table-row`)
+        const items = screen.getAllByTestId('table-row')
+
         expect(getByText(items[0], 'More Actions')).toBeInTheDocument()
       })
 
       // Open more actions menu
       fireEvent.click(
-        getByText(screen.getAllByTestId(`table-row`)[0], 'More Actions')
+        getByText(screen.getAllByTestId('table-row')[0], 'More Actions')
       )
 
       await waitFor(() => {
@@ -319,13 +331,14 @@ describe('Listings page / List item buttons', () => {
       )
 
       await waitFor(() => {
-        const items = screen.getAllByTestId(`table-row`)
+        const items = screen.getAllByTestId('table-row')
+
         expect(getByText(items[0], 'More Actions')).toBeInTheDocument()
       })
 
       // Open more actions menu
       fireEvent.click(
-        getByText(screen.getAllByTestId(`table-row`)[0], 'More Actions')
+        getByText(screen.getAllByTestId('table-row')[0], 'More Actions')
       )
 
       await waitFor(() => {
@@ -355,13 +368,14 @@ describe('Listings page / List item buttons', () => {
       )
 
       await waitFor(() => {
-        const items = screen.getAllByTestId(`table-row`)
+        const items = screen.getAllByTestId('table-row')
+
         expect(getByText(items[0], 'More Actions')).toBeInTheDocument()
       })
 
       // Open more actions menu
       fireEvent.click(
-        getByText(screen.getAllByTestId(`table-row`)[0], 'More Actions')
+        getByText(screen.getAllByTestId('table-row')[0], 'More Actions')
       )
 
       await waitFor(() => {
@@ -379,13 +393,14 @@ describe('Listings page / List item buttons', () => {
       )
 
       await waitFor(() => {
-        const items = screen.getAllByTestId(`table-row`)
+        const items = screen.getAllByTestId('table-row')
+
         expect(getByText(items[0], 'More Actions')).toBeInTheDocument()
       })
 
       // Open more actions menu
       fireEvent.click(
-        getByText(screen.getAllByTestId(`table-row`)[0], 'More Actions')
+        getByText(screen.getAllByTestId('table-row')[0], 'More Actions')
       )
 
       await waitFor(() => {
@@ -415,13 +430,14 @@ describe('Listings page / List item buttons', () => {
       )
 
       await waitFor(() => {
-        const items = screen.getAllByTestId(`table-row`)
+        const items = screen.getAllByTestId('table-row')
+
         expect(getByText(items[1], 'More Actions')).toBeInTheDocument()
       })
 
       // Open more actions menu
       fireEvent.click(
-        getByText(screen.getAllByTestId(`table-row`)[1], 'More Actions')
+        getByText(screen.getAllByTestId('table-row')[1], 'More Actions')
       )
 
       await waitFor(() => {
@@ -440,31 +456,6 @@ describe('Listings page / List item buttons', () => {
         expect(
           screen.getByText('New Open House Registration Page')
         ).toBeInTheDocument()
-      })
-    })
-  })
-})
-
-describe('ListingsPage - add mls account', () => {
-  it('should redirect to add mls account and open the modal when user clicks on the button', async () => {
-    render(
-      <ListingsPageTestProvider>
-        <Listings {...routerProps} />
-      </ListingsPageTestProvider>
-    )
-
-    await waitFor(() => {
-      expect(screen.getByText(`Add MLS Account`)).toBeInTheDocument()
-    })
-
-    fireEvent.click(screen.getByText(`Add MLS Account`))
-
-    await waitFor(() => {
-      expect(browserHistory.getCurrentLocation().pathname).toBe(
-        '/dashboard/account/connected-accounts'
-      )
-      expect(browserHistory.getCurrentLocation().query).toEqual({
-        action: 'add-mls-account'
       })
     })
   })
