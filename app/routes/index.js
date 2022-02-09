@@ -372,11 +372,11 @@ const AsyncContactProfile = withAcl.crm(
   })
 )
 
-const AsyncContactsImportCsv = withAcl.crm(
+const AsyncContactsCsvImport = withAcl.crm(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */
+        '../components/Pages/Dashboard/Contacts/CsvImport' /* webpackChunkName: "contact_csv" */
       )
   })
 )
@@ -538,7 +538,11 @@ const AsyncSuperCampaign = withAcl(
         '../components/Pages/Dashboard/MarketingInsights/SuperCampaign' /* webpackChunkName: "email_insight_super_campaign" */
       )
   }),
-  [{ oneOf: [ACL.MARKETING, ACL.CRM] }, ACL.BETA]
+  [
+    { oneOf: [ACL.MARKETING, ACL.CRM] },
+    { oneOf: [ACL.ADMIN, user => user.user_type === 'Agent'] },
+    ACL.BETA
+  ]
 )
 /* ==================================== */
 //  Chatroom
@@ -951,7 +955,7 @@ export default (
         <Route path="contacts" component={AsyncContacts} />
         <Route path="contacts/duplicates" component={AsyncDuplicateContacts} />
         <Route path="contacts/:id" component={AsyncContactProfile} />
-        <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
+        <Route path="contacts/import/csv" component={AsyncContactsCsvImport} />
 
         <Route path="marketing" component={AsyncMarketingOverview} />
         <Route path="marketing/designs" component={AsyncMarketingHistory} />

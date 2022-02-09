@@ -11,13 +11,13 @@ const S3Plugin = require('webpack-s3-plugin')
 
 const common = require('./base')
 
-const postcssOptions = {
-  plugins: [
-    require('postcss-preset-env')(),
-    require('postcss-browser-reporter')(),
-    require('postcss-reporter')()
-  ]
-}
+// const postcssOptions = {
+//   plugins: [
+//     require('postcss-preset-env')(),
+//     require('postcss-browser-reporter')(),
+//     require('postcss-reporter')()
+//   ]
+// }
 
 const config = {
   mode: 'production',
