@@ -38,6 +38,7 @@ describe('setListings actions', () => {
         }
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -50,6 +51,7 @@ describe('setListings actions', () => {
         info
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -62,8 +64,9 @@ describe('removeListing actions', () => {
       type: 'REMOVE_LISTING',
       payload: {
         id
-      } 
+      }
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -80,6 +83,7 @@ describe('setMapLocation actions', () => {
         zoom
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -93,6 +97,7 @@ describe('setIsLoading actions', () => {
         isLoading: true
       }
     }
+
     expect(actual).toEqual(expected)
   })
   it('should work when loading is false', () => {
@@ -103,6 +108,7 @@ describe('setIsLoading actions', () => {
         isLoading: true
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })
