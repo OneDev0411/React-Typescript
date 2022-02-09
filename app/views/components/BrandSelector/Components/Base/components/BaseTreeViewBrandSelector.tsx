@@ -39,6 +39,7 @@ export type NodeRenderer = {
 export interface BaseTreeViewBrandSelectorProps {
   hasError?: boolean
   isLoading?: boolean
+  searchPlaceholder?: string
   nodes: TreeFn<IBrand>
   shouldExpandOnNodeClick?: boolean
   initialExpandedNodes?: string[]
@@ -52,6 +53,7 @@ export function BaseTreeViewBrandSelector({
   isLoading = false,
   shouldExpandOnNodeClick = false,
   initialExpandedNodes = [],
+  searchPlaceholder = 'Search for teams and agents',
   onNodeClick = noop,
   nodeRenderer
 }: BaseTreeViewBrandSelectorProps) {
@@ -95,7 +97,7 @@ export function BaseTreeViewBrandSelector({
     <>
       <div className={classes.searchContainer}>
         <Search
-          placeholder="Search for teams and agents"
+          placeholder={searchPlaceholder}
           onChange={value => debouncedSetQuery(value)}
         />
       </div>

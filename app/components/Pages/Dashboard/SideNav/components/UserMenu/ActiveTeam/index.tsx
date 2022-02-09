@@ -258,6 +258,7 @@ export function ActiveTeam() {
           width="43rem"
           onClose={hanldeCloseBrandSelectorDrawer}
           brandSelectorProps={{
+            searchPlaceholder: 'Search for teams',
             shouldExpandOnNodeClick: true,
             nodeRenderer: renderBrandNode
           }}

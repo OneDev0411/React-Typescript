@@ -2,5 +2,8 @@ import { BaseTreeViewBrandSelectorProps } from './components/BaseTreeViewBrandSe
 
 export type BaseBrandSelectorProps = Pick<
   BaseTreeViewBrandSelectorProps,
-  'nodeRenderer' | 'onNodeClick' | 'shouldExpandOnNodeClick'
+  | 'nodeRenderer'
+  | 'onNodeClick'
+  | 'shouldExpandOnNodeClick'
+  | 'searchPlaceholder'
 >
