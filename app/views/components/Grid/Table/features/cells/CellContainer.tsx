@@ -44,7 +44,6 @@ const useStyles = makeStyles(
       textOverflow: 'ellipsis',
       borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`,
       whiteSpace: 'nowrap',
-      paddingLeft: theme.spacing(2),
       '&.visibleOverflow': {
         overflow: 'visible'
       }
@@ -53,7 +52,8 @@ const useStyles = makeStyles(
       display: 'flex',
       overflow: 'hidden',
       gap: theme.spacing(1),
-      height: theme.spacing(3.25)
+      height: theme.spacing(3.25),
+      marginLeft: theme.spacing(2)
     },
     cellOverlay: {
       position: 'absolute',
