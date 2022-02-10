@@ -7,7 +7,7 @@ import moment from 'moment'
 
 import { CellProps } from '../../types'
 
-import CellContainer from './CellContainer'
+import DateCell from './types/DateCell'
 
 const useStyles = makeStyles(
   theme => ({
@@ -166,7 +166,7 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
     </>
   )
 
-  return <CellContainer renderCellContent={renderCellContent} />
+  return <DateCell value={birthday} renderCellContent={renderCellContent} />
 }
 
 export default memo(BirthdayCell)
