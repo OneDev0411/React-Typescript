@@ -7,7 +7,6 @@ export const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       color: theme.palette.grey[700],
-      paddingRight: theme.spacing(1),
       ...theme.typography.body2
     },
     expandableNode: {

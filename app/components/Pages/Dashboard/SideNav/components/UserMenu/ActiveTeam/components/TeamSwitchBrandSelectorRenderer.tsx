@@ -1,7 +1,14 @@
 import { memo } from 'react'
 
-import { Chip, Theme, makeStyles } from '@material-ui/core'
+import { Button, Chip, Theme, makeStyles } from '@material-ui/core'
 import cn from 'classnames'
+
+interface Props {
+  brand: IBrand
+  isActive: boolean
+  disabled: boolean
+  onClick: (brand: IBrand) => void
+}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -10,16 +17,24 @@ const useStyles = makeStyles(
       alignItems: 'center',
       justifyContent: 'space-between',
       padding: theme.spacing(1, 0),
-      '&:hover $switchButton': {
-        display: 'block'
+      '&:hover': {
+        padding: ({
+          isActive,
+          disabled
+        }: Pick<Props, 'isActive' | 'disabled'>) =>
+          !isActive && !disabled
+            ? '0.161rem 0.161rem 0.161rem 0' // I'm using this strange value due to hokm hokumati :\
+            : theme.spacing(1, 0),
+
+        '& $switchButton': {
+          display: 'block'
+        }
       }
     },
     disabled: {
       opacity: 0.5
     },
     switchButton: {
-      color: theme.palette.primary.main,
-      cursor: 'pointer',
       display: 'none'
     },
     activeIndicator: {
@@ -29,15 +44,8 @@ const useStyles = makeStyles(
   { name: 'SwitchTeamNodeRenderer' }
 )
 
-interface Props {
-  brand: IBrand
-  isActive: boolean
-  disabled: boolean
-  onClick: (brand: IBrand) => void
-}
-
 function Brand({ brand, isActive, disabled, onClick }: Props) {
-  const classes = useStyles()
+  const classes = useStyles({ isActive, disabled })
 
   const handleOnClick = () => {
     if (disabled) {
@@ -60,9 +68,15 @@ function Brand({ brand, isActive, disabled, onClick }: Props) {
         )}
       </div>
       {!isActive && !disabled && (
-        <span className={classes.switchButton} onClick={handleOnClick}>
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          className={classes.switchButton}
+          onClick={handleOnClick}
+        >
           Select Team
-        </span>
+        </Button>
       )}
     </div>
   )
