@@ -3,9 +3,6 @@ import React from 'react'
 import { Box, BoxProps } from '@material-ui/core'
 
 import GlobalHeader, { GlobalHeaderProps } from 'components/GlobalHeader'
-import GlobalHeaderWithBackground, {
-  GlobalHeaderWithBackgroundProps
-} from 'components/GlobalHeaderWithBackground'
 import GlobalHeaderWithSearch, {
   GlobalHeaderWithSearchProps
 } from 'components/GlobalHeaderWithSearch'
@@ -31,13 +28,10 @@ const GlobalPageLayout = ({ gutter = 4, ...props }: Props) => {
 GlobalPageLayout.Header = (props: GlobalHeaderProps) => (
   <GlobalHeader {...props} noPadding />
 )
-GlobalPageLayout.HeaderWithBackground = (
-  props: GlobalHeaderWithBackgroundProps
-) => <GlobalHeaderWithBackground {...props} />
-
 GlobalPageLayout.HeaderWithSearch = (props: GlobalHeaderWithSearchProps) => (
   <GlobalHeaderWithSearch {...props} noPadding />
 )
+
 GlobalPageLayout.Main = ({ gutter = 0, ...props }: Props) => (
   <Box
     id="GlobalPageLayoutMain"

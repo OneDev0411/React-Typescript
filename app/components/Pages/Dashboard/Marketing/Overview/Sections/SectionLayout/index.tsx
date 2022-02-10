@@ -17,9 +17,6 @@ const useStyles = makeStyles(
     container: {
       marginBottom: theme.spacing(8)
     },
-    containerDashboardStyles: {
-      marginBottom: theme.spacing(3) // TODO: Find a better way to override the margin value
-    },
     containerGray: {
       '&&': { padding: theme.spacing(3) }, // TODO: Find a better way to override the padding value
       backgroundColor: theme.palette.grey[100],
@@ -50,7 +47,6 @@ interface Props {
     'container' | 'item' | 'alignItems' | 'direction' | 'className'
   >
   grayMode?: boolean
-  dashboardStyles?: boolean
 }
 
 export default function SectionLayout({
@@ -59,8 +55,7 @@ export default function SectionLayout({
   actionNode,
   containerGridProps,
   headerGridProps,
-  grayMode = false,
-  dashboardStyles = false
+  grayMode = false
 }: Props) {
   const classes = useStyles()
 
@@ -71,8 +66,7 @@ export default function SectionLayout({
       direction="column"
       className={classNames(
         classes.container,
-        iff(grayMode, classes.containerGray),
-        iff(dashboardStyles, classes.containerDashboardStyles)
+        iff(grayMode, classes.containerGray)
       )}
       {...containerGridProps}
     >
@@ -86,9 +80,7 @@ export default function SectionLayout({
       >
         <Grid item className={classes.titleContainer}>
           <Box pr={1}>
-            <Typography variant={dashboardStyles ? 'subtitle1' : 'h5'}>
-              {title}
-            </Typography>
+            <Typography variant="h5">{title}</Typography>
           </Box>
         </Grid>
         {actionNode && <Grid item>{actionNode}</Grid>}

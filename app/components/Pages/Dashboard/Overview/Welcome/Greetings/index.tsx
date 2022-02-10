@@ -6,28 +6,21 @@ import Typography from '@material-ui/core/Typography'
 import fecha from 'fecha'
 import { useSelector } from 'react-redux'
 
+import { Avatar } from 'components/Avatar'
 import { selectUser } from 'selectors/user'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     wrapper: {
       justifyContent: 'center',
+      padding: theme.spacing(5),
       display: 'flex',
+      alignItems: 'center',
       flexDirection: 'column'
     },
     headline: {
-      display: 'flex'
-    },
-    username: {
-      color: theme.palette.primary.main,
-      marginLeft: theme.spacing(0.5)
-    },
-    today: {
-      display: 'flex'
-    },
-    date: {
-      marginLeft: theme.spacing(0.25),
-      fontWeight: 700
+      fontWeight: 900,
+      fontFamily: 'LatoBlack'
     }
   }),
   { name: 'Greeting' }
@@ -39,17 +32,14 @@ export function Greeting() {
 
   return (
     <Box className={classes.wrapper}>
-      <Box className={classes.headline}>
-        <Typography variant="body1">Welcome back,</Typography>
-        <Typography variant="subtitle1" className={classes.username}>
-          {user.first_name}!
-        </Typography>
-      </Box>
-
-      <Box className={classes.today}>
-        <Typography variant="caption">Today is</Typography>
-        <Typography variant="caption" className={classes.date}>
-          {fecha.format(new Date(), 'dddd, MMM DD, YYYY')}
+      <Avatar size="xlarge" user={user} disableLazyLoad />
+      <Box textAlign="center" mt={2}>
+        <Typography
+          variant="h4"
+          className={classes.headline}
+        >{`Hello, ${user.first_name}.`}</Typography>
+        <Typography variant="body2">
+          Today is {fecha.format(new Date(), 'dddd, MMMM Do, YYYY')}
         </Typography>
       </Box>
     </Box>
