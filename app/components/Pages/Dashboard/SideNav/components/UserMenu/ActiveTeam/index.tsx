@@ -268,7 +268,7 @@ export function ActiveTeam() {
         <TeamAgentsDrawer
           open
           width="43rem"
-          title="Select Impersonate User"
+          title="Select User"
           withRelatedContacts={false}
           teamAgentsModelFn={handlePassingSelectedBrand}
           onSelectAgents={handleSelectImpersonateUser}
