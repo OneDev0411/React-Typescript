@@ -40,6 +40,17 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     listItemWithButton: {
       paddingRight: theme.spacing(12)
+    },
+    itemText: {
+      '& a': {
+        paddingRight: theme.spacing(2),
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        '-webkit-line-clamp': 2 /* number of lines to show */,
+        'line-clamp': 2,
+        '-webkit-box-orient': 'vertical'
+      }
     }
   }),
   { name: 'CalendarListItem' }
@@ -124,11 +135,12 @@ export default function CalendarEventListItem({ event }: Props) {
       <ListItem classes={{ secondaryAction: classes.listItemWithButton }}>
         <ListItemAvatar>{avatarIcon}</ListItemAvatar>
         <ListItemText
+          className={classes.itemText}
           primary={eventTitleLink || eventTitle}
           secondary={eventSubTitle}
         />
-        <ListItemSecondaryAction>
-          {cardTemplateTypes && (
+        {cardTemplateTypes && (
+          <ListItemSecondaryAction>
             <div>
               <Button
                 variant="outlined"
@@ -159,8 +171,8 @@ export default function CalendarEventListItem({ event }: Props) {
                 />
               )}
             </div>
-          )}
-        </ListItemSecondaryAction>
+          </ListItemSecondaryAction>
+        )}
       </ListItem>
     </>
   )
