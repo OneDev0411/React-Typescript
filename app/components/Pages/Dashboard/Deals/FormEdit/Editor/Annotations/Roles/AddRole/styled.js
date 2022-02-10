@@ -9,7 +9,7 @@ export const Container = styled.span`
 
 export const RolesList = styled.div`
   position: absolute;
-  min-width: 15rem;
+  min-width: 16rem;
   top: ${props => props.top + 5}px;
   left: 0;
   background: #fff;
