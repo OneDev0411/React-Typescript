@@ -16,7 +16,7 @@ import { SingleEmailComposeForm } from './SingleEmailComposeForm'
 const role = roleObj as any
 // IDeal type is not in compliance with what is actually stored in redux.
 // TODO: fix `as unknown` when deal types are improved
-const deal = (dealObj as unknown) as IDeal
+const deal = dealObj as unknown as IDeal
 const checklists = keyBy(checklistsArray as IDealChecklist[], 'id')
 const tasks = keyBy<IDealTask>(tasksArray as any, 'id')
 
@@ -24,6 +24,7 @@ jest.mock('models/email/create-email-campaign')
 jest.mock('models/contacts/search-contacts')
 jest.mock('models/contacts/get-contacts-tags')
 jest.mock('models/filter-segments/get-segments')
+jest.mock('models/o-auth-accounts/get-o-auth-accounts')
 
 describe('BulkEmailComposeForm', () => {
   /**
@@ -58,7 +59,6 @@ describe('BulkEmailComposeForm', () => {
       </TestBed>
     )
 
-    
     // TODO: Mock context properly
     const roleSuggestion = await $.findByText('Mr. Deal Role! (...)')
 
