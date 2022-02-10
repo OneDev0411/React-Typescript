@@ -2,7 +2,6 @@ import { Model } from 'backbone'
 import { Editor } from 'grapesjs'
 
 import ImageIcon from 'assets/images/marketing/editor/blocks/image.png'
-import { Image } from 'components/ImageDrawer/types'
 
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
@@ -32,7 +31,7 @@ export default function registerImageBlock(
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
   { imageClassNames, onImageDrop }: ImageBlockOptions
-): RegisterBlockSelectHandler<Image> {
+): RegisterBlockSelectHandler<string> {
   const resizable = {
     tl: 0,
     tr: 0,
@@ -89,12 +88,12 @@ export default function registerImageBlock(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent<Image, ImageRenderData>(
+  return handleBlockDragStopEvent<string, ImageRenderData>(
     editor,
     allBlocks,
-    selectedImage => ({
+    selectedImageUrl => ({
       ...renderData,
-      image: selectedImage.url
+      image: selectedImageUrl
     }),
     onImageDrop
   )
