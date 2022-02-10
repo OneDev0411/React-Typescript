@@ -150,7 +150,7 @@ class Dashboard extends Component {
     return (
       <CheckBrowser id={this.props.params.id}>
         <Helmet>
-          <title>Rechat | Home</title>
+          <title>Rechat | Dashboard</title>
         </Helmet>
         <div className="u-scrollbar">
           {user && !user.email_confirmed && !user.fake_email && (

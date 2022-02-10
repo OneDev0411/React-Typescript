@@ -16,12 +16,14 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     boxWrapper: {
       marginLeft: theme.spacing(2),
-      flex: 1
+      flex: 1,
+      maxWidth: '600px'
     },
     boxTitle: {
       marginBottom: theme.spacing(2),
       display: 'flex',
-      alignItems: 'flex-start'
+      alignItems: 'flex-start',
+      fontSize: '16px'
     },
     boxContainer: {
       border: `1px solid ${theme.palette.grey[300]}`,
@@ -56,7 +58,7 @@ export function UpcomingCelebrations({ isLoading, events }: Props) {
 
   return (
     <Box className={classes.boxWrapper}>
-      <Typography variant="subtitle1" className={classes.boxTitle}>
+      <Typography variant="h6" className={classes.boxTitle}>
         <SvgIcon path={mdiGiftOutline} rightMargined />
 
         <InlineBadge badgeContent={celebrationEvents.length} color="primary">
