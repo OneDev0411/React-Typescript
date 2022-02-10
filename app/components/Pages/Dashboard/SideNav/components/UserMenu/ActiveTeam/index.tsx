@@ -222,7 +222,7 @@ export function ActiveTeam() {
       <div className={classes.container}>
         <div>
           <Typography variant="overline" className={classes.header}>
-            Logged in User
+            Working User
           </Typography>
           <div className={classes.activeTeamContainer}>
             <div className={classes.activeTeam}>
@@ -234,7 +234,7 @@ export function ActiveTeam() {
         </div>
         <div>
           <Typography variant="overline" className={classes.header}>
-            Active Account
+            Active Team
           </Typography>
           <div className={classes.activeTeamContainer}>
             <div className={classes.activeTeam}>

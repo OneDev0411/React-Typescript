@@ -3,6 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 import { mdiDotsVertical } from '@mdi/js'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
+import { useImpersonateUser } from '@app/hooks/use-impersonate-user'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
 const useStyles = makeStyles(
@@ -48,11 +49,14 @@ interface Props {
 export default function ToggleButton(props: Props) {
   const classes = useStyles()
   const activeBrand = useUnsafeActiveBrand()
+  const impersonateUser = useImpersonateUser()
 
   const { display_name } = props.user
 
-  const tooltipTitle = `${display_name} ${
-    activeBrand?.name ? `(${activeBrand.name})` : ''
+  const userName = impersonateUser?.display_name ?? display_name
+
+  const tooltipTitle = `${userName} ${
+    activeBrand?.name ? `(${activeBrand?.name})` : ''
   }`
 
   return (
@@ -76,7 +80,10 @@ export default function ToggleButton(props: Props) {
                 variant="body1"
                 className={classes.userDisplayName}
               >
-                {activeBrand?.name ?? display_name ?? 'Loading...'}
+                {impersonateUser?.display_name ??
+                  activeBrand?.name ??
+                  display_name ??
+                  'Loading...'}
               </Typography>
             </div>
           </div>
