@@ -1,5 +1,6 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 
+import { Helmet } from 'react-helmet'
 import { WithRouterProps } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
@@ -36,14 +37,19 @@ export default function CalendarPage(props: WithRouterProps) {
   })
 
   return (
-    <div className={classes.container}>
-      <GlobalHeader title="Calendar" noPadding>
-        <ViewAs />
-        <ImportContactsButton />
-      </GlobalHeader>
-      <div className={classes.listContainer}>
-        <GridCalendar actionRef={actionRef} />
+    <>
+      <Helmet>
+        <title>Calendar | Rechat</title>
+      </Helmet>
+      <div className={classes.container}>
+        <GlobalHeader title="Calendar" noPadding>
+          <ViewAs />
+          <ImportContactsButton />
+        </GlobalHeader>
+        <div className={classes.listContainer}>
+          <GridCalendar actionRef={actionRef} />
+        </div>
       </div>
-    </div>
+    </>
   )
 }
