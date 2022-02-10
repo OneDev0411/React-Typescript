@@ -12,6 +12,7 @@ import { mdiChevronDown } from '@mdi/js'
 import classNames from 'classnames'
 
 import { ClassesProps } from '../../../utils/ts-utils'
+import { muiIconSizes } from '../SvgIcons/icon-sizes'
 import { SvgIcon } from '../SvgIcons/SvgIcon'
 
 interface Props extends ButtonProps {
@@ -77,6 +78,7 @@ export const DropdownToggleButton = forwardRef(
         {children}
         <SvgIcon
           path={iconPath}
+          size={muiIconSizes.small}
           className={classNames(styleClasses.arrowIcon, {
             [styleClasses.rotated]: isActive
           })}

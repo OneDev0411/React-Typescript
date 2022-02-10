@@ -1,6 +1,6 @@
 import { Box, Typography, Tooltip } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { mdiDotsVertical } from '@mdi/js'
+import { mdiDotsHorizontal } from '@mdi/js'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { getActiveBrand } from 'utils/user-teams'
@@ -9,23 +9,38 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     dropdownToggleButton: {
       maxWidth: '100%',
-      padding: theme.spacing(1.5, 2, 1.5, 3),
+      padding: theme.spacing(2, 2.5, 2, 3),
       justifyContent: 'space-between'
     },
     wrapper: {
       display: 'flex',
       width: `calc(100% - ${theme.spacing(3)}px)`,
-      color: theme.palette.navbar.contrastText
+      color: theme.palette.common.white,
+      alignItems: 'center'
     },
     userDetails: {
       textAlign: 'left',
       width: '100%'
     },
+    avatar: {
+      width: theme.spacing(4),
+      height: theme.spacing(4),
+      marginRight: theme.spacing(1)
+    },
     userDisplayName: {
-      color: theme.palette.navbar.contrastText
+      color: theme.palette.common.white,
+      lineHeight: 1.3,
+      '&:hover': {
+        color: theme.palette.primary.main
+      }
     },
     arrowIcon: {
-      color: theme.palette.navbar.contrastText
+      color: theme.palette.common.white,
+      marginLeft: theme.spacing(0.5),
+      alignSelf: 'center'
+    },
+    tooltipArrow: {
+      marginLeft: `${theme.spacing(-1.25)}px !important`
     },
     arrowIconRotated: {
       transform: 'rotateX(0)'
@@ -51,7 +66,11 @@ export default function ToggleButton(props: Props) {
   const tooltipTitle = `${display_name} ${brandName ? `(${brandName})` : ''}`
 
   return (
-    <Tooltip placement="right" title={tooltipTitle}>
+    <Tooltip
+      placement="right"
+      title={tooltipTitle}
+      classes={{ arrow: classes.tooltipArrow }}
+    >
       <DropdownToggleButton
         id={props.id}
         onClick={props.onClick}
@@ -61,14 +80,14 @@ export default function ToggleButton(props: Props) {
           root: classes.dropdownToggleButton,
           rotated: classes.arrowIconRotated
         }}
-        iconPath={mdiDotsVertical}
+        iconPath={mdiDotsHorizontal}
       >
         <Box className={classes.wrapper}>
-          {/* <Avatar user={props.user} /> */}
+          {/* <Avatar user={props.user} className={classes.avatar} /> */}
           <div className={classes.userDetails}>
             <Typography
               noWrap
-              variant="body1"
+              variant="body2"
               className={classes.userDisplayName}
             >
               {brandName}
