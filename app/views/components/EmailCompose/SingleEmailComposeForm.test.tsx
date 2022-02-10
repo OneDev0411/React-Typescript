@@ -25,11 +25,7 @@ jest.mock('models/contacts/search-contacts')
 jest.mock('models/contacts/get-contacts-tags')
 jest.mock('models/filter-segments/get-segments')
 jest.mock('models/o-auth-accounts/get-o-auth-accounts')
-jest.mock('use-dropbox-chooser', () => ({
-  useDropboxChooser: () => ({
-    isOpen: false
-  })
-}))
+jest.mock('use-dropbox-chooser')
 
 describe('BulkEmailComposeForm', () => {
   /**
