@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react'
 
 import { Typography, Theme, makeStyles } from '@material-ui/core'
-import { mdiAccountSwitchOutline } from '@mdi/js'
 import { useSelector } from 'react-redux'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
@@ -12,13 +11,12 @@ import {
   removeImpersonateUser
 } from '@app/utils/impersonate-user'
 import { getBrandUsers } from '@app/utils/user-teams'
+import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
 import {
   NodeRenderer,
   BrandAvailableToUserSelectorDrawer
 } from '@app/views/components/BrandSelector'
 import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
-import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
-import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { Agent, BrandedUser } from '@app/views/components/TeamAgents/types'
 import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
 
@@ -68,24 +66,13 @@ const useStyles = makeStyles(
     },
     switchingIcon: {
       margin: 'auto',
-      width: '150px',
-      height: '150px',
-      lineHeight: '210px',
-      textAlign: 'center',
-      background: theme.palette.primary.main,
-      borderRadius: '100%',
-      color: theme.palette.common.white,
-      // TODO: these style are tmp and as soon as design team give a design will update it
-      '& svg': {
-        width: '4rem !important',
-        height: '4rem !important'
-      }
+      textAlign: 'center'
     },
     switchingLabel: {
       display: 'block',
       marginTop: theme.spacing(1),
       color: theme.palette.common.black,
-      ...theme.typography.h4
+      ...theme.typography.h5
     }
   }),
   { name: 'ActiveTeam' }
@@ -210,10 +197,7 @@ export function ActiveTeam() {
         <div className={classes.switchingIndicatorContainer}>
           <div className={classes.switchingIndicatorInfo}>
             <div className={classes.switchingIcon}>
-              <SvgIcon
-                path={mdiAccountSwitchOutline}
-                size={muiIconSizes.large}
-              />
+              <AnimatedLoader />
             </div>
             <span className={classes.switchingLabel}>Switching Team...</span>
           </div>
