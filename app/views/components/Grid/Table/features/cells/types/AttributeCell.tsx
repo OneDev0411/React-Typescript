@@ -12,7 +12,7 @@ interface Props {
   countEnabled?: boolean
   attribute_type?: string
   attribute_label?: string
-  valueFormatter?: (str: string) => string
+  valueFormatter?: (value: string) => string
 }
 
 const useStyles = makeStyles(
@@ -45,7 +45,7 @@ const useStyles = makeStyles(
   { name: 'Attribute-cell' }
 )
 
-const AttributeCell = ({
+export const AttributeCell = ({
   attributes,
   isRowSelected = false,
   countEnabled = false,
@@ -55,8 +55,8 @@ const AttributeCell = ({
 }: Props) => {
   const classes = useStyles()
 
-  let attribute
-  let attributeLabel
+  let attribute: Nullable<string> = null
+  let attributeLabel: Nullable<string> = null
   let count = 0
 
   //--
@@ -89,21 +89,23 @@ const AttributeCell = ({
     isHovered = false,
     isSelected = false
   }: CellProps) => {
+    if (!attribute) {
+      return null
+    }
+
     return (
       <>
-        {!!attribute && (
-          <div
-            className={cn(classes.attributeText, {
-              hovered: isHovered,
-              selected: isSelected,
-              rowSelected: isRowSelected
-            })}
-          >
-            {valueFormatter ? valueFormatter(attribute) : attribute}
-          </div>
-        )}
+        <div
+          className={cn(classes.attributeText, {
+            hovered: isHovered,
+            selected: isSelected,
+            rowSelected: isRowSelected
+          })}
+        >
+          {valueFormatter ? valueFormatter(attribute) : attribute}
+        </div>
 
-        {!!attributeLabel && (
+        {attributeLabel && (
           <div
             className={cn(classes.attributeLabel, {
               selected: isSelected
@@ -122,5 +124,3 @@ const AttributeCell = ({
 
   return <CellContainer renderCellContent={renderCellContent} />
 }
-
-export default AttributeCell

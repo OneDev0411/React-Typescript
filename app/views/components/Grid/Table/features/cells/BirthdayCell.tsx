@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import React, { memo, useMemo } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import cn from 'classnames'
@@ -16,16 +16,17 @@ const useStyles = makeStyles(
       letterSpacing: '0.4px',
       lineHeight: `${theme.spacing(3)}px`,
       color: theme.palette.grey['500'],
+
       '&.selected': {
         color: theme.palette.tertiary.dark
       },
       '&.rowSelected': {
         color: theme.palette.tertiary.dark
-      },
-      '> .isToday': {
-        ...theme.typography.button,
-        color: theme.palette.primary.main
       }
+    },
+    isToday: {
+      ...theme.typography.button,
+      color: theme.palette.primary.main
     },
     dateValue: {
       ...theme.typography.body2,
@@ -58,7 +59,14 @@ const getDate = (datetime: Date = new Date()) =>
 const getDateDiff = (date1: Date, date2: Date) =>
   date1.getTime() - date2.getTime()
 
-const formatDate = (date: Date, format: string = 'MMM D'): string => {
+const formatDate = (
+  date: Nullable<Date>,
+  format: string = 'MMM D'
+): Nullable<string> => {
+  if (date === null) {
+    return null
+  }
+
   const utcDate = getDate(date)
 
   if (utcDate.getFullYear() === 1800) {
@@ -86,7 +94,7 @@ const durationAsDays = (duration: number): number =>
   moment.duration(duration).asDays()
 
 const getDateOfBirth = contact => {
-  let date
+  let date: Nullable<Date> = null
 
   contact.attributes?.filter(attr => {
     if (!attr.is_partner && attr.attribute_type === 'birthday') {
@@ -101,9 +109,9 @@ const getDateOfBirth = contact => {
   return date
 }
 
-const daysToNextBirthday = (birthday, today) => {
+const daysToNextBirthday = (birthday, today): Nullable<number> => {
   if (!birthday) {
-    return -1
+    return null
   }
 
   let dateDiff: number = getDateDiff(birthdayThisYear(birthday), today)
@@ -130,12 +138,15 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
   const classes = useStyles()
 
   const today: Date = useMemo(getDate, [])
-  const birthday: Date = useMemo(() => getDateOfBirth(contact), [contact])
-  const daysToBirthday = useMemo(
-    () => daysToNextBirthday(birthday, today),
-    [today, birthday]
+  const birthday: Nullable<Date> = useMemo(
+    () => getDateOfBirth(contact),
+    [contact]
   )
-  const inputFormattedDate: string = useMemo(
+  const daysToBirthday: Nullable<number> = useMemo(
+    () => daysToNextBirthday(birthday, today),
+    [birthday, today]
+  )
+  const inputFormattedDate: Nullable<string> = useMemo(
     () => formatDate(birthday),
     [birthday]
   )
@@ -143,9 +154,13 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
   const renderCellContent = ({
     isHovered = false,
     isSelected = false
-  }: CellProps) => (
-    <>
-      {!!inputFormattedDate && (
+  }: CellProps) => {
+    if (!inputFormattedDate) {
+      return null
+    }
+
+    return (
+      <>
         <div
           className={cn(classes.dateValue, {
             hovered: isHovered,
@@ -154,25 +169,30 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
         >
           {inputFormattedDate}
         </div>
-      )}
-      {daysToBirthday >= 0 && daysToBirthday <= 30 && !!inputFormattedDate && (
-        <div
-          className={cn(classes.dateDiffValue, {
-            rowSelected: isRowSelected
-          })}
-        >
-          <span>(</span>
-          {daysToBirthday > 0 && (
-            <span>{`in ${daysToBirthday} day${
-              daysToBirthday == 1 ? '' : 's'
-            }`}</span>
-          )}
-          {daysToBirthday == 0 && <span className="isToday">It's Today</span>}
-          <span>)</span>
-        </div>
-      )}
-    </>
-  )
+
+        {daysToBirthday && (
+          <div
+            className={cn(classes.dateDiffValue, {
+              rowSelected: isRowSelected
+            })}
+          >
+            <span>(</span>
+            <span
+              className={cn({
+                [classes.isToday]: daysToBirthday == 0
+              })}
+            >
+              {daysToBirthday > 0 &&
+                daysToBirthday <= 30 &&
+                `in ${daysToBirthday} day${daysToBirthday == 1 ? '' : 's'}`}
+              {daysToBirthday === 0 && "It's Today"}
+            </span>
+            <span>)</span>
+          </div>
+        )}
+      </>
+    )
+  }
 
   return <CellContainer renderCellContent={renderCellContent} />
 }

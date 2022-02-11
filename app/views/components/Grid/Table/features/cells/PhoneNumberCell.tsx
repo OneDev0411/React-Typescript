@@ -1,6 +1,6 @@
 import { formatPhoneNumber } from '@app/utils/format'
 
-import AttributeCell from './types/AttributeCell'
+import { AttributeCell } from './types/AttributeCell'
 
 interface Props {
   contact: IContact
@@ -8,7 +8,7 @@ interface Props {
   isRowSelected?: boolean
 }
 
-const PhoneNumberCell = ({ contact, isRowSelected = false }: Props) => {
+export const PhoneNumberCell = ({ contact, isRowSelected = false }: Props) => {
   return (
     <AttributeCell
       attributes={contact.attributes || []}
@@ -20,5 +20,3 @@ const PhoneNumberCell = ({ contact, isRowSelected = false }: Props) => {
     />
   )
 }
-
-export default PhoneNumberCell

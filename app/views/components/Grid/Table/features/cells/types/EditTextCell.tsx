@@ -39,7 +39,7 @@ interface Props {
   onCellSelect?: (e) => void
 }
 
-const EditTextCell = ({
+export const EditTextCell = ({
   text = '',
   isPrimary = false,
   isRowSelected = false
@@ -64,5 +64,3 @@ const EditTextCell = ({
 
   return <CellContainer renderCellContent={renderCellContent} />
 }
-
-export default EditTextCell
