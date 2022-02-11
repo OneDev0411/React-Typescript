@@ -11,11 +11,9 @@ import { OtherTabsWrapper } from './otherTabsWrapper'
 import { SearchTabWrapper } from './searchTabWrapper'
 import { useStyles } from './styles'
 import TabFilters from './TabFilters'
-import { SearchQuery, StateProps } from './types'
+import { SearchQuery } from './types'
 
-export default function BackofficeWraperPage(
-  props: WithRouterProps & StateProps
-) {
+export default function BackofficeWraperPage(props: WithRouterProps) {
   const classes = useStyles()
 
   const [searchCriteria, setSearchCriteria] = useQueryParam('q')
