@@ -2,7 +2,6 @@ import { useCallback, useMemo } from 'react'
 
 import Fuse from 'fuse.js'
 
-import { convertOptionToAttribute } from '../../../helpers/convert-option-to-attribute'
 import {
   IAttribute,
   AttributeOption,
@@ -50,11 +49,9 @@ export function useOptions(
       })
 
     return [...list, ...addressOptions, ...partnerOptions].map(option => {
-      const attribute = convertOptionToAttribute(option)!
-
       return {
         ...option,
-        disabled: isAttributeDisabled(fields, attribute, option.index)
+        disabled: isAttributeDisabled(fields, option)
       }
     }) as AttributeOption[]
   }, [

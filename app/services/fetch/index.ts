@@ -41,7 +41,9 @@ export default class Fetch {
     isUploadMethod: boolean = false
   ): SuperAgent.SuperAgentRequest {
     if (process.env.NODE_ENV === 'test') {
-      return SuperAgent[method](endpoint)
+      throw new Error(
+        `You forgot to mock a model\n method: ${method}\n endpoint: ${endpoint}\n`
+      )
     }
 
     const { user, brand, activeTeam } = store.getState() as IAppState

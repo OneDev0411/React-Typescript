@@ -26,7 +26,6 @@ import { getAttributeDefs } from '../../../store_actions/contacts'
 import { getDeals, searchDeals } from '../../../store_actions/deals'
 import { fetchUnreadEmailThreadsCount } from '../../../store_actions/inbox'
 import { deactivateIntercom } from '../../../store_actions/intercom'
-import getFavorites from '../../../store_actions/listings/favorites/get-favorites'
 import { getAllNotifications } from '../../../store_actions/notifications'
 import CheckBrowser from '../../../views/components/CheckBrowser'
 import EmailVerificationBanner from '../../../views/components/EmailVerificationBanner'
@@ -118,9 +117,6 @@ class Dashboard extends Component {
     this.initializeSockets(user)
 
     dispatch(getAllNotifications())
-
-    // Get MLS favorites
-    dispatch(getFavorites(user))
 
     dispatch(syncOpenHouseData(user.access_token))
 
