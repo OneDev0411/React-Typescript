@@ -20,6 +20,7 @@ jest.mock('models/email/update-email-campaign')
 jest.mock('models/contacts/search-contacts')
 jest.mock('models/contacts/get-contacts-tags')
 jest.mock('models/filter-segments/get-segments')
+jest.mock('use-dropbox-chooser')
 
 describe('BulkEmailComposeForm', () => {
   /**

@@ -2,7 +2,6 @@ import { Model } from 'backbone'
 import { Editor } from 'grapesjs'
 
 import ImageIcon from 'assets/images/marketing/editor/blocks/image.png'
-import { Image } from 'components/ImageDrawer/types'
 import { TemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
@@ -20,7 +19,7 @@ export interface Options {
 }
 
 interface ImageRenderData {
-  image: Image
+  image: string
 }
 
 export default function registerImageBlock(
@@ -28,7 +27,7 @@ export default function registerImageBlock(
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
   { onDrop }: Options
-): RegisterBlockSelectHandler<Image> {
+): RegisterBlockSelectHandler<string> {
   const imageBlocks = {
     [blockName]: templateBlockOptions.blocks[blockName]?.template || template
   }
@@ -53,7 +52,7 @@ export default function registerImageBlock(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent<Image, ImageRenderData>(
+  return handleBlockDragStopEvent<string, ImageRenderData>(
     editor,
     allBlocks,
     selectedImageUrl => ({
