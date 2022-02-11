@@ -4,6 +4,7 @@ import { ResponseError } from 'superagent'
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
 import { UpdateCacheActions, updateCacheComposer } from '@app/utils/react-query'
 
+import { allList as enrollmentAllList } from '../query-keys/enrollment'
 import {
   updateCacheAllList,
   updateCacheDetail,
@@ -31,7 +32,7 @@ export type UseUpdateSuperCampaignTagsOptions = Omit<
     DataInput,
     { cache: UpdateCacheActions }
   >,
-  'notify' | 'onMutate'
+  'notify' | 'onMutate' | 'invalidates'
 >
 
 export function useUpdateSuperCampaignTags(
@@ -48,6 +49,9 @@ export function useUpdateSuperCampaignTags(
         onSuccess: 'The tags were updated',
         onError: 'Something went wrong while saving the tags. Please try again.'
       },
+      invalidates: (_, { superCampaignId }) => [
+        enrollmentAllList(superCampaignId)
+      ],
       onMutate: async ({ superCampaignId, tags }) => ({
         cache: await updateCacheComposer(
           updateCacheDetail(queryClient, superCampaignId, {
@@ -57,6 +61,7 @@ export function useUpdateSuperCampaignTags(
             tags
           }),
           updateCacheMyList(queryClient, superCampaignId, { tags })
+          //
         )
       }),
       onError: (error, variables, context) => {
