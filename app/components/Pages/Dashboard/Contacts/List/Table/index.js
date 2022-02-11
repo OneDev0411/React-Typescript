@@ -61,7 +61,6 @@ const useCustomGridStyles = makeStyles(theme => ({
 const ContactsList = props => {
   const [state, dispatch] = useGridContext()
 
-  const inlineGridEnabled = true
   const gridClasses = useGridStyles()
   const inlineGridClasses = useInlineGridStyles()
   const customGridClasses = useCustomGridStyles()
@@ -87,15 +86,13 @@ const ContactsList = props => {
       selection: { selectedRowIds, isEntireRowsSelected, excludedRows }
     } = state
 
-    let selectedCount
+    let selectedCount = selectedRowIds.length
 
     if (isEntireRowsSelected) {
       selectedCount = contactCount - excludedRows.length
-    } else if (selectedRowIds.length > 0) {
-      selectedCount = selectedRowIds.length
     }
 
-    return selectedCount
+    return selectedCount > 0
       ? `${selectedCount} of ${contactCount} selected`
       : `${contactCount} Contacts`
   }
@@ -274,7 +271,7 @@ const ContactsList = props => {
         totalRows={props.totalRows}
         loading={getLoading()}
         columns={columns}
-        inlineGridEnabled={inlineGridEnabled}
+        inlineGridEnabled
         rowSize={5}
         LoadingStateComponent={LoadingComponent}
         getTrProps={getRowProps}
@@ -285,11 +282,7 @@ const ContactsList = props => {
           showSelectAll: false
         }}
         classes={{
-          row: cn({
-            [gridClasses.row]: !inlineGridEnabled,
-            [inlineGridClasses.row]: inlineGridEnabled,
-            [customGridClasses.row]: true
-          })
+          row: cn(gridClasses.row, inlineGridClasses.row, customGridClasses.row)
         }}
         infiniteScrolling={{
           onReachEnd: props.onRequestLoadMore,

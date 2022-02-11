@@ -11,9 +11,9 @@ const useStyles = makeStyles(
       alignItems: 'center',
       justifyContent: 'flex-end',
       overflow: 'initial',
-      width: theme.spacing(7.5),
+      width: '60px',
       paddingRight: theme.spacing(0.5),
-      flex: `0 0 ${theme.spacing(7.5)}`
+      flex: '0 0 60px'
     }
   }),
   { name: 'ToggleEntireRows' }
@@ -35,21 +35,22 @@ export function ToggleEntireRows<Row>({ rows, totalRows }: Props<Row>) {
     excludedRows
   } = state.selection
 
-  const isAllSelected =
+  const allRowsSelected =
     isAllRowsSelected ||
     selectedRowIds.length === rows.length ||
     (isEntireRowsSelected && excludedRows.length === 0)
 
-  const isSomeRowsSelected =
+  const someRowsSelected =
     (isAllRowsSelected === false &&
       selectedRowIds.length > 0 &&
       selectedRowIds.length < rows.length) ||
     (isEntireRowsSelected && excludedRows.length > 0)
 
-  const verbText = isAllSelected || isEntireRowsSelected ? 'Deselect' : 'Select'
-  const isSelectAllDisable = Number(rows.length) === 0
+  const verbText =
+    allRowsSelected || isEntireRowsSelected ? 'Deselect' : 'Select'
+  const disableCheckbox = Number(rows.length) === 0
   const defaultSelectAllValue =
-    Number(rows.length) === 0 ? false : isAllSelected
+    Number(rows.length) === 0 ? false : allRowsSelected
 
   const handleToggleEntireRows = () => {
     dispatch({
@@ -63,9 +64,9 @@ export function ToggleEntireRows<Row>({ rows, totalRows }: Props<Row>) {
         size="small"
         disableRipple
         tooltipTitle={`${verbText} all ${totalRows} Rows`}
-        disabled={isSelectAllDisable}
+        disabled={disableCheckbox}
         checked={defaultSelectAllValue}
-        indeterminate={isSomeRowsSelected}
+        indeterminate={someRowsSelected}
         onChange={handleToggleEntireRows}
         data-tour-id="select-deselect-checkbox"
       />

@@ -11,7 +11,7 @@ const useStyles = makeStyles(
       flexDirection: 'row',
       alignItems: 'stretch',
 
-      backgroundColor: `${alpha(theme.palette.grey[50], 0.75)}`,
+      backgroundColor: alpha(theme.palette.grey[50], 0.75),
       borderTop: `1px solid ${theme.palette.divider}`,
       borderBottom: `1px solid ${theme.palette.divider}`,
 
