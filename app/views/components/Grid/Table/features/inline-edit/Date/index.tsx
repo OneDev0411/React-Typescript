@@ -29,7 +29,7 @@ const useStyles = makeStyles(
     textField: {
       ...theme.typography.body2,
       letterSpacing: 0.15,
-      paddingLeft: theme.spacing(2) - 1,
+      paddingLeft: theme.spacing(2.5),
       lineHeight: 'inherit',
       borderRadius: theme.spacing(0.5)
     },
@@ -42,8 +42,11 @@ const useStyles = makeStyles(
 
       '& > .footer': {
         borderTop: `1px solid ${theme.palette.action.disabledBackground}`,
-        padding: theme.spacing(2),
         marginTop: theme.spacing(2),
+        height: theme.spacing(6.5),
+        display: 'flex',
+        alignItems: 'center',
+        paddingLeft: theme.spacing(2),
 
         '& > a': {
           ...theme.typography.body2,
@@ -122,7 +125,16 @@ const useStyles = makeStyles(
                   padding: 0,
                   letterSpacing: '0.4px',
                   lineHeight: `${theme.spacing(3)}px`,
-                  color: theme.palette.grey['500']
+                  color: theme.palette.grey['500'],
+
+                  '&:first-child': {
+                    borderTopLeftRadius: theme.spacing(0.5),
+                    borderBottomLeftRadius: theme.spacing(0.5)
+                  },
+                  '&:last-child': {
+                    borderTopRightRadius: theme.spacing(0.5),
+                    borderBottomRightRadius: theme.spacing(0.5)
+                  }
                 }
               }
             },

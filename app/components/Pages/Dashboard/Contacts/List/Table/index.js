@@ -107,7 +107,7 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '250px',
+      width: '230px',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
       render: ({ row: contact, isRowSelected }) => {
         const name = getAttributeFromSummary(contact, 'display_name')
@@ -126,7 +126,7 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '210px',
+      width: '200px',
       class: 'tags',
       render: ({ row: contact, isRowSelected }) => (
         <TagsCell
@@ -149,7 +149,7 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '210px',
+      width: '190px',
       render: ({ row: contact, isRowSelected }) => (
         <PhoneNumberCell contact={contact} isRowSelected={isRowSelected} />
       )
@@ -163,7 +163,7 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '310px',
+      width: '270px',
       render: ({ row: contact, isRowSelected }) => (
         <EmailCell contact={contact} isRowSelected={isRowSelected} />
       )
@@ -195,7 +195,7 @@ const ContactsList = props => {
           sortEnabled={false}
         />
       ),
-      width: '120px',
+      width: '110px',
       class: 'flows',
       render: ({ row: contact, isRowSelected }) => (
         <FlowsCell
@@ -215,7 +215,7 @@ const ContactsList = props => {
         <ColumnHeaderCell title="Birthday" iconPath={mdiCake} />
       ),
       sortable: false,
-      width: '180px',
+      width: '220px',
       render: ({ row: contact, isRowSelected }) => (
         <BirthdayCell contact={contact} isRowSelected={isRowSelected} />
       )
