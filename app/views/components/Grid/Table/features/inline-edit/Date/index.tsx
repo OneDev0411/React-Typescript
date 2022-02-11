@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 import { makeStyles, TextField, Theme } from '@material-ui/core'
 import fecha from 'fecha'
-import DayPicker from 'react-day-picker'
+import DayPicker, { DayModifiers } from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
 
 const useStyles = makeStyles(
@@ -161,7 +161,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  value?: Date
+  value: Date
   readOnly?: boolean
   dateFormat?: string
 }
@@ -172,11 +172,13 @@ export function DateInlineEdit({
   dateFormat = 'MMM DD, YYYY'
 }: Props) {
   const [fieldValue, setFieldValue] = useState<Nullable<string>>()
+  const [dateValue, setDateValue] = useState<Date | undefined>(value)
   const classes = useStyles()
 
   useEffect(() => {
     if (value) {
       setFieldValue(fecha.format(value, dateFormat))
+      setDateValue(value)
     }
   }, [value, dateFormat])
 
@@ -188,7 +190,16 @@ export function DateInlineEdit({
     }
   }
 
-  const handleDayClick = () => null
+  const handleDayClick = (day: Date, { selected }: DayModifiers) => {
+    if (selected) {
+      return
+    }
+
+    if (day) {
+      setFieldValue(fecha.format(day, dateFormat))
+      setDateValue(day)
+    }
+  }
 
   return (
     <div className={classes.root}>
@@ -212,11 +223,10 @@ export function DateInlineEdit({
       <div className={classes.pickerContainer}>
         <DayPicker
           showOutsideDays
-          month={value}
-          selectedDays={[value]}
+          month={dateValue}
+          selectedDays={[dateValue]}
           onDayClick={handleDayClick}
         />
-
         <div className="footer">
           <a>Clear</a>
         </div>

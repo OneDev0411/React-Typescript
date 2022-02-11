@@ -3,7 +3,7 @@ import { DateInlineEdit } from '../../inline-edit/Date'
 import CellContainer from '../CellContainer'
 
 interface Props {
-  value?: Date
+  value: Date
   dateFormat?: string
   readOnly?: boolean
   renderCellContent: (props: CellProps) => React.ReactNode

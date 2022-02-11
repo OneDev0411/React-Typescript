@@ -3,6 +3,7 @@ import { memo, useMemo } from 'react'
 import { makeStyles } from '@material-ui/core'
 import cn from 'classnames'
 import fecha from 'fecha'
+import { some } from 'lodash'
 import moment from 'moment'
 
 import { CellProps } from '../../types'
@@ -84,7 +85,7 @@ const durationAsDays = (duration: number): number =>
 const getDateOfBirth = contact => {
   let date
 
-  contact.attributes?.filter(attr => {
+  some(contact.attributes, attr => {
     if (!attr.is_partner && attr.attribute_type === 'birthday') {
       date = new Date(attr.date * 1000)
 
