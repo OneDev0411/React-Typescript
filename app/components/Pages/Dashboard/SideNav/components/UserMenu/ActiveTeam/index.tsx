@@ -219,18 +219,20 @@ export function ActiveTeam() {
         </div>
       )}
       <div className={classes.container}>
-        <div>
-          <Typography variant="overline" className={classes.header}>
-            Working User
-          </Typography>
-          <div className={classes.activeTeamContainer}>
-            <div className={classes.activeTeam}>
-              <Typography variant="subtitle2" noWrap>
-                {impersonateUser?.display_name ?? user.display_name}
-              </Typography>
+        {impersonateUser && (
+          <div>
+            <Typography variant="overline" className={classes.header}>
+              Working User
+            </Typography>
+            <div className={classes.activeTeamContainer}>
+              <div className={classes.activeTeam}>
+                <Typography variant="subtitle2" noWrap>
+                  {impersonateUser.display_name}
+                </Typography>
+              </div>
             </div>
           </div>
-        </div>
+        )}
         <div>
           <Typography variant="overline" className={classes.header}>
             Active Team
