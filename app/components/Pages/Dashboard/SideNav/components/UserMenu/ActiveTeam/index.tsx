@@ -4,6 +4,7 @@ import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
+import { getBrands } from '@app/models/BrandConsole/Brands'
 import { switchActiveTeam } from '@app/models/user/switch-active-team'
 import { selectUser, selectImpersonateUser } from '@app/selectors/user'
 import {
@@ -135,25 +136,31 @@ export function ActiveTeam() {
   }
 
   const handleSelectBrand = async (brand: IBrand) => {
-    const selectedBrandUsers = getBrandUsers(brand)
-    const isCurrentUserExistInSelectedBrand = selectedBrandUsers.some(
-      u => u.id === user.id
-    )
+    try {
+      const { data: brandWithUsers } = await getBrands(brand.id, false)
+      const selectedBrandUsers = getBrandUsers(brandWithUsers)
 
-    if (isCurrentUserExistInSelectedBrand) {
-      await handleSwitchTeam(brand)
+      const isCurrentUserExistInSelectedBrand = selectedBrandUsers.some(
+        u => u.id === user.id
+      )
 
-      return
+      if (isCurrentUserExistInSelectedBrand) {
+        await handleSwitchTeam(brandWithUsers)
+
+        return
+      }
+
+      if (brandWithUsers.member_count === 1) {
+        await handleSwitchTeam(brandWithUsers, selectedBrandUsers[0])
+
+        return
+      }
+
+      setSelectedBrandToSwitch(brandWithUsers)
+      hanldeOpenImpersonateSelectorDrawer()
+    } catch (error) {
+      console.error(error)
     }
-
-    if (brand.member_count === 1) {
-      await handleSwitchTeam(brand, selectedBrandUsers[0])
-
-      return
-    }
-
-    setSelectedBrandToSwitch(brand)
-    hanldeOpenImpersonateSelectorDrawer()
   }
 
   const handleSelectImpersonateUser = async (users: Agent[]) => {

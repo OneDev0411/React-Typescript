@@ -22,7 +22,7 @@ export async function getBrands(
 
 export async function getAvailableBrandsToSwitch(
   fetchChildren: boolean = true,
-  customeAssociations: string[] = defaultAssociations
+  customeAssociations: string[] = []
 ): Promise<IBrand[]> {
   const associations = [...customeAssociations]
 
