@@ -31,10 +31,7 @@ import {
   SORT_FIELD_SETTING_KEY
 } from '../../../helpers/sort-utils'
 import { SortString, ViewType } from '../../../types'
-import {
-  setMapLocation,
-  toggleListingFavoriteState
-} from '../../context/actions'
+import { setMapLocation, removeListing } from '../../context/actions'
 import useFavoritesContext from '../../hooks/useFavoritesContext'
 import { Results } from '../Results'
 
@@ -174,7 +171,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
   }, [])
 
   const onToggleFavorite = useCallback((id: UUID) => {
-    dispatch(toggleListingFavoriteState(id))
+    dispatch(removeListing(id))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
