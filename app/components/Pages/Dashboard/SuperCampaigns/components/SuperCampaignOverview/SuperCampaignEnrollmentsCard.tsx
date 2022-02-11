@@ -45,7 +45,7 @@ function SuperCampaignEnrollmentsCard() {
         <SuperCampaignResultList
           isLoading={isLoading}
           superCampaignResults={
-            superCampaignEnrollments as ISuperCampaignEnrollment<
+            (superCampaignEnrollments ?? []) as ISuperCampaignEnrollment<
               'user' | 'brand' | 'campaign'
             >[]
           }
@@ -62,7 +62,7 @@ function SuperCampaignEnrollmentsCard() {
               isLoading ? Number.POSITIVE_INFINITY : enrolledAgentCount
             }
             eligibleBrands={superCampaign.eligible_brands}
-            superCampaignEnrollments={superCampaignEnrollments as any} // TODO: fix this
+            superCampaignEnrollments={superCampaignEnrollments ?? []}
           />
           <SuperCampaignCardHeader
             className={classes.title}
@@ -76,7 +76,7 @@ function SuperCampaignEnrollmentsCard() {
           <SuperCampaignEnrollmentList
             isLoading={isLoading}
             superCampaignEnrollments={
-              superCampaignEnrollments as ISuperCampaignEnrollment<
+              (superCampaignEnrollments ?? []) as ISuperCampaignEnrollment<
                 'user' | 'brand'
               >[]
             }
