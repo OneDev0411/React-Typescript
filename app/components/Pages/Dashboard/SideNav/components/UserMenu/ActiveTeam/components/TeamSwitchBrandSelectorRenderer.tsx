@@ -74,7 +74,7 @@ function Brand({ brand, isActive, isFetchingUser, disabled, onClick }: Props) {
           />
         )}
       </div>
-      {!isActive && !disabled && (
+      {!disabled && (
         <Button
           variant="contained"
           color="primary"
@@ -86,7 +86,7 @@ function Brand({ brand, isActive, isFetchingUser, disabled, onClick }: Props) {
           }
           onClick={handleOnClick}
         >
-          {isFetchingUser ? 'Checking Team...' : 'Select Team'}
+          {isFetchingUser ? 'Loading...' : 'Select Team'}
         </Button>
       )}
     </div>
