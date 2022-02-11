@@ -90,6 +90,8 @@ export function ActiveTeam() {
     useState<boolean>(false)
   const [isSwitchingActiveTeam, setIsSwitchingActiveTeam] =
     useState<boolean>(false)
+  const [selectedBrandToFetchUser, setSelectedBrandToFetchUser] =
+    useState<Nullable<IBrand>>(null)
   const [selectedBrandToSwitch, setSelectedBrandToSwitch] =
     useState<Nullable<IBrand>>(null)
   const isCurrentUserExistInActiveBrand = useMemo(() => {
@@ -137,6 +139,8 @@ export function ActiveTeam() {
 
   const handleSelectBrand = async (brand: IBrand) => {
     try {
+      setSelectedBrandToFetchUser(brand)
+
       const { data: brandWithUsers } = await getBrands(brand.id, false)
       const selectedBrandUsers = getBrandUsers(brandWithUsers)
 
@@ -160,6 +164,8 @@ export function ActiveTeam() {
       hanldeOpenImpersonateSelectorDrawer()
     } catch (error) {
       console.error(error)
+    } finally {
+      setSelectedBrandToFetchUser(null)
     }
   }
 
@@ -177,14 +183,16 @@ export function ActiveTeam() {
     selectedBrandToSwitch ? [selectedBrandToSwitch] : []
 
   const renderBrandNode = ({ brand }: NodeRenderer) => {
-    const isActive = brand.id === activeBrand?.id
+    const isActive = activeBrand?.id === brand.id
     const isDisabled = isActive && isCurrentUserExistInActiveBrand
+    const isFetchingUsers = selectedBrandToFetchUser?.id === brand.id
 
     return (
       <Brand
         brand={brand}
         isActive={isActive}
         disabled={isDisabled}
+        isFetchingUser={isFetchingUsers}
         onClick={() => handleSelectBrand(brand)}
       />
     )

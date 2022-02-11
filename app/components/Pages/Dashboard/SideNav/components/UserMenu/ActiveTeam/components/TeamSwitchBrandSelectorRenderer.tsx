@@ -1,11 +1,18 @@
 import { memo } from 'react'
 
-import { Button, Chip, Theme, makeStyles } from '@material-ui/core'
+import {
+  Chip,
+  Theme,
+  Button,
+  makeStyles,
+  CircularProgress
+} from '@material-ui/core'
 import cn from 'classnames'
 
 interface Props {
   brand: IBrand
   isActive: boolean
+  isFetchingUser: boolean
   disabled: boolean
   onClick: (brand: IBrand) => void
 }
@@ -27,7 +34,7 @@ const useStyles = makeStyles(
             : theme.spacing(1, 0),
 
         '& $switchButton': {
-          display: 'block'
+          display: 'inline-flex'
         }
       }
     },
@@ -44,7 +51,7 @@ const useStyles = makeStyles(
   { name: 'SwitchTeamNodeRenderer' }
 )
 
-function Brand({ brand, isActive, disabled, onClick }: Props) {
+function Brand({ brand, isActive, isFetchingUser, disabled, onClick }: Props) {
   const classes = useStyles({ isActive, disabled })
 
   const handleOnClick = () => {
@@ -72,10 +79,14 @@ function Brand({ brand, isActive, disabled, onClick }: Props) {
           variant="contained"
           color="primary"
           size="small"
+          disabled={isFetchingUser}
           className={classes.switchButton}
+          startIcon={
+            isFetchingUser && <CircularProgress color="inherit" size={16} />
+          }
           onClick={handleOnClick}
         >
-          Select Team
+          {isFetchingUser ? 'Checking Team...' : 'Select Team'}
         </Button>
       )}
     </div>
