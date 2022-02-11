@@ -25,7 +25,9 @@ jest.mock('react-window')
 jest.mock('@app/models/tasks/get-tasks')
 jest.mock('@app/models/listings/listing/get-deals-listings')
 jest.mock('@app/models/listings/search/get-brand-listings')
-jest.mock('@app/views/components/TextEditor/features/Image/utils/get-image-dimensions')
+jest.mock(
+  '@app/views/components/TextEditor/features/Image/utils/get-image-dimensions'
+)
 
 describe('Listings page / Table rendering', () => {
   beforeAll(() => {
