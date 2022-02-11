@@ -159,6 +159,9 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
       return null
     }
 
+    const birthdayApproaching =
+      daysToBirthday && daysToBirthday >= 0 && daysToBirthday <= 30
+
     return (
       <>
         <div
@@ -170,7 +173,7 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
           {inputFormattedDate}
         </div>
 
-        {daysToBirthday && (
+        {birthdayApproaching && (
           <div
             className={cn(classes.dateDiffValue, {
               rowSelected: isRowSelected
@@ -179,13 +182,12 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
             <span>(</span>
             <span
               className={cn({
-                [classes.isToday]: daysToBirthday == 0
+                [classes.isToday]: daysToBirthday === 0
               })}
             >
-              {daysToBirthday > 0 &&
-                daysToBirthday <= 30 &&
-                `in ${daysToBirthday} day${daysToBirthday == 1 ? '' : 's'}`}
               {daysToBirthday === 0 && "It's Today"}
+              {daysToBirthday > 0 &&
+                `in ${daysToBirthday} day${daysToBirthday == 1 ? '' : 's'}`}
             </span>
             <span>)</span>
           </div>
