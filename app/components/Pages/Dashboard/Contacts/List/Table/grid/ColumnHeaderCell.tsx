@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { makeStyles, Typography } from '@material-ui/core'
 import { mdiDotsVertical, mdiSortAscending, mdiSortDescending } from '@mdi/js'
 
@@ -12,9 +14,10 @@ const useStyles = makeStyles(
       width: '100%'
     },
     iconContainer: {
-      width: theme.spacing(4),
+      width: '32px',
+      height: '100%',
       fontSize: theme.spacing(0.75),
-      color: `${theme.palette.grey[500]}`,
+      color: theme.palette.grey[500],
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'flex-end'
@@ -23,8 +26,9 @@ const useStyles = makeStyles(
       display: 'flex',
       flex: '1 0 auto',
       alignItems: 'center',
-      color: `${theme.palette.grey[700]}`,
+      color: theme.palette.grey[700],
       padding: theme.spacing(0, 1),
+      height: '100%',
       letterSpacing: '0.15px'
     },
     sortActionContainer: {
@@ -32,15 +36,16 @@ const useStyles = makeStyles(
       alignItems: 'center',
       width: theme.spacing(4),
       justifyContent: 'center',
-      color: `${theme.palette.grey[500]}`,
-      fontSize: theme.spacing(0.75)
+      color: theme.palette.grey[500],
+      fontSize: theme.spacing(0.75),
+      height: '100%'
     }
   }),
   { name: 'ColumnHeaderCell' }
 )
 
 interface Props {
-  title?: string
+  title: string
   iconPath?: string
   sortable?: boolean
   sortDirection?: 'asc' | 'desc'
@@ -54,30 +59,41 @@ const ColumnHeaderCell = ({
 }: Props) => {
   const classes = useStyles()
 
+  let columnIcon: Nullable<React.ReactNode> = null
+  let sortButton: Nullable<React.ReactNode> = null
+
+  if (iconPath) {
+    columnIcon = (
+      <div className={classes.iconContainer}>
+        <SvgIcon size={muiIconSizes.small} path={iconPath} />
+      </div>
+    )
+  }
+
+  if (sortable) {
+    sortButton = (
+      <div className={classes.sortActionContainer}>
+        <SvgIcon
+          size={muiIconSizes.small}
+          path={
+            !sortDirection
+              ? mdiDotsVertical
+              : sortDirection === 'asc'
+              ? mdiSortAscending
+              : mdiSortDescending
+          }
+        />
+      </div>
+    )
+  }
+
   return (
     <div className={classes.container}>
-      {iconPath && (
-        <div className={classes.iconContainer}>
-          <SvgIcon size={muiIconSizes.small} path={iconPath} />
-        </div>
-      )}
+      {columnIcon}
       <div className={classes.titleContainer}>
         <Typography variant="body2">{title}</Typography>
       </div>
-      {sortable && (
-        <div className={classes.sortActionContainer}>
-          <SvgIcon
-            size={muiIconSizes.small}
-            path={
-              !sortDirection
-                ? mdiDotsVertical
-                : sortDirection === 'asc'
-                ? mdiSortAscending
-                : mdiSortDescending
-            }
-          />
-        </div>
-      )}
+      {sortButton}
     </div>
   )
 }

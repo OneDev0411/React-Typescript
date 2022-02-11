@@ -146,7 +146,7 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
     () => daysToNextBirthday(birthday, today),
     [birthday, today]
   )
-  const inputFormattedDate: Nullable<string> = useMemo(
+  const formattedDate: Nullable<string> = useMemo(
     () => formatDate(birthday),
     [birthday]
   )
@@ -155,7 +155,7 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
     isHovered = false,
     isSelected = false
   }: CellProps) => {
-    if (!inputFormattedDate) {
+    if (!formattedDate) {
       return null
     }
 
@@ -170,7 +170,7 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
             selected: isSelected
           })}
         >
-          {inputFormattedDate}
+          {formattedDate}
         </div>
 
         {birthdayApproaching && (
