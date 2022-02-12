@@ -83,7 +83,7 @@ const useStyles = makeStyles(
 
 interface Props {
   title: string
-  iconPath: string
+  iconPath?: string
   sortable?: boolean
   sortDirection?: 'asc' | 'desc'
   isPrimary?: boolean
@@ -132,9 +132,11 @@ const ColumnHeaderCell = ({
       onMouseEnter={onHoverIn}
       onMouseLeave={onHoverOut}
     >
-      <div className={classes.iconContainer}>
-        <SvgIcon size={muiIconSizes.small} path={iconPath} />
-      </div>
+      {iconPath && (
+        <div className={classes.iconContainer}>
+          <SvgIcon size={muiIconSizes.small} path={iconPath} />
+        </div>
+      )}
       <div className={classes.titleContainer}>
         <Typography variant="body2">{title}</Typography>
       </div>
