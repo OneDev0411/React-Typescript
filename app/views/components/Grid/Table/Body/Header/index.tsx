@@ -5,8 +5,15 @@ import { GridSelectionOptions, TableColumn } from '../../types'
 
 const useStyles = makeStyles(
   theme => ({
-    rowContainer: ({ rowSize }: { rowSize: number }) => ({
+    rowContainer: ({
+      rowSize,
+      width
+    }: {
+      rowSize: number
+      width: number | string
+    }) => ({
       height: theme.spacing(rowSize),
+      width,
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'stretch',
@@ -43,6 +50,7 @@ interface Props<Row> {
   rowSize?: number
   inlineGridEnabled?: boolean
   columnsSize: string[]
+  width?: number | string
 }
 
 function Header<Row>({
@@ -50,9 +58,10 @@ function Header<Row>({
   rows,
   totalRows,
   rowSize = 5,
+  width = '100%',
   columnsSize
 }: Props<Row>) {
-  const classes = useStyles({ rowSize })
+  const classes = useStyles({ rowSize, width })
 
   const Cell = (cellContent, column, columnIndex) => (
     <div

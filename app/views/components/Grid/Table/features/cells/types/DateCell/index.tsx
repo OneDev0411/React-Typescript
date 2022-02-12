@@ -11,7 +11,7 @@ interface Props {
 
 export const DateCell = ({
   value,
-  dateFormat = 'MMM DD, YYYY',
+  dateFormat = 'MMM D, YYYY',
   readOnly = false,
   renderCellContent
 }: Props) => {

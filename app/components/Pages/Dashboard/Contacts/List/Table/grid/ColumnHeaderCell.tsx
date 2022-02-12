@@ -83,7 +83,7 @@ const useStyles = makeStyles(
 
 interface Props {
   title: string
-  iconPath?: string
+  iconPath: string
   sortable?: boolean
   sortDirection?: 'asc' | 'desc'
   isPrimary?: boolean
@@ -98,31 +98,11 @@ const ColumnHeaderCell = ({
 }: Props) => {
   const classes = useStyles()
 
-  let columnIcon: Nullable<React.ReactNode> = null
-  let sortButton: Nullable<React.ReactNode> = null
-
   const [isHovered, setIsHovered] = useState(false)
-
   const onHoverIn = () => setIsHovered(true)
   const onHoverOut = () => setIsHovered(false)
 
-  if (iconPath) {
-    columnIcon = (
-      <div
-        className={cn(classes.sortActionContainer, {
-          hovered: isHovered
-        })}
-      >
-        <div
-          className={cn(classes.sortIconBg, {
-            cellHovered: isHovered
-          })}
-        >
-          <SvgIcon size={muiIconSizes.small} path={iconPath} />
-        </div>
-      </div>
-    )
-  }
+  let sortButton: Nullable<React.ReactNode> = null
 
   if (sortable) {
     let sortIcon: string = mdiDotsVertical
@@ -133,7 +113,13 @@ const ColumnHeaderCell = ({
 
     sortButton = (
       <div className={classes.sortActionContainer}>
-        <SvgIcon size={muiIconSizes.small} path={sortIcon} />
+        <div
+          className={cn(classes.sortIconBg, {
+            cellHovered: isHovered
+          })}
+        >
+          <SvgIcon size={muiIconSizes.small} path={sortIcon} />
+        </div>
       </div>
     )
   }
@@ -146,7 +132,9 @@ const ColumnHeaderCell = ({
       onMouseEnter={onHoverIn}
       onMouseLeave={onHoverOut}
     >
-      {columnIcon}
+      <div className={classes.iconContainer}>
+        <SvgIcon size={muiIconSizes.small} path={iconPath} />
+      </div>
       <div className={classes.titleContainer}>
         <Typography variant="body2">{title}</Typography>
       </div>

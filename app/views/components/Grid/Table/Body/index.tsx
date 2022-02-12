@@ -141,56 +141,58 @@ export function Body<Row>({
 
   return (
     <>
-      {hasHeader && (
-        <Header
-          columns={columns}
-          rows={rows}
-          selection={selection}
-          totalRows={totalRows}
-          rowSize={rowSize}
-          inlineGridEnabled={inlineGridEnabled}
-          columnsSize={columnsSize}
-        />
-      )}
       <AutoSizer disableHeight>
         {({ width }) => (
-          <FixedSizeList
-            ref={listRef}
-            itemCount={rows.length}
-            itemSize={theme.spacing(rowSize)}
-            width={width}
-            height={windowHeight}
-            overscanCount={8}
-            itemKey={(
-              index: number,
-              { rows }: ComponentProps<typeof Row>['data']
-            ) => rows[index].id || index}
-            itemData={
-              {
-                rows,
-                columns,
-                selection,
-                state,
-                classes,
-                getTrProps,
-                getTdProps,
-                columnsSize,
-                inlineGridEnabled
-              } as ComponentProps<typeof Row>['data']
-            }
-            style={{
-              // I've searched 1.5 days to find this
-              height: '100% !important'
-            }}
-            {...(infiniteScrolling
-              ? {
-                  onItemsRendered: debounce(onItemsRendered, 100),
-                  onScroll: setScroll
-                }
-              : {})}
-          >
-            {Row}
-          </FixedSizeList>
+          <>
+            {hasHeader && (
+              <Header
+                columns={columns}
+                rows={rows}
+                selection={selection}
+                totalRows={totalRows}
+                rowSize={rowSize}
+                width={width}
+                columnsSize={columnsSize}
+              />
+            )}
+            <FixedSizeList
+              ref={listRef}
+              itemCount={rows.length}
+              itemSize={theme.spacing(rowSize)}
+              width={width}
+              height={windowHeight}
+              overscanCount={8}
+              itemKey={(
+                index: number,
+                { rows }: ComponentProps<typeof Row>['data']
+              ) => rows[index].id || index}
+              itemData={
+                {
+                  rows,
+                  columns,
+                  selection,
+                  state,
+                  classes,
+                  getTrProps,
+                  getTdProps,
+                  columnsSize,
+                  inlineGridEnabled
+                } as ComponentProps<typeof Row>['data']
+              }
+              style={{
+                // I've searched 1.5 days to find this
+                height: '100% !important'
+              }}
+              {...(infiniteScrolling
+                ? {
+                    onItemsRendered: debounce(onItemsRendered, 100),
+                    onScroll: setScroll
+                  }
+                : {})}
+            >
+              {Row}
+            </FixedSizeList>
+          </>
         )}
       </AutoSizer>
     </>

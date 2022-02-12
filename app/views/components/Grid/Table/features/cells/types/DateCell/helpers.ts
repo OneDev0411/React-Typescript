@@ -19,13 +19,7 @@ export const formatDate = (
     return null
   }
 
-  const utcDate = getDate(date)
-
-  if (utcDate.getFullYear() === 1800) {
-    return fecha.format(utcDate, 'MMM DD')
-  }
-
-  return fecha.format(utcDate, format)
+  return fecha.format(getDate(date), format)
 }
 
 export const durationAsDays = (duration: number): number =>

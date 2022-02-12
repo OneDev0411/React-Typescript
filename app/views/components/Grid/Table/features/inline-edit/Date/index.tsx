@@ -29,7 +29,7 @@ const useStyles = makeStyles(
     textField: {
       ...theme.typography.body2,
       letterSpacing: 0.15,
-      paddingLeft: theme.spacing(2.5),
+      paddingLeft: theme.spacing(2) - 1,
       lineHeight: 'inherit',
       borderRadius: theme.spacing(0.5)
     },
@@ -58,6 +58,10 @@ const useStyles = makeStyles(
 
       '& .DayPicker': {
         padding: 0,
+
+        '& > *': {
+          outline: 'none !important'
+        },
 
         '& > .DayPicker-wrapper': {
           paddingBottom: 0,
@@ -101,61 +105,63 @@ const useStyles = makeStyles(
               }
             }
           },
-          '& .DayPicker-Month': {
-            margin: theme.spacing(0, 1),
+          '& .DayPicker-Months': {
+            '& > .DayPicker-Month': {
+              margin: theme.spacing(0, 1),
 
-            '& > .DayPicker-Caption': {
-              ...theme.typography.subtitle2,
-              textAlign: 'left',
-              height: 'auto',
-              letterSpacing: '0.1px',
-              border: 0,
-              marginBottom: 0,
-              padding: theme.spacing(2.25, 1),
-              lineHeight: `${theme.spacing(2.5)}px`
-            },
+              '& > .DayPicker-Caption': {
+                ...theme.typography.subtitle2,
+                textAlign: 'left',
+                height: 'auto',
+                letterSpacing: '0.1px',
+                border: 0,
+                marginBottom: 0,
+                padding: theme.spacing(2.25, 1),
+                lineHeight: `${theme.spacing(2.5)}px`
+              },
 
-            '& > .DayPicker-Weekdays': {
-              '& .DayPicker-WeekdaysRow': {
-                background: theme.palette.grey['100'],
-                color: theme.palette.grey['600'],
+              '& > .DayPicker-Weekdays': {
+                '& .DayPicker-WeekdaysRow': {
+                  background: theme.palette.grey['100'],
+                  color: theme.palette.grey['600'],
 
-                '& .DayPicker-Weekday': {
-                  ...theme.typography.caption,
-                  padding: 0,
-                  letterSpacing: '0.4px',
-                  lineHeight: `${theme.spacing(3)}px`,
-                  color: theme.palette.grey['500'],
+                  '& .DayPicker-Weekday': {
+                    ...theme.typography.caption,
+                    padding: 0,
+                    letterSpacing: '0.4px',
+                    lineHeight: `${theme.spacing(3)}px`,
+                    color: theme.palette.grey['500'],
 
-                  '&:first-child': {
-                    borderTopLeftRadius: theme.spacing(0.5),
-                    borderBottomLeftRadius: theme.spacing(0.5)
-                  },
-                  '&:last-child': {
-                    borderTopRightRadius: theme.spacing(0.5),
-                    borderBottomRightRadius: theme.spacing(0.5)
+                    '&:first-child': {
+                      borderTopLeftRadius: theme.spacing(0.5),
+                      borderBottomLeftRadius: theme.spacing(0.5)
+                    },
+                    '&:last-child': {
+                      borderTopRightRadius: theme.spacing(0.5),
+                      borderBottomRightRadius: theme.spacing(0.5)
+                    }
                   }
                 }
-              }
-            },
-            '& .DayPicker-Week': {
-              ...theme.typography.body3,
-              padding: 0,
-              letterSpacing: '0.2px',
+              },
+              '& .DayPicker-Week': {
+                ...theme.typography.body3,
+                padding: 0,
+                letterSpacing: '0.2px',
 
-              '& .DayPicker-Day': {
-                padding: '6.5px 8.5px',
-                cursor: 'pointer',
+                '& .DayPicker-Day': {
+                  padding: '6.5px 8.5px',
+                  cursor: 'pointer',
 
-                '&:hover': {
-                  backgroundColor: `${theme.palette.primary.dark} !important`
-                },
+                  '&:hover': {
+                    backgroundColor: `${theme.palette.primary.dark} !important`
+                  },
 
-                '&--outside': {
-                  color: theme.palette.grey['500']
-                },
-                '&--selected': {
-                  backgroundColor: `${theme.palette.primary.dark} !important`
+                  '&--outside': {
+                    color: theme.palette.grey['500']
+                  },
+                  '&--selected': {
+                    backgroundColor: `${theme.palette.primary.dark} !important`
+                  }
                 }
               }
             }
@@ -191,7 +197,7 @@ interface Props {
 export function DateInlineEdit({
   value,
   readOnly = false,
-  dateFormat = 'MMM DD, YYYY'
+  dateFormat = 'MMM D, YYYY'
 }: Props) {
   const [fieldValue, setFieldValue] = useState<Nullable<Date>>()
 

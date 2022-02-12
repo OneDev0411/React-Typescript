@@ -99,11 +99,11 @@ const ContactsList = props => {
   const columns = [
     {
       id: 'name',
-      headerName: ({ rows }) => (
+      headerName: ({ rows, column }) => (
         <ColumnHeaderCell
           title={getSelectedInfo(rows.length)}
           isPrimary
-          sortEnabled={false}
+          sortable={column.sortable}
         />
       ),
       width: '230px',
