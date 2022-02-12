@@ -47,10 +47,14 @@ export function useLoadUserAndActiveTeam(): UseLoadUserAndActiveTeam {
   useEffectOnce(() => {
     const loadActiveTeam = async (user: IUser) => {
       try {
-        const res = await getActiveTeam(user)
+        const team = await getActiveTeam(user)
 
-        dispatch(setActiveTeam(res))
-      } catch (e) {}
+        if (team !== null) {
+          dispatch(setActiveTeam(team))
+        }
+      } catch (error) {
+        console.error(error)
+      }
     }
 
     const loadUser = async () => {

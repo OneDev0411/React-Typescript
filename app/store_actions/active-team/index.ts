@@ -2,6 +2,7 @@ import { Dispatch } from 'redux'
 
 import { getActiveTeam } from '@app/models/user/get-active-team'
 import { putUserSetting } from '@app/models/user/put-user-setting'
+import { SIGNIN_SUCCESS } from 'constants/auth/signin'
 import {
   UPDATE_ACTIVE_TEAM_SETTING,
   SET_USER_AND_ACTIVE_TEAM,
@@ -19,16 +20,27 @@ export type RequestActiveTeamAction = ReturnType<typeof requestActiveTeam>
 export const setActiveTeam = (team: IUserTeam) =>
   ({
     type: SET_ACTIVE_TEAM,
-    payload: team
+    payload: null
   } as const)
 
 export type SetActiveTeamAction = ReturnType<typeof setActiveTeam>
 
-export const setUserAndActiveTeam = (user: IUser, team: IUserTeam) =>
-  ({
+export const setUserAndActiveTeam = (
+  user: IUser,
+  team: Nullable<IUserTeam>
+) => {
+  if (team === null) {
+    return {
+      type: SIGNIN_SUCCESS,
+      user
+    } as const
+  }
+
+  return {
     type: SET_USER_AND_ACTIVE_TEAM,
     payload: { user, team }
-  } as const)
+  } as const
+}
 
 export type SetUserAndActiveTeamAction = ReturnType<typeof setUserAndActiveTeam>
 
@@ -53,7 +65,9 @@ export const fetchActiveTeam = () => async (dispatch: Dispatch) => {
   try {
     const activeTeam = await getActiveTeam()
 
-    dispatch(setActiveTeam(activeTeam))
+    if (activeTeam !== null) {
+      dispatch(setActiveTeam(activeTeam))
+    }
   } catch (error) {
     console.error(error)
   }

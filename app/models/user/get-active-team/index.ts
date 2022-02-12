@@ -11,7 +11,9 @@ const DEFAULT_ASSOCIATIONS = [
   'brand.roles'
 ]
 
-export async function getActiveTeam(user?: IUser): Promise<IUserTeam> {
+export async function getActiveTeam(
+  user?: IUser
+): Promise<Nullable<IUserTeam>> {
   try {
     const fetchActiveTeamInstance = new Fetch()
       .get('/users/self/active-role')

@@ -17,7 +17,6 @@ import {
   NodeRenderer,
   BrandAvailableToUserSelectorDrawer
 } from '@app/views/components/BrandSelector'
-import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { Agent, BrandedUser } from '@app/views/components/TeamAgents/types'
 import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
 
@@ -199,11 +198,7 @@ export function ActiveTeam() {
   }
 
   if (!activeBrand) {
-    return (
-      <div className={classes.container}>
-        <Loading />
-      </div>
-    )
+    return null
   }
 
   return (
