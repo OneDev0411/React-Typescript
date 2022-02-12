@@ -172,8 +172,18 @@ const useStyles = makeStyles(
   }
 )
 
+const getDate = (datetime: Date = new Date()) =>
+  new Date(
+    datetime.getUTCFullYear(),
+    datetime.getUTCMonth(),
+    datetime.getUTCDate()
+  )
+
+const getMonth = (datetime: Date = new Date()) =>
+  new Date(datetime.getUTCFullYear(), datetime.getUTCMonth())
+
 interface Props {
-  value: Date
+  value: Nullable<Date>
   readOnly?: boolean
   dateFormat?: string
 }
@@ -183,22 +193,22 @@ export function DateInlineEdit({
   readOnly = false,
   dateFormat = 'MMM DD, YYYY'
 }: Props) {
-  const [fieldValue, setFieldValue] = useState<Nullable<string>>()
-  const [dateValue, setDateValue] = useState<Date | undefined>(value)
+  const [fieldValue, setFieldValue] = useState<Nullable<Date>>()
+
   const classes = useStyles()
 
   useEffect(() => {
     if (value) {
-      setFieldValue(fecha.format(value, dateFormat))
-      setDateValue(value)
+      setFieldValue(value)
     }
-  }, [value, dateFormat])
+  }, [value])
 
   const onChange = e => {
     const input = e.target.value
+    const parsed = fecha.parse(dateFormat, input)
 
-    if (fecha.parse(dateFormat, input)) {
-      setFieldValue(input)
+    if (typeof parsed !== 'boolean') {
+      setFieldValue(parsed)
     }
   }
 
@@ -208,8 +218,7 @@ export function DateInlineEdit({
     }
 
     if (day) {
-      setFieldValue(fecha.format(day, dateFormat))
-      setDateValue(day)
+      setFieldValue(day)
     }
   }
 
@@ -217,7 +226,7 @@ export function DateInlineEdit({
     <div className={classes.root}>
       <div className={classes.inputContainer}>
         <TextField
-          value={fieldValue}
+          value={fieldValue ? fecha.format(fieldValue, dateFormat) : ''}
           size="small"
           disabled={readOnly}
           fullWidth
@@ -235,9 +244,9 @@ export function DateInlineEdit({
       <div className={classes.pickerContainer}>
         <DayPicker
           showOutsideDays
-          month={dateValue}
-          selectedDays={[dateValue]}
           onDayClick={handleDayClick}
+          month={fieldValue ?? getMonth()}
+          selectedDays={fieldValue ? [fieldValue] : [getDate()]}
         />
         <div className="footer">
           <a>Clear</a>

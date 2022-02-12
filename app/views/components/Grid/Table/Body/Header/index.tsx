@@ -1,9 +1,6 @@
-import { memo, useMemo } from 'react'
-
 import { alpha, makeStyles } from '@material-ui/core'
 
 import { ToggleEntireRows } from '../../features/Selection/ToggleEntireRows'
-import { getColumnsSize } from '../../helpers/get-columns-size'
 import { GridSelectionOptions, TableColumn } from '../../types'
 
 const useStyles = makeStyles(
@@ -14,11 +11,17 @@ const useStyles = makeStyles(
       flexDirection: 'row',
       alignItems: 'stretch',
 
+      backgroundColor: alpha(theme.palette.grey[50], 0.75),
       borderTop: `1px solid ${theme.palette.divider}`,
       borderBottom: `1px solid ${theme.palette.divider}`,
 
-      '& > div:first-child': {
-        borderRight: 'none'
+      '& > div': {
+        display: 'flex',
+        flex: '0 0 auto',
+
+        '&:first-child': {
+          borderRight: 'none'
+        }
       }
     }),
     cellContainer: {
@@ -29,7 +32,7 @@ const useStyles = makeStyles(
       borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`
     }
   }),
-  { name: 'Header-row' }
+  { name: 'HeaderRow' }
 )
 
 interface Props<Row> {
@@ -38,16 +41,20 @@ interface Props<Row> {
   totalRows: number
   selection: GridSelectionOptions<Row> | null
   rowSize?: number
+  inlineGridEnabled?: boolean
+  columnsSize: string[]
 }
 
-function Header<Row>({ columns, rows, totalRows, rowSize = 5 }: Props<Row>) {
-  const columnsSize = useMemo(() => getColumnsSize<Row>(columns), [columns])
-
+function Header<Row>({
+  columns,
+  rows,
+  totalRows,
+  rowSize = 5,
+  columnsSize
+}: Props<Row>) {
   const classes = useStyles({ rowSize })
 
-  //--
-
-  const Cell = (cellContent, columnIndex) => (
+  const Cell = (cellContent, column, columnIndex) => (
     <div
       className={classes.cellContainer}
       key={columnIndex}
@@ -58,8 +65,12 @@ function Header<Row>({ columns, rows, totalRows, rowSize = 5 }: Props<Row>) {
   )
 
   const getCell = (column, columnIndex) => {
+    if (column.isHidden) {
+      return null
+    }
+
     if (typeof column.headerName === 'string') {
-      return Cell(column.headerName, columnIndex)
+      return Cell(column.headerName, column, columnIndex)
     }
 
     if (typeof column.headerName === 'function') {
@@ -70,12 +81,13 @@ function Header<Row>({ columns, rows, totalRows, rowSize = 5 }: Props<Row>) {
           columnIndex,
           totalRows
         }),
+        column,
         columnIndex
       )
     }
-  }
 
-  //--
+    return null
+  }
 
   return (
     <div className={classes.rowContainer}>
@@ -85,4 +97,4 @@ function Header<Row>({ columns, rows, totalRows, rowSize = 5 }: Props<Row>) {
   )
 }
 
-export default memo(Header)
+export default Header

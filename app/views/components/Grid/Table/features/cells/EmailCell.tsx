@@ -3,7 +3,7 @@ import { memo, useMemo } from 'react'
 import { mdiEmailOutline } from '@mdi/js'
 
 import { CellAction } from './CellContainer'
-import AttributeCell from './types/AttributeCell'
+import { AttributeCell } from './types/AttributeCell'
 
 interface Props {
   contact: IContact
@@ -11,7 +11,7 @@ interface Props {
   isRowSelected?: boolean
 }
 
-const EmailCell = ({ contact, isRowSelected = false }: Props) => {
+export const EmailCell = memo(({ contact, isRowSelected = false }: Props) => {
   const actions: Record<string, CellAction> = {
     email: {
       tooltipText: 'Email',
@@ -37,6 +37,4 @@ const EmailCell = ({ contact, isRowSelected = false }: Props) => {
       actions={actions}
     />
   )
-}
-
-export default memo(EmailCell)
+})

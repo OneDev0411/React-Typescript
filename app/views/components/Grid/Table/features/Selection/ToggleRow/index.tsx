@@ -12,10 +12,10 @@ const useStyles = makeStyles(
   theme => ({
     container: {
       display: 'flex',
-      flex: '0 0 auto',
-      justifyContent: 'end',
+      justifyContent: 'flex-end',
       alignItems: 'center',
-      width: theme.spacing(7.5),
+      width: '60px',
+      borderBottom: `1px solid ${theme.palette.divider}`,
       height: '100%',
       paddingRight: '4px',
       overflow: 'initial'

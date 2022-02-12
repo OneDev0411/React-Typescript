@@ -20,6 +20,7 @@ interface Props {
   attributeType: 'email' | 'phone_number'
   attributeLabel?: string
   actions?: Record<string, CellAction>
+  valueFormatter?: (value: string) => string
 }
 
 const useStyles = makeStyles(
@@ -210,7 +211,7 @@ const useStyles = makeStyles(
   { name: 'Attribute-cell' }
 )
 
-const AttributeCell = ({
+export const AttributeCell = ({
   attributes,
   isRowSelected = false,
   isSelectable = false,
@@ -219,12 +220,13 @@ const AttributeCell = ({
   attributeInputPlaceholder,
   attributeDescription,
   attributeLabel = 'Main',
+  valueFormatter,
   actions = {}
 }: Props) => {
   const classes = useStyles()
 
-  let primaryAttribute
-  let primaryAttributeLabel
+  let primaryAttribute: Nullable<string> = null
+  let primaryAttributeLabel: Nullable<string> = null
   let count = 0
 
   //--
@@ -273,21 +275,23 @@ const AttributeCell = ({
     isHovered = false,
     isSelected = false
   }: CellProps) => {
+    if (!primaryAttribute) {
+      return null
+    }
+
     return (
       <>
-        {!!primaryAttribute && (
-          <div
-            className={cn(classes.attributeText, {
-              hovered: isHovered,
-              selected: isSelected,
-              rowSelected: isRowSelected
-            })}
-          >
-            {primaryAttribute}
-          </div>
-        )}
+        <div
+          className={cn(classes.attributeText, {
+            hovered: isHovered,
+            selected: isSelected,
+            rowSelected: isRowSelected
+          })}
+        >
+          {valueFormatter ? valueFormatter(primaryAttribute) : primaryAttribute}
+        </div>
 
-        {!!primaryAttributeLabel && (
+        {primaryAttributeLabel && (
           <div
             className={cn(classes.attributeLabel, {
               selected: isSelected
@@ -330,5 +334,3 @@ const AttributeCell = ({
     />
   )
 }
-
-export default AttributeCell

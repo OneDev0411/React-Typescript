@@ -1,15 +1,15 @@
-import { CellProps } from '../../../types'
-import { DateInlineEdit } from '../../inline-edit/Date'
-import CellContainer from '../CellContainer'
+import { CellProps } from '../../../../types'
+import { DateInlineEdit } from '../../../inline-edit/Date'
+import CellContainer from '../../CellContainer'
 
 interface Props {
-  value: Date
+  value: Nullable<Date>
   dateFormat?: string
   readOnly?: boolean
   renderCellContent: (props: CellProps) => React.ReactNode
 }
 
-const DateCell = ({
+export const DateCell = ({
   value,
   dateFormat = 'MMM DD, YYYY',
   readOnly = false,
@@ -28,5 +28,3 @@ const DateCell = ({
     />
   )
 }
-
-export default DateCell

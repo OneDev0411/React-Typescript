@@ -1,6 +1,8 @@
 import { memo, useMemo } from 'react'
 
-import AttributeCell from './types/AttributeCell'
+import { formatPhoneNumber } from '@app/utils/format'
+
+import { AttributeCell } from './types/AttributeCell'
 
 interface Props {
   contact: IContact
@@ -8,24 +10,25 @@ interface Props {
   isRowSelected?: boolean
 }
 
-const PhoneNumberCell = ({ contact, isRowSelected = false }: Props) => {
-  const attributes: IContactAttribute[] = useMemo(
-    () => contact?.attributes || [],
-    [contact?.attributes]
-  )
+export const PhoneNumberCell = memo(
+  ({ contact, isRowSelected = false }: Props) => {
+    const attributes: IContactAttribute[] = useMemo(
+      () => contact?.attributes || [],
+      [contact?.attributes]
+    )
 
-  return (
-    <AttributeCell
-      countEnabled
-      isSelectable
-      attributes={attributes}
-      isRowSelected={isRowSelected}
-      attributeInputPlaceholder="(123) 456 - 7890"
-      attributeDescription="Phone Number"
-      attributeType="phone_number"
-      attributeLabel="Main"
-    />
-  )
-}
-
-export default memo(PhoneNumberCell)
+    return (
+      <AttributeCell
+        countEnabled
+        isSelectable
+        attributes={attributes}
+        isRowSelected={isRowSelected}
+        attributeInputPlaceholder="(123) 456 - 7890"
+        attributeDescription="Phone Number"
+        attributeType="phone_number"
+        attributeLabel="Main"
+        valueFormatter={formatPhoneNumber}
+      />
+    )
+  }
+)

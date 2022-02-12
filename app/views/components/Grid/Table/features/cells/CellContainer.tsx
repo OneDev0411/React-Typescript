@@ -42,7 +42,8 @@ const useStyles = makeStyles(
       width: '100%',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
-      borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`,
+      borderRight: `1px solid ${theme.palette.divider}`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
       whiteSpace: 'nowrap',
       '&.visibleOverflow': {
         overflow: 'visible'

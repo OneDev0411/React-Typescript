@@ -9,15 +9,16 @@ import {
 } from '@mdi/js'
 import cn from 'classnames'
 
+import { useBreakpoint } from '@app/hooks/use-breakpoint'
 import { Table } from 'components/Grid/Table'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import BirthdayCell from 'components/Grid/Table/features/cells/BirthdayCell'
-import EmailCell from 'components/Grid/Table/features/cells/EmailCell'
+import { BirthdayCell } from 'components/Grid/Table/features/cells/BirthdayCell'
+import { EmailCell } from 'components/Grid/Table/features/cells/EmailCell'
 import FlowsCell from 'components/Grid/Table/features/cells/FlowsCell'
-import LastTouchCell from 'components/Grid/Table/features/cells/LastTouchCell'
-import PhoneNumberCell from 'components/Grid/Table/features/cells/PhoneNumberCell'
+import { LastTouchCell } from 'components/Grid/Table/features/cells/LastTouchCell'
+import { PhoneNumberCell } from 'components/Grid/Table/features/cells/PhoneNumberCell'
 import TagsCell from 'components/Grid/Table/features/cells/TagsCell'
-import EditTextCell from 'components/Grid/Table/features/cells/types/EditTextCell'
+import { EditTextCell } from 'components/Grid/Table/features/cells/types/EditTextCell'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import {
   useGridStyles,
@@ -59,10 +60,10 @@ const useCustomGridStyles = makeStyles(theme => ({
 const ContactsList = props => {
   const [state, dispatch] = useGridContext()
 
-  const inlineGridEnabled = true
   const gridClasses = useGridStyles()
   const inlineGridClasses = useInlineGridStyles()
   const customGridClasses = useCustomGridStyles()
+  const breakpoint = useBreakpoint()
 
   const isParkTabActive = props.activeSegment?.id === PARKED_CONTACTS_LIST_ID
   const resetSelectedRow = () => {
@@ -84,15 +85,13 @@ const ContactsList = props => {
       selection: { selectedRowIds, isEntireRowsSelected, excludedRows }
     } = state
 
-    let selectedCount
+    let selectedCount = selectedRowIds.length
 
     if (isEntireRowsSelected) {
       selectedCount = contactCount - excludedRows.length
-    } else if (selectedRowIds.length > 0) {
-      selectedCount = selectedRowIds.length
     }
 
-    return selectedCount
+    return selectedCount > 0
       ? `${selectedCount} of ${contactCount} selected`
       : `${contactCount} Contacts`
   }
@@ -119,15 +118,16 @@ const ContactsList = props => {
     },
     {
       id: 'tag',
-      headerName: () => (
+      headerName: ({ column }) => (
         <ColumnHeaderCell
           title="Tags"
           iconPath={mdiTagMultipleOutline}
-          sortEnabled={false}
+          sortable={column.sortable}
         />
       ),
+      isHidden: ['xs', 'sm'].includes(breakpoint),
+      sortable: false,
       width: '200px',
-      class: 'tags',
       render: ({ row: contact, isRowSelected }) => (
         <TagsCell
           contact={contact}
@@ -142,61 +142,65 @@ const ContactsList = props => {
     },
     {
       id: 'phone',
-      headerName: () => (
+      headerName: ({ column }) => (
         <ColumnHeaderCell
           title="Phone"
           iconPath={mdiPhoneOutline}
-          sortEnabled={false}
+          sortable={column.sortable}
         />
       ),
-      width: '190px',
+      sortable: false,
+      width: '200px',
       render: ({ row: contact, isRowSelected }) => (
         <PhoneNumberCell contact={contact} isRowSelected={isRowSelected} />
       )
     },
     {
       id: 'email',
-      headerName: () => (
+      headerName: ({ column }) => (
         <ColumnHeaderCell
           title="Email"
           iconPath={mdiEmailOutline}
-          sortEnabled={false}
+          sortable={column.sortable}
         />
       ),
-      width: '270px',
+      sortable: false,
+      width: '290px',
       render: ({ row: contact, isRowSelected }) => (
         <EmailCell contact={contact} isRowSelected={isRowSelected} />
       )
     },
     {
       id: 'last_touch',
-      headerName: () => (
+      headerName: ({ column }) => (
         <ColumnHeaderCell
           title="Last Touch"
           iconPath={mdiCalendarOutline}
-          sortEnabled={false}
+          sortable={column.sortable}
           // sortDirection={(
           //   ["last_touch", "-last_touch"].includes(sortOrder) &&
           //   (sortOrder.startsWith("-") ? "desc" : "asc")
           // )}
         />
       ),
-      width: '150px',
+      isHidden: ['xs', 'sm', 'md'].includes(breakpoint),
+      sortable: false,
+      width: '140px',
       render: ({ row: contact, isRowSelected }) => (
         <LastTouchCell contact={contact} isRowSelected={isRowSelected} />
       )
     },
     {
       id: 'flows',
-      headerName: () => (
+      headerName: ({ column }) => (
         <ColumnHeaderCell
           title="Flows"
           iconPath={mdiLightningBoltOutline}
-          sortEnabled={false}
+          sortable={column.sortable}
         />
       ),
       width: '110px',
-      class: 'flows',
+      isHidden: breakpoint !== 'xl',
       render: ({ row: contact, isRowSelected }) => (
         <FlowsCell
           contact={contact}
@@ -211,11 +215,16 @@ const ContactsList = props => {
     },
     {
       id: 'birthday',
-      headerName: () => (
-        <ColumnHeaderCell title="Birthday" iconPath={mdiCake} />
+      headerName: ({ column }) => (
+        <ColumnHeaderCell
+          title="Birthday"
+          iconPath={mdiCake}
+          sortable={column.sortable}
+        />
       ),
       sortable: false,
-      width: '220px',
+      isHidden: breakpoint !== 'xl',
+      width: '180px',
       render: ({ row: contact, isRowSelected }) => (
         <BirthdayCell contact={contact} isRowSelected={isRowSelected} />
       )
@@ -253,7 +262,7 @@ const ContactsList = props => {
         totalRows={props.totalRows}
         loading={getLoading()}
         columns={columns}
-        inlineGridEnabled={inlineGridEnabled}
+        inlineGridEnabled
         rowSize={5}
         LoadingStateComponent={LoadingComponent}
         getTrProps={getRowProps}
@@ -264,11 +273,7 @@ const ContactsList = props => {
           showSelectAll: false
         }}
         classes={{
-          row: cn({
-            [gridClasses.row]: !inlineGridEnabled,
-            [inlineGridClasses.row]: inlineGridEnabled,
-            [customGridClasses.row]: true
-          })
+          row: cn(gridClasses.row, inlineGridClasses.row, customGridClasses.row)
         }}
         infiniteScrolling={{
           onReachEnd: props.onRequestLoadMore,

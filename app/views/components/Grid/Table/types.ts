@@ -44,6 +44,7 @@ export interface TableColumn<Row> {
   sortFn?: (rows: Row[]) => Row[]
   accessor?: (row: Row) => StringOrNumber | null | undefined
   render?: (data: RenderProps<Row>) => React.ReactNode | string
+  isHidden?: boolean
 }
 
 export type GridHookPlugin<Row, Options> = (

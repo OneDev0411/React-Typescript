@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 
-import { alpha, makeStyles, Typography } from '@material-ui/core'
+import { makeStyles, Typography, alpha } from '@material-ui/core'
 import { mdiDotsVertical, mdiSortAscending, mdiSortDescending } from '@mdi/js'
 import cn from 'classnames'
 
@@ -28,19 +28,21 @@ const useStyles = makeStyles(
       }
     },
     iconContainer: {
-      width: theme.spacing(4),
+      width: '32px',
+      height: '100%',
       fontSize: theme.spacing(0.75),
-      color: `${theme.palette.grey[500]}`,
+      color: theme.palette.grey[500],
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'end'
+      justifyContent: 'flex-end'
     },
     titleContainer: {
       display: 'flex',
       flex: '1 0 auto',
       alignItems: 'center',
-      color: `${theme.palette.grey[700]}`,
+      color: theme.palette.grey[700],
       padding: theme.spacing(0, 1),
+      height: '100%',
       letterSpacing: '0.15px'
     },
     sortActionContainer: {
@@ -80,9 +82,9 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  title?: string
+  title: string
   iconPath?: string
-  sortEnabled?: boolean
+  sortable?: boolean
   sortDirection?: 'asc' | 'desc'
   isPrimary?: boolean
 }
@@ -90,16 +92,51 @@ interface Props {
 const ColumnHeaderCell = ({
   title,
   iconPath,
-  sortEnabled = false,
   sortDirection,
-  isPrimary = false
+  isPrimary = false,
+  sortable = false
 }: Props) => {
   const classes = useStyles()
+
+  let columnIcon: Nullable<React.ReactNode> = null
+  let sortButton: Nullable<React.ReactNode> = null
 
   const [isHovered, setIsHovered] = useState(false)
 
   const onHoverIn = () => setIsHovered(true)
   const onHoverOut = () => setIsHovered(false)
+
+  if (iconPath) {
+    columnIcon = (
+      <div
+        className={cn(classes.sortActionContainer, {
+          hovered: isHovered
+        })}
+      >
+        <div
+          className={cn(classes.sortIconBg, {
+            cellHovered: isHovered
+          })}
+        >
+          <SvgIcon size={muiIconSizes.small} path={iconPath} />
+        </div>
+      </div>
+    )
+  }
+
+  if (sortable) {
+    let sortIcon: string = mdiDotsVertical
+
+    if (sortDirection) {
+      sortIcon = sortDirection === 'asc' ? mdiSortAscending : mdiSortDescending
+    }
+
+    sortButton = (
+      <div className={classes.sortActionContainer}>
+        <SvgIcon size={muiIconSizes.small} path={sortIcon} />
+      </div>
+    )
+  }
 
   return (
     <div
@@ -109,38 +146,11 @@ const ColumnHeaderCell = ({
       onMouseEnter={onHoverIn}
       onMouseLeave={onHoverOut}
     >
-      {iconPath && (
-        <div className={classes.iconContainer}>
-          <SvgIcon size={muiIconSizes.small} path={iconPath} />
-        </div>
-      )}
+      {columnIcon}
       <div className={classes.titleContainer}>
         <Typography variant="body2">{title}</Typography>
       </div>
-      {sortEnabled && (
-        <div
-          className={cn(classes.sortActionContainer, {
-            hovered: isHovered
-          })}
-        >
-          <div
-            className={cn(classes.sortIconBg, {
-              cellHovered: isHovered
-            })}
-          >
-            <SvgIcon
-              size={muiIconSizes.small}
-              path={
-                !sortDirection
-                  ? mdiDotsVertical
-                  : sortDirection === 'asc'
-                  ? mdiSortAscending
-                  : mdiSortDescending
-              }
-            />
-          </div>
-        </div>
-      )}
+      {sortButton}
     </div>
   )
 }
