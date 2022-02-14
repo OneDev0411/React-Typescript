@@ -1,6 +1,8 @@
-import { ListingsState, reducer } from './index'
-import { Actions } from '../actions'
 import { compactListing } from 'fixtures/listing/compact_listing'
+
+import { Actions } from '../actions'
+
+import { ListingsState, reducer } from './index'
 
 describe('reducer', () => {
   let initialState: ListingsState
@@ -62,6 +64,7 @@ describe('reducer', () => {
         }
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -92,6 +95,7 @@ describe('reducer', () => {
         }
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -126,6 +130,7 @@ describe('reducer', () => {
         ]
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -160,6 +165,7 @@ describe('reducer', () => {
         ]
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -189,6 +195,7 @@ describe('reducer', () => {
         ]
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -211,6 +218,7 @@ describe('reducer', () => {
         bounds: { ne: { lat: 1, lng: 2 }, sw: { lat: 3, lng: 4 } }
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -240,6 +248,7 @@ describe('reducer', () => {
         }
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -259,6 +268,7 @@ describe('reducer', () => {
         filters: {}
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -267,6 +277,7 @@ describe('reducer', () => {
       minimum_price: 900000,
       property_types: ['Commercial']
     }
+
     const action: Actions = {
       type: 'UPDATE_FILTERS',
       payload: {
@@ -289,6 +300,7 @@ describe('reducer', () => {
         }
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -297,6 +309,7 @@ describe('reducer', () => {
       minimum_price: 900000,
       property_types: ['Commercial']
     }
+
     const action: Actions = {
       type: 'UPDATE_FILTERS',
       payload: {
@@ -320,6 +333,7 @@ describe('reducer', () => {
         }
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -345,6 +359,7 @@ describe('reducer', () => {
         }
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -363,6 +378,7 @@ describe('reducer', () => {
       ...initialState,
       map: { zoom: 12, center: { lat: 1, lng: 2 } }
     }
+
     expect(actual).toEqual(expected)
     expect(actual.pinMarker).toBeUndefined()
   })
@@ -386,11 +402,13 @@ describe('reducer', () => {
       },
       pinMarker: { lat: 4.2, lng: 5.6 }
     }
+
     expect(actual).toEqual(expected)
   })
 
   it('should remove pin marker when map marker was set before', () => {
     initialState.pinMarker = { lat: 4.2, lng: 5.6 }
+
     const action: Actions = {
       type: 'REMOVE_PIN_MARKER',
       payload: {}
@@ -401,6 +419,7 @@ describe('reducer', () => {
       ...initialState,
       pinMarker: undefined
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -415,6 +434,7 @@ describe('reducer', () => {
       ...initialState,
       pinMarker: undefined
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -431,6 +451,7 @@ describe('reducer', () => {
       ...initialState,
       isLoading: true
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -448,6 +469,7 @@ describe('reducer', () => {
         drawing: []
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -458,6 +480,7 @@ describe('reducer', () => {
       { lat: 5, lng: 6 },
       { lat: 1, lng: 2 }
     ]
+
     const action: Actions = {
       type: 'REMOVE_MAP_DRAWING',
       payload: {}
@@ -471,6 +494,7 @@ describe('reducer', () => {
         drawing: []
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })

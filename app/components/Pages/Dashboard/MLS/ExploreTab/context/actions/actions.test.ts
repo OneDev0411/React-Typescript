@@ -1,4 +1,5 @@
 import { compactListing } from 'fixtures/listing/compact_listing'
+
 import { Sort } from '../../../types'
 
 import {
@@ -45,6 +46,7 @@ describe('setListings actions', () => {
         }
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -57,6 +59,7 @@ describe('setListings actions', () => {
         info
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -71,6 +74,7 @@ describe('toggleListingFavoriteState actions', () => {
         id
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -88,6 +92,7 @@ describe('setMapDrawing actions', () => {
         points
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -108,6 +113,7 @@ describe('updateFilters actions', () => {
         filters
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -119,6 +125,7 @@ describe('updateFilters actions', () => {
         filters: {}
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -136,6 +143,7 @@ describe('changeSort actions', () => {
         sort
       }
     }
+
     expect(actual).toEqual(expected)
   })
   it('should work with descending', () => {
@@ -150,6 +158,7 @@ describe('changeSort actions', () => {
         sort
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -172,6 +181,7 @@ describe('setMapBounds actions', () => {
         bounds
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -190,6 +200,7 @@ describe('setMapLocation actions', () => {
         setPinMarker
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -206,6 +217,7 @@ describe('setMapLocation actions', () => {
         setPinMarker
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -217,6 +229,7 @@ describe('removePinMarker actions', () => {
       type: 'REMOVE_PIN_MARKER',
       payload: {}
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -230,6 +243,7 @@ describe('setIsLoading actions', () => {
         isLoading: true
       }
     }
+
     expect(actual).toEqual(expected)
   })
   it('should work when loading is false', () => {
@@ -240,6 +254,7 @@ describe('setIsLoading actions', () => {
         isLoading: true
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -251,6 +266,7 @@ describe('removeMapDrawing actions', () => {
       type: 'REMOVE_MAP_DRAWING',
       payload: {}
     }
+
     expect(actual).toEqual(expected)
   })
 })

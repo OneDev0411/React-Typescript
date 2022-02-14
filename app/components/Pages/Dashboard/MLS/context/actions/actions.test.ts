@@ -14,6 +14,7 @@ describe('changeListingHoverState actions', () => {
         id: null
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -25,6 +26,7 @@ describe('changeListingHoverState actions', () => {
         id: 'some id string'
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -38,6 +40,7 @@ describe('changeListingClickedState actions', () => {
         id: null
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -49,6 +52,7 @@ describe('changeListingClickedState actions', () => {
         id: 'some id string'
       }
     }
+
     expect(actual).toEqual(expected)
   })
 })
@@ -60,6 +64,7 @@ describe('clearListingUiStates actions', () => {
       type: 'CLEAR_LISTING_UI_STATES',
       payload: {}
     }
+
     expect(actual).toEqual(expected)
   })
 })

@@ -1,6 +1,7 @@
-import { reducer } from './index'
 import { IListingUIStates } from '../../types'
 import { Actions } from '../actions'
+
+import { reducer } from './index'
 
 describe('reducer', () => {
   let initialState: IListingUIStates
@@ -25,6 +26,7 @@ describe('reducer', () => {
       ...initialState,
       hover: 'some id string'
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -43,6 +45,7 @@ describe('reducer', () => {
       ...initialState,
       hover: null
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -59,6 +62,7 @@ describe('reducer', () => {
       ...initialState,
       click: 'some id string'
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -77,6 +81,7 @@ describe('reducer', () => {
       ...initialState,
       click: null
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -94,6 +99,7 @@ describe('reducer', () => {
       hover: null,
       click: null
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -111,6 +117,7 @@ describe('reducer', () => {
       hover: null,
       click: null
     }
+
     expect(actual).toEqual(expected)
   })
 })
