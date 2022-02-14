@@ -1,8 +1,7 @@
 import { useRef } from 'react'
 
-import { Helmet } from 'react-helmet'
 import { WithRouterProps } from 'react-router'
-import { useEffectOnce } from 'react-use'
+import { useEffectOnce, useTitle } from 'react-use'
 
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
 import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
@@ -15,6 +14,8 @@ import { ViewAs } from 'components/ViewAs'
 import { useStyles as useCommonStyles } from './use-styles'
 
 export default function CalendarPage(props: WithRouterProps) {
+  useTitle('Calendar | Rechat')
+
   const classes = useCommonStyles()
   const actionRef = useRef<ActionRef>(null)
   const [, dispatch] = useGlobalActionContext()
@@ -38,9 +39,6 @@ export default function CalendarPage(props: WithRouterProps) {
 
   return (
     <>
-      <Helmet>
-        <title>Calendar | Rechat</title>
-      </Helmet>
       <div className={classes.container}>
         <GlobalHeader title="Calendar" noPadding>
           <ViewAs />
