@@ -35,7 +35,7 @@ describe('BulkEmailComposeForm', () => {
   // TypeError: Network request failed
   //   at node_modules/whatwg-fetch/dist/fetch.umd.js:535:18
   test.skip('Deal roles are suggested if deal prop is passed', async () => {
-    const $ = render(
+    render(
       <TestBed
         reduxState={{
           contacts: {
