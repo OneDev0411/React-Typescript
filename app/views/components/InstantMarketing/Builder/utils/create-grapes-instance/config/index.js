@@ -38,7 +38,12 @@ export default {
     outline: none;
   }`,
   height: '100%',
-  allowScripts: true,
+  parser: {
+    optionsHtml: {
+      allowScripts: true,
+      allowUnsafeAttr: true
+    }
+  },
   styleManager: {
     textNoElement: '',
 

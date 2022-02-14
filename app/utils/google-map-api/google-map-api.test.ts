@@ -110,6 +110,7 @@ describe('loadMapLibraries function', () => {
 })
 
 describe('isMapLibrariesLoaded function', () => {
+  // eslint-disable-next-line no-global-assign
   window = {
     google: {
       maps: {

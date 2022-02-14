@@ -41,7 +41,7 @@ export const allIds = (state = [], action) => {
     case TOGGLE_FAVORITE:
     case FETCH_LISTINGS_SUCCESS:
     case CLEAR_ALERT_NOTIFICATION:
-      return action.response.result
+      return action.response?.result || []
     default:
       return state
   }
@@ -53,7 +53,7 @@ export const info = (state = { total: 0, count: 0 }, action) => {
     case FETCH_LISTINGS_SUCCESS:
       return {
         ...state,
-        ...action.response.info
+        ...(action.response?.info || {})
       }
     default:
       return state

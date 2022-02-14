@@ -2,9 +2,9 @@ import React from 'react'
 
 import { fireEvent, render } from '@testing-library/react'
 
-import templateInstance from 'fixtures/marketing-center/template-instance.json'
-import user from 'fixtures/users/agent.json'
-import { createEmailCampaign as mockCreateEmailCampaign } from 'models/email/create-email-campaign'
+// import templateInstance from 'fixtures/marketing-center/template-instance.json'
+// import user from 'fixtures/users/agent.json'
+// import { createEmailCampaign as mockCreateEmailCampaign } from 'models/email/create-email-campaign'
 import { updateEmailCampaign as mockUpdateEmailCampaign } from 'models/email/update-email-campaign'
 
 // eslint-disable-next-line import/no-unresolved
@@ -20,6 +20,7 @@ jest.mock('models/email/update-email-campaign')
 jest.mock('models/contacts/search-contacts')
 jest.mock('models/contacts/get-contacts-tags')
 jest.mock('models/filter-segments/get-segments')
+jest.mock('use-dropbox-chooser')
 
 describe('BulkEmailComposeForm', () => {
   /**

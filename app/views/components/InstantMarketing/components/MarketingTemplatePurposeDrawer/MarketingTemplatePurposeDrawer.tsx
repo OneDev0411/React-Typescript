@@ -42,24 +42,25 @@ function MarketingTemplatePurposeDrawer({
             <MarketingTemplatePurposeOption
               onClick={() => onPurposeSelect('ForMySelf')}
               icon={mdiAccountOutline}
-              title="Create for myself"
-              description="Only you will be able to edit or use this template."
+              title="Schedule or Send"
+              // TODO: Display a proper description when the new team switcher has merged and the current user is an admin that
+              // sees the option on behalf of another person.
+              description="Create to schedule or send. Best when sending or sharing on behalf of yourself."
             />
             {builderActions.shouldShowSaveAsTemplateButton && (
               <MarketingTemplatePurposeOption
                 onClick={() => onPurposeSelect('ForOtherAgents')}
                 icon={mdiAccountGroupOutline}
-                title="Create for other agents"
-                description="Agents of your team will be able to edit or use this template."
+                title="Add to Marketing Center"
+                description="Create a template and select users to add it to their Marketing Center so they can edit or use it."
               />
             )}
             {builderActions.shouldShowCreateSuperCampaignButton && (
               <MarketingTemplatePurposeOption
                 onClick={() => onPurposeSelect('ForCampaigns')}
                 icon={mdiNewspaperVariantMultipleOutline}
-                title="Create for campaigns"
-                description="You can send it on behalf of other agents. This template can be
-                copied by agents of your team."
+                title="Create a Campaign"
+                description="Create a Campaign to schedule or send on behalf of other users. Best for when you’d like to schedule or send on behalf of more than one user."
               />
             )}
           </MenuList>
