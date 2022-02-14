@@ -1,12 +1,13 @@
 import { renderHook, act, cleanup } from '@testing-library/react-hooks'
 import nock from 'nock'
+import { ParseResult } from 'papaparse'
 
 import { ReactQueryTestBed, queryClient } from 'tests/unit/ReactQueryTestBed'
+import { TestBed } from 'tests/unit/TestBed'
+
+import { mockAttributeDefs } from '../../tests/helpers/mock-get-attribute-def'
 
 import { useAttributeMap } from '.'
-import { ParseResult } from 'papaparse'
-import { TestBed } from 'tests/unit/TestBed'
-import { mockAttributeDefs } from '../../tests/helpers/mock-get-attribute-def'
 
 jest.mock('@app/models/contacts/get-attribute-defs', () => {
   const originalModule = jest.requireActual(
@@ -40,8 +41,8 @@ describe('test Csv Import auto mapping', () => {
         data: {
           'First Name': {
             attribute: {
-              type: "attribute_def",
-              attribute_def: "a90a7cef-a080-44e3-8c13-eb33da4c0465",
+              type: 'attribute_def',
+              attribute_def: 'a90a7cef-a080-44e3-8c13-eb33da4c0465'
             },
             rate: 0.9
           }
@@ -49,13 +50,15 @@ describe('test Csv Import auto mapping', () => {
       })
 
     const { result, waitForNextUpdate } = renderHook(
-      () => useAttributeMap(csv), {
-      wrapper: ({ children }) => (
-        <TestBed>
-          <ReactQueryTestBed>{children}</ReactQueryTestBed>
-        </TestBed>
-      )
-    })
+      () => useAttributeMap(csv),
+      {
+        wrapper: ({ children }) => (
+          <TestBed>
+            <ReactQueryTestBed>{children}</ReactQueryTestBed>
+          </TestBed>
+        )
+      }
+    )
 
     await waitForNextUpdate()
     await waitForNextUpdate()
@@ -75,8 +78,8 @@ describe('test Csv Import auto mapping', () => {
         data: {
           'First Name': {
             attribute: {
-              type: "attribute_def",
-              attribute_def: "a90a7cef-a080-44e3-8c13-eb33da4c0465",
+              type: 'attribute_def',
+              attribute_def: 'a90a7cef-a080-44e3-8c13-eb33da4c0465'
             },
             rate: 0.2
           }
@@ -84,13 +87,15 @@ describe('test Csv Import auto mapping', () => {
       })
 
     const { result, waitForNextUpdate } = renderHook(
-      () => useAttributeMap(csv), {
-      wrapper: ({ children }) => (
-        <TestBed>
-          <ReactQueryTestBed>{children}</ReactQueryTestBed>
-        </TestBed>
-      )
-    })
+      () => useAttributeMap(csv),
+      {
+        wrapper: ({ children }) => (
+          <TestBed>
+            <ReactQueryTestBed>{children}</ReactQueryTestBed>
+          </TestBed>
+        )
+      }
+    )
 
     await waitForNextUpdate()
 
@@ -98,28 +103,28 @@ describe('test Csv Import auto mapping', () => {
   })
 
   it('shoud map the column after auto mapping', async () => {
-    nock(/.*/)
-      .post('/csv/similarity')
-      .reply(200, {
-        data: {}
-      })
+    nock(/.*/).post('/csv/similarity').reply(200, {
+      data: {}
+    })
 
     const { result, waitForNextUpdate } = renderHook(
-      () => useAttributeMap(csv), {
-      wrapper: ({ children }) => (
-        <TestBed>
-          <ReactQueryTestBed>{children}</ReactQueryTestBed>
-        </TestBed>
-      )
-    })
+      () => useAttributeMap(csv),
+      {
+        wrapper: ({ children }) => (
+          <TestBed>
+            <ReactQueryTestBed>{children}</ReactQueryTestBed>
+          </TestBed>
+        )
+      }
+    )
 
     await waitForNextUpdate()
 
     act(() => {
       result.current[1]({
         'First Name': {
-          type: "attribute_def",
-          attribute_def: "a90a7cef-a080-44e3-8c13-eb33da4c0465",
+          type: 'attribute_def',
+          attribute_def: 'a90a7cef-a080-44e3-8c13-eb33da4c0465',
           isPartner: false,
           index: 0
         }
@@ -128,34 +133,34 @@ describe('test Csv Import auto mapping', () => {
 
     expect(result.current[0]).toMatchObject({
       'First Name': {
-        type: "attribute_def",
-        attribute_def: "a90a7cef-a080-44e3-8c13-eb33da4c0465",
+        type: 'attribute_def',
+        attribute_def: 'a90a7cef-a080-44e3-8c13-eb33da4c0465'
       }
     })
   })
 
   it('should return status when mapping', async () => {
-    nock(/.*/)
-      .post('/csv/similarity')
-      .reply(200, {
-        data: {}
-      })
+    nock(/.*/).post('/csv/similarity').reply(200, {
+      data: {}
+    })
 
     const { result, waitForNextUpdate } = renderHook(
-      () => useAttributeMap(csv), {
-      wrapper: ({ children }) => (
-        <TestBed>
-          <ReactQueryTestBed>{children}</ReactQueryTestBed>
-        </TestBed>
-      )
-    })
+      () => useAttributeMap(csv),
+      {
+        wrapper: ({ children }) => (
+          <TestBed>
+            <ReactQueryTestBed>{children}</ReactQueryTestBed>
+          </TestBed>
+        )
+      }
+    )
 
     await waitForNextUpdate()
 
     expect(result.current[2]).toBe('doing')
 
     await waitForNextUpdate()
-    
+
     expect(result.current[2]).toBe('done')
   })
 })
