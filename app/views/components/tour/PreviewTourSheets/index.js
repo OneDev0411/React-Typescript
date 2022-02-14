@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import { Button } from '@material-ui/core'
+import { Button, Tooltip } from '@material-ui/core'
 import PropTypes from 'prop-types'
 
 import { TourSheets } from '../TourSheets'
@@ -36,13 +36,15 @@ export class PreviewTourSheets extends React.Component {
   render() {
     return (
       <Fragment>
-        <Button
-          disabled={this.props.disabled}
-          onClick={this.handleOpen}
-          variant="outlined"
-        >
-          {this.props.title}
-        </Button>
+        <Tooltip placement="top" title="Preview and print tour sheets">
+          <Button
+            disabled={this.props.disabled}
+            onClick={this.handleOpen}
+            variant="outlined"
+          >
+            {this.props.title}
+          </Button>
+        </Tooltip>
 
         {this.state.isOpen && (
           <TourSheets
