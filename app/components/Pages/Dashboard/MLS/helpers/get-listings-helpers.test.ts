@@ -1,5 +1,6 @@
 import { ListingSearchOptions } from '../ExploreTab/context/reducers'
 import { Sort } from '../types'
+
 import {
   createValertQueryString,
   createValertOptions
@@ -48,6 +49,7 @@ describe('createValertQueryString', () => {
       brand,
       sort
     )
+
     expect(actual).toEqual(expected)
   })
 
@@ -63,6 +65,7 @@ describe('createValertQueryString', () => {
       brand,
       sort
     )
+
     expect(actual).toEqual(expected)
   })
 
@@ -75,6 +78,7 @@ describe('createValertQueryString', () => {
       null,
       sort
     )
+
     expect(actual).toEqual(expected)
   })
 
@@ -90,6 +94,7 @@ describe('createValertQueryString', () => {
       brand,
       sort
     )
+
     expect(actual).toEqual(expected)
   })
 
@@ -106,6 +111,7 @@ describe('createValertQueryString', () => {
       brand,
       sort
     )
+
     expect(actual).toEqual(expected)
   })
 
@@ -114,6 +120,7 @@ describe('createValertQueryString', () => {
       index: 'builtYear',
       ascending: true
     }
+
     const expected = '?order_by[]=%2Byear_built'
 
     const actual = createValertQueryString(
@@ -122,6 +129,7 @@ describe('createValertQueryString', () => {
       null,
       sort
     )
+
     expect(actual).toEqual(expected)
   })
 
@@ -130,6 +138,7 @@ describe('createValertQueryString', () => {
       index: 'builtYear',
       ascending: false
     }
+
     const expected = '?order_by[]=-year_built'
 
     const actual = createValertQueryString(
@@ -138,6 +147,7 @@ describe('createValertQueryString', () => {
       null,
       sort
     )
+
     expect(actual).toEqual(expected)
   })
 
@@ -146,6 +156,7 @@ describe('createValertQueryString', () => {
       index: 'beds',
       ascending: false
     }
+
     const expected = `?order_by[]=-${parseToValertSort('beds')}`
 
     const actual = createValertQueryString(
@@ -154,6 +165,7 @@ describe('createValertQueryString', () => {
       null,
       sort
     )
+
     expect(actual).toEqual(expected)
   })
 
@@ -162,6 +174,7 @@ describe('createValertQueryString', () => {
       index: 'baths',
       ascending: false
     }
+
     const expected = `?order_by[]=-${parseToValertSort('baths')}`
 
     const actual = createValertQueryString(
@@ -170,6 +183,7 @@ describe('createValertQueryString', () => {
       null,
       sort
     )
+
     expect(actual).toEqual(expected)
   })
 })
@@ -274,6 +288,7 @@ describe('createValertOptions', () => {
     ]
 
     const actual = createValertOptions(search, limit)
+
     expect(actual.points).toEqual(expected)
   })
 
@@ -304,6 +319,7 @@ describe('createValertOptions', () => {
     ]
 
     const actual = createValertOptions(search, limit)
+
     expect(actual.points).toEqual(expected)
   })
 
@@ -311,6 +327,7 @@ describe('createValertOptions', () => {
     search.filters.postal_codes = ['12345']
 
     const actual = createValertOptions(search, limit)
+
     expect(actual.points).toBeUndefined()
   })
 
@@ -332,24 +349,31 @@ describe('createValertOptions', () => {
     search.filters.postal_codes = ['12345']
 
     const actual = createValertOptions(search, limit)
+
     expect(actual.points).toBeUndefined()
   })
 
   it('should return office  if it does exist', () => {
     search.office = 'xofficenumber'
+
     const actual = createValertOptions(search, limit)
+
     expect(actual.offices).toStrictEqual(['xofficenumber'])
   })
 
   it('should not return office if it does not exist', () => {
     search.office = undefined
+
     const actual = createValertOptions(search, limit)
+
     expect(actual.offices).toBeUndefined()
   })
 
   it('should return filters', () => {
     limit = 12
+
     const actual = createValertOptions(search, limit)
+
     expect(actual.limit).toBe(12)
   })
 
