@@ -1,4 +1,3 @@
-import React from 'react'
 import { ReactNode } from 'react'
 
 import { fireEvent, render, RenderResult } from '@testing-library/react'

@@ -1,6 +1,9 @@
 import { renderHook, act } from '@testing-library/react-hooks'
+
 import { ReactQueryTestBed, queryClient } from 'tests/unit/ReactQueryTestBed'
+
 import { mockAttributeDefs } from '../../tests/helpers/mock-get-attribute-def'
+
 import { useAttributeLabel } from '.'
 
 jest.mock('@app/models/contacts/get-attribute-defs', () => {
@@ -22,9 +25,11 @@ describe('test Csv Import attribute label', () => {
 
   it('should return correct label of the attributes', async () => {
     const { result, waitForNextUpdate } = renderHook(
-      () => useAttributeLabel(), {
-      wrapper: ReactQueryTestBed
-    })
+      () => useAttributeLabel(),
+      {
+        wrapper: ReactQueryTestBed
+      }
+    )
 
     await waitForNextUpdate()
 
@@ -49,9 +54,11 @@ describe('test Csv Import attribute label', () => {
 
   it('should return correct label of the spouse attribute', async () => {
     const { result, waitForNextUpdate } = renderHook(
-      () => useAttributeLabel(), {
-      wrapper: ReactQueryTestBed
-    })
+      () => useAttributeLabel(),
+      {
+        wrapper: ReactQueryTestBed
+      }
+    )
 
     await waitForNextUpdate()
 
@@ -68,9 +75,11 @@ describe('test Csv Import attribute label', () => {
 
   it('should return correct label of the indexed attribute', async () => {
     const { result, waitForNextUpdate } = renderHook(
-      () => useAttributeLabel(), {
-      wrapper: ReactQueryTestBed
-    })
+      () => useAttributeLabel(),
+      {
+        wrapper: ReactQueryTestBed
+      }
+    )
 
     await waitForNextUpdate()
 
@@ -88,9 +97,11 @@ describe('test Csv Import attribute label', () => {
 
   it('should return correct label of the indexed spouse attribute', async () => {
     const { result, waitForNextUpdate } = renderHook(
-      () => useAttributeLabel(), {
-      wrapper: ReactQueryTestBed
-    })
+      () => useAttributeLabel(),
+      {
+        wrapper: ReactQueryTestBed
+      }
+    )
 
     await waitForNextUpdate()
 
