@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 type PrintLayout = 'landscape' | 'portrait'
 
-function usePrintLayout(layout: PrintLayout) {
+function usePrintLayout(layout: PrintLayout): void {
   useEffect(() => {
     if (!document) {
       return
@@ -20,8 +20,6 @@ function usePrintLayout(layout: PrintLayout) {
       printLayoutStyleElement.remove()
     }
   }, [layout])
-
-  return {}
 }
 
 export default usePrintLayout
