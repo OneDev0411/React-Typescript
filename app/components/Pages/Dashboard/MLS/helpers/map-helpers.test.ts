@@ -193,7 +193,7 @@ describe('estimateMapZoom', () => {
   })
 
   it('should estimate map width when mapWidth parameter is undefined', () => {
-    window.innerWidth = 1650
+    global.innerWidth = 1650
 
     const actual = estimateMapZoom(bounds, offset, undefined, 650)
 
@@ -201,7 +201,7 @@ describe('estimateMapZoom', () => {
   })
 
   it('should estimate map height when mapHeight parameter is undefined', () => {
-    window.innerHeight = 1650
+    global.innerHeight = 1650
 
     const actual = estimateMapZoom(bounds, offset, 650, undefined)
 
@@ -209,8 +209,8 @@ describe('estimateMapZoom', () => {
   })
 
   it('should estimate map width/height when mapWidth and mapHeight are undefined', () => {
-    window.innerWidth = 2650
-    window.innerHeight = 2650
+    global.innerWidth = 2650
+    global.innerHeight = 2650
 
     const actual = estimateMapZoom(bounds, offset, undefined, undefined)
 
