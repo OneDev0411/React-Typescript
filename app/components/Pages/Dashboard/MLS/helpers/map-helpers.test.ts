@@ -1,6 +1,8 @@
 import { Theme } from '@material-ui/core'
 import { Maps } from 'google-map-react'
+
 import { PLACE_ZOOM_OFFSETS } from '../constants'
+
 import {
   createMapOptions,
   createMapPolygonOptions,
@@ -152,14 +154,14 @@ describe('getPlaceZoomOffset', () => {
   it('should return correct offset when types has locality', () => {
     const types = ['country', 'locality', 'something else']
     const actual = getPlaceZoomOffset(types)
-    const expected = PLACE_ZOOM_OFFSETS['locality']
+    const expected = PLACE_ZOOM_OFFSETS.locality
 
     expect(actual).toEqual(expected)
   })
   it('should return correct offset when types has locality and administrative_area_level_1', () => {
     const types = ['administrative_area_level_1', 'locality', 'something else']
     const actual = getPlaceZoomOffset(types)
-    const expected = PLACE_ZOOM_OFFSETS['administrative_area_level_1']
+    const expected = PLACE_ZOOM_OFFSETS.administrative_area_level_1
 
     expect(actual).toEqual(expected)
   })
@@ -175,8 +177,6 @@ describe('getPlaceZoomOffset', () => {
 describe('estimateMapZoom', () => {
   let bounds: ICompactBounds
   let offset: Optional<number>
-  let mapWidth: Optional<number>
-  let mapHeight: Optional<number>
 
   beforeEach(() => {
     bounds = {
@@ -190,12 +190,11 @@ describe('estimateMapZoom', () => {
       }
     }
     offset = undefined
-    mapWidth = undefined
-    mapHeight = undefined
   })
 
   it('should estimate map width when mapWidth parameter is undefined', () => {
     window.innerWidth = 1650
+
     const actual = estimateMapZoom(bounds, offset, undefined, 650)
 
     expect(actual).toEqual(7)
@@ -203,6 +202,7 @@ describe('estimateMapZoom', () => {
 
   it('should estimate map height when mapHeight parameter is undefined', () => {
     window.innerHeight = 1650
+
     const actual = estimateMapZoom(bounds, offset, 650, undefined)
 
     expect(actual).toEqual(7)
@@ -211,6 +211,7 @@ describe('estimateMapZoom', () => {
   it('should estimate map width/height when mapWidth and mapHeight are undefined', () => {
     window.innerWidth = 2650
     window.innerHeight = 2650
+
     const actual = estimateMapZoom(bounds, offset, undefined, undefined)
 
     expect(actual).toEqual(8)
@@ -227,5 +228,4 @@ describe('estimateMapZoom', () => {
 
     expect(actual).toEqual(9)
   })
-
 })
