@@ -13,6 +13,7 @@ interface Props {
   attribute_type?: string
   attribute_label?: string
   valueFormatter?: (value: string) => string
+  width: number | string
 }
 
 const useStyles = makeStyles(
@@ -51,7 +52,8 @@ export const AttributeCell = ({
   countEnabled = false,
   attribute_type,
   attribute_label = 'Main',
-  valueFormatter
+  valueFormatter,
+  width
 }: Props) => {
   const classes = useStyles()
 
@@ -122,5 +124,5 @@ export const AttributeCell = ({
     )
   }
 
-  return <CellContainer renderCellContent={renderCellContent} />
+  return <CellContainer renderCellContent={renderCellContent} width={width} />
 }

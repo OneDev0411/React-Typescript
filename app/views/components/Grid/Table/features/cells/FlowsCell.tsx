@@ -35,13 +35,15 @@ interface Props {
   callback: () => void
   flowsCount: number
   isRowSelected?: boolean
+  width: number | string
 }
 
 const FlowsCell = ({
   contact,
   callback,
   flowsCount,
-  isRowSelected = false
+  isRowSelected = false,
+  width
 }: Props) => {
   const classes = useStyles()
 
@@ -73,7 +75,7 @@ const FlowsCell = ({
     )
   }
 
-  return <CellContainer renderCellContent={renderCellContent} />
+  return <CellContainer renderCellContent={renderCellContent} width={width} />
 }
 
 export default FlowsCell

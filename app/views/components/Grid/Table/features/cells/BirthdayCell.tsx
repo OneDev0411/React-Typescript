@@ -132,9 +132,10 @@ interface Props {
   contact: IContact
   onSave?: (e: any) => void
   isRowSelected?: boolean
+  width: number | string
 }
 
-const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
+const BirthdayCell = ({ contact, isRowSelected = false, width }: Props) => {
   const classes = useStyles()
 
   const today: Date = useMemo(getDate, [])
@@ -196,7 +197,7 @@ const BirthdayCell = ({ contact, isRowSelected = false }: Props) => {
     )
   }
 
-  return <CellContainer renderCellContent={renderCellContent} />
+  return <CellContainer renderCellContent={renderCellContent} width={width} />
 }
 
 export default memo(BirthdayCell)

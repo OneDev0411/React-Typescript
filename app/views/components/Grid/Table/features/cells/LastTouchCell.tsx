@@ -43,9 +43,14 @@ interface Props {
   contact: IContact
   onSave?: (e: any) => void
   isRowSelected?: boolean
+  width: number | string
 }
 
-export const LastTouchCell = ({ contact, isRowSelected = false }: Props) => {
+export const LastTouchCell = ({
+  contact,
+  isRowSelected = false,
+  width
+}: Props) => {
   const classes = useStyles()
 
   const renderCellContent = ({
@@ -101,5 +106,5 @@ export const LastTouchCell = ({ contact, isRowSelected = false }: Props) => {
     return content()
   }
 
-  return <CellContainer renderCellContent={renderCellContent} />
+  return <CellContainer renderCellContent={renderCellContent} width={width} />
 }

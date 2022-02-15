@@ -63,6 +63,7 @@ interface Props {
   hasAttributeFilters: boolean
   reloadContacts: () => void
   isRowSelected: boolean
+  width: number | string
 }
 
 function getCurrentTags(tags, showingTags) {
@@ -83,7 +84,8 @@ const TagsCell = ({
   hasAttributeFilters,
   isParkTabActive,
   reloadContacts,
-  isRowSelected
+  isRowSelected,
+  width
 }: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -174,7 +176,9 @@ const TagsCell = ({
 
   //----
 
-  return <CellContainer renderCellContent={renderPopOverTagSelector} />
+  return (
+    <CellContainer renderCellContent={renderPopOverTagSelector} width={width} />
+  )
 }
 
 export default memo(TagsCell)

@@ -11,25 +11,26 @@ interface Props {
   text?: string
   renderCellContent: (props: CellProps) => React.ReactNode
   onCellSelect?: (e) => void
+  width: number | string
 }
 
 //----
 
 const useStyles = makeStyles(
   theme => ({
-    container: {
+    container: ({ width }: { width: number | string }) => ({
       position: 'relative',
       display: 'flex',
       alignItems: 'center',
       height: '100%',
-      width: '100%',
+      width,
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`,
       borderBottom: `1px solid ${theme.palette.divider}`,
       whiteSpace: 'nowrap',
       paddingLeft: theme.spacing(2)
-    },
+    }),
     inlineViewContainer: {
       display: 'flex',
       overflow: 'hidden',
@@ -54,8 +55,8 @@ const useStyles = makeStyles(
 
 //----
 
-const CellContainer = ({ renderCellContent }: Props) => {
-  const classes = useStyles()
+const CellContainer = ({ renderCellContent, width }: Props) => {
+  const classes = useStyles({ width })
 
   const [isHovered, setIsHovered] = useState(false)
   const isSelected = false
