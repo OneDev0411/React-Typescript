@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
 
 import { Button } from '@material-ui/core'
+import { mdiRotateRight } from '@mdi/js'
 import { isEqual } from 'lodash'
 import { useLocalStorage } from 'react-use'
 
 import { Filters as BaseFilters } from '@app/views/components/Filters'
 import FilterButton from '@app/views/components/Filters/FilterButton'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import {
   PROPERTIES_FILTERS_STORAGE_KEY,
@@ -187,6 +190,9 @@ export const Filters = () => {
                 disabled={
                   isEqual(currentFilters, systemDefaultFilters) &&
                   currentFilters.property_types[0] === 'Residential'
+                }
+                startIcon={
+                  <SvgIcon path={mdiRotateRight} size={muiIconSizes.small} />
                 }
                 size="small"
               >
