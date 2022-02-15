@@ -4,7 +4,7 @@ import dealWithOffer from 'fixtures/deal/seller-with-offer.json'
 
 import { normalizeRoleNames } from '.'
 
-function setDoubleEnded(isDoubleEnded) {
+function setDoubleEnded(isDoubleEnded: boolean) {
   return {
     ...dealWithOffer,
     context: {
