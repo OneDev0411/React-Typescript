@@ -7,7 +7,9 @@ import {
   mdiCalendarCursor,
   mdiCalendarCheckOutline,
   mdiCalendarPlus,
-  mdiCalendarRemove
+  mdiCalendarRemove,
+  mdiScriptTextOutline,
+  mdiRotateRight
 } from '@mdi/js'
 import { saveAs } from 'file-saver'
 import { isEqual, pickBy } from 'lodash'
@@ -127,11 +129,12 @@ export const Filters = ({
                 renderButton={({ onClick }) => (
                   <FilterButton
                     onClick={onClick}
+                    startIconPath={mdiScriptTextOutline}
                     title={
                       currentFilters.deal_type &&
                       currentFilters.deal_type.length !== DEAL_TYPES.length
                         ? DEAL_TYPES_ITEMS[currentFilters.deal_type[0]]
-                        : 'Listings & Contracts'
+                        : 'Both Sides'
                     }
                     isActive={
                       !isEqual(
@@ -309,6 +312,9 @@ export const Filters = ({
                 onClick={resetFilters}
                 disabled={isEqual(currentFilters, systemDefaultFilters)}
                 size="small"
+                startIcon={
+                  <SvgIcon path={mdiRotateRight} size={muiIconSizes.small} />
+                }
               >
                 Reset
               </Button>
