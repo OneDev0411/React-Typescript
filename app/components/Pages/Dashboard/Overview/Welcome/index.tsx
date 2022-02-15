@@ -14,7 +14,7 @@ const useStyles = makeStyles(
       display: 'flex',
       borderRadius: theme.shape.borderRadius,
       flexDirection: 'column',
-      padding: theme.spacing(0, 3)
+      padding: theme.spacing(0, 5)
     },
     container: {
       display: 'flex',
