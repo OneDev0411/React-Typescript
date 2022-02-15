@@ -15,6 +15,11 @@ const defaultAvailability: [number, number] = [
 
 const defaultSlots: ShowingAvailabilityItem[] = [
   {
+    id: 'init-0',
+    weekday: 'Sunday',
+    availability: defaultAvailability
+  },
+  {
     id: 'init-1',
     weekday: 'Monday',
     availability: defaultAvailability
@@ -37,6 +42,11 @@ const defaultSlots: ShowingAvailabilityItem[] = [
   {
     id: 'init-5',
     weekday: 'Friday',
+    availability: defaultAvailability
+  },
+  {
+    id: 'init-6',
+    weekday: 'Saturday',
     availability: defaultAvailability
   }
 ]
