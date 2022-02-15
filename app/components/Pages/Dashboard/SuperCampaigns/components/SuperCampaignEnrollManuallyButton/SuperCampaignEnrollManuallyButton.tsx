@@ -92,7 +92,8 @@ function SuperCampaignEnrollManuallyButton({
   const availableAgentCount = useSuperCampaignAvailableAgentCount(
     teamAgentsModelFn,
     enrolledAgentCount,
-    eligibleBrands
+    eligibleBrands,
+    superCampaignTags
   )
 
   // Remove the enrolled people from the teams
