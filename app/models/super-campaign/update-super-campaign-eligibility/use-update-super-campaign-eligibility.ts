@@ -4,6 +4,7 @@ import { ResponseError } from 'superagent'
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
 import { UpdateCacheActions, updateCacheComposer } from '@app/utils/react-query'
 
+import { allList as enrollmentAllList } from '../query-keys/enrollment'
 import {
   updateCacheAllList,
   updateCacheDetail,
@@ -31,7 +32,7 @@ export type UseUpdateSuperCampaignEligibilityOptions = Omit<
     DataInput,
     { cache: UpdateCacheActions }
   >,
-  'notify' | 'onMutate'
+  'notify' | 'onMutate' | 'invalidates'
 >
 
 export function useUpdateSuperCampaignEligibility(
@@ -49,6 +50,9 @@ export function useUpdateSuperCampaignEligibility(
         onError:
           'Something went wrong while saving the eligible brands. Please try again.'
       },
+      invalidates: (_, { superCampaignId }) => [
+        enrollmentAllList(superCampaignId)
+      ],
       onMutate: async ({ superCampaignId, eligibleBrands }) => ({
         cache: await updateCacheComposer(
           updateCacheDetail(queryClient, superCampaignId, {
