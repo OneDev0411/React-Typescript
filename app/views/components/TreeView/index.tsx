@@ -107,6 +107,7 @@ export default memo(function TreeView<NodeType = any>({
           key={getNodeId(node)}
           selectable={props.selectable}
           multiSelectable={props.multiSelectable}
+          shouldExpandOnNodeClick={props.shouldExpandOnNodeClick}
           expandedNodes={expandedNodes}
           onToggleExpanded={onToggleExpanded}
           getNodeId={getNodeId}

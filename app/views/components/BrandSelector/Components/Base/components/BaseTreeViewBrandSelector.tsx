@@ -26,7 +26,6 @@ const useStyles = makeStyles(
       marginTop: theme.spacing(3)
     },
     nodeName: {
-      padding: theme.spacing(1, 0),
       cursor: 'pointer'
     }
   }),
@@ -40,7 +39,9 @@ export type NodeRenderer = {
 export interface BaseTreeViewBrandSelectorProps {
   hasError?: boolean
   isLoading?: boolean
+  searchPlaceholder?: string
   nodes: TreeFn<IBrand>
+  shouldExpandOnNodeClick?: boolean
   initialExpandedNodes?: string[]
   nodeRenderer?: (props: NodeRenderer) => ReactNode
   onNodeClick?: (value?: IBrand) => void
@@ -50,7 +51,9 @@ export function BaseTreeViewBrandSelector({
   nodes,
   hasError = false,
   isLoading = false,
+  shouldExpandOnNodeClick = false,
   initialExpandedNodes = [],
+  searchPlaceholder = 'Search for teams and agents',
   onNodeClick = noop,
   nodeRenderer
 }: BaseTreeViewBrandSelectorProps) {
@@ -64,7 +67,7 @@ export function BaseTreeViewBrandSelector({
     if (!nodeRenderer) {
       return (
         <div className={classes.nodeName} onClick={() => onNodeClick(brand)}>
-          <Typography variant="body2">{brand.name}</Typography>
+          {brand.name}
         </div>
       )
     }
@@ -94,13 +97,14 @@ export function BaseTreeViewBrandSelector({
     <>
       <div className={classes.searchContainer}>
         <Search
-          placeholder="Search for teams and agents"
+          placeholder={searchPlaceholder}
           onChange={value => debouncedSetQuery(value)}
         />
       </div>
       <TreeView
         selectable
         getChildNodes={filteredNodes}
+        shouldExpandOnNodeClick={shouldExpandOnNodeClick}
         initialExpandedNodes={initialExpandedNodes}
         getNodeId={getNodeId}
         renderNode={renderNode}

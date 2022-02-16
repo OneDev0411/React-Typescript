@@ -137,7 +137,7 @@ export default function MarketingAssetUploadDrawer({
         <BaseMultiSelectDrawer
           open
           drawerTitle="Save to Marketing Center for:"
-          // saveButtonText="Next: Select Files"
+          saveButtonText="Next: Select Files"
           selectedBrands={brands}
           onClose={closeDrawer}
           onSave={brands => {

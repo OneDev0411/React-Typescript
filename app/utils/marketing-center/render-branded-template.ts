@@ -1,10 +1,11 @@
+import { IImpersonateUser } from '@app/reducers/user/impersonate-user'
 import { getTemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { renderMjml } from 'components/TemplatePreview/helpers'
 import { loadTemplateHtml } from 'models/instant-marketing'
 
 export interface TemplateData {
-  user?: IUser
+  user?: IUser | IImpersonateUser
   contact?: IContact
   listing?: IListing
   listings?: IListing[]

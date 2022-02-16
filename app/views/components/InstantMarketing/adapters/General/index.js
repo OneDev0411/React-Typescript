@@ -2,6 +2,8 @@ import { Component, Fragment } from 'react'
 
 import { connect } from 'react-redux'
 
+import { selectActiveTeamUnsafe } from '@app/selectors/team'
+import { selectUserImpersonateFirst } from '@app/selectors/user'
 import ActionButton from 'components/Button/ActionButton'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
@@ -182,10 +184,10 @@ class General extends Component {
   }
 }
 
-function mapStateToProps({ user, activeTeam = null }) {
+function mapStateToProps(state) {
   return {
-    user,
-    activeTeam
+    user: selectUserImpersonateFirst(state),
+    activeTeam: selectActiveTeamUnsafe(state)
   }
 }
 

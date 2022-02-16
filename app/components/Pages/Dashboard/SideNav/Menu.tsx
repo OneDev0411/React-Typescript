@@ -41,6 +41,7 @@ const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 export function Menu() {
   const user = useSelector(selectUserUnsafe)
+
   const brand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
   )
@@ -73,6 +74,7 @@ export function Menu() {
     <Sidenav>
       <Logo />
       <GlobalActionsButton />
+
       <ScrollableArea
         shadowColor={scrollableAreaShadowColor}
         style={{ flex: '1 1' }}

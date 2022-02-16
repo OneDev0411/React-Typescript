@@ -113,9 +113,13 @@ export function Dashboard({ params, children, location }: DashboardProps) {
 
   useEffectOnce(() => {
     const init = async () => {
-      console.log('init of new dashboard', { user, activeTeam, deals })
+      if (!user) {
+        return
+      }
 
-      if (!activeTeam || !user) {
+      initializeSockets(user)
+
+      if (!activeTeam) {
         return
       }
 
@@ -152,8 +156,6 @@ export function Dashboard({ params, children, location }: DashboardProps) {
       ) {
         dispatch(getAttributeDefs())
       }
-
-      initializeSockets(user)
 
       dispatch(getAllNotifications())
 

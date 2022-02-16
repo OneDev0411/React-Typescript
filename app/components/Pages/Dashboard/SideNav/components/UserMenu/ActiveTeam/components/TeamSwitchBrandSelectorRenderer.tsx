@@ -1,36 +1,61 @@
 import { memo } from 'react'
 
-import { Chip, Theme, makeStyles } from '@material-ui/core'
+import {
+  Chip,
+  Theme,
+  Button,
+  makeStyles,
+  CircularProgress
+} from '@material-ui/core'
 import cn from 'classnames'
+
+interface Props {
+  brand: IBrand
+  isActive: boolean
+  isFetchingUser: boolean
+  disabled: boolean
+  onClick: (brand: IBrand) => void
+}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     name: {
       display: 'flex',
       alignItems: 'center',
-      cursor: 'pointer'
+      justifyContent: 'space-between',
+      padding: theme.spacing(1, 0),
+      '&:hover': {
+        padding: ({
+          isActive,
+          disabled
+        }: Pick<Props, 'isActive' | 'disabled'>) =>
+          !isActive && !disabled
+            ? '0.161rem 0.161rem 0.161rem 0' // I'm using this strange value due to hokm hokumati :\
+            : theme.spacing(1, 0),
+
+        '& $switchButton': {
+          display: 'inline-flex'
+        }
+      }
     },
-    active: {
-      cursor: 'not-allowed'
+    disabled: {
+      opacity: 0.5
+    },
+    switchButton: {
+      display: 'none'
     },
     activeIndicator: {
-      marginLeft: theme.spacing(1)
+      marginLeft: theme.spacing(0.5)
     }
   }),
   { name: 'SwitchTeamNodeRenderer' }
 )
 
-interface Props {
-  brand: IBrand
-  isActive: boolean
-  onClick: (brand: IBrand) => void
-}
-
-function Brand({ brand, isActive, onClick }: Props) {
-  const classes = useStyles()
+function Brand({ brand, isActive, isFetchingUser, disabled, onClick }: Props) {
+  const classes = useStyles({ isActive, disabled })
 
   const handleOnClick = () => {
-    if (isActive) {
+    if (disabled) {
       return null
     }
 
@@ -38,17 +63,31 @@ function Brand({ brand, isActive, onClick }: Props) {
   }
 
   return (
-    <div
-      className={cn(classes.name, { [classes.active]: isActive })}
-      onClick={handleOnClick}
-    >
-      {brand.name}
-      {isActive && (
-        <Chip
+    <div className={cn(classes.name, { [classes.disabled]: disabled })}>
+      <div>
+        {brand.name}
+        {isActive && (
+          <Chip
+            size="small"
+            label="You're here"
+            className={classes.activeIndicator}
+          />
+        )}
+      </div>
+      {!disabled && (
+        <Button
+          variant="contained"
+          color="primary"
           size="small"
-          label="You're here"
-          className={classes.activeIndicator}
-        />
+          disabled={isFetchingUser}
+          className={classes.switchButton}
+          startIcon={
+            isFetchingUser && <CircularProgress color="inherit" size={16} />
+          }
+          onClick={handleOnClick}
+        >
+          {isFetchingUser ? 'Loading...' : 'Select Team'}
+        </Button>
       )}
     </div>
   )

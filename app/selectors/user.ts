@@ -24,6 +24,36 @@ export function selectUser(state: IAppState): IUser {
   return selectUserUnsafe(state)!
 }
 
+/**
+ * Returns the impersonated user info from the redux store.
+ * This selector returns null if there is no active impersonate user
+ * @param state The app state
+ * @returns The impersonate user state
+ */
+export const selectImpersonateUser = (
+  state: IAppState
+): IAppState['impersonateUser'] => state.impersonateUser
+
+/**
+ * indicate a impersonate user exist or not
+ * @param state The app state
+ * @returns true/false
+ */
+export const selectImpersonateUserIsActive = (state: IAppState): boolean =>
+  !!selectImpersonateUser(state)
+
+/**
+ * Returns an user object with priority of impersonated one
+ * @param state The app state
+ * @returns The user state
+ */
+
+export function selectUserImpersonateFirst(
+  state: IAppState
+): IAppState['impersonateUser'] | IUser {
+  return selectImpersonateUser(state) ?? selectUser(state)
+}
+
 /* Returns the user agents info from the redux store.
  * @param state The app state
  * @returns The user state
@@ -59,6 +89,12 @@ export const selectUserFormattedPhoneNumber = createSelector(
  */
 export const selectUserEmailSignature = (state: IAppState) =>
   selectUser(state)?.email_signature
+
+export const selectUserEmailSignatureImpersonateFirst = (state: IAppState) => {
+  const user = selectUserImpersonateFirst(state)
+
+  return user?.email_signature
+}
 
 /**
  * Returns true if the user is signed in otherwise returns false

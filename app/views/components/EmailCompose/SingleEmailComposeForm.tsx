@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { DealRolesProvider } from '@app/contexts/deals-roles-definitions/provider'
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
+import { useImpersonateUser } from '@app/hooks/use-impersonate-user'
 import { confirmation } from 'actions/confirmation'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
@@ -57,21 +58,32 @@ export function SingleEmailComposeForm({
   headers = {},
   ...otherProps
 }: Props) {
+  const dispach = useDispatch()
   const user = useSelector(selectUser)
   const activeBrand = useUnsafeActiveBrand()
-  const activeBrandUsers = activeBrand ? getBrandUsers(activeBrand) : [user]
+  const impersonateUser = useImpersonateUser()
+  const activeBrandUsers = useMemo(() => {
+    const users = activeBrand ? getBrandUsers(activeBrand) : [user]
 
+    if (
+      impersonateUser &&
+      !users.some(user => user.id === impersonateUser.id)
+    ) {
+      users.push(impersonateUser)
+    }
+
+    return users
+  }, [activeBrand, impersonateUser, user])
   const [allAccounts, isLoadingAccounts] =
     useGetAllOauthAccounts(filterAccounts)
 
   const initialValues: Partial<EmailFormValues> = getInitialValues({
     allAccounts,
+    defaultUser: impersonateUser ?? user,
+    impersonateUser,
     defaultValues: otherProps.initialValues,
-    defaultUser: user,
     preferredAccountId
   })
-
-  const dispach = useDispatch()
 
   const [individualMode, setIndividualMode] = useState(
     !!otherProps.initialValues?.templateInstance

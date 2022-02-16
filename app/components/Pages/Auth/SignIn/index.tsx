@@ -87,7 +87,7 @@ export default function Signin(props: Props) {
       setSignInFormSubmitMsg(null)
 
       const user: IUser = await signin({ ...values, username })
-      const activeTeam: IUserTeam = await getActiveTeam(user)
+      const activeTeam: Nullable<IUserTeam> = await getActiveTeam(user)
 
       dispatch(setUserAndActiveTeam(user, activeTeam))
 

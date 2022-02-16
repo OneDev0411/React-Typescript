@@ -1,4 +1,4 @@
-import { useCallback, memo, ChangeEvent } from 'react'
+import { useCallback, memo, MouseEvent, ChangeEvent } from 'react'
 
 import { Checkbox } from '@material-ui/core'
 import { mdiChevronRight, mdiChevronDown } from '@mdi/js'
@@ -18,7 +18,13 @@ export interface Props<NodeType> extends BaseTreeViewNodeProps<NodeType> {
 
 export const TreeViewNode = memo(function TreeViewNode<
   NodeType extends any = any
->({ node, onToggleExpanded, onCheckNode, ...props }: Props<NodeType>) {
+>({
+  node,
+  isChildNode = false,
+  onToggleExpanded,
+  onCheckNode,
+  ...props
+}: Props<NodeType>) {
   const classes = useStyles()
   const childNodes = props.getChildNodes(node) || []
 
@@ -40,6 +46,20 @@ export const TreeViewNode = memo(function TreeViewNode<
     onCheckNode(node)
   }
 
+  const handleOnNodeClick = () => {
+    if (!expandable || !props.shouldExpandOnNodeClick) {
+      return
+    }
+
+    handleToggleNode()
+  }
+
+  const handleOnExpandButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+
+    handleToggleNode()
+  }
+
   const renderNode = () => {
     const checkbox = props.multiSelectable && (
       <Checkbox
@@ -53,10 +73,10 @@ export const TreeViewNode = memo(function TreeViewNode<
     const arrow = expandable && (
       <button
         type="button"
-        className={cn(classes.expandButton, {
+        className={cn(classes.expandNodeButton, {
           [classes.isExpanded]: expanded
         })}
-        onClick={handleToggleNode}
+        onClick={handleOnExpandButtonClick}
       >
         <SvgIcon
           path={expanded ? mdiChevronDown : mdiChevronRight}
@@ -65,13 +85,20 @@ export const TreeViewNode = memo(function TreeViewNode<
       </button>
     )
 
+    const otherNodeContentClassNames = {
+      [classes.expandableNode]: expandable,
+      [classes.rootNoneExpandableNode]: !isChildNode && !expandable,
+      [classes.childNode]: isChildNode && !expandable,
+      [classes.isExpandableOnNodeClick]:
+        expandable && props.shouldExpandOnNodeClick,
+      [classes.isNodeExpanded]: expanded,
+      [classes.isNodeSelectable]: props.selectable
+    }
+
     return (
       <div
-        className={cn(classes.contentContainer, {
-          [classes.expandableContentContainer]: expandable,
-          [classes.isContentContainerExpanded]: expanded,
-          [classes.selectableContentContainer]: props.selectable
-        })}
+        className={cn(classes.node, otherNodeContentClassNames)}
+        onClick={handleOnNodeClick}
       >
         {arrow}
         {checkbox}
@@ -81,13 +108,14 @@ export const TreeViewNode = memo(function TreeViewNode<
   }
 
   return (
-    <div className={classes.container}>
+    <div className={classes.nodeContainer}>
       {renderNode()}
       {expandable && expanded && (
         <div className={classes.childrenContainer}>
           {childNodes.map(node => (
             <TreeViewNode
               key={props.getNodeId(node)}
+              isChildNode
               node={node}
               onToggleExpanded={onToggleExpanded}
               onCheckNode={onCheckNode}
