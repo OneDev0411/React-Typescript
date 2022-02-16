@@ -12,7 +12,6 @@ const useStyles = makeStyles(
     text: {
       ...theme.typography.body2,
       color: theme.palette.grey[700],
-      letterSpacing: '0.15px',
       lineHeight: `${theme.spacing(3)}px`,
       '&.hovered': {
         color: theme.palette.tertiary.dark
@@ -75,7 +74,13 @@ const FlowsCell = ({
     )
   }
 
-  return <CellContainer renderCellContent={renderCellContent} width={width} />
+  return (
+    <CellContainer
+      renderCellContent={renderCellContent}
+      width={width}
+      stopPropagation
+    />
+  )
 }
 
 export default FlowsCell

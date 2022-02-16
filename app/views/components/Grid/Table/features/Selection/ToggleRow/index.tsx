@@ -18,7 +18,7 @@ const useStyles = makeStyles(
       minWidth: '60px',
       borderBottom: `1px solid ${theme.palette.divider}`,
       height: '100%',
-      paddingRight: '4px',
+      paddingRight: theme.spacing(0.5),
       overflow: 'initial'
     },
     showDefault: {

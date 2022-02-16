@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { makeStyles, Typography } from '@material-ui/core'
+import { alpha, makeStyles, Typography } from '@material-ui/core'
 import { mdiDotsVertical, mdiSortAscending, mdiSortDescending } from '@mdi/js'
 
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
@@ -8,15 +6,18 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   theme => ({
-    container: {
+    container: ({ width }: { width: number | string }) => ({
       display: 'flex',
       height: '100%',
-      width: '100%'
-    },
+      width,
+      backgroundColor: alpha(theme.palette.grey[50], 0.75),
+      borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`,
+      borderTop: `1px solid ${theme.palette.divider}`,
+      borderBottom: `1px solid ${theme.palette.divider}`
+    }),
     iconContainer: {
       width: '32px',
       height: '100%',
-      fontSize: theme.spacing(0.75),
       color: theme.palette.grey[500],
       display: 'flex',
       alignItems: 'center',
@@ -28,13 +29,12 @@ const useStyles = makeStyles(
       alignItems: 'center',
       color: theme.palette.grey[700],
       padding: theme.spacing(0, 1),
-      height: '100%',
-      letterSpacing: '0.15px'
+      height: '100%'
     },
     sortActionContainer: {
       display: 'flex',
       alignItems: 'center',
-      width: theme.spacing(4),
+      width: '32px',
       justifyContent: 'center',
       color: theme.palette.grey[500],
       fontSize: theme.spacing(0.75),
@@ -49,15 +49,17 @@ interface Props {
   iconPath?: string
   sortable?: boolean
   sortDirection?: 'asc' | 'desc'
+  width: number | string
 }
 
 const ColumnHeaderCell = ({
   title,
   iconPath,
   sortable = false,
-  sortDirection
+  sortDirection,
+  width
 }: Props) => {
-  const classes = useStyles()
+  const classes = useStyles({ width })
 
   const columnIcon = () =>
     iconPath && (

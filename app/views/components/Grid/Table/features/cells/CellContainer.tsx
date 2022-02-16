@@ -12,6 +12,7 @@ interface Props {
   renderCellContent: (props: CellProps) => React.ReactNode
   onCellSelect?: (e) => void
   width: number | string
+  stopPropagation?: boolean // temporary till phase 2
 }
 
 //----
@@ -55,7 +56,11 @@ const useStyles = makeStyles(
 
 //----
 
-const CellContainer = ({ renderCellContent, width }: Props) => {
+const CellContainer = ({
+  renderCellContent,
+  width,
+  stopPropagation = false
+}: Props) => {
   const classes = useStyles({ width })
 
   const [isHovered, setIsHovered] = useState(false)
@@ -89,6 +94,7 @@ const CellContainer = ({ renderCellContent, width }: Props) => {
       className={classes.container}
       onMouseEnter={onHoverIn}
       onMouseLeave={onHoverOut}
+      onClick={e => stopPropagation && e.stopPropagation()} // temporary
     >
       {renderInlineContent()}
     </div>

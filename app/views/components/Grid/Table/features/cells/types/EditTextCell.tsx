@@ -12,7 +12,6 @@ const useStyles = makeStyles(
     },
     cellText: {
       color: theme.palette.grey[700],
-      letterSpacing: '0.15px',
       ...theme.typography.body2,
       lineHeight: `${theme.spacing(3)}px`,
       '&.primary': {

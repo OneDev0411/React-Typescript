@@ -5,21 +5,28 @@ import { GridSelectionOptions, TableColumn } from '../../types'
 
 const useStyles = makeStyles(
   theme => ({
-    rowContainer: ({ rowSize }: { rowSize: number }) => ({
+    rowContainer: ({
+      rowSize,
+      width
+    }: {
+      rowSize: number
+      width: number | string
+    }) => ({
       height: theme.spacing(rowSize),
+      width,
       display: 'flex',
       flexDirection: 'row',
-      alignItems: 'stretch',
-
-      backgroundColor: alpha(theme.palette.grey[50], 0.75),
-      borderTop: `1px solid ${theme.palette.divider}`,
-      borderBottom: `1px solid ${theme.palette.divider}`
+      alignItems: 'stretch'
     }),
     cellContainer: {
       height: '100%',
       display: 'flex',
       alignSelf: 'center',
       alignItems: 'center',
+      backgroundColor: alpha(theme.palette.grey[50], 0.75),
+
+      borderTop: `1px solid ${theme.palette.divider}`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
       borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`
     }
   }),
@@ -34,6 +41,7 @@ interface Props<Row> {
   rowSize?: number
   inlineGridEnabled?: boolean
   columnsSize: string[]
+  width?: number | string
 }
 
 export function Header<Row>({
@@ -41,40 +49,37 @@ export function Header<Row>({
   rows,
   totalRows = 0,
   rowSize = 5,
-  columnsSize
+  columnsSize,
+  width = '100%'
 }: Props<Row>) {
-  const classes = useStyles({ rowSize })
-
-  const Cell = ({ cellContent, columnIndex }) => (
-    <div
-      className={classes.cellContainer}
-      key={columnIndex}
-      style={{ width: columnsSize[columnIndex] }}
-    >
-      {cellContent}
-    </div>
-  )
+  const classes = useStyles({ rowSize, width })
 
   const getCell = (column, columnIndex) => {
     if (column.isHidden) {
       return null
     }
 
-    const header = column.header ?? column.headerName
+    const headerCell = column.header ?? column.headerName
 
-    if (typeof header === 'string') {
-      return Cell({ cellContent: header, columnIndex })
+    if (typeof headerCell === 'string') {
+      return (
+        <div
+          className={classes.cellContainer}
+          key={columnIndex}
+          style={{ width: columnsSize[columnIndex] }}
+        >
+          {headerCell}
+        </div>
+      )
     }
 
-    if (typeof header === 'function') {
-      return Cell({
-        cellContent: header({
-          rows,
-          column,
-          columnIndex,
-          totalRows
-        }),
-        columnIndex
+    if (typeof headerCell === 'function') {
+      return headerCell({
+        rows,
+        column,
+        columnIndex,
+        totalRows,
+        width: columnsSize[columnIndex]
       })
     }
 

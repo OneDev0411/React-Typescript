@@ -115,7 +115,6 @@ export function Body<Row>({
             index={rowIndex}
             data={{
               rows,
-              rowSize,
               columns,
               state,
               classes,
@@ -131,19 +130,20 @@ export function Body<Row>({
   }
 
   return (
-    <>
-      {hasHeader && (
-        <Header
-          columns={columns}
-          rows={rows}
-          selection={selection}
-          totalRows={totalRows}
-          inlineGridEnabled={inlineGridEnabled}
-          columnsSize={columnsSize}
-        />
-      )}
-      <AutoSizer disableHeight>
-        {({ width }) => (
+    <AutoSizer disableHeight>
+      {({ width }) => (
+        <>
+          {hasHeader && (
+            <Header
+              columns={columns}
+              rows={rows}
+              selection={selection}
+              totalRows={totalRows}
+              inlineGridEnabled={inlineGridEnabled}
+              columnsSize={columnsSize}
+              width={width}
+            />
+          )}
           <FixedSizeList
             ref={listRef}
             itemCount={rows.length}
@@ -182,9 +182,9 @@ export function Body<Row>({
           >
             {Row}
           </FixedSizeList>
-        )}
-      </AutoSizer>
-    </>
+        </>
+      )}
+    </AutoSizer>
   )
 }
 

@@ -1,4 +1,4 @@
-import { Box, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import {
   mdiCake,
   mdiCalendarOutline,
@@ -11,15 +11,16 @@ import cn from 'classnames'
 
 import { useBreakpoint } from '@app/hooks/use-breakpoint'
 import { goTo } from '@app/utils/go-to'
+import BirthdayCell from '@app/views/components/Grid/Table/features/cells/BirthdayCell'
+import { EmailCell } from '@app/views/components/Grid/Table/features/cells/EmailCell'
+import FlowsCell from '@app/views/components/Grid/Table/features/cells/FlowsCell'
+import ColumnHeaderCell from '@app/views/components/Grid/Table/features/cells/header/ColumnHeaderCell'
+import { LastTouchCell } from '@app/views/components/Grid/Table/features/cells/LastTouchCell'
+import { PhoneNumberCell } from '@app/views/components/Grid/Table/features/cells/PhoneNumberCell'
+import TagsCell from '@app/views/components/Grid/Table/features/cells/TagsCell'
+import { EditTextCell } from '@app/views/components/Grid/Table/features/cells/types/EditTextCell'
 import { Table } from 'components/Grid/Table'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import BirthdayCell from 'components/Grid/Table/features/cells/BirthdayCell'
-import { EmailCell } from 'components/Grid/Table/features/cells/EmailCell'
-import FlowsCell from 'components/Grid/Table/features/cells/FlowsCell'
-import { LastTouchCell } from 'components/Grid/Table/features/cells/LastTouchCell'
-import { PhoneNumberCell } from 'components/Grid/Table/features/cells/PhoneNumberCell'
-import TagsCell from 'components/Grid/Table/features/cells/TagsCell'
-import { EditTextCell } from 'components/Grid/Table/features/cells/types/EditTextCell'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import {
   useGridStyles,
@@ -33,7 +34,6 @@ import { PARKED_CONTACTS_LIST_ID } from '../constants'
 import { TableActions } from './Actions'
 import Avatar from './columns/Avatar'
 import { LoadingComponent } from './components/LoadingComponent'
-import ColumnHeaderCell from './grid/ColumnHeaderCell'
 
 const useCustomGridStyles = makeStyles(theme => ({
   row: {
@@ -100,13 +100,12 @@ const ContactsList = props => {
   const columns = [
     {
       id: 'name',
-      headerName: ({ rows }) => (
-        <Box pl={1}>
-          <ColumnHeaderCell
-            title={getSelectedInfo(rows.length)}
-            sortable={false}
-          />
-        </Box>
+      headerName: ({ rows, width }) => (
+        <ColumnHeaderCell
+          title={getSelectedInfo(rows.length)}
+          sortable={false}
+          width={width}
+        />
       ),
       width: '250px',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
@@ -129,11 +128,12 @@ const ContactsList = props => {
     },
     {
       id: 'tag',
-      headerName: ({ column }) => (
+      headerName: ({ column, width }) => (
         <ColumnHeaderCell
           title="Tags"
           iconPath={mdiTagMultipleOutline}
           sortable={column.sortable}
+          width={width}
         />
       ),
       isHidden: ['xs', 'sm'].includes(breakpoint),
@@ -160,11 +160,12 @@ const ContactsList = props => {
     },
     {
       id: 'phone',
-      headerName: ({ column }) => (
+      headerName: ({ column, width }) => (
         <ColumnHeaderCell
           title="Phone"
           iconPath={mdiPhoneOutline}
           sortable={column.sortable}
+          width={width}
         />
       ),
       sortable: false,
@@ -185,11 +186,12 @@ const ContactsList = props => {
     },
     {
       id: 'email',
-      headerName: ({ column }) => (
+      headerName: ({ column, width }) => (
         <ColumnHeaderCell
           title="Email"
           iconPath={mdiEmailOutline}
           sortable={column.sortable}
+          width={width}
         />
       ),
       sortable: false,
@@ -211,15 +213,16 @@ const ContactsList = props => {
     },
     {
       id: 'last_touched',
-      headerName: ({ column }) => (
+      headerName: ({ column, width }) => (
         <ColumnHeaderCell
           title="Last Touch"
           iconPath={mdiCalendarOutline}
           sortable={column.sortable}
+          width={width}
           sortDirection="desc"
         />
       ),
-      isHidden: ['xs', 'sm', 'md'].includes(breakpoint),
+      isHidden: ['xs'].includes(breakpoint),
       sortable: false,
       width: '140px',
       render: ({ row: contact, isRowSelected, column }) => {
@@ -238,11 +241,12 @@ const ContactsList = props => {
     },
     {
       id: 'flows',
-      headerName: ({ column }) => (
+      headerName: ({ column, width }) => (
         <ColumnHeaderCell
           title="Flows"
           iconPath={mdiLightningBoltOutline}
           sortable={column.sortable}
+          width={width}
         />
       ),
       width: '120px',
@@ -268,11 +272,12 @@ const ContactsList = props => {
     },
     {
       id: 'birthday',
-      headerName: ({ column }) => (
+      headerName: ({ column, width }) => (
         <ColumnHeaderCell
           title="Birthday"
           iconPath={mdiCake}
           sortable={column.sortable}
+          width={width}
         />
       ),
       sortable: false,

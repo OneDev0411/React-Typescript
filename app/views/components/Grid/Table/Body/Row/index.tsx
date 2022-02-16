@@ -46,24 +46,27 @@ function Row<T>({
     [state.selection, row.id, rowIndex]
   )
 
-  const rowCells = getRowCells(
-    rows,
-    rowIndex,
-    columns,
-    columnsSize,
-    inlineGridEnabled,
-    getTdProps,
-    isRowSelected
-  )
-
   if (inlineGridEnabled) {
     return (
       <GridRowContainer
         selected={isRowSelected}
         style={style}
         data-tour-id={`row-${rowIndex}`}
+        {...getTrProps({
+          rowIndex,
+          row,
+          selected: isRowSelected
+        })}
       >
-        {rowCells}
+        {getRowCells(
+          rows,
+          rowIndex,
+          columns,
+          columnsSize,
+          inlineGridEnabled,
+          getTdProps,
+          isRowSelected
+        )}
       </GridRowContainer>
     )
   }
@@ -81,7 +84,15 @@ function Row<T>({
         selected: isRowSelected
       })}
     >
-      {rowCells}
+      {getRowCells(
+        rows,
+        rowIndex,
+        columns,
+        columnsSize,
+        inlineGridEnabled,
+        getTdProps,
+        isRowSelected
+      )}
     </RowContainer>
   )
 }

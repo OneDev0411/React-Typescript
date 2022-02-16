@@ -23,7 +23,6 @@ const useStyles = makeStyles(
       ...theme.typography.body3,
       color: theme.palette.grey[700],
       lineHeight: `${theme.spacing(3)}px`,
-      letterSpacing: '0.2px',
       '&.hovered': {
         color: theme.palette.tertiary.dark
       },
@@ -37,7 +36,6 @@ const useStyles = makeStyles(
     tagLabel: {
       display: 'flex',
       flexDirection: 'row',
-      letterSpacing: '0.2px',
       gap: theme.spacing(1),
       ...theme.typography.body3,
       color: theme.palette.grey[700],
@@ -177,7 +175,11 @@ const TagsCell = ({
   //----
 
   return (
-    <CellContainer renderCellContent={renderPopOverTagSelector} width={width} />
+    <CellContainer
+      renderCellContent={renderPopOverTagSelector}
+      width={width}
+      stopPropagation
+    />
   )
 }
 
