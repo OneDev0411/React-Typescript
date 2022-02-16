@@ -1,10 +1,10 @@
-import React, {
+import {
   memo,
   useState,
-  useCallback,
+  RefObject,
   useEffect,
-  useImperativeHandle,
-  RefObject
+  useCallback,
+  useImperativeHandle
 } from 'react'
 
 import FullCalendar, {
@@ -20,11 +20,13 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 // eslint-disable-next-line import/order
 import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import _map from 'lodash/map'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { useViewAs } from '@app/hooks/team/use-view-as'
+import { selectUser } from '@app/selectors/user'
 import {
   CrmEventType,
   ApiOptions,
@@ -33,8 +35,6 @@ import {
 import { getCalendar, FilterQuery } from 'models/calendar/get-calendar'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { updateTask } from 'models/tasks'
-import { IAppState } from 'reducers/index'
-import { viewAs } from 'utils/user-teams'
 
 import { upsertCrmEvents } from '../ContactProfileTimeline/helpers/upsert-crm-events'
 
@@ -50,10 +50,10 @@ import {
 } from './helpers/get-date-range'
 import { normalizeEventOnEdit } from './helpers/normalize-event-on-edit'
 import { normalizeEvents } from './helpers/normalize-events'
-import { StateProps, SocketUpdate, ActionRef } from './types'
+import { SocketUpdate, ActionRef } from './types'
 
 const useStyles = makeStyles(
-  (theme: Theme) => ({
+  () => ({
     calendarContainer: {
       position: 'absolute',
       width: '100%',
@@ -68,23 +68,22 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  user?: IUser
   contrariwise?: boolean
-  viewAsUsers?: UUID[]
   initialRange?: NumberRange
   associations?: string[]
   actionRef?: RefObject<ActionRef>
 }
 
 export const GridCalendarPresentation = ({
-  user,
   actionRef,
-  viewAsUsers = [],
   initialRange,
   contrariwise = false,
   associations = []
 }: Props) => {
   const classes = useStyles()
+  const user = useSelector(selectUser)
+  const viewAsUsers = useViewAs()
+
   // list of server events
   const [rowEvents, setRowEvents] = useState<ICalendarEvent[]>([])
   // list of current events
@@ -460,7 +459,7 @@ export const GridCalendarPresentation = ({
         />
       </div>
       <EventController
-        user={user!}
+        user={user}
         event={selectedEvent}
         day={selectedDay}
         setSelectedEvent={setSelectedEvent}
@@ -471,13 +470,4 @@ export const GridCalendarPresentation = ({
   )
 }
 
-const mapStateToProps = ({ user }: IAppState) => ({
-  user,
-  viewAsUsers: viewAs(user)
-})
-
-export const ConnectedGridCalendar = connect<StateProps, {}, Props>(
-  mapStateToProps
-)(GridCalendarPresentation)
-
-export const GridCalendar = memo(ConnectedGridCalendar)
+export const GridCalendar = memo(GridCalendarPresentation)

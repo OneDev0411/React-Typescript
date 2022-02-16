@@ -4,8 +4,8 @@ import { Button, CircularProgress, Box } from '@material-ui/core'
 import pluralize from 'pluralize'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
+import Drawer, { OverlayDrawerProps } from '@app/views/components/OverlayDrawer'
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
-import Drawer from 'components/OverlayDrawer'
 import TeamAgents, { TeamAgentsProps } from 'components/TeamAgents'
 import { Agent, BrandedUser } from 'components/TeamAgents/types'
 import { searchContacts } from 'models/contacts/search-contacts'
@@ -13,14 +13,13 @@ import { searchContacts } from 'models/contacts/search-contacts'
 import { AgentsList } from './List'
 
 interface Props
-  extends Pick<TeamAgentsProps, 'teamAgentsModelFn' | 'filterTeamsFn'> {
+  extends OverlayDrawerProps,
+    Pick<TeamAgentsProps, 'teamAgentsModelFn' | 'filterTeamsFn'> {
   title: string
   multiSelection?: boolean
   withRelatedContacts?: boolean
   flattened?: boolean
   isPrimaryAgent?: boolean
-  isDrawerOpen?: boolean
-  onClose: () => void
   onSelectAgents(agents: Agent[]): void
 }
 
@@ -30,11 +29,10 @@ export function TeamAgentsDrawer({
   withRelatedContacts = true,
   flattened = false,
   isPrimaryAgent = false,
-  isDrawerOpen = true,
-  onClose,
   onSelectAgents,
   teamAgentsModelFn,
-  filterTeamsFn
+  filterTeamsFn,
+  ...props
 }: Props) {
   const [selectedAgents, setSelectedAgents] = useState<BrandedUser[]>([])
   const [isSearchingContacts, setIsSearchingContacts] = useState<boolean>(false)
@@ -103,7 +101,7 @@ export function TeamAgentsDrawer({
   }
 
   return (
-    <Drawer open={isDrawerOpen} onClose={onClose}>
+    <Drawer {...props}>
       <Drawer.Header title={title} />
 
       <Drawer.Body>

@@ -2,8 +2,8 @@ import { Box, Typography, Tooltip } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { mdiDotsVertical } from '@mdi/js'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
-import { getActiveBrand } from 'utils/user-teams'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -45,10 +45,12 @@ interface Props {
 
 export default function ToggleButton(props: Props) {
   const classes = useStyles()
+  const activeBrand = useUnsafeActiveBrand()
   const { display_name } = props.user
 
-  const brandName = getActiveBrand(props.user)?.name ?? ''
-  const tooltipTitle = `${display_name} ${brandName ? `(${brandName})` : ''}`
+  const tooltipTitle = `${display_name} ${
+    activeBrand?.name ? `(${activeBrand.name})` : ''
+  }`
 
   return (
     <Tooltip placement="right" title={tooltipTitle}>
@@ -64,14 +66,13 @@ export default function ToggleButton(props: Props) {
         iconPath={mdiDotsVertical}
       >
         <Box className={classes.wrapper}>
-          {/* <Avatar user={props.user} /> */}
           <div className={classes.userDetails}>
             <Typography
               noWrap
               variant="body1"
               className={classes.userDisplayName}
             >
-              {brandName}
+              {activeBrand?.name ?? display_name ?? 'Loading...'}
             </Typography>
           </div>
         </Box>

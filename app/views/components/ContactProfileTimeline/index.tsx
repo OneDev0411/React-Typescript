@@ -61,9 +61,9 @@ export function Calendar({
   const { user, viewAsUsers } = useSelector<
     IAppState,
     { user: IUser; viewAsUsers: UUID[] }
-  >(({ user }) => ({
+  >(({ user, activeTeam }) => ({
     user: user!,
-    viewAsUsers: viewAs(user)
+    viewAsUsers: viewAs(activeTeam)
   }))
 
   useEffectOnce(() => {

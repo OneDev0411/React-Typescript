@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Box, Link, IconButton, Theme, makeStyles } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { mdiClose } from '@mdi/js'
 import { Helmet } from 'react-helmet'
-import { useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
+import { useActiveBrandSettings } from '@app/hooks/brand/use-active-brand-settings'
 import Acl from 'components/Acl'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
 import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
@@ -20,8 +21,6 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ACL } from 'constants/acl'
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { ZeroState } from 'partials/ZeroState'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId, getActiveTeamSettings } from 'utils/user-teams'
 
 import Actions from './columns/Actions'
 import Avatar from './columns/Avatar'
@@ -69,9 +68,8 @@ function OpenHousesList() {
     }
   )
 
-  const user = useSelector(selectUser)
-  const activeBrandId = getActiveTeamId(user) || ''
-  const activeBrandSettings = getActiveTeamSettings(user, true)
+  const activeBrandId = useActiveBrandId()
+  const activeBrandSettings = useActiveBrandSettings(true)
   const { enable_open_house_requests: showNotifyOfficeBanner } =
     activeBrandSettings
 

@@ -17,11 +17,10 @@ import Alert from '@material-ui/lab/Alert'
 import { mdiClose, mdiNewBox } from '@mdi/js'
 import cn from 'classnames'
 import pluralize from 'pluralize'
-import { useSelector } from 'react-redux'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { TeamContactSelect } from '@app/views/components/TeamContact/TeamContactSelect'
-import { selectUser } from 'selectors/user'
 import { goTo } from 'utils/go-to'
 import { isSoloActiveTeam } from 'utils/user-teams'
 
@@ -121,8 +120,7 @@ const TriggerEditModeComponent = ({
   onChangeTemplate
 }: Props) => {
   const classes = useStyles()
-  const user = useSelector(selectUser)
-  // Fields
+  const activeTeam = useUnsafeActiveTeam()
   const [sender, setSender] = useState<IUser>(senderProp)
   const [subject, setSubject] = useState<string>(subjectProp)
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
@@ -183,13 +181,14 @@ const TriggerEditModeComponent = ({
   }
 
   const renderSenderSwitcher = () => {
-    if (user && isSoloActiveTeam(user)) {
+    if (isSoloActiveTeam(activeTeam)) {
       return null
     }
 
     return (
       <div className={classes.senderContainer}>
         <TeamContactSelect
+          /* @ts-ignore */
           disabled={disabled || !isActive || isSaving}
           owner={sender}
           user={sender}

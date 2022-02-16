@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
-import { isBackOffice } from '@app/utils/user-teams'
+import { isBackOffice } from '@app/utils/acl'
 
 import AgentTable from './Agent'
 import BackOfficeTable from './BackOffice'
@@ -21,9 +21,9 @@ const List = ({ isBackOffice, ...rest }: Props & WithRouterProps) => {
   )
 }
 
-function mapStateToProps({ user }) {
+function mapStateToProps({ activeTeam }) {
   return {
-    isBackOffice: isBackOffice(user)
+    isBackOffice: isBackOffice(activeTeam)
   }
 }
 

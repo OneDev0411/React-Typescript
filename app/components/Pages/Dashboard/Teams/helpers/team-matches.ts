@@ -1,9 +1,11 @@
+import escapeRegExp from 'lodash/escapeRegExp'
+
 import { getBrandUsers } from 'utils/user-teams'
 
 import { userMatches } from './users-matches'
 
 export function teamMatches(team: IBrand, searchTerm: string) {
-  const regExp = new RegExp(searchTerm, 'gi')
+  const regExp = new RegExp(escapeRegExp(searchTerm), 'gi')
 
   // TODO: improve search UX with fuse
   return (

@@ -1,14 +1,15 @@
-import React, { ComponentProps, useState, useMemo } from 'react'
+import { ComponentProps, useState, useMemo } from 'react'
 
 import { Field } from 'react-final-form'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { DealRolesProvider } from '@app/contexts/deals-roles-definitions/provider'
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { confirmation } from 'actions/confirmation'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 import { selectUser } from 'selectors/user'
-import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
+import { getBrandUsers } from 'utils/user-teams'
 
 import { TemplateExpressionContext } from '../TextEditor/features/TemplateExpressions/template-expressions-plugin/template-expression-context'
 
@@ -57,7 +58,7 @@ export function SingleEmailComposeForm({
   ...otherProps
 }: Props) {
   const user = useSelector(selectUser)
-  const activeBrand = getActiveBrand(user)
+  const activeBrand = useUnsafeActiveBrand()
   const activeBrandUsers = activeBrand ? getBrandUsers(activeBrand) : [user]
 
   const [allAccounts, isLoadingAccounts] =

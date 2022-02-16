@@ -1,10 +1,7 @@
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  RefObject
-} from 'react'
+/* TODO: this I've made this component typescript 8 months ago during contact profile redesign
+   without any improvement. literally, I just convert js to tsx which we should take care of it in future.
+*/
+import { useRef, useState, RefObject, useEffect, useCallback } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
@@ -460,7 +457,7 @@ const ContactProfile = props => {
   )
 }
 
-const mapStateToProps = ({ user, contacts }, props) => {
+const mapStateToProps = ({ user, contacts, activeTeam = null }, props) => {
   const tags = contacts.list
   const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
 
@@ -478,7 +475,7 @@ const mapStateToProps = ({ user, contacts }, props) => {
     user,
     contact,
     fetchTags,
-    viewAsUsers: viewAs(user),
+    viewAsUsers: viewAs(activeTeam),
     attributeDefs: contacts.attributeDefs,
     allConnectedAccounts
   }

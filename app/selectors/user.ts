@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect'
 
-import { getSettingsFromActiveTeam } from '@app/utils/user-teams'
 import { IAppState } from 'reducers'
 import { formatPhoneNumber } from 'utils/format'
 
@@ -25,24 +24,12 @@ export function selectUser(state: IAppState): IUser {
   return selectUserUnsafe(state)!
 }
 
-/**
- * Returns the user agents info from the redux store.
+/* Returns the user agents info from the redux store.
  * @param state The app state
  * @returns The user state
  */
 export function selectUserAgents(state: IAppState): Nullable<IAgent[]> {
   return selectUser(state).agents
-}
-
-/**
- * Returns the given user's settings
- * @param state The app state
- * @returns The user state
- */
-export function selectUserSettingsInActiveTeam(
-  state: IAppState
-): StringMap<any> {
-  return getSettingsFromActiveTeam(team => team?.settings)(selectUser(state))
 }
 
 /**

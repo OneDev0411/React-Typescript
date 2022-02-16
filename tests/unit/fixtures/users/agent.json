@@ -69,7 +69,6 @@
   "access_token": "OWU2M2YwMzItOTRlMi0xMWU5LWFkNjMtMGE5NTk5ODQ4MmFj",
   "refresh_token": "OWU2NTA0MGUtOTRlMi0xMWU5LWFkNjUtMGE5NTk5ODQ4MmFj",
   "expire_date": 1561808465344,
-  "is_fetching_teams": false,
   "teams": [
     {
       "id": "8725b638-3b09-11e7-b651-0242ac110003_8cb4a358-8973-11e7-9089-0242ac110003",

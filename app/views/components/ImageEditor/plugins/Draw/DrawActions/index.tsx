@@ -44,22 +44,21 @@ const useStyles = makeStyles(
 
 interface Props {
   editor: ImageEditor
-  onChangeActiveAction: (action: Actions | null) => void
+  onChangeActiveAction: (action: Nullable<Actions>) => void
 }
 
 export function DrawActions({ editor, onChangeActiveAction }: Props) {
   const classes = useStyles()
-  const [drawingMode, setDrawingMode] = useState<DRAWING_MODE | null>(
-    'FREE_DRAWING'
-  )
+  const [drawingMode, setDrawingMode] =
+    useState<Nullable<DRAWING_MODE>>('FREE_DRAWING')
 
   const [activeObject, setActiveObject] =
-    useState<tuiImageEditor.IGraphicObjectProps | null>(null)
+    useState<Nullable<tuiImageEditor.IGraphicObjectProps>>(null)
   const [brushWidth, setBrushWidth] = useState(5)
   const [brushColor, setBrushColor] = useState('#000')
 
-  const brand = useSelector<IAppState, IBrand | null>(({ user }) =>
-    getBrandByType(user, 'Brokerage')
+  const brand = useSelector<IAppState, Nullable<IBrand>>(({ activeTeam }) =>
+    getBrandByType(activeTeam, 'Brokerage')
   )
 
   useEffectOnce(() => {

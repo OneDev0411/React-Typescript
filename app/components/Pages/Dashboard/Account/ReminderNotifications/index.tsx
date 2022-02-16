@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 import { Grid, Theme, useTheme } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { getContextsByBrand } from 'actions/deals'
 import ActionButton from 'components/Button/ActionButton'
 import { addNotification } from 'components/notification'
@@ -16,12 +17,7 @@ import Loading from 'partials/Loading'
 import { IAppState } from 'reducers'
 import { selectBrandContexts } from 'reducers/deals/contexts'
 import { selectDeals } from 'selectors/deals'
-import { selectUser } from 'selectors/user'
-import {
-  getActiveTeamId,
-  hasUserAccessToCrm,
-  hasUserAccessToDeals
-} from 'utils/user-teams'
+import { hasUserAccessToCrm, hasUserAccessToDeals } from 'utils/acl'
 
 import Column from './components/Column'
 import { RENDER_FORCE_PUSH_BUTTON } from './constants'
@@ -33,7 +29,7 @@ import { updateNewColumnInColumns } from './helpers/update-new-column-in-columns
 import { ColumnState } from './types'
 
 export default function ReminderNotifications() {
-  const user = useSelector(selectUser)
+  const activeTeam = useUnsafeActiveTeam()
   const deals = useSelector(selectDeals)
   const contactsAttributeDefs = useSelector(
     ({ contacts }: IAppState) => contacts.attributeDefs
@@ -95,32 +91,35 @@ export default function ReminderNotifications() {
       const settings = await getSettings()
       const columns: ColumnState[] = []
 
-      if (hasUserAccessToDeals(user)) {
+      if (hasUserAccessToDeals(activeTeam)) {
         const dealContexts = await getDealContexts()
 
         columns.push(getDealColumn(dealContexts, settings))
       }
 
-      if (hasUserAccessToCrm(user)) {
+      if (hasUserAccessToCrm(activeTeam)) {
         columns.push(getContactColumn(contactsAttributeDefs, settings))
       }
 
       return columns
 
       async function getDealContexts(): Promise<readonly IDealBrandContext[]> {
-        const brandId = getActiveTeamId(user)
-        const dealContexts = selectBrandContexts(deals.contexts, brandId)
+        // const dealContexts = getDealContextsFromStore()
+        const dealContexts = selectBrandContexts(
+          deals.contexts,
+          activeTeam?.brand.id
+        )
 
         if (dealContexts) {
           return dealContexts
         }
 
-        await dispatch(getContextsByBrand(brandId))
+        await dispatch(getContextsByBrand(activeTeam?.brand.id))
 
         return dealContexts ?? []
       }
     }
-  }, [contactsAttributeDefs, deals, dispatch, user])
+  }, [activeTeam, contactsAttributeDefs, deals, dispatch])
 
   return (
     <>

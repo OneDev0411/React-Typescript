@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { confirmation } from '@app/store_actions/confirmation'
 import { getLocationErrorMessage } from '@app/utils/map'
 import GlobalPageLayout from '@app/views/components/GlobalPageLayout'
@@ -38,9 +39,10 @@ interface Props extends WithRouterProps {
 
 function FavoritesTab({ isWidget, user }: Props) {
   const classes = useStyles()
+  const activeTeam = useUnsafeActiveTeam()
 
   const reduxDispatch = useDispatch()
-  const userLastBrowsingLocation = getUserLastBrowsingLocation(user)
+  const userLastBrowsingLocation = getUserLastBrowsingLocation(activeTeam)
 
   const initialState = {
     map: userLastBrowsingLocation

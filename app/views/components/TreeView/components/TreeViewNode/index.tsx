@@ -1,69 +1,101 @@
-import * as React from 'react'
-import { ReactNode, useCallback } from 'react'
+import { useCallback, memo, ChangeEvent } from 'react'
 
-import {
-  TreeViewExpandArrow,
-  TreeViewExpandButton,
-  TreeViewNodeChildrenContainer,
-  TreeViewNodeContainer,
-  TreeViewNodeContent
-} from './styled'
+import { Checkbox } from '@material-ui/core'
+import { mdiChevronRight, mdiChevronDown } from '@mdi/js'
+import cn from 'classnames'
 
-interface Props<NodeType> {
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+
+import { BaseTreeViewNodeProps } from '../../type'
+
+import { useStyles } from './style'
+
+export interface Props<NodeType> extends BaseTreeViewNodeProps<NodeType> {
   node: NodeType
-
-  // adapter
-  renderNode: (node: NodeType) => ReactNode
-  getId: (node: NodeType) => string
-  getChildNodes: (node?: NodeType) => NodeType[]
-  //
-
-  expandedNodes: string[]
-  selectedNode?: string
-  selectable?: boolean
   onToggleExpanded: (node: NodeType) => any
 }
 
-export const TreeViewNode = React.memo(function TreeViewNode<
+export const TreeViewNode = memo(function TreeViewNode<
   NodeType extends any = any
->({ node, onToggleExpanded, ...props }: Props<NodeType>) {
+>({ node, onToggleExpanded, onCheckNode, ...props }: Props<NodeType>) {
+  const classes = useStyles()
   const childNodes = props.getChildNodes(node) || []
 
-  const expanded = props.expandedNodes.indexOf(props.getId(node)) > -1
+  const expandable = childNodes.length > 0
+  const expanded = props.expandedNodes.indexOf(props.getNodeId(node)) > -1
 
-  const toggle = useCallback(
+  const handleToggleNode = useCallback(
     () => onToggleExpanded(node),
     [node, onToggleExpanded]
   )
 
-  const expandable = childNodes.length > 0
-  const arrow = expandable ? (
-    <TreeViewExpandButton onClick={toggle}>
-      <TreeViewExpandArrow expanded={expanded} />
-    </TreeViewExpandButton>
-  ) : null
+  const handleCheckNode = (e: ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation()
+
+    if (!props.multiSelectable || !onCheckNode) {
+      return
+    }
+
+    onCheckNode(node)
+  }
+
+  const renderNode = () => {
+    const checkbox = props.multiSelectable && (
+      <Checkbox
+        size="small"
+        classes={{
+          root: classes.selectCheckbox
+        }}
+        onChange={handleCheckNode}
+      />
+    )
+    const arrow = expandable && (
+      <button
+        type="button"
+        className={cn(classes.expandButton, {
+          [classes.isExpanded]: expanded
+        })}
+        onClick={handleToggleNode}
+      >
+        <SvgIcon
+          path={expanded ? mdiChevronDown : mdiChevronRight}
+          size={muiIconSizes.small}
+        />
+      </button>
+    )
+
+    return (
+      <div
+        className={cn(classes.contentContainer, {
+          [classes.expandableContentContainer]: expandable,
+          [classes.isContentContainerExpanded]: expanded,
+          [classes.selectableContentContainer]: props.selectable
+        })}
+      >
+        {arrow}
+        {checkbox}
+        <div className={classes.content}>{props.renderNode(node)}</div>
+      </div>
+    )
+  }
 
   return (
-    <>
-      <TreeViewNodeContainer
-        selectable={props.selectable}
-        expandable={expandable}
-      >
-        {arrow}{' '}
-        <TreeViewNodeContent>{props.renderNode(node)}</TreeViewNodeContent>
-      </TreeViewNodeContainer>
-      {expanded && (
-        <TreeViewNodeChildrenContainer>
+    <div className={classes.container}>
+      {renderNode()}
+      {expandable && expanded && (
+        <div className={classes.childrenContainer}>
           {childNodes.map(node => (
             <TreeViewNode
-              key={props.getId(node)}
+              key={props.getNodeId(node)}
               node={node}
               onToggleExpanded={onToggleExpanded}
+              onCheckNode={onCheckNode}
               {...props}
             />
           ))}
-        </TreeViewNodeChildrenContainer>
+        </div>
       )}
-    </>
+    </div>
   )
 })

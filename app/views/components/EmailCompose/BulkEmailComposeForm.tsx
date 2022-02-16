@@ -1,13 +1,14 @@
-import React, { ComponentProps, HTMLProps } from 'react'
+import { ComponentProps, HTMLProps } from 'react'
 
 import { TextFieldProps } from '@material-ui/core'
 import { Field } from 'react-final-form'
 import { useSelector } from 'react-redux'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 import { selectUser } from 'selectors/user'
-import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
+import { getBrandUsers } from 'utils/user-teams'
 
 import { EmailRecipientQuickSuggestions } from '../EmailRecipientQuickSuggestions'
 import EmailRecipientsChipsInput from '../EmailRecipientsChipsInput'
@@ -56,7 +57,7 @@ export function BulkEmailComposeForm({
   ...otherProps
 }: Props) {
   const user = useSelector(selectUser)
-  const activeBrand = getActiveBrand(user)
+  const activeBrand = useUnsafeActiveBrand()
   const activeBrandUsers = activeBrand ? getBrandUsers(activeBrand) : [user]
   const [allAccounts, isLoadingAccounts] =
     useGetAllOauthAccounts(filterAccounts)

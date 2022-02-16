@@ -1,8 +1,9 @@
+import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
+
 import Socket from '..'
 import Deal from '../../../models/Deal'
 import { updateDeal } from '../../../store_actions/deals'
 import store from '../../../stores'
-import { viewAs, viewAsEveryoneOnTeam } from '../../../utils/user-teams'
 
 export default class DealSocket extends Socket {
   constructor(user) {
@@ -13,11 +14,13 @@ export default class DealSocket extends Socket {
   }
 
   shouldUpsertDeal(deal) {
-    if (viewAsEveryoneOnTeam(this.user)) {
+    const activeTeam = store.getState().activeTeam ?? null
+
+    if (viewAsEveryoneOnTeam(activeTeam)) {
       return true
     }
 
-    const usersFilter = viewAs(this.user, true)
+    const usersFilter = viewAs(activeTeam, true)
     const dealUsers = (deal.roles || [])
       .filter(role => role.user !== null)
       .map(role => role.user.id)
