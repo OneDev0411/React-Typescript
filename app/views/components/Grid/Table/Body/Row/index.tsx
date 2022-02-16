@@ -5,11 +5,11 @@ import cn from 'classnames'
 import { StateContext } from '../../context'
 import { TableColumn, TrProps, TdProps, GridClasses } from '../../types'
 
-import { RowContainer as ListRowContainer, GridRowContainer } from './styled'
+import { RowContainer, GridRowContainer } from './styled'
 
 interface Props<Row> {
   index: number
-  style: CSSProperties
+  style?: CSSProperties
   data: {
     rows: Row[]
     columns: TableColumn<Row>[]
@@ -46,15 +46,33 @@ function Row<T>({
     [state.selection, row.id, rowIndex]
   )
 
-  const RowContainer = inlineGridEnabled ? GridRowContainer : ListRowContainer
+  const rowCells = getRowCells(
+    rows,
+    rowIndex,
+    columns,
+    columnsSize,
+    inlineGridEnabled,
+    getTdProps,
+    isRowSelected
+  )
+
+  if (inlineGridEnabled) {
+    return (
+      <GridRowContainer
+        selected={isRowSelected}
+        style={style}
+        data-tour-id={`row-${rowIndex}`}
+      >
+        {rowCells}
+      </GridRowContainer>
+    )
+  }
 
   return (
     <RowContainer
       index={rowIndex}
       selected={isRowSelected}
-      className={cn(classes.row, {
-        selected: isRowSelected && inlineGridEnabled
-      })}
+      className={classes.row}
       style={style}
       data-tour-id={`row-${rowIndex}`}
       {...getTrProps({
@@ -63,50 +81,66 @@ function Row<T>({
         selected: isRowSelected
       })}
     >
-      {columns
-        .filter(
-          (column: TableColumn<T>) =>
-            (inlineGridEnabled && !column.isHidden && !!column.render) ??
-            !!column.render
-        )
-        .map((column: TableColumn<T>, columnIndex: number) => (
-          <div
-            key={columnIndex}
-            className={cn(column.class, {
-              column: !inlineGridEnabled,
-              primary: !inlineGridEnabled && column.primary === true
-            })}
-            style={
-              inlineGridEnabled
-                ? {
-                    width: column.width ?? '180px' // columnsSize[columnIndex]
-                  }
-                : {
-                    width: columnsSize[columnIndex],
-                    textAlign: column.align || 'left',
-                    ...(column.rowStyle || {}),
-                    ...(column.style || {})
-                  }
-            }
-            {...getTdProps({
-              columnIndex,
-              column,
-              rowIndex,
-              row
-            })}
-          >
-            {getCell(
-              column,
-              row,
-              rowIndex,
-              columnIndex,
-              rows.length,
-              isRowSelected
-            )}
-          </div>
-        ))}
+      {rowCells}
     </RowContainer>
   )
+}
+
+function getRowCells<Row>(
+  rows,
+  rowIndex,
+  columns,
+  columnsSize,
+  inlineGridEnabled,
+  getTdProps,
+  isRowSelected
+) {
+  if (inlineGridEnabled) {
+    return columns
+      .filter((column: TableColumn<Row>) => !!column.render)
+      .map((column: TableColumn<Row>, columnIndex: number) =>
+        getCell(
+          column,
+          rows[rowIndex],
+          rowIndex,
+          columnIndex,
+          rows.length,
+          isRowSelected
+        )
+      )
+  }
+
+  return columns
+    .filter((column: TableColumn<Row>) => !!column.render)
+    .map((column: TableColumn<Row>, columnIndex: number) => (
+      <div
+        key={columnIndex}
+        className={cn(column.class, column, {
+          primary: column.primary === true
+        })}
+        style={{
+          width: columnsSize[columnIndex],
+          textAlign: column.align || 'left',
+          ...(column.rowStyle || {}),
+          ...(column.style || {})
+        }}
+        {...getTdProps({
+          columnIndex,
+          column,
+          rowIndex,
+          row: rows[rowIndex]
+        })}
+      >
+        {getCell(
+          column,
+          rows[rowIndex],
+          rowIndex,
+          columnIndex,
+          rows.length,
+          isRowSelected
+        )}
+      </div>
+    ))
 }
 
 function getCell<Row>(
@@ -119,6 +153,7 @@ function getCell<Row>(
 ) {
   if (column.render) {
     return column.render({
+      column,
       row,
       totalRows,
       rowIndex,
