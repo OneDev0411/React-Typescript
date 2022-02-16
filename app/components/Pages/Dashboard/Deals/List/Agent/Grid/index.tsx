@@ -40,6 +40,7 @@ import EmptyState from './EmptyState'
 interface Props {
   sortableColumns: SortableColumn[]
   activeFilter: string
+  isSearching: boolean
 }
 
 function AgentGrid(props: Props & WithRouterProps) {
@@ -127,28 +128,33 @@ function AgentGrid(props: Props & WithRouterProps) {
   useDealsListsLuckyMode(data, isFetchingDeals)
 
   return (
-    <Grid<IDeal>
-      sorting={{
-        columns: props.sortableColumns,
-        sortBy: getGridSort(
-          activeTeam,
-          columns,
-          props.location,
-          SORT_FIELD_SETTING_KEY
-        )
-      }}
-      columns={columns}
-      rows={data}
-      totalRows={data.length}
-      virtualize={data.length > 30}
-      LoadingStateComponent={LoadingState}
-      EmptyStateComponent={EmptyState}
-      loading={isFetchingDeals ? 'middle' : null}
-      getTrProps={getRowProps}
-      classes={{
-        row: gridClasses.row
-      }}
-    />
+    <>
+      {data.length === 0 && !isFetchingDeals ? (
+        <EmptyState isSearching={props.isSearching} />
+      ) : (
+        <Grid<IDeal>
+          sorting={{
+            columns: props.sortableColumns,
+            sortBy: getGridSort(
+              activeTeam,
+              columns,
+              props.location,
+              SORT_FIELD_SETTING_KEY
+            )
+          }}
+          columns={columns}
+          rows={data}
+          totalRows={data.length}
+          virtualize={data.length > 30}
+          LoadingStateComponent={LoadingState}
+          loading={isFetchingDeals ? 'middle' : null}
+          getTrProps={getRowProps}
+          classes={{
+            row: gridClasses.row
+          }}
+        />
+      )}
+    </>
   )
 }
 

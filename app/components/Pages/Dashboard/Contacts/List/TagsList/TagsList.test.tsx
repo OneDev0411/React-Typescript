@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 import attributeDefs from 'fixtures/contacts/attribute-defs.json'
 import tags from 'fixtures/contacts/tags.json'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'

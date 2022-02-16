@@ -43,6 +43,9 @@ export default function AgentTable(props: WithRouterProps) {
   const dispatch = useDispatch()
 
   const deals = useSelector(({ deals }: IAppState) => deals.list)
+
+  const isSearching = searchCriteria.length !== 0
+
   const isFetchingDeals = useSelector(
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
@@ -104,6 +107,7 @@ export default function AgentTable(props: WithRouterProps) {
         <Grid
           activeFilter={props.params.filter}
           sortableColumns={SORTABLE_COLUMNS}
+          isSearching={isSearching}
         />
       </PageLayout.Main>
     </PageLayout>

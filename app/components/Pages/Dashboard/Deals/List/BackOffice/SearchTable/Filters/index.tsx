@@ -41,14 +41,19 @@ import { FilterButton } from './filterButton'
 import { StatusEditor } from './statusEditor'
 import { useStyles } from './styles'
 import { DEAL_TYPES_ITEMS, TypeEditor } from './typeEditor'
-import { UseFiltersWithQuery } from './useFiltersWithQuery'
 import { isStatusFilterChanged } from './utils'
 
 interface Props {
   searchQuery: SearchQuery
+  userFilters: DealsListFilters
+  onFiltersChange: (changedFilters: Partial<DealsListFilters>) => void
 }
 
-export const Filters = ({ searchQuery }: Props) => {
+export const Filters = ({
+  searchQuery,
+  userFilters,
+  onFiltersChange
+}: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const isFirstMount = useFirstMountState()
@@ -62,12 +67,6 @@ export const Filters = ({ searchQuery }: Props) => {
   const [isExporting, setIsExporting] = useState(false)
   const activeTeam = useActiveTeam()
   const activeBrand = activeTeam.brand
-
-  const [userFilters, setUserFilters] = UseFiltersWithQuery()
-
-  const onFiltersChange = (changedFilters: Partial<DealsListFilters>) => {
-    setUserFilters(oldFilters => ({ ...oldFilters, ...changedFilters }))
-  }
 
   const onExportList = useCallback(async () => {
     const payload = {

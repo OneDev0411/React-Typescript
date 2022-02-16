@@ -38,6 +38,7 @@ import { SearchQuery } from '../types'
 import { ContactsZeroState } from './ZeroState'
 
 interface Props {
+  isSearching: boolean
   searchQuery: SearchQuery
   statuses: IDealStatus[]
 }
@@ -193,28 +194,33 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
   useDealsListsLuckyMode(data, isFetchingDeals)
 
   return (
-    <Grid<IDeal>
-      sorting={{
-        columns: SORTABLE_COLUMNS,
-        sortBy: getGridSort(
-          activeTeam,
-          columns,
-          props.location,
-          SORT_FIELD_SETTING_KEY
-        )
-      }}
-      columns={columns}
-      rows={data}
-      totalRows={data.length}
-      virtualize={data.length > 150}
-      LoadingStateComponent={LoadingState}
-      EmptyStateComponent={ContactsZeroState}
-      loading={isFetchingDeals ? 'middle' : null}
-      getTrProps={getRowProps}
-      classes={{
-        row: gridClasses.row
-      }}
-    />
+    <>
+      {data.length === 0 && !isFetchingDeals ? (
+        <ContactsZeroState isSearching={props.isSearching} />
+      ) : (
+        <Grid<IDeal>
+          sorting={{
+            columns: SORTABLE_COLUMNS,
+            sortBy: getGridSort(
+              activeTeam,
+              columns,
+              props.location,
+              SORT_FIELD_SETTING_KEY
+            )
+          }}
+          columns={columns}
+          rows={data}
+          totalRows={data.length}
+          virtualize={data.length > 150}
+          LoadingStateComponent={LoadingState}
+          loading={isFetchingDeals ? 'middle' : null}
+          getTrProps={getRowProps}
+          classes={{
+            row: gridClasses.row
+          }}
+        />
+      )}
+    </>
   )
 }
 

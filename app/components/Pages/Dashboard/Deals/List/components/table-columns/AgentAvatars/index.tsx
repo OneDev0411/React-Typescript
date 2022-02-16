@@ -4,7 +4,11 @@ import { Tooltip } from '@material-ui/core'
 
 import { Avatar } from 'components/Avatar'
 
-const AgentAvatars = ({ agent }) => {
+interface Props {
+  agent: Nullable<IDealRole>
+}
+
+const AgentAvatars = ({ agent }: Props) => {
   if (!agent) {
     return null
   }

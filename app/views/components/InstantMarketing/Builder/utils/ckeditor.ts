@@ -1,5 +1,7 @@
 import { Editor } from 'grapesjs'
 
+import { supportNunjucksVariables } from './ckeditor-patches/support-nunjucks-variables'
+
 const CK_EDITOR_LINE_HEIGHT_VALUES = [
   '1',
   '1.1',
@@ -296,4 +298,7 @@ export async function attachCKEditor(
       }, 200)
     }
   })
+
+  // Apply all available patches
+  supportNunjucksVariables()
 }
