@@ -1,11 +1,11 @@
-import { Card, Typography, makeStyles, Badge } from '@material-ui/core'
+import { Card, Typography, makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 import { Link } from 'react-router'
 
-import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { AppointmentFilter, AppointmentFilterInfo } from '../../types'
+import { InlineBadge } from '../InlineBadge'
 
 const useStyles = makeStyles(
   theme => ({
@@ -39,7 +39,8 @@ const useStyles = makeStyles(
     },
     info: {
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'baseline',
+      marginTop: theme.spacing(0.25)
     },
     label: { marginLeft: theme.spacing(0.5) }
   }),
@@ -70,21 +71,25 @@ function ShowingAppointmentFilterCard({
   const classes = useStyles()
 
   const card = (
-    <Badge className={classes.root} badgeContent={badge} color="error">
+    <InlineBadge className={classes.root} badgeContent={badge} color="error">
       <Card
         className={classNames(classes.card, selected && classes.selected)}
         variant="outlined"
         onClick={onClick}
       >
-        <Typography variant="subtitle1">{count}</Typography>
+        {icon ? (
+          <SvgIcon path={icon} />
+        ) : (
+          <Typography variant="subtitle1">{count}</Typography>
+        )}
         <div className={classes.info}>
-          {icon && <SvgIcon path={icon} size={muiIconSizes.small} />}
+          {icon && <Typography variant="subtitle1">{count}</Typography>}
           <Typography className={classes.label} variant="body2">
             {label}
           </Typography>
         </div>
       </Card>
-    </Badge>
+    </InlineBadge>
   )
 
   return link ? (

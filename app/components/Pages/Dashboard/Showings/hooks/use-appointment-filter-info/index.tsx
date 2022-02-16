@@ -1,10 +1,10 @@
 import {
   mdiRotateRight,
   mdiFlagCheckered,
-  mdiExclamation,
-  mdiCheck,
-  mdiClose,
-  mdiPlus
+  mdiAlertDecagramOutline,
+  mdiCheckCircleOutline,
+  mdiCloseCircleOutline,
+  mdiStarOutline
 } from '@mdi/js'
 
 import { AppointmentFilter, AppointmentFilterInfo } from '../../types'
@@ -23,12 +23,12 @@ export const appointmentStatusInfo: Record<
   },
   Requested: {
     label: 'Requested',
-    icon: mdiExclamation,
+    icon: mdiAlertDecagramOutline,
     filter: createStatusFilter('Requested')
   },
   Confirmed: {
     label: 'Approved',
-    icon: mdiCheck,
+    icon: mdiCheckCircleOutline,
     filter: createStatusFilter('Confirmed')
   },
   Rescheduled: {
@@ -38,7 +38,7 @@ export const appointmentStatusInfo: Record<
   },
   Canceled: {
     label: 'Canceled',
-    icon: mdiClose,
+    icon: mdiCloseCircleOutline,
     filter: createStatusFilter('Canceled')
   },
   Completed: {
@@ -48,7 +48,7 @@ export const appointmentStatusInfo: Record<
   },
   Feedback: {
     label: 'Feedback',
-    icon: mdiPlus,
+    icon: mdiStarOutline,
     filter: appointments =>
       appointments.filter(appointment => !!appointment.feedback)
   }
