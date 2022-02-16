@@ -26,7 +26,8 @@ const useStyles = makeStyles(
         alignItems: 'center',
         justifyContent: 'space-between'
       }
-    }
+    },
+    agentName: { margin: theme.spacing(0, 1) }
   }),
   { name: 'ShowingDetailHeader' }
 )
@@ -50,27 +51,46 @@ function ShowingDetailHeader({
     <Box className={classes.root} px={4} pt={4}>
       <Box className={classes.header}>
         <Box display="flex" alignItems="center" mr={1} mb={2}>
-          <Box flexShrink="0" flexGrow="0" mr={2}>
+          <Box flexShrink="0" flexGrow="0" mr={1}>
             <Avatar url={image} variant="circular" size="xlarge" />
           </Box>
           <Box>
-            <Typography noWrap variant="subtitle1">
-              {address}
-            </Typography>
-            {listing && (
-              <LinkButton
-                color="secondary"
-                size="small"
-                variant="text"
-                endIcon={
-                  <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
-                }
-                to={`/dashboard/mls/${listing.id}`}
-                target="_blank"
-              >
-                MLS# {listing.mls_number}
-              </LinkButton>
-            )}
+            <Box ml={1}>
+              <Typography noWrap variant="h6">
+                {address}
+              </Typography>
+            </Box>
+            <Box display="flex">
+              {listing && (
+                <LinkButton
+                  color="secondary"
+                  size="medium"
+                  variant="text"
+                  endIcon={
+                    <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
+                  }
+                  to={`/dashboard/mls/${listing.id}`}
+                  target="_blank"
+                >
+                  MLS# {listing.mls_number}
+                </LinkButton>
+              )}
+              <Box display="flex" alignItems="center" ml={4}>
+                <Typography noWrap variant="caption" color="textSecondary">
+                  Agent
+                </Typography>
+                <Typography
+                  noWrap
+                  variant="subtitle2"
+                  className={classes.agentName}
+                >
+                  John Doe
+                </Typography>
+                <Typography noWrap variant="subtitle2" color="textSecondary">
+                  Texas
+                </Typography>
+              </Box>
+            </Box>
           </Box>
         </Box>
         <Box
