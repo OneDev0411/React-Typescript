@@ -1,4 +1,4 @@
 declare type IShowingRoleType = Extract<
   IDealRoleType,
-  'SellerAgent' | 'CoSellerAgent' | 'Tenant'
+  'Admin/Assistant' | 'SellerAgent' | 'CoSellerAgent' | 'Tenant' | 'Other'
 >

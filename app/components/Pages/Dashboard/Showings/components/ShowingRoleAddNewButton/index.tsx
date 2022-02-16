@@ -42,6 +42,15 @@ function ShowingRoleAddNewButton({
           <ListItem
             button
             onClick={event => {
+              onClick('Admin/Assistant')
+              closeMenu(event)
+            }}
+          >
+            {getShowingRoleLabel('Admin/Assistant')}
+          </ListItem>
+          <ListItem
+            button
+            onClick={event => {
               onClick('CoSellerAgent')
               closeMenu(event)
             }}
@@ -56,6 +65,15 @@ function ShowingRoleAddNewButton({
             }}
           >
             {getShowingRoleLabel('Tenant')}
+          </ListItem>
+          <ListItem
+            button
+            onClick={event => {
+              onClick('Other')
+              closeMenu(event)
+            }}
+          >
+            {getShowingRoleLabel('Other')}
           </ListItem>
         </List>
       )}

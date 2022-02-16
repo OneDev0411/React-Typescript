@@ -146,6 +146,9 @@ export function sortAppointments(
 
 export function getShowingRoleLabel(role: IDealRoleType): string {
   switch (role) {
+    case 'Admin/Assistant':
+      return 'Admin/Assistant'
+
     case 'SellerAgent':
       return 'Agent'
 
@@ -156,7 +159,7 @@ export function getShowingRoleLabel(role: IDealRoleType): string {
       return 'Occupant'
 
     default:
-      return role
+      return 'Other'
   }
 }
 
