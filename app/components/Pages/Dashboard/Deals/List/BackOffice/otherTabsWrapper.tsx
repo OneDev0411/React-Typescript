@@ -15,5 +15,7 @@ export function OtherTabsWrapper({ searchQuery }: Props) {
 
   useSearchQuery(searchQuery, statuses)
 
-  return <Grid searchQuery={searchQuery} statuses={statuses} />
+  return (
+    <Grid searchQuery={searchQuery} statuses={statuses} isSearching={false} />
+  )
 }

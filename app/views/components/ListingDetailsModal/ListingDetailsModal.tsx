@@ -28,6 +28,7 @@ function ListingDetailsModal({
       open={isOpen}
       fullScreen
       scroll="paper"
+      data-test="listing-details-modal"
       classes={{
         root: 'u-scrollbar'
       }}

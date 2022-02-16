@@ -1,6 +1,8 @@
-import { FavoritesState, reducer } from './index'
-import { Actions } from '../actions'
 import { compactListing } from 'fixtures/listing/compact_listing'
+
+import { Actions } from '../actions'
+
+import { FavoritesState, reducer } from './index'
 
 describe('reducer', () => {
   let initialState: FavoritesState
@@ -54,6 +56,7 @@ describe('reducer', () => {
         }
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -84,6 +87,7 @@ describe('reducer', () => {
         }
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -108,6 +112,7 @@ describe('reducer', () => {
         listings: initialState.result.listings.slice(1)
       }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -123,6 +128,7 @@ describe('reducer', () => {
     const expected: FavoritesState = {
       ...initialState
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -140,6 +146,7 @@ describe('reducer', () => {
       ...initialState,
       map: { zoom: 12, center: { lat: 1, lng: 2 } }
     }
+
     expect(actual).toEqual(expected)
   })
 
@@ -156,6 +163,7 @@ describe('reducer', () => {
       ...initialState,
       isLoading: true
     }
+
     expect(actual).toEqual(expected)
   })
 })
