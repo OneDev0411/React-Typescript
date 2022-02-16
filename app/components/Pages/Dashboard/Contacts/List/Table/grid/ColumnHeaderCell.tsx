@@ -59,19 +59,15 @@ const ColumnHeaderCell = ({
 }: Props) => {
   const classes = useStyles()
 
-  let columnIcon: Nullable<React.ReactNode> = null
-  let sortButton: Nullable<React.ReactNode> = null
-
-  if (iconPath) {
-    columnIcon = (
+  const columnIcon = () =>
+    iconPath && (
       <div className={classes.iconContainer}>
         <SvgIcon size={muiIconSizes.small} path={iconPath} />
       </div>
     )
-  }
 
-  if (sortable) {
-    sortButton = (
+  const sortButton = () =>
+    sortable && (
       <div className={classes.sortActionContainer}>
         <SvgIcon
           size={muiIconSizes.small}
@@ -85,15 +81,14 @@ const ColumnHeaderCell = ({
         />
       </div>
     )
-  }
 
   return (
     <div className={classes.container}>
-      {columnIcon}
+      {columnIcon()}
       <div className={classes.titleContainer}>
         <Typography variant="body2">{title}</Typography>
       </div>
-      {sortButton}
+      {sortButton()}
     </div>
   )
 }

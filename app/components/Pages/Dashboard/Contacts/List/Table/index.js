@@ -110,11 +110,20 @@ const ContactsList = props => {
       ),
       width: '250px',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
-      render: ({ row: contact, isRowSelected }) => {
+      render: ({ row: contact, isRowSelected, column }) => {
         const name = getAttributeFromSummary(contact, 'display_name')
 
+        if (column.isHidden) {
+          return null
+        }
+
         return (
-          <EditTextCell text={name} isPrimary isRowSelected={isRowSelected} />
+          <EditTextCell
+            text={name}
+            isPrimary
+            isRowSelected={isRowSelected}
+            width={column.width}
+          />
         )
       }
     },
@@ -130,17 +139,24 @@ const ContactsList = props => {
       isHidden: ['xs', 'sm'].includes(breakpoint),
       sortable: false,
       width: '210px',
-      render: ({ row: contact, isRowSelected }) => (
-        <TagsCell
-          contact={contact}
-          reloadContacts={props.reloadContacts}
-          hasAttributeFilters={
-            (props.filters?.attributeFilters || []).length > 0
-          }
-          isParkTabActive={isParkTabActive}
-          isRowSelected={isRowSelected}
-        />
-      )
+      render: ({ row: contact, isRowSelected, column }) => {
+        if (column.isHidden) {
+          return null
+        }
+
+        return (
+          <TagsCell
+            contact={contact}
+            reloadContacts={props.reloadContacts}
+            hasAttributeFilters={
+              (props.filters?.attributeFilters || []).length > 0
+            }
+            isParkTabActive={isParkTabActive}
+            isRowSelected={isRowSelected}
+            width={column.width}
+          />
+        )
+      }
     },
     {
       id: 'phone',
@@ -153,9 +169,19 @@ const ContactsList = props => {
       ),
       sortable: false,
       width: '210px',
-      render: ({ row: contact, isRowSelected }) => (
-        <PhoneNumberCell contact={contact} isRowSelected={isRowSelected} />
-      )
+      render: ({ row: contact, isRowSelected, column }) => {
+        if (column.isHidden) {
+          return null
+        }
+
+        return (
+          <PhoneNumberCell
+            contact={contact}
+            isRowSelected={isRowSelected}
+            width={column.width}
+          />
+        )
+      }
     },
     {
       id: 'email',
@@ -167,10 +193,21 @@ const ContactsList = props => {
         />
       ),
       sortable: false,
+      isHidden: ['xs'].includes(breakpoint),
       width: '320px',
-      render: ({ row: contact, isRowSelected }) => (
-        <EmailCell contact={contact} isRowSelected={isRowSelected} />
-      )
+      render: ({ row: contact, isRowSelected, column }) => {
+        if (column.isHidden) {
+          return null
+        }
+
+        return (
+          <EmailCell
+            contact={contact}
+            isRowSelected={isRowSelected}
+            width={column.width}
+          />
+        )
+      }
     },
     {
       id: 'last_touched',
@@ -185,9 +222,19 @@ const ContactsList = props => {
       isHidden: ['xs', 'sm', 'md'].includes(breakpoint),
       sortable: false,
       width: '140px',
-      render: ({ row: contact, isRowSelected }) => (
-        <LastTouchCell contact={contact} isRowSelected={isRowSelected} />
-      )
+      render: ({ row: contact, isRowSelected, column }) => {
+        if (column.isHidden) {
+          return null
+        }
+
+        return (
+          <LastTouchCell
+            contact={contact}
+            isRowSelected={isRowSelected}
+            width={column.width}
+          />
+        )
+      }
     },
     {
       id: 'flows',
@@ -200,17 +247,24 @@ const ContactsList = props => {
       ),
       width: '120px',
       isHidden: breakpoint !== 'xl',
-      render: ({ row: contact, isRowSelected }) => (
-        <FlowsCell
-          contact={contact}
-          callback={() => {
-            resetSelectedRow()
-            props.reloadContacts()
-          }}
-          isRowSelected={isRowSelected}
-          flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
-        />
-      )
+      render: ({ row: contact, isRowSelected, column }) => {
+        if (column.isHidden) {
+          return null
+        }
+
+        return (
+          <FlowsCell
+            contact={contact}
+            callback={() => {
+              resetSelectedRow()
+              props.reloadContacts()
+            }}
+            width={column.width}
+            isRowSelected={isRowSelected}
+            flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
+          />
+        )
+      }
     },
     {
       id: 'birthday',
@@ -224,9 +278,19 @@ const ContactsList = props => {
       sortable: false,
       isHidden: breakpoint !== 'xl',
       width: '180px',
-      render: ({ row: contact, isRowSelected }) => (
-        <BirthdayCell contact={contact} isRowSelected={isRowSelected} />
-      )
+      render: ({ row: contact, isRowSelected, column }) => {
+        if (column.isHidden) {
+          return null
+        }
+
+        return (
+          <BirthdayCell
+            contact={contact}
+            isRowSelected={isRowSelected}
+            width={column.width}
+          />
+        )
+      }
     }
   ]
 

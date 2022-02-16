@@ -5,25 +5,16 @@ import { GridSelectionOptions, TableColumn } from '../../types'
 
 const useStyles = makeStyles(
   theme => ({
-    rowContainer: {
-      height: '40px',
+    rowContainer: ({ rowSize }: { rowSize: number }) => ({
+      height: theme.spacing(rowSize),
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'stretch',
 
       backgroundColor: alpha(theme.palette.grey[50], 0.75),
       borderTop: `1px solid ${theme.palette.divider}`,
-      borderBottom: `1px solid ${theme.palette.divider}`,
-
-      '& > div': {
-        display: 'flex',
-        flex: '0 0 auto',
-
-        '&:first-child': {
-          borderRight: 'none'
-        }
-      }
-    },
+      borderBottom: `1px solid ${theme.palette.divider}`
+    }),
     cellContainer: {
       height: '100%',
       display: 'flex',
@@ -38,20 +29,27 @@ const useStyles = makeStyles(
 interface Props<Row> {
   columns: TableColumn<Row>[]
   rows: (Row & { id?: UUID })[]
-  totalRows: number
+  totalRows?: number
   selection: GridSelectionOptions<Row> | null
+  rowSize?: number
   inlineGridEnabled?: boolean
   columnsSize: string[]
 }
 
-function Header<Row>({ columns, rows, totalRows }: Props<Row>) {
-  const classes = useStyles()
+export function Header<Row>({
+  columns,
+  rows,
+  totalRows = 0,
+  rowSize = 5,
+  columnsSize
+}: Props<Row>) {
+  const classes = useStyles({ rowSize })
 
-  const Cell = (cellContent, column, columnIndex) => (
+  const Cell = ({ cellContent, columnIndex }) => (
     <div
       className={classes.cellContainer}
       key={columnIndex}
-      style={{ width: column.width ?? '180px' }}
+      style={{ width: columnsSize[columnIndex] }}
     >
       {cellContent}
     </div>
@@ -62,21 +60,22 @@ function Header<Row>({ columns, rows, totalRows }: Props<Row>) {
       return null
     }
 
-    if (typeof column.headerName === 'string') {
-      return Cell(column.headerName, column, columnIndex)
+    const header = column.header ?? column.headerName
+
+    if (typeof header === 'string') {
+      return Cell({ cellContent: header, columnIndex })
     }
 
-    if (typeof column.headerName === 'function') {
-      return Cell(
-        column.headerName({
+    if (typeof header === 'function') {
+      return Cell({
+        cellContent: header({
           rows,
           column,
           columnIndex,
           totalRows
         }),
-        column,
         columnIndex
-      )
+      })
     }
 
     return null
@@ -89,5 +88,3 @@ function Header<Row>({ columns, rows, totalRows }: Props<Row>) {
     </div>
   )
 }
-
-export default Header
