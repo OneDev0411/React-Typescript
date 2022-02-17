@@ -49,6 +49,16 @@ import { useStyles } from './styles'
 import { DEAL_TYPES_ITEMS, TypeEditor } from './typeEditor'
 import { isStatusFilterChanged } from './utils'
 
+const sale_property_types: IDealPropertyTypes[] = [
+  'Resale',
+  'New Home',
+  'Commercial Sale'
+]
+const lease_property_types: IDealPropertyTypes[] = [
+  'Residential Lease',
+  'Commercial Lease'
+]
+
 interface Props {
   searchQuery: SearchQuery
   userFilters: DealsListFilters
@@ -221,26 +231,26 @@ export const Filters = ({
               />
 
               <div className={classes.buttonGroup}>
-                {/* contract date Filter  */}
+                {/* List date Filter  */}
                 <BaseFilterButton
                   renderButton={({ onClick }) => (
                     <FilterButton
                       onClick={onClick}
-                      title="Executed Date"
-                      startIconPath={mdiCalendarCursor}
+                      title="Listing Date"
+                      startIconPath={mdiCalendarPlus}
                       isActive={
                         !isEqual(
-                          systemDefaultFilters.contexts.contract_date?.date,
-                          currentFilters.contexts.contract_date?.date
+                          systemDefaultFilters.contexts.list_date?.date,
+                          currentFilters.contexts.list_date?.date
                         )
                       }
                     />
                   )}
                   renderDropdown={() => (
                     <DateFilterEditor
-                      id="contract_date"
-                      title="Executed Date"
-                      iconPath={mdiCalendarCursor}
+                      id="list_date"
+                      title="Listing Date"
+                      iconPath={mdiCalendarPlus}
                       filters={currentFilters}
                       updateFilters={updateFilters}
                       defaultFilters={systemDefaultFilters}
@@ -248,26 +258,26 @@ export const Filters = ({
                   )}
                 />
 
-                {/* Closing date Filter  */}
+                {/* List expiration Filter  */}
                 <BaseFilterButton
                   renderButton={({ onClick }) => (
                     <FilterButton
                       onClick={onClick}
-                      title="Closing Date"
-                      startIconPath={mdiCalendarCheckOutline}
+                      title="Listing Expiration"
+                      startIconPath={mdiCalendarRemove}
                       isActive={
                         !isEqual(
-                          systemDefaultFilters.contexts.closing_date?.date,
-                          currentFilters.contexts.closing_date?.date
+                          systemDefaultFilters.contexts.expiration_date?.date,
+                          currentFilters.contexts.expiration_date?.date
                         )
                       }
                     />
                   )}
                   renderDropdown={() => (
                     <DateFilterEditor
-                      id="closing_date"
-                      title="Closing Date"
-                      iconPath={mdiCalendarCheckOutline}
+                      id="expiration_date"
+                      title="Listing Expiration"
+                      iconPath={mdiCalendarRemove}
                       filters={currentFilters}
                       updateFilters={updateFilters}
                       defaultFilters={systemDefaultFilters}
@@ -278,29 +288,30 @@ export const Filters = ({
 
               {/* Only `Sale` type related date filters  */}
               {currentFilters.property_type?.length === 1 &&
-                propertyTypesItems[currentFilters.property_type[0]] ===
-                  'Resale' && (
+                sale_property_types.includes(
+                  propertyTypesItems[currentFilters.property_type[0]]
+                ) && (
                   <div className={classes.buttonGroup}>
-                    {/* List date Filter  */}
+                    {/* contract date Filter  */}
                     <BaseFilterButton
                       renderButton={({ onClick }) => (
                         <FilterButton
                           onClick={onClick}
-                          title="Listing Date"
-                          startIconPath={mdiCalendarPlus}
+                          title="Executed Date"
+                          startIconPath={mdiCalendarCursor}
                           isActive={
                             !isEqual(
-                              systemDefaultFilters.contexts.list_date?.date,
-                              currentFilters.contexts.list_date?.date
+                              systemDefaultFilters.contexts.contract_date?.date,
+                              currentFilters.contexts.contract_date?.date
                             )
                           }
                         />
                       )}
                       renderDropdown={() => (
                         <DateFilterEditor
-                          id="list_date"
-                          title="Listing Date"
-                          iconPath={mdiCalendarPlus}
+                          id="contract_date"
+                          title="Executed Date"
+                          iconPath={mdiCalendarCursor}
                           filters={currentFilters}
                           updateFilters={updateFilters}
                           defaultFilters={systemDefaultFilters}
@@ -308,27 +319,26 @@ export const Filters = ({
                       )}
                     />
 
-                    {/* List expiration Filter  */}
+                    {/* Closing date Filter  */}
                     <BaseFilterButton
                       renderButton={({ onClick }) => (
                         <FilterButton
                           onClick={onClick}
-                          title="Listing Expiration"
-                          startIconPath={mdiCalendarRemove}
+                          title="Closing Date"
+                          startIconPath={mdiCalendarCheckOutline}
                           isActive={
                             !isEqual(
-                              systemDefaultFilters.contexts.expiration_date
-                                ?.date,
-                              currentFilters.contexts.expiration_date?.date
+                              systemDefaultFilters.contexts.closing_date?.date,
+                              currentFilters.contexts.closing_date?.date
                             )
                           }
                         />
                       )}
                       renderDropdown={() => (
                         <DateFilterEditor
-                          id="expiration_date"
-                          title="Listing Expiration"
-                          iconPath={mdiCalendarRemove}
+                          id="closing_date"
+                          title="Closing Date"
+                          iconPath={mdiCalendarCheckOutline}
                           filters={currentFilters}
                           updateFilters={updateFilters}
                           defaultFilters={systemDefaultFilters}
@@ -340,8 +350,9 @@ export const Filters = ({
 
               {/* Only `Lease` type related date filters  */}
               {currentFilters.property_type?.length === 1 &&
-                propertyTypesItems[currentFilters.property_type[0]] ===
-                  'Residential Lease' && (
+                lease_property_types.includes(
+                  propertyTypesItems[currentFilters.property_type[0]]
+                ) && (
                   <div className={classes.buttonGroup}>
                     {/* lease begin Filter  */}
                     <BaseFilterButton
