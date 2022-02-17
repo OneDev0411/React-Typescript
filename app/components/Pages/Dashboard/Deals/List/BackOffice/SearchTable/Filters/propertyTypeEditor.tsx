@@ -9,7 +9,7 @@ import { FilterEditorFooter } from './filterEditorFooter'
 import { useStyles } from './styles'
 
 interface Props extends FilterButtonDropDownProp<DealsListFilters> {
-  propertyTypesItems: Record<UUID, IDealPropertyTypes>
+  propertyTypesItems: Record<UUID, IDealPropertyType>
 }
 
 export const PropertyTypeEditor = ({
@@ -60,18 +60,18 @@ export const PropertyTypeEditor = ({
               checked={filters.property_type?.includes(id) || false}
               className={classes.switchControlButton}
               color="primary"
-              name={propertyTypesItems[id]}
+              name={propertyTypesItems[id].label}
               onChange={() => {
                 toggleValues(filters.property_type, id)
               }}
               inputProps={{
-                'aria-label': `${propertyTypesItems[id]} checkbox`
+                'aria-label': `${propertyTypesItems[id].label} checkbox`
               }}
             />
           }
           label={
             <Grid container alignItems="center">
-              <Typography variant="body1">{`${propertyTypesItems[id]}`}</Typography>
+              <Typography variant="body1">{`${propertyTypesItems[id].label}`}</Typography>
             </Grid>
           }
         />

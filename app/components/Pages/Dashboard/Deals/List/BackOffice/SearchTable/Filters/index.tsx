@@ -49,16 +49,6 @@ import { useStyles } from './styles'
 import { DEAL_TYPES_ITEMS, TypeEditor } from './typeEditor'
 import { isStatusFilterChanged } from './utils'
 
-const sale_property_types: IDealPropertyTypes[] = [
-  'Resale',
-  'New Home',
-  'Commercial Sale'
-]
-const lease_property_types: IDealPropertyTypes[] = [
-  'Residential Lease',
-  'Commercial Lease'
-]
-
 interface Props {
   searchQuery: SearchQuery
   userFilters: DealsListFilters
@@ -79,10 +69,10 @@ export const Filters = ({
 
   const propertyTypesItems = useMemo(() => {
     return propertyTypes.reduce((acc, propertyType) => {
-      acc[propertyType.id] = propertyType.label
+      acc[propertyType.id] = { ...propertyType }
 
       return acc
-    }, {} as Record<UUID, IDealPropertyTypes>)
+    }, {} as Record<UUID, IDealPropertyType>)
   }, [propertyTypes])
 
   const [queryParamValue] = useQueryParam('q')
@@ -188,6 +178,7 @@ export const Filters = ({
                       currentFilters.property_type &&
                       currentFilters.property_type.length === 1
                         ? propertyTypesItems[currentFilters.property_type[0]]
+                            .label
                         : 'Property type'
                     }
                     isActive={
@@ -288,9 +279,8 @@ export const Filters = ({
 
               {/* Only `Sale` type related date filters  */}
               {currentFilters.property_type?.length === 1 &&
-                sale_property_types.includes(
-                  propertyTypesItems[currentFilters.property_type[0]]
-                ) && (
+                !propertyTypesItems[currentFilters.property_type[0]]
+                  .is_lease && (
                   <div className={classes.buttonGroup}>
                     {/* contract date Filter  */}
                     <BaseFilterButton
@@ -350,9 +340,8 @@ export const Filters = ({
 
               {/* Only `Lease` type related date filters  */}
               {currentFilters.property_type?.length === 1 &&
-                lease_property_types.includes(
-                  propertyTypesItems[currentFilters.property_type[0]]
-                ) && (
+                propertyTypesItems[currentFilters.property_type[0]]
+                  .is_lease && (
                   <div className={classes.buttonGroup}>
                     {/* lease begin Filter  */}
                     <BaseFilterButton
