@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { Typography } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 
 import { Avatar } from 'components/Avatar'
 import PopOver from 'components/Popover'
@@ -8,6 +6,27 @@ import { getSide } from 'models/Deal/helpers/context/get-side'
 
 import { RoleName } from '../../../../components/Roles/RoleName'
 import { getLegalFullName } from '../../../../utils/roles'
+
+const useStyles = makeStyles(
+  theme => ({
+    container: {
+      display: 'flex',
+      justifyContent: 'center',
+      flexDirection: 'row',
+      alignItems: 'center'
+    },
+    circle: {
+      width: theme.spacing(0.5),
+      height: theme.spacing(0.5),
+      margin: theme.spacing(0, 1),
+      borderRadius: '100%',
+      backgroundColor: theme.palette.grey[500]
+    }
+  }),
+  {
+    name: 'AgentGridSide'
+  }
+)
 
 interface Props {
   deal: IDeal
@@ -17,6 +36,8 @@ interface Props {
 }
 
 export function Side({ deal, roles, rowId, rowsCount }: Props) {
+  const classes = useStyles()
+
   const sideName = getSide(deal)
   const dealRoles = (deal.roles || []) as unknown[]
 
@@ -28,15 +49,10 @@ export function Side({ deal, roles, rowId, rowsCount }: Props) {
     return <Typography variant="caption">{getSide(deal)}</Typography>
   }
 
-  let relatedRoleUser
-
-  if (roles && roles[relatedRole]) {
-    relatedRoleUser = roles[relatedRole].user
-  }
+  const relatedRoleName = roles[relatedRole]?.legal_full_name || undefined
 
   return (
     <PopOver
-      containerStyle={{ display: 'inline-block' }}
       placement={rowId > 3 && rowId + 3 >= rowsCount ? 'top' : 'bottom'}
       id={`popover-trigger-sides-${deal.id}`}
       caption={
@@ -68,20 +84,19 @@ export function Side({ deal, roles, rowId, rowsCount }: Props) {
         </div>
       }
     >
-      <div
-        className="underline-on-hover"
-        style={{
-          cursor: 'help'
-        }}
-      >
-        <Typography variant="caption">{sideName}</Typography>
-
-        <Typography variant="caption">
-          {relatedRoleUser && relatedRoleUser.last_name
-            ? `: ${relatedRoleUser.last_name}`
-            : ''}
-        </Typography>
-      </div>
+      {relatedRoleName && (
+        <div className={classes.container}>
+          <div className={classes.circle} />
+          <div
+            className="underline-on-hover"
+            style={{
+              cursor: 'help'
+            }}
+          >
+            <Typography variant="caption">{relatedRoleName}</Typography>
+          </div>
+        </div>
+      )}
     </PopOver>
   )
 }
