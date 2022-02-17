@@ -40,6 +40,7 @@ const useStyles = makeStyles(
       ...theme.typography.body3,
       color: theme.palette.grey[700],
       lineHeight: `${theme.spacing(3)}px`,
+      cursor: 'pointer',
 
       '&.hovered': {
         color: theme.palette.tertiary.dark
@@ -64,10 +65,17 @@ interface Props {
   width: number | string
 }
 
-function getCurrentTags(tags, showingTags) {
-  return tags.map(tag => {
-    if (showingTags.length < 2) {
-      showingTags.push(tag)
+interface Tag {
+  title: string
+  value: string
+}
+
+function getCurrentTags(tags: string[], showingTags: string[]): Tag[] {
+  const currentTags = tags.map(tag => {
+    if (showingTags.length < 3) {
+      if (tag.length <= 10 && tag.toLowerCase() === tag) {
+        showingTags.push(tag)
+      }
     }
 
     return {
@@ -75,6 +83,24 @@ function getCurrentTags(tags, showingTags) {
       value: tag
     }
   })
+
+  if (showingTags.length === 0 && currentTags.length > 0) {
+    if (currentTags.length < 3) {
+      currentTags.forEach(tag => showingTags.push(tag.value))
+    }
+
+    if (currentTags.length >= 3) {
+      currentTags
+        .filter(tag => tag.value.length <= 10)
+        .forEach(tag => showingTags.length <= 3 && showingTags.push(tag.value))
+    }
+
+    if (showingTags.length === 0 && currentTags.length > 0) {
+      showingTags.push(currentTags[0].value)
+    }
+  }
+
+  return currentTags
 }
 
 const TagsCell = ({
@@ -89,13 +115,13 @@ const TagsCell = ({
   const dispatch = useDispatch()
 
   const showingTags: string[] = []
-  const tags = useMemo(() => contact?.tags || [], [contact?.tags])
-  const currentTags = getCurrentTags(tags, showingTags)
+  const tags: string[] = useMemo(() => contact?.tags || [], [contact?.tags])
+  const currentTags: Tag[] = getCurrentTags(tags, showingTags)
 
   const tagsCount = tags.length
   const invisibleTagsCount = tagsCount - showingTags.length
 
-  //----
+  //
 
   const handleChangeTag = async (tags: SelectorOption[] = []) => {
     try {
@@ -114,7 +140,7 @@ const TagsCell = ({
     }
   }
 
-  //----
+  //
 
   const renderPopOverTagSelector = ({
     isHovered = false,
@@ -172,7 +198,7 @@ const TagsCell = ({
     )
   }
 
-  //----
+  //
 
   return (
     <CellContainer
