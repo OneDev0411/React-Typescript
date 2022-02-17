@@ -1,8 +1,5 @@
-import { useSelector } from 'react-redux'
-
-import { selectUser } from '@app/selectors/user'
-import { useBrandStatuses } from 'hooks/use-brand-statuses'
-import { getActiveTeamId } from 'utils/user-teams'
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
+import { useBrandStatuses } from '@app/hooks/use-brand-statuses'
 
 import SearchTable from './SearchTable'
 import { SearchQuery } from './types'
@@ -12,9 +9,9 @@ interface Props {
 }
 
 export function SearchTabWrapper({ searchQuery }: Props) {
-  const user = useSelector(selectUser)
+  const activeBrandId = useActiveBrandId()
 
-  const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
+  const [statuses] = useBrandStatuses(activeBrandId)
 
   return <SearchTable searchQuery={searchQuery} statuses={statuses} />
 }

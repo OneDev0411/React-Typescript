@@ -1,15 +1,24 @@
-import React from 'react'
+import { useState } from 'react'
 
-import { Popover } from '@material-ui/core'
+import { Popover, Theme, makeStyles } from '@material-ui/core'
 import usePromise from 'react-use-promise'
 
+import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
+import { getBrandChecklists } from '@app/models/BrandConsole/Checklists'
 import { IUserState } from 'reducers/user'
-
-import { getBrandChecklists } from '../../../../../../models/BrandConsole/Checklists'
-import { getActiveTeamId } from '../../../../../../utils/user-teams'
 
 import ToggleButton from './ToggleButton'
 import { UserMenuContent } from './UserMenuContent'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    popover: {
+      marginLeft: theme.spacing(3),
+      boxShadow: theme.shadows[2]
+    }
+  }),
+  { name: 'UserMenu' }
+)
 
 export function UserMenu({ user }: { user: IUserState }) {
   /**
@@ -28,13 +37,16 @@ export function UserMenu({ user }: { user: IUserState }) {
    * UserMenuContent is rendered). But it introduces a delay in showing
    * the link which may be seen as a UX problem.
    */
+  const classes = useStyles()
+  const activeBrandId = useUnsafeActiveBrandId()
 
-  const teamId = user && getActiveTeamId(user)
   const [checklists] = usePromise(() => {
-    return (teamId && getBrandChecklists(teamId)) || Promise.reject()
-  }, [teamId])
+    return (
+      (activeBrandId && getBrandChecklists(activeBrandId)) || Promise.reject()
+    )
+  }, [activeBrandId])
 
-  const [anchorEl, setAnchorEl] = React.useState(null)
+  const [anchorEl, setAnchorEl] = useState(null)
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
@@ -47,7 +59,11 @@ export function UserMenu({ user }: { user: IUserState }) {
   const isOpen = Boolean(anchorEl)
   const id = isOpen ? 'user-menu-popover' : ''
 
-  return user ? (
+  if (!user) {
+    return null
+  }
+
+  return (
     <>
       <ToggleButton id={id} isOpen={isOpen} onClick={handleClick} user={user} />
       <Popover
@@ -55,9 +71,12 @@ export function UserMenu({ user }: { user: IUserState }) {
         open={isOpen}
         anchorEl={anchorEl}
         onClose={handleClose}
+        classes={{
+          paper: classes.popover
+        }}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left'
+          vertical: 'bottom',
+          horizontal: 'right'
         }}
         transformOrigin={{
           vertical: 'bottom',
@@ -65,11 +84,10 @@ export function UserMenu({ user }: { user: IUserState }) {
         }}
       >
         <UserMenuContent
-          user={user}
           onClose={handleClose}
           showChecklists={checklists ? checklists.length > 0 : false}
         />
       </Popover>
     </>
-  ) : null
+  )
 }

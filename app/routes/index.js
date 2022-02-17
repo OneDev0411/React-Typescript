@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { IndexRoute, Route } from 'react-router'
 
 import withAcl from 'components/Acl/with-acl'

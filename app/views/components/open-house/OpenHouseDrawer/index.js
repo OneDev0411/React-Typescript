@@ -24,7 +24,7 @@ import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 import getListing from 'models/listings/listing/get-listing'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import { goTo } from 'utils/go-to'
-import { isSoloActiveTeam, getActiveTeamId } from 'utils/user-teams'
+import { isSoloActiveTeam } from 'utils/user-teams'
 
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
@@ -142,16 +142,16 @@ class OpenHouseDrawerInternal extends React.Component {
       this.setState({ isDisabled: true })
 
       if (this.isNew) {
+        const { activeTeam, associations } = this.props
+
         this.setState({ isLoadingTemplate: true })
 
         let fullListing = null
-        const activeTeamId = getActiveTeamId(this.props.user)
-        const list = await getTemplates(activeTeamId, ['CrmOpenHouse'])
+        const activeBrandId = activeTeam?.brand?.id
+        const list = await getTemplates(activeBrandId, ['CrmOpenHouse'])
         const templateItem = list[0]
 
         const rawTemplate = await loadTemplateHtml(templateItem)
-
-        const { associations } = this.props
 
         if (associations) {
           let listingId = ''
@@ -427,7 +427,7 @@ class OpenHouseDrawerInternal extends React.Component {
   }
 
   render() {
-    const { user } = this.props
+    const { user, activeTeam } = this.props
     const { isDisabled, error, shouldShowDescription } = this.state
 
     return (
@@ -582,11 +582,10 @@ class OpenHouseDrawerInternal extends React.Component {
                               />
                             </>
                           )}
-                          {!isSoloActiveTeam(user) && (
+                          {!isSoloActiveTeam(activeTeam) && (
                             <AssigneesField
                               buttonText="Assignee"
                               name="assignees"
-                              owner={user}
                             />
                           )}
                         </Flex>
@@ -628,7 +627,7 @@ class OpenHouseDrawerInternal extends React.Component {
                       handleSave={this.handleSaveTemplate}
                       assets={this.getTemplateAssets()}
                       templateData={{
-                        user: this.props.user,
+                        user,
                         listing: this.state.listing,
                         crmopenhouse: {
                           title: values.title,
@@ -651,6 +650,7 @@ class OpenHouseDrawerInternal extends React.Component {
 OpenHouseDrawerInternal.propTypes = propTypes
 OpenHouseDrawerInternal.defaultProps = defaultProps
 
-export const OpenHouseDrawer = connect(state => ({ user: state.user }))(
-  OpenHouseDrawerInternal
-)
+export const OpenHouseDrawer = connect(({ user, activeTeam = null }) => ({
+  user,
+  activeTeam
+}))(OpenHouseDrawerInternal)

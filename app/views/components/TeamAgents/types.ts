@@ -6,7 +6,7 @@ export interface NormalizedBrand {
 }
 
 export type BrandedUser = IUser & {
-  brand_id?: UUID | null
+  brand_id?: Nullable<UUID>
 }
 
 export interface Agent {

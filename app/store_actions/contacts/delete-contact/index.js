@@ -58,7 +58,7 @@ export async function afterDeleteContactsFetch(dispatch, getState, contactIds) {
           isParkedContactActive,
           listInfo.searchText,
           undefined,
-          viewAs(state.user)
+          viewAs(state.avtiveTeam ?? null)
         )
       )
     }

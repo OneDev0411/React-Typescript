@@ -1,13 +1,11 @@
-import { useSelector } from 'react-redux'
-
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import {
   SectionsEnum,
   Section,
   SectionItem
 } from 'components/PageSideNav/types'
-import { selectUser } from 'selectors/user'
+import { hasUserAccess } from 'utils/acl'
 import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
-import { hasUserAccess } from 'utils/user-teams'
 
 export interface ExtendedSection extends Section {
   key: string
@@ -335,12 +333,12 @@ const ALL_SECTIONS: SectionCollection = {
 }
 
 function getPrivilegedSectionItems(
-  user: IUser,
+  team: Nullable<IUserTeam>,
   section: Section
 ): SectionItem[] {
   return section.items.filter(item => {
     const hasAccessToItem = (item.access || []).every(access =>
-      hasUserAccess(user, access)
+      hasUserAccess(team, access)
     )
 
     return hasAccessToItem
@@ -356,15 +354,14 @@ function getSerializedValue(value?: string | string[]): string {
 }
 
 export function useMarketingCenterSections({ types }): SectionCollection {
-  const user = useSelector(selectUser)
-
+  const activeTeam = useUnsafeActiveTeam()
   const newSections: SectionCollection = {}
   const sectionKeys = Object.keys(ALL_SECTIONS)
 
   sectionKeys.forEach(key => {
     const section = ALL_SECTIONS[key]
     const hasAccessToSection = (section.access || []).every(access =>
-      hasUserAccess(user, access)
+      hasUserAccess(activeTeam, access)
     )
 
     // No section access!
@@ -379,7 +376,7 @@ export function useMarketingCenterSections({ types }): SectionCollection {
 
     const newSection: ExtendedSection = {
       ...section,
-      items: getPrivilegedSectionItems(user, section),
+      items: getPrivilegedSectionItems(activeTeam, section),
       title: activeType
         ? `${section.title}: ${activeType.title}`
         : section.title,

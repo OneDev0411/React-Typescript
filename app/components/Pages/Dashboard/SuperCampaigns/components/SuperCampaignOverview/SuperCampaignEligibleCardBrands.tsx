@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import useSafeState from '@app/hooks/use-safe-state'
 import { selectActiveBrandId } from '@app/selectors/brand'
-import { MultiSelectionBrandSelectorDrawer } from '@app/views/components/BrandSelector'
+import { BaseMultiSelectDrawer } from '@app/views/components/BrandSelector'
 
 import { isSuperCampaignReadOnly } from '../../helpers'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
@@ -47,7 +47,7 @@ function SuperCampaignEligibleCardBrands() {
         been selected
       </Button>
       {isBrandSelectorOpen && (
-        <MultiSelectionBrandSelectorDrawer
+        <BaseMultiSelectDrawer
           open
           width="43rem"
           disabled={isReadOnly}

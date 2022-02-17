@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {
   Box,
   Button,
@@ -12,12 +10,10 @@ import {
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { mdiPlayCircleOutline } from '@mdi/js'
-import { useSelector } from 'react-redux'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { IAppState } from 'reducers'
-import { selectUser } from 'selectors/user'
-import { hasUserAccessToBrandSettings } from 'utils/user-teams'
+import { hasUserAccessToBrandSettings } from 'utils/acl'
 
 interface StylesProps {
   isDesktop: boolean
@@ -68,8 +64,8 @@ export default function EmptyState() {
   const theme = useTheme()
   const isDesktop = useMediaQuery('(min-width:1440px)')
   const classes = useStyles({ isDesktop })
-  const user = useSelector((state: IAppState) => selectUser(state))
-  const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)
+  const activeTeam = useUnsafeActiveTeam()
+  const hasAccessToBrandSettings = hasUserAccessToBrandSettings(activeTeam)
 
   return (
     <>

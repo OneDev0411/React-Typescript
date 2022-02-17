@@ -1,9 +1,10 @@
 import io from 'socket.io-client'
 
+import { getTeamACL } from '@app/utils/acl'
+import { ACL } from 'constants/acl'
+
 import config from '../../../config/public'
-import { getTeams } from '../../models/user/get-teams'
 import store from '../../stores'
-import { getActiveTeamACL, getActiveTeamId } from '../../utils/user-teams'
 
 // create socket
 const socket = io(config.socket.server, {
@@ -73,10 +74,7 @@ export default class Socket {
 
       // update authenticated flag
       Socket.authenticated = true
-
-      this.getUserWithTeams(user).then(userWithTeams =>
-        this.registerBrand(userWithTeams)
-      )
+      this.registerBrand(store.getState().activeTeam ?? null)
 
       // update app store
       // store.dispatch(changeSocketStatus('connected'))
@@ -86,13 +84,13 @@ export default class Socket {
   /**
    * authenticate user brand
    */
-  registerBrand = user => {
+  registerBrand = activeTeam => {
     console.log('[Deal Socket] Registering Brand')
 
-    const acl = getActiveTeamACL(user)
+    const acl = getTeamACL(activeTeam)
 
-    if (acl.includes('Deals') || acl.includes('BackOffice')) {
-      const id = getActiveTeamId(user)
+    if (acl.includes(ACL.DEALS) || acl.includes(ACL.BACK_OFFICE)) {
+      const id = activeTeam?.brand?.id
 
       window.socket.emit('Brand.Register', id, err => {
         console.log('[Deal Socket]', 'Brand Registered - ', id, err)
@@ -143,26 +141,6 @@ export default class Socket {
 
     // emit connected message
     // store.dispatch(changeSocketStatus('connected'))
-  }
-
-  /**
-   * returns user with its teams
-   */
-  async getUserWithTeams(user) {
-    if (user.teams) {
-      return user
-    }
-
-    const userState = store.getState().user
-
-    if (userState.teams) {
-      return userState
-    }
-
-    return {
-      ...user,
-      teams: await getTeams(user)
-    }
   }
 
   /**

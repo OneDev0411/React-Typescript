@@ -18,6 +18,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       position: 'relative',
       margin: theme.spacing(4, 0),
       flex: '1 1 auto'
+    },
+    viewAsContainer: {
+      marginRight: theme.spacing(1)
     }
   })
 )

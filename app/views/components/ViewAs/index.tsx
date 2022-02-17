@@ -1,18 +1,14 @@
-import React, { useState, useMemo, ReactNode, CSSProperties } from 'react'
+import { useState, useMemo, ReactNode, CSSProperties, MouseEvent } from 'react'
 
 import { Avatar, Popover, makeStyles, Tooltip, Theme } from '@material-ui/core'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 import { useSelector } from 'react-redux'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { getContactNameInitials } from 'models/contacts/helpers'
 import { selectUser } from 'selectors/user'
-
-import {
-  viewAs,
-  isBackOffice,
-  getActiveTeam,
-  getTeamAvailableMembers
-} from '../../../utils/user-teams'
+import { isBackOffice } from 'utils/acl'
+import { viewAs, getTeamAvailableMembers } from 'utils/user-teams'
 
 import { MemberList } from './components/List'
 
@@ -37,11 +33,17 @@ interface Props {
 export const ViewAs = ({ containerStyle }: Props) => {
   const classes = useStyles()
   const user: IUser = useSelector(selectUser)
-  const team: IUserTeam | null = getActiveTeam(user)
-  const teamMembers: IUser[] = getTeamAvailableMembers(team)
-  const initialSelectedMembers: UUID[] = useMemo(
-    () => viewAs(user, true, team),
-    [team, user]
+  const activeTeam: Nullable<IUserTeam> = useUnsafeActiveTeam()
+
+  const {
+    initialSelectedMembers,
+    teamMembers
+  }: { initialSelectedMembers: UUID[]; teamMembers: IUser[] } = useMemo(
+    () => ({
+      initialSelectedMembers: viewAs(activeTeam, true),
+      teamMembers: getTeamAvailableMembers(activeTeam)
+    }),
+    [activeTeam]
   )
   const [selectedMembers, setSelectedMembers] = useState<UUID[]>(
     initialSelectedMembers
@@ -72,7 +74,7 @@ export const ViewAs = ({ containerStyle }: Props) => {
     )
   }, [classes.tooltip, selectedMembers, teamMembers])
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
@@ -95,7 +97,7 @@ export const ViewAs = ({ containerStyle }: Props) => {
     })
   }
 
-  if (isBackOffice(user) || teamMembers.length === 1) {
+  if (isBackOffice(activeTeam) || teamMembers.length === 1) {
     return null
   }
 
