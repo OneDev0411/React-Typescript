@@ -55,6 +55,7 @@ function ShowingDetail({
         address={showing?.title || ''}
         listing={showing?.listing || showing?.deal?.listing}
         bookingUrl={showingBookingUrl}
+        roles={showing?.roles}
       />
       <PageLayout.Main gutter={0} mt={0} mr={4}>
         <Box ml={4}>

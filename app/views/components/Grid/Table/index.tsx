@@ -11,12 +11,14 @@ import {
   LoadingPosition,
   GridClasses,
   TrProps,
-  TdProps
+  TdProps,
+  HeaderColumn
 } from './types'
 
 export interface Props<Row> {
   columns: TableColumn<Row>[]
   rows: Row[]
+  header: HeaderColumn[]
   totalRows: number
   virtualize?: boolean
   rowSize?: number

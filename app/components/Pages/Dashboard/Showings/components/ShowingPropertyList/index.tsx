@@ -1,4 +1,5 @@
 import { Box, makeStyles } from '@material-ui/core'
+import { mdiOpenInNew, mdiCheck, mdiEyeOutline, mdiAccountTie } from '@mdi/js'
 import classNames from 'classnames'
 
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
@@ -64,32 +65,34 @@ function ShowingPropertyList({
     {
       header: 'Approved',
       id: 'approved',
-      width: '10%',
+      width: '100px',
       sortable: false,
       render: ({ row }) => (
-        <ShowingLabeledColumn label="Approved">
-          {row.confirmed}
+        <ShowingLabeledColumn>
+          <Box textAlign="center">{row.confirmed}</Box>
         </ShowingLabeledColumn>
       )
     },
     {
       header: 'Total Visits',
       id: 'total-visits',
-      width: '10%',
+      width: '220px',
       sortable: false,
       render: ({ row }) => (
-        <ShowingLabeledColumn label="Total Visits">
-          {row.visits}
+        <ShowingLabeledColumn>
+          <Box textAlign="center">{row.visits}</Box>
         </ShowingLabeledColumn>
       )
     },
     {
       header: 'Agent',
       id: 'agent',
-      width: '20%',
+      width: '15%',
       sortable: false,
       render: ({ row }) => (
-        <ShowingLabeledColumn label="Agent">John Doe</ShowingLabeledColumn>
+        <ShowingLabeledColumn>
+          {`${row.roles[0].first_name} ${row.roles[0].last_name}`}
+        </ShowingLabeledColumn>
       )
     },
     {
@@ -115,6 +118,32 @@ function ShowingPropertyList({
   return (
     <Box minHeight="320px">
       <Table
+        header={[
+          {
+            title: 'Property',
+            icon: mdiOpenInNew,
+            width: '30%',
+            textAlign: 'left'
+          },
+          {
+            title: 'Approved',
+            icon: mdiCheck,
+            width: '100px',
+            textAlign: 'center'
+          },
+          {
+            title: 'Total Bookings',
+            icon: mdiEyeOutline,
+            width: '220px',
+            textAlign: 'center'
+          },
+          {
+            title: 'Agent',
+            icon: mdiAccountTie,
+            width: '15%',
+            textAlign: 'left'
+          }
+        ]}
         rows={sortedRows}
         totalRows={sortedRows.length}
         columns={columns}

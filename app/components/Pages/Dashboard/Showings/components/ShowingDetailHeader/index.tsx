@@ -37,13 +37,15 @@ interface ShowingDetailHeaderProps {
   image: string
   listing?: IListing
   bookingUrl?: string
+  roles?: IShowingRole[]
 }
 
 function ShowingDetailHeader({
   image,
   address,
   listing,
-  bookingUrl
+  bookingUrl,
+  roles
 }: ShowingDetailHeaderProps) {
   const classes = useStyles()
 
@@ -75,21 +77,23 @@ function ShowingDetailHeader({
                   MLS# {listing.mls_number}
                 </LinkButton>
               )}
-              <Box display="flex" alignItems="center" ml={4}>
-                <Typography noWrap variant="caption" color="textSecondary">
-                  Agent
-                </Typography>
-                <Typography
-                  noWrap
-                  variant="subtitle2"
-                  className={classes.agentName}
-                >
-                  John Doe
-                </Typography>
-                <Typography noWrap variant="subtitle2" color="textSecondary">
-                  Texas
-                </Typography>
-              </Box>
+              {roles && (
+                <Box display="flex" alignItems="center" ml={4}>
+                  <Typography noWrap variant="caption" color="textSecondary">
+                    Agent
+                  </Typography>
+                  <Typography
+                    noWrap
+                    variant="subtitle2"
+                    className={classes.agentName}
+                  >
+                    {`${roles[0].first_name} ${roles[0].last_name}`}
+                  </Typography>
+                  <Typography noWrap variant="subtitle2" color="textSecondary">
+                    Texas
+                  </Typography>
+                </Box>
+              )}
             </Box>
           </Box>
         </Box>

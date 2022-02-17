@@ -98,3 +98,10 @@ export interface TdProps<Row> {
   rowIndex: number
   row: Row
 }
+
+export interface HeaderColumn {
+  title: string
+  icon: string
+  width: string
+  textAlign: string
+}
