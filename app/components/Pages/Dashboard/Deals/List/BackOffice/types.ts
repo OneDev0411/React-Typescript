@@ -19,6 +19,7 @@ export type TDealsContexts = {
 }
 export interface DealsListFilters {
   deal_type?: IDealType[]
+  property_type?: IPropertyType[]
   status: TDealsStatusList
   contexts: TDealsContexts
 }
