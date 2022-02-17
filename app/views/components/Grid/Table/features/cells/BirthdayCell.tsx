@@ -159,7 +159,7 @@ const BirthdayCell = ({ contact, isRowSelected = false, width }: Props) => {
     }
 
     const birthdayApproaching =
-      daysToBirthday && daysToBirthday >= 0 && daysToBirthday <= 30
+      daysToBirthday !== null && daysToBirthday >= 0 && daysToBirthday <= 30
 
     return (
       <>
