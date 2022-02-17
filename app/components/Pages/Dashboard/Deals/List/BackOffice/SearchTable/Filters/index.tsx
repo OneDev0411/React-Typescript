@@ -263,63 +263,65 @@ export const Filters = ({
               </div>
 
               {/* Sale type related date filters  */}
-              {currentFilters.property_type?.includes('Residential') && (
-                <div className={classes.buttonGroup}>
-                  {/* List date Filter  */}
-                  <BaseFilterButton
-                    renderButton={({ onClick }) => (
-                      <FilterButton
-                        onClick={onClick}
-                        title="Listing Date"
-                        startIconPath={mdiCalendarPlus}
-                        isActive={
-                          !isEqual(
-                            systemDefaultFilters.contexts.list_date?.date,
-                            currentFilters.contexts.list_date?.date
-                          )
-                        }
-                      />
-                    )}
-                    renderDropdown={() => (
-                      <DateFilterEditor
-                        id="list_date"
-                        title="Listing Date"
-                        iconPath={mdiCalendarPlus}
-                        filters={currentFilters}
-                        updateFilters={updateFilters}
-                        defaultFilters={systemDefaultFilters}
-                      />
-                    )}
-                  />
+              {currentFilters.property_type?.includes('Residential') &&
+                currentFilters.property_type?.length === 1 && (
+                  <div className={classes.buttonGroup}>
+                    {/* List date Filter  */}
+                    <BaseFilterButton
+                      renderButton={({ onClick }) => (
+                        <FilterButton
+                          onClick={onClick}
+                          title="Listing Date"
+                          startIconPath={mdiCalendarPlus}
+                          isActive={
+                            !isEqual(
+                              systemDefaultFilters.contexts.list_date?.date,
+                              currentFilters.contexts.list_date?.date
+                            )
+                          }
+                        />
+                      )}
+                      renderDropdown={() => (
+                        <DateFilterEditor
+                          id="list_date"
+                          title="Listing Date"
+                          iconPath={mdiCalendarPlus}
+                          filters={currentFilters}
+                          updateFilters={updateFilters}
+                          defaultFilters={systemDefaultFilters}
+                        />
+                      )}
+                    />
 
-                  {/* List expiration Filter  */}
-                  <BaseFilterButton
-                    renderButton={({ onClick }) => (
-                      <FilterButton
-                        onClick={onClick}
-                        title="Listing Expiration"
-                        startIconPath={mdiCalendarRemove}
-                        isActive={
-                          !isEqual(
-                            systemDefaultFilters.contexts.expiration_date?.date,
-                            currentFilters.contexts.expiration_date?.date
-                          )
-                        }
-                      />
-                    )}
-                    renderDropdown={() => (
-                      <DateFilterEditor
-                        id="expiration_date"
-                        title="Listing Expiration"
-                        iconPath={mdiCalendarRemove}
-                        filters={currentFilters}
-                        updateFilters={updateFilters}
-                        defaultFilters={systemDefaultFilters}
-                      />
-                    )}
-                  />
-                </div>
-              )}
+                    {/* List expiration Filter  */}
+                    <BaseFilterButton
+                      renderButton={({ onClick }) => (
+                        <FilterButton
+                          onClick={onClick}
+                          title="Listing Expiration"
+                          startIconPath={mdiCalendarRemove}
+                          isActive={
+                            !isEqual(
+                              systemDefaultFilters.contexts.expiration_date
+                                ?.date,
+                              currentFilters.contexts.expiration_date?.date
+                            )
+                          }
+                        />
+                      )}
+                      renderDropdown={() => (
+                        <DateFilterEditor
+                          id="expiration_date"
+                          title="Listing Expiration"
+                          iconPath={mdiCalendarRemove}
+                          filters={currentFilters}
+                          updateFilters={updateFilters}
+                          defaultFilters={systemDefaultFilters}
+                        />
+                      )}
+                    />
+                  </div>
+                )}
             </Grid>
 
             <Grid className={classes.actionsWrapper}>
