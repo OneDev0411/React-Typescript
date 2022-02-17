@@ -15,4 +15,5 @@ declare interface IShowingRole extends IModel<'showing_role'> {
   cancel_notification_type: INotificationDeliveryType[]
   user_id: UUID
   agent_id: UUID
+  office_name?: string
 }
