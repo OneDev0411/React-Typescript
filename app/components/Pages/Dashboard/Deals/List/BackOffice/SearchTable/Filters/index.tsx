@@ -262,7 +262,7 @@ export const Filters = ({
                 />
               </div>
 
-              {/* Sale type related date filters  */}
+              {/* Only `Sale` type related date filters  */}
               {currentFilters.property_type?.includes('Residential') &&
                 currentFilters.property_type?.length === 1 && (
                   <div className={classes.buttonGroup}>
@@ -313,6 +313,66 @@ export const Filters = ({
                         <DateFilterEditor
                           id="expiration_date"
                           title="Listing Expiration"
+                          iconPath={mdiCalendarRemove}
+                          filters={currentFilters}
+                          updateFilters={updateFilters}
+                          defaultFilters={systemDefaultFilters}
+                        />
+                      )}
+                    />
+                  </div>
+                )}
+
+              {/* Only `Lease` type related date filters  */}
+              {currentFilters.property_type?.includes('Residential Lease') &&
+                currentFilters.property_type?.length === 1 && (
+                  <div className={classes.buttonGroup}>
+                    {/* lease begin Filter  */}
+                    <BaseFilterButton
+                      renderButton={({ onClick }) => (
+                        <FilterButton
+                          onClick={onClick}
+                          title="Lease Begin"
+                          startIconPath={mdiCalendarPlus}
+                          isActive={
+                            !isEqual(
+                              systemDefaultFilters.contexts.lease_begin?.date,
+                              currentFilters.contexts.lease_begin?.date
+                            )
+                          }
+                        />
+                      )}
+                      renderDropdown={() => (
+                        <DateFilterEditor
+                          id="lease_begin"
+                          title="Lease Begin"
+                          iconPath={mdiCalendarPlus}
+                          filters={currentFilters}
+                          updateFilters={updateFilters}
+                          defaultFilters={systemDefaultFilters}
+                        />
+                      )}
+                    />
+
+                    {/* Lease End Filter  */}
+                    <BaseFilterButton
+                      renderButton={({ onClick }) => (
+                        <FilterButton
+                          onClick={onClick}
+                          title="Lease End"
+                          startIconPath={mdiCalendarRemove}
+                          isActive={
+                            !isEqual(
+                              systemDefaultFilters.contexts.lease_end?.date,
+                              currentFilters.contexts.lease_end?.date
+                            )
+                          }
+                        />
+                      )}
+                      renderDropdown={() => (
+                        <DateFilterEditor
+                          id="lease_end"
+                          title="Lease End"
                           iconPath={mdiCalendarRemove}
                           filters={currentFilters}
                           updateFilters={updateFilters}

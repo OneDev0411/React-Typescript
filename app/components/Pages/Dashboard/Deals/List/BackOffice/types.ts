@@ -16,6 +16,8 @@ export type TDealsContexts = {
   list_date?: DealsListContext
   expiration_date?: DealsListContext
   contract_date?: DealsListContext
+  lease_begin?: DealsListContext
+  lease_end?: DealsListContext
 }
 export interface DealsListFilters {
   deal_type?: IDealType[]
