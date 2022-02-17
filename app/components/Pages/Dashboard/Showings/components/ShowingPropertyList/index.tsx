@@ -51,7 +51,7 @@ function ShowingPropertyList({
   const columns: TableColumn<IShowing<'showing'>>[] = [
     {
       id: 'property',
-      width: '40%',
+      width: '30%',
       primary: true,
       render: ({ row }) => (
         <ShowingColumnProperty
@@ -72,7 +72,6 @@ function ShowingPropertyList({
         </ShowingLabeledColumn>
       )
     },
-
     {
       header: 'Total Visits',
       id: 'total-visits',
@@ -82,6 +81,15 @@ function ShowingPropertyList({
         <ShowingLabeledColumn label="Total Visits">
           {row.visits}
         </ShowingLabeledColumn>
+      )
+    },
+    {
+      header: 'Agent',
+      id: 'agent',
+      width: '20%',
+      sortable: false,
+      render: ({ row }) => (
+        <ShowingLabeledColumn label="Agent">John Doe</ShowingLabeledColumn>
       )
     },
     {
