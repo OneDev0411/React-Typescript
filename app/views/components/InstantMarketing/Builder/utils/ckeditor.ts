@@ -266,6 +266,20 @@ export async function attachCKEditor(
         ;['off', 'on'].forEach(m => editorEls[m]('mousedown', stopPropagation))
       })
 
+      rte.on(
+        'doubleclick',
+        evt => {
+          const element = evt.data.element
+
+          if (element.is('a')) {
+            evt.stop() // don't do the other listeners
+          }
+        },
+        null,
+        null,
+        1
+      )
+
       this.focus(el, rte)
 
       editor.once('rendered', () => {
@@ -290,12 +304,13 @@ export async function attachCKEditor(
     },
 
     focus(el, rte) {
+      el.contentEditable = true
+
       // Do nothing if already focused
       if (rte && rte.focusManager.hasFocus) {
         return
       }
 
-      el.contentEditable = true
       editor.RichTextEditor.updatePosition()
       setTimeout(() => {
         rte && rte.focus()
