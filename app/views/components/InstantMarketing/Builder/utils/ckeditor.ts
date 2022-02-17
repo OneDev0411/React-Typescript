@@ -282,6 +282,10 @@ export async function attachCKEditor(
         rte.focusManager.blur(true)
       }
 
+      // Close the current dialog before destroying the editor
+      // @ts-ignore
+      CKEDITOR.dialog.getCurrent()?.hide()
+
       rte.destroy(true)
     },
 
