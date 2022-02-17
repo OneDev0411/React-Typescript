@@ -89,9 +89,15 @@ function ShowingDetailHeader({
                   >
                     {`${roles[0].first_name} ${roles[0].last_name}`}
                   </Typography>
-                  <Typography noWrap variant="subtitle2" color="textSecondary">
-                    Texas
-                  </Typography>
+                  {roles[0].office_name && (
+                    <Typography
+                      noWrap
+                      variant="subtitle2"
+                      color="textSecondary"
+                    >
+                      {roles[0].office_name}
+                    </Typography>
+                  )}
                 </Box>
               )}
             </Box>
