@@ -278,9 +278,10 @@ export const Filters = ({
               </div>
 
               {/* Only `Sale` type related date filters  */}
-              {currentFilters.property_type?.length === 1 &&
-                !propertyTypesItems[currentFilters.property_type[0]]
-                  .is_lease && (
+              {currentFilters.property_type &&
+                !currentFilters.property_type.some(
+                  id => propertyTypesItems[id].is_lease === true
+                ) && (
                   <div className={classes.buttonGroup}>
                     {/* contract date Filter  */}
                     <BaseFilterButton
@@ -339,9 +340,10 @@ export const Filters = ({
                 )}
 
               {/* Only `Lease` type related date filters  */}
-              {currentFilters.property_type?.length === 1 &&
-                propertyTypesItems[currentFilters.property_type[0]]
-                  .is_lease && (
+              {currentFilters.property_type &&
+                !currentFilters.property_type.some(
+                  id => propertyTypesItems[id].is_lease === false
+                ) && (
                   <div className={classes.buttonGroup}>
                     {/* lease begin Filter  */}
                     <BaseFilterButton
