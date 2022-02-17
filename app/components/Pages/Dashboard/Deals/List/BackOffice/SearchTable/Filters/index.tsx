@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { Button, Grid } from '@material-ui/core'
 import {
@@ -17,7 +17,9 @@ import { isEqual, pickBy } from 'lodash'
 import { useDispatch } from 'react-redux'
 import { useDebounce, useFirstMountState } from 'react-use'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useActiveTeam } from '@app/hooks/team/use-active-team'
+import { useBrandPropertyTypes } from '@app/hooks/use-get-brand-property-types'
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { exportFilter } from '@app/models/Deal/deal'
 import { Filters as BaseFilters } from '@app/views/components/Filters'
@@ -41,7 +43,7 @@ import {
 
 import { DateFilterEditor } from './dateFilterEditor'
 import { FilterButton } from './filterButton'
-import { PropertyTypeEditor, PROPERTY_TYPES_ITEMS } from './propertyTypeEditor'
+import { PropertyTypeEditor } from './propertyTypeEditor'
 import { StatusEditor } from './statusEditor'
 import { useStyles } from './styles'
 import { DEAL_TYPES_ITEMS, TypeEditor } from './typeEditor'
@@ -61,6 +63,17 @@ export const Filters = ({
   const classes = useStyles()
   const dispatch = useDispatch()
   const isFirstMount = useFirstMountState()
+  const activeBrandId = useActiveBrandId()
+
+  const { propertyTypes } = useBrandPropertyTypes(activeBrandId)
+
+  const propertyTypesItems = useMemo(() => {
+    return propertyTypes.reduce((acc, propertyType) => {
+      acc[propertyType.id] = propertyType.label
+
+      return acc
+    }, {} as Record<UUID, IDealPropertyTypes>)
+  }, [propertyTypes])
 
   const [queryParamValue] = useQueryParam('q')
 
@@ -164,7 +177,7 @@ export const Filters = ({
                     title={
                       currentFilters.property_type &&
                       currentFilters.property_type.length === 1
-                        ? PROPERTY_TYPES_ITEMS[currentFilters.property_type[0]]
+                        ? propertyTypesItems[currentFilters.property_type[0]]
                         : 'Property type'
                     }
                     isActive={
@@ -177,6 +190,7 @@ export const Filters = ({
                 )}
                 renderDropdown={() => (
                   <PropertyTypeEditor
+                    propertyTypesItems={propertyTypesItems}
                     filters={currentFilters}
                     updateFilters={updateFilters}
                     defaultFilters={systemDefaultFilters}
@@ -263,8 +277,9 @@ export const Filters = ({
               </div>
 
               {/* Only `Sale` type related date filters  */}
-              {currentFilters.property_type?.includes('Residential') &&
-                currentFilters.property_type?.length === 1 && (
+              {currentFilters.property_type?.length === 1 &&
+                propertyTypesItems[currentFilters.property_type[0]] ===
+                  'Resale' && (
                   <div className={classes.buttonGroup}>
                     {/* List date Filter  */}
                     <BaseFilterButton
@@ -324,8 +339,9 @@ export const Filters = ({
                 )}
 
               {/* Only `Lease` type related date filters  */}
-              {currentFilters.property_type?.includes('Residential Lease') &&
-                currentFilters.property_type?.length === 1 && (
+              {currentFilters.property_type?.length === 1 &&
+                propertyTypesItems[currentFilters.property_type[0]] ===
+                  'Residential Lease' && (
                   <div className={classes.buttonGroup}>
                     {/* lease begin Filter  */}
                     <BaseFilterButton

@@ -8,28 +8,23 @@ import { DealsListFilters } from '../../types'
 import { FilterEditorFooter } from './filterEditorFooter'
 import { useStyles } from './styles'
 
-export const PROPERTY_TYPES_ITEMS: Record<
-  Exclude<IPropertyType, 'Multi-Family'>,
-  string
-> = {
-  Residential: 'Sale',
-  'Residential Lease': 'Lease',
-  Commercial: 'Commercial',
-  'Lots & Acreage': 'Lots & Acreage'
+interface Props extends FilterButtonDropDownProp<DealsListFilters> {
+  propertyTypesItems: Record<UUID, IDealPropertyTypes>
 }
 
 export const PropertyTypeEditor = ({
   filters,
   defaultFilters,
-  updateFilters
-}: FilterButtonDropDownProp<DealsListFilters>) => {
+  updateFilters,
+  propertyTypesItems
+}: Props) => {
   const classes = useStyles()
 
   const toggleValues = (
-    currentProperyTypes: IPropertyType[] = [],
-    newDealType: IPropertyType
+    currentProperyTypes: UUID[] = [],
+    newDealType: UUID
   ) => {
-    let toggledProperyTypes: IPropertyType[] = []
+    let toggledProperyTypes: UUID[] = []
 
     if (currentProperyTypes.includes(newDealType)) {
       toggledProperyTypes = currentProperyTypes.filter(item => {
@@ -40,7 +35,9 @@ export const PropertyTypeEditor = ({
     }
 
     updateFilters({
-      property_type: toggledProperyTypes
+      property_type: toggledProperyTypes.length
+        ? toggledProperyTypes
+        : undefined
     })
   }
 
@@ -52,29 +49,29 @@ export const PropertyTypeEditor = ({
         </Typography>
       </Grid>
 
-      {Object.keys(PROPERTY_TYPES_ITEMS).map((type: IPropertyType) => (
+      {Object.keys(propertyTypesItems).map(id => (
         <FormControlLabel
-          key={type}
+          key={id}
           classes={{
             root: classes.switchControlLabel
           }}
           control={
             <Switch
-              checked={filters.property_type?.includes(type) || false}
+              checked={filters.property_type?.includes(id) || false}
               className={classes.switchControlButton}
               color="primary"
-              name={PROPERTY_TYPES_ITEMS[type]}
+              name={propertyTypesItems[id]}
               onChange={() => {
-                toggleValues(filters.property_type, type)
+                toggleValues(filters.property_type, id)
               }}
               inputProps={{
-                'aria-label': `${PROPERTY_TYPES_ITEMS[type]} checkbox`
+                'aria-label': `${propertyTypesItems[id]} checkbox`
               }}
             />
           }
           label={
             <Grid container alignItems="center">
-              <Typography variant="body1">{`${PROPERTY_TYPES_ITEMS[type]}`}</Typography>
+              <Typography variant="body1">{`${propertyTypesItems[id]}`}</Typography>
             </Grid>
           }
         />
