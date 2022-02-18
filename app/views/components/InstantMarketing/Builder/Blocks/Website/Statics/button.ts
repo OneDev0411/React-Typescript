@@ -40,7 +40,8 @@ export default function registerButtonBlock(
         name: 'Button',
         attributes: {
           href: '',
-          target: '_blank'
+          target: '_blank',
+          rte: 'disable'
         }
       }
     },
