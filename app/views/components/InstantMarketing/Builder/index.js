@@ -1615,7 +1615,7 @@ class Builder extends React.Component {
               </>
             )}
 
-            {this.editor && this.isEmailTemplate && (
+            {this.editor && (this.isEmailTemplate || this.isWebsiteTemplate) && (
               <>
                 <DeviceManager editor={this.editor} />
                 <Divider orientation="vertical" />
