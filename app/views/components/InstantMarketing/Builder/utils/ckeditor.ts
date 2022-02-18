@@ -193,6 +193,13 @@ export async function attachCKEditor(
     enable(el, rte) {
       el.contentEditable = true
 
+      // If already exists I'll just focus on it
+      if (rte && rte.status != 'destroyed') {
+        this.focus(el, rte)
+
+        return rte
+      }
+
       // Seems like 'sharedspace' plugin doesn't work exactly as expected
       // so will help hiding other toolbars already created
       let rteToolbar = editor.RichTextEditor.getToolbarEl()
@@ -283,7 +290,9 @@ export async function attachCKEditor(
       this.focus(el, rte)
 
       editor.once('rendered', () => {
-        rte.destroy(true)
+        if (rte && rte.status !== 'destroyed') {
+          rte.destroy(true)
+        }
       })
 
       return rte
@@ -296,7 +305,9 @@ export async function attachCKEditor(
         rte.focusManager.blur(true)
       }
 
-      rte.destroy(true)
+      if (rte && rte.status !== 'destroyed') {
+        rte.destroy(true)
+      }
     },
 
     focus(el, rte) {
