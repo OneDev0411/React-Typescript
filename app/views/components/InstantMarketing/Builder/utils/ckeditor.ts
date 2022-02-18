@@ -312,8 +312,6 @@ export async function attachCKEditor(
       if (rte && rte.status !== 'destroyed') {
         rte.destroy(true)
       }
-
-      rte.destroy(true)
     },
 
     focus(el, rte) {
