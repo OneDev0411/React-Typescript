@@ -191,14 +191,14 @@ export async function attachCKEditor(
 
   editor.setCustomRte({
     enable(el, rte) {
-      el.contentEditable = true
-
       // If already exists I'll just focus on it
       if (rte && rte.status != 'destroyed') {
         this.focus(el, rte)
 
         return rte
       }
+
+      el.contentEditable = true
 
       // Seems like 'sharedspace' plugin doesn't work exactly as expected
       // so will help hiding other toolbars already created
