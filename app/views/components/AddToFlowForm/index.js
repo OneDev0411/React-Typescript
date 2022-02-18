@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 import Alert from '@material-ui/lab/Alert'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { addToFlow } from 'models/flows/add-to-flow'
 import { getBrandFlows } from 'models/flows/get-brand-flows'
 import { noop } from 'utils/helpers'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import DetailView from './DetailView'
 import ListView from './ListView'
@@ -29,7 +28,13 @@ AddToFlowForm.defaultProps = {
   style: {}
 }
 
-function AddToFlowForm({ contacts, handleClose, callback, ...props }) {
+export default function AddToFlowForm({
+  contacts,
+  handleClose,
+  callback,
+  ...props
+}) {
+  const activeBrandId = useActiveBrandId()
   const [error, setError] = useState('')
   const [isAdding, setIsAdding] = useState(false)
   const [isFetching, setIsFetching] = useState(false)
@@ -42,7 +47,7 @@ function AddToFlowForm({ contacts, handleClose, callback, ...props }) {
         setIsFetching(true)
 
         let templatesById = {}
-        const data = await getBrandFlows(getActiveTeamId(props.user), {
+        const data = await getBrandFlows(activeBrandId, {
           associations: ['brand_flow.steps']
         })
 
@@ -62,7 +67,7 @@ function AddToFlowForm({ contacts, handleClose, callback, ...props }) {
     }
 
     fetchTemplates()
-  }, [props.activeFlows, props.user])
+  }, [activeBrandId, props.activeFlows])
 
   const onSelectTemplate = useCallback(
     event => {
@@ -143,5 +148,3 @@ function AddToFlowForm({ contacts, handleClose, callback, ...props }) {
     </>
   )
 }
-
-export default connect(state => ({ user: state.user }))(AddToFlowForm)

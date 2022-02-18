@@ -12,6 +12,11 @@ declare interface IUserBase extends IModel<'user'> {
   email_signature: string | null
   access_token: string
   refresh_token: string
+  facebook: Nullable<string>
+  twitter: Nullable<string>
+  linkedin: Nullable<string>
+  youtube: Nullable<string>
+  instagram: Nullable<string>
 }
 declare interface IUserInput extends Partial<IUserBase> {
   agent?: UUID
@@ -38,7 +43,6 @@ declare interface IUser extends IUserBase {
   secondary_password?: string
 
   active_brand: string | null
-  teams?: IUserTeam[] // seems it comes with association
 
   agents: Nullable<IAgent[]>
 
@@ -72,6 +76,8 @@ declare interface IUserTeam {
   acl: IPermission[]
   type: 'user_role'
   settings: StringMap<any>
+  // API: "we supposed to do some staff in feature on this field but for now it's always null"
+  subscription?: Nullable<unknown>
 }
 
 declare interface IUserDocusign extends IModel<'docusign_account'> {

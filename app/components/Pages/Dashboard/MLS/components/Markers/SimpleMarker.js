@@ -2,7 +2,8 @@ import React from 'react'
 
 import ButtonBase from '@material-ui/core/ButtonBase'
 
-import { ListingDetailsModal } from 'components/ListingDetailsModal'
+import { changeUrl } from '@app/utils/change-url'
+import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 
 import ListingMarker from '../ListingMarker'
 
@@ -32,7 +33,7 @@ const SimpleMarker = ({ listing, isWidget }) => {
 
   const closeListing = () => {
     if (!isWidget) {
-      window.history.replaceState({}, '', '/dashboard/mls')
+      window.history.back()
     }
 
     setIsListingOpen(false)
@@ -40,7 +41,7 @@ const SimpleMarker = ({ listing, isWidget }) => {
 
   const handleClick = React.useCallback(() => {
     if (!isWidget) {
-      window.history.replaceState({}, '', `/dashboard/mls/${listing.id}`)
+      changeUrl(`/dashboard/mls/${listing.id}`)
     }
 
     setIsListingOpen(true)

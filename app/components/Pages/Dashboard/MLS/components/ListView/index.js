@@ -1,20 +1,25 @@
 import React, { useCallback, useState, memo, useEffect } from 'react'
 
-import { Grid, Checkbox, useTheme, makeStyles } from '@material-ui/core'
+import {
+  Grid,
+  Checkbox,
+  useTheme,
+  makeStyles,
+  Typography
+} from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
 import pluralize from 'pluralize'
 
-import { ResultsCount } from '@app/components/Pages/Dashboard/MLS/components/ResultsCount'
-import { getListingsPage } from '@app/components/Pages/Dashboard/MLS/helpers/pagination-utils'
-import Table from 'components/Grid/Table'
-import { useGridStyles } from 'components/Grid/Table/styles'
-import { ListingDetailsModal } from 'components/ListingDetailsModal'
-import { useListSelection } from 'components/ListSelection/use-list-selection'
-import LoadingComponent from 'components/Spinner'
+import { changeUrl } from '@app/utils/change-url'
+import Table from '@app/views/components/Grid/Table'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles'
+import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
+import { useListSelection } from '@app/views/components/ListSelection/use-list-selection'
+import LoadingComponent from '@app/views/components/Spinner'
 
-const BASE_URL = '/dashboard/mls'
-const PAGE_SIZE = 30
-
+import { QUERY_LIMIT, PAGE_SIZE } from '../../constants'
+import { getListingsPage } from '../../helpers/pagination-utils'
+import { ResultsHeader } from '../ResultsHeader'
 import { ShareListings } from '../ShareListings'
 import ZeroState from '../ZeroState'
 
@@ -35,7 +40,7 @@ const useStyles = makeStyles(
   }),
   { name: 'ListView' }
 )
-const ListView = ({ sortedListings, isFetching }) => {
+const ListView = props => {
   const theme = useTheme()
   const classes = useStyles()
 
@@ -47,13 +52,13 @@ const ListView = ({ sortedListings, isFetching }) => {
     useState(false)
 
   const closeListingDetailsModal = useCallback(() => {
-    window.history.replaceState({}, '', BASE_URL)
+    window.history.back()
     setIsListingDetailsModalOpen(false)
     setSelectedListingId(null)
   }, [])
 
   const openListingDetailsModal = useCallback(id => {
-    window.history.replaceState({}, '', `${BASE_URL}/${id}`)
+    changeUrl(`/dashboard/mls/${id}`)
     setIsListingDetailsModalOpen(true)
     setSelectedListingId(id)
   }, [])
@@ -145,7 +150,7 @@ const ListView = ({ sortedListings, isFetching }) => {
   useEffect(() => {
     setCurrentPage(1)
     scrollToTop()
-  }, [sortedListings])
+  }, [props.sortedListings])
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value)
@@ -153,18 +158,36 @@ const ListView = ({ sortedListings, isFetching }) => {
   }
 
   const renderTable = () => {
-    if (isFetching) {
+    if (props.isFetching) {
       return <LoadingComponent />
     }
 
-    if (!sortedListings.length) {
-      return <ZeroState />
+    if (!props.sortedListings.length) {
+      return (
+        <ZeroState
+          image={
+            props.tabName === 'favorites'
+              ? '/static/images/zero-state/mls-favorites.png'
+              : '/static/images/zero-state/agents-network.png'
+          }
+          title={
+            props.tabName === 'favorites'
+              ? 'You don’t have any Favorites.'
+              : 'You don’t have any Saved Search.'
+          }
+          subtitle={
+            props.tabName === 'favorites'
+              ? 'Try for add new Favorites.'
+              : 'Try for add new Saved Search.'
+          }
+        />
+      )
     }
 
     return (
       <Table
         columns={columns}
-        rows={getListingsPage(sortedListings, currentPage, PAGE_SIZE)}
+        rows={getListingsPage(props.sortedListings, currentPage, PAGE_SIZE)}
         selection={{
           render: ({ row: listing }) => (
             <Checkbox
@@ -183,31 +206,45 @@ const ListView = ({ sortedListings, isFetching }) => {
     )
   }
 
-  const isListingsDisplayed = !isFetching && sortedListings.length
+  const isListingsDisplayed = !props.isFetching && props.sortedListings.length
 
   return (
     <>
       <Grid className={classes.container}>
-        {isListingsDisplayed ? (
-          <ResultsCount
-            currentPage={currentPage}
-            pageSize={PAGE_SIZE}
-            resultsCounts={sortedListings.length}
-          />
-        ) : null}
+        <ResultsHeader
+          isLoading={props.isFetching}
+          mapIsShown
+          currentPage={currentPage}
+          total={props.info?.total}
+          resultsCount={props.sortedListings.length}
+          viewType="table"
+          onMapToggle={() => {}}
+          onToggleView={props.onToggleView}
+          onChangeSort={props.onChangeSort}
+          activeSort={props.activeSort}
+        />
         {renderTable()}
         {isListingsDisplayed ? (
-          <Grid container className={classes.paginationContainer}>
-            <Pagination
-              page={currentPage}
-              onChange={handlePageChange}
-              count={Math.ceil(sortedListings.length / PAGE_SIZE)}
-              variant="outlined"
-              color="primary"
-              size="large"
-              shape="rounded"
-            />
-          </Grid>
+          <>
+            <Grid container className={classes.paginationContainer}>
+              <Pagination
+                page={currentPage}
+                onChange={handlePageChange}
+                count={Math.ceil(props.sortedListings.length / PAGE_SIZE)}
+                variant="outlined"
+                color="primary"
+                size="large"
+                shape="rounded"
+              />
+            </Grid>
+            {props.info && props.info.total > QUERY_LIMIT && (
+              <Grid container justifyContent="center">
+                <Typography variant="caption" component="p">
+                  We only show {QUERY_LIMIT} results for saved searches.
+                </Typography>
+              </Grid>
+            )}
+          </>
         ) : null}
         <ListingDetailsModal
           isOpen={isListingDetailsModalOpen}

@@ -1,6 +1,6 @@
+// @ts-nocheck
 const path = require('path')
 
-const { ESBuildPlugin } = require('esbuild-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
@@ -11,10 +11,12 @@ function resolvePath(dirPath) {
   return path.resolve(__dirname, dirPath)
 }
 
-const ESBUILD_COMMON_OPTIONS = {
-  jsxFactory: 'React.createElement',
-  jsxFragment: 'React.Fragment',
-  sourcemap: false
+const postcssOptions = {
+  plugins: [
+    require('postcss-preset-env')(),
+    require('postcss-browser-reporter')(),
+    require('postcss-reporter')()
+  ]
 }
 
 module.exports = {
@@ -24,10 +26,11 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: __DEV__ ? '[name].js' : '[name].[hash].js',
+    filename: __DEV__ ? '[name].bundle.js' : '[name].[fullhash].js',
     chunkFilename: '[name].[chunkhash].js',
     publicPath: '/',
-    globalObject: 'this'
+    globalObject: 'self',
+    assetModuleFilename: '[hash][ext]' // Webpack bby default includes [query] in this, S3 file upload plugin can't handle it.
   },
   resolve: {
     modules: [resolvePath('../app'), 'node_modules'],
@@ -55,7 +58,8 @@ module.exports = {
       deals: resolvePath('../app/components/Pages/Dashboard/Deals'),
       crm: resolvePath('../app/components/Pages/Dashboard/Contacts'),
       animations: resolvePath('../app/animations'),
-      fixtures: resolvePath('../tests/unit/fixtures')
+      fixtures: resolvePath('../tests/unit/fixtures'),
+      tests: resolvePath('../tests')
     },
     fallback: {
       path: require.resolve('path-browserify'),
@@ -76,7 +80,6 @@ module.exports = {
     new webpack.ProvidePlugin({
       React: 'react'
     }),
-    new ESBuildPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(env),
@@ -114,7 +117,8 @@ module.exports = {
         MAPBOX_ACCESS_TOKEN: JSON.stringify(process.env.MAPBOX_ACCESS_TOKEN),
         STRIPE_PUBLIC_KEY: JSON.stringify(process.env.STRIPE_PUBLIC_KEY),
         SHOWING_BOOKING_URL: JSON.stringify(process.env.SHOWING_BOOKING_URL),
-        ENABLE_FULLSTORY: JSON.stringify(process.env.ENABLE_FULLSTORY)
+        ENABLE_FULLSTORY: JSON.stringify(process.env.ENABLE_FULLSTORY),
+        NLP_SERVER: JSON.stringify(process.env.NLP_SERVER)
       },
       __DEV__,
       NODE_ENV: env,
@@ -128,128 +132,46 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.m?js/,
-        resolve: {
-          fullySpecified: false
-        }
-      },
-      {
-        test: /\.jsx?$/,
+        test: /\.(ts|tsx|js|jsx)$/i,
         exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'esbuild-loader',
-          options: {
-            ...ESBUILD_COMMON_OPTIONS,
-            loader: 'jsx'
-          }
-        }
-      },
-      {
-        test: /\.ts$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'esbuild-loader',
-          options: {
-            ...ESBUILD_COMMON_OPTIONS,
-            loader: 'ts'
-          }
-        }
-      },
-      {
-        test: /\.tsx$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'esbuild-loader',
-          options: {
-            ...ESBUILD_COMMON_OPTIONS,
-            loader: 'tsx'
-          }
-        }
-      },
-      {
-        test: /\.woff(\?.*)?$/,
         use: [
           {
-            loader:
-              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/font-woff'
+            loader: require.resolve('babel-loader'),
+            options: {
+              cacheDirectory: true,
+              cacheCompression: false,
+              plugins: [
+                __DEV__ && require.resolve('react-refresh/babel')
+              ].filter(Boolean)
+            }
           }
         ]
       },
       {
-        test: /\.woff2(\?.*)?$/,
+        test: /\.(png|jpg|gif|svg|eot|ttf|otf|woff|woff2)$/i,
+        type: 'asset/resource'
+      },
+      {
+        test: /\.(mjml|njk|html)$/,
+        exclude: /index\.html/, // This should be excluded so HtmlWebpackPlugin can read it. https://github.com/webpack/webpack/discussions/14847
+        type: 'asset/source'
+      },
+      {
+        test: /\.css/,
         use: [
+          'style-loader',
+          'css-loader',
           {
-            loader:
-              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/font-woff2'
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions
+            }
           }
         ]
       },
       {
-        test: /\.otf(\?.*)?$/,
-        use: [
-          {
-            loader:
-              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=font/opentype'
-          }
-        ]
-      },
-      {
-        test: /\.ttf(\?.*)?$/,
-        use: [
-          {
-            loader:
-              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/octet-stream'
-          }
-        ]
-      },
-      {
-        test: /\.eot(\?.*)?$/,
-        use: [
-          {
-            loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]'
-          }
-        ]
-      },
-      {
-        test: /\.svg(\?.*)?$/,
-        use: [
-          {
-            loader:
-              'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=image/svg+xml'
-          }
-        ]
-      },
-      {
-        test: /\.(png|jpg|gif|svg)$/,
-        use: [
-          {
-            loader: 'file-loader'
-          }
-        ]
-      },
-      {
-        test: /\.(mjml)$/,
-        use: [
-          {
-            loader: 'raw-loader'
-          }
-        ]
-      },
-      {
-        test: /\.(njk)$/,
-        use: [
-          {
-            loader: 'raw-loader'
-          }
-        ]
-      },
-      {
-        test: /\.(html)$/,
-        use: [
-          {
-            loader: 'raw-loader'
-          }
-        ]
+        test: /\.scss/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
       }
     ]
   }

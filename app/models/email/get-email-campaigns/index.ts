@@ -1,6 +1,5 @@
 import Fetch from 'services/fetch'
 import { toEntityAssociation } from 'utils/association-utils'
-import { getActiveTeamId } from 'utils/user-teams'
 
 export const DEFAULT_EMAIL_ASSOCIATIONS: IEmailCampaignAssociation[] = [
   'emails',
@@ -33,7 +32,7 @@ export async function getEmailCampaigns<
   A2 extends IEmailCampaignRecipientAssociation,
   A3 extends IEmailCampaignEmailAssociation
 >(
-  user: IUser,
+  brandId: Nullable<UUID>,
   associations: GetEmailCampaignsAssociations<A1, A2, A3> = {}
 ): Promise<IEmailCampaign<A1, A2, A3, never>[]> {
   const {
@@ -43,10 +42,8 @@ export async function getEmailCampaigns<
     emailCampaignEmailsAssociation = DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS as A3[]
   } = associations
 
-  const brandId: UUID | null = getActiveTeamId(user)
-
   if (!brandId) {
-    throw new Error('This user does not belong to any brand')
+    throw new Error('the current user does not belong to any brand')
   }
 
   const endpoint = `/brands/${brandId}/emails/campaigns`

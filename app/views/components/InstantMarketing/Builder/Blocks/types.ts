@@ -25,6 +25,7 @@ export interface TemplateOptions {
   disableDefault?: string[] | true
   textEditor?: {
     extraFonts?: string[]
+    extraColors?: string[]
   }
 }
 
@@ -41,13 +42,13 @@ export interface TemplateBlockOptions {
 
 export type BlockTemplates = Record<string, string>
 
-export type TemplateRenderDataFunc<T> = (
-  selectedItem: T,
+export type TemplateRenderDataFunc<TSelectedItem, TCustomRenderData> = (
+  selectedItem: TSelectedItem,
   blockId: string
-) => TemplateRenderData
+) => TemplateRenderData<TCustomRenderData>
 
-export type BlockOnDropFunc = (model: Model, blockId: string) => void
+export type BlockOnDropFunc = (model: Model, blockId: string | number) => void
 
-export interface BlockDragStopEventReturn<T> {
-  selectHandler: (selectedItem?: T) => void
+export interface RegisterBlockSelectHandler<TSelectedItem> {
+  selectHandler: (selectedItem?: TSelectedItem) => void
 }

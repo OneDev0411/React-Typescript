@@ -289,10 +289,13 @@ class UploadModal extends React.Component {
           isOpen={filesCount > 0 && !this.state.isNotifyOfficeDialogOpen}
           autoHeight
           offOverflow
-          onRequestClose={() => this.closeModal()}
         >
           <ModalHeader
-            closeHandler={() => this.closeModal()}
+            closeHandler={
+              this.isFinished && taskIds.length > 0
+                ? undefined
+                : () => this.closeModal()
+            }
             className="modal-header"
             title={`${filesCount} Documents`}
           />

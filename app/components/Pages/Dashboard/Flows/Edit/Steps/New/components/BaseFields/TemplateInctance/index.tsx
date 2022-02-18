@@ -1,27 +1,65 @@
-import React from 'react'
-
-import { Box, Typography } from '@material-ui/core'
 import { Field } from 'react-final-form'
 
 import { TemplateSelector } from './Selector'
 
+const allMarketingTemplateType: IMarketingTemplateType[] = [
+  'BackToSchool',
+  'Birthday',
+  'Blank',
+  'Blog',
+  'Brand',
+  'ChineseNewYear',
+  'Christmas',
+  'ColumbusDay',
+  'DaylightSaving',
+  'Diwali',
+  'Easter',
+  'Event',
+  'FathersDay',
+  'FourthOfJuly',
+  'Halloween',
+  'Hanukkah',
+  'HomeAnniversary',
+  'Kwanzaa',
+  'LaborDay',
+  'Layout',
+  'MarketReport',
+  'MemorialDay',
+  'MLKDay',
+  'MothersDay',
+  'NewAgent',
+  'News',
+  'Newsletter',
+  'NewYear',
+  'OtherHoliday',
+  'Passover',
+  'PatriotsDay',
+  'Recruitment',
+  'RoshHashanah',
+  'September11',
+  'StPatrick',
+  'Thanksgiving',
+  'Valentines',
+  'VeteransDay',
+  'WeddingAnniversary',
+  'WomansDay'
+]
+
 interface Props {
   disabled?: boolean
-  currentBrandTemplate?: Nullable<IBrandMarketingTemplate>
-  currentTemplateInstance?: Nullable<IMarketingTemplateInstance>
+  currentTemplate?: Nullable<
+    IMarketingTemplateInstance | IBrandMarketingTemplate
+  >
 }
 
 export const TemplateInctance = ({
   disabled = false,
-  currentBrandTemplate = null,
-  currentTemplateInstance = null
+  currentTemplate = null
 }: Props) => {
-  const handleValidation = value => {
-    if (value) {
-      return
+  const handleValidation = (value, allValues) => {
+    if (allValues.title && allValues.event_type && !value) {
+      return 'No Template selected'
     }
-
-    return 'No Template selected'
   }
 
   return (
@@ -29,26 +67,18 @@ export const TemplateInctance = ({
       name="template"
       label="template"
       validate={handleValidation}
-      render={({ input: { onChange, value }, meta }) => {
+      render={({ input: { onChange }, meta }) => {
         const showError = Boolean(meta.submitFailed && meta.error)
 
         return (
-          <>
-            <TemplateSelector
-              disabled={disabled}
-              hasError={showError}
-              currentBrandTemplate={currentBrandTemplate}
-              currentTemplateInstance={currentTemplateInstance}
-              onChange={onChange}
-            />
-            {showError && (
-              <Box mt={0.5}>
-                <Typography variant="body2" color="error">
-                  {meta.error}
-                </Typography>
-              </Box>
-            )}
-          </>
+          <TemplateSelector
+            disabled={disabled}
+            templateTypes={allMarketingTemplateType}
+            hasError={showError}
+            error={meta.error}
+            currentTemplate={currentTemplate}
+            onChange={onChange}
+          />
         )
       }}
     />

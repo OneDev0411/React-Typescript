@@ -7,18 +7,19 @@ import timeout from 'connect-timeout'
 import cookieSession from 'cookie-session'
 import express, { Request, Response, NextFunction } from 'express'
 import enforce from 'express-sslify'
+import morgan from 'morgan'
 import serveStatic from 'serve-static'
 import throng from 'throng'
 import webpack from 'webpack'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 
 import { checkBrowser } from './app/middlewares/check-browser'
+import appConfig from './config'
 import routes from './routes'
 
 const port = process.env.PORT || 8080
 const isProduction = process.env.NODE_ENV === 'production'
 const isDevelopment = !isProduction
-const isBabel = process.env.IS_BABEL === 'true'
 
 const app = express()
 
@@ -34,11 +35,24 @@ app.use(
   })
 )
 
+app.use(morgan('combined'))
+
 /**
  * Checks user-agent and navigates old browsers to
  * the /unsupported page
  */
 app.use(checkBrowser)
+
+/**
+ * caches properties liting urls in order to provide open graph for social networks
+ */
+if (isProduction) {
+  app.use(
+    require('prerender-node')
+      .whitelisted('/dashboard/mls/.*')
+      .set('prerenderToken', appConfig.prerender_token)
+  )
+}
 
 // setup routes
 app.use('/', routes)
@@ -47,26 +61,15 @@ app.use(haltOnTimedout)
 app.use(history())
 
 if (isDevelopment) {
-  if (isBabel) {
-    const config = require('../webpack/developmentBabel')
-    const compiler = webpack(config)
+  const config = require('../webpack/development')
+  const compiler = webpack(config)
 
-    app.use(
-      webpackDevMiddleware(compiler, {
-        publicPath: config.output.publicPath
-      })
-    )
-    app.use(require('webpack-hot-middleware')(compiler))
-  } else {
-    const config = require('../webpack/development')
-    const compiler = webpack(config)
-
-    app.use(
-      webpackDevMiddleware(compiler, {
-        publicPath: config.output.publicPath
-      })
-    )
-  }
+  app.use(
+    webpackDevMiddleware(compiler, {
+      publicPath: config.output.publicPath
+    })
+  )
+  app.use(require('webpack-hot-middleware')(compiler))
 
   app.use('/static', express.static(path.resolve(__dirname, '../app/static')))
 }

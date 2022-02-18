@@ -3,6 +3,7 @@ import { useState, useMemo, Fragment } from 'react'
 import { Tooltip } from '@material-ui/core'
 import { mdiPencilOutline } from '@mdi/js'
 
+import { useDealsRolesContext } from '@app/contexts/deals-roles-definitions/use-deals-roles-context'
 import DealRole from 'components/DealRole'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { getRoleTooltip } from 'deals/FormEdit/utils/get-role-tooltip'
@@ -18,6 +19,7 @@ import { RoleItem } from './styled'
 
 export function RoleField(props) {
   const [activeRole, setRole] = useState(undefined)
+  const { dealRolesByName } = useDealsRolesContext()
 
   const allowedRoles = normalizeRoleNames(props.deal, props.annotation.role)
   const roles = props.roles.filter(role => allowedRoles.includes(role.role))
@@ -36,6 +38,7 @@ export function RoleField(props) {
   )
 
   const tooltip = getRoleTooltip(
+    dealRolesByName,
     props.annotation,
     props.annotation.type === 'Roles'
   )

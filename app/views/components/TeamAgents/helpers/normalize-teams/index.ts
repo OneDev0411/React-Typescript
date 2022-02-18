@@ -39,12 +39,12 @@ const getSubtitle = memoize(
 )
 
 export function normalizeTeams(
-  user: IUser,
+  team: Nullable<IUserTeam>,
   teams: IBrand[],
   flattened: boolean,
   searchTerm: string
 ): NormalizedBrand[] {
-  const isTraining = isActiveTeamTraining(user)
+  const isTraining = isActiveTeamTraining(team)
 
   const list = teams
     .filter((office: IBrand) => isTrainingOffice(office) === isTraining)

@@ -1,8 +1,6 @@
 import { Grid } from '@material-ui/core'
-import { useSelector } from 'react-redux'
 
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
-import { selectActiveBrandId } from '@app/selectors/brand'
 import Link from '@app/views/components/ALink'
 import CardSkeleton from '@app/views/components/CardSkeleton'
 import ListingCard from '@app/views/components/ListingCards/ListingCard'
@@ -11,16 +9,18 @@ import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
 
 export default function PromoteListingsSection() {
-  const brandId = useSelector(selectActiveBrandId)
-
-  const { listings, isLoading } = useBrandAndDealsListings(brandId)
+  const { listings, isLoading } = useBrandAndDealsListings()
 
   return (
     <SectionLayout
       title="Promote Your Listings"
       actionNode={
-        <LinkSectionAction title="View all" url="/dashboard/listings" />
+        <LinkSectionAction
+          title="View all your listings"
+          url="/dashboard/listings"
+        />
       }
+      headerGridProps={{ justifyContent: 'space-between' }}
     >
       {isLoading && (
         <>

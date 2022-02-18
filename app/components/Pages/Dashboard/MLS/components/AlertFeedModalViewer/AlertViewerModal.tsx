@@ -2,13 +2,11 @@ import React, { useState } from 'react'
 
 import { Box, Typography } from '@material-ui/core'
 
-import Modal from 'components/BareModal'
-import ListingCard from 'components/ListingCards/ListingCard'
-import { ListingDetailsModal } from 'components/ListingDetailsModal'
-import LoadingContainer from 'components/LoadingContainer'
-import PageHeader from 'components/PageHeader'
-
-import { formatListing } from '../../helpers/format-listing'
+import Modal from '@app/views/components/BareModal'
+import ListingCard from '@app/views/components/ListingCards/ListingCard'
+import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
+import LoadingContainer from '@app/views/components/LoadingContainer'
+import PageHeader from '@app/views/components/PageHeader'
 
 import { Card } from './styled'
 
@@ -41,7 +39,7 @@ export default function AlertViewerModal(props: Props) {
           {feed.map(listing => (
             <Card key={listing.id}>
               <ListingCard
-                listing={formatListing(listing)}
+                listing={listing}
                 onClick={() => {
                   setSelectedListing(listing)
                   setShowListingModal(true)

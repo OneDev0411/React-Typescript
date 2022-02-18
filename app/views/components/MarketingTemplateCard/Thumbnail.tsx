@@ -3,12 +3,12 @@ import { useState, useEffect, ComponentProps } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { useInView } from 'react-intersection-observer'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { PdfThumbnail } from 'components/PdfThumbnail'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import TemplateThumbnail from 'components/TemplateThumbnail'
 import { getFileType } from 'utils/file-utils/get-file-type'
 import { getTemplateImage } from 'utils/marketing-center/helpers'
-import { getActiveBrand } from 'utils/user-teams'
 
 const useStyles = makeStyles(
   () => ({
@@ -40,10 +40,10 @@ export function Thumbnail({
   useStaticImage,
   onClick
 }: Props) {
+  const activeBrand = useUnsafeActiveBrand()
   const { ref, inView } = useInView({ delay: 100 })
   const [isAlreadyLoaded, setIsAlreadyLoaded] = useState<boolean>(false)
   const classes = useStyles()
-  const brand = getActiveBrand(user)
   const [listing, setListing] = useState<Optional<IListing>>(undefined)
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export function Thumbnail({
     )
   }
 
-  if (!brand) {
+  if (!activeBrand) {
     return null
   }
 
@@ -114,7 +114,7 @@ export function Thumbnail({
       {shouldRender && (
         <TemplateThumbnail
           template={template}
-          brand={brand}
+          brand={activeBrand}
           data={{ listing, user }}
           onClick={onClick}
         />

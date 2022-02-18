@@ -15,15 +15,13 @@ import {
 } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
 import { useForm, Controller } from 'react-hook-form'
-import { useSelector } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import {
   createPropertyType,
   PropertyTypeData
 } from 'models/property-types/create-property-type'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 interface Props {
   isOpen: boolean
@@ -32,8 +30,8 @@ interface Props {
 }
 
 export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
+  const activeBrandId = useActiveBrandId()
   const [isSaving, setIsSaving] = useState(false)
-  const user = useSelector(selectUser)
 
   const {
     control,
@@ -51,7 +49,7 @@ export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
 
     try {
       const propertyType = await createPropertyType(
-        getActiveTeamId(user)!,
+        activeBrandId,
         control.getValues() as PropertyTypeData
       )
 

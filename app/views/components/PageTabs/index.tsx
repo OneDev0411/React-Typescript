@@ -130,6 +130,7 @@ export function PageTabs({
       {actions && (
         <div>
           <Tabs
+            indicatorColor="primary"
             value={actionValue || activeAction || false}
             onChange={(e, v) => handleChangeAction(v)}
             variant="scrollable"

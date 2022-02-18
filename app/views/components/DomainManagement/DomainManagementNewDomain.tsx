@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Box, Button, useTheme } from '@material-ui/core'
-import { ArrowBack } from '@material-ui/icons'
+import { mdiArrowLeft } from '@mdi/js'
 import { useDispatch } from 'react-redux'
 
 import { addNotification as notify } from 'components/notification'
 import { QuestionSection, QuestionWizard } from 'components/QuestionWizard'
 import { IWizardState } from 'components/QuestionWizard/context'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useAsync from 'hooks/use-async'
 import purchaseDomain from 'models/domains/purchase-domain'
 import addHostnameToWebsite from 'models/website/add-hostname-to-website'
@@ -53,13 +54,12 @@ function DomainManagementNewDomain({
   const handleAddDomainToHost = (domainName: string, wizard: IWizardState) => {
     wizard.setLoading(true)
 
-    run(async () =>
-      addHostnameToWebsite(websiteId, {
-        hostname: domainName,
-        is_default: true
-      })
-    ).then(
-      () => {
+    run(async () => {
+      try {
+        await addHostnameToWebsite(websiteId, {
+          hostname: domainName,
+          is_default: true
+        })
         handleAddDomain(domainName, true)
         dispatch(
           notify({
@@ -67,8 +67,7 @@ function DomainManagementNewDomain({
             status: 'success'
           })
         )
-      },
-      () => {
+      } catch (_: unknown) {
         dispatch(
           notify({
             message: 'An error occurred on adding the domain, please try again',
@@ -77,7 +76,7 @@ function DomainManagementNewDomain({
         )
         wizard.setLoading(false)
       }
-    )
+    })
   }
 
   const handleSelectDomainName = (domainName: string, price: string) => {
@@ -94,14 +93,23 @@ function DomainManagementNewDomain({
     done?: () => void
   ) => {
     wizard.setLoading(true)
-    run(async () =>
-      purchaseDomain(stripeCustomerId, domainName, domainAgreementKeys)
-    )
-      .then(
-        () => handleAddDomainToHost(domainName, wizard),
-        () => wizard.setLoading(false)
-      )
-      .finally(() => done?.())
+    run(async () => {
+      try {
+        await purchaseDomain(stripeCustomerId, domainName, domainAgreementKeys)
+        handleAddDomainToHost(domainName, wizard)
+      } catch (_: unknown) {
+        dispatch(
+          notify({
+            message:
+              'Something went wrong while purchasing the domain. Please try again.',
+            status: 'error'
+          })
+        )
+      }
+
+      wizard.setLoading(false)
+      done?.()
+    })
   }
 
   return (
@@ -111,7 +119,7 @@ function DomainManagementNewDomain({
           type="button"
           onClick={onBack}
           disabled={isWorking}
-          startIcon={<ArrowBack />}
+          startIcon={<SvgIcon path={mdiArrowLeft} />}
           color="inherit"
         >
           Back to domain list

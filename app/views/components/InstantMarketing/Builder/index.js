@@ -6,6 +6,11 @@ import juice from 'juice'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import {
+  selectActiveBrand,
+  selectActiveBrandSettings
+} from '@app/selectors/brand'
+import { selectActiveTeamUnsafe } from '@app/selectors/team'
 import SearchArticleDrawer from '@app/views/components/SearchArticleDrawer'
 import SearchVideoDrawer from '@app/views/components/SearchVideoDrawer'
 import CarouselDrawer from 'components/CarouselDrawer'
@@ -23,22 +28,21 @@ import SearchListingDrawer from 'components/SearchListingDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
 import { uploadAsset } from 'models/instant-marketing/upload-asset'
+import { isAdmin } from 'utils/acl'
 import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
 import { getBrandColors } from 'utils/get-brand-colors'
 import { loadJS, unloadJS } from 'utils/load-js'
-import {
-  isAdmin,
-  getBrandByType,
-  getActiveTeamSettings,
-  getActiveBrand
-} from 'utils/user-teams'
 
+import {
+  hasCreateSuperCampaignButton,
+  hasSaveAsTemplateButton
+} from '../helpers/builder-actions'
 import getTemplateObject from '../helpers/get-template-object'
 import nunjucks from '../helpers/nunjucks'
 import Templates from '../Templates'
 
-import AddToMarketingCenter from './AddToMarketingCenter'
-import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenter/constants'
+import { AddToMarketingCenterButton } from './AddToMarketingCenterButton'
+import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenterButton/constants'
 import { registerEmailBlocks } from './Blocks/Email'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
 import { registerSocialBlocks } from './Blocks/Social'
@@ -49,7 +53,10 @@ import {
 import { registerWebsiteBlocks, websiteBlocksTraits } from './Blocks/Website'
 import { registerCommands } from './commands'
 import { BASICS_BLOCK_CATEGORY } from './constants'
+import CreateSuperCampaignButton from './CreateSuperCampaignButton'
 import DeviceManager from './DeviceManager'
+import { addFallbackSrcToImage } from './extensions/add-fallback-src-to-image'
+import { addFallbackSrcToMjImage } from './extensions/add-fallback-src-to-mj-image'
 import {
   Container,
   Actions,
@@ -175,12 +182,15 @@ class Builder extends React.Component {
     const { load: loadAssetManagerPlugin } = await import('./AssetManager')
     const { load: loadStyleManagerPlugin } = await import('./StyleManager')
 
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const brandColors = getBrandColors(brand)
+    const activeBrand = this.props.activeBrand
+    const colors =
+      this.selectedTemplateColors.length > 0
+        ? this.selectedTemplateColors
+        : getBrandColors(activeBrand)
 
     await Promise.all([
       loadAssetManagerPlugin(),
-      loadStyleManagerPlugin(brandColors)
+      loadStyleManagerPlugin(colors)
     ])
 
     this.setState({
@@ -211,6 +221,7 @@ class Builder extends React.Component {
       const iframe = this.editor.Canvas.getBody()
 
       iframe.removeEventListener('paste', this.iframePasteHandler)
+      iframe.removeEventListener('click', this.iframeClickHandler)
     }
 
     unloadJS('ckeditor')
@@ -282,6 +293,18 @@ class Builder extends React.Component {
     return []
   }
 
+  get selectedTemplateColors() {
+    if (
+      this.selectedTemplateOptions &&
+      this.selectedTemplateOptions.textEditor &&
+      this.selectedTemplateOptions.textEditor.extraColors
+    ) {
+      return this.selectedTemplateOptions.textEditor.extraColors
+    }
+
+    return []
+  }
+
   loadCKEditor = () => {
     return new Promise(resolve => {
       loadJS('/static/ckeditor/ckeditor.js', 'ckeditor', resolve)
@@ -309,10 +332,13 @@ class Builder extends React.Component {
   }
 
   loadCKEditorRTE = async () => {
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const brandColors = getBrandColors(brand)
+    const { activeBrand } = this.props
+    const colors =
+      this.selectedTemplateColors.length > 0
+        ? this.selectedTemplateColors
+        : getBrandColors(activeBrand)
 
-    return attachCKEditor(this.editor, [], brandColors, undefined, () => {
+    return attachCKEditor(this.editor, [], colors, undefined, () => {
       const templateFonts = this.selectedTemplateFonts
 
       const fonts =
@@ -459,16 +485,17 @@ class Builder extends React.Component {
     this.disableAssetManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
+    this.deselectComponentsOnCanvasClick()
     this.disableDefaultDeviceManager()
     this.scrollSidebarToTopOnComponentSelect()
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       await this.registerEmailBlocks()
-    }
-
-    if (this.isWebsiteTemplate) {
+    } else if (this.isWebsiteTemplate) {
       await this.registerWebsiteBlocks()
     }
+
+    this.registerComponentExtensions()
 
     this.setupImageDoubleClickHandler()
 
@@ -489,7 +516,18 @@ class Builder extends React.Component {
       agent: {
         onDrop: () => {
           this.setState({ isAgentDrawerOpen: true })
-        }
+        },
+        shouldUseDefaultAgents:
+          this.isEmailTemplateForCampaigns || this.isTemplateForOtherAgents,
+        defaultAgents:
+          this.props.templateData && this.props.templateData.user
+            ? [
+                {
+                  agent: this.props.templateData.user,
+                  contacts: []
+                }
+              ]
+            : []
       },
       image: {
         onDrop: () => {
@@ -506,7 +544,7 @@ class Builder extends React.Component {
       }
     }
 
-    const activeTeamSettings = getActiveTeamSettings(this.props.user, true)
+    const activeTeamSettings = this.props.activeBrandSetting
 
     const { enable_liveby: shouldShowNeighborhoodsBlocks } = activeTeamSettings
 
@@ -532,8 +570,8 @@ class Builder extends React.Component {
 
     this.emailBlocksRegistered = true
 
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
+    const { activeBrand, templateData } = this.props
+    const renderData = getTemplateRenderData(activeBrand)
 
     removeUnusedBlocks(this.editor)
 
@@ -547,7 +585,7 @@ class Builder extends React.Component {
     this.blocks = registerEmailBlocks(
       this.editor,
       {
-        ...this.props.templateData,
+        ...templateData,
         ...renderData
       },
       templateBlockOptions,
@@ -556,8 +594,8 @@ class Builder extends React.Component {
   }
 
   async registerSocialBlocks() {
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
+    const { activeBrand, templateData } = this.props
+    const renderData = getTemplateRenderData(activeBrand)
 
     const templateBlockOptions = await getTemplateBlockOptions(
       this.selectedTemplate,
@@ -568,7 +606,7 @@ class Builder extends React.Component {
     this.blocks = registerSocialBlocks(
       this.editor,
       {
-        ...this.props.templateData,
+        ...templateData,
         ...renderData
       },
       templateBlockOptions
@@ -583,8 +621,8 @@ class Builder extends React.Component {
 
     this.websiteBlocksRegistered = true
 
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
+    const { activeBrand, templateData } = this.props
+    const renderData = getTemplateRenderData(activeBrand)
 
     const dynamicBlocksOptions = this.getBlocksOptions()
     const blocksOptions = {
@@ -611,12 +649,33 @@ class Builder extends React.Component {
     this.blocks = registerWebsiteBlocks(
       this.editor,
       {
-        ...this.props.templateData,
+        ...templateData,
         ...renderData
       },
       templateBlockOptions,
       blocksOptions
     )
+  }
+
+  registerComponentExtensions() {
+    // We should not re-register extensions if it's already done!
+    if (this.componentExtensionsRegistered) {
+      return
+    }
+
+    this.componentExtensionsRegistered = true
+
+    if (this.isWebsiteTemplate) {
+      return
+    }
+
+    if (this.isEmailTemplate && this.isMjmlTemplate) {
+      addFallbackSrcToMjImage(this.editor)
+
+      return
+    }
+
+    addFallbackSrcToImage(this.editor)
   }
 
   setupDependentComponents = () => {
@@ -811,16 +870,32 @@ class Builder extends React.Component {
     iframe.addEventListener('paste', this.iframePasteHandler)
   }
 
+  deselectComponentsOnCanvasClick = () => {
+    const iframeBody = this.editor.Canvas.getBody()
+
+    iframeBody.addEventListener('click', this.iframeClickHandler)
+  }
+
   iframePasteHandler = ev => {
     if (!ev.target.contentEditable) {
       return
     }
 
-    ev.preventDefault()
-
-    const text = ev.clipboardData.getData('text')
+    const text = ev.clipboardData.getData('text/plain')
 
     ev.target.ownerDocument.execCommand('insertText', false, text)
+    ev.preventDefault()
+  }
+
+  iframeClickHandler = ev => {
+    const parentNode = ev.target.parentNode
+
+    if (parentNode.id !== 'wrapper') {
+      return
+    }
+
+    this.deselectAll()
+    ev.stopPropagation()
   }
 
   setTraits = model => {
@@ -948,9 +1023,8 @@ class Builder extends React.Component {
   }
 
   generateBrandedTemplate = (templateMarkup, data) => {
-    const activeBrand = getActiveBrand(this.props.user)
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
+    const activeBrand = this.props.activeBrand
+    const renderData = getTemplateRenderData(activeBrand)
 
     return nunjucks.renderString(templateMarkup, {
       ...data,
@@ -1001,6 +1075,8 @@ class Builder extends React.Component {
     } else if (this.isWebsiteTemplate) {
       this.registerWebsiteBlocks()
     }
+
+    this.registerComponentExtensions()
   }
 
   deselectAll = () => {
@@ -1105,7 +1181,11 @@ class Builder extends React.Component {
   }
 
   get shouldShowEmailActions() {
-    if (this.isBareMode) {
+    if (
+      this.isBareMode ||
+      this.shouldShowSaveAsTemplateButton ||
+      this.shouldShowCreateSuperCampaignButton
+    ) {
       return false
     }
 
@@ -1132,7 +1212,11 @@ class Builder extends React.Component {
   }
 
   get shouldShowSocialShareActions() {
-    if (this.isBareMode) {
+    if (
+      this.isBareMode ||
+      this.shouldShowSaveAsTemplateButton ||
+      this.shouldShowCreateSuperCampaignButton
+    ) {
       return false
     }
 
@@ -1148,7 +1232,11 @@ class Builder extends React.Component {
   }
 
   get shouldShowPrintableActions() {
-    if (this.isBareMode) {
+    if (
+      this.isBareMode ||
+      this.shouldShowSaveAsTemplateButton ||
+      this.shouldShowCreateSuperCampaignButton
+    ) {
       return false
     }
 
@@ -1200,15 +1288,40 @@ class Builder extends React.Component {
     }))
   }
 
-  shouldShowSaveAsTemplateButton = () => {
-    if (this.isBareMode) {
+  get isTemplateForOtherAgents() {
+    return this.props.templatePurpose === 'ForOtherAgents'
+  }
+
+  get isEmailTemplateForCampaigns() {
+    return this.isEmailMedium && this.props.templatePurpose === 'ForCampaigns'
+  }
+
+  get shouldShowSaveAsTemplateButton() {
+    // We need this because we should respect the user answer on the purpose drawer
+    if (!this.isTemplateForOtherAgents) {
       return false
     }
 
-    // Only admin users should see this for now
-    const isAdminUser = isAdmin(this.props.user)
+    return hasSaveAsTemplateButton(
+      this.isBareMode,
+      !!this.state.selectedTemplate,
+      this.props.isAdminUser,
+      this.isOpenHouseMedium
+    )
+  }
 
-    return isAdminUser && this.state.selectedTemplate && !this.isOpenHouseMedium
+  get shouldShowCreateSuperCampaignButton() {
+    // We need this because we should respect the user answer on the purpose drawer
+    if (!this.isEmailTemplateForCampaigns) {
+      return false
+    }
+
+    return hasCreateSuperCampaignButton(
+      this.isBareMode,
+      !!this.state.selectedTemplate,
+      this.props.isAdminUser,
+      this.isEmailMedium
+    )
   }
 
   isTemplatesListEnabled = () => {
@@ -1258,6 +1371,20 @@ class Builder extends React.Component {
       : saveButton
   }
 
+  get templateInstanceData() {
+    const listingsArray = this.props.templateData.listing
+      ? [this.props.templateData.listing]
+      : this.props.templateData.listings
+
+    return {
+      contacts: this.props.templateData.contacts?.map(contact => contact.id),
+      listings: listingsArray
+        ?.filter(listing => !listing.isMock) // Remove mock listings
+        ?.map(listing => listing.id), // Collect all listing ids
+      deals: this.props.templateData.deals?.map(deal => deal.id)
+    }
+  }
+
   render() {
     if (this.state.isLoading) {
       return null
@@ -1267,7 +1394,7 @@ class Builder extends React.Component {
       <Portal root="marketing-center">
         <Container
           hideBlocks={!this.hasBlocks}
-          className="template-builder"
+          className="template-builder mui-fixed"
           style={this.props.containerStyle}
         >
           {this.state.isListingDrawerOpen && (
@@ -1309,8 +1436,8 @@ class Builder extends React.Component {
           )}
           {this.state.isAgentDrawerOpen && (
             <TeamAgentsDrawer
+              open
               multiSelection
-              user={this.props.user}
               title="Select Agents"
               onClose={() => {
                 this.blocks.agent.selectHandler()
@@ -1498,13 +1625,23 @@ class Builder extends React.Component {
             <Actions>
               {this.props.customActions}
 
-              {this.shouldShowSaveAsTemplateButton() && (
-                <AddToMarketingCenter
+              {this.shouldShowSaveAsTemplateButton && (
+                <AddToMarketingCenterButton
                   medium={this.selectedTemplate.medium}
                   inputs={this.selectedTemplate.inputs}
+                  originalTemplateId={this.selectedTemplate.id}
                   mjml={this.selectedTemplate.mjml}
                   getTemplateMarkup={this.getTemplateMarkup.bind(this)}
                   disabled={this.props.actionButtonsDisabled}
+                />
+              )}
+
+              {this.shouldShowCreateSuperCampaignButton && (
+                <CreateSuperCampaignButton
+                  disabled={this.props.actionButtonsDisabled}
+                  template={this.selectedTemplate}
+                  getTemplateMarkup={this.getTemplateMarkup.bind(this)}
+                  templateInstanceData={this.templateInstanceData}
                 />
               )}
 
@@ -1594,16 +1731,20 @@ Builder.propTypes = {
   onPrintableSharing: PropTypes.func,
   actionButtonsDisabled: PropTypes.bool,
   customActions: PropTypes.node,
-  saveButtonWrapper: PropTypes.func
+  saveButtonWrapper: PropTypes.func,
+  templatePurpose: PropTypes.string
 }
 
 Builder.defaultProps = {
   onBuilderLoad: () => null
 }
 
-function mapStateToProps({ user }) {
+function mapStateToProps({ user, ...state }) {
   return {
-    user
+    user,
+    isAdminUser: isAdmin(selectActiveTeamUnsafe(state)),
+    activeBrand: selectActiveBrand(state),
+    activeBrandSetting: selectActiveBrandSettings(state, true)
   }
 }
 

@@ -1,11 +1,12 @@
 import React from 'react'
 
 import { configure } from '@testing-library/react'
+import '@testing-library/jest-dom'
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17'
 import Enzyme, { ShallowWrapper } from 'enzyme'
+import { browserHistory } from 'react-router'
 
 import 'whatwg-fetch'
-import '@testing-library/react/cleanup-after-each'
 
 process.env.DISABLE_MODAL = 'true'
 window.React = React
@@ -84,3 +85,9 @@ configure({ testIdAttribute: 'data-test' })
 
 // Fix mapbox-gl issue
 window.URL.createObjectURL = function () {}
+
+afterEach(() => {
+  // reset the history
+  // TODO: find a better way to do this
+  browserHistory.replace('/')
+})

@@ -3,30 +3,31 @@ import React, { memo, useState } from 'react'
 import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
 import { mdiCardsOutline } from '@mdi/js'
+import { dequal as equal } from 'dequal'
 import {
   Droppable,
   DroppableProvided,
   DroppableStateSnapshot
 } from 'react-beautiful-dnd'
 import { useSelector } from 'react-redux'
-import { useAsync } from 'react-use'
+import { useDeepCompareEffect } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { areEqual } from 'react-window'
 
+import { useViewAs } from '@app/hooks/team/use-view-as'
 import { searchContacts } from '@app/models/contacts/search-contacts'
 import { IAppState } from '@app/reducers'
-import { selectUser } from '@app/selectors/user'
 import VirtualList, { LoadingPosition } from '@app/views/components/VirtualList'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { viewAs } from 'utils/user-teams'
 
 import { Tags } from '../constants'
 import { useColumnList } from '../hooks/use-column-list'
+import { FilterCriteria } from '../types'
 
 import { CardItem } from './Card/CardItem'
 import { DraggableCardItem } from './Card/DraggableCardItem'
 
-const loadingLimit = 100
+const loadingLimit = 50
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -82,7 +83,7 @@ interface Props {
   id: string
   title: string
   tag?: string
-  searchTerm: string
+  criteria: FilterCriteria
   onReachStart?: () => void
   onReachEnd?: () => void
 }
@@ -90,17 +91,17 @@ interface Props {
 export const BoardColumn = memo(function BoardColumn({
   id,
   title,
-  searchTerm,
+  criteria,
   tag
 }: Props) {
   const classes = useStyles()
-  const [currentSearchTerm, setCurrentSearchTerm] = useState(searchTerm)
+  const viewAs = useViewAs()
+  const [currentCriteria, setCurrentCriteria] = useState(criteria)
   const [list, updateList] = useColumnList(tag)
   const [loadingOffset, setLoadingOffset] = useState(0)
   const [loadingState, setLoadingState] =
     useState<Nullable<'initial' | 'more'>>(null)
   const [isReachedEnd, setIsReachedEnd] = useState(false)
-  const user = useSelector(selectUser)
   const tagAttributeDefinitionId = useSelector<IAppState, UUID>(
     ({ contacts }) => contacts.attributeDefs.byName.tag
   )
@@ -120,53 +121,75 @@ export const BoardColumn = memo(function BoardColumn({
     return undefined
   }
 
-  useAsync(async () => {
-    if (loadingState || (searchTerm === currentSearchTerm && isReachedEnd)) {
-      return
-    }
+  useDeepCompareEffect(() => {
+    const fetch = async () => {
+      const isCriteriaChanged = equal(criteria, currentCriteria) === false
 
-    setLoadingState(loadingOffset === 0 ? 'initial' : 'more')
+      if (isLoading || (!isCriteriaChanged && isReachedEnd)) {
+        return
+      }
 
-    let filters: IContactFilter[] | undefined
+      setLoadingState(loadingOffset === 0 ? 'initial' : 'more')
 
-    if (tag) {
-      filters = [
+      let columnFilters: IContactFilter[] | undefined
+
+      if (tag) {
+        columnFilters = [
+          {
+            attribute_def: tagAttributeDefinitionId,
+            invert: false,
+            value: tag
+          },
+          ...criteria.filters
+        ]
+      } else {
+        columnFilters =
+          criteria.filters?.length > 0
+            ? criteria.filters
+            : Tags.map(tag => ({
+                attribute_def: tagAttributeDefinitionId,
+                invert: true,
+                value: tag
+              }))
+      }
+
+      const { data, info } = await searchContacts(
+        criteria.searchTerm,
+        columnFilters,
         {
-          attribute_def: tagAttributeDefinitionId,
-          invert: false,
-          value: tag
-        }
-      ]
-    } else {
-      filters = Tags.map(tag => ({
-        attribute_def: tagAttributeDefinitionId,
-        invert: true,
-        value: tag
-      }))
+          start: loadingOffset,
+          limit: loadingLimit,
+          filter_type: criteria.conditionOperator
+        },
+        viewAs,
+        criteria.flows,
+        criteria.crmTasks
+      )
+
+      setLoadingState(null)
+      setIsReachedEnd(data.length + list.length >= info!.total)
+
+      updateList(isCriteriaChanged ? data : [...list, ...data], tag)
+      setCurrentCriteria(criteria)
     }
 
-    const { data, info } = await searchContacts(
-      searchTerm,
-      filters,
-      {
-        start: loadingOffset,
-        limit: loadingLimit
-      },
-      viewAs(user)
-    )
-
-    setLoadingState(null)
-    setIsReachedEnd(data.length + list.length === info?.total)
-
-    updateList(
-      searchTerm === currentSearchTerm ? [...list, ...data] : data,
-      tag
-    )
-
-    setCurrentSearchTerm(searchTerm)
-  }, [loadingOffset, searchTerm, tagAttributeDefinitionId])
+    fetch()
+  }, [loadingOffset, criteria, tagAttributeDefinitionId])
 
   const handleReachEnd = () => setLoadingOffset(offset => offset + loadingLimit)
+
+  const handleChangeTags = (contact: IContact, tags: string[]) => {
+    const newList = list.map(item =>
+      item.id !== contact.id
+        ? item
+        : {
+            ...contact,
+            tags
+          }
+    )
+
+    updateList(newList)
+  }
 
   return (
     <div className={classes.root}>
@@ -242,7 +265,8 @@ export const BoardColumn = memo(function BoardColumn({
                     itemData={
                       {
                         rows: list,
-                        columnId: id
+                        columnId: id,
+                        onChangeTags: handleChangeTags
                       } as React.ComponentProps<
                         typeof DraggableCardItem
                       >['data']

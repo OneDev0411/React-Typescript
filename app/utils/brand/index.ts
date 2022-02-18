@@ -9,7 +9,7 @@ export const getBrandSettings = (brand: IBrand): Nullable<IBrandSettings> => {
 export const getBrandTheme = (brand: IBrand): Nullable<IBrandTheme> => {
   const brandSettings = getBrandSettings(brand)
 
-  if (!brandSettings?.theme) {
+  if (!brandSettings?.theme || !brand.settings) {
     return null
   }
 

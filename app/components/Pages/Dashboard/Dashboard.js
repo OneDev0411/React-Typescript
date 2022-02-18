@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component, cloneElement } from 'react'
 
 import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
@@ -6,6 +6,13 @@ import { withRouter } from 'react-router'
 
 import { fetchShowingTotalNotificationCount } from 'actions/showings'
 import ShowingSocket from 'services/socket/showings'
+import {
+  hasUserAccessToCrm,
+  hasUserAccessToDeals,
+  hasUserAccessToShowings,
+  isBackOffice
+} from 'utils/acl'
+import { viewAsEveryoneOnTeam } from 'utils/user-teams'
 
 import asyncComponentLoader from '../../../loader'
 import { isLoadedContactAttrDefs } from '../../../reducers/contacts/attributeDefs'
@@ -19,9 +26,7 @@ import { getAttributeDefs } from '../../../store_actions/contacts'
 import { getDeals, searchDeals } from '../../../store_actions/deals'
 import { fetchUnreadEmailThreadsCount } from '../../../store_actions/inbox'
 import { deactivateIntercom } from '../../../store_actions/intercom'
-import getFavorites from '../../../store_actions/listings/favorites/get-favorites'
 import { getAllNotifications } from '../../../store_actions/notifications'
-import { hasUserAccess, viewAsEveryoneOnTeam } from '../../../utils/user-teams'
 import CheckBrowser from '../../../views/components/CheckBrowser'
 import EmailVerificationBanner from '../../../views/components/EmailVerificationBanner'
 import Intercom from '../../../views/components/Intercom'
@@ -47,27 +52,30 @@ class Dashboard extends Component {
   }
 
   componentWillUnmount() {
-    const { user, dispatch } = this.props
+    const { activeTeam, dispatch } = this.props
 
     dispatch(deactivateIntercom(true))
 
-    if (user && hasUserAccess(user, 'CRM')) {
+    if (activeTeam && hasUserAccessToCrm(activeTeam)) {
       window.removeEventListener('online', this.handleOnlineEvent)
     }
   }
 
   async init() {
-    const { user, deals, dispatch } = this.props
+    const { user, activeTeam, deals, dispatch } = this.props
 
-    if (!user) {
+    console.log('init of dashboard', { user, activeTeam, deals })
+
+    if (!activeTeam || !user) {
       return
     }
 
-    const isBackOffice = hasUserAccess(user, 'BackOffice')
+    const hasBackOfficeAccess = isBackOffice(activeTeam)
 
-    this.hasCrmAccess = hasUserAccess(user, 'CRM')
-    this.hasDealsAccess = hasUserAccess(user, 'Deals') || isBackOffice
-    this.hasShowingsAccess = hasUserAccess(user, 'Showings')
+    this.hasCrmAccess = hasUserAccessToCrm(activeTeam)
+    this.hasDealsAccess =
+      hasUserAccessToDeals(activeTeam) || hasBackOfficeAccess
+    this.hasShowingsAccess = hasUserAccessToShowings(activeTeam)
 
     dispatch(getRooms())
 
@@ -81,13 +89,19 @@ class Dashboard extends Component {
         this.props.location.pathname.startsWith('/dashboard/deals') &&
         new URLSearchParams(this.props.location.search).get('q')
 
-      if ((isBackOffice || viewAsEveryoneOnTeam(user)) && !searchParamValue) {
-        dispatch(getDeals(user))
+      if (
+        (isBackOffice || viewAsEveryoneOnTeam(activeTeam)) &&
+        !searchParamValue
+      ) {
+        dispatch(getDeals(activeTeam))
+        console.log('get deal 1')
       } else {
+        console.log('get deal 2')
+
         dispatch(
           searchParamValue
-            ? searchDeals(user, decodeURIComponent(searchParamValue))
-            : getDeals(user)
+            ? searchDeals(activeTeam, decodeURIComponent(searchParamValue))
+            : getDeals(activeTeam)
         )
       }
     }
@@ -103,9 +117,6 @@ class Dashboard extends Component {
     this.initializeSockets(user)
 
     dispatch(getAllNotifications())
-
-    // Get MLS favorites
-    dispatch(getFavorites(user))
 
     dispatch(syncOpenHouseData(user.access_token))
 
@@ -164,7 +175,7 @@ class Dashboard extends Component {
           {user && <InstantChat user={user} rooms={rooms} />}
 
           <DashboardLayout>
-            {React.cloneElement(this.props.children, {
+            {cloneElement(this.props.children, {
               data,
               user
             })}
@@ -185,7 +196,8 @@ function mapStateToProps(state) {
     isFetchingDeals: state.deals.properties.isFetchingDeals,
     favoritesListings: selectListings(state.favorites.listings),
     rooms: state.chatroom.rooms,
-    user: state.user
+    user: state.user,
+    activeTeam: state.activeTeam ?? null
   }
 }
 

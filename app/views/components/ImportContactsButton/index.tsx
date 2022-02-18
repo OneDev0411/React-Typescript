@@ -1,10 +1,12 @@
 import React, { useEffect, useCallback, Fragment } from 'react'
 
 import { Link, MenuItem, Typography, Grid } from '@material-ui/core'
-import { connect, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link as RouterLink } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
+import { IMPORT_TOOLTIP_VISITED_SETTINGS_KEY } from '@app/components/Pages/Dashboard/Contacts/List/constants'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Divider } from 'components/Divider'
 import { addNotification as notify } from 'components/notification'
@@ -19,40 +21,38 @@ import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 import { putUserSetting } from 'models/user/put-user-setting'
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-import { getUserSettingsInActiveTeam } from 'utils/user-teams'
+import { getSettingFromTeam } from 'utils/user-teams'
 
 import { ConnectedAccount } from './ConnectedAccount'
 import { useStyles } from './styles'
 
-export const IMPORT_TOOLTIP_VISITED_SETTINGS_KEY = 'import_tooltip_visited'
-
 const TOOLTIP_WIDTH = 150
 
 interface Props {
-  accounts: IOAuthAccount[]
-  user: IUser
   onFetchedOAuthAccounts?: () => void
   hasCSVButton?: boolean
   tooltip?: string
 }
 
 export function ImportContactsButton({
-  accounts,
-  user,
   onFetchedOAuthAccounts,
   hasCSVButton = false,
   tooltip = 'Connect to Google or Outlook'
 }: Props) {
   const dispatch = useDispatch()
+  const activeTeam = useUnsafeActiveTeam()
+  const accounts: IOAuthAccount[] = useSelector((state: IAppState) =>
+    selectAllConnectedAccounts(state.contacts.oAuthAccounts)
+  )
   const classes = useStyles()
 
   const isTooltipOpen =
-    !getUserSettingsInActiveTeam(user, IMPORT_TOOLTIP_VISITED_SETTINGS_KEY) &&
+    !getSettingFromTeam(activeTeam, IMPORT_TOOLTIP_VISITED_SETTINGS_KEY) &&
     accounts.length === 0
 
   useEffect(() => {
     if (isTooltipOpen) {
-      putUserSetting(IMPORT_TOOLTIP_VISITED_SETTINGS_KEY, '1')
+      putUserSetting(IMPORT_TOOLTIP_VISITED_SETTINGS_KEY, true)
     }
   }, [isTooltipOpen])
 
@@ -212,11 +212,4 @@ export function ImportContactsButton({
   )
 }
 
-function mapStateToProps(state: IAppState) {
-  return {
-    accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts),
-    user: state.user
-  }
-}
-
-export default connect(mapStateToProps)(ImportContactsButton)
+export default ImportContactsButton

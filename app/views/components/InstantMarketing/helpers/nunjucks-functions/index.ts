@@ -1,9 +1,8 @@
 import _get from 'lodash/get'
 
+import config from 'config'
 import { DEFAULT_BRAND_PALETTE } from 'utils/constants'
 import flattenBrand from 'utils/flatten-brand'
-
-import config from '../../../../../../config/public'
 
 export function getListingUrl(
   activeBrand: IBrand,
@@ -22,7 +21,7 @@ export function getListingUrl(
   }
 
   const brand = flattenBrand(activeBrand)
-  const listing_url = brand && brand.messages ? brand.messages.listing_url : ''
+  const listing_url = brand?.messages?.listing_url ?? ''
 
   return listing_url
     ? listing_url.replace('%1', listing.mls_number)
@@ -30,7 +29,17 @@ export function getListingUrl(
 }
 
 export function get(brand: IBrand, key: BrandMarketingPaletteKey): string {
-  const defaultValue = _get(DEFAULT_BRAND_PALETTE, key)
+  let currentBrand: Nullable<IBrand> = brand
 
-  return _get(brand, `settings.marketing_palette.${key}`, defaultValue)
+  while (currentBrand) {
+    const value = _get(currentBrand, `settings.marketing_palette.${key}`)
+
+    if (value) {
+      return value
+    }
+
+    currentBrand = currentBrand.parent
+  }
+
+  return _get(DEFAULT_BRAND_PALETTE, key)
 }

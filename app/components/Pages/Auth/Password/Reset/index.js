@@ -75,9 +75,8 @@ const Reset = ({
             />
             {submitError && (
               <div className="c-auth__submit-error-alert">
-                An unexpected error occurred. Please try again.
-                <br />
-                <Link to="/password/forgot">request a new password</Link>.
+                Password recovery email expired.{' '}
+                <Link to="/password/forgot">Request a new password</Link>.
               </div>
             )}
             <Button

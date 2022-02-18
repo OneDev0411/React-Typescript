@@ -1,17 +1,23 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import _groupBy from 'lodash/groupBy'
+import { useDeepCompareEffect } from 'react-use'
 
+import { notNull } from '@app/utils/ts-utils'
 import { onlyUnique, sortAlphabetically } from 'utils/helpers'
 
 function getFormattedUniqueMediums(
-  templates: IBrandMarketingTemplate[]
+  templatesOrAssets: (IBrandMarketingTemplate | IBrandAsset)[]
 ): IMarketingTemplateMedium[] {
-  return templates
-    .map(t => t.template.medium)
-    .filter(onlyUnique)
-    .sort(sortAlphabetically)
-    .reverse()
+  const mediums = templatesOrAssets
+    .map(templateOrAsset => {
+      return templateOrAsset.type === 'brand_template'
+        ? templateOrAsset.template.medium
+        : templateOrAsset.medium
+    })
+    .filter(notNull)
+
+  return mediums.filter(onlyUnique).sort(sortAlphabetically).reverse()
 }
 
 export type TemplateTypeToMediumsMap = {
@@ -19,29 +25,40 @@ export type TemplateTypeToMediumsMap = {
 }
 
 export function useMarketingCenterMediums(
-  templates: IBrandMarketingTemplate[]
+  templates: IBrandMarketingTemplate[],
+  brandAssets: IBrandAsset[] = []
 ): TemplateTypeToMediumsMap {
   const [mediums, setMediums] = useState<TemplateTypeToMediumsMap>({})
 
-  useEffect(() => {
-    if (!templates || templates.length === 0) {
+  useDeepCompareEffect(() => {
+    if (
+      (!templates || templates.length === 0) &&
+      (!brandAssets || brandAssets.length === 0)
+    ) {
       setMediums({})
 
       return
     }
 
-    const groupedTemplatesByType = _groupBy(templates, i => {
-      return i.template.template_type
-    })
+    const groupedTemplatesAndAssetsByType = _groupBy(
+      [...templates, ...brandAssets],
+      i => {
+        return i.type === 'brand_template'
+          ? i.template.template_type
+          : i.template_type
+      }
+    )
 
     const newMediums: TemplateTypeToMediumsMap = {}
 
-    Object.keys(groupedTemplatesByType).forEach(key => {
-      newMediums[key] = getFormattedUniqueMediums(groupedTemplatesByType[key])
+    Object.keys(groupedTemplatesAndAssetsByType).forEach(key => {
+      newMediums[key] = getFormattedUniqueMediums(
+        groupedTemplatesAndAssetsByType[key]
+      )
     })
 
     setMediums(newMediums)
-  }, [templates])
+  }, [templates, brandAssets])
 
   return mediums
 }

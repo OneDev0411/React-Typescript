@@ -1,6 +1,3 @@
-/* eslint-disable max-len */
-import React from 'react'
-
 import { IndexRoute, Route } from 'react-router'
 
 import withAcl from 'components/Acl/with-acl'
@@ -229,84 +226,30 @@ const AsyncMLSLayout = Load({
 const AsyncMLSSearch = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/MLS/Search' /* webpackChunkName: "mls_search" */
+      '../components/Pages/Dashboard/MLS/ExploreTab' /* webpackChunkName: "mls_search" */
     )
 })
 
 const AsyncMLSSavedSearch = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/MLS/SavedSearch' /* webpackChunkName: "alerts" */
+      '../components/Pages/Dashboard/MLS/SavedSearchTab' /* webpackChunkName: "alerts" */
     )
 })
 
 const AsyncMLSFavorites = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/MLS/Favorites' /* webpackChunkName: "fav" */
+      '../components/Pages/Dashboard/MLS/FavoritesTab' /* webpackChunkName: "fav" */
     )
 })
 
 const AsyncMLSSinglePage = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/MLS/Listing' /* webpackChunkName: "list_single" */
+      '../components/Pages/Dashboard/MLS/ListingPage' /* webpackChunkName: "list_single" */
     )
 })
-
-/* ==================================== */
-//  Properties
-/* ==================================== */
-
-const AsyncPropertiesLayout = withAcl(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Properties' /* webpackChunkName: "properties" */
-      )
-  }),
-  [ACL.BETA]
-)
-
-const AsyncPropertiesSearch = withAcl(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Properties/ExploreTab' /* webpackChunkName: "properties_search" */
-      )
-  }),
-  [ACL.BETA]
-)
-
-const AsyncPropertiesSavedSearch = withAcl(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Properties/SavedSearchTab' /* webpackChunkName: "properties_alerts" */
-      )
-  }),
-  [ACL.BETA]
-)
-
-const AsyncPropertiesFavorites = withAcl(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Properties/FavoritesTab' /* webpackChunkName: "properties_fav" */
-      )
-  }),
-  [ACL.BETA]
-)
-
-const AsyncPropertiesSinglePage = withAcl(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Properties/ListingPage' /* webpackChunkName: "properties_list_single" */
-      )
-  }),
-  [ACL.BETA]
-)
 
 /* ==================================== */
 //  Agent Network
@@ -428,11 +371,11 @@ const AsyncContactProfile = withAcl.crm(
   })
 )
 
-const AsyncContactsImportCsv = withAcl.crm(
+const AsyncContactsCsvImport = withAcl.crm(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */
+        '../components/Pages/Dashboard/Contacts/CsvImport' /* webpackChunkName: "contact_csv" */
       )
   })
 )
@@ -587,7 +530,19 @@ const AsyncMarketingInsight = withAcl(
   }),
   { oneOf: [ACL.MARKETING, ACL.CRM] }
 )
-
+const AsyncSuperCampaign = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/MarketingInsights/SuperCampaign' /* webpackChunkName: "email_insight_super_campaign" */
+      )
+  }),
+  [
+    { oneOf: [ACL.MARKETING, ACL.CRM] },
+    { oneOf: [ACL.ADMIN, user => user.user_type === 'Agent'] },
+    ACL.BETA
+  ]
+)
 /* ==================================== */
 //  Chatroom
 /* ==================================== */
@@ -648,6 +603,14 @@ const ManageTags = withAcl.crm(
       )
   })
 )
+const GlobalTriggers = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Account/Triggers' /* webpackChunkName: "global_trigger" */
+      )
+  })
+)
 
 const ReminderNotifications = withAcl(
   Load({
@@ -690,6 +653,13 @@ const AsyncUpgradeToAgent = Load({
   loader: () =>
     import(
       '../components/Pages/Dashboard/Account/UpgradeToAgent' /* webpackChunkName: "upgrade_to_agent" */
+    )
+})
+
+const AsyncCampaigns = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Account/Campaigns' /* webpackChunkName: "campaigns" */
     )
 })
 
@@ -749,15 +719,6 @@ const AsyncWebsitesList = withAcl.websites(
   })
 )
 
-const AsyncOldWebsite = withAcl.store(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Website' /* webpackChunkName: "old_website" */
-      )
-  })
-)
-
 /* ==================================== */
 //  Showings
 /* ==================================== */
@@ -787,6 +748,20 @@ const AsyncCreateShowing = withAcl.showings(
         '../components/Pages/Dashboard/Showings/pages/CreateShowing' /* webpackChunkName: "create_showing" */
       )
   })
+)
+
+/* ==================================== */
+//  Super Campaigns
+/* ==================================== */
+
+const AsyncSuperCampaignDetail = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/SuperCampaigns/pages/SuperCampaignDetail' /* webpackChunkName: "super_campaign_detail" */
+      )
+  }),
+  [ACL.ADMIN, ACL.BETA]
 )
 
 /* ==================================== */
@@ -979,7 +954,7 @@ export default (
         <Route path="contacts" component={AsyncContacts} />
         <Route path="contacts/duplicates" component={AsyncDuplicateContacts} />
         <Route path="contacts/:id" component={AsyncContactProfile} />
-        <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
+        <Route path="contacts/import/csv" component={AsyncContactsCsvImport} />
 
         <Route path="marketing" component={AsyncMarketingOverview} />
         <Route path="marketing/designs" component={AsyncMarketingHistory} />
@@ -1002,6 +977,11 @@ export default (
         <Route path="insights">
           <IndexRoute component={AsyncMarketingInsightsList} />
           <Route path="scheduled" component={AsyncMarketingInsightsList} />
+          <Route
+            path="super-campaign/:id/detail"
+            component={AsyncSuperCampaignDetail}
+          />
+          <Route path="super-campaign" component={AsyncSuperCampaign} />
           <Route path=":id" component={AsyncMarketingInsight} />
         </Route>
 
@@ -1047,20 +1027,6 @@ export default (
 
         <Route path="/dashboard/mls/:id" component={AsyncMLSSinglePage} />
 
-        <Route path="/dashboard/properties" component={AsyncPropertiesLayout}>
-          <IndexRoute component={AsyncPropertiesSearch} />
-          <Route path="favorites" component={AsyncPropertiesFavorites} />
-          <Route
-            path="saved-searches/:id"
-            component={AsyncPropertiesSavedSearch}
-          />
-        </Route>
-
-        <Route
-          path="/dashboard/properties/:id"
-          component={AsyncPropertiesSinglePage}
-        />
-
         <Route path="recents(/:roomId)">
           <IndexRoute component={AsyncRecents} />
         </Route>
@@ -1076,6 +1042,7 @@ export default (
 
           <Route path="exportCalendar" component={ExportCalendar} />
           <Route path="manage-tags" component={ManageTags} />
+          <Route path="triggers" component={GlobalTriggers} />
           <Route
             path="reminder-notifications"
             component={ReminderNotifications}
@@ -1086,6 +1053,7 @@ export default (
             path="connected-accounts"
             component={ConnectedAccountsSetting}
           />
+          <Route path="campaigns" component={AsyncCampaigns} />
           {/* <Route path="css" component={AsyncCSS} /> */}
         </Route>
 
@@ -1128,8 +1096,6 @@ export default (
             component={AsyncShowings}
           />
         </Route>
-
-        <Route path="website" component={AsyncOldWebsite} />
 
         <Route path="listings(/:brandId)" component={AsyncListingsList} />
       </Route>

@@ -1,28 +1,26 @@
 import { useState, useEffect } from 'react'
 
-import { useSelector } from 'react-redux'
-
+import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
 import { getDealsListings } from '@app/models/listings/listing/get-deals-listings'
 import {
   getBrandListings,
   GetBrandListingsOptions
 } from '@app/models/listings/search/get-brand-listings'
-import { selectActiveBrandId } from '@app/selectors/brand'
 
 export function useBrandListings(
-  brand: Nullable<UUID>,
   options?: GetBrandListingsOptions
 ): Nullable<ICompactListing[]> {
+  const activeBrandId = useUnsafeActiveBrandId()
   const [listings, setListings] = useState<Nullable<ICompactListing[]>>(null)
 
   useEffect(() => {
     async function fetchBrandListings() {
-      if (!brand) {
+      if (!activeBrandId) {
         return
       }
 
       try {
-        const brandListings = await getBrandListings(brand, options)
+        const brandListings = await getBrandListings(activeBrandId, options)
 
         setListings(brandListings)
       } catch (error) {
@@ -32,7 +30,7 @@ export function useBrandListings(
     }
 
     fetchBrandListings()
-  }, [brand, options])
+  }, [activeBrandId, options])
 
   return listings
 }
@@ -40,18 +38,17 @@ export function useBrandListings(
 export function useDealsListings(
   listingIdsToExclude?: UUID[]
 ): Nullable<IListing[]> {
+  const activeBrandId = useUnsafeActiveBrandId()
   const [listings, setListings] = useState<Nullable<IListing[]>>(null)
-
-  const brandId = useSelector(selectActiveBrandId)
 
   useEffect(() => {
     async function fetchDealsListings() {
-      if (!listingIdsToExclude) {
+      if (!listingIdsToExclude || !activeBrandId) {
         return
       }
 
       try {
-        const dealsListings = await getDealsListings(brandId)
+        const dealsListings = await getDealsListings(activeBrandId)
 
         // We're removing duplicate listings that we already have them
         const uniqueDealsListings = dealsListings.filter(
@@ -66,7 +63,7 @@ export function useDealsListings(
     }
 
     fetchDealsListings()
-  }, [listingIdsToExclude, brandId])
+  }, [listingIdsToExclude, activeBrandId])
 
   return listings
 }

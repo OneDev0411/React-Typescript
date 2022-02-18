@@ -41,6 +41,7 @@ const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 export function Menu() {
   const user = useSelector(selectUserUnsafe)
+
   const brand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
   )
@@ -73,6 +74,7 @@ export function Menu() {
     <Sidenav>
       <Logo />
       <GlobalActionsButton />
+
       <ScrollableArea
         shadowColor={scrollableAreaShadowColor}
         style={{ flex: '1 1' }}
@@ -115,26 +117,15 @@ export function Menu() {
             </SideNavLinkItem>
           </Acl.Marketing>
 
-          <Acl.Marketing>
+          <Acl.Crm>
             <SideNavLinkItem to="/dashboard/flows" tourId="nav-flows">
               Flows
             </SideNavLinkItem>
-          </Acl.Marketing>
+          </Acl.Crm>
 
           <SideNavLinkItem to="/dashboard/mls" tourId="nav-properties">
             Properties
           </SideNavLinkItem>
-
-          <Acl.Beta>
-            <SideNavLinkItem
-              to="/dashboard/properties"
-              tourId="nav-properties2"
-            >
-              <InlineBadge badgeContent="Beta" color="secondary">
-                Properties v.2
-              </InlineBadge>
-            </SideNavLinkItem>
-          </Acl.Beta>
 
           <Acl.AgentNetwork>
             <SideNavLinkItem
@@ -183,12 +174,6 @@ export function Menu() {
           <Acl access={ACL.WEBSITES}>
             <SideNavLinkItem to="/dashboard/websites" tourId="nav-websites">
               Websites
-            </SideNavLinkItem>
-          </Acl>
-
-          <Acl access={[ACL.STORE]}>
-            <SideNavLinkItem to="/dashboard/website" tourId="nav-store">
-              Store
             </SideNavLinkItem>
           </Acl>
 

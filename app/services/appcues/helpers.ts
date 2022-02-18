@@ -1,10 +1,12 @@
 import { differenceInDays } from 'date-fns'
 
 import { ACL } from '@app/constants/acl'
-import { OAuthProvider } from 'constants/contacts'
-import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
 
-import { AppcuesUserInfo, AppcuesUserAccessList } from './types'
+import {
+  AppcuesUserInfo,
+  AppcuesUserAccessList,
+  AppcuesBrandsList
+} from './types'
 
 export const DEFAULT_APPCUES_USER_ACL = Object.values(
   ACL
@@ -30,10 +32,28 @@ export function createAppcuesAccessList(
   return appcuesAccessList
 }
 
+function createAppcuesBrandsList(activeBrand: IBrand | null) {
+  const list: Record<string, UUID> = {}
+
+  if (!activeBrand) {
+    return list
+  }
+
+  let current: IBrand | null = activeBrand
+
+  do {
+    list[current.brand_type] = current.id
+    current = current.parent
+  } while (current !== null)
+
+  return list
+}
+
 export function createAppcuesUserData(
   gmailOrOutlookSynced: boolean,
   userInfo: AppcuesUserInfo,
-  appcuesAccessList: AppcuesUserAccessList
+  appcuesAccessList: AppcuesUserAccessList,
+  appcuesBrandsList: AppcuesBrandsList
 ) {
   const { createdAt, ...restInfo } = userInfo
 
@@ -41,34 +61,38 @@ export function createAppcuesUserData(
     ...restInfo,
     accountAgeInDays: differenceInDays(new Date(), createdAt * 1000),
     gmailOrOutlookSynced,
-    ...appcuesAccessList
+    ...appcuesAccessList,
+    ...appcuesBrandsList
   }
 }
 
 export async function prepareAndSendUserData(
+  activeBrand: IBrand | null,
   accessList: IPermission[],
   userId: string,
-  userInfo: AppcuesUserInfo
+  userInfo: AppcuesUserInfo,
+  gmailOrOutlookSynced: boolean
 ) {
-  const google = await getOAuthAccounts(OAuthProvider.Google)
-  const outlook = await getOAuthAccounts(OAuthProvider.Outlook)
-  const gmailOrOutlookSynced = Boolean(google.length || outlook.length)
-
   const appcuesAccessList = createAppcuesAccessList(
     accessList,
     DEFAULT_APPCUES_USER_ACL
   )
 
+  const appcuesBrandsList = createAppcuesBrandsList(activeBrand)
+
   const userData = createAppcuesUserData(
     gmailOrOutlookSynced,
     userInfo,
-    appcuesAccessList
+    appcuesAccessList,
+    appcuesBrandsList
   )
 
   // Normally what we should be doing here is to call Appcues.Page(), but
   // behind the scenes, Appcues.identify() also invokes that function.
   // Reac more: https://docs.appcues.com/article/161-javascript-api
-  window.AppcuesReady(() => {
-    window.Appcues.identify(userId, userData)
-  })
+  if (window.AppcuesReady && window.Appcues) {
+    window.AppcuesReady(() => {
+      window.Appcues.identify(userId, userData)
+    })
+  }
 }

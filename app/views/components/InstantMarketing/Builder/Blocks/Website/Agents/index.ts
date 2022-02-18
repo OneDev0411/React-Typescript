@@ -1,16 +1,16 @@
 import { Model } from 'backbone'
 import { Editor } from 'grapesjs'
 
+import { getNameInitialsPlaceholderImage } from '@app/utils/helpers'
+import { Agent, BrandedUser } from '@app/views/components/TeamAgents/types'
 import AgentGridIcon from 'assets/images/marketing/editor/blocks/agent-grid.png'
 import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
-import { Agent } from 'components/TeamAgents/types'
-import { getNameInitialsPlaceholderImage } from 'utils/helpers'
 
 import { AGENTS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
-import { TemplateBlockOptions } from '../../types'
+import { TemplateBlockOptions, RegisterBlockSelectHandler } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 import { baseView, isComponent } from '../utils'
 
@@ -24,15 +24,15 @@ const typeAgentItem = 'agent-item'
 export const agentLeftBlockName = 'agent-left'
 export const agentGridBlockName = 'agent-grid'
 
+interface AgentRenderData {
+  users: BrandedUser[]
+}
+
 export interface AgentBlocksOptions {
   agentGroupClassNames?: string
   agentListClassNames?: string
   agentItemClassNames?: string
   onAgentDrop: (model: Model) => void
-}
-
-interface AgentBlocks {
-  selectHandler: (selectedAgents?: Agent[]) => void
 }
 
 export default function registerAgentBlocks(
@@ -45,7 +45,7 @@ export default function registerAgentBlocks(
     agentItemClassNames,
     onAgentDrop
   }: AgentBlocksOptions
-): AgentBlocks {
+): RegisterBlockSelectHandler<Agent[]> {
   editor.DomComponents.addType(typeAgentGroup, {
     isComponent: isComponent(typeAgentGroup),
     model: {
@@ -110,10 +110,10 @@ export default function registerAgentBlocks(
     templateBlockOptions.blocks
   )
 
-  return handleBlockDragStopEvent(
+  return handleBlockDragStopEvent<Agent[], AgentRenderData>(
     editor,
     allBlocks,
-    (agents: Agent[]) => ({
+    agents => ({
       ...renderData,
       users: agents.map(item => {
         const profileImageUrl =

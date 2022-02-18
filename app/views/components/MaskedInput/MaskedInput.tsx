@@ -1,8 +1,9 @@
-import Masked, { maskArray } from 'react-text-mask'
+import Masked from 'react-text-mask'
+import type { Mask } from 'react-text-mask'
 
 interface Props {
   inputRef: (ref: HTMLInputElement | null) => void
-  mask: maskArray | ((value: string) => maskArray)
+  mask: Mask
 }
 
 export default function MaskedInput({ inputRef, ...rest }: Props) {

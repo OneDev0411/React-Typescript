@@ -8,23 +8,25 @@ import {
   Typography
 } from '@material-ui/core'
 import { mdiDrag, mdiTrashCan } from '@mdi/js'
+import cn from 'classnames'
 import {
   Draggable,
   DraggableProvided,
   DraggableStateSnapshot
 } from 'react-beautiful-dnd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { browserHistory, Link } from 'react-router'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { confirmation } from 'actions/confirmation'
 import { addNotification as notify } from 'components/notification'
 import { deletePropertyType } from 'models/property-types/delete-property-type'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { getChecklistPageLink } from '../helpers/get-checklist-page-link'
+
+import { PropertyTypeEdit } from './PropertyTypeEdit'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -38,11 +40,11 @@ const useStyles = makeStyles(
       '&:hover': {
         backgroundColor: theme.palette.action.hover
       },
-      '&:hover $deleteIcon': {
+      '&:hover .icon-button': {
         visibility: 'visible'
       },
-      '& .active': {
-        backgroundColor: theme.palette.success.light
+      '&.active': {
+        backgroundColor: theme.palette.info.light
       }
     },
     dragHandler: {
@@ -69,23 +71,26 @@ const useStyles = makeStyles(
 
 interface Props {
   index: number
+  isSelected: boolean
   checklistType: IDealChecklistType
   propertyType: IDealPropertyType
+  onUpdate: (propertyType: IDealPropertyType) => void
 }
 
 export function ChecklistsSidenavItem({
   index,
+  isSelected,
   checklistType,
-  propertyType
+  propertyType,
+  onUpdate
 }: Props) {
-  const [isDeleted, setIsDeleted] = useState(false)
-
-  const user = useSelector(selectUser)
-  const dispatch = useDispatch()
   const classes = useStyles()
+  const [isDeleted, setIsDeleted] = useState(false)
+  const activeBrandId = useActiveBrandId()
+  const dispatch = useDispatch()
 
   const requestDelete = (propertyType: IDealPropertyType) => {
-    if (propertyType.brand !== getActiveTeamId(user)) {
+    if (propertyType.brand !== activeBrandId) {
       dispatch(
         confirmation({
           description: `You can not delete this property type because 
@@ -112,7 +117,7 @@ export function ChecklistsSidenavItem({
   const handleDelete = async (id: UUID) => {
     try {
       setIsDeleted(true)
-      await deletePropertyType(getActiveTeamId(user)!, id)
+      await deletePropertyType(activeBrandId, id)
 
       browserHistory.push('/dashboard/checklists')
 
@@ -143,7 +148,11 @@ export function ChecklistsSidenavItem({
     <Draggable draggableId={propertyType.id} index={index}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
         <div ref={provided.innerRef} {...provided.draggableProps}>
-          <div className={classes.root}>
+          <div
+            className={cn(classes.root, {
+              active: isSelected
+            })}
+          >
             <Box display="flex" alignItems="center">
               <div
                 {...provided.dragHandleProps}
@@ -160,16 +169,23 @@ export function ChecklistsSidenavItem({
               </Link>
             </Box>
 
-            <IconButton
-              size="small"
-              onClick={() => requestDelete(propertyType)}
-            >
-              <SvgIcon
-                path={mdiTrashCan}
-                className={classes.deleteIcon}
-                size={muiIconSizes.small}
+            <div>
+              <PropertyTypeEdit
+                propertyType={propertyType}
+                onUpdate={onUpdate}
               />
-            </IconButton>
+
+              <IconButton
+                size="small"
+                onClick={() => requestDelete(propertyType)}
+              >
+                <SvgIcon
+                  path={mdiTrashCan}
+                  className={cn(classes.deleteIcon, 'icon-button')}
+                  size={muiIconSizes.small}
+                />
+              </IconButton>
+            </div>
           </div>
         </div>
       )}

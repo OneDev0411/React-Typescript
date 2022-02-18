@@ -6,8 +6,11 @@ module.exports = {
   testURL: 'http://localhost:8080',
   setupFilesAfterEnv: ['./setupTests.js'],
   verbose: true,
+  coverageReporters: ['cobertura', 'lcov', 'text-summary'],
   testEnvironment: 'jsdom',
-  transformIgnorePatterns: ['/node_modules/(?!(swiper|ssr-window|dom7)/)'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!(swiper|ssr-window|dom7|validator)/)'
+  ],
   transform: {
     '^.+\\.[t|j]sx?$': 'babel-jest',
     '\\.mjml$': 'jest-raw-loader',
@@ -36,6 +39,7 @@ module.exports = {
     '^config$': '<rootDir>/config/public',
     '^fixtures/(.*)': '<rootDir>/tests/unit/fixtures/$1',
     '^hooks/(.*)': '<rootDir>/app/hooks/$1',
+    '^tests/unit/(.*)': '<rootDir>/tests/unit/$1',
     '^selectors/(.*)': '<rootDir>/app/selectors/$1',
     '^animations/(.*)': '<rootDir>/app/animations/$1',
     '^crm/(.*)': '<rootDir>/app/components/Pages/Dashboard/Contacts/$1',

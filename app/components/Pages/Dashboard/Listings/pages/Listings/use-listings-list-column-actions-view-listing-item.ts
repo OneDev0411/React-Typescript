@@ -1,9 +1,11 @@
 import { useState } from 'react'
 
+import { changeUrl } from '@app/utils/change-url'
+
 interface UseListingsListColumnActionsViewListingItemReturn {
   isListingModalOpen: boolean
   viewListingLabel: string
-  openListingsModal: () => void
+  openListingsModal: (listingId: UUID) => void
   closeListingsModal: () => void
 }
 
@@ -12,9 +14,15 @@ function useListingsListColumnActionsViewListingItem(): UseListingsListColumnAct
   const [isListingModalOpen, setIsListingsModalOpen] = useState(false)
   const viewListingLabel = 'View Listing'
 
-  const openListingsModal = () => setIsListingsModalOpen(true)
+  const openListingsModal = (listingId: UUID) => {
+    changeUrl(`/dashboard/mls/${listingId}`)
+    setIsListingsModalOpen(true)
+  }
 
-  const closeListingsModal = () => setIsListingsModalOpen(false)
+  const closeListingsModal = () => {
+    window.history.back()
+    setIsListingsModalOpen(false)
+  }
 
   return {
     isListingModalOpen,

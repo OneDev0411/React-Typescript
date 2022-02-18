@@ -329,7 +329,6 @@ class EventDrawerContainer extends Component {
                           <FieldContainer alignCenter justifyBetween>
                             <DateTimeField
                               name="dueDate"
-                              selectedDate={values.dueDate}
                               showTimePicker={!values.allDay}
                             />
 
@@ -466,7 +465,7 @@ class EventDrawerContainer extends Component {
                               />
                             </Flex>
                           )}
-                          <AssigneesField name="assignees" owner={user} />
+                          <AssigneesField name="assignees" />
                         </Flex>
                         <ActionButton
                           appearance="secondary"

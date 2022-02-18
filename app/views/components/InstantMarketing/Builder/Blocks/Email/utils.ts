@@ -19,7 +19,7 @@ const BLOCK_IDS_TO_REMOVE = [
 ]
 
 export function removeUnusedBlocks(editor: Editor) {
-  BLOCK_IDS_TO_REMOVE.forEach(editor.BlockManager.remove)
+  BLOCK_IDS_TO_REMOVE.forEach(id => editor.BlockManager.remove(id))
 }
 
 export const isComponent =

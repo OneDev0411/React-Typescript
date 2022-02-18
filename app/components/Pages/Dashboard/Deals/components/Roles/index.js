@@ -21,9 +21,10 @@ import { getNameInitials } from 'utils/helpers'
 
 import { SectionTitle } from '../../Dashboard/Factsheet/styled'
 import { getAvatarTitle } from '../../utils/get-avatar-title'
-import { roleName, getLegalFullName, isPrimaryAgent } from '../../utils/roles'
+import { getLegalFullName, isPrimaryAgent } from '../../utils/roles'
 
 import AddRole from './AddRole'
+import { RoleName } from './RoleName'
 import {
   RolesContainer,
   RoleItem,
@@ -37,6 +38,7 @@ import {
 const propTypes = {
   deal: PropTypes.object.isRequired,
   disableAddRole: PropTypes.bool,
+  disableList: PropTypes.bool,
   allowDeleteRole: PropTypes.bool,
   showEmail: PropTypes.bool,
   showTitle: PropTypes.bool,
@@ -55,6 +57,7 @@ const propTypes = {
 const defaultProps = {
   showEmail: false,
   disableAddRole: false,
+  disableList: false,
   allowDeleteRole: true,
   isEmailRequired: false,
   allowEditRole: false,
@@ -192,89 +195,95 @@ class Roles extends React.Component {
           </Box>
         )}
 
-        {roles.map(role => {
-          const isRowRemovable = this.getIsRowRemovable(role.role)
+        {this.props.disableList === false && (
+          <>
+            {roles.map(role => {
+              const isRowRemovable = this.getIsRowRemovable(role.role)
 
-          return (
-            <RoleItem
-              key={role.id}
-              allowDeleteRole={this.props.allowDeleteRole}
-              className="item"
-            >
-              <Flex alignCenter justifyBetween style={{ flexGrow: 1 }}>
-                <Flex alignCenter>
-                  <RoleAvatar>
-                    <Avatar
-                      alt={getAvatarTitle(role)}
-                      user={role.user}
-                      size="small"
-                    >
-                      {role.user
-                        ? getContactNameInitials(role.user)
-                        : getNameInitials(getLegalFullName(role), 1)}
-                    </Avatar>
-                  </RoleAvatar>
+              return (
+                <RoleItem
+                  key={role.id}
+                  allowDeleteRole={this.props.allowDeleteRole}
+                  className="item"
+                >
+                  <Flex alignCenter justifyBetween style={{ flexGrow: 1 }}>
+                    <Flex alignCenter>
+                      <RoleAvatar>
+                        <Avatar
+                          alt={getAvatarTitle(role)}
+                          user={role.user}
+                          size="small"
+                        >
+                          {role.user
+                            ? getContactNameInitials(role.user)
+                            : getNameInitials(getLegalFullName(role), 1)}
+                        </Avatar>
+                      </RoleAvatar>
 
-                  <RoleInfo onClick={() => this.onSelectRole(role)}>
-                    <RoleTitle>{getLegalFullName(role)}</RoleTitle>
+                      <RoleInfo onClick={() => this.onSelectRole(role)}>
+                        <RoleTitle>{getLegalFullName(role)}</RoleTitle>
 
-                    {this.props.allowEditRole && (
-                      <SvgIcon
-                        path={mdiPencilOutline}
-                        size={muiIconSizes.small}
+                        {this.props.allowEditRole && (
+                          <SvgIcon
+                            path={mdiPencilOutline}
+                            size={muiIconSizes.small}
+                          />
+                        )}
+                      </RoleInfo>
+                    </Flex>
+
+                    <RoleType>
+                      <RoleName name={role.role} />
+                      {this.props.showEmail &&
+                        role.user &&
+                        ` . ${role.user.email}`}
+                    </RoleType>
+                  </Flex>
+
+                  {this.props.allowDeleteRole && (
+                    <RoleActions>
+                      {isRowRemovable ? (
+                        <DeleteRole
+                          deal={this.props.deal}
+                          role={role}
+                          style={{ padding: 0, marginLeft: '0.5rem' }}
+                        />
+                      ) : (
+                        <Button
+                          color="secondary"
+                          size="small"
+                          style={{
+                            padding: 0,
+                            margin: 0
+                          }}
+                          onClick={() => this.toggleReplaceAgentDrawer(role)}
+                        >
+                          Replace
+                        </Button>
+                      )}
+                    </RoleActions>
+                  )}
+
+                  {this.state.isRoleFormOpen &&
+                    !this.state.isReplaceAgentDrawerOpen &&
+                    role.id === this.state.user.id && (
+                      <DealRole
+                        isOpen
+                        deal={this.props.deal}
+                        form={this.state.user}
+                        isRoleRemovable={isRowRemovable}
+                        isEmailRequired={this.props.isEmailRequired}
+                        showBrokerageFields={this.props.showBrokerageFields}
+                        allowedRoles={this.props.allowedRoles}
+                        onUpsertRole={this.props.onUpsertRole}
+                        onClose={this.closeRoleForm}
                       />
                     )}
-                  </RoleInfo>
-                </Flex>
-
-                <RoleType>
-                  {roleName(role.role)}
-                  {this.props.showEmail && role.user && ` . ${role.user.email}`}
-                </RoleType>
-              </Flex>
-
-              {this.props.allowDeleteRole && (
-                <RoleActions>
-                  {isRowRemovable ? (
-                    <DeleteRole
-                      deal={this.props.deal}
-                      role={role}
-                      style={{ padding: 0, marginLeft: '0.5rem' }}
-                    />
-                  ) : (
-                    <Button
-                      color="secondary"
-                      size="small"
-                      style={{
-                        padding: 0,
-                        margin: 0
-                      }}
-                      onClick={() => this.toggleReplaceAgentDrawer(role)}
-                    >
-                      Replace
-                    </Button>
-                  )}
-                </RoleActions>
-              )}
-
-              {this.state.isRoleFormOpen &&
-                !this.state.isReplaceAgentDrawerOpen &&
-                role.id === this.state.user.id && (
-                  <DealRole
-                    isOpen
-                    deal={this.props.deal}
-                    form={this.state.user}
-                    isRoleRemovable={isRowRemovable}
-                    isEmailRequired={this.props.isEmailRequired}
-                    showBrokerageFields={this.props.showBrokerageFields}
-                    allowedRoles={this.props.allowedRoles}
-                    onUpsertRole={this.props.onUpsertRole}
-                    onClose={this.closeRoleForm}
-                  />
-                )}
-            </RoleItem>
-          )
-        })}
+                </RoleItem>
+              )
+            })}
+          </>
+        )}
 
         {this.props.disableAddRole === false && (
           <AddRole
@@ -290,9 +299,9 @@ class Roles extends React.Component {
 
         {this.state.isReplaceAgentDrawerOpen && !this.state.isRoleFormOpen && (
           <TeamAgentsDrawer
+            open
             isPrimaryAgent
             withRelatedContacts={false}
-            user={this.props.user}
             title="Select New Primary Agent"
             onSelectAgents={this.handleReplaceAgent}
             onClose={this.toggleReplaceAgentDrawer}

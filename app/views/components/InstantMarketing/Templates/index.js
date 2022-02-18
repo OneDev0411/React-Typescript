@@ -4,12 +4,12 @@ import { Box, CircularProgress } from '@material-ui/core'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import { selectActiveBrandIdUnsafe } from '@app/selectors/brand'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 import { getTemplateImage } from 'utils/marketing-center/helpers'
-import { getActiveTeamId } from 'utils/user-teams'
 
-import { SAVED_TEMPLATE_VARIANT } from '../Builder/AddToMarketingCenter/constants'
+import { SAVED_TEMPLATE_VARIANT } from '../Builder/AddToMarketingCenterButton/constants'
 
 import { Container, TemplateItem, Video, Image } from './styled'
 import TemplateTypesSelect from './TemplateTypesSelect'
@@ -40,12 +40,16 @@ class Templates extends React.Component {
   }
 
   fetchTemplatesList = async () => {
-    const { medium, defaultTemplate, templateTypes: types } = this.props
-    const activeTeamBrandId = getActiveTeamId(this.props.user)
+    const {
+      medium,
+      activeBrandId,
+      defaultTemplate,
+      templateTypes: types
+    } = this.props
 
     try {
       let templates = await getTemplates(
-        activeTeamBrandId,
+        activeBrandId,
         types,
         medium ? [medium] : []
       )
@@ -196,4 +200,6 @@ class Templates extends React.Component {
   }
 }
 
-export default connect(state => ({ user: state.user }))(Templates)
+export default connect(state => ({
+  activeBrandId: selectActiveBrandIdUnsafe(state) ?? ''
+}))(Templates)

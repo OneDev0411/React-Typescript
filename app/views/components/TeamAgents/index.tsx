@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
-import { useSelector } from 'react-redux'
-
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { getAgents } from 'models/Deal/agent'
-import { IAppState } from 'reducers'
 
 import { getBrand } from './helpers/get-brand'
 import type { NormalizedBrand } from './types'
@@ -14,30 +12,37 @@ interface RenderProps {
   isEmptyState: boolean
   teams: NormalizedBrand[]
 }
-interface Props {
+
+export interface TeamAgentsProps {
   isPrimaryAgent: boolean
   flattenTeams?: boolean
   criteria?: string
   children: (props: RenderProps) => React.ReactNode
+  teamAgentsModelFn?: (brandId: Nullable<UUID>) => Promise<IBrand[]>
+  filterTeamsFn?: (teams: NormalizedBrand[]) => NormalizedBrand[]
 }
 
 export default function TeamAgents({
   children,
   isPrimaryAgent,
   criteria = '',
-  flattenTeams = false
-}: Props) {
+  flattenTeams = false,
+  teamAgentsModelFn = getAgents,
+  filterTeamsFn
+}: TeamAgentsProps) {
+  const activeTeam = useUnsafeActiveTeam()
+
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [teamAgents, setTeamAgents] = useState<IBrand[]>([])
-
-  const user = useSelector<IAppState, IUser>(({ user }) => user!)
 
   useEffect(() => {
     const getTeamAgents = async () => {
       try {
         setIsLoading(true)
 
-        const agents = await getAgents(getBrand(user, isPrimaryAgent))
+        const agents = await teamAgentsModelFn(
+          getBrand(activeTeam, isPrimaryAgent)
+        )
 
         setTeamAgents(agents || [])
       } catch (e) {
@@ -49,7 +54,7 @@ export default function TeamAgents({
     }
 
     getTeamAgents()
-  }, [isPrimaryAgent, user])
+  }, [isPrimaryAgent, activeTeam, teamAgentsModelFn])
 
   const isEmptyState = !isLoading && teamAgents.length === 0
   const teams = useTeamAgentsSearch(teamAgents, criteria, flattenTeams)
@@ -59,7 +64,7 @@ export default function TeamAgents({
       {children({
         isLoading,
         isEmptyState,
-        teams
+        teams: filterTeamsFn ? filterTeamsFn(teams) : teams
       })}
     </>
   )

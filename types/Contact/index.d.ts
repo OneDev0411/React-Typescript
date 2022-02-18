@@ -288,6 +288,7 @@ type TContactAssociation =
   | 'contact.summary'
   | 'contact.lists'
   | 'contact.flows'
+  | 'contact.triggers'
   | 'contact.brand'
   | 'contact.user'
   | 'contact.created_by'
@@ -331,8 +332,29 @@ declare interface TGetContactFunc<A extends string> {
   >
 }
 
+declare interface IContactWithAssoc<T extends TContactAssociation>
+  extends IContact {
+  flows: 'contact.flows' extends T ? IFlow[] : never
+  triggers: 'contact.triggers' extends T ? ITrigger[] : never
+  attributes: 'contact.attributes' extends T ? IContactAttribute[] : never
+  users: 'contact.users' extends T ? IUser[] : never
+  deals: 'contact.deals' extends T ? IDeal[] : never
+  lists?: 'contact.lists' extends T ? UUID[] : never
+  created_by?: 'contact.created_by' extends T ? IUser : never
+  updated_by?: 'contact.updated_by' extends T ? IUser : never
+  brand?: 'contact.brand' extends T ? IBrand : never
+  user?: 'contact.user' extends T ? IUser : never
+}
+
 declare interface IContactFilter {
   attribute_def: UUID
   invert: boolean
   value: unknown
+}
+
+declare interface IContactActiveFilters {
+  id: UUID
+  isActive: boolean
+  operator?: TContactFilterOperator
+  values: { label: string; value: string }[]
 }

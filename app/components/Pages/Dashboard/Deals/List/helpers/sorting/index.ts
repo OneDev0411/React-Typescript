@@ -6,14 +6,14 @@ import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 const DEFAULT_SORT = 'status'
 
 export function getActiveSort(
-  user: IUser,
+  team: Nullable<IUserTeam>,
   location: WithRouterProps['location'],
   sortFieldSettingKey: string
 ): {
   id: string
   ascending: boolean
 } {
-  let sort = parseSortSetting(user, sortFieldSettingKey, DEFAULT_SORT)
+  let sort = parseSortSetting(team, sortFieldSettingKey, DEFAULT_SORT)
 
   if (location.query.sortBy) {
     sort = {
@@ -26,12 +26,12 @@ export function getActiveSort(
 }
 
 export function getGridSort(
-  user: IUser,
+  team: Nullable<IUserTeam>,
   columns: TableColumn<IDeal>[],
   location: WithRouterProps['location'],
   sortFieldSettingKey: string
 ) {
-  const sort = getActiveSort(user, location, sortFieldSettingKey)
+  const sort = getActiveSort(team, location, sortFieldSettingKey)
 
   const column = columns.find(col => col.id === sort.id)
 
@@ -46,13 +46,13 @@ export function getGridSort(
 }
 
 export function getGridSortLabel(
-  user: IUser,
+  team: Nullable<IUserTeam>,
   columns: SortableColumn[],
   location: WithRouterProps['location'],
   sortFieldSettingKey: string
 ): string {
   const defaultValue = 'A - Z'
-  const sort = getActiveSort(user, location, sortFieldSettingKey)
+  const sort = getActiveSort(team, location, sortFieldSettingKey)
 
   const column = columns.find(
     item => item.value === sort.id && item.ascending === sort.ascending

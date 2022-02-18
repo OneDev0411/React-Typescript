@@ -1,7 +1,7 @@
 import type { FieldProps } from 'react-final-form'
 
-export type FinalFieldProps<T> = Omit<
+export type FinalFieldProps<T, FieldValue = string> = Omit<
   T,
-  'name' | 'defaultValue' | 'defaultChecked'
+  'name' | 'defaultValue' | 'defaultChecked' | 'value'
 > &
-  Pick<FieldProps<string, any>, 'name' | 'format' | 'validate'>
+  Pick<FieldProps<FieldValue, any>, 'name' | 'format' | 'validate' | 'parse'>

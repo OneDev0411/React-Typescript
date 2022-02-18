@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Box, Theme, Divider, IconButton, makeStyles } from '@material-ui/core'
 import { mdiFormatBold, mdiFormatItalic, mdiFormatUnderline } from '@mdi/js'
@@ -6,15 +6,13 @@ import FontFaceObserver from 'fontfaceobserver'
 import debounce from 'lodash/debounce'
 import pick from 'lodash/pick'
 import { ColorState } from 'react-color'
-import { useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
+import { useActiveBrand } from '@app/hooks/brand/use-active-brand'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { IAppState } from 'reducers'
 import { getBrandColors } from 'utils/get-brand-colors'
 import { getBrandFontFamilies } from 'utils/get-brand-fonts'
-import { getBrandByType } from 'utils/user-teams'
 
 import FontField from '../../../../../../components/Pages/Dashboard/BrandSettings/Sidebar/Field/Font'
 import { ColorPicker } from '../../../components/ColorPicker'
@@ -61,9 +59,7 @@ interface Props {
 export function TextActions({ editor }: Props) {
   const classes = useStyles()
   const [object, setObject] = useState<Partial<TextObjectProps>>(InitialStyle)
-  const brand = useSelector<IAppState, IBrand | null>(({ user }) =>
-    getBrandByType(user, 'Brokerage')
-  )
+  const brand = useActiveBrand()
 
   useEffectOnce(() => {
     const onObjectScaled = debounce(

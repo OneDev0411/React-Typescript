@@ -1,71 +1,61 @@
-import { makeStyles, createStyles, Theme } from '@material-ui/core'
-import { useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
-import { selectUser } from '@app/selectors/user'
+import { goTo } from '@app/utils/go-to'
 import PageLayout from 'components/GlobalPageLayout'
-import { useBrandStatuses } from 'hooks/use-brand-statuses'
-import { getActiveTeamId } from 'utils/user-teams'
 
-import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
-import TabFilters from './Filters'
-import Grid from './Grid'
 import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
-import { useSearchQuery } from './hooks/use-search-query'
+import { OtherTabsWrapper } from './otherTabsWrapper'
+import { SearchTabWrapper } from './searchTabWrapper'
+import { useStyles } from './styles'
+import TabFilters from './TabFilters'
 import { SearchQuery } from './types'
 
-interface StateProps {
-  user: IUser
-  isFetchingDeals: boolean
-  getDeals(user: IUser): void
-  searchDeals(user: IUser, value: object | string): void
-}
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      margin: theme.spacing(5)
-    },
-    headerContainer: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'flex-end'
-    },
-    filtersContainer: {
-      margin: theme.spacing(5, 0)
-    }
-  })
-)
-
-export default function BackofficeTable(props: WithRouterProps & StateProps) {
+export default function BackofficeWraperPage(props: WithRouterProps) {
   const classes = useStyles()
-  const user = useSelector(selectUser)
 
-  const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
   const [searchCriteria, setSearchCriteria] = useQueryParam('q')
+  const isSearchTab = props.params.filter === 'search'
 
   const searchQuery: SearchQuery = {
     filter: props.params.filter,
     type: props.location.query.type || 'inbox',
-    term: searchCriteria || ''
+    term: !isSearchTab || !searchCriteria ? '' : searchCriteria
   }
 
-  useSearchQuery(searchQuery, statuses)
+  // Redirect to Search tab onClick on the search box on other tabs
+  const redirectToSearchTab = () => {
+    goTo('/dashboard/deals/filter/search?type=query')
+  }
 
   return (
     <PageLayout>
       <PageLayout.Header title="Deals Admin">
         <div className={classes.headerContainer}>
-          <DebouncedSearchInput
-            placeholder="Search deals by address, MLS# or agent name..."
-            value={searchCriteria}
-            onChange={setSearchCriteria}
-          />
-
-          <ExportDeals />
+          {
+            // The search box on other tab should be readonly.
+            // We redirect to the Search tab when users click the search box,
+            // so users can see the results in an appropriate tab
+          }
+          {isSearchTab ? (
+            <DebouncedSearchInput
+              placeholder="Search deals by address, MLS# or agent name..."
+              value={searchCriteria}
+              onChange={setSearchCriteria}
+              autoFocus
+            />
+          ) : (
+            <div>
+              <DebouncedSearchInput
+                onClick={redirectToSearchTab}
+                placeholder="Search deals by address, MLS# or agent name..."
+                value=""
+                InputProps={{ readOnly: true }}
+              />
+            </div>
+          )}
         </div>
       </PageLayout.Header>
       <PageLayout.Main>
@@ -76,8 +66,11 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
             sortableColumns={SORTABLE_COLUMNS}
           />
         </div>
-
-        <Grid searchQuery={searchQuery} statuses={statuses} />
+        {isSearchTab ? (
+          <SearchTabWrapper searchQuery={searchQuery} />
+        ) : (
+          <OtherTabsWrapper searchQuery={searchQuery} />
+        )}
       </PageLayout.Main>
     </PageLayout>
   )

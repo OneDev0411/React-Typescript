@@ -1,12 +1,12 @@
 import { useState } from 'react'
 
-import { Helmet } from 'react-helmet'
 import { shallowEqual, useSelector } from 'react-redux'
+import { useTitle } from 'react-use'
 
 import { useLoadFullDeal } from 'hooks/use-load-deal'
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
-import { isBackOffice as isBackOfficeUser } from 'utils/user-teams'
+import { isBackOffice as isBackOfficeUser } from 'utils/acl'
 
 import { TaskActions } from '../components/TaskActions'
 import { ActionContextProvider } from '../contexts/actions-context/provider'
@@ -25,7 +25,7 @@ function DealDetails(props) {
   )
 
   const { user, deal, isBackOffice, selectedTask } = useSelector(
-    ({ deals, user }) => {
+    ({ deals, user, activeTeam = null }) => {
       const { selectedTask } = deals.properties
 
       return {
@@ -35,15 +35,11 @@ function DealDetails(props) {
           deals.tasks,
           selectedTask && selectedTask.id
         ),
-        isBackOffice: isBackOfficeUser(user)
+        isBackOffice: isBackOfficeUser(activeTeam)
       }
     },
     shallowEqual
   )
-
-  if (!deal) {
-    return null
-  }
 
   const getPageTitle = () => {
     const pageTitle = getDealTitle(deal)
@@ -53,12 +49,14 @@ function DealDetails(props) {
       : 'Show Deal | Deals | Rechat'
   }
 
+  useTitle(getPageTitle())
+
+  if (!deal) {
+    return null
+  }
+
   return (
     <DealContainer>
-      <Helmet>
-        <title>{getPageTitle()}</title>
-      </Helmet>
-
       <PageWrapper>
         <ActionContextProvider>
           <PageHeader deal={deal} isBackOffice={isBackOffice} />
