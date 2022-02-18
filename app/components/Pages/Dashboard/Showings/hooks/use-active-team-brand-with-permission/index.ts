@@ -1,25 +1,23 @@
 import { useMemo } from 'react'
 
-import { useSelector } from 'react-redux'
-
-import { selectActiveTeamUnsafe } from 'selectors/team'
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 
 function useActiveTeamBrandWithPermission(
   permission: IPermission
 ): Optional<IBrand> {
-  const activeTeam = useSelector(selectActiveTeamUnsafe)?.brand
+  const activeBrand = useUnsafeActiveBrand()
 
   return useMemo<Optional<IBrand>>(
     () =>
-      activeTeam
+      activeBrand
         ? {
-            ...activeTeam,
-            roles: activeTeam.roles?.filter(role =>
+            ...activeBrand,
+            roles: (activeBrand.roles || []).filter(role =>
               role.acl.includes(permission)
             )
           }
         : undefined,
-    [activeTeam, permission]
+    [activeBrand, permission]
   )
 }
 

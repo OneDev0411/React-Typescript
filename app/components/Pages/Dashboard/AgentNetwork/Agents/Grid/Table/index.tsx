@@ -4,6 +4,7 @@ import { Button, Tooltip, Theme, useTheme } from '@material-ui/core'
 import { mdiEmailOutline } from '@mdi/js'
 import Flex from 'styled-flex-component'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { AgentWithStats } from '@app/models/agent-network/get-agents'
 import { Avatar } from 'components/Avatar'
 import { Table } from 'components/Grid/Table'
@@ -38,6 +39,7 @@ export function ListTable({
   onSelectAgentInfo
 }: Props) {
   const theme: Theme = useTheme()
+  const activeTeam = useUnsafeActiveTeam()
 
   const columns = [
     {
@@ -141,7 +143,11 @@ export function ListTable({
   ]
 
   const getActiveSort = () => {
-    const sort = parseSortSetting(user, SORT_FIELD_SETTING_KEY, '-listings')
+    const sort = parseSortSetting(
+      activeTeam,
+      SORT_FIELD_SETTING_KEY,
+      '-listings'
+    )
 
     return SortableColumns.find(
       col => col.value === sort.id && col.ascending === sort.ascending

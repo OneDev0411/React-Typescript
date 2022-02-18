@@ -159,6 +159,7 @@ function SuperCampaignEnrollManuallyButton({
       </div>
       {isTeamAgentsDrawerOpen && !isLoading && (
         <TeamAgentsDrawer
+          open
           isPrimaryAgent
           multiSelection
           title="Enroll Participants"

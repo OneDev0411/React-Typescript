@@ -1,12 +1,20 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 
 import { Snackbar, Box, Button } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 
 import verify from '../../../models/verify'
 
-export default function EmailVerificationBanner({ email }) {
-  const [isHide, setIsHide] = useState(false)
+interface EmailVerificationBannerProps {
+  email: string
+  show?: boolean
+}
+
+export default function EmailVerificationBanner({
+  email,
+  show = false
+}: EmailVerificationBannerProps) {
+  const [isHide, setIsHide] = useState(show)
   const [isSending, setIsSending] = useState(false)
   const [isSent, setIsSent] = useState(false)
   const previousEmail = useRef(email)

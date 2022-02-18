@@ -1,7 +1,5 @@
-import React from 'react'
-import NotificationsSystem, { atalhoTheme, dismissNotification } from 'reapop'
-
 import { useSelector, useDispatch } from 'react-redux'
+import NotificationsSystem, { atalhoTheme, dismissNotification } from 'reapop'
 
 import { IAppState } from 'reducers'
 

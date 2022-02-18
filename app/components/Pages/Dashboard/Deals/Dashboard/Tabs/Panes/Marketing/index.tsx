@@ -1,7 +1,6 @@
-import React from 'react'
-
+import { ACL } from '@app/constants/acl'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 import { isSelling } from 'models/Deal/helpers/context'
-import { hasUserAccessToAgentNetwork } from 'utils/user-teams'
 
 import AgentNetwork from './AgentNetwork'
 import EmailMarketing from './EmailMarketing'
@@ -16,11 +15,11 @@ interface Props {
 }
 
 export default function MarketingPane({ deal, user }: Props) {
+  const hasAccessToAgentNetwork = useAcl(ACL.AGENT_NETWORK)
+
   return (
     <MarketingContainer>
-      {hasUserAccessToAgentNetwork(user) && deal.listing && (
-        <AgentNetwork deal={deal} />
-      )}
+      {hasAccessToAgentNetwork && deal.listing && <AgentNetwork deal={deal} />}
       <MyMarketingMatters user={user} deal={deal} />
       {isSelling(deal) && deal.listing && <OpenHouse deal={deal} user={user} />}
       <EmailMarketing deal={deal} user={user} />

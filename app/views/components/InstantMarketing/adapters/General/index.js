@@ -1,18 +1,20 @@
-import React, { Fragment } from 'react'
+import { Component, Fragment } from 'react'
 
 import { connect } from 'react-redux'
 
+import { selectActiveTeamUnsafe } from '@app/selectors/team'
+import { selectUserImpersonateFirst } from '@app/selectors/user'
 import ActionButton from 'components/Button/ActionButton'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
-import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
+import { hasUserAccessToMarketingCenter } from 'utils/acl'
 
 import SocialDrawer from '../../components/SocialDrawer'
 
-class General extends React.Component {
+class General extends Component {
   state = {
     isBuilderOpen: false,
     isComposeEmailOpen: false,
@@ -124,9 +126,9 @@ class General extends React.Component {
   }
 
   render() {
-    const { user, selectedTemplate } = this.props
+    const { user, activeTeam, selectedTemplate } = this.props
 
-    if (hasMarketingAccess(user) === false) {
+    if (!hasUserAccessToMarketingCenter(activeTeam)) {
       return false
     }
 
@@ -182,9 +184,10 @@ class General extends React.Component {
   }
 }
 
-function mapStateToProps({ user }) {
+function mapStateToProps(state) {
   return {
-    user
+    user: selectUserImpersonateFirst(state),
+    activeTeam: selectActiveTeamUnsafe(state)
   }
 }
 

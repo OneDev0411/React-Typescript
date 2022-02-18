@@ -72,7 +72,7 @@ function SuperCampaignAgentListColumnActions({
           onClick={onParticipateClick}
           disabled={isWorking}
         >
-          Participate to This Campaign
+          Preview and Participate
         </Button>
       )}
       <BaseDropdown

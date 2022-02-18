@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { browserHistory, withRouter, Route, InjectedRouter } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { getBrandChecklists } from '@app/models/BrandConsole/Checklists'
 import {
   createDeal,
@@ -21,7 +22,6 @@ import Deal from 'models/Deal'
 import { getDefinitionId } from 'models/Deal/helpers/brand-context/get-definition-id'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { createAddressContext } from '../utils/create-address-context'
 
@@ -55,19 +55,18 @@ function CreateDeal({ router, route }: Props) {
 
   const classes = useStyles()
   const { control, watch } = useForm()
-
+  const activeBrandId = useActiveBrandId()
   const [dealId, setDealId] = useState<UUID | null>(null)
   const [isCreatingDeal, setIsCreatingDeal] = useState(false)
 
   const dispatch = useReduxDispatch()
-  const user = useSelector<IAppState, IUser>(state => selectUser(state))
+  const user = useSelector<IAppState, IUser>(selectUser)
   const deal = useSelector<IAppState, IDeal | null>(({ deals }) =>
     dealId ? deals.list[dealId] : null
   )
 
-  const { propertyTypes: brandPropertyTypes } = useBrandPropertyTypes(
-    getActiveTeamId(user)!
-  )
+  const { propertyTypes: brandPropertyTypes } =
+    useBrandPropertyTypes(activeBrandId)
 
   const dealSide = watch('deal_side') as IDealSide
   const dealType: IDealType = dealSide === 'Buying' ? 'Buying' : 'Selling'
@@ -116,7 +115,7 @@ function CreateDeal({ router, route }: Props) {
 
     setIsCreatingDeal(true)
 
-    const newDeal: IDeal = await Deal.create(user, {
+    const newDeal: IDeal = await Deal.create({
       brand: agent!.brand,
       property_type: propertyType?.id,
       deal_type: dealType,

@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { mdiClose } from '@mdi/js'
 import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'

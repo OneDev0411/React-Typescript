@@ -1,9 +1,12 @@
-import React, { useState, useContext, useLayoutEffect } from 'react'
+import { useState, useContext, useLayoutEffect } from 'react'
 
 import { Box } from '@material-ui/core'
 import { ContentBlock } from 'draft-js'
 import { Options as ExportOptions } from 'draft-js-import-html'
+import { useSelector } from 'react-redux'
 
+import useNotify from '@app/hooks/use-notify'
+import { selectImpersonateUserIsActive } from '@app/selectors/user'
 import { useLatestValueRef } from 'hooks/use-latest-value-ref'
 
 import { Checkbox } from '../../../Checkbox'
@@ -41,9 +44,11 @@ export function SignatureFeature({
   stateFromHtmlOptions,
   hasSignatureByDefault
 }: Props) {
+  const notify = useNotify()
   const confirmation = useContext(ConfirmationModalContext)
   const { editorState, setEditorState } = useContext(EditorContext)
   const [isWaitingToActive, setIsaitingToActive] = useState(false)
+  const isImpersonateUserActive = useSelector(selectImpersonateUserIsActive)
   const signatureRef = useLatestValueRef(signature)
 
   const { signaturePlugin } = useEditorPlugins(
@@ -84,6 +89,13 @@ export function SignatureFeature({
 
   const handleOnChange = () => {
     if (!signature) {
+      if (isImpersonateUserActive) {
+        return notify({
+          status: 'info',
+          message: "The impersonated user doesn't have signature."
+        })
+      }
+
       setIsaitingToActive(true)
 
       return showNoSignatureModal()

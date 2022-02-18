@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { useEffectOnce } from 'react-use'
 
-import Fetch from '@app/services/fetch'
+import { getDefinitions } from '@app/models/Deal/role'
 
 export function useDealsRolesDefinitions(): [IDealRoleDefinition[], boolean] {
   const [isLoading, setIsLoading] = useState(false)
@@ -13,9 +13,9 @@ export function useDealsRolesDefinitions(): [IDealRoleDefinition[], boolean] {
       try {
         setIsLoading(true)
 
-        const { body } = await new Fetch().get('/deals/roles/definitions')
+        const roles = await getDefinitions()
 
-        setRoles(body.data)
+        setRoles(roles)
       } catch (e) {
         console.log(e)
       } finally {

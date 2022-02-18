@@ -8,7 +8,7 @@ import ChatPopups from '../Popups'
 
 const InstantChat = ({ user, chatroom }) => (
   <Fragment>
-    <Chatbar user={user} showChatbar={chatroom.showChatbar} />
+    <Chatbar user={user} />
     <ChatPopups
       user={user}
       rooms={chatroom.rooms}
