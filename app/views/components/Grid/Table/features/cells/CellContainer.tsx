@@ -1,6 +1,12 @@
 import { useState } from 'react'
 
-import { makeStyles, alpha, Tooltip, IconButton } from '@material-ui/core'
+import {
+  makeStyles,
+  alpha,
+  Tooltip,
+  IconButton,
+  Popover
+} from '@material-ui/core'
 import { mdiPencilOutline } from '@mdi/js'
 import cn from 'classnames'
 import { omitBy } from 'lodash'
@@ -169,6 +175,33 @@ const CellContainer = ({
       </div>
     )
 
+    const InlineEdit = () => {
+      if (!renderInlineEdit) {
+        return null
+      }
+
+      const id = isEditing ? 'inline-edit-popover' : undefined
+
+      return (
+        <Popover
+          id={id}
+          open={isEditing}
+          anchorReference="anchorPosition"
+          anchorPosition={{ top: -10, left: -10 }}
+          transformOrigin={{
+            vertical: 'center',
+            horizontal: 'left'
+          }}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}
+        >
+          {renderInlineEdit()}
+        </Popover>
+      )
+    }
+
     return (
       <>
         {!isEditing && isSelected && actionsActivated && CellOverlay()}
@@ -177,7 +210,7 @@ const CellContainer = ({
             {renderCellContent({ isHovered, isSelected })}
           </div>
         )}
-        {isEditing && !!renderInlineEdit && renderInlineEdit()}
+        {isEditing && InlineEdit()}
       </>
     )
   }
