@@ -16,7 +16,7 @@ export function ReminderDialog({
   const dispatch = useDispatch()
   const activeTeam = useUnsafeActiveTeam()
   const [isOpen, setIsOpen] = useState(
-    getSettingFromTeam(activeTeam, userSettingsKey, false)
+    !getSettingFromTeam(activeTeam, userSettingsKey, false)
   )
 
   const onClickGotIt = (dontShow: boolean) => {
