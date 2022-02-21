@@ -175,11 +175,11 @@ const AttributeLabelMenu = ({ attributeLabel }) => {
         elevation={0}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'right'
+          horizontal: 'left'
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'right'
+          horizontal: 'left'
         }}
         MenuListProps={{
           'aria-labelledby': 'demo-customized-button'

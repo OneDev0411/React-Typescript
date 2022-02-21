@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import {
   makeStyles,
   alpha,
   Tooltip,
   IconButton,
-  Popover
+  Popper,
+  Fade
 } from '@material-ui/core'
 import { mdiPencilOutline } from '@mdi/js'
 import cn from 'classnames'
@@ -29,7 +30,7 @@ interface Props {
   isEmpty?: boolean
   isSelectable?: boolean
   actionsActivated?: boolean
-  renderInlineEdit?: () => React.ReactNode
+  renderInlineEdit?: () => React.ReactElement
   renderCellContent: (props: CellProps) => React.ReactNode
   onCellSelect?: (e) => void
   onEnterEdit?: (isEditing: boolean) => void
@@ -123,6 +124,8 @@ const CellContainer = ({
   const [isHovered, setIsHovered] = useState(false)
   const [isSelected, setIsSelected] = useState(false)
 
+  const anchorRef = useRef<HTMLDivElement>(null)
+
   const onSelect = () => {
     if (!isEditing) {
       setIsSelected(true)
@@ -133,8 +136,6 @@ const CellContainer = ({
   const toggleEdit = () => {
     setIsEditing(true)
   }
-
-  //--
 
   const InlineContent = () => {
     const Action = (
@@ -183,22 +184,34 @@ const CellContainer = ({
       const id = isEditing ? 'inline-edit-popover' : undefined
 
       return (
-        <Popover
+        <Popper
           id={id}
           open={isEditing}
-          anchorReference="anchorPosition"
-          anchorPosition={{ top: -10, left: -10 }}
-          transformOrigin={{
-            vertical: 'center',
-            horizontal: 'left'
-          }}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right'
+          anchorEl={anchorRef.current}
+          transition
+          placement="bottom-start"
+          modifiers={{
+            offset: {
+              enabled: true,
+              offset: '0, -40'
+            },
+            flip: {
+              enabled: false
+            }
           }}
         >
-          {renderInlineEdit()}
-        </Popover>
+          {({ TransitionProps, placement }) => (
+            <Fade
+              {...TransitionProps}
+              style={{
+                transformOrigin:
+                  placement === 'bottom' ? 'center top' : 'center bottom'
+              }}
+            >
+              {renderInlineEdit()}
+            </Fade>
+          )}
+        </Popper>
       )
     }
 
@@ -215,10 +228,9 @@ const CellContainer = ({
     )
   }
 
-  //--
-
   return (
     <div
+      ref={anchorRef}
       className={cn(classes.container, {
         visibleOverflow: isEditing
       })}

@@ -6,11 +6,9 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
       padding: theme.spacing(0),
-      height: '100%',
-      position: 'absolute',
+      height: '40px',
       minWidth: '115%',
       background: theme.palette.background.paper,
-      zIndex: 10,
       boxShadow:
         '0px 0.3px 0.5px rgba(0, 0, 0, 0.1), 0px 2px 4px rgba(0, 0, 0, 0.2)',
       borderRadius: theme.shape.borderRadius

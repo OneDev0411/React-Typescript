@@ -27,11 +27,7 @@ const useStyles = makeStyles(
       `,
       borderRadius: theme.spacing(0.5),
       border: `1px solid ${theme.palette.primary.main}`,
-      background: theme.palette.background.paper,
-      position: 'absolute',
-      zIndex: 10,
-      left: 0,
-      top: 0
+      background: theme.palette.background.paper
     },
     attributeEntries: {
       display: 'flex',

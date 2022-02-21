@@ -9,9 +9,6 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
       padding: theme.spacing(0),
-      top: 0,
-      position: 'absolute',
-      minWidth: '115%',
       background: theme.palette.background.paper,
       borderRadius: theme.spacing(0.5),
       zIndex: 10,
