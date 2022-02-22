@@ -4,17 +4,18 @@ import { makeStyles, TextField, Button, Theme } from '@material-ui/core'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    root: {
-      padding: theme.spacing(0),
-      height: '40px',
+    root: ({ rowSize }: { rowSize: number }) => ({
+      padding: 0,
+      height: `${rowSize - 1}px`,
       minWidth: '115%',
       background: theme.palette.background.paper,
       boxShadow:
         '0px 0.3px 0.5px rgba(0, 0, 0, 0.1), 0px 2px 4px rgba(0, 0, 0, 0.2)',
       borderRadius: theme.shape.borderRadius
-    },
+    }),
     textField: {
       ...theme.typography.body2,
+      paddingLeft: theme.spacing(0.25),
       letterSpacing: 0.15
     }
   }),
@@ -26,12 +27,18 @@ const useStyles = makeStyles(
 interface Props {
   value: number | string
   isSaving?: boolean
+  rowSize?: number
   onSave: (e: MouseEvent<HTMLButtonElement>, value: number | string) => void
 }
 
-export function TextInlineEdit({ value, isSaving, onSave }: Props) {
+export function TextInlineEdit({
+  value,
+  isSaving,
+  onSave,
+  rowSize = 40
+}: Props) {
   const [fieldValue, setFieldValue] = useState(value)
-  const classes = useStyles()
+  const classes = useStyles({ rowSize })
 
   useEffect(() => {
     setFieldValue(value)

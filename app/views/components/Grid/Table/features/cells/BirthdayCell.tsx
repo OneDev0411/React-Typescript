@@ -18,16 +18,17 @@ const useStyles = makeStyles(
   theme => ({
     dateDiffValue: {
       ...theme.typography.body3,
-      letterSpacing: '0.4px',
       lineHeight: `${theme.spacing(3)}px`,
-      color: theme.palette.grey['500'],
-
-      '&.selected': {
-        color: theme.palette.tertiary.dark
-      },
-      '&.rowSelected': {
-        color: theme.palette.tertiary.dark
-      }
+      color: theme.palette.grey['500']
+    },
+    selected: {
+      color: theme.palette.tertiary.dark
+    },
+    hovered: {
+      color: theme.palette.tertiary.dark
+    },
+    rowSelected: {
+      color: theme.palette.tertiary.dark
     },
     isToday: {
       ...theme.typography.button,
@@ -36,23 +37,11 @@ const useStyles = makeStyles(
     dateValue: {
       ...theme.typography.body2,
       color: theme.palette.grey[700],
-      letterSpacing: '0.15px',
-      lineHeight: `${theme.spacing(3)}px`,
-      '&.hovered': {
-        color: theme.palette.tertiary.dark
-      },
-      '&.selected': {
-        color: theme.palette.tertiary.dark
-      },
-      '&.rowSelected': {
-        color: theme.palette.tertiary.dark
-      }
+      lineHeight: `${theme.spacing(3)}px`
     }
   }),
-  { name: 'Birthday-cell' }
+  { name: 'BirthdayCell' }
 )
-
-//--
 
 const birthdayThisYear = (bithday: Date): Date =>
   new Date(
@@ -101,8 +90,6 @@ const daysToNextBirthday = (birthday, today): Nullable<number> => {
   return durationAsDays(dateDiff)
 }
 
-//--
-
 interface Props {
   contact: IContact
   onSave?: (e: any) => void
@@ -143,8 +130,8 @@ export const BirthdayCell = memo(
         <>
           <div
             className={cn(classes.dateValue, {
-              hovered: isHovered,
-              selected: isSelected
+              [classes.hovered]: isHovered,
+              [classes.selected]: isSelected
             })}
           >
             {formattedDate}
@@ -153,7 +140,7 @@ export const BirthdayCell = memo(
           {birthdayApproaching && (
             <div
               className={cn(classes.dateDiffValue, {
-                rowSelected: isRowSelected
+                [classes.rowSelected]: isRowSelected
               })}
             >
               <span>(</span>

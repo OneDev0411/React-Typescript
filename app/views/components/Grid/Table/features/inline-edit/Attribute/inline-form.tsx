@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import {
   TextField,
@@ -22,10 +22,9 @@ const useStyles = makeStyles(
     },
     attributeTypeSelect: {
       ...theme.typography.body2,
-      letterSpacing: '0.15px',
       lineHeight: `${theme.spacing(3)}px`,
       flex: '0 0 auto',
-      minWidth: theme.spacing(8.25),
+      minWidth: '66px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'end'
@@ -38,15 +37,13 @@ const useStyles = makeStyles(
       justifyContent: 'end',
       gap: theme.spacing(1),
       color: 'grey',
-      minWidth: theme.spacing(10),
-
-      '&.email': {
-        minWidth: theme.spacing(14.25)
-      }
+      minWidth: '80px'
+    },
+    emailAttributeActionsContainer: {
+      minWidth: '114px'
     },
     textField: {
       ...theme.typography.body2,
-      letterSpacing: '0.15px',
       paddingLeft: theme.spacing(2) - 1,
       lineHeight: 'inherit',
       borderRadius: theme.spacing(0.5)
@@ -55,7 +52,7 @@ const useStyles = makeStyles(
       '& .MuiPaper-root': {
         borderRadius: theme.shape.borderRadius,
         marginTop: theme.spacing(0.5),
-        minWidth: theme.spacing(20),
+        minWidth: '160px',
         boxShadow: `
           0px 0.3px 0.5px ${alpha(theme.palette.secondary.dark, 0.1)},
           0px 2px 4px ${alpha(theme.palette.secondary.dark, 0.2)}
@@ -63,7 +60,7 @@ const useStyles = makeStyles(
 
         '& .MuiMenu-list': {
           ...theme.typography.body2,
-          padding: '4px 0'
+          padding: theme.spacing(0.5, 0)
         },
         '& .MuiMenuItem-root': {
           ...theme.typography.body2,
@@ -94,6 +91,7 @@ interface Props {
   type: 'email' | 'phone_number'
   actions: React.ReactNode
   inputPlaceholder: string
+  valueFormatter?: (value: string) => string
 }
 
 export default function EntryInlineForm({
@@ -101,17 +99,25 @@ export default function EntryInlineForm({
   label,
   type,
   actions,
-  inputPlaceholder
+  inputPlaceholder,
+  valueFormatter
 }: Props) {
   const classes = useStyles()
 
   const [fieldAttrText, setFieldAttrText] = useState('')
   const [fieldAttrLabel, setFieldAttrLabel] = useState('')
 
+  const formatValue = useCallback(
+    v => () => valueFormatter ? valueFormatter(v) : v,
+    [valueFormatter]
+  )
+
+  const onInputChange = e => setFieldAttrText(formatValue(e.target.value))
+
   useEffect(() => {
-    setFieldAttrText(value)
+    setFieldAttrText(formatValue(value))
     setFieldAttrLabel(label)
-  }, [value, label])
+  }, [value, label, formatValue])
 
   return (
     <>
@@ -122,7 +128,7 @@ export default function EntryInlineForm({
           variant="standard"
           fullWidth
           placeholder={inputPlaceholder}
-          onChange={e => setFieldAttrText(e.target.value)}
+          onChange={onInputChange}
           style={{
             flexDirection: 'row',
             height: '100%'
@@ -138,7 +144,11 @@ export default function EntryInlineForm({
         <AttributeLabelMenu attributeLabel={fieldAttrLabel} />
       </div>
 
-      <div className={cn(classes.attributeActionsContainer, type)}>
+      <div
+        className={cn(classes.attributeActionsContainer, {
+          [classes.emailAttributeActionsContainer]: type === 'email'
+        })}
+      >
         {actions}
       </div>
     </>

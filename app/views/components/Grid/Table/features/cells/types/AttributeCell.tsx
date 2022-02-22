@@ -1,4 +1,4 @@
-import { alpha, Chip, makeStyles } from '@material-ui/core'
+import { Chip, makeStyles } from '@material-ui/core'
 import { mdiClose, mdiContentCopy } from '@mdi/js'
 import cn from 'classnames'
 
@@ -28,184 +28,25 @@ const useStyles = makeStyles(
     attributeText: {
       ...theme.typography.body2,
       color: theme.palette.grey[700],
-      letterSpacing: '0.15px',
-      lineHeight: `${theme.spacing(3)}px`,
-      '&.hovered': {
-        color: theme.palette.tertiary.dark
-      },
-      '&.selected': {
-        color: theme.palette.primary.main
-      },
-      '&.rowSelected': {
-        color: theme.palette.tertiary.dark
-      }
+      lineHeight: `${theme.spacing(3)}px`
     },
+    attributeTextHovered: {
+      color: theme.palette.tertiary.dark
+    },
+    attributeTextSelected: {
+      color: theme.palette.primary.main
+    },
+    attributeTextRowSelected: {
+      color: theme.palette.tertiary.dark
+    },
+
     attributeLabel: {
       ...theme.typography.body3,
-      letterSpacing: '0.4px',
       lineHeight: `${theme.spacing(3)}px`,
-      color: theme.palette.grey['500'],
-      '&.selected': {
-        color: theme.palette.tertiary.dark
-      }
+      color: theme.palette.grey['500']
     },
-    chip: {
-      letterSpacing: '0.2px'
-    },
-
-    iconButton: {
-      color: `${theme.palette.action.disabled} !important`,
-      '&:hover': {
-        color: `${theme.palette.tertiary.main} !important`
-      }
-    },
-
-    //---
-
-    attributeEditWidget: {
-      boxSizing: 'border-box',
-      boxShadow: `
-        0px 0.3px 0.5px ${alpha(theme.palette.secondary.dark, 0.1)},
-        0px 2px 4px ${alpha(theme.palette.secondary.dark, 0.2)}
-      `,
-      borderRadius: theme.spacing(0.5),
-      border: `1px solid ${theme.palette.primary.main}`,
-      background: theme.palette.background.paper,
-      position: 'absolute',
-      zIndex: 10,
-      left: 0,
-      top: 0
-    },
-    attributeEntries: {
-      display: 'flex',
-      flexDirection: 'column',
-
-      '&.phone_number': {
-        minWidth: theme.spacing(42.75)
-      },
-      '&.email': {
-        minWidth: theme.spacing(50)
-      }
-    },
-    attributeEntry: {
-      display: 'flex',
-      flexDirection: 'row',
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      justifyContent: 'flex-end',
-      gap: theme.spacing(0.5),
-      borderTopLeftRadius: theme.spacing(0.5),
-      borderTopRightRadius: theme.spacing(0.5),
-      height: theme.spacing(5),
-
-      '&:first-child': {
-        height: theme.spacing(5) - 1
-      },
-      '&:last-child': {
-        height: theme.spacing(5) - 1,
-        borderBottomLeftRadius: theme.spacing(0.5),
-        borderBottomRightRadius: theme.spacing(0.5),
-        borderBottom: 'none'
-      },
-      '&:only-child': {
-        height: theme.spacing(5) - 2
-      },
-      '&:hover': {
-        backgroundColor: theme.palette.grey[50]
-      },
-      '&.add-new': {
-        ...theme.typography.body2,
-        color: theme.palette.primary.main,
-        letterSpacing: '0.15px',
-        lineHeight: `${theme.spacing(3)}px`,
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        borderBottom: 'none'
-      }
-    },
-    attributeInputContainer: {
-      flex: '1 0 auto',
-      borderRadius: theme.spacing(0.5)
-    },
-    attributeTypeSelect: {
-      ...theme.typography.body2,
-      letterSpacing: '0.15px',
-      lineHeight: `${theme.spacing(3)}px`,
-      flex: '0 0 auto',
-      minWidth: theme.spacing(8.25),
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'end'
-    },
-    selectLabel: {
-      paddingLeft: theme.spacing(1),
-      paddingRight: theme.spacing(1)
-    },
-    attributeActionsContainer: {
-      paddingRight: theme.spacing(2),
-      flex: '0 0 auto',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'end',
-      gap: theme.spacing(1),
-      color: 'grey',
-      minWidth: theme.spacing(10),
-
-      '&.email': {
-        minWidth: theme.spacing(14.25)
-      }
-    },
-    textField: {
-      ...theme.typography.body2,
-      letterSpacing: '0.15px',
-      paddingLeft: theme.spacing(2) - 1,
-      lineHeight: 'inherit',
-      borderRadius: theme.spacing(0.5)
-    },
-    addAttributeButton: {
-      ...theme.typography.body2,
-      letterSpacing: '0.15px',
-      textAlign: 'right',
-      minWidth: theme.spacing(7),
-      justifyContent: 'right',
-      lineHeight: `${theme.spacing(3)}px`,
-      color: theme.palette.primary.main,
-      display: 'flex',
-      alignItems: 'center'
-    },
-    menu: {
-      '& .MuiPaper-root': {
-        borderRadius: theme.shape.borderRadius,
-        marginTop: theme.spacing(0.5),
-        minWidth: theme.spacing(20),
-        boxShadow: `
-          0px 0.3px 0.5px ${alpha(theme.palette.secondary.dark, 0.1)},
-          0px 2px 4px ${alpha(theme.palette.secondary.dark, 0.2)}
-        `,
-
-        '& .MuiMenu-list': {
-          ...theme.typography.body2,
-          padding: '4px 0'
-        },
-        '& .MuiMenuItem-root': {
-          ...theme.typography.body2,
-
-          '& .MuiSvgIcon-root': {
-            color: theme.palette.text.secondary,
-            marginRight: theme.spacing(1.5)
-          },
-          '&:active': {
-            backgroundColor: alpha(
-              theme.palette.primary.main,
-              theme.palette.action.selectedOpacity
-            )
-          }
-        }
-      }
-    },
-    selectButton: {
-      ...theme.typography.body2
+    attributeLabelSelected: {
+      color: theme.palette.tertiary.dark
     }
   }),
   { name: 'Attribute-cell' }
@@ -228,8 +69,6 @@ export const AttributeCell = ({
   let primaryAttribute: Nullable<string> = null
   let primaryAttributeLabel: Nullable<string> = null
   let count = 0
-
-  //--
 
   const attributeActions: Record<string, CellAction> = {
     ...actions,
@@ -258,6 +97,8 @@ export const AttributeCell = ({
     return false
   })
 
+  const isEmpty = filteredAttributes.length === 0
+
   if (filteredAttributes.length > 0) {
     if (!primaryAttribute) {
       primaryAttribute = filteredAttributes[0].text
@@ -266,10 +107,6 @@ export const AttributeCell = ({
 
     count = filteredAttributes.length
   }
-
-  const isEmpty = filteredAttributes.length === 0
-
-  //--
 
   const renderCellContent = ({
     isHovered = false,
@@ -283,9 +120,9 @@ export const AttributeCell = ({
       <>
         <div
           className={cn(classes.attributeText, {
-            hovered: isHovered,
-            selected: isSelected,
-            rowSelected: isRowSelected
+            [classes.attributeTextHovered]: isHovered,
+            [classes.attributeTextSelected]: isSelected,
+            [classes.attributeTextRowSelected]: isRowSelected
           })}
         >
           {valueFormatter ? valueFormatter(primaryAttribute) : primaryAttribute}
@@ -294,7 +131,7 @@ export const AttributeCell = ({
         {primaryAttributeLabel && (
           <div
             className={cn(classes.attributeLabel, {
-              selected: isSelected
+              [classes.attributeLabelSelected]: isSelected
             })}
           >
             {primaryAttributeLabel}
@@ -302,12 +139,7 @@ export const AttributeCell = ({
         )}
 
         {countEnabled && count > 1 && (
-          <Chip
-            className={classes.chip}
-            variant="outlined"
-            size="small"
-            label={`${count - 1} more`}
-          />
+          <Chip variant="outlined" size="small" label={`${count - 1} more`} />
         )}
       </>
     )
@@ -320,6 +152,7 @@ export const AttributeCell = ({
       attributeActions={attributeActions}
       attributeInputPlaceholder={attributeInputPlaceholder}
       attributeDescription={attributeDescription}
+      valueFormatter={valueFormatter}
     />
   )
 

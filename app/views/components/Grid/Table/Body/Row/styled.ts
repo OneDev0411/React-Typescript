@@ -75,10 +75,5 @@ export const GridRowContainer = styled.div<{
     &:hover .selection--checkbox {
       display: block !important;
     }
-    
-    > div {
-      display: flex;
-      flex: 0 0 auto;
-    }
   `}
 `

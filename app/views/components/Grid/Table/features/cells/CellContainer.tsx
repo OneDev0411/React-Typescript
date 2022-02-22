@@ -18,8 +18,6 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { CellProps } from '../../types'
 
-//----
-
 export interface CellAction {
   tooltipText?: string
   onClick: (e: any) => void
@@ -29,6 +27,7 @@ export interface CellAction {
 interface Props {
   text?: string
   isEmpty?: boolean
+  rowSize?: number | string
   isSelectable?: boolean
   actionsActivated?: boolean
   renderInlineEdit?: () => React.ReactElement
@@ -37,8 +36,6 @@ interface Props {
   onEnterEdit?: (isEditing: boolean) => void
   actions?: Record<string, CellAction>
 }
-
-//----
 
 const useStyles = makeStyles(
   theme => ({
@@ -52,10 +49,10 @@ const useStyles = makeStyles(
       textOverflow: 'ellipsis',
       borderRight: `1px solid ${theme.palette.divider}`,
       borderBottom: `1px solid ${theme.palette.divider}`,
-      whiteSpace: 'nowrap',
-      '&.visibleOverflow': {
-        overflow: 'visible'
-      }
+      whiteSpace: 'nowrap'
+    },
+    visibleOverflow: {
+      overflow: 'visible'
     },
     inlineViewContainer: {
       display: 'flex',
@@ -72,25 +69,17 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'end',
-      paddingRight: theme.spacing(1),
-
-      '&.selected': {
-        border: `2px solid ${theme.palette.primary.main}`,
-        borderRadius: theme.spacing(0.5),
-        boxSizing: 'border-box'
-      }
+      paddingRight: theme.spacing(1)
+    },
+    cellOverlaySelected: {
+      border: `2px solid ${theme.palette.primary.main}`,
+      borderRadius: theme.spacing(0.5),
+      boxSizing: 'border-box'
     },
     inlineActionIconsContainer: () => ({
       position: 'relative',
       display: 'flex',
-      gap: theme.spacing(1),
-
-      '&.hidden': {
-        visibility: 'hidden'
-      },
-      '&.visible': {
-        visibility: 'visible'
-      }
+      gap: theme.spacing(1)
     }),
     iconButton: {
       background: theme.palette.background.paper,
@@ -109,14 +98,13 @@ const useStyles = makeStyles(
   { name: 'CellContainer' }
 )
 
-//----
-
 const CellContainer = ({
   actionsActivated = false,
   isEmpty = true,
   isSelectable = false,
   renderCellContent,
   renderInlineEdit,
+  rowSize = '40px',
   actions = {}
 }: Props) => {
   const classes = useStyles()
@@ -170,7 +158,7 @@ const CellContainer = ({
     const CellOverlay = () => (
       <div
         className={cn(classes.cellOverlay, {
-          selected: isSelected
+          [classes.cellOverlaySelected]: isSelected
         })}
       >
         <div className={classes.inlineActionIconsContainer}>
@@ -195,7 +183,7 @@ const CellContainer = ({
           modifiers={{
             offset: {
               enabled: true,
-              offset: '0, -40' // rowSize
+              offset: `0, -${rowSize}`
             },
             flip: {
               enabled: false
@@ -235,7 +223,7 @@ const CellContainer = ({
       <div
         ref={anchorRef}
         className={cn(classes.container, {
-          visibleOverflow: isEditing
+          [classes.visibleOverflow]: isEditing
         })}
         onMouseEnter={onHoverIn}
         onMouseLeave={onHoverOut}

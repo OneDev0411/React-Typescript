@@ -14,21 +14,20 @@ const useStyles = makeStyles(
     },
     cellText: {
       color: theme.palette.grey[700],
-      letterSpacing: '0.15px',
       ...theme.typography.body2,
-      lineHeight: `${theme.spacing(3)}px`,
-      '&.primary': {
-        color: theme.palette.tertiary.dark
-      },
-      '&.hovered': {
-        color: theme.palette.tertiary.dark
-      },
-      '&.selected': {
-        color: theme.palette.primary.main
-      },
-      '&.rowSelected': {
-        color: theme.palette.tertiary.dark
-      }
+      lineHeight: `${theme.spacing(3)}px`
+    },
+    primaryText: {
+      color: theme.palette.tertiary.dark
+    },
+    hoveredText: {
+      color: theme.palette.tertiary.dark
+    },
+    selectedText: {
+      color: theme.palette.primary.main
+    },
+    rowSelectedText: {
+      color: theme.palette.tertiary.dark
     }
   }),
   { name: 'EditText-cell' }
@@ -54,10 +53,10 @@ export const EditTextCell = ({
   }: CellProps) => (
     <div
       className={cn(classes.cellText, {
-        primary: isPrimary,
-        hovered: isHovered,
-        selected: isSelected,
-        rowSelected: isRowSelected
+        [classes.primaryText]: isPrimary,
+        [classes.hoveredText]: isHovered,
+        [classes.selectedText]: isSelected,
+        [classes.rowSelectedText]: isRowSelected
       })}
     >
       {text}
@@ -70,8 +69,8 @@ export const EditTextCell = ({
 
   return (
     <CellContainer
-      isSelectable
-      actionsActivated
+      isSelectable={false}
+      actionsActivated={false}
       renderCellContent={renderCellContent}
       renderInlineEdit={renderInlineEdit}
     />

@@ -22,39 +22,24 @@ const useStyles = makeStyles(
     noTag: {
       ...theme.typography.body3,
       color: theme.palette.grey[700],
-      lineHeight: `${theme.spacing(3)}px`,
-      letterSpacing: '0.2px',
-      '&.hovered': {
-        color: theme.palette.tertiary.dark
-      },
-      '&.selected': {
-        color: theme.palette.primary.main
-      },
-      '&.rowSelected': {
-        color: theme.palette.tertiary.dark
-      }
+      lineHeight: `${theme.spacing(3)}px`
+    },
+    hovered: {
+      color: theme.palette.tertiary.dark
+    },
+    selected: {
+      color: theme.palette.primary.main
+    },
+    rowSelected: {
+      color: theme.palette.tertiary.dark
     },
     tagLabel: {
       display: 'flex',
       flexDirection: 'row',
-      letterSpacing: '0.2px',
       gap: theme.spacing(1),
       ...theme.typography.body3,
       color: theme.palette.grey[700],
-      lineHeight: `${theme.spacing(3)}px`,
-
-      '&.hovered': {
-        color: theme.palette.tertiary.dark
-      },
-      '&.selected': {
-        color: theme.palette.primary.main
-      },
-      '&.rowSelected': {
-        color: theme.palette.tertiary.dark
-      }
-    },
-    chip: {
-      letterSpacing: '0.2px'
+      lineHeight: `${theme.spacing(3)}px`
     }
   }),
   { name: 'TagsCell' }
@@ -98,8 +83,6 @@ const TagsCell = ({
   const tagsCount = tags.length
   const invisibleTagsCount = tagsCount - showingTags.length
 
-  //----
-
   const handleChangeTag = async (tags: SelectorOption[] = []) => {
     try {
       if (isParkTabActive || (hasAttributeFilters && tags.length === 0)) {
@@ -117,8 +100,6 @@ const TagsCell = ({
     }
   }
 
-  //----
-
   const renderPopOverTagSelector = ({
     isHovered = false,
     isSelected = false
@@ -126,15 +107,14 @@ const TagsCell = ({
     const renderTagsStrip = () => (
       <div
         className={cn(classes.tagLabel, {
-          rowSelected: isRowSelected,
-          hovered: isHovered,
-          selected: isSelected
+          [classes.rowSelected]: isRowSelected,
+          [classes.hovered]: isHovered,
+          [classes.selected]: isSelected
         })}
       >
         <span>{showingTags.join(', ')}</span>
         {invisibleTagsCount > 0 && (
           <Chip
-            className={classes.chip}
             variant="outlined"
             size="small"
             label={`${invisibleTagsCount} more`}
@@ -149,9 +129,9 @@ const TagsCell = ({
           {tagsCount === 0 && (
             <div
               className={cn(classes.noTag, {
-                rowSelected: isRowSelected,
-                hovered: isHovered,
-                selected: isSelected
+                [classes.rowSelected]: isRowSelected,
+                [classes.hovered]: isHovered,
+                [classes.selected]: isSelected
               })}
             >
               Add Tags
@@ -175,8 +155,6 @@ const TagsCell = ({
       />
     )
   }
-
-  //----
 
   return <CellContainer renderCellContent={renderPopOverTagSelector} />
 }

@@ -6,37 +6,30 @@ import { CellProps } from '../../types'
 
 import CellContainer from './CellContainer'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    noTouch: {
-      ...theme.typography.body2,
-      lineHeight: `${theme.spacing(3)}px`,
-      color: theme.palette.grey[700],
-      '&.hovered': {
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      noTouch: {
+        ...theme.typography.body2,
+        lineHeight: `${theme.spacing(3)}px`,
+        color: theme.palette.grey[700]
+      },
+      hovered: {
         color: theme.palette.tertiary.dark
       },
-      '&.selected': {
+      selected: {
         color: theme.palette.primary.main
       },
-      '&.rowSelected': {
-        color: theme.palette.tertiary.dark
-      }
-    },
-    lastTouchValue: {
-      ...theme.typography.body2,
-      lineHeight: `${theme.spacing(3)}px`,
-      color: theme.palette.grey[700],
-      '&.hovered': {
+      rowSelected: {
         color: theme.palette.tertiary.dark
       },
-      '&.selected': {
-        color: theme.palette.primary.main
-      },
-      '&.rowSelected': {
-        color: theme.palette.tertiary.dark
+      lastTouchValue: {
+        ...theme.typography.body2,
+        lineHeight: `${theme.spacing(3)}px`,
+        color: theme.palette.grey[700]
       }
-    }
-  })
+    }),
+  { name: 'LastTouchCell' }
 )
 
 interface Props {
@@ -58,9 +51,9 @@ export const LastTouchCell = ({ contact, isRowSelected = false }: Props) => {
       return (
         <div
           className={cn(classes.noTouch, {
-            rowSelected: isRowSelected,
-            hovered: isHovered,
-            selected: isSelected
+            [classes.rowSelected]: isRowSelected,
+            [classes.hovered]: isHovered,
+            [classes.selected]: isSelected
           })}
         >
           No touches

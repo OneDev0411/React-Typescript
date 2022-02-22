@@ -13,22 +13,20 @@ const useStyles = makeStyles(
       ...theme.typography.body2,
       color: theme.palette.grey[700],
       letterSpacing: '0.15px',
-      lineHeight: `${theme.spacing(3)}px`,
-      '&.hovered': {
-        color: theme.palette.tertiary.dark
-      },
-      '&.selected': {
-        color: theme.palette.tertiary.dark
-      },
-      '&.rowSelected': {
-        color: theme.palette.tertiary.dark
-      }
+      lineHeight: `${theme.spacing(3)}px`
+    },
+    textHovered: {
+      color: theme.palette.tertiary.dark
+    },
+    textSelected: {
+      color: theme.palette.tertiary.dark
+    },
+    textRowSelected: {
+      color: theme.palette.tertiary.dark
     }
   }),
-  { name: 'Flows-cell' }
+  { name: 'FlowsCell' }
 )
-
-//----
 
 interface Props {
   contact: IContact
@@ -53,9 +51,9 @@ const FlowsCell = ({ contact, callback, isRowSelected = false }: Props) => {
           <Tooltip title="Click to add to flow">
             <div
               className={cn(className, classes.text, {
-                hovered: isHovered,
-                selected: isSelected,
-                rowSelected: isRowSelected
+                [classes.textHovered]: isHovered,
+                [classes.textSelected]: isSelected,
+                [classes.textRowSelected]: isRowSelected
               })}
               {...buttonProps}
             >
