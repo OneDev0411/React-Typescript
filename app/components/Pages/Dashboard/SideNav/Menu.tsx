@@ -185,8 +185,8 @@ function Menu(props: WithRouterProps) {
         },
         {
           access: insightAccess,
-          id: 'insights',
-          label: 'Insights',
+          id: 'insight',
+          label: 'Insight',
           to: '/dashboard/insights'
         }
       ]
