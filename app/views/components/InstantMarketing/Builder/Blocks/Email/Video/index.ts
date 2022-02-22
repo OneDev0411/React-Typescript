@@ -59,7 +59,10 @@ export default function registerVideoBlock(
     selectedVideo => ({
       ...renderData,
       url: selectedVideo.url,
-      image: selectedVideo.thumbnail
+      image: selectedVideo.thumbnail,
+      padding: selectedVideo.thumbnailAspectRatio
+        ? Math.floor((selectedVideo.thumbnailAspectRatio * 100) / 2)
+        : 30 // Default padding value
     }),
     onDrop
   )
