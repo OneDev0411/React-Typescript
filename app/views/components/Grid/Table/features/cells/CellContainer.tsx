@@ -6,7 +6,8 @@ import {
   Tooltip,
   IconButton,
   Popper,
-  Fade
+  Fade,
+  ClickAwayListener
 } from '@material-ui/core'
 import { mdiPencilOutline } from '@mdi/js'
 import cn from 'classnames'
@@ -133,8 +134,12 @@ const CellContainer = ({
   }
   const onHoverIn = () => setIsHovered(true)
   const onHoverOut = () => setIsHovered(false)
-  const toggleEdit = () => {
-    setIsEditing(true)
+
+  const toggleEdit = () => setIsEditing(prev => !prev)
+
+  const onClickAway = () => {
+    setIsSelected(false)
+    setIsEditing(false)
   }
 
   const InlineContent = () => {
@@ -181,11 +186,8 @@ const CellContainer = ({
         return null
       }
 
-      const id = isEditing ? 'inline-edit-popover' : undefined
-
       return (
         <Popper
-          id={id}
           open={isEditing}
           anchorEl={anchorRef.current}
           transition
@@ -193,7 +195,7 @@ const CellContainer = ({
           modifiers={{
             offset: {
               enabled: true,
-              offset: '0, -40'
+              offset: '0, -40' // rowSize
             },
             flip: {
               enabled: false
@@ -229,17 +231,19 @@ const CellContainer = ({
   }
 
   return (
-    <div
-      ref={anchorRef}
-      className={cn(classes.container, {
-        visibleOverflow: isEditing
-      })}
-      onMouseEnter={onHoverIn}
-      onMouseLeave={onHoverOut}
-      {...(isSelectable ? { onClick: onSelect } : {})}
-    >
-      {InlineContent()}
-    </div>
+    <ClickAwayListener onClickAway={onClickAway}>
+      <div
+        ref={anchorRef}
+        className={cn(classes.container, {
+          visibleOverflow: isEditing
+        })}
+        onMouseEnter={onHoverIn}
+        onMouseLeave={onHoverOut}
+        {...(isSelectable ? { onClick: onSelect } : {})}
+      >
+        {InlineContent()}
+      </div>
+    </ClickAwayListener>
   )
 }
 

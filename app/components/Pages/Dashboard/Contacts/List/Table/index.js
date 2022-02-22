@@ -206,10 +206,10 @@ const ContactsList = props => {
           contact={contact}
           callback={() => {
             resetSelectedRow()
-            props.reloadContacts()
+            // find a way to reload without refreshing page
+            // props.reloadContacts()
           }}
           isRowSelected={isRowSelected}
-          flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
         />
       )
     },

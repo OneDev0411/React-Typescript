@@ -33,17 +33,13 @@ const useStyles = makeStyles(
 interface Props {
   contact: IContact
   callback: () => void
-  flowsCount: number
   isRowSelected?: boolean
 }
 
-const FlowsCell = ({
-  contact,
-  callback,
-  flowsCount,
-  isRowSelected = false
-}: Props) => {
+const FlowsCell = ({ contact, callback, isRowSelected = false }: Props) => {
   const classes = useStyles()
+
+  const flowsCount = Array.isArray(contact.flows) ? contact.flows.length : 0
 
   const renderCellContent = ({
     isHovered = false,
