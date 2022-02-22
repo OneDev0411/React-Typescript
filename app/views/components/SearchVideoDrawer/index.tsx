@@ -10,7 +10,7 @@ import OverlayDrawer from 'components/OverlayDrawer'
 import { SearchInput } from '../GlobalHeaderWithSearch/SearchInput'
 import LoadingContainer from '../LoadingContainer'
 
-import { makeVimeoDateStandard } from './helpers'
+import { calcThumbnailAspectRatio, makeVimeoDateStandard } from './helpers'
 import SearchVideoEmptyState from './SearchVideoEmptyState'
 import SearchVideoResults from './SearchVideoResults'
 import { SearchVideoResult, Video } from './types'
@@ -82,6 +82,11 @@ function SearchVideoDrawer({
         const results = [
           ...vimeoVideos.map<SearchVideoResult>(video => ({
             thumbnail: video.thumbnail_url,
+            thumbnailAspectRatio: calcThumbnailAspectRatio(
+              video.width,
+              video.height
+            ),
+
             title: unescape(video.title),
             url: `https://vimeo.com/${video.video_id}`,
             publisher: video.author_name,
@@ -90,6 +95,10 @@ function SearchVideoDrawer({
           })),
           ...youtubeVideos.map<SearchVideoResult>(video => ({
             thumbnail: video.snippet?.thumbnails?.high?.url ?? '',
+            thumbnailAspectRatio: calcThumbnailAspectRatio(
+              video.snippet?.thumbnails?.high?.width,
+              video.snippet?.thumbnails?.high?.height
+            ),
             title: unescape(video.snippet?.title ?? ''),
             url: `https://www.youtube.com/watch?v=${video.id?.videoId}`,
             publisher: video.snippet?.channelTitle ?? '',
@@ -130,7 +139,8 @@ function SearchVideoDrawer({
 
     const videoInfo: Video = {
       url: video.url,
-      thumbnail: video.thumbnail
+      thumbnail: video.thumbnail,
+      thumbnailAspectRatio: video.thumbnailAspectRatio
     }
 
     onSelect(videoInfo)

@@ -63,3 +63,14 @@ export function youtubeVideos(
       )
   })
 }
+
+export function calcThumbnailAspectRatio(
+  width: Optional<number>,
+  height: Optional<number>
+): number {
+  if (!width || !height) {
+    return 0
+  }
+
+  return height / width
+}
