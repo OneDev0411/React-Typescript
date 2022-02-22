@@ -18,7 +18,7 @@ const useStyles = makeStyles(
   theme => ({
     attributeInputContainer: {
       flex: '1 0 auto',
-      borderRadius: theme.spacing(0.5)
+      borderRadius: theme.shape.borderRadius
     },
     attributeTypeSelect: {
       ...theme.typography.body2,
@@ -46,7 +46,7 @@ const useStyles = makeStyles(
       ...theme.typography.body2,
       paddingLeft: theme.spacing(2) - 1,
       lineHeight: 'inherit',
-      borderRadius: theme.spacing(0.5)
+      borderRadius: theme.shape.borderRadius
     },
     menu: {
       '& .MuiPaper-root': {

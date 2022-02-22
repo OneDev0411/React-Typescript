@@ -8,27 +8,40 @@ import 'react-day-picker/lib/style.css'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      padding: theme.spacing(0),
+      padding: 0,
       background: theme.palette.background.paper,
-      borderRadius: theme.spacing(0.5),
+      borderRadius: theme.shape.borderRadius,
       zIndex: 10,
       boxShadow:
         '0px 0.3px 0.5px rgba(0, 0, 0, 0.1), 0px 2px 4px rgba(0, 0, 0, 0.2)',
       border: 'none'
     },
-    inputContainer: {
+    inputContainer: ({ rowSize }: { rowSize: number }) => ({
       background: theme.palette.background.paper,
-      height: theme.spacing(5),
+      height: rowSize,
       border: `1px solid ${theme.palette.primary.main}`,
-      borderTopLeftRadius: theme.spacing(0.5),
-      borderTopRightRadius: theme.spacing(0.5)
-    },
+      borderTopLeftRadius: theme.shape.borderRadius,
+      borderTopRightRadius: theme.shape.borderRadius
+    }),
     textField: {
       ...theme.typography.body2,
-      letterSpacing: 0.15,
       paddingLeft: theme.spacing(2) - 1,
       lineHeight: 'inherit',
-      borderRadius: theme.spacing(0.5)
+      borderRadius: theme.shape.borderRadius
+    },
+    footerContainer: {
+      borderTop: `1px solid ${theme.palette.action.disabledBackground}`,
+      marginTop: theme.spacing(2),
+      height: '52px',
+      display: 'flex',
+      alignItems: 'center',
+      paddingLeft: theme.spacing(2)
+    },
+    footerAction: {
+      ...theme.typography.body2,
+      lineHeight: `${theme.spacing(3)}px`,
+      cursor: 'pointer',
+      color: theme.palette.tertiary.dark
     },
     pickerContainer: {
       background: theme.palette.background.paper,
@@ -36,22 +49,6 @@ const useStyles = makeStyles(
       borderBottomRightRadius: theme.shape.borderRadius,
       border: `1px solid ${theme.palette.primary.main}`,
       borderTop: 'none',
-
-      '& > .footer': {
-        borderTop: `1px solid ${theme.palette.action.disabledBackground}`,
-        marginTop: theme.spacing(2),
-        height: theme.spacing(6.5),
-        display: 'flex',
-        alignItems: 'center',
-        paddingLeft: theme.spacing(2),
-
-        '& > a': {
-          ...theme.typography.body2,
-          letterSpacing: '0.1px',
-          lineHeight: `${theme.spacing(3)}px`,
-          color: theme.palette.tertiary.dark
-        }
-      },
 
       '& .DayPicker': {
         padding: 0,
@@ -70,7 +67,7 @@ const useStyles = makeStyles(
             alignItems: 'center',
             justifyContent: 'flex-end',
             width: 'auto',
-            height: theme.spacing(7),
+            height: '56px',
             gap: theme.spacing(3),
             padding: 0,
             left: 'auto',
@@ -110,7 +107,6 @@ const useStyles = makeStyles(
                 ...theme.typography.subtitle2,
                 textAlign: 'left',
                 height: 'auto',
-                letterSpacing: '0.1px',
                 border: 0,
                 marginBottom: 0,
                 padding: theme.spacing(2.25, 1),
@@ -125,17 +121,16 @@ const useStyles = makeStyles(
                   '& .DayPicker-Weekday': {
                     ...theme.typography.caption,
                     padding: 0,
-                    letterSpacing: '0.4px',
                     lineHeight: `${theme.spacing(3)}px`,
                     color: theme.palette.grey['500'],
 
                     '&:first-child': {
-                      borderTopLeftRadius: theme.spacing(0.5),
-                      borderBottomLeftRadius: theme.spacing(0.5)
+                      borderTopLeftRadius: theme.shape.borderRadius,
+                      borderBottomLeftRadius: theme.shape.borderRadius
                     },
                     '&:last-child': {
-                      borderTopRightRadius: theme.spacing(0.5),
-                      borderBottomRightRadius: theme.spacing(0.5)
+                      borderTopRightRadius: theme.shape.borderRadius,
+                      borderBottomRightRadius: theme.shape.borderRadius
                     }
                   }
                 }
@@ -143,7 +138,6 @@ const useStyles = makeStyles(
               '& .DayPicker-Week': {
                 ...theme.typography.body3,
                 padding: 0,
-                letterSpacing: '0.2px',
 
                 '& .DayPicker-Day': {
                   padding: '6.5px 8.5px',
@@ -171,7 +165,7 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'Date-inline-edit'
+    name: 'DateInlineEdit'
   }
 )
 
@@ -189,16 +183,18 @@ interface Props {
   value: Nullable<Date>
   readOnly?: boolean
   dateFormat?: string
+  rowSize?: number
 }
 
 export function DateInlineEdit({
   value,
   readOnly = false,
-  dateFormat = 'MMM D, YYYY'
+  dateFormat = 'MMM D, YYYY',
+  rowSize = 40
 }: Props) {
   const [fieldValue, setFieldValue] = useState<Nullable<Date>>()
 
-  const classes = useStyles()
+  const classes = useStyles({ rowSize })
 
   useEffect(() => {
     if (value) {
@@ -251,8 +247,8 @@ export function DateInlineEdit({
           month={fieldValue ?? getMonth()}
           selectedDays={fieldValue ? [fieldValue] : [getDate()]}
         />
-        <div className="footer">
-          <a>Clear</a>
+        <div className={classes.footerContainer}>
+          <a className={classes.footerAction}>Clear</a>
         </div>
       </div>
     </div>

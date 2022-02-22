@@ -73,7 +73,7 @@ const useStyles = makeStyles(
     },
     cellOverlaySelected: {
       border: `2px solid ${theme.palette.primary.main}`,
-      borderRadius: theme.spacing(0.5),
+      borderRadius: theme.shape.borderRadius,
       boxSizing: 'border-box'
     },
     inlineActionIconsContainer: () => ({
