@@ -1,14 +1,13 @@
 import { useState, ChangeEvent } from 'react'
 
 import {
-  mdiViewGridOutline,
-  mdiAccountMultiple,
-  mdiChartArc,
-  mdiSwapHorizontal,
+  mdiGamepadCircleUp,
+  mdiAccountMultipleOutline,
+  mdiBullhornOutline,
+  mdiCurrencyUsd,
   mdiBellOutline,
-  mdiHelpCircleOutline,
-  mdiPhoneOutline,
-  mdiHomeCity
+  mdiHelp,
+  mdiHomeCityOutline
 } from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
@@ -107,59 +106,12 @@ function Menu(props: WithRouterProps) {
   const MenuItems: AccordionMenu[] = [
     {
       access: dashboardAccess,
-      hasDivider: true,
-      icon: mdiViewGridOutline,
+      hasDivider: false,
+      icon: mdiGamepadCircleUp,
       id: 'home',
-      label: 'Home',
+      label: 'Today',
       testId: 'side-nav-list',
       to: '/dashboard/overview'
-    },
-    {
-      access: marketingAccess,
-      hasDivider: false,
-      icon: mdiChartArc,
-      id: 'marketing',
-      label: 'Marketing',
-      subMenu: [
-        {
-          access: ['Marketing'],
-          id: 'overview',
-          label: 'Overview',
-          to: '/dashboard/marketing'
-        },
-        {
-          access: ['Marketing'],
-          id: 'flows',
-          label: 'Flows',
-          to: '/dashboard/flows'
-        },
-        {
-          access: ['AgentNetwork'],
-          id: 'agent-network',
-          label: 'Agent Network',
-          to: '/dashboard/agent-network'
-        },
-        {
-          access: insightAccess,
-          id: 'email-insights',
-          label: 'Email Insights',
-          to: '/dashboard/insights'
-        },
-        {
-          access: ACL.WEBSITES,
-          id: 'websites',
-          label: 'Websites',
-          to: '/dashboard/websites'
-        }
-      ]
-    },
-    {
-      access: ['Marketing'],
-      hasDivider: false,
-      icon: mdiHomeCity,
-      id: 'properties',
-      label: 'Properties',
-      to: '/dashboard/mls'
     },
     {
       access: dashboardAccess,
@@ -167,16 +119,15 @@ function Menu(props: WithRouterProps) {
         inboxNotificationNumber || chatRoomsNotificationsNumber
       ),
       hasDivider: false,
-      icon: mdiAccountMultiple,
+      icon: mdiAccountMultipleOutline,
       id: 'people',
       label: 'People',
       subMenu: [
         {
           access: ['CRM'],
-          id: 'email',
-          label: 'Email',
-          notificationCount: inboxNotificationNumber,
-          to: '/dashboard/inbox'
+          id: 'contacts',
+          label: 'Contacts',
+          to: '/dashboard/contacts'
         },
         {
           access: ['CRM'],
@@ -186,9 +137,10 @@ function Menu(props: WithRouterProps) {
         },
         {
           access: ['CRM'],
-          id: 'contacts',
-          label: 'Contacts',
-          to: '/dashboard/contacts'
+          id: 'inbox',
+          label: 'Inbox',
+          notificationCount: inboxNotificationNumber,
+          to: '/dashboard/inbox'
         },
         {
           access: ['CRM'],
@@ -201,12 +153,72 @@ function Menu(props: WithRouterProps) {
       ]
     },
     {
+      access: marketingAccess,
+      hasDivider: false,
+      icon: mdiBullhornOutline,
+      id: 'marketing',
+      label: 'Marketing',
+      subMenu: [
+        {
+          access: ['Marketing'],
+          id: 'overview',
+          label: 'Overview',
+          to: '/dashboard/marketing'
+        },
+        {
+          access: ['Marketing'],
+          id: 'automation',
+          label: 'Automation',
+          to: '/dashboard/flows'
+        },
+        {
+          access: ['AgentNetwork'],
+          id: 'agent-network',
+          label: 'Agent Network',
+          to: '/dashboard/agent-network'
+        },
+        {
+          access: ACL.WEBSITES,
+          id: 'websites',
+          label: 'Websites',
+          to: '/dashboard/websites'
+        },
+        {
+          access: insightAccess,
+          id: 'insights',
+          label: 'Insights',
+          to: '/dashboard/insights'
+        }
+      ]
+    },
+    {
+      access: ['Marketing'],
+      hasDivider: false,
+      icon: mdiHomeCityOutline,
+      id: 'search',
+      label: 'Search',
+      subMenu: [
+        {
+          access: ['Marketing'],
+          id: 'properties',
+          label: 'Properties',
+          to: '/dashboard/mls'
+        },
+        {
+          access: openHouseAccess,
+          id: 'tours',
+          label: 'Tours',
+          to: '/dashboard/tours'
+        }
+      ]
+    },
+    {
       access: ['Marketing'],
       hasChildrenNotification: !!(
         dealsNotificationsNumber || showingsTotalNotificationCount
       ),
       hasDivider: true,
-      icon: mdiSwapHorizontal,
+      icon: mdiCurrencyUsd,
       id: 'transactions',
       label: 'Transactions',
       subMenu: [
@@ -222,12 +234,6 @@ function Menu(props: WithRouterProps) {
           id: 'listings',
           label: 'Listings',
           to: '/dashboard/listings'
-        },
-        {
-          access: openHouseAccess,
-          id: 'tours',
-          label: 'Tours',
-          to: '/dashboard/tours'
         },
         {
           access: ['CRM'],
@@ -246,7 +252,7 @@ function Menu(props: WithRouterProps) {
     },
     {
       access: ['Marketing'],
-      hasDivider: true,
+      hasDivider: false,
       icon: mdiBellOutline,
       id: 'notifications',
       isHidden: !user,
@@ -256,17 +262,24 @@ function Menu(props: WithRouterProps) {
     },
     {
       access: allAccess,
-      icon: mdiHelpCircleOutline,
-      id: 'help-center',
-      label: 'Help Center',
-      action: () => handleOpenExternalLink(brandHelpCenterURL)
-    },
-    {
-      access: allAccess,
-      icon: mdiPhoneOutline,
+      hasDivider: false,
+      icon: mdiHelp,
       id: 'support',
       label: 'Support',
-      action: handleOpenSupportDialogueBox
+      subMenu: [
+        {
+          access: allAccess,
+          id: 'help-center',
+          label: 'Help Center',
+          action: () => handleOpenExternalLink(brandHelpCenterURL)
+        },
+        {
+          access: allAccess,
+          id: 'customer-support',
+          label: 'Customer Support',
+          action: handleOpenSupportDialogueBox
+        }
+      ]
     }
   ]
 

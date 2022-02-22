@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 
 import {
   Accordion,
@@ -7,7 +7,7 @@ import {
   makeStyles,
   Divider
 } from '@material-ui/core'
-import { mdiMenuUp, mdiMenuDown } from '@mdi/js'
+import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
 
 import Acl from '@app/views/components/Acl'
 import { MenuBadge } from '@app/views/components/MenuBadge'
@@ -19,7 +19,9 @@ import {
   AccordionSummaryDot,
   AccordionSummaryLabel,
   SideNavItemLabel,
-  SidenavListGroup
+  SidenavListGroup,
+  IconWrapper,
+  AccordionSummaryIconWrapper
 } from '../styled'
 import { AccordionMenu, ExpandedMenu } from '../types'
 
@@ -29,7 +31,7 @@ const useStyles = makeStyles(
   theme => ({
     divider: {
       backgroundColor: theme.palette.grey[800],
-      margin: theme.spacing(0.75, 1)
+      margin: theme.spacing(0.75, 0)
     },
     accordionRoot: {
       backgroundColor: 'transparent',
@@ -45,7 +47,7 @@ const useStyles = makeStyles(
     accordionSummaryRoot: {
       padding: 0,
       // I had to add !important to force accordionSummary styles to change
-      minHeight: `${theme.spacing(5.5)}px !important`
+      minHeight: `${theme.spacing(4)}px !important`
     },
     accordionSummaryRootExpanded: {
       // Added primary color to the root menu's svg-icon, when it is expanded
@@ -60,6 +62,7 @@ const useStyles = makeStyles(
       margin: '0 !important'
     },
     AccordionDetailsRoot: {
+      margin: theme.spacing(0, 1, 0, 0),
       padding: 0,
       flexDirection: 'column'
     }
@@ -100,7 +103,20 @@ export default function SideNavAccordion({
     isHidden = false
   } = data
 
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null)
+
   const menuId = 'nav-'.concat(id) as ExpandedMenu
+
+  const menuIconWrapper = (
+    <>
+      {(hoveredItem !== menuId || !subMenu) && (
+        <IconWrapper>
+          <SvgIcon path={icon} size={muiIconSizes.small} rightMargined />
+        </IconWrapper>
+      )}
+      <AccordionSummaryLabel>{label}</AccordionSummaryLabel>
+    </>
+  )
 
   return !isHidden ? (
     <Acl access={access}>
@@ -121,6 +137,8 @@ export default function SideNavAccordion({
               expanded: classes.accordionSummaryRootExpanded,
               content: classes.accordionSummaryContent
             }}
+            onMouseEnter={() => setHoveredItem(menuId)}
+            onMouseLeave={() => setHoveredItem(null)}
           >
             <SideNavLinkItem
               onTriggerAction={action}
@@ -130,36 +148,31 @@ export default function SideNavAccordion({
               subMenu={subMenu}
             >
               <AccordionSummaryDiv>
+                {subMenu && hoveredItem === menuId ? (
+                  <AccordionSummaryIconWrapper>
+                    {expandedMenu === menuId ? (
+                      <SvgIcon path={mdiChevronUp} />
+                    ) : (
+                      <SvgIcon path={mdiChevronDown} />
+                    )}
+                  </AccordionSummaryIconWrapper>
+                ) : null}
+
                 {notificationCount ? (
-                  <MenuBadge badgeContent={notificationCount} color="primary">
-                    <SvgIcon
-                      path={icon}
-                      size={muiIconSizes.small}
-                      rightMargined
-                    />
-                    <AccordionSummaryLabel>{label}</AccordionSummaryLabel>
+                  <MenuBadge
+                    badgeContent={notificationCount}
+                    color="primary"
+                    max={9}
+                  >
+                    {menuIconWrapper}
                   </MenuBadge>
                 ) : (
                   <>
-                    <SvgIcon
-                      path={icon}
-                      size={muiIconSizes.small}
-                      rightMargined
-                    />
-                    <AccordionSummaryLabel>
-                      {label}
-                      {hasChildrenNotification ? <AccordionSummaryDot /> : null}
-                    </AccordionSummaryLabel>
+                    {menuIconWrapper}
+                    {hasChildrenNotification ? <AccordionSummaryDot /> : null}
                   </>
                 )}
               </AccordionSummaryDiv>
-              {subMenu ? (
-                expandedMenu === menuId ? (
-                  <SvgIcon path={mdiMenuUp} />
-                ) : (
-                  <SvgIcon path={mdiMenuDown} />
-                )
-              ) : null}
             </SideNavLinkItem>
           </AccordionSummary>
 
@@ -183,6 +196,7 @@ export default function SideNavAccordion({
                           <MenuBadge
                             badgeContent={item.notificationCount}
                             color="primary"
+                            max={9}
                           >
                             <SideNavItemLabel>{item.label}</SideNavItemLabel>
                           </MenuBadge>

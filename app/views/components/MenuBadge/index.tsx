@@ -11,6 +11,7 @@ export const MenuBadge = withStyles((theme: Theme) => ({
     left: 'auto',
     padding: theme.spacing(0.5),
     transform: 'scale(1) translateY(50%)',
-    borderRadius: theme.shape.borderRadius
+    borderRadius: '50%',
+    fontWeight: theme.typography.subtitle3.fontWeight
   }
 }))(Badge)

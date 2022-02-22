@@ -1,6 +1,6 @@
 import { Box, Typography, Tooltip } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { mdiDotsHorizontal } from '@mdi/js'
+import { mdiDotsVertical } from '@mdi/js'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { getActiveBrand } from 'utils/user-teams'
@@ -15,7 +15,7 @@ const useStyles = makeStyles(
     wrapper: {
       display: 'flex',
       width: `calc(100% - ${theme.spacing(3)}px)`,
-      color: theme.palette.common.white,
+      color: theme.palette.grey[400],
       alignItems: 'center'
     },
     userDetails: {
@@ -28,14 +28,14 @@ const useStyles = makeStyles(
       marginRight: theme.spacing(1)
     },
     userDisplayName: {
-      color: theme.palette.common.white,
+      color: theme.palette.grey[400],
       lineHeight: 1.3,
       '&:hover': {
         color: theme.palette.primary.main
       }
     },
     arrowIcon: {
-      color: theme.palette.common.white,
+      color: theme.palette.grey[400],
       marginLeft: theme.spacing(0.5),
       alignSelf: 'center'
     },
@@ -80,7 +80,7 @@ export default function ToggleButton(props: Props) {
           root: classes.dropdownToggleButton,
           rotated: classes.arrowIconRotated
         }}
-        iconPath={mdiDotsHorizontal}
+        iconPath={mdiDotsVertical}
       >
         <Box className={classes.wrapper}>
           {/* <Avatar user={props.user} className={classes.avatar} /> */}

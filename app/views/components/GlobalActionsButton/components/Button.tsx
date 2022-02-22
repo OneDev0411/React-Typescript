@@ -9,8 +9,8 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      padding: theme.spacing(0, 2),
-      marginBottom: theme.spacing(2.5)
+      padding: theme.spacing(0, 1),
+      marginBottom: theme.spacing(4)
     },
     root: {
       borderRadius: theme.shape.borderRadius,

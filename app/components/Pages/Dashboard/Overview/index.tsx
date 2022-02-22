@@ -8,7 +8,7 @@ import Welcome from './Welcome'
 function OverviewDashboard() {
   return (
     <PageLayout>
-      <PageLayout.Header title="Home" />
+      <PageLayout.Header title="Today" />
       <PageLayout.Main>
         <Welcome />
       </PageLayout.Main>

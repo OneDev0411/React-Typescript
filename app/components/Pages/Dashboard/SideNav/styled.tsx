@@ -18,7 +18,7 @@ export const Sidenav = styled.aside`
 `
 
 export const SidenavListGroup = styled.ul`
-  margin: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 2)};
+  margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -31,14 +31,13 @@ export const SideNavItemLabel = styled.div`
 
 const itemStyle = css`
   display: flex;
-  padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 0.5, 0, 1)};
+  padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 0.5)};
   font-size: ${(props: ThemeProps<Theme>) =>
     props.theme.typography.body2.fontSize};
   align-items: center;
   border-radius: ${(props: ThemeProps<Theme>) =>
     `${props.theme.shape.borderRadius}px`};
-  color: ${(props: ThemeProps<Theme>) =>
-    alpha(props.theme.palette.navbar.contrastText, 1)};
+  color: ${(props: ThemeProps<Theme>) => props.theme.palette.grey[400]};
   &:hover {
     text-decoration: none;
     color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
@@ -47,15 +46,17 @@ const itemStyle = css`
     text-decoration: none;
     color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main}};
   }
-  height:${(props: ThemeProps<Theme>) => props.theme.spacing(4)}px;
+  height:${(props: ThemeProps<Theme>) => props.theme.spacing(3.25)}px;
   ${({ active }: ThemeProps<Theme> & { active: boolean }) =>
     active &&
     // !important was added to prevent :hover and :focus to change :active item
     css`
       color: ${(props: ThemeProps<Theme>) =>
-        props.theme.palette.common.black} !important;
+        props.theme.palette.common.white} !important;
+        font-weight: ${(props: ThemeProps<Theme>) =>
+          props.theme.typography.fontWeightBold}};
       background-color: ${(props: ThemeProps<Theme>) =>
-        props.theme.palette.common.white};
+        alpha(props.theme.palette.navbar.contrastText, 0.24)};
 
       svg {
         color: ${(props: ThemeProps<Theme>) =>
@@ -92,11 +93,18 @@ const WrappedRouterLink = ({ active, ...rest }: SidenavLinkPorps) => (
 
 export const SidenavLinkSummary = styled(WrappedRouterLink)<SidenavLinkPorps>`
   ${linkStyle}
+  margin: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 1, 0, 0)};
+  padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 1, 0, 2)};
+  border-radius: ${(props: ThemeProps<Theme>) =>
+    props.theme.spacing(0, 0.5, 0.5, 0)};
 `
 
 export const SidenavLink = styled(WrappedRouterLink)<SidenavLinkPorps>`
   ${linkStyle}
-  margin-bottom: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(1)}px`};
+  padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 1, 0, 2.5)};
+  border-radius: ${(props: ThemeProps<Theme>) =>
+    props.theme.spacing(0, 0.5, 0.5, 0)};
+  margin: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 0, 0.25, 0)};
 `
 
 export const Avatar = styled.div`
@@ -131,13 +139,26 @@ export const AccordionSummaryLabel = styled.span`
 
 export const AccordionSummaryDot = styled.span`
   display: inline-block;
-  width: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.5)}px`};
-  height: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.5)}px`};
+  width: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.75)}px`};
+  height: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.75)}px`};
   position: absolute;
-  top: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.5)}px`};
-  right: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(-1)}px`};
+  right: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(2.75)}px`};
   border-radius: ${(props: ThemeProps<Theme>) =>
     `${props.theme.shape.borderRadius}px`};
   background-color: ${(props: ThemeProps<Theme>) =>
     props.theme.palette.primary.main};
+`
+
+export const IconWrapper = styled.span`
+  padding-left: ${(props: ThemeProps<Theme>) =>
+    `${props.theme.spacing(0.5)}px`};
+  display: flex;
+  align-items: 'center';
+`
+
+export const AccordionSummaryIconWrapper = styled.span`
+  margin-right: ${(props: ThemeProps<Theme>) =>
+    `${props.theme.spacing(0.5)}px`};
+  display: flex;
+  align-items: 'center';
 `

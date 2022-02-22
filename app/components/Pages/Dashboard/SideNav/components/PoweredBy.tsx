@@ -6,11 +6,10 @@ const useStyles = makeStyles(
       padding: theme.spacing(1.5, 3)
     },
     divider: {
-      backgroundColor: theme.palette.grey[800],
-      margin: theme.spacing(0, 3)
+      backgroundColor: theme.palette.grey[800]
     },
     text: {
-      color: theme.palette.common.white
+      color: theme.palette.grey[400]
     },
     logo: {
       opacity: 0.8,
