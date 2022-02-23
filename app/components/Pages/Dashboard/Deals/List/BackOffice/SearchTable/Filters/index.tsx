@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 
-import { Button, Grid } from '@material-ui/core'
+import { Button, Grid, Tooltip } from '@material-ui/core'
 import {
   mdiFileDownloadOutline,
   mdiListStatus,
@@ -10,7 +10,8 @@ import {
   mdiCalendarRemove,
   mdiScriptTextOutline,
   mdiRotateRight,
-  mdiDomain
+  mdiDomain,
+  mdiHelpCircleOutline
 } from '@mdi/js'
 import { saveAs } from 'file-saver'
 import { isEqual, pickBy } from 'lodash'
@@ -38,7 +39,9 @@ import {
   DealsListFilters,
   DealsListPayload,
   DealsOrder,
-  SearchQuery
+  SearchQuery,
+  TPropertyGroupType,
+  TPropertyGroup
 } from '../../types'
 
 import { DateFilterEditor } from './dateFilterEditor'
@@ -47,7 +50,6 @@ import { PropertyTypeEditor } from './propertyTypeEditor'
 import { StatusEditor } from './statusEditor'
 import { useStyles } from './styles'
 import { DEAL_TYPES_ITEMS, TypeEditor } from './typeEditor'
-import { isStatusFilterChanged } from './utils'
 
 interface Props {
   searchQuery: SearchQuery
@@ -67,12 +69,15 @@ export const Filters = ({
 
   const { propertyTypes } = useBrandPropertyTypes(activeBrandId)
 
-  const propertyTypesItems = useMemo(() => {
+  const propertyGroups = useMemo(() => {
     return propertyTypes.reduce((acc, propertyType) => {
-      acc[propertyType.id] = { ...propertyType }
+      const group: TPropertyGroupType = propertyType.is_lease ? 'lease' : 'sale'
+      const oldGroupItems: IDealPropertyType[] = acc[group] || []
+
+      acc[group] = [...oldGroupItems, propertyType]
 
       return acc
-    }, {} as Record<UUID, IDealPropertyType>)
+    }, {} as TPropertyGroup)
   }, [propertyTypes])
 
   const [queryParamValue] = useQueryParam('q')
@@ -105,9 +110,13 @@ export const Filters = ({
   useDebounce(
     () => {
       if (!isFirstMount) {
+        // property_group is not an actual filter that API needed, it's just a way to group properties by type
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { property_group, ...actualFilters } = userFilters
+
         // remove false statuses from the user filters
         const cleanedUserFilters: DealsListFilters = {
-          ...userFilters,
+          ...actualFilters,
           status: pickBy(userFilters.status, v => v === true)
         }
 
@@ -174,13 +183,7 @@ export const Filters = ({
                   <FilterButton
                     onClick={onClick}
                     startIconPath={mdiDomain}
-                    title={
-                      currentFilters.property_type &&
-                      currentFilters.property_type.length === 1
-                        ? propertyTypesItems[currentFilters.property_type[0]]
-                            .label
-                        : 'Property type'
-                    }
+                    title="Property type"
                     isActive={
                       !isEqual(
                         currentFilters.property_type?.sort(),
@@ -191,7 +194,7 @@ export const Filters = ({
                 )}
                 renderDropdown={() => (
                   <PropertyTypeEditor
-                    propertyTypesItems={propertyTypesItems}
+                    propertyGroups={propertyGroups}
                     filters={currentFilters}
                     updateFilters={updateFilters}
                     defaultFilters={systemDefaultFilters}
@@ -206,10 +209,12 @@ export const Filters = ({
                     onClick={onClick}
                     title="Status"
                     startIconPath={mdiListStatus}
-                    isActive={isStatusFilterChanged(
-                      systemDefaultFilters,
-                      currentFilters
-                    )}
+                    isActive={
+                      !isEqual(
+                        currentFilters.status,
+                        systemDefaultFilters.status
+                      )
+                    }
                   />
                 )}
                 renderDropdown={() => (
@@ -278,10 +283,8 @@ export const Filters = ({
               </div>
 
               {/* Only `Sale` type related date filters  */}
-              {currentFilters.property_type &&
-                !currentFilters.property_type.some(
-                  id => propertyTypesItems[id].is_lease === true
-                ) && (
+              {currentFilters.property_group?.length === 1 &&
+                currentFilters.property_group[0] === 'sale' && (
                   <div className={classes.buttonGroup}>
                     {/* contract date Filter  */}
                     <BaseFilterButton
@@ -340,10 +343,8 @@ export const Filters = ({
                 )}
 
               {/* Only `Lease` type related date filters  */}
-              {currentFilters.property_type &&
-                !currentFilters.property_type.some(
-                  id => propertyTypesItems[id].is_lease === false
-                ) && (
+              {currentFilters.property_group?.length === 1 &&
+                currentFilters.property_group[0] === 'lease' && (
                   <div className={classes.buttonGroup}>
                     {/* lease begin Filter  */}
                     <BaseFilterButton
@@ -400,6 +401,18 @@ export const Filters = ({
                     />
                   </div>
                 )}
+
+              {/* Display the help button if both lease and sale are selected or neither  */}
+              {currentFilters.property_group?.length !== 1 && (
+                <Tooltip title="To see date filters related to lease or sale property types, you mus only select from one of those property type categories at once.">
+                  <div className={classes.helpWrapper}>
+                    <SvgIcon
+                      size={muiIconSizes.small}
+                      path={mdiHelpCircleOutline}
+                    />
+                  </div>
+                </Tooltip>
+              )}
             </Grid>
 
             <Grid className={classes.actionsWrapper}>

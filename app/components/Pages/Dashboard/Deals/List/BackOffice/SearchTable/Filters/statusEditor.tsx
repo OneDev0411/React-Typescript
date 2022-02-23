@@ -53,7 +53,7 @@ export const StatusEditor = ({
           }}
           control={
             <Switch
-              checked={filters.status[status] || false}
+              checked={!!filters.status[status]}
               className={classes.switchControlButton}
               color="primary"
               name={status}

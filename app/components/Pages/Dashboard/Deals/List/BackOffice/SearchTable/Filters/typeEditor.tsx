@@ -10,7 +10,7 @@ import { useStyles } from './styles'
 
 export const DEAL_TYPES_ITEMS: Record<IDealType, string> = {
   Selling: 'Listings',
-  Buying: 'Contracts'
+  Buying: 'Buyings'
 }
 
 export const TypeEditor = ({
