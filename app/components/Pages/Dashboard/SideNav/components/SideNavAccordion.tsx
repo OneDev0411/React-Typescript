@@ -47,7 +47,7 @@ const useStyles = makeStyles(
     accordionSummaryRoot: {
       padding: 0,
       // I had to add !important to force accordionSummary styles to change
-      minHeight: `${theme.spacing(4)}px !important`
+      minHeight: `${theme.spacing(5.5)}px !important`
     },
     accordionSummaryRootExpanded: {
       // Added primary color to the root menu's svg-icon, when it is expanded

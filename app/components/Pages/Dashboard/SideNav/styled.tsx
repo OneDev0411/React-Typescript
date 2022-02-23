@@ -46,7 +46,7 @@ const itemStyle = css`
     text-decoration: none;
     color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main}};
   }
-  height:${(props: ThemeProps<Theme>) => props.theme.spacing(3.25)}px;
+  height:${(props: ThemeProps<Theme>) => props.theme.spacing(4)}px;
   ${({ active }: ThemeProps<Theme> & { active: boolean }) =>
     active &&
     // !important was added to prevent :hover and :focus to change :active item
@@ -104,7 +104,7 @@ export const SidenavLink = styled(WrappedRouterLink)<SidenavLinkPorps>`
   padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 1, 0, 2.5)};
   border-radius: ${(props: ThemeProps<Theme>) =>
     props.theme.spacing(0, 0.5, 0.5, 0)};
-  margin: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 0, 0.25, 0)};
+  margin: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 0, 1, 0)};
 `
 
 export const Avatar = styled.div`
