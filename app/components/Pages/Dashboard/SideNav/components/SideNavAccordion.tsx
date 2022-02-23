@@ -142,7 +142,7 @@ export default function SideNavAccordion({
           >
             <SideNavLinkItem
               onTriggerAction={action}
-              to={to}
+              to={to || subMenu?.[0]?.to}
               tourId={menuId}
               onExpandedMenu={setExpandedMenu}
               subMenu={subMenu}

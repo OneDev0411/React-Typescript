@@ -6,7 +6,7 @@ export const MenuBadge = withStyles((theme: Theme) => ({
     alignItems: 'center'
   },
   anchorOriginTopRightRectangle: {
-    top: theme.spacing(-1.25),
+    top: theme.spacing(-1),
     right: 0,
     left: 'auto',
     padding: theme.spacing(0.5),

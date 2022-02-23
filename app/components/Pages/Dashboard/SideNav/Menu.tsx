@@ -122,7 +122,6 @@ function Menu(props: WithRouterProps) {
       icon: mdiAccountMultipleOutline,
       id: 'people',
       label: 'People',
-      to: '/dashboard/contacts',
       subMenu: [
         {
           access: ['CRM'],
@@ -159,7 +158,6 @@ function Menu(props: WithRouterProps) {
       icon: mdiBullhornOutline,
       id: 'marketing',
       label: 'Marketing',
-      to: '/dashboard/marketing',
       subMenu: [
         {
           access: ['Marketing'],
@@ -199,7 +197,6 @@ function Menu(props: WithRouterProps) {
       icon: mdiHomeCityOutline,
       id: 'search',
       label: 'Search',
-      to: '/dashboard/mls',
       subMenu: [
         {
           access: ['Marketing'],
@@ -224,7 +221,6 @@ function Menu(props: WithRouterProps) {
       icon: mdiCurrencyUsd,
       id: 'transactions',
       label: 'Transactions',
-      to: '/dashboard/deals',
       subMenu: [
         {
           access: dealsAccess,
