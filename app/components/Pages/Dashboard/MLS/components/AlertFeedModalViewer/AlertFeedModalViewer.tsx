@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
-
-import { getAlertFeed } from '@app/models/listings/alerts/get-alert-feed'
+import { useAlertFeed } from '@app/models/listings/alerts/use-alert-feed'
 
 import AlertViewerModal from './AlertViewerModal'
 
@@ -15,39 +13,12 @@ export default function AlertFeedModalViewer({
   isOpen,
   onClose
 }: Props) {
-  const [feed, setFeed] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const { isLoading, data } = useAlertFeed(alert.id, alert.room, isOpen)
 
-  const fetchFeed = useCallback(async () => {
-    let feed = []
-    const alertId = alert.id
-    const roomId = alert.room
-
-    setIsLoading(true)
-
-    try {
-      const response = await getAlertFeed(alertId, roomId)
-
-      if (response) {
-        feed = response[alertId]
-      }
-    } catch (error) {
-      console.log(error)
-    }
-
-    setFeed(feed)
-    setIsLoading(false)
-  }, [alert.id, alert.room])
-
-  useEffect(() => {
-    if (isOpen && !isLoading && feed.length === 0) {
-      fetchFeed()
-    }
-  }, [isOpen, isLoading, fetchFeed, feed.length])
+  const feed = data ? data[alert.id] : []
 
   const handleClose = () => {
     onClose()
-    setFeed([])
   }
 
   return (

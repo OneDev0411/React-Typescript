@@ -20,25 +20,27 @@ const useStyles = makeStyles(
       display: 'flex',
       flexDirection: 'row',
       padding: theme.spacing(0, 1),
+      overflow: 'hidden',
       '&:hover $title': {
         color: theme.palette.text.primary
       }
     },
     titleContainer: {
-      width: '100%'
+      display: 'flex',
+      alignItems: 'center',
+      minWidth: theme.spacing(15),
+      gap: theme.spacing(1)
     },
     title: {
-      width: '100%',
       color: theme.palette.grey[600]
     },
     value: {
+      flex: '1 0 auto',
       display: 'inline-block',
-      width: '100%',
       whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textAlign: 'right',
       msTextOverflow: 'ellipsis',
       textOverflow: 'ellipsis',
+      textAlign: 'right',
       color: theme.palette.grey[900]
     },
     triggerIndicator: {
@@ -71,26 +73,26 @@ export function ViewMode(props: Props) {
           className={classes.title}
           data-test={`contact-attribute${title ? `-${title}` : ''}`}
         >
-          <span>{title}</span>
-          {props.is_primary && (
-            <Tooltip title="Primary">
-              <SvgIcon
-                path={mdiStarOutline}
-                leftMargined
-                className={classes.starIcon}
-                size={muiIconSizes.small}
-              />
-            </Tooltip>
-          )}
-          {props.isTriggerable && (
+          {title}
+        </Typography>
+
+        {props.is_primary && (
+          <Tooltip title="Primary">
             <SvgIcon
-              path={mdiLightningBoltOutline}
-              leftMargined
-              className={classes.triggerIcon}
+              path={mdiStarOutline}
+              className={classes.starIcon}
               size={muiIconSizes.small}
             />
-          )}
-        </Typography>
+          </Tooltip>
+        )}
+
+        {props.isTriggerable && (
+          <SvgIcon
+            path={mdiLightningBoltOutline}
+            className={classes.triggerIcon}
+            size={muiIconSizes.small}
+          />
+        )}
       </Box>
       <Box className={classes.value}>
         <Typography variant="body2">{props.value || '-'}</Typography>
