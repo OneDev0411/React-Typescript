@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react'
-
 import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 
@@ -7,7 +5,7 @@ import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
 import { isSuperCampaignDueAtTimeout } from '../../helpers'
-import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
+import { useSuperCampaign } from '../SuperCampaignProvider'
 
 import { isSuperCampaignEnrollmentOptedOut } from './helpers'
 import SuperCampaignColumnPerson from './SuperCampaignColumnPerson'
@@ -15,9 +13,7 @@ import SuperCampaignEnrollmentListColumnActions from './SuperCampaignEnrollmentL
 import SuperCampaignEnrollmentListColumnTags from './SuperCampaignEnrollmentListColumnTags'
 import SuperCampaignListEmptyState from './SuperCampaignListEmptyState'
 import SuperCampaignListLoadingState from './SuperCampaignListLoadingState'
-import { useDeleteSuperCampaignEnrollment } from './use-delete-super-campaign-enrollment'
 import { useSuperCampaignListStyles } from './use-super-campaign-list-styles'
-import { useUpdateSuperCampaignEnrollmentTags } from './use-update-super-campaign-enrollment-tags'
 
 const useStyles = makeStyles(
   theme => ({
@@ -38,34 +34,17 @@ const useStyles = makeStyles(
 interface SuperCampaignEnrollmentListProps {
   isLoading: boolean
   superCampaignEnrollments: ISuperCampaignEnrollment<'user' | 'brand'>[]
-  setSuperCampaignEnrollments: Dispatch<
-    SetStateAction<ISuperCampaignEnrollment<'user' | 'brand'>[]>
-  >
 }
 
 function SuperCampaignEnrollmentList({
   isLoading,
-  superCampaignEnrollments,
-  setSuperCampaignEnrollments
+  superCampaignEnrollments
 }: SuperCampaignEnrollmentListProps) {
-  const { superCampaign } = useSuperCampaignDetail()
+  const superCampaign = useSuperCampaign()
   const isCampaignDueAtTimeout = isSuperCampaignDueAtTimeout(superCampaign)
 
   const classes = useStyles()
   const listClasses = useSuperCampaignListStyles()
-
-  const updateSuperCampaignEnrollmentTags =
-    useUpdateSuperCampaignEnrollmentTags(
-      superCampaign.id,
-      superCampaignEnrollments,
-      setSuperCampaignEnrollments
-    )
-
-  const deleteSuperCampaignEnrollment = useDeleteSuperCampaignEnrollment(
-    superCampaign.id,
-    superCampaignEnrollments,
-    setSuperCampaignEnrollments
-  )
 
   const columns: TableColumn<ISuperCampaignEnrollment<'user' | 'brand'>>[] = [
     {
@@ -86,11 +65,7 @@ function SuperCampaignEnrollmentList({
       sortable: false,
       class: classes.tags,
       render: ({ row }) => (
-        <SuperCampaignEnrollmentListColumnTags
-          isOptedOut={isSuperCampaignEnrollmentOptedOut(row)}
-          tags={row.tags}
-          onTagsChange={tags => updateSuperCampaignEnrollmentTags(row.id, tags)}
-        />
+        <SuperCampaignEnrollmentListColumnTags superCampaignEnrollment={row} />
       )
     },
     {
@@ -105,7 +80,7 @@ function SuperCampaignEnrollmentList({
           <SuperCampaignEnrollmentListColumnActions
             className={!isOptedOut ? classes.hide : undefined}
             isOptedOut={isOptedOut}
-            onDelete={() => deleteSuperCampaignEnrollment(row.id)}
+            superCampaignEnrollment={row}
           />
         )
       }

@@ -1,12 +1,11 @@
 import { Button, Typography, makeStyles } from '@material-ui/core'
 
+import { useUpdateSuperCampaignTags } from '@app/models/super-campaign'
 import SuperCampaignDisplayTags from '@app/views/components/SuperCampaignDisplayTags'
 import SuperCampaignTagsPopover from '@app/views/components/SuperCampaignTagsPopover'
 
 import { isSuperCampaignReadOnly } from '../../helpers'
-import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
-
-import { useUpdateSuperCampaignTags } from './use-update-super-campaign-tags'
+import { useSuperCampaign } from '../SuperCampaignProvider'
 
 const useStyles = makeStyles(
   {
@@ -18,14 +17,15 @@ const useStyles = makeStyles(
 function SuperCampaignEligibleCardTags() {
   const classes = useStyles()
 
-  const { superCampaign, setSuperCampaign } = useSuperCampaignDetail()
+  const superCampaign = useSuperCampaign()
 
-  const { isSaving, updateSuperCampaignTags } = useUpdateSuperCampaignTags(
-    superCampaign,
-    setSuperCampaign
-  )
+  const { isLoading, mutateAsync } = useUpdateSuperCampaignTags()
 
   const isReadOnly = isSuperCampaignReadOnly(superCampaign)
+
+  const handleTagsChange = async (tags: string[]) => {
+    await mutateAsync({ superCampaignId: superCampaign.id, tags })
+  }
 
   return (
     <Typography variant="body2" component="div">
@@ -36,13 +36,13 @@ function SuperCampaignEligibleCardTags() {
       {!isReadOnly && (
         <SuperCampaignTagsPopover
           tags={superCampaign.tags ?? []}
-          onTagsChange={updateSuperCampaignTags}
+          onTagsChange={handleTagsChange}
           anchorRenderer={onClick => (
             <Button
               onClick={onClick}
               color="primary"
               size="small"
-              disabled={isSaving}
+              disabled={isLoading}
               className={classes.edit}
             >
               Edit
