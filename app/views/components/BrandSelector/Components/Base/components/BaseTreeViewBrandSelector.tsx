@@ -97,6 +97,7 @@ export function BaseTreeViewBrandSelector({
     <>
       <div className={classes.searchContainer}>
         <Search
+          autoFocus
           placeholder={searchPlaceholder}
           onChange={value => debouncedSetQuery(value)}
         />
