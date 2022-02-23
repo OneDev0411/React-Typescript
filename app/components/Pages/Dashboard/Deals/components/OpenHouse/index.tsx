@@ -5,6 +5,7 @@ import { PopoverActions } from '@material-ui/core/Popover'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useActiveBrandSettings } from '@app/hooks/brand/use-active-brand-settings'
 import {
   setSelectedTask,
   updateTask,
@@ -16,7 +17,6 @@ import { createTaskComment } from 'deals/utils/create-task-comment'
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { selectUser } from 'selectors/user'
-import { getActiveTeamSettings, getActiveTeamId } from 'utils/user-teams'
 
 import Form from './Form'
 import List from './List'
@@ -36,16 +36,12 @@ function OpenHouses({
 }: Props & WithRouterProps) {
   const dispatch = useDispatch()
 
-  const { activeTeamId, checklists } = useSelector(
-    ({ user, deals }: IAppState) => ({
-      user,
-      activeTeamId: getActiveTeamId(user),
-      checklists: getDealChecklists(deal, deals.checklists)
-    })
-  )
   const user = useSelector(selectUser)
+  const checklists = useSelector(({ deals }: IAppState) =>
+    getDealChecklists(deal, deals.checklists)
+  )
 
-  const activeBrandSettings = getActiveTeamSettings(user, true)
+  const activeBrandSettings = useActiveBrandSettings(true)
   const { enable_open_house_requests: showOpenHouse } = activeBrandSettings
 
   const confirmation = useContext(ConfirmationModalContext)
@@ -169,7 +165,6 @@ function OpenHouses({
           ) : (
             <List
               deal={deal}
-              activeTeamId={activeTeamId}
               onClickNewItem={() => setShowForm(true)}
               onSelectItem={task => dispatch(setSelectedTask(task))}
               onClickEdit={handleClickEdit}

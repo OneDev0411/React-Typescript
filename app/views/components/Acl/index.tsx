@@ -13,7 +13,6 @@ interface Props {
   fallback?: React.ReactNode
   children: React.ReactNode
   fallbackUrl?: string
-  accessControlPolicy?: IAccessControlPolicy
 }
 
 /**
@@ -34,14 +33,8 @@ interface Props {
  * <Acl access={{oneOf: [ACL.BACK_OFFICE, ACL.DEAL]}}>Agent or BackOffice</Acl>
  * ```
  */
-function Acl({
-  access,
-  fallback = null,
-  fallbackUrl,
-  accessControlPolicy,
-  children
-}: Props) {
-  const userHasAccess = useAcl(access, { accessControlPolicy })
+function Acl({ access, fallback = null, fallbackUrl, children }: Props) {
+  const userHasAccess = useAcl(access)
 
   useEffect(() => {
     if (!userHasAccess && fallbackUrl) {

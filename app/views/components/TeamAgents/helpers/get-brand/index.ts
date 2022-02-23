@@ -1,8 +1,7 @@
-import { getActiveTeam } from 'utils/user-teams'
-
-export function getBrand(user: IUser, isPrimaryAgent: boolean): UUID | null {
-  const team = getActiveTeam(user)
-
+export function getBrand(
+  team: Nullable<IUserTeam>,
+  isPrimaryAgent: boolean
+): Nullable<UUID> {
   if (!team) {
     return null
   }

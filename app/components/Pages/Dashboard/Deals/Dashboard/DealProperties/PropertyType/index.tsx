@@ -1,14 +1,13 @@
 import { Button, MenuItem, makeStyles, Theme } from '@material-ui/core'
 import { mdiChevronDown } from '@mdi/js'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { updatePropertyType } from 'actions/deals'
 import { BaseDropdown } from 'components/BaseDropdown'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { ItemValue } from '../../Factsheet/styled'
 
@@ -32,9 +31,9 @@ interface Props {
 export function PropertyType(props: Props) {
   const dispatch = useDispatch()
   const classes = useStyles()
+  const activeBrandId = useActiveBrandId()
 
-  const user = useSelector(selectUser)
-  const { propertyTypes } = useBrandPropertyTypes(getActiveTeamId(user)!)
+  const { propertyTypes } = useBrandPropertyTypes(activeBrandId)
 
   const handleChange = async (value: string) => {
     try {

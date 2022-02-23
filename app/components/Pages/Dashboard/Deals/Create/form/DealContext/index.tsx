@@ -11,7 +11,9 @@ import {
 import fecha from 'fecha'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { ACL } from '@app/constants/acl'
 import { convertUnixtimeToUtc } from '@app/utils/convert-unixitme-to-utc'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 import { upsertContexts } from 'actions/deals'
 import DatePicker from 'components/DatePicker'
 import { MaskedInput } from 'components/MaskedInput'
@@ -30,7 +32,6 @@ import { validateContext } from 'models/Deal/helpers/context/validate-context'
 import { IAppState } from 'reducers'
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 import { getDealChecklists } from 'reducers/deals/checklists'
-import { isBackOffice } from 'utils/user-teams'
 
 import { useCreationContext } from '../../context/use-creation-context'
 
@@ -71,7 +72,8 @@ export function DealContext({
 
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal, user } = useCreationContext()
+  const { deal } = useCreationContext()
+  const isBackOffice = useAcl(ACL.BACK_OFFICE)
 
   const { checklists, brandChecklists } = useSelector(
     ({ deals }: IAppState) => ({
@@ -148,7 +150,7 @@ export function DealContext({
 
     if (deal && !onChange) {
       try {
-        const approved = isBackOffice(user) ? true : !context.needs_approval
+        const approved = isBackOffice ? true : !context.needs_approval
         const data = createContextObject(
           deal,
           brandChecklists,

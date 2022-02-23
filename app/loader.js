@@ -1,4 +1,3 @@
-import React from 'react'
 import Loadable from 'react-loadable'
 
 import { AnimatedLoader } from 'components/AnimatedLoader'

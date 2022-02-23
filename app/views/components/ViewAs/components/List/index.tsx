@@ -96,7 +96,7 @@ export const MemberList = ({
     const payload = isAllSelected ? null : selectedMembers
 
     setIsSubmitting(true)
-    await dispatch(setViewAsFilter(user, payload))
+    await dispatch(setViewAsFilter(payload))
 
     window.location.reload()
   }

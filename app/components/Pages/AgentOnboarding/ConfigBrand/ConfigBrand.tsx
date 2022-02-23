@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 
 import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
@@ -7,6 +7,7 @@ import { Form, Field } from 'react-final-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { updateUser } from 'actions/user'
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
@@ -15,7 +16,6 @@ import { getTeams } from 'models/user/get-teams'
 import { putUserSetting } from 'models/user/put-user-setting'
 import getVerificationCode from 'models/verify/request'
 import { selectUser } from 'selectors/user'
-import { getActiveBrand } from 'utils/user-teams'
 
 import { useCommonStyles } from '../common-styles'
 import Container from '../Container'
@@ -33,7 +33,7 @@ export function ConfigBrand() {
   const dispatch = useDispatch()
   const commonClasses = useCommonStyles()
   const user = useSelector(selectUser)
-  const activeBrand = getActiveBrand(user)
+  const activeBrand = useUnsafeActiveBrand()
 
   const getNextStep = useCallback(() => {
     let nextStepUrl = 'oauth-accounts'
@@ -82,21 +82,22 @@ export function ConfigBrand() {
         ]
       )
 
-      const teams = await getTeams(user)
+      const teams = await getTeams()
       const personalTeam = teams.find(
         team => team.brand.brand_type === 'Personal'
       )
 
-      await putUserSetting('user_filter', [], personalTeam.brand.id)
+      if (personalTeam) {
+        await putUserSetting('user_filter', [], personalTeam.brand.id)
 
-      dispatch(
-        updateUser({
-          ...user,
-          active_brand: personalTeam.brand.id,
-          brand: personalTeam.brand.id,
-          teams
-        })
-      )
+        dispatch(
+          updateUser({
+            ...user,
+            active_brand: personalTeam.brand.id,
+            brand: personalTeam.brand.id
+          })
+        )
+      }
 
       browserHistory.push(getNextStep())
     } catch (error) {

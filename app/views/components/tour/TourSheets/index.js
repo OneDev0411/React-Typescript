@@ -1,12 +1,15 @@
-import React from 'react'
+import { useMemo } from 'react'
 
 import PropTypes from 'prop-types'
+
+import usePrintLayout from '@app/hooks/use-print-layout'
 
 import BareModal from '../../BareModal'
 
 import { CoverPage } from './CoverPage'
 import { Header } from './Header'
 import { LocationPage } from './LocationPage'
+
 import './styles/main.scss'
 
 TourSheets.propTypes = {
@@ -18,43 +21,46 @@ TourSheets.propTypes = {
 }
 
 export function TourSheets(props) {
+  usePrintLayout('portrait')
+
   const { tour, listings, handleClose } = props
   const pageTitle = 'Tour Sheets Preview'
-  let agent = tour && tour.created_by
 
-  if (!agent || agent.id === props.agent.id) {
-    agent = props.agent
-  } else if (agent && agent.active_brand === props.agent.active_brand) {
-    agent.teams = props.agent.teams
-  }
+  const tourSheetAgent = useMemo(() => {
+    let agent = tour && tour.created_by
 
-  if (!agent.teams) {
-    agent.teams = props.agent.teams
-  }
+    if (!agent || agent.id === props.agent.id) {
+      agent = props.agent
+    }
+
+    return agent
+  }, [props.agent, tour])
 
   return (
-    <BareModal
-      isOpen
-      className="c-tour-sheets"
-      overlayClassName="c-tour-sheets-modal"
-      contentLabel={pageTitle}
-      onRequestClose={handleClose}
-    >
-      <Header
-        className="c-tour-sheets-modal__header"
-        handleClose={handleClose}
-        title={pageTitle}
-      />
-      <CoverPage tour={tour} listings={listings} agent={agent} />
-      {listings.map((listing, index) => (
-        <LocationPage
-          key={index}
-          index={index}
-          listing={listing}
-          tour={tour}
-          agent={agent}
+    <>
+      <BareModal
+        isOpen
+        className="c-tour-sheets"
+        overlayClassName="c-tour-sheets-modal"
+        contentLabel={pageTitle}
+        onRequestClose={handleClose}
+      >
+        <Header
+          className="c-tour-sheets-modal__header"
+          handleClose={handleClose}
+          title={pageTitle}
         />
-      ))}
-    </BareModal>
+        <CoverPage tour={tour} listings={listings} agent={tourSheetAgent} />
+        {listings.map((listing, index) => (
+          <LocationPage
+            key={index}
+            index={index}
+            listing={listing}
+            tour={tour}
+            agent={tourSheetAgent}
+          />
+        ))}
+      </BareModal>
+    </>
   )
 }
