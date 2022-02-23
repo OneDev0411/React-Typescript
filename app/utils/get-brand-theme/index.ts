@@ -19,7 +19,7 @@ export const getBrandTheme = (brand?: Nullable<IBrand>): ThemeOptions => {
 
   let currentBrand: Nullable<IBrand> = { ...brand }
 
-  while (currentBrand.parent) {
+  while (currentBrand) {
     if (hasCustomTheme(currentBrand)) {
       return currentBrand.settings?.theme ?? {}
     }
