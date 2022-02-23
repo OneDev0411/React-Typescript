@@ -9,14 +9,17 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   theme => ({
-    container: {
+    container: ({ width }: { width: number | string }) => ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'end',
 
       height: '100%',
-      width: '100%',
+      width,
       backgroundColor: `${alpha(theme.palette.grey[50], 0.75)}`,
+      borderRight: `1px solid ${theme.palette.divider}`,
+      borderTop: `1px solid ${theme.palette.divider}`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
       cursor: 'pointer',
 
       '&.primary': {
@@ -26,11 +29,10 @@ const useStyles = makeStyles(
       '&:hover': {
         backgroundColor: `${alpha(theme.palette.grey[100], 0.75)}`
       }
-    },
+    }),
     iconContainer: {
       width: '32px',
       height: '100%',
-      fontSize: theme.spacing(0.75),
       color: theme.palette.grey[500],
       display: 'flex',
       alignItems: 'center',
@@ -42,16 +44,15 @@ const useStyles = makeStyles(
       alignItems: 'center',
       color: theme.palette.grey[700],
       padding: theme.spacing(0, 1),
-      height: '100%',
-      letterSpacing: '0.15px'
+      height: '100%'
     },
     sortActionContainer: {
       display: 'flex',
       alignItems: 'center',
+      width: '32px',
       justifyContent: 'center',
       color: `${theme.palette.grey[500]}`,
-      fontSize: theme.spacing(0.75),
-      width: theme.spacing(4)
+      fontSize: theme.spacing(0.75)
     },
     sortIconBg: {
       display: 'none',
@@ -87,6 +88,7 @@ interface Props {
   sortable?: boolean
   sortDirection?: 'asc' | 'desc'
   isPrimary?: boolean
+  width: number | string
 }
 
 const ColumnHeaderCell = ({
@@ -94,9 +96,10 @@ const ColumnHeaderCell = ({
   iconPath,
   sortDirection,
   isPrimary = false,
-  sortable = false
+  sortable = false,
+  width = '100%'
 }: Props) => {
-  const classes = useStyles()
+  const classes = useStyles({ width })
 
   const [isHovered, setIsHovered] = useState(false)
   const onHoverIn = () => setIsHovered(true)

@@ -38,12 +38,14 @@ interface Props {
   isPrimary?: boolean
   isRowSelected?: boolean
   onCellSelect?: (e) => void
+  width: number | string
 }
 
 export const EditTextCell = ({
   text = '',
   isPrimary = false,
-  isRowSelected = false
+  isRowSelected = false,
+  width
 }: Props) => {
   const classes = useStyles()
 
@@ -71,6 +73,7 @@ export const EditTextCell = ({
     <CellContainer
       isSelectable={false}
       actionsActivated={false}
+      width={width}
       renderCellContent={renderCellContent}
       renderInlineEdit={renderInlineEdit}
     />

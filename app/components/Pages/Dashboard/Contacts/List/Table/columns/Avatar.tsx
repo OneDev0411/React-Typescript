@@ -1,5 +1,3 @@
-import { Typography } from '@material-ui/core'
-
 import { Avatar } from 'components/Avatar'
 import {
   getAttributeFromSummary,
@@ -22,9 +20,7 @@ function ContactAvatar({ contact }: Props) {
       showStatus
       isOnline={getContactOnlineStatus(contact)}
     >
-      <Typography variant="overline">
-        {getContactNameInitials(contact)}
-      </Typography>
+      {getContactNameInitials(contact)}
     </Avatar>
   )
 }

@@ -33,24 +33,25 @@ interface Props {
   renderInlineEdit?: () => React.ReactElement
   renderCellContent: (props: CellProps) => React.ReactNode
   onCellSelect?: (e) => void
-  onEnterEdit?: (isEditing: boolean) => void
   actions?: Record<string, CellAction>
+  width: number | string
+  stopPropagation?: boolean // temporary till phase 2
 }
 
 const useStyles = makeStyles(
   theme => ({
-    container: {
+    container: ({ width }: { width: number | string }) => ({
       position: 'relative',
       display: 'flex',
       alignItems: 'center',
       height: '100%',
-      width: '100%',
+      width,
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       borderRight: `1px solid ${theme.palette.divider}`,
       borderBottom: `1px solid ${theme.palette.divider}`,
       whiteSpace: 'nowrap'
-    },
+    }),
     visibleOverflow: {
       overflow: 'visible'
     },
@@ -105,9 +106,11 @@ const CellContainer = ({
   renderCellContent,
   renderInlineEdit,
   rowSize = '40px',
-  actions = {}
+  actions = {},
+  width,
+  stopPropagation = false
 }: Props) => {
-  const classes = useStyles()
+  const classes = useStyles({ width })
 
   const [isEditing, setIsEditing] = useState(false)
   const [isHovered, setIsHovered] = useState(false)

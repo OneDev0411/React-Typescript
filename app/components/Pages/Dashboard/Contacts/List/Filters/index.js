@@ -29,7 +29,7 @@ import getUniqTags from './helpers/get-uniq-tags'
 const useStyles = makeStyles(theme =>
   createStyles({
     infoContainer: {
-      display: 'none',
+      display: 'inline-block',
       marginLeft: theme.spacing(2)
     },
     toggleAll: {

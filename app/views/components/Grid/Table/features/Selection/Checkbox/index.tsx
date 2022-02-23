@@ -3,8 +3,7 @@ import React, { useState, useEffect, ChangeEvent } from 'react'
 import {
   Checkbox as MUICheckbox,
   CheckboxProps as MUICheckBoxProp,
-  Tooltip,
-  makeStyles
+  Tooltip
 } from '@material-ui/core'
 
 interface Props extends Omit<MUICheckBoxProp, 'checked' | 'onChange'> {
@@ -12,15 +11,6 @@ interface Props extends Omit<MUICheckBoxProp, 'checked' | 'onChange'> {
   tooltipTitle?: string
   onChange: () => void
 }
-
-const useStyles = makeStyles(
-  theme => ({
-    checkBox: {
-      padding: theme.spacing(0.25)
-    }
-  }),
-  { name: 'ContactCheckBox' }
-)
 
 export default function Checkbox({
   checked,
@@ -30,7 +20,6 @@ export default function Checkbox({
   ...props
 }: Props) {
   const [isChecked, setIsChecked] = useState<boolean>(checked)
-  const classes = useStyles()
 
   useEffect(() => {
     setIsChecked(checked)
@@ -45,7 +34,6 @@ export default function Checkbox({
     <MUICheckbox
       {...props}
       size="small"
-      className={classes.checkBox}
       checked={isChecked}
       indeterminate={indeterminate}
       onChange={handleToggleRow}

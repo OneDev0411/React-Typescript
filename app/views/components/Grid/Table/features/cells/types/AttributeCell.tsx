@@ -21,6 +21,7 @@ interface Props {
   attributeLabel?: string
   actions?: Record<string, CellAction>
   valueFormatter?: (value: string) => string
+  width: number | string
 }
 
 const useStyles = makeStyles(
@@ -62,7 +63,8 @@ export const AttributeCell = ({
   attributeDescription,
   attributeLabel = 'Main',
   valueFormatter,
-  actions = {}
+  actions = {},
+  width
 }: Props) => {
   const classes = useStyles()
 
@@ -162,6 +164,7 @@ export const AttributeCell = ({
       actionsActivated
       actions={attributeActions}
       isEmpty={isEmpty}
+      width={width}
       renderCellContent={renderCellContent}
       renderInlineEdit={renderInlineEdit}
     />

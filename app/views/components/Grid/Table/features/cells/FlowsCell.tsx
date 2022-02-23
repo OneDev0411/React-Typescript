@@ -32,9 +32,15 @@ interface Props {
   contact: IContact
   callback: () => void
   isRowSelected?: boolean
+  width: number | string
 }
 
-const FlowsCell = ({ contact, callback, isRowSelected = false }: Props) => {
+const FlowsCell = ({
+  contact,
+  callback,
+  isRowSelected = false,
+  width
+}: Props) => {
   const classes = useStyles()
 
   const flowsCount = Array.isArray(contact.flows) ? contact.flows.length : 0
@@ -67,7 +73,13 @@ const FlowsCell = ({ contact, callback, isRowSelected = false }: Props) => {
     )
   }
 
-  return <CellContainer renderCellContent={renderCellContent} />
+  return (
+    <CellContainer
+      renderCellContent={renderCellContent}
+      width={width}
+      stopPropagation
+    />
+  )
 }
 
 export default FlowsCell

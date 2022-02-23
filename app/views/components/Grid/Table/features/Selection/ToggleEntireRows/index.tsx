@@ -12,8 +12,12 @@ const useStyles = makeStyles(
       justifyContent: 'flex-end',
       overflow: 'initial',
       width: '60px',
+      minWidth: '60px',
       paddingRight: theme.spacing(0.5),
       flex: '0 0 60px',
+
+      borderTop: `1px solid ${theme.palette.divider}`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
 
       backgroundColor: `${alpha(theme.palette.grey[50], 0.75)}`,
       cursor: 'pointer',
@@ -27,7 +31,7 @@ const useStyles = makeStyles(
 )
 
 interface Props<Row> {
-  rows: (Row & { id?: UUID })[]
+  rows: Row[]
   totalRows: number
 }
 

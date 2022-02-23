@@ -10,20 +10,21 @@ import {
 import cn from 'classnames'
 
 import { useBreakpoint } from '@app/hooks/use-breakpoint'
-import { Table } from 'components/Grid/Table'
-import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import { BirthdayCell } from 'components/Grid/Table/features/cells/BirthdayCell'
-import { EmailCell } from 'components/Grid/Table/features/cells/EmailCell'
-import FlowsCell from 'components/Grid/Table/features/cells/FlowsCell'
-import { LastTouchCell } from 'components/Grid/Table/features/cells/LastTouchCell'
-import { PhoneNumberCell } from 'components/Grid/Table/features/cells/PhoneNumberCell'
-import TagsCell from 'components/Grid/Table/features/cells/TagsCell'
-import { EditTextCell } from 'components/Grid/Table/features/cells/types/EditTextCell'
-import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
+import { Table } from '@app/views/components/Grid/Table'
+import { resetRows } from '@app/views/components/Grid/Table/context/actions/selection/reset-rows'
+import { BirthdayCell } from '@app/views/components/Grid/Table/features/cells/BirthdayCell'
+import { EmailCell } from '@app/views/components/Grid/Table/features/cells/EmailCell'
+import FlowsCell from '@app/views/components/Grid/Table/features/cells/FlowsCell'
+import ColumnHeaderCell from '@app/views/components/Grid/Table/features/cells/header/ColumnHeaderCell'
+import { LastTouchCell } from '@app/views/components/Grid/Table/features/cells/LastTouchCell'
+import { PhoneNumberCell } from '@app/views/components/Grid/Table/features/cells/PhoneNumberCell'
+import TagsCell from '@app/views/components/Grid/Table/features/cells/TagsCell'
+import { EditTextCell } from '@app/views/components/Grid/Table/features/cells/types/EditTextCell'
+import { useGridContext } from '@app/views/components/Grid/Table/hooks/use-grid-context'
 import {
   useGridStyles,
   useInlineGridStyles
-} from 'components/Grid/Table/styles'
+} from '@app/views/components/Grid/Table/styles'
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 
 import NoSearchResults from '../../../../../Partials/no-search-results'
@@ -32,7 +33,6 @@ import { PARKED_CONTACTS_LIST_ID } from '../constants'
 import { TableActions } from './Actions'
 import Avatar from './columns/Avatar'
 import { LoadingComponent } from './components/LoadingComponent'
-import ColumnHeaderCell from './grid/ColumnHeaderCell'
 
 const useCustomGridStyles = makeStyles(theme => ({
   row: {
@@ -99,80 +99,121 @@ const ContactsList = props => {
   const columns = [
     {
       id: 'name',
-      headerName: ({ rows, column }) => (
+      headerName: ({ rows, column, width }) => (
         <ColumnHeaderCell
           title={getSelectedInfo(rows.length)}
           isPrimary
+          width={width}
           sortable={column.sortable}
         />
       ),
       width: '230px',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
-      render: ({ row: contact, isRowSelected }) => {
+      render: ({ row: contact, isRowSelected, column }) => {
         const name = getAttributeFromSummary(contact, 'display_name')
 
+        if (column.isHidden) {
+          return null
+        }
+
         return (
-          <EditTextCell text={name} isPrimary isRowSelected={isRowSelected} />
+          <EditTextCell
+            text={name}
+            isPrimary
+            isRowSelected={isRowSelected}
+            width={column.width}
+          />
         )
       }
     },
     {
       id: 'tag',
-      headerName: ({ column }) => (
+      headerName: ({ column, width }) => (
         <ColumnHeaderCell
           title="Tags"
           iconPath={mdiTagMultipleOutline}
           sortable={column.sortable}
+          width={width}
         />
       ),
       isHidden: ['xs', 'sm'].includes(breakpoint),
       sortable: false,
       width: '200px',
-      render: ({ row: contact, isRowSelected }) => (
-        <TagsCell
-          contact={contact}
-          reloadContacts={props.reloadContacts}
-          hasAttributeFilters={
-            (props.filters?.attributeFilters || []).length > 0
-          }
-          isParkTabActive={isParkTabActive}
-          isRowSelected={isRowSelected}
-        />
-      )
+      render: ({ row: contact, isRowSelected, column }) => {
+        if (column.isHidden) {
+          return null
+        }
+
+        return (
+          <TagsCell
+            contact={contact}
+            reloadContacts={props.reloadContacts}
+            hasAttributeFilters={
+              (props.filters?.attributeFilters || []).length > 0
+            }
+            isParkTabActive={isParkTabActive}
+            isRowSelected={isRowSelected}
+            width={column.width}
+          />
+        )
+      }
     },
     {
       id: 'phone',
-      headerName: ({ column }) => (
+      headerName: ({ column, width }) => (
         <ColumnHeaderCell
           title="Phone"
           iconPath={mdiPhoneOutline}
           sortable={column.sortable}
+          width={width}
         />
       ),
       sortable: false,
-      width: '200px',
-      render: ({ row: contact, isRowSelected }) => (
-        <PhoneNumberCell contact={contact} isRowSelected={isRowSelected} />
-      )
+      width: '210px',
+      render: ({ row: contact, isRowSelected, column }) => {
+        if (column.isHidden) {
+          return null
+        }
+
+        return (
+          <PhoneNumberCell
+            contact={contact}
+            isRowSelected={isRowSelected}
+            width={column.width}
+          />
+        )
+      }
     },
     {
       id: 'email',
-      headerName: ({ column }) => (
+      headerName: ({ column, width }) => (
         <ColumnHeaderCell
           title="Email"
           iconPath={mdiEmailOutline}
           sortable={column.sortable}
+          width={width}
         />
       ),
       sortable: false,
+      isHidden: ['xs'].includes(breakpoint),
       width: '290px',
-      render: ({ row: contact, isRowSelected }) => (
-        <EmailCell contact={contact} isRowSelected={isRowSelected} />
-      )
+      render: ({ row: contact, isRowSelected, column }) => {
+        if (column.isHidden) {
+          return null
+        }
+
+        return (
+          <EmailCell
+            contact={contact}
+            isRowSelected={isRowSelected}
+            width={column.width}
+          />
+        )
+      }
     },
     {
-      id: 'last_touch',
-      headerName: ({ column }) => (
+      id: 'last_touched',
+      headerName: ({ column, width }) => (
         <ColumnHeaderCell
           title="Last Touch"
           iconPath={mdiCalendarOutline}
@@ -181,53 +222,85 @@ const ContactsList = props => {
           //   ["last_touch", "-last_touch"].includes(sortOrder) &&
           //   (sortOrder.startsWith("-") ? "desc" : "asc")
           // )}
+          width={width}
+          sortDirection="desc"
         />
       ),
-      isHidden: ['xs', 'sm', 'md'].includes(breakpoint),
+      isHidden: ['xs'].includes(breakpoint),
       sortable: false,
-      width: '140px',
-      render: ({ row: contact, isRowSelected }) => (
-        <LastTouchCell contact={contact} isRowSelected={isRowSelected} />
-      )
+      width: '130px',
+      render: ({ row: contact, isRowSelected, column }) => {
+        if (column.isHidden) {
+          return null
+        }
+
+        return (
+          <LastTouchCell
+            contact={contact}
+            isRowSelected={isRowSelected}
+            width={column.width}
+          />
+        )
+      }
     },
     {
       id: 'flows',
-      headerName: ({ column }) => (
+      headerName: ({ column, width }) => (
         <ColumnHeaderCell
           title="Flows"
           iconPath={mdiLightningBoltOutline}
           sortable={column.sortable}
+          width={width}
         />
       ),
       width: '110px',
       isHidden: breakpoint !== 'xl',
-      render: ({ row: contact, isRowSelected }) => (
-        <FlowsCell
-          contact={contact}
-          callback={() => {
-            resetSelectedRow()
-            // find a way to reload without refreshing page
-            // props.reloadContacts()
-          }}
-          isRowSelected={isRowSelected}
-        />
-      )
+      render: ({ row: contact, isRowSelected, column }) => {
+        if (column.isHidden) {
+          return null
+        }
+
+        return (
+          <FlowsCell
+            contact={contact}
+            callback={() => {
+              resetSelectedRow()
+              // find a way to reload without refreshing page
+              // props.reloadContacts()
+            }}
+            width={column.width}
+            isRowSelected={isRowSelected}
+            flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
+          />
+        )
+      }
     },
     {
       id: 'birthday',
-      headerName: ({ column }) => (
+      headerName: ({ column, width }) => (
         <ColumnHeaderCell
           title="Birthday"
           iconPath={mdiCake}
           sortable={column.sortable}
+          width={width}
         />
       ),
       sortable: false,
       isHidden: breakpoint !== 'xl',
       width: '180px',
-      render: ({ row: contact, isRowSelected }) => (
-        <BirthdayCell contact={contact} isRowSelected={isRowSelected} />
-      )
+      render: ({ row: contact, isRowSelected, column }) => {
+        if (column.isHidden) {
+          return null
+        }
+
+        return (
+          <BirthdayCell
+            contact={contact}
+            isRowSelected={isRowSelected}
+            width={column.width}
+          />
+        )
+      }
     }
   ]
 

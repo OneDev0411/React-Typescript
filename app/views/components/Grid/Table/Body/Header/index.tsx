@@ -16,27 +16,31 @@ const useStyles = makeStyles(
       width,
       display: 'flex',
       flexDirection: 'row',
-      alignItems: 'stretch',
+      alignItems: 'stretch'
 
-      backgroundColor: alpha(theme.palette.grey[50], 0.75),
-      borderTop: `1px solid ${theme.palette.divider}`,
-      borderBottom: `1px solid ${theme.palette.divider}`,
+      // backgroundColor: alpha(theme.palette.grey[50], 0.75),
+      // borderTop: `1px solid ${theme.palette.divider}`,
+      // borderBottom: `1px solid ${theme.palette.divider}`,
 
-      '& > div': {
-        display: 'flex',
-        flex: '0 0 auto',
+      // '& > div': {
+      //   display: 'flex',
+      //   flex: '0 0 auto',
 
-        '&:first-child': {
-          borderRight: 'none'
-        }
-      }
+      //   '&:first-child': {
+      //     borderRight: 'none'
+      //   }
+      // }
     }),
     cellContainer: {
       height: '100%',
       display: 'flex',
       alignSelf: 'center',
       alignItems: 'center',
-      borderRight: `1px solid ${alpha(theme.palette.divider, 0.06)}`
+      backgroundColor: alpha(theme.palette.grey[50], 0.75),
+
+      borderTop: `1px solid ${theme.palette.divider}`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
+      borderRight: `1px solid ${theme.palette.divider}`
     }
   }),
   { name: 'HeaderRow' }
@@ -45,7 +49,7 @@ const useStyles = makeStyles(
 interface Props<Row> {
   columns: TableColumn<Row>[]
   rows: (Row & { id?: UUID })[]
-  totalRows: number
+  totalRows?: number
   selection: GridSelectionOptions<Row> | null
   rowSize?: number
   inlineGridEnabled?: boolean
@@ -53,46 +57,43 @@ interface Props<Row> {
   width?: number | string
 }
 
-function Header<Row>({
+export function Header<Row>({
   columns,
   rows,
-  totalRows,
+  totalRows = 0,
   rowSize = 5,
   width = '100%',
   columnsSize
 }: Props<Row>) {
   const classes = useStyles({ rowSize, width })
 
-  const Cell = (cellContent, column, columnIndex) => (
-    <div
-      className={classes.cellContainer}
-      key={columnIndex}
-      style={{ width: columnsSize[columnIndex] }}
-    >
-      {cellContent}
-    </div>
-  )
-
   const getCell = (column, columnIndex) => {
     if (column.isHidden) {
       return null
     }
 
-    if (typeof column.headerName === 'string') {
-      return Cell(column.headerName, column, columnIndex)
+    const headerCell = column.header ?? column.headerName
+
+    if (typeof headerCell === 'string') {
+      return (
+        <div
+          className={classes.cellContainer}
+          key={columnIndex}
+          style={{ width: columnsSize[columnIndex] }}
+        >
+          {headerCell}
+        </div>
+      )
     }
 
-    if (typeof column.headerName === 'function') {
-      return Cell(
-        column.headerName({
-          rows,
-          column,
-          columnIndex,
-          totalRows
-        }),
+    if (typeof headerCell === 'function') {
+      return headerCell({
+        rows,
         column,
-        columnIndex
-      )
+        columnIndex,
+        totalRows,
+        width: columnsSize[columnIndex]
+      })
     }
 
     return null
@@ -105,5 +106,3 @@ function Header<Row>({
     </div>
   )
 }
-
-export default Header

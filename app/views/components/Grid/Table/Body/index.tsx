@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  ComponentProps,
-  useEffect,
-  useMemo
-} from 'react'
+import { useState, useRef, ComponentProps, useEffect, useMemo } from 'react'
 
 import { Theme } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
@@ -30,7 +24,7 @@ import {
   GridSelectionOptions
 } from '../types'
 
-import Header from './Header'
+import { Header } from './Header'
 import Row from './Row'
 
 interface Props<Row> {
@@ -120,9 +114,6 @@ export function Body<Row>({
           <Row
             key={row.id || rowIndex}
             index={rowIndex}
-            style={{
-              height: theme.spacing(rowSize)
-            }}
             data={{
               rows,
               columns,

@@ -52,11 +52,10 @@ export const RowContainer = styled.div<{
 `
 
 export const GridRowContainer = styled.div<{
-  index: number
   selected: boolean
   theme: Theme
 }>`
-  ${({ theme, index, selected }) => `
+  ${({ theme, selected }) => `
     cursor: pointer;
     ${selected ? `background-color: ${theme.palette.grey[100]};` : ''}
     
