@@ -50,7 +50,7 @@ const useStyles = makeStyles(
       color: theme.palette.tertiary.dark
     }
   }),
-  { name: 'Attribute-cell' }
+  { name: 'AttributeCell' }
 )
 
 export const AttributeCell = ({

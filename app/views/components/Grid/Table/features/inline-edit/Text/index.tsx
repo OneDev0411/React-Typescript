@@ -20,7 +20,7 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'Table-TextInlineEdit'
+    name: 'TextInlineEdit'
   }
 )
 

@@ -30,7 +30,7 @@ const useStyles = makeStyles(
       color: theme.palette.tertiary.dark
     }
   }),
-  { name: 'EditText-cell' }
+  { name: 'EditTextCell' }
 )
 
 interface Props {
