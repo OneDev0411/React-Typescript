@@ -72,8 +72,9 @@ const useStyles = makeStyles(
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2),
       alignItems: 'center',
-      justifyContent: 'flex-start',
-      borderBottom: 'none'
+      justifyContent: 'flex-start !important',
+      borderBottom: 'none !important',
+      cursor: 'pointer'
     },
     addAttributeButton: {
       ...theme.typography.body2,
@@ -83,7 +84,8 @@ const useStyles = makeStyles(
       lineHeight: `${theme.spacing(3)}px`,
       color: theme.palette.primary.main,
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      cursor: 'pointer'
     }
   }),
   { name: 'AttributeInlineEdit' }
@@ -179,7 +181,7 @@ export default function AttributeInlineEdit({
             valueFormatter={valueFormatter}
           />
         )}
-        {showAppendForm && <>Add {attributeDescription}</>}
+        {showAppendForm && `Add ${attributeDescription}`}
       </div>
     )
   }

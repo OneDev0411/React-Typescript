@@ -27,14 +27,14 @@ const useStyles = makeStyles(
       minWidth: '66px',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'end'
+      justifyContent: 'flex-end'
     },
     attributeActionsContainer: {
       paddingRight: theme.spacing(2),
       flex: '0 0 auto',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'end',
+      justifyContent: 'flex-end',
       gap: theme.spacing(1),
       color: 'grey',
       minWidth: '80px'
