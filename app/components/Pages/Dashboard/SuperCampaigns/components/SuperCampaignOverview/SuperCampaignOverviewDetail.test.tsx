@@ -1,9 +1,9 @@
 import * as t from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { TestBed } from 'tests/unit/TestBed'
-import { makeControlledAsync } from 'tests/unit/utils/controllable-promise'
 
 import templateInstance from 'fixtures/marketing-center/template-instance.json'
+import { TestBed } from 'tests/unit/TestBed'
+import { makeControlledAsync } from 'tests/unit/utils/controllable-promise'
 
 import { SuperCampaignProvider } from '../SuperCampaignProvider'
 
