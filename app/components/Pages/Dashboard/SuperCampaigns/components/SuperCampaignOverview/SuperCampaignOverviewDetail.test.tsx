@@ -12,7 +12,7 @@ import SuperCampaignOverviewDetail from './SuperCampaignOverviewDetail'
 const mockUpdateCampaignModel = makeControlledAsync(jest.fn())
 
 jest.mock(
-  '@app/models/super-campaign/update-super-campaign',
+  '@app/models/super-campaign/update-super-campaign/update-super-campaign',
   () => async (superCampaignId: UUID, data: ISuperCampaignInput) => {
     await mockUpdateCampaignModel.fn(superCampaignId, data)
 
