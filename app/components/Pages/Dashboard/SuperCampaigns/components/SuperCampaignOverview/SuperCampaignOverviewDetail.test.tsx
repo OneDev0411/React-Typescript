@@ -1,11 +1,11 @@
 import * as t from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-
-import templateInstance from 'fixtures/marketing-center/template-instance.json'
 import { TestBed } from 'tests/unit/TestBed'
 import { makeControlledAsync } from 'tests/unit/utils/controllable-promise'
 
-import { SuperCampaignDetailProvider } from '../SuperCampaignDetailProvider'
+import templateInstance from 'fixtures/marketing-center/template-instance.json'
+
+import { SuperCampaignProvider } from '../SuperCampaignProvider'
 
 import SuperCampaignOverviewDetail from './SuperCampaignOverviewDetail'
 
@@ -54,12 +54,9 @@ interface Props {
 function Test({ superCampaign, setSuperCampaign }: Props) {
   return (
     <TestBed>
-      <SuperCampaignDetailProvider
-        superCampaign={superCampaign}
-        setSuperCampaign={setSuperCampaign}
-      >
+      <SuperCampaignProvider superCampaign={superCampaign}>
         <SuperCampaignOverviewDetail />
-      </SuperCampaignDetailProvider>
+      </SuperCampaignProvider>
     </TestBed>
   )
 }
