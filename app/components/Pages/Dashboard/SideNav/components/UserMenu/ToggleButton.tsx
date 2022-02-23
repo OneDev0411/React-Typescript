@@ -87,7 +87,7 @@ export default function ToggleButton(props: Props) {
           <div className={classes.userDetails}>
             <Typography
               noWrap
-              variant="body2"
+              variant="body1"
               className={classes.userDisplayName}
             >
               {brandName}

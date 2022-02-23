@@ -33,7 +33,7 @@ const itemStyle = css`
   display: flex;
   padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 0.5)};
   font-size: ${(props: ThemeProps<Theme>) =>
-    props.theme.typography.body2.fontSize};
+    props.theme.typography.body1.fontSize};
   align-items: center;
   border-radius: ${(props: ThemeProps<Theme>) =>
     `${props.theme.shape.borderRadius}px`};
