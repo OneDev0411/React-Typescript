@@ -6,6 +6,8 @@ import useAsync from '@app/hooks/use-async'
 import { getAvailableBrandsToSwitch } from 'models/BrandConsole/Brands'
 import { TreeFn } from 'utils/tree-utils/types'
 
+import { getExpandBrandsByType } from '../helpers/get-expand-brands-by-types'
+
 interface UseTeamsReturnType {
   isError: boolean
   isLoading: boolean
@@ -29,15 +31,11 @@ export function useTeams(): UseTeamsReturnType {
     [teams]
   )
   const initialExpandedNodes = useMemo(() => {
-    let expandedNodes: UUID[] = []
+    if (!teams) {
+      return []
+    }
 
-    teams?.forEach(team => {
-      if (team.children) {
-        expandedNodes.push(team.id)
-      }
-    })
-
-    return expandedNodes
+    return getExpandBrandsByType(teams)
   }, [teams])
 
   return {
