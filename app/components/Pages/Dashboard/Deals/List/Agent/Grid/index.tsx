@@ -46,7 +46,7 @@ interface Props {
 function AgentGrid(props: Props & WithRouterProps) {
   const gridClasses = useGridStyles()
   const activeTeam = useActiveTeam()
-  const activeBrandId = activeTeam?.brand.id
+  const activeBrandId = activeTeam?.brand?.id
 
   const isFetchingDeals = useSelector(
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
