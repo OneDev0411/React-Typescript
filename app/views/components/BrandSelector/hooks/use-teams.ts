@@ -6,6 +6,7 @@ import useAsync from '@app/hooks/use-async'
 import { getAvailableBrandsToSwitch } from 'models/BrandConsole/Brands'
 import { TreeFn } from 'utils/tree-utils/types'
 
+import { getBrandsWithMembers } from '../helpers/get-brands-with-members'
 import { getExpandBrandsByType } from '../helpers/get-expand-brands-by-types'
 
 interface UseTeamsReturnType {
@@ -26,17 +27,19 @@ export function useTeams(): UseTeamsReturnType {
     })
   })
 
-  const getChildNodes = useCallback(
-    parent => (parent ? parent.children || [] : teams || []),
-    [teams]
-  )
+  const filteredTeams = useMemo(() => getBrandsWithMembers(teams), [teams])
   const initialExpandedNodes = useMemo(() => {
-    if (!teams) {
+    if (!filteredTeams) {
       return []
     }
 
-    return getExpandBrandsByType(teams)
-  }, [teams])
+    return getExpandBrandsByType(filteredTeams)
+  }, [filteredTeams])
+
+  const getChildNodes = useCallback(
+    parent => (parent ? parent.children || [] : filteredTeams || []),
+    [filteredTeams]
+  )
 
   return {
     isError,
