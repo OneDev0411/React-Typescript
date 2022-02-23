@@ -159,11 +159,7 @@ export default function SideNavAccordion({
                 ) : null}
 
                 {notificationCount ? (
-                  <MenuBadge
-                    badgeContent={notificationCount}
-                    color="primary"
-                    max={9}
-                  >
+                  <MenuBadge badgeContent={notificationCount} max={9}>
                     {menuIconWrapper}
                   </MenuBadge>
                 ) : (

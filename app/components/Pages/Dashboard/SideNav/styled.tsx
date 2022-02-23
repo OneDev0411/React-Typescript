@@ -146,7 +146,7 @@ export const AccordionSummaryDot = styled.span`
   border-radius: ${(props: ThemeProps<Theme>) =>
     `${props.theme.shape.borderRadius}px`};
   background-color: ${(props: ThemeProps<Theme>) =>
-    props.theme.palette.primary.main};
+    props.theme.palette.error.dark};
 `
 
 export const IconWrapper = styled.span`
