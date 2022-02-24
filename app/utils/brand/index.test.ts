@@ -1,6 +1,6 @@
 import { hasBrandCustomTheme, isBrandADescendantOfAnotherBrand } from '.'
 
-const MOCK_BRAND_WITH_THEME: DeepPartial<IBrand> = {
+const MOCK_BRAND_WITH_THEME: IBrand = {
   settings: {
     theme: {
       palette: {
@@ -11,34 +11,47 @@ const MOCK_BRAND_WITH_THEME: DeepPartial<IBrand> = {
       }
     }
   }
-}
+} as IBrand
 
-const MOCK_BRAND_WITHOUT_THEME: DeepPartial<IBrand> = {
+const MOCK_BRAND_WITH_SIDE_NAV_LOGO: IBrand = {
+  settings: {
+    theme: {
+      // @ts-ignore
+      navbar_logo: 'my-logo.png'
+    }
+  }
+} as IBrand
+
+const MOCK_BRAND_WITHOUT_THEME: IBrand = {
   settings: {
     theme: {
       palette: {}
     }
   }
-}
+} as IBrand
 
 const MOCK_PARENT_BRAND: IBrand = {
-  id: '1',
-  ...MOCK_BRAND_WITH_THEME
+  ...MOCK_BRAND_WITH_THEME,
+  id: '1'
 } as IBrand
 
 const MOCK_BRAND_WITH_PARENT: IBrand = {
-  id: '2',
   ...MOCK_BRAND_WITH_THEME,
+  id: '2',
   parent: { ...MOCK_PARENT_BRAND }
 } as IBrand
 
 describe('utils/brand', () => {
-  it('hasBrandCustom theme should return false when the brand has no theme', () => {
+  it('hasBrandCustomTheme should return false when the brand has no theme', () => {
     expect(hasBrandCustomTheme(MOCK_BRAND_WITHOUT_THEME as IBrand)).toBe(false)
   })
 
-  it('hasBrandCustom theme should return true when the brand has theme', () => {
+  it('hasBrandCustomTheme should return true when the brand has theme', () => {
     expect(hasBrandCustomTheme(MOCK_BRAND_WITH_THEME as IBrand)).toBe(true)
+  })
+
+  it('hasBrandCustomTheme should return true when the brand has only navbar logo', () => {
+    expect(hasBrandCustomTheme(MOCK_BRAND_WITH_SIDE_NAV_LOGO)).toBe(true)
   })
 
   it('isBrandADescendantOfAnotherBrand should return true if a brand is a descendant of another brand', () => {

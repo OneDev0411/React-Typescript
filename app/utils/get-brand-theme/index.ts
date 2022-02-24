@@ -1,5 +1,3 @@
-import { ThemeOptions } from '@material-ui/core'
-
 import {
   hasBrandCustomTheme,
   isBrandADescendantOfAnotherBrand
@@ -8,7 +6,7 @@ import {
 export const getBrandTheme = (
   brand: Nullable<IBrand>,
   hostBrand?: Nullable<IBrand>
-): ThemeOptions => {
+): IBrandTheme => {
   // Anonymous user using a custom host to see a property page
   // We do return the host brand theme
   if (hostBrand && !brand) {

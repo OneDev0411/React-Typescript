@@ -33,9 +33,15 @@ export const hasBrandCustomTheme = (brand: IBrand): boolean => {
     return false
   }
 
-  const keysToCheck = Object.keys(theme.palette ?? [])
+  if (theme.navbar_logo) {
+    return true
+  }
 
-  return keysToCheck.some(key => Object.keys(theme.palette?.[key]).length > 0)
+  const paletteKeysToCheck = Object.keys(theme.palette ?? [])
+
+  return paletteKeysToCheck.some(
+    key => Object.keys(theme.palette?.[key]).length > 0
+  )
 }
 
 export const isBrandADescendantOfAnotherBrand = (
