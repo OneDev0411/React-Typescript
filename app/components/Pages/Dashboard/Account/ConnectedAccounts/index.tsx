@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { List, Box, Typography } from '@material-ui/core'
+import { List, Box, Typography, makeStyles } from '@material-ui/core'
 import { connect, useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -22,6 +22,14 @@ import ConnectAccountButtons from './ConnectAccountButtons'
 import ConnectedAccount from './ConnectedAccount'
 import ConnectedAgents from './ConnectedAgents'
 import ConnectedDocusign from './ConnectedDocusign'
+import ConnectedInstagram from './ConnectedInstagram'
+
+const useStyles = makeStyles(
+  theme => ({
+    section: { marginTop: theme.spacing(6) }
+  }),
+  { name: 'ConnectedAccountsLayout' }
+)
 
 interface Props {
   accounts: IOAuthAccount[]
@@ -44,6 +52,8 @@ function ConnectedAccounts({
   disconnectDocuSign,
   fetchUnreadEmailThreadsCount
 }: Props) {
+  const classes = useStyles()
+
   useTitle('Connected Accounts | Settings | Rechat')
   useEffectOnce(() => {
     fetchOAuthAccounts()
@@ -95,7 +105,9 @@ function ConnectedAccounts({
         ))}
       </List>
 
-      <ConnectedAgents user={user} onDelete={() => {}} />
+      <ConnectedAgents className={classes.section} user={user} />
+
+      <ConnectedInstagram className={classes.section} />
 
       {user.docusign && (
         <ConnectedDocusign
