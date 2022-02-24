@@ -1,8 +1,6 @@
 import { useMemo } from 'react'
 
 import {
-  Theme,
-  ThemeOptions,
   ThemeProvider,
   StylesProvider,
   responsiveFontSizes
@@ -10,17 +8,20 @@ import {
 import { useSelector } from 'react-redux'
 import { ThemeProvider as StyledComponentsThemeProvider } from 'styled-components'
 
+import { useUnsafeActiveBrand } from './hooks/brand'
 import { MaterialUiGlobalOverrides } from './material-ui-global-overrides'
 import { IAppState } from './reducers'
 import { themeGenerator } from './theme'
 import { getBrandTheme } from './utils/get-brand-theme'
 
 export const AppTheme = ({ children }) => {
-  const brand = useSelector<IAppState, IBrand>(
+  // Custom hostname brand
+  const hostBrand: Nullable<IBrand> = useSelector(
     (state: IAppState) => state.brand
   )
-  const brandTheme: ThemeOptions = getBrandTheme(brand)
-  const theme: Theme = useMemo(() => themeGenerator(brandTheme), [brandTheme])
+  const activeBrand = useUnsafeActiveBrand()
+  const brandTheme = getBrandTheme(activeBrand, hostBrand)
+  const theme = useMemo(() => themeGenerator(brandTheme), [brandTheme])
 
   return (
     <>
