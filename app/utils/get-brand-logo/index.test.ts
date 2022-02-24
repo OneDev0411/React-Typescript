@@ -35,18 +35,19 @@ const MOCK_BRAND_WITH_PARENT: IBrand = {
 const DEFAULT_LOGO = '/static/images/logo.svg'
 
 describe('utils/get-brand-logo', () => {
-  // it('getBrandLogo should return the default logo if the brand tree does not have the logo', () => {
-  //   expect(getBrandLogo(null, null, 'default-logo')).toEqual('default-logo')
-  //   expect(
-  //     getBrandLogo(MOCK_BRAND_TREE_WITHOUT_LOGO, null, 'default-logo')
-  //   ).toEqual('default-logo')
-  // })
+  it('getBrandLogo should return the default logo if the brand tree does not have the logo', () => {
+    expect(getBrandLogo(null, null, 'default-logo')).toEqual('default-logo')
+    expect(
+      getBrandLogo(MOCK_BRAND_TREE_WITHOUT_LOGO, null, 'default-logo')
+    ).toEqual('default-logo')
+  })
 
-  // it('getBrandLogo should return the logo if the brand tree have the logo', () => {
-  //   expect(getBrandLogo(MOCK_BRAND_WITH_PARENT, null, 'default-logo')).toEqual(
-  //     MOCK_BRAND_WITH_PARENT.settings?.theme?.navbar_logo
-  //   )
-  // })
+  it('getBrandLogo should return the logo if the brand tree have the logo', () => {
+    expect(getBrandLogo(MOCK_BRAND_WITH_PARENT, null, 'default-logo')).toEqual(
+      MOCK_BRAND_WITH_PARENT.settings?.theme?.navbar_logo
+    )
+  })
+
   it('getBrandLogo should return the default logo if a null brand is provided', () => {
     expect(getBrandLogo(null)).toEqual(DEFAULT_LOGO)
   })
@@ -85,13 +86,13 @@ describe('utils/get-brand-logo', () => {
     ).toEqual(MOCK_BRAND_WITH_LOGO.settings?.theme?.navbar_logo)
   })
 
-  it('getBrandLogo should return the default logo, if the passed brand is not a descendant of the host brand', () => {
+  it('getBrandLogo should return the host brand logo, if the passed brand is not a descendant of the host brand', () => {
     expect(
       getBrandLogo(MOCK_BRAND_WITH_PARENT as IBrand, {
         ...MOCK_PARENT_BRAND,
-        id: '10'
+        id: 'wrong'
       })
-    ).toEqual(DEFAULT_LOGO)
+    ).toEqual(MOCK_PARENT_BRAND.settings?.theme?.navbar_logo)
   })
 
   it('getBrandLogo should return the passed brand logo, if the passed brand is equal to the host brand', () => {

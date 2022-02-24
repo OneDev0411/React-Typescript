@@ -80,11 +80,11 @@ describe('utils/get-brand-theme', () => {
         {
           ...MOCK_BRAND_WITH_PARENT,
           parent: {
-            ...MOCK_BRAND_WITH_PARENT.parent,
+            ...MOCK_PARENT_BRAND,
             id: 'wrong'
           } as IBrand
         },
-        MOCK_BRAND_WITH_PARENT.parent
+        MOCK_PARENT_BRAND
       )
     ).toEqual(MOCK_BRAND_WITH_THEME.settings?.theme)
   })
