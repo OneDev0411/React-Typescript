@@ -15,14 +15,12 @@ import { themeGenerator } from './theme'
 import { getBrandTheme } from './utils/get-brand-theme'
 
 export const AppTheme = ({ children }) => {
-  // TODO: remove the following selector
-  // and remove this `state.brand` selector in the whole app
-  // This is null in all cases, except the custom hostnames (not app.rechat.com)
-  const brand = useSelector((state: IAppState) => state.brand)
+  // Custom hostname brand
+  const hostBrand: Nullable<IBrand> = useSelector(
+    (state: IAppState) => state.brand
+  )
   const activeBrand = useUnsafeActiveBrand()
-  const finalBrand = brand ?? activeBrand
-  const brandTheme = getBrandTheme(finalBrand)
-
+  const brandTheme = getBrandTheme(activeBrand, hostBrand)
   const theme = useMemo(() => themeGenerator(brandTheme), [brandTheme])
 
   return (
