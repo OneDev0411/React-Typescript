@@ -74,13 +74,19 @@ describe('utils/get-brand-theme', () => {
     ).toEqual(MOCK_BRAND_WITH_THEME.settings?.theme)
   })
 
-  it('getBrandTheme should return an empty object, if the passed brand is not a descendant of the host brand', () => {
+  it('getBrandTheme should return the host brand theme, if the passed brand is not a descendant of the host brand', () => {
     expect(
-      getBrandTheme(MOCK_BRAND_WITH_PARENT as IBrand, {
-        ...MOCK_PARENT_BRAND,
-        id: '10'
-      })
-    ).toEqual({})
+      getBrandTheme(
+        {
+          ...MOCK_BRAND_WITH_PARENT,
+          parent: {
+            ...MOCK_BRAND_WITH_PARENT.parent,
+            id: 'wrong'
+          } as IBrand
+        },
+        MOCK_BRAND_WITH_PARENT.parent
+      )
+    ).toEqual(MOCK_BRAND_WITH_THEME.settings?.theme)
   })
 
   it('getBrandTheme should return the passed brand theme, if the passed brand is equal to the host brand', () => {

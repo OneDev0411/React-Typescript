@@ -1,4 +1,4 @@
-import { hasBrandCustomTheme, isBrandADescendantOfAnotherBrand } from '.'
+import { hasBrandCustomTheme, isBrandUnderAncestor } from '.'
 
 const MOCK_BRAND_WITH_THEME: IBrand = {
   settings: {
@@ -54,18 +54,15 @@ describe('utils/brand', () => {
     expect(hasBrandCustomTheme(MOCK_BRAND_WITH_SIDE_NAV_LOGO)).toBe(true)
   })
 
-  it('isBrandADescendantOfAnotherBrand should return true if a brand is a descendant of another brand', () => {
+  it('isBrandUnderAncestor should return true if a brand is a descendant of another brand', () => {
     expect(
-      isBrandADescendantOfAnotherBrand(
-        MOCK_BRAND_WITH_PARENT,
-        MOCK_PARENT_BRAND
-      )
+      isBrandUnderAncestor(MOCK_BRAND_WITH_PARENT, MOCK_PARENT_BRAND)
     ).toBe(true)
   })
 
-  it('isBrandADescendantOfAnotherBrand should return false if a brand is not descendant of another brand', () => {
+  it('isBrandUnderAncestor should return false if a brand is not descendant of another brand', () => {
     expect(
-      isBrandADescendantOfAnotherBrand(MOCK_BRAND_WITH_PARENT, {
+      isBrandUnderAncestor(MOCK_BRAND_WITH_PARENT, {
         ...MOCK_PARENT_BRAND,
         id: '3'
       } as IBrand)

@@ -44,11 +44,11 @@ export const hasBrandCustomTheme = (brand: IBrand): boolean => {
   )
 }
 
-export const isBrandADescendantOfAnotherBrand = (
-  child: IBrand,
+export const isBrandUnderAncestor = (
+  brand: IBrand,
   ancestor: IBrand
 ): boolean => {
-  let currentAncestor: Nullable<IBrand> = child.parent
+  let currentAncestor: Nullable<IBrand> = brand.parent
 
   while (currentAncestor) {
     if (currentAncestor.id === ancestor.id) {
