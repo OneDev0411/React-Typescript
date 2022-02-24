@@ -9,6 +9,7 @@ import dealEnvelopeEditRoute from './app/routes/deal/envelope-edit'
 import dealEnvelopeSignRoute from './app/routes/deal/envelope-sign'
 import dealExportRoute from './app/routes/deal/export'
 import dealReportRoute from './app/routes/deal/report'
+import facebookAuthResultRoute from './app/routes/facebook-auth-result'
 import getPdfSizeRoute from './app/routes/get-pdf-size'
 import livebyNeighborhoodsRoute from './app/routes/liveby/neighborhoods'
 import livebyReportRoute from './app/routes/liveby/report'
@@ -101,6 +102,7 @@ router.post(
  */
 router.get('/unsupported', unsupportedRoute)
 router.get('/api/utils/cors/:url', corsRoute)
+router.get('/api/facebook/auth-result', facebookAuthResultRoute)
 router.post('/api/pdf/get-size', requestLimit, getPdfSizeRoute)
 router.post('/api/utils/render-mjml', requestLimit, renderMjmlRoute)
 router.post('/api/utils/get-url-metadata', requestLimit, urlMetadataRoute)
