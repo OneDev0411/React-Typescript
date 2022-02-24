@@ -6,7 +6,7 @@ import {
   mdiBullhornOutline,
   mdiCurrencyUsd,
   mdiBellOutline,
-  mdiHelp,
+  mdiHeadphones,
   mdiHomeCityOutline
 } from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
@@ -263,7 +263,7 @@ function Menu(props: WithRouterProps) {
     {
       access: allAccess,
       hasDivider: false,
-      icon: mdiHelp,
+      icon: mdiHeadphones,
       id: 'support',
       label: 'Support',
       subMenu: [
