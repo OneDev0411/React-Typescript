@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 
 import { Box } from '@material-ui/core'
 import { WithRouterProps } from 'react-router'
@@ -24,11 +24,21 @@ function Showings({ params }: ShowingsProps) {
 
   const tab = params.tab || showingsTabs.Properties
 
-  const { isLoading, showings, appointments, setShowings } = useGetShowings()
+  const [query, setQuery] = useState<string>('')
+
+  const { isLoading, showings, appointments, setShowings } =
+    useGetShowings(query)
 
   return (
     <PageLayout position="relative" overflow="hidden">
-      <PageLayout.Header title="Showings" />
+      <PageLayout.HeaderWithSearch
+        title="Showings"
+        onSearch={searchQuery => setQuery(searchQuery)}
+        SearchInputProps={{
+          placeholder: 'Search Address, MLS# or Agent',
+          isLoading: !!query && isLoading
+        }}
+      />
       <PageLayout.Main>
         <Box mb={4}>
           <ShowingsTabs value={tab} />
