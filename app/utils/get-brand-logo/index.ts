@@ -1,8 +1,11 @@
+import { getBrandTheme } from '@app/utils/get-brand-theme'
+
 export const getBrandLogo = (
-  brand: IBrand,
+  brand: Nullable<IBrand>,
+  hostBrand?: Nullable<IBrand>,
   defaultValue: string = '/static/images/logo.svg'
 ): string => {
-  const logo = brand?.settings?.theme?.navbar_logo
+  const theme = getBrandTheme(brand, hostBrand)
 
-  return logo || defaultValue
+  return theme.navbar_logo || defaultValue
 }
