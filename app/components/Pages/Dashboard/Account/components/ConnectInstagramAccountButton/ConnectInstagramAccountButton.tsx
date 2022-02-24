@@ -1,17 +1,23 @@
+import { useState } from 'react'
+
 import { Button, ButtonProps, CircularProgress } from '@material-ui/core'
 
 import { useFacebookAuth, UseFacebookAuthOptions } from './use-facebook-auth'
 
 interface ConnectInstagramAccountButtonProps
   extends Omit<ButtonProps, 'size' | 'onClick' | 'startIcon' | 'disabled'>,
-    UseFacebookAuthOptions {}
+    Pick<UseFacebookAuthOptions, 'onAuthSuccess' | 'onAuthError'> {}
 
 function ConnectInstagramAccountButton({
   onAuthSuccess,
   onAuthError,
   ...buttonProps
 }: ConnectInstagramAccountButtonProps) {
-  const { isAuthWindowOpen, openAuthWindow } = useFacebookAuth({
+  const [isWorking, setIsWorking] = useState(false)
+
+  const { openAuthWindow } = useFacebookAuth({
+    onAuthWindowOpen: () => setIsWorking(true),
+    onAuthWindowClose: () => setIsWorking(false),
     onAuthSuccess,
     onAuthError
   })
@@ -21,9 +27,9 @@ function ConnectInstagramAccountButton({
       size="small"
       onClick={openAuthWindow}
       startIcon={
-        isAuthWindowOpen ? <CircularProgress size={20} color="inherit" /> : null
+        isWorking ? <CircularProgress size={20} color="inherit" /> : null
       }
-      disabled={isAuthWindowOpen}
+      disabled={isWorking}
       {...buttonProps}
     />
   )

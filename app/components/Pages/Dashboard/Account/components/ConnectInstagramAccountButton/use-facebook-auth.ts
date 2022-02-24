@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 
 import { useEffectOnce } from 'react-use'
 
@@ -8,53 +8,64 @@ import { useFacebookResultMessage } from './use-facebook-result-message'
 const facebookAuthUrl = '/users/self/facebook/auth'
 
 export interface UseFacebookAuthOptions {
+  onAuthWindowOpen?: () => void
+  onAuthWindowClose?: () => void
   onAuthSuccess?: () => void
   onAuthError?: (errorCode: FacebookAuthErrorCode) => void
 }
 
 interface UseFacebookAuth {
-  isAuthWindowOpen: boolean
   openAuthWindow: () => void
 }
 
 export function useFacebookAuth({
+  onAuthWindowOpen,
+  onAuthWindowClose,
   onAuthSuccess,
   onAuthError
 }: UseFacebookAuthOptions): UseFacebookAuth {
   const authWindowRef = useRef<Nullable<Window>>(null)
-  const [isAuthWindowOpen, setIsAuthWindowOpen] = useState(false)
-
-  // Close the auth window
-  const handleCloseAuthWindow = () => {
-    setIsAuthWindowOpen(false)
-    authWindowRef.current = null
-  }
+  const checkIntervalRef = useRef<Nullable<NodeJS.Timer>>(null)
 
   // Open the auth window
   const openAuthWindow = () => {
-    const windowHandle = window.open(facebookAuthUrl, '_blank')
-
-    if (windowHandle) {
-      windowHandle.addEventListener('beforeunload', handleCloseAuthWindow)
+    if (authWindowRef.current) {
+      return
     }
 
+    const windowHandle = window.open(facebookAuthUrl, '_blank')
+
+    if (!windowHandle) {
+      return
+    }
+
+    onAuthWindowOpen?.()
     authWindowRef.current = windowHandle
 
-    setIsAuthWindowOpen(!!windowHandle)
+    // The beforeunload event does not work here because of CORS issue so it needs to have
+    // a check interval to check if the auth window is closed
+    checkIntervalRef.current = setInterval(() => {
+      if (!windowHandle.closed || !checkIntervalRef.current) {
+        return
+      }
+
+      clearInterval(checkIntervalRef.current)
+      checkIntervalRef.current = null
+
+      onAuthWindowClose?.()
+      authWindowRef.current = null
+    }, 1000)
   }
 
-  // Close the window when the component unmounts
+  // Close the auth window when the component unmounts
   useEffectOnce(() => {
-    const authWindow = authWindowRef.current
-
     return () => {
-      authWindow?.close()
+      authWindowRef.current?.close()
     }
   })
 
+  // Call onAuthSuccess and onAuthError if needed
   useFacebookResultMessage(payload => {
-    authWindowRef.current?.close() // Close the auth window
-
     if (payload.type === 'success') {
       onAuthSuccess?.()
 
@@ -65,7 +76,6 @@ export function useFacebookAuth({
   })
 
   return {
-    isAuthWindowOpen,
     openAuthWindow
   }
 }
