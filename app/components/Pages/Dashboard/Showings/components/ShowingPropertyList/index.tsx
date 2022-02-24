@@ -89,11 +89,17 @@ function ShowingPropertyList({
       id: 'agent',
       width: '15%',
       sortable: false,
-      render: ({ row }) => (
-        <ShowingLabeledColumn>
-          {`${row.roles[0].first_name} ${row.roles[0].last_name}`}
-        </ShowingLabeledColumn>
-      )
+      render: ({ row }) => {
+        const sellerAgent = row.roles.filter(
+          user => user.role === 'SellerAgent'
+        )[0]
+
+        return (
+          <ShowingLabeledColumn>
+            {`${sellerAgent?.first_name} ${sellerAgent?.last_name}`}
+          </ShowingLabeledColumn>
+        )
+      }
     },
     {
       header: 'Body',

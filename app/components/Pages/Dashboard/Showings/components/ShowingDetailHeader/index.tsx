@@ -49,6 +49,8 @@ function ShowingDetailHeader({
 }: ShowingDetailHeaderProps) {
   const classes = useStyles()
 
+  const sellerAgent = roles?.filter(user => user.role === 'SellerAgent')[0]
+
   return (
     <Box className={classes.root} px={4} pt={4}>
       <Box className={classes.header}>
@@ -87,15 +89,15 @@ function ShowingDetailHeader({
                     variant="subtitle2"
                     className={classes.agentName}
                   >
-                    {`${roles[0].first_name} ${roles[0].last_name}`}
+                    {`${sellerAgent?.first_name} ${sellerAgent?.last_name}`}
                   </Typography>
-                  {roles[0].office_name && (
+                  {sellerAgent?.office_name && (
                     <Typography
                       noWrap
                       variant="subtitle2"
                       color="textSecondary"
                     >
-                      {roles[0].office_name}
+                      {sellerAgent?.office_name}
                     </Typography>
                   )}
                 </Box>
