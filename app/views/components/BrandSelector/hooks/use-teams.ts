@@ -38,8 +38,20 @@ export function useTeams(): UseTeamsReturnType {
       return []
     }
 
+    if (searchTerm) {
+      // expand all type on brand type
+      return getExpandBrandsByType(filteredTeams, [
+        'Team',
+        'Other',
+        'Region',
+        'Office',
+        'Brokerage',
+        'Personal'
+      ])
+    }
+
     return getExpandBrandsByType(filteredTeams)
-  }, [filteredTeams])
+  }, [filteredTeams, searchTerm])
 
   const getChildNodes = useCallback(
     parent => (parent ? parent.children || [] : filteredTeams || []),
