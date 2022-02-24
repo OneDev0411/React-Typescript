@@ -9,7 +9,10 @@ import { TreeFn } from 'utils/tree-utils/types'
 import { getBrandsWithMembers } from '../helpers/get-brands-with-members'
 import { getExpandBrandsByType } from '../helpers/get-expand-brands-by-types'
 
-interface UseTeamsReturnType {
+import { useFilterTeams, UseFilterTeamsReturnType } from './use-filter-teams'
+
+interface UseTeamsReturnType
+  extends Omit<UseFilterTeamsReturnType, 'filterTeams'> {
   isError: boolean
   isLoading: boolean
   teams: TreeFn<IBrand>
@@ -18,6 +21,8 @@ interface UseTeamsReturnType {
 
 export function useTeams(): UseTeamsReturnType {
   const { data: teams, isLoading, isError, run } = useAsync<IBrand[]>()
+  const { searchTerm, handleSearch, filterTeams }: UseFilterTeamsReturnType =
+    useFilterTeams()
 
   useEffectOnce(() => {
     run(async () => {
@@ -44,7 +49,9 @@ export function useTeams(): UseTeamsReturnType {
   return {
     isError,
     isLoading,
-    teams: getChildNodes,
+    searchTerm,
+    handleSearch,
+    teams: filterTeams(getChildNodes),
     initialExpandedNodes
   }
 }
