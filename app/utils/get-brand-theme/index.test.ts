@@ -1,6 +1,6 @@
 import { getBrandTheme } from '.'
 
-const MOCK_BRAND_WITH_THEME: DeepPartial<IBrand> = {
+const MOCK_BRAND_WITH_THEME: IBrand = {
   settings: {
     theme: {
       palette: {
@@ -11,31 +11,31 @@ const MOCK_BRAND_WITH_THEME: DeepPartial<IBrand> = {
       }
     }
   }
-}
+} as IBrand
 
-const MOCK_BRAND_WITHOUT_THEME: DeepPartial<IBrand> = {
+const MOCK_BRAND_WITHOUT_THEME: IBrand = {
   settings: {
     theme: {
       palette: {}
     }
   }
-}
+} as IBrand
 
-const MOCK_BRAND_TREE_WITHOUT_THEME: DeepPartial<IBrand> = {
+const MOCK_BRAND_TREE_WITHOUT_THEME: IBrand = {
   ...MOCK_BRAND_WITHOUT_THEME,
   parent: {
     ...MOCK_BRAND_WITHOUT_THEME
   }
-}
+} as IBrand
 
 const MOCK_PARENT_BRAND: IBrand = {
-  id: '1',
-  ...MOCK_BRAND_WITH_THEME
+  ...MOCK_BRAND_WITH_THEME,
+  id: '1'
 } as IBrand
 
 const MOCK_BRAND_WITH_PARENT: IBrand = {
-  id: '2',
   ...MOCK_BRAND_WITH_THEME,
+  id: '2',
   parent: { ...MOCK_PARENT_BRAND }
 } as IBrand
 
