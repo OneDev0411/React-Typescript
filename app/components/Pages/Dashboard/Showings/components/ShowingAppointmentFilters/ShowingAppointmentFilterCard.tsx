@@ -70,7 +70,7 @@ function ShowingAppointmentFilterCard({
   const classes = useStyles()
 
   const card = (
-    <Badge className={classes.root} badgeContent={5} color="error">
+    <Badge className={classes.root} badgeContent={badge} color="error">
       <Card
         className={classNames(classes.card, selected && classes.selected)}
         variant="outlined"

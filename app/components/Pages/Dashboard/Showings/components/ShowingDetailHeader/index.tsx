@@ -1,15 +1,13 @@
 import { Box, Typography, makeStyles } from '@material-ui/core'
-import { mdiOpenInNew } from '@mdi/js'
 
-import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
-import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { Avatar } from 'components/Avatar'
 
-import LinkButton from '../LinkButton'
 import ShowingCloseButton from '../ShowingCloseButton'
 
+import ShowingDetailHeaderAgentInfo from './ShowingDetailHeaderAgentInfo'
 import ShowingDetailHeaderBookingButton from './ShowingDetailHeaderBookingButton'
 import ShowingDetailHeaderCopyButton from './ShowingDetailHeaderCopyButton'
+import ShowingDetailHeaderListing from './ShowingDetailHeaderListing'
 
 const useStyles = makeStyles(
   theme => ({
@@ -26,8 +24,7 @@ const useStyles = makeStyles(
         alignItems: 'center',
         justifyContent: 'space-between'
       }
-    },
-    agentName: { margin: theme.spacing(0, 1) }
+    }
   }),
   { name: 'ShowingDetailHeader' }
 )
@@ -49,8 +46,6 @@ function ShowingDetailHeader({
 }: ShowingDetailHeaderProps) {
   const classes = useStyles()
 
-  const sellerAgent = roles?.find(user => user.role === 'SellerAgent')
-
   return (
     <Box className={classes.root} px={4} pt={4}>
       <Box className={classes.header}>
@@ -65,43 +60,8 @@ function ShowingDetailHeader({
               </Typography>
             </Box>
             <Box display="flex">
-              {listing && (
-                <LinkButton
-                  color="secondary"
-                  size="medium"
-                  variant="text"
-                  endIcon={
-                    <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
-                  }
-                  to={`/dashboard/mls/${listing.id}`}
-                  target="_blank"
-                >
-                  MLS# {listing.mls_number}
-                </LinkButton>
-              )}
-              {roles && (
-                <Box display="flex" alignItems="center" ml={4}>
-                  <Typography noWrap variant="caption" color="textSecondary">
-                    Agent
-                  </Typography>
-                  <Typography
-                    noWrap
-                    variant="subtitle2"
-                    className={classes.agentName}
-                  >
-                    {`${sellerAgent?.first_name} ${sellerAgent?.last_name}`}
-                  </Typography>
-                  {sellerAgent?.office_name && (
-                    <Typography
-                      noWrap
-                      variant="subtitle2"
-                      color="textSecondary"
-                    >
-                      {sellerAgent?.office_name}
-                    </Typography>
-                  )}
-                </Box>
-              )}
+              {listing && <ShowingDetailHeaderListing listing={listing} />}
+              {roles && <ShowingDetailHeaderAgentInfo roles={roles} />}
             </Box>
           </Box>
         </Box>
