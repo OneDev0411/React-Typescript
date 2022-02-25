@@ -21,6 +21,7 @@ interface Props {
   minimumLength?: number
   isSearching?: boolean
   disableOnSearch?: boolean
+  autoFocus?: boolean
   className?: string
   showLoadingOnSearch?: boolean
   showClearSearch?: boolean
@@ -46,17 +47,18 @@ class Search extends React.Component<Props, State> {
     showLoadingOnSearch: false,
     style: {},
     disableOnSearch: true,
-    showClearSearch: true
+    showClearSearch: true,
+    autoFocus: false
   }
 
   constructor(props) {
     super(props)
 
-    const { onChange, debounceTime, defaultValue } = props
+    const { onChange, autoFocus, debounceTime, defaultValue } = props
 
     this.state = {
       searchValue: defaultValue || '',
-      isFocused: false
+      isFocused: autoFocus
     }
 
     this.onChangeHandler =
@@ -109,8 +111,9 @@ class Search extends React.Component<Props, State> {
 
   render() {
     const {
-      placeholder,
       style,
+      autoFocus,
+      placeholder,
       isSearching,
       disableOnSearch,
       showLoadingOnSearch,
@@ -135,6 +138,7 @@ class Search extends React.Component<Props, State> {
           </Icon>
 
           <TextInput
+            autoFocus={autoFocus}
             value={this.state.searchValue}
             placeholder={placeholder}
             onChange={this.handleChange}

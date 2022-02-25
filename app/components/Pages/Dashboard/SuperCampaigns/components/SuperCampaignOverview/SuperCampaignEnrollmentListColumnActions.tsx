@@ -1,29 +1,30 @@
 import { IconButton } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 
-import useSafeState from '@app/hooks/use-safe-state'
+import { useDeleteSuperCampaignEnrollment } from '@app/models/super-campaign'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import SuperCampaignOptedOutChip from './SuperCampaignOptedOutChip'
 
 interface SuperCampaignEnrollmentListColumnActionsProps {
   className?: string
+  superCampaignEnrollment: ISuperCampaignEnrollment<'user' | 'brand'>
   isOptedOut: boolean
-  onDelete: () => Promise<void>
 }
 
 function SuperCampaignEnrollmentListColumnActions({
   className,
   isOptedOut,
-  onDelete
+  superCampaignEnrollment
 }: SuperCampaignEnrollmentListColumnActionsProps) {
-  const [isDeleting, setIsDeleting] = useSafeState(false)
+  const { isLoading: isDeleting, mutate } = useDeleteSuperCampaignEnrollment()
 
-  const handleDelete = async () => {
-    setIsDeleting(true)
-    await onDelete()
-    setIsDeleting(false)
-  }
+  const handleDelete = () =>
+    mutate({
+      superCampaignId: superCampaignEnrollment.super_campaign,
+      userId: superCampaignEnrollment.user.id,
+      brandId: superCampaignEnrollment.brand.id
+    })
 
   if (isOptedOut) {
     return <SuperCampaignOptedOutChip />
