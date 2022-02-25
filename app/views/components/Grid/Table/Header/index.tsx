@@ -27,7 +27,7 @@ export function Header({ columns }: Props) {
 
   return (
     <Box display="flex" mb={2} pr={2}>
-      {columns?.map((item, index) => (
+      {columns.map((item, index) => (
         <Box
           key={index}
           display="flex"
