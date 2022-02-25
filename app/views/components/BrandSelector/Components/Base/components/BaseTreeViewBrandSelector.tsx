@@ -1,4 +1,4 @@
-import { useState, ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 import {
   Typography,
@@ -6,13 +6,13 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
-import useDebouncedCallback from 'use-debounce/lib/callback'
 
-import { useTeamsFilterHook } from '@app/components/Pages/Dashboard/Teams/hooks/use-teams-filter.hook'
+import { noop } from '@app/utils/helpers'
+import { TreeFn } from '@app/utils/tree-utils/types'
 import Search from '@app/views/components/Grid/Search'
 import TreeView from '@app/views/components/TreeView'
-import { noop } from 'utils/helpers'
-import { TreeFn } from 'utils/tree-utils/types'
+
+import { UseFilterTeamsReturnType } from '../../../hooks/use-filter-teams'
 
 const getNodeId = (team: IBrand) => team.id
 
@@ -36,7 +36,8 @@ export type NodeRenderer = {
   brand: IBrand
 }
 
-export interface BaseTreeViewBrandSelectorProps {
+export interface BaseTreeViewBrandSelectorProps
+  extends Omit<UseFilterTeamsReturnType, 'filterTeams'> {
   hasError?: boolean
   isLoading?: boolean
   searchPlaceholder?: string
@@ -54,14 +55,11 @@ export function BaseTreeViewBrandSelector({
   shouldExpandOnNodeClick = false,
   initialExpandedNodes = [],
   searchPlaceholder = 'Search for teams and agents',
+  handleSearch,
   onNodeClick = noop,
   nodeRenderer
 }: BaseTreeViewBrandSelectorProps) {
-  const [query, setQuery] = useState<string>('')
   const classes = useStyles()
-
-  const [debouncedSetQuery] = useDebouncedCallback(setQuery, 400)
-  const filteredNodes = useTeamsFilterHook(nodes, query)
 
   const renderNode = (brand: IBrand) => {
     if (!nodeRenderer) {
@@ -97,13 +95,14 @@ export function BaseTreeViewBrandSelector({
     <>
       <div className={classes.searchContainer}>
         <Search
+          autoFocus
           placeholder={searchPlaceholder}
-          onChange={value => debouncedSetQuery(value)}
+          onChange={value => handleSearch(value)}
         />
       </div>
       <TreeView
         selectable
-        getChildNodes={filteredNodes}
+        getChildNodes={nodes}
         shouldExpandOnNodeClick={shouldExpandOnNodeClick}
         initialExpandedNodes={initialExpandedNodes}
         getNodeId={getNodeId}
