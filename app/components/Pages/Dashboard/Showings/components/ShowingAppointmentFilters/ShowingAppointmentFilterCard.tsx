@@ -1,11 +1,10 @@
-import { Card, Typography, makeStyles } from '@material-ui/core'
+import { Badge, Card, Typography, makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 import { Link } from 'react-router'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { AppointmentFilter, AppointmentFilterInfo } from '../../types'
-import { InlineBadge } from '../InlineBadge'
 
 const useStyles = makeStyles(
   theme => ({
@@ -71,7 +70,7 @@ function ShowingAppointmentFilterCard({
   const classes = useStyles()
 
   const card = (
-    <InlineBadge className={classes.root} badgeContent={badge} color="error">
+    <Badge className={classes.root} badgeContent={5} color="error">
       <Card
         className={classNames(classes.card, selected && classes.selected)}
         variant="outlined"
@@ -89,7 +88,7 @@ function ShowingAppointmentFilterCard({
           </Typography>
         </div>
       </Card>
-    </InlineBadge>
+    </Badge>
   )
 
   return link ? (
