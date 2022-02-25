@@ -15,7 +15,7 @@ import { getExpandBrandsByType } from '../helpers/get-expand-brands-by-types'
 
 import { useFilterTeams, UseFilterTeamsReturnType } from './use-filter-teams'
 
-interface UseAvailableToSwitchTeamsReturnType
+interface UseAvailableTeamsToSwitchReturnType
   extends Omit<UseFilterTeamsReturnType, 'filterTeams'> {
   isError: boolean
   isLoading: boolean
@@ -29,7 +29,7 @@ type Teams = {
   allTeams: IBrand[]
 }
 
-export function useAvailableToSwitchTeams(): UseAvailableToSwitchTeamsReturnType {
+export function useAvailableTeamsToSwitch(): UseAvailableTeamsToSwitchReturnType {
   const {
     data: teams,
     isLoading,
