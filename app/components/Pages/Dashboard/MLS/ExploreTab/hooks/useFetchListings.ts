@@ -17,6 +17,7 @@ import {
   createValertOptions,
   createValertQueryString
 } from '../../helpers/get-listings-helpers'
+import { logSearchListings } from '../../helpers/log-search-listings'
 import { Actions, setListings, setIsLoading } from '../context/actions'
 import { reducer, initialState, ListingsState } from '../context/reducers'
 
@@ -96,6 +97,12 @@ export default function useFetchListings(
     // We don't need to call fetchResults() on every state.map.zoom change
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch, dispatch, brand])
+
+  useEffect(() => {
+    // Log user searching for listings activity when filter is applied
+    // TODO: fix this to parse search title
+    logSearchListings(JSON.stringify(state.search.filters))
+  }, [state.search.filters])
 
   return [state, dispatch]
 }

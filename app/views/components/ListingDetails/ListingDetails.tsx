@@ -172,7 +172,16 @@ function ListingDetails({
     mapSection.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  useLogUserActivity(listing?.id)
+  // Log user viewing the listing activity
+  useLogUserActivity(
+    {
+      action: 'UserViewedListing',
+      object_sa: {
+        listing: id
+      }
+    },
+    true
+  )
 
   const openShareModal = () => setIsShareModalOpen(true)
   const closeShareModal = () => setIsShareModalOpen(false)
