@@ -1,10 +1,17 @@
 export function getSide(deal: IDeal): string {
-  const sides = {
+  const isLeasing = deal.property_type.is_lease
+
+  const saleTypes = {
     Buying: 'Buyer',
     Selling: 'Seller'
   }
 
-  return sides[deal.deal_type]
+  const leaseTypes = {
+    Buying: 'Tenant',
+    Selling: 'Landlord'
+  }
+
+  return isLeasing ? leaseTypes[deal.deal_type] : saleTypes[deal.deal_type]
 }
 
 export function isSelling(deal: IDeal): boolean {
