@@ -36,7 +36,7 @@ export const calculateWordWrap = memoize(
       appearance.bold
     )
 
-    fontSize = Math.min(fontSize - 1, options.maxFontSize || fontSize)
+    fontSize = Math.min(fontSize, options.maxFontSize || fontSize) - 1
 
     return {
       appearance,

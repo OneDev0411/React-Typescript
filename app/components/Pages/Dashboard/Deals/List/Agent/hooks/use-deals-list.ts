@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { useSelector } from 'react-redux'
 
-import { useActiveTeamId } from '@app/hooks/team/use-active-team-id'
+import { useActiveBrandId } from '@app/hooks/brand'
 import { useBrandStatuses } from '@app/hooks/use-brand-statuses'
 import { IAppState } from '@app/reducers'
 import {
@@ -31,9 +31,10 @@ const Filters = {
 }
 
 export function useDealsList() {
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
+
   const deals = useSelector(({ deals }: IAppState) => deals.list)
-  const [statuses] = useBrandStatuses(activeTeamId)
+  const [statuses] = useBrandStatuses(activeBrandId)
 
   return useCallback(
     (activeFilter: string = 'all') => {
