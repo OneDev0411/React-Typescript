@@ -49,7 +49,7 @@ function ShowingDetailHeader({
 }: ShowingDetailHeaderProps) {
   const classes = useStyles()
 
-  const sellerAgent = roles?.filter(user => user.role === 'SellerAgent')[0]
+  const sellerAgent = roles?.find(user => user.role === 'SellerAgent')
 
   return (
     <Box className={classes.root} px={4} pt={4}>

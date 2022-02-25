@@ -90,9 +90,7 @@ function ShowingPropertyList({
       width: '15%',
       sortable: false,
       render: ({ row }) => {
-        const sellerAgent = row.roles.filter(
-          user => user.role === 'SellerAgent'
-        )[0]
+        const sellerAgent = row.roles.find(user => user.role === 'SellerAgent')
 
         return (
           <ShowingLabeledColumn>
