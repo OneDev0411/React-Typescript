@@ -1,20 +1,22 @@
-import React from 'react'
-
 import { useSelector } from 'react-redux'
+import { useEffectOnce } from 'react-use'
 
-import logUserActivity from 'models/user/post-new-activity'
+import { logUserActivity } from '@app/models/user/log-activity'
 import { selectUserUnsafe } from 'selectors/user'
 
-export function useLogUserActivity(activityObjectId?: UUID) {
+export function useLogUserActivity(
+  userActivity: TUserActivity,
+  isIpNeeded: boolean = false
+) {
   const user = useSelector(selectUserUnsafe)
 
-  React.useEffect(() => {
-    if (activityObjectId && user) {
-      logUserActivity({
-        object: activityObjectId,
-        object_class: 'listing',
-        action: 'UserViewedListing'
-      })
+  useEffectOnce(() => {
+    if (user) {
+      try {
+        logUserActivity(userActivity, isIpNeeded)
+      } catch (error) {
+        console.error(error)
+      }
     }
-  }, [activityObjectId, user])
+  })
 }

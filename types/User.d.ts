@@ -85,3 +85,58 @@ declare interface IUserDocusign extends IModel<'docusign_account'> {
   first_name: string
   last_name: string
 }
+
+type TUserActivityActions =
+  | 'UserLoggedIn'
+  | 'UserLoggedOut'
+  | 'UserSearchedListings'
+  | 'UserViewedAlert'
+  | 'UserViewedListing'
+  | 'UserFavoritedListing'
+  | 'UserSharedListing'
+  | 'UserCreatedAlert'
+  | 'UserCommentedRoom'
+  | 'UserOpenedIOSApp'
+  | 'UserCalledContact'
+  | 'UserCreatedContact'
+  | 'UserSignedUp'
+  | 'UserInvited'
+  | 'UserUpdatedSubmission'
+  | 'UserViewedFile'
+  | 'UserUpdatedReview'
+  | 'UserCreatedEnvelopeForSubmission'
+  | 'UserReactedToEnvelopeForSubmission'
+  | 'UserSharedAlert'
+  | 'UserCreatedDeal'
+  | 'UserSavedAlert'
+  | 'UserUploadedFile'
+  | 'UserDeletedFile'
+  | 'UserAddedTask'
+  | 'UserNotifiedOffice'
+  | 'UserRequestedDeletionOfTask'
+  | 'DealRoleReactedToEnvelopeForSubmission'
+  | 'UserCreatedCrmTask'
+  | 'UserCreatedContactAttributeDef'
+  | 'UserCreatedEnvelopeForTask'
+  | 'DealRoleReactedToEnvelopeForTask'
+  | 'UserImportedContacts'
+  | 'UserCreatedContactList'
+  | 'UserUpdatedContactList'
+  | 'UserVoidedEnvelopeForTask'
+  | 'UserRenamedFile'
+  | 'UserRequiredTask'
+
+interface IUserActivityBase {
+  action: TUserActivityActions
+}
+
+interface IUserActivityObjectSa extends IUserActivityBase {
+  object_sa: object
+}
+
+interface IUserActivityObjectClass extends IUserActivityBase {
+  object_class: string
+  object: any
+}
+
+declare type TUserActivity = IUserActivityObjectSa | IUserActivityObjectClass

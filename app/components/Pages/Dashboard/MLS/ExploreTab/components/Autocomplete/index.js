@@ -131,7 +131,7 @@ class MlsAutocompleteSearch extends Component {
         sw: placeResponse.geometry.viewport.southwest
       }
 
-      this.props.onSelectPlace(center, bounds, types)
+      this.props.onSelectPlace(center, bounds, types, place.description)
     } finally {
       this.setState({
         isLoading: false

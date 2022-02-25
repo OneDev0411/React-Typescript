@@ -36,7 +36,12 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   isGettingCurrentPosition: boolean
   onClickLocate: () => void
-  onSelectPlace: (center: ICoord, bounds: IBounds, types: string[]) => void
+  onSelectPlace: (
+    center: ICoord,
+    bounds: IBounds,
+    types: string[],
+    description: string
+  ) => void
 }
 
 export function LandingPage({

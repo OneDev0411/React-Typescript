@@ -29,6 +29,7 @@ import {
 } from '../../../context/actions'
 import useUiListingsContext from '../../../context/useUiListingsContext'
 import { createValertOptions } from '../../../helpers/get-listings-helpers'
+import { logSearchListings } from '../../../helpers/log-search-listings'
 import {
   coordToPoint,
   estimateMapZoom,
@@ -185,8 +186,12 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const onSelectPlace = (
     center: ICoord,
     bounds: ICompactBounds,
-    types: string[]
+    types: string[],
+    description: string
   ) => {
+    // Log user searching for listings activity when search url param is set
+    logSearchListings(description)
+
     const mapWidth = mapRef.current
       ? mapRef.current.getDiv().clientWidth
       : undefined

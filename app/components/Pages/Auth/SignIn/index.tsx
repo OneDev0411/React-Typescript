@@ -8,6 +8,7 @@ import { browserHistory } from 'react-router'
 import signin from '@app/models/auth/signin'
 import signup from '@app/models/auth/signup'
 import { getActiveTeam } from '@app/models/user/get-active-team'
+import { logUserActivity } from '@app/models/user/log-activity'
 import { lookUpUserByEmail } from '@app/models/user/lookup-user-by-email'
 import { setUserAndActiveTeam } from '@app/store_actions/active-team'
 
@@ -81,6 +82,21 @@ export default function Signin(props: Props) {
     }
   }
 
+  const logUserLoginActivity = async () => {
+    // Log user login activity
+    try {
+      await logUserActivity(
+        {
+          action: 'UserLoggedIn',
+          object_sa: {}
+        },
+        true
+      )
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const handleSignin = async values => {
     try {
       setIsLogging(true)
@@ -90,6 +106,8 @@ export default function Signin(props: Props) {
       const activeTeam: Nullable<IUserTeam> = await getActiveTeam(user)
 
       dispatch(setUserAndActiveTeam(user, activeTeam))
+
+      await logUserLoginActivity()
 
       Sentry.configureScope(scope => {
         scope.setUser({
