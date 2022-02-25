@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types'
 
-import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
+import { useActiveTeamPalette } from '@app/hooks/team/use-active-team-palette'
+import { getUserTitle } from '@app/models/user/helpers/get-user-title'
+import { H1 } from '@app/views/components/Typography/headings'
 
-import Brand from '../../../../../controllers/Brand'
-import { getUserTitle } from '../../../../../models/user/helpers/get-user-title'
-import { H1 } from '../../../Typography/headings'
 import { Map } from '../../Map'
 import { getFormatedDueDate } from '../helpers/get-formated-due-date'
 import '../styles/shared.scss'
@@ -21,15 +20,12 @@ const COVER_PAGE_CSS_NAME = 'c-tour-sheets-cover'
 export function CoverPage(props) {
   const { agent, tour } = props
   const { description } = tour
-  const activeBrand = useUnsafeActiveBrand()
+  const activeTeamPalette = useActiveTeamPalette()
 
-  let officeLogoSrc = ''
-
-  if (activeBrand) {
-    const marketingLogos = Brand.asset('marketing', null, activeBrand)
-
-    officeLogoSrc = marketingLogos && marketingLogos['logo-wide-alpha']
-  }
+  const officeLogoSrc =
+    activeTeamPalette['container-logo-wide'] ||
+    activeTeamPalette['container-logo-square'] ||
+    null
 
   return (
     <div className={`${TOUR_SHEETS_CSS_NAME}__page ${COVER_PAGE_CSS_NAME}`}>
