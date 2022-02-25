@@ -82,8 +82,8 @@ export function BaseBrandAvailableToUserSelector(
         variant="fullWidth"
         centered
       >
-        <Tab value={View.UserTeams} disabled={isLoading} label="My Teams" />
-        <Tab value={View.AllTeams} disabled={isLoading} label="All Teams" />
+        <Tab value={View.UserTeams} disabled={isLoading} label="My Accounts" />
+        <Tab value={View.AllTeams} disabled={isLoading} label="All Accounts" />
       </Tabs>
       {renderTreeView()}
     </>
