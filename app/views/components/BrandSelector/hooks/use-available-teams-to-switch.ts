@@ -4,6 +4,7 @@
 */
 import { useMemo, useCallback } from 'react'
 
+import escapeRegExp from 'lodash/escapeRegExp'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import useAsync from '@app/hooks/use-async'
@@ -82,8 +83,18 @@ export function useAvailableTeamsToSwitch(): UseAvailableTeamsToSwitchReturnType
     [teams.allTeams]
   )
   const getChildNodesForUserTeams = useCallback(
-    parent => (parent ? parent.children || [] : teams.userTeams || []),
-    [teams.userTeams]
+    parent => {
+      const nodes = parent ? parent.children || [] : teams.userTeams || []
+
+      if (!searchTerm) {
+        return nodes
+      }
+
+      const regExp = new RegExp(escapeRegExp(searchTerm), 'gi')
+
+      return nodes.filter((brand: IBrand) => brand.name.match(regExp))
+    },
+    [searchTerm, teams.userTeams]
   )
 
   return {
@@ -93,6 +104,6 @@ export function useAvailableTeamsToSwitch(): UseAvailableTeamsToSwitchReturnType
     handleSearch,
     allTeamInitialExpandedNodes,
     allTeams: filterTeams(getChildNodesForAllTeams),
-    userTeams: filterTeams(getChildNodesForUserTeams)
+    userTeams: getChildNodesForUserTeams
   }
 }
