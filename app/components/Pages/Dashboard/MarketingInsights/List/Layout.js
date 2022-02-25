@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Box, Button, Chip, makeStyles } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
-import { setUserSetting } from 'actions/user/set-setting'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import PageLayout from 'components/GlobalPageLayout'
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
-import { selectUser } from 'selectors/user'
 import { noop } from 'utils/helpers'
-import { getUserSettingsInActiveTeam } from 'utils/user-teams'
+import { getSettingFromTeam } from 'utils/user-teams'
 
 import { useHasSuperCampaignAccess } from '../../SuperCampaigns/hooks/use-has-super-campaign-access'
 
@@ -35,7 +35,7 @@ function InsightsLayout({
   hasSortFilter = true
 }) {
   const classes = useStyles()
-  const user = useSelector(selectUser)
+  const activeTeam = useUnsafeActiveTeam()
   const dispatch = useDispatch()
   const [sortField, setSortField] = useState({
     label: 'Newest',
@@ -67,8 +67,8 @@ function InsightsLayout({
   }
 
   useEffectOnce(() => {
-    const savedSortField = getUserSettingsInActiveTeam(
-      user,
+    const savedSortField = getSettingFromTeam(
+      activeTeam,
       SORT_FIELD_INSIGHT_KEY
     )
 
@@ -78,7 +78,7 @@ function InsightsLayout({
   })
 
   const handleSortChange = async item => {
-    dispatch(setUserSetting(SORT_FIELD_INSIGHT_KEY, item))
+    dispatch(setActiveTeamSetting(SORT_FIELD_INSIGHT_KEY, item))
     setSortField(item)
   }
 

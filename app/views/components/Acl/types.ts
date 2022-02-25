@@ -1,8 +1,4 @@
 export type Access =
   | IPermission
-  | ((user: IUser) => boolean)
+  | ((team: IUserTeam) => boolean)
   | { oneOf: Access[] }
-
-export interface UseAclOptions {
-  accessControlPolicy?: IAccessControlPolicy
-}

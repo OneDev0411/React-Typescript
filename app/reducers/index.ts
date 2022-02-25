@@ -3,6 +3,7 @@ import { reducer as notificationsReducer } from 'reapop'
 import { combineReducers } from 'redux'
 import { reducer as reduxFormReducer } from 'redux-form'
 
+import activeTeam, { IActiveTeamState } from './active-team'
 import auth from './auth'
 import brand from './brand'
 import chatroom from './chatroom'
@@ -25,6 +26,7 @@ import showings, { IShowingsState } from './showings'
 import socket from './socket'
 import { tasks } from './tasks'
 import user, { IUserState } from './user'
+import impersonateUser, { IImpersonateUserState } from './user/impersonate-user'
 import widgets from './widgets'
 
 const appReducer = combineReducers({
@@ -54,8 +56,12 @@ const appReducer = combineReducers({
   /* showings reducers */
   showings,
 
+  /* active team reducers (aka active user's role) */
+  activeTeam,
   /* global-triggers reducer */
   globalTriggers,
+  /* we use this user in some place instead of main user */
+  impersonateUser,
 
   /* third party reducers */
   notifications: notificationsReducer(),
@@ -78,6 +84,8 @@ export interface IAppState extends IAppReducer {
   user: IUserState
   globalNotifications: INotificationState
   showings: IShowingsState
+  activeTeam: IActiveTeamState
+  impersonateUser: IImpersonateUserState
   globalTriggers: IGlobalTriggerState
 }
 

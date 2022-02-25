@@ -14,6 +14,7 @@ import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
+import { selectActiveBrandIdUnsafe } from '@app/selectors/brand'
 import { deleteEmailTemplate } from 'actions/email-templates/delete-email-template'
 import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -26,7 +27,6 @@ import {
   selectEmailTemplates,
   selectEmailTemplatesIsFetching
 } from 'reducers/email-templates'
-import { getActiveTeamId } from 'utils/user-teams'
 
 const useStyles = makeStyles((theme: Theme) => ({
   name: {
@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface Props {
-  brand: UUID
+  activeBrandId: UUID
   isFetching: boolean
   templates: IBrandEmailTemplate[]
   onItemClick: (item: IBrandEmailTemplate) => void
@@ -85,7 +85,7 @@ interface Props {
 }
 
 function EmailTemplatesList({
-  brand,
+  activeBrandId,
   isFetching,
   templates,
   onItemClick,
@@ -105,7 +105,7 @@ function EmailTemplatesList({
   const handleDelete = async (id: UUID): Promise<void> => {
     try {
       addToDeletingItems(id)
-      await deleteEmailTemplate(brand, id)
+      await deleteEmailTemplate(activeBrandId, id)
       removeFromDeletingItems(id)
     } catch (error) {
       removeFromDeletingItems(id)
@@ -113,8 +113,8 @@ function EmailTemplatesList({
   }
 
   useEffect(() => {
-    fetchEmailTemplates(brand)
-  }, [brand, fetchEmailTemplates])
+    fetchEmailTemplates(activeBrandId)
+  }, [activeBrandId, fetchEmailTemplates])
 
   const columns: TableColumn<IBrandEmailTemplate>[] = [
     {
@@ -210,12 +210,15 @@ function EmailTemplatesList({
 }
 
 const mapStateToProps = (state: IAppState) => {
-  const brand = getActiveTeamId(state.user) || ''
+  const activeBrandId = selectActiveBrandIdUnsafe(state) || ''
 
   return {
-    brand,
-    templates: selectEmailTemplates(state.emailTemplates, brand),
-    isFetching: selectEmailTemplatesIsFetching(state.emailTemplates, brand)
+    activeBrandId,
+    templates: selectEmailTemplates(state.emailTemplates, activeBrandId),
+    isFetching: selectEmailTemplatesIsFetching(
+      state.emailTemplates,
+      activeBrandId
+    )
   }
 }
 

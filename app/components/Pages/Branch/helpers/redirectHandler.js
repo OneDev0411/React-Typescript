@@ -109,6 +109,8 @@ const redirectHandler = async (
       )
     )
 
+    window.location.reload()
+
     return
   } else if (userInfo && userInfo.is_shadow) {
     console.log('isShadow:', branchData)
@@ -140,8 +142,8 @@ const redirectHandler = async (
   } else if (actionType === 'UserLogin') {
     console.log('UserLogin', branchData)
 
-    const loginHandler = () =>
-      dispatch(
+    const loginHandler = async () => {
+      await dispatch(
         submitSigninForm(
           {
             refresh_token: branchData.refresh_token.token,
@@ -152,6 +154,9 @@ const redirectHandler = async (
           branchData.refresh_token.user
         )
       )
+
+      window.location.reload()
+    }
 
     if (hasConflict()) {
       console.log('UserLogin - CONFLICT')

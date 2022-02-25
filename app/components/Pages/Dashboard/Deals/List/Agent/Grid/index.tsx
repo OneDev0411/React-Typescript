@@ -2,6 +2,7 @@ import { TableCellProps } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useActiveTeam } from '@app/hooks/team/use-active-team'
 import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
 import { useMakeOriginQueryParamFromLocation } from '@app/hooks/use-make-origin-query-param-from-location'
 import { goTo } from '@app/utils/go-to'
@@ -19,9 +20,7 @@ import {
   getFormattedPrice
 } from 'models/Deal/helpers/context'
 import { IAppState } from 'reducers'
-import { selectUser } from 'selectors/user'
 import { sortDealsStatus } from 'utils/sort-deals-status'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import onDealOpened from '../../../utils/on-deal-opened'
 import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
@@ -46,15 +45,16 @@ interface Props {
 
 function AgentGrid(props: Props & WithRouterProps) {
   const gridClasses = useGridStyles()
+  const activeTeam = useActiveTeam()
+  const activeBrandId = activeTeam?.brand?.id
 
   const isFetchingDeals = useSelector(
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
   const roles = useSelector(({ deals }: IAppState) => deals.roles)
-  const user = useSelector(selectUser)
-  const brandChecklists = useBrandChecklists(getActiveTeamId(user)!)
+  const brandChecklists = useBrandChecklists(activeBrandId)
 
-  const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
+  const [statuses] = useBrandStatuses(activeBrandId)
   const originQueryParam = useMakeOriginQueryParamFromLocation()
   const getDealsList = useDealsList()
 
@@ -136,7 +136,7 @@ function AgentGrid(props: Props & WithRouterProps) {
           sorting={{
             columns: props.sortableColumns,
             sortBy: getGridSort(
-              user,
+              activeTeam,
               columns,
               props.location,
               SORT_FIELD_SETTING_KEY

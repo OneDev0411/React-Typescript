@@ -1,6 +1,6 @@
 import merge from 'merge'
 
-export default function flattenBrand(brand: IBrand): IBrand | null {
+export default function flattenBrand(brand: IBrand): Nullable<IBrand> {
   if (!brand) {
     return null
   }

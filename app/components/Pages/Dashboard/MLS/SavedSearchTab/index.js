@@ -9,10 +9,9 @@ import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 
 import { getSavedSearchListings } from '@app/models/listings/alerts/get-alert-listings'
-import { putUserSetting } from '@app/models/user/put-user-setting'
 import { selectAlert } from '@app/reducers/listings/alerts/list'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import getAlerts from '@app/store_actions/listings/alerts/get-alerts'
-import { getUserTeams } from '@app/store_actions/user/teams'
 import { changeUrl } from '@app/utils/change-url'
 import { normalizeListingLocation } from '@app/utils/map'
 import Avatars from '@app/views/components/Avatars'
@@ -83,7 +82,9 @@ class SavedSearch extends React.Component {
   constructor(props) {
     super(props)
 
-    const { index, ascending } = parseSortIndex(getDefaultSort(this.props.user))
+    const { index, ascending } = parseSortIndex(
+      getDefaultSort(this.props.activeTeam)
+    )
 
     this.state = {
       listings: {
@@ -155,8 +156,7 @@ class SavedSearch extends React.Component {
         ascending
       }
     })
-    await putUserSetting(SORT_FIELD_SETTING_KEY, sort)
-    this.props.dispatch(getUserTeams(this.props.user))
+    this.props.dispatch(setActiveTeamSetting(SORT_FIELD_SETTING_KEY, sort))
   }
 
   onToggleListingModal = (id, isOpen) => {
@@ -282,8 +282,9 @@ class SavedSearch extends React.Component {
 SavedSearch.propTypes = propTypes
 SavedSearch.defaultProps = defaultProps
 
-const mapStateToProps = ({ alerts, user }, props) => ({
+const mapStateToProps = ({ alerts, user, activeTeam }, props) => ({
   savedSearch: selectAlert(alerts.list, props.params.id),
+  activeTeam,
   user
 })
 

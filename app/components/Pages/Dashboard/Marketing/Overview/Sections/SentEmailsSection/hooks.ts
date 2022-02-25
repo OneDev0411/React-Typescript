@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
 
-import { useSelector } from 'react-redux'
-
+import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
 import { useLoadingEntities } from 'hooks/use-loading'
 import { getEmailCampaigns } from 'models/email/get-email-campaigns'
-import { selectUser } from 'selectors/user'
 
 type EmailCampaign = IEmailCampaign<'recipients' | 'template', 'list', 'email'>
 
@@ -14,13 +12,13 @@ interface UseEmailCampaigns {
 }
 
 export function useEmailCampaigns(): UseEmailCampaigns {
-  const user = useSelector(selectUser)
+  const activeBrandId = useUnsafeActiveBrandId()
   const [campaigns, setCampaigns] = useState<Nullable<EmailCampaign[]>>(null)
   const [isLoading] = useLoadingEntities(campaigns)
 
   useEffect(() => {
     async function fetchEmailCampaigns() {
-      const emailCampaigns = await getEmailCampaigns(user, {
+      const emailCampaigns = await getEmailCampaigns(activeBrandId, {
         emailCampaignAssociations: ['recipients', 'template'],
         emailRecipientsAssociations: ['list'],
         emailCampaignEmailsAssociation: ['email']
@@ -34,7 +32,7 @@ export function useEmailCampaigns(): UseEmailCampaigns {
     }
 
     fetchEmailCampaigns()
-  }, [user])
+  }, [activeBrandId])
 
   return {
     isLoading,

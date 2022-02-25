@@ -4,18 +4,18 @@ import IframeResizer from 'iframe-resizer-react'
 import { useSelector } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 interface Props {
   dashboardId: UUID
 }
 
 export default function MetabaseDashboard({ dashboardId }: Props) {
-  const [analyticsUrl, setAnalyticsUrl] = useState<string>()
-
   const user = useSelector(selectUser)
-  const activeBrandId = getActiveTeamId(user)
+  const activeBrandId = useActiveBrandId()
+
+  const [analyticsUrl, setAnalyticsUrl] = useState<string>()
 
   useDeepCompareEffect(() => {
     const makeURL = async () => {

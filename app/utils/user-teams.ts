@@ -1,168 +1,24 @@
 import idx from 'idx'
 import { flatMap, identity, uniqBy } from 'lodash'
 
-import { ACL } from '../constants/acl'
-
 import { DEFAULT_BRAND_PALETTE } from './constants'
 import flattenBrand from './flatten-brand'
 import { notDeleted } from './not-deleted'
 
-function getActiveTeamFromUser(user) {
-  return user.active_brand || user.brand
-}
-
-export function getActiveTeam(user: Partial<IUser> | null): IUserTeam | null {
-  if (user == null || user.teams == null) {
-    return null
-  }
-
-  const { teams } = user
-
-  let activeTeam = teams.find(
-    team => team.brand.id === getActiveTeamFromUser(user)
-  )
-
-  if (!activeTeam && teams) {
-    activeTeam = teams[0]
-  }
-
-  return activeTeam || null
-}
-
-export function getActiveBrand(user: Partial<IUser> | null): IBrand | null {
-  const activeTeam = getActiveTeam(user)
-
-  if (activeTeam == null) {
-    return null
-  }
-
-  return activeTeam.brand
-}
-
-export function getActiveTeamId(user: IUser | null): UUID | null {
-  if (user == null) {
-    return null
-  }
-
-  if (user.active_brand) {
-    return user.active_brand
-  }
-
-  const activeTeam = getActiveTeam(user)
-
-  if (!activeTeam) {
-    return user.brand
-  }
-
-  return activeTeam.brand.id
-}
-
-export function getActiveTeamACL(user: IUser | null): string[] {
-  const team = getActiveTeam(user)
-
-  return team && team.acl ? team.acl : []
-}
-
-export function isSoloActiveTeam(user: IUser | null): boolean {
-  const team = getActiveTeam(user)
-
-  return !!(team && team.brand && team.brand.member_count === 1)
-}
-
-export function hasUserAccess(
-  user: IUser | null,
-  access: IPermission,
-  accessControlPolicy: IAccessControlPolicy = 'ActiveTeam'
-): boolean {
-  if (user == null) {
+export function isSoloActiveTeam(team: Nullable<IUserTeam>): boolean {
+  if (!team) {
     return false
   }
 
-  const team = getActiveTeam(user)
-
-  let brand: IBrand | null = team && team.brand
-
-  while (brand) {
-    const brandId = brand.id
-    const userTeam = (user.teams || []).find(team => team.brand.id === brandId)
-
-    if (
-      // If policy is Root, we only accept access if we have reached the root brand
-      (accessControlPolicy !== 'Root' || !brand.parent) &&
-      userTeam &&
-      (userTeam.acl || []).includes(access)
-    ) {
-      return true
-    }
-
-    // If policy is ActiveTeam, don't need to traverse the tree up
-    if (accessControlPolicy === 'ActiveTeam') {
-      break
-    }
-
-    brand = brand.parent
-  }
-
-  return false
+  return !!(team.brand && team.brand.member_count === 1)
 }
 
-export function hasUserAccessToDeals(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.DEALS) || isBackOffice(user)
-}
-
-export function hasUserAccessToCrm(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.CRM)
-}
-
-export function hasUserAccessToMarketingCenter(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.MARKETING)
-}
-
-export function hasUserAccessToAgentNetwork(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.AGENT_NETWORK)
-}
-
-export function hasUserAccessToWebsites(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.WEBSITES)
-}
-
-export function hasUserAccessToShowings(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.SHOWINGS)
-}
-
-export function isBackOffice(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.BACK_OFFICE)
-}
-
-export function isAdmin(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.ADMIN)
-}
-
-export function hasUserAccessToBrandSettings(user: IUser | null): boolean {
-  const brand = getActiveBrand(user)
-
-  // Only brokerages should have brand settings
-  if (!brand || brand.brand_type !== 'Brokerage') {
+export function isActiveTeamTraining(team: Nullable<IUserTeam>): boolean {
+  if (!team) {
     return false
   }
 
-  // User should be an admin and should have access to MC
-  return isAdmin(user) && hasUserAccessToMarketingCenter(user)
-}
-
-export function hasUserAccessToUploadBrandAssets(user: IUser | null): boolean {
-  // User should be an admin and should have access to MC
-  return isAdmin(user) && hasUserAccessToMarketingCenter(user)
-}
-
-export function isActiveTeamTraining(user: IUser | null): boolean {
-  const activeTeam: IUserTeam | null = getActiveTeam(user)
-
-  if (!activeTeam) {
-    return false
-  }
-
-  let current: IBrand = activeTeam.brand
+  let current: IBrand = team.brand
 
   do {
     if (current.training) {
@@ -176,9 +32,8 @@ export function isActiveTeamTraining(user: IUser | null): boolean {
 }
 
 export function viewAs(
-  user: IUser | null,
-  shouldReturnAll: boolean = false,
-  team: IUserTeam | null = getActiveTeam(user)
+  team: Nullable<IUserTeam>,
+  shouldReturnAll: boolean = false
 ): UUID[] {
   if (!team) {
     return []
@@ -205,46 +60,26 @@ export function viewAs(
   return allTeamMemberIds
 }
 
-type GetSettings = (
-  team: IUserTeam,
-  includesParents?: boolean
-) => StringMap<any>
-
-export const getSettingsFromActiveTeam =
-  (getSettings: GetSettings) =>
-  (user: IUser | null, includesParents?: boolean) => {
-    const team = getActiveTeam(user)
-
+export const getTeamSetting =
+  (team: Nullable<IUserTeam>) => (key: string, defaultValue?: any) => {
     if (!team) {
-      return {}
+      return defaultValue
     }
 
-    return getSettings(team, includesParents)
+    return team?.settings?.[key] ?? defaultValue
   }
 
-export const getActiveTeamSettings = getSettingsFromActiveTeam(
-  (team, includesParents) => {
-    let settings: StringMap<any> | null | undefined = team.brand.settings
-
-    if (includesParents) {
-      let brand = flattenBrand(team.brand)
-
-      settings = brand?.settings
-    }
-
-    return settings || {}
-  }
-)
-
-export const getUserSettingsInActiveTeam = (user: IUser, key: string): any => {
-  return getSettingsFromActiveTeam(team => {
-    return team?.settings?.[key]
-  })(user)
+export const getSettingFromTeam = (
+  team: Nullable<IUserTeam>,
+  key: string,
+  defaultValue?: any
+): any => {
+  return getTeamSetting(team)(key, defaultValue)
 }
 
-export function getActiveTeamPalette(user: IUser): BrandMarketingPalette {
-  const team = getActiveTeam(user)
-
+export function getActiveTeamPalette(
+  team: Nullable<IUserTeam>
+): BrandMarketingPalette {
   if (!team || !team.brand) {
     return DEFAULT_BRAND_PALETTE
   }
@@ -258,23 +93,23 @@ export function getActiveTeamPalette(user: IUser): BrandMarketingPalette {
   return brand.settings.marketing_palette
 }
 
-export function viewAsEveryoneOnTeam(user: IUser | null): boolean {
-  if (user == null) {
+export function viewAsEveryoneOnTeam(team: Nullable<IUserTeam>): boolean {
+  if (!team) {
     return false
   }
 
-  const users = viewAs(user, true)
+  const users = viewAs(team, true)
 
   return (
     // It means all members of the team
     users == null ||
     users.length === 0 ||
-    getTeamAvailableMembers(getActiveTeam(user)).length === users.length
+    getTeamAvailableMembers(team).length === users.length
   )
 }
 
-export function getTeamAvailableMembers(team: IUserTeam | null) {
-  return team && team.brand ? getBrandUsers(team.brand) : []
+export function getTeamAvailableMembers(team: Nullable<IUserTeam>) {
+  return team?.brand ? getBrandUsers(team.brand) : []
 }
 
 export function getRoleUsers(role: IBrandRole, includeDeletedUsers = false) {
@@ -284,12 +119,12 @@ export function getRoleUsers(role: IBrandRole, includeDeletedUsers = false) {
 }
 
 export function getBrandUsers(
-  team: IBrand,
+  brand: IBrand,
   includeDeletedUsers = false
 ): IUser[] {
   return uniqBy(
     flatMap(
-      (team.roles || [])
+      (brand.roles || [])
         .filter(notDeleted)
         .map(role => getRoleUsers(role, includeDeletedUsers))
     ),
@@ -308,16 +143,14 @@ export function getUserRoles(team: IBrand, userId: string) {
 }
 
 export function getBrandByType(
-  user: IUser | null,
+  team: Nullable<IUserTeam>,
   type: IBrandType
-): IBrand | null {
-  const team = getActiveTeam(user)
-
-  if (team === null) {
+): Nullable<IBrand> {
+  if (!team) {
     return null
   }
 
-  let brand: IBrand | null = team.brand
+  let brand: Nullable<IBrand> = team.brand
 
   do {
     if (brand.brand_type === type) {
@@ -330,14 +163,12 @@ export function getBrandByType(
   return null
 }
 
-export function getRootBrand(user: IUser | null): IBrand | null {
-  const team = getActiveTeam(user)
-
-  if (team === null) {
+export function getRootBrand(team: Nullable<IUserTeam>): Nullable<IBrand> {
+  if (!team) {
     return null
   }
 
-  let brand: IBrand | null = team.brand
+  let brand: Nullable<IBrand> = team.brand
 
   while (brand && brand.parent) {
     brand = brand.parent

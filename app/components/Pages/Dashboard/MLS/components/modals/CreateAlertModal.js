@@ -100,8 +100,8 @@ const CreateAlertModal = ({
 
 export default compose(
   connect(
-    ({ data }) => ({
-      user: data.user
+    ({ user }) => ({
+      user
     }),
     { createAlert }
   ),

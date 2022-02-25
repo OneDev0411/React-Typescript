@@ -1,5 +1,3 @@
-import React from 'react'
-
 import flatten from 'lodash/flatten'
 import uniqBy from 'lodash/uniqBy'
 

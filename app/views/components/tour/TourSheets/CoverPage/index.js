@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types'
 
+import { useActiveTeamPalette } from '@app/hooks/team/use-active-team-palette'
 import { getUserTitle } from '@app/models/user/helpers/get-user-title'
-import { getActiveTeamPalette } from '@app/utils/user-teams'
 import { H1 } from '@app/views/components/Typography/headings'
 
 import { Map } from '../../Map'
 import { getFormatedDueDate } from '../helpers/get-formated-due-date'
-
 import '../styles/shared.scss'
 import './style.scss'
 
@@ -21,7 +20,7 @@ const COVER_PAGE_CSS_NAME = 'c-tour-sheets-cover'
 export function CoverPage(props) {
   const { agent, tour } = props
   const { description } = tour
-  const activeTeamPalette = getActiveTeamPalette(agent)
+  const activeTeamPalette = useActiveTeamPalette()
 
   const officeLogoSrc =
     activeTeamPalette['container-logo-wide'] ||
