@@ -250,11 +250,10 @@ export function ActiveTeam() {
       {isBrandSelectorOpen && (
         <BrandAvailableToUserSelectorDrawer
           open
-          drawerTitle="Switch Team"
+          drawerTitle="Select an Account"
           width="43rem"
           onClose={hanldeCloseBrandSelectorDrawer}
           brandSelectorProps={{
-            searchPlaceholder: 'Search for teams',
             shouldExpandOnNodeClick: true,
             nodeRenderer: renderBrandNode
           }}

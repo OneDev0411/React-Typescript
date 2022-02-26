@@ -86,7 +86,7 @@ function Brand({ brand, isActive, isFetchingUser, disabled, onClick }: Props) {
           }
           onClick={handleOnClick}
         >
-          {isFetchingUser ? 'Loading...' : 'Select Team'}
+          {isFetchingUser ? 'Loading...' : 'Select Account'}
         </Button>
       )}
     </div>
