@@ -3,10 +3,9 @@ import { useMemo, useCallback } from 'react'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import useAsync from '@app/hooks/use-async'
-import { getAvailableBrandsToSwitch } from 'models/BrandConsole/Brands'
+import { getAvailableBrandsToSwitch } from '@app/models/BrandConsole/Brands'
 import { TreeFn } from 'utils/tree-utils/types'
 
-import { getBrandsWithMembers } from '../helpers/get-brands-with-members'
 import { getExpandBrandsByType } from '../helpers/get-expand-brands-by-types'
 
 import { useFilterTeams, UseFilterTeamsReturnType } from './use-filter-teams'
@@ -32,15 +31,14 @@ export function useTeams(): UseTeamsReturnType {
     })
   })
 
-  const filteredTeams = useMemo(() => getBrandsWithMembers(teams), [teams])
   const initialExpandedNodes = useMemo(() => {
-    if (!filteredTeams) {
+    if (!teams) {
       return []
     }
 
     if (searchTerm) {
       // expand all type on brand type
-      return getExpandBrandsByType(filteredTeams, [
+      return getExpandBrandsByType(teams, [
         'Team',
         'Other',
         'Region',
@@ -50,12 +48,12 @@ export function useTeams(): UseTeamsReturnType {
       ])
     }
 
-    return getExpandBrandsByType(filteredTeams)
-  }, [filteredTeams, searchTerm])
+    return getExpandBrandsByType(teams)
+  }, [teams, searchTerm])
 
   const getChildNodes = useCallback(
-    parent => (parent ? parent.children || [] : filteredTeams || []),
-    [filteredTeams]
+    parent => (parent ? parent.children || [] : teams || []),
+    [teams]
   )
 
   return {
