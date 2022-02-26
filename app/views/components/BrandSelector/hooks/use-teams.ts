@@ -3,7 +3,7 @@ import { useMemo, useCallback } from 'react'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import useAsync from '@app/hooks/use-async'
-import { getAvailableBrandsToSwitch } from 'models/BrandConsole/Brands'
+import { getAvailableBrandsToSwitch } from '@app/models/BrandConsole/Brands'
 import { TreeFn } from 'utils/tree-utils/types'
 
 import { getExpandBrandsByType } from '../helpers/get-expand-brands-by-types'
