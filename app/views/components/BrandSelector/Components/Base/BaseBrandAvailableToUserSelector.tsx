@@ -54,19 +54,21 @@ export function BaseBrandAvailableToUserSelector(
     if (view === View.AllTeams) {
       return (
         <BaseTreeViewBrandSelector
-          initialExpandedNodes={allTeamInitialExpandedNodes}
-          nodes={allTeams}
           {...commonProps}
           {...props}
+          searchPlaceholder="Search for teams"
+          initialExpandedNodes={allTeamInitialExpandedNodes}
+          nodes={allTeams}
         />
       )
     }
 
     return (
       <BaseTreeViewBrandSelector
-        nodes={userTeams}
         {...commonProps}
         {...props}
+        searchPlaceholder="Search my accounts"
+        nodes={userTeams}
       />
     )
   }
@@ -83,7 +85,11 @@ export function BaseBrandAvailableToUserSelector(
         centered
       >
         <Tab value={View.UserTeams} disabled={isLoading} label="My Accounts" />
-        <Tab value={View.AllTeams} disabled={isLoading} label="All Accounts" />
+        <Tab
+          value={View.AllTeams}
+          disabled={isLoading}
+          label="Other Accounts"
+        />
       </Tabs>
       {renderTreeView()}
     </>
