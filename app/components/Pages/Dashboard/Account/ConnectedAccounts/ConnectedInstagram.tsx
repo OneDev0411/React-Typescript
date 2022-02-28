@@ -1,9 +1,9 @@
 import useNotify from '@app/hooks/use-notify'
 
-import ConnectedInstagramAccounts from '../components/ConnectedInstagramAccounts'
 import ConnectInstagramAccountButton, {
   FacebookAuthErrorCode
 } from '../components/ConnectInstagramAccountButton'
+import FacebookPageList from '../components/FacebookPageList'
 
 import ConnectedAccountsLayout from './ConnectedAccountsLayout'
 
@@ -41,7 +41,7 @@ function ConnectedInstagram({ className }: Props) {
         </ConnectInstagramAccountButton>
       }
     >
-      <ConnectedInstagramAccounts />
+      <FacebookPageList />
     </ConnectedAccountsLayout>
   )
 }
