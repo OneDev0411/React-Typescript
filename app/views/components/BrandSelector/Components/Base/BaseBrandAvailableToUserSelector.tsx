@@ -68,6 +68,7 @@ export function BaseBrandAvailableToUserSelector(
         {...commonProps}
         {...props}
         searchPlaceholder="Search my accounts"
+        initialExpandedNodes={[]}
         nodes={userTeams}
       />
     )
