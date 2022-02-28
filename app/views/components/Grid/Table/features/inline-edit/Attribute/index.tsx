@@ -54,6 +54,7 @@ const useStyles = makeStyles(
       },
       '&:last-child': {
         height: rowSize - 1,
+
         borderBottomLeftRadius: theme.shape.borderRadius,
         borderBottomRightRadius: theme.shape.borderRadius,
         borderBottom: 'none'

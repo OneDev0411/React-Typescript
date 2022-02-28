@@ -1,4 +1,4 @@
-import { alpha, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 
 import { ToggleEntireRows } from '../../features/Selection/ToggleEntireRows'
 import { GridSelectionOptions, TableColumn } from '../../types'
@@ -35,12 +35,7 @@ const useStyles = makeStyles(
       height: '100%',
       display: 'flex',
       alignSelf: 'center',
-      alignItems: 'center',
-      backgroundColor: alpha(theme.palette.grey[50], 0.75),
-
-      borderTop: `1px solid ${theme.palette.divider}`,
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      borderRight: `1px solid ${theme.palette.divider}`
+      alignItems: 'center'
     }
   }),
   { name: 'HeaderRow' }
@@ -87,13 +82,17 @@ export function Header<Row>({
     }
 
     if (typeof headerCell === 'function') {
-      return headerCell({
-        rows,
-        column,
-        columnIndex,
-        totalRows,
-        width: columnsSize[columnIndex]
-      })
+      return (
+        <div className={classes.cellContainer} key={columnIndex}>
+          {headerCell({
+            rows,
+            column,
+            columnIndex,
+            totalRows,
+            width: columnsSize[columnIndex]
+          })}
+        </div>
+      )
     }
 
     return null

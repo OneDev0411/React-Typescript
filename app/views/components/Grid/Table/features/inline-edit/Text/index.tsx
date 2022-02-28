@@ -15,8 +15,7 @@ const useStyles = makeStyles(
     }),
     textField: {
       ...theme.typography.body2,
-      paddingLeft: theme.spacing(0.25),
-      letterSpacing: 0.15
+      paddingLeft: theme.spacing(0.25)
     }
   }),
   {

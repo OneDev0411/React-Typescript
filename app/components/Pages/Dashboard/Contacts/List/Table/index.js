@@ -218,17 +218,16 @@ const ContactsList = props => {
           title="Last Touch"
           iconPath={mdiCalendarOutline}
           sortable={column.sortable}
+          width={width}
           // sortDirection={(
           //   ["last_touch", "-last_touch"].includes(sortOrder) &&
           //   (sortOrder.startsWith("-") ? "desc" : "asc")
           // )}
-          width={width}
-          sortDirection="desc"
         />
       ),
       isHidden: ['xs'].includes(breakpoint),
       sortable: false,
-      width: '130px',
+      width: '150px',
       render: ({ row: contact, isRowSelected, column }) => {
         if (column.isHidden) {
           return null

@@ -22,14 +22,13 @@ const useStyles = makeStyles(
       borderBottom: `1px solid ${theme.palette.divider}`,
       cursor: 'pointer',
 
-      '&.primary': {
-        paddingLeft: theme.spacing(1)
-      },
-
       '&:hover': {
         backgroundColor: `${alpha(theme.palette.grey[100], 0.75)}`
       }
     }),
+    primaryContainer: {
+      paddingLeft: theme.spacing(1)
+    },
     iconContainer: {
       width: '32px',
       height: '100%',
@@ -61,14 +60,6 @@ const useStyles = makeStyles(
       height: theme.spacing(3),
       borderRadius: theme.spacing(3),
 
-      '&.cellHovered': {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-
-        color: `${theme.palette.action.disabled}`
-      },
-
       '&:hover': {
         display: 'flex',
         alignItems: 'center',
@@ -77,6 +68,13 @@ const useStyles = makeStyles(
         backgroundColor: `${theme.palette.action.hover}`,
         color: `${theme.palette.tertiary.dark}`
       }
+    },
+    sortIconBgCellHovered: {
+      display: 'flex !important',
+      alignItems: 'center',
+      justifyContent: 'center',
+
+      color: `${theme.palette.action.disabled}`
     }
   }),
   { name: 'ColumnHeaderCell' }
@@ -118,7 +116,7 @@ const ColumnHeaderCell = ({
       <div className={classes.sortActionContainer}>
         <div
           className={cn(classes.sortIconBg, {
-            cellHovered: isHovered
+            [classes.sortIconBgCellHovered]: isHovered
           })}
         >
           <SvgIcon size={muiIconSizes.small} path={sortIcon} />
@@ -130,7 +128,7 @@ const ColumnHeaderCell = ({
   return (
     <div
       className={cn(classes.container, {
-        primary: isPrimary
+        [classes.primaryContainer]: isPrimary
       })}
       onMouseEnter={onHoverIn}
       onMouseLeave={onHoverOut}
