@@ -36,7 +36,6 @@ export default function SignOut(props: Props) {
         queryParams ? createUrlSearch(queryParams, undefined, true) : ''
       }`
 
-      console.log('redirectFullPath', redirectFullPath)
       await signout()
 
       window.location.replace(redirectFullPath)
