@@ -159,6 +159,7 @@ export const BoardColumn = memo(function BoardColumn({
         {
           start: loadingOffset,
           limit: loadingLimit,
+          order: criteria.sortOrder,
           filter_type: criteria.conditionOperator
         },
         viewAs,
