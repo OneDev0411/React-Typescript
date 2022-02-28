@@ -4,15 +4,15 @@ import { Button, ButtonProps, CircularProgress } from '@material-ui/core'
 
 import { useFacebookAuth, UseFacebookAuthOptions } from './use-facebook-auth'
 
-interface ConnectInstagramAccountButtonProps
+interface ConnectFacebookPageButtonProps
   extends Omit<ButtonProps, 'size' | 'onClick' | 'startIcon' | 'disabled'>,
     Pick<UseFacebookAuthOptions, 'onAuthSuccess' | 'onAuthError'> {}
 
-function ConnectInstagramAccountButton({
+function ConnectFacebookPageButton({
   onAuthSuccess,
   onAuthError,
   ...buttonProps
-}: ConnectInstagramAccountButtonProps) {
+}: ConnectFacebookPageButtonProps) {
   const [isWorking, setIsWorking] = useState(false)
 
   const { openAuthWindow } = useFacebookAuth({
@@ -35,4 +35,4 @@ function ConnectInstagramAccountButton({
   )
 }
 
-export default ConnectInstagramAccountButton
+export default ConnectFacebookPageButton

@@ -1,8 +1,8 @@
 import useNotify from '@app/hooks/use-notify'
 
-import ConnectInstagramAccountButton, {
+import ConnectFacebookPageButton, {
   FacebookAuthErrorCode
-} from '../components/ConnectInstagramAccountButton'
+} from '../components/ConnectFacebookPageButton'
 import FacebookPageList from '../components/FacebookPageList'
 
 import ConnectedAccountsLayout from './ConnectedAccountsLayout'
@@ -32,13 +32,13 @@ function ConnectedInstagram({ className }: Props) {
       title="Instagram"
       description="Share marketing stuff directly to Instagram"
       action={
-        <ConnectInstagramAccountButton
+        <ConnectFacebookPageButton
           variant="outlined"
           onAuthSuccess={handleAuthSuccess}
           onAuthError={handleAuthError}
         >
           Connect Instagram Account
-        </ConnectInstagramAccountButton>
+        </ConnectFacebookPageButton>
       }
     >
       <FacebookPageList />
