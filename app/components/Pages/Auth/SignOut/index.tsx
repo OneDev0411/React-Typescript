@@ -3,22 +3,11 @@ import { useEffectOnce } from 'react-use'
 
 import signout from '@app/models/auth/signout'
 import { logUserActivity } from '@app/models/user/log-activity'
+import { createUrlSearch } from '@app/utils/helpers'
 import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
 
 interface Props {
   location: Location
-}
-
-function createParams(params: Record<string, string>) {
-  const queryString = Object.keys(params)
-    .map(key => `${key}=${encodeURIComponent(params[key])}`)
-    .join('&')
-
-  if (queryString.length > 0) {
-    return `?${queryString}`
-  }
-
-  return ''
 }
 
 export default function SignOut(props: Props) {
@@ -44,9 +33,10 @@ export default function SignOut(props: Props) {
         '/signin') as string
 
       const redirectFullPath = `${redirectPath}${
-        queryParams ? createParams(queryParams as Record<string, string>) : ''
+        queryParams ? createUrlSearch(queryParams, undefined, true) : ''
       }`
 
+      console.log('redirectFullPath', redirectFullPath)
       await signout()
 
       window.location.replace(redirectFullPath)
