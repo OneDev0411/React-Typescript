@@ -18,6 +18,7 @@ import {
   createValertQueryString
 } from '../../helpers/get-listings-helpers'
 import { logSearchListings } from '../../helpers/log-search-listings'
+import { stringifyFilters } from '../../helpers/stringifyFilters'
 import { Actions, setListings, setIsLoading } from '../context/actions'
 import { reducer, initialState, ListingsState } from '../context/reducers'
 
@@ -100,8 +101,7 @@ export default function useFetchListings(
 
   useEffect(() => {
     // Log user searching for listings activity when filter is applied
-    // TODO: fix this to parse search title
-    logSearchListings(JSON.stringify(state.search.filters))
+    logSearchListings(stringifyFilters(state.search.filters))
   }, [state.search.filters])
 
   return [state, dispatch]
