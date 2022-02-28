@@ -33,7 +33,11 @@ export function useFacebookAuth({
       return
     }
 
-    const windowHandle = window.open(facebookAuthUrl, '_blank')
+    const windowHandle = window.open(
+      facebookAuthUrl,
+      'sharer',
+      'toolbar=0,status=0,width=548,height=325'
+    )
 
     if (!windowHandle) {
       return
