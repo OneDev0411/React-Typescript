@@ -165,6 +165,9 @@ export function getShowingRoleLabel(role: IDealRoleType): string {
 
 export function getShowingRoleAOrAn(role: IDealRoleType): string {
   switch (role) {
+    case 'Admin/Assistant':
+      return 'an'
+
     case 'SellerAgent':
       return 'an'
 
@@ -175,7 +178,7 @@ export function getShowingRoleAOrAn(role: IDealRoleType): string {
       return 'an'
 
     default:
-      return role
+      return 'an'
   }
 }
 
