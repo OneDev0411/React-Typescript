@@ -230,7 +230,7 @@ export function ActiveTeam() {
         )}
         <div>
           <Typography variant="overline" className={classes.header}>
-            Active Team
+            Active Account
           </Typography>
           <div className={classes.activeTeamContainer}>
             <div className={classes.activeTeam}>

@@ -1,6 +1,12 @@
 import { memo } from 'react'
 
-import { Theme, Button, makeStyles, CircularProgress } from '@material-ui/core'
+import {
+  Theme,
+  Button,
+  makeStyles,
+  MouseEvent,
+  CircularProgress
+} from '@material-ui/core'
 import cn from 'classnames'
 
 interface Props {
@@ -52,7 +58,9 @@ const useStyles = makeStyles(
 function Brand({ brand, isActive, isFetchingUser, disabled, onClick }: Props) {
   const classes = useStyles({ isActive, disabled })
 
-  const handleOnClick = () => {
+  const handleOnClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+
     if (disabled) {
       return null
     }
