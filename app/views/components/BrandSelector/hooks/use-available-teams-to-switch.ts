@@ -12,6 +12,7 @@ import { getAvailableBrandsToSwitch } from '@app/models/BrandConsole/Brands'
 import { getTeams } from '@app/models/user/get-teams'
 import { TreeFn } from 'utils/tree-utils/types'
 
+import { getBrandsWithMembers } from '../helpers/get-brands-with-members'
 import { getExpandBrandsByType } from '../helpers/get-expand-brands-by-types'
 
 import { useFilterTeams, UseFilterTeamsReturnType } from './use-filter-teams'
@@ -52,8 +53,8 @@ export function useAvailableTeamsToSwitch(): UseAvailableTeamsToSwitchReturnType
       const userTeams = userRoles.map(team => team.brand)
 
       return {
-        userTeams,
-        allTeams: teams
+        userTeams: getBrandsWithMembers(userTeams),
+        allTeams: getBrandsWithMembers(teams)
       }
     })
   })

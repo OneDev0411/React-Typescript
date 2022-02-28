@@ -9,7 +9,9 @@ export function getBrandsWithMembers(brands: Nullable<IBrand[]>): IBrand[] {
   }
 
   return brands
-    .filter(brand => brand.member_count > 0)
+    .filter(
+      brand => brand.member_count > 0 && (brand.children || []).length < 1
+    )
     .map(brand => {
       if (brand.children) {
         brand.children = getBrandsWithMembers(brand.children)
