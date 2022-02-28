@@ -84,7 +84,13 @@ export default memo(function TreeView<NodeType = any>({
   useEffect(() => {
     if (props.initialExpandedNodes) {
       setExpandedNodes(expandedNodes => {
-        return [...expandedNodes, ...(props.initialExpandedNodes || [])]
+        const newExpandedNodes = props.initialExpandedNodes || []
+
+        if (newExpandedNodes.length === 0) {
+          return []
+        }
+
+        return [...expandedNodes, ...newExpandedNodes]
       })
     }
   }, [props.initialExpandedNodes, setExpandedNodes])
