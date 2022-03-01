@@ -1,7 +1,7 @@
 declare interface IShowingRoleInput {
   role: IShowingRoleType
   user: Optional<UUID>
-  agent?: IShowingAgent
+  agent: Optional<UUID> // `user` should be provided in case of passing this
   brand: UUID
   first_name: string
   last_name: string
