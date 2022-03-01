@@ -8,6 +8,8 @@ import CalendarEventListItem from 'components/CalendarEvent/ListItem'
 import { InlineBadge } from 'components/InlineBadge'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
+import { EmptyState } from '../../components/EmptyState'
+
 const NUMBER_OF_EVENTS_TO_SHOW = 50
 
 interface Props {
@@ -61,7 +63,7 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
       <Typography variant="subtitle1" className={classes.boxTitle}>
         <SvgIcon path={mdiCalendarToday} rightMargined />
         <InlineBadge badgeContent={filteredEvents.length} color="primary">
-          This Week's Schedule
+          To Do
         </InlineBadge>
       </Typography>
       <Box className={classes.boxContainer}>
@@ -71,14 +73,10 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
           </>
         )}
         {!isLoading && filteredEvents.length === 0 && (
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            height={1}
-          >
-            <Typography variant="body1">You're all caught up!</Typography>
-          </Box>
+          <EmptyState
+            description="You're all caught up!"
+            iconSrc="/static/icons/empty-states/letter.svg"
+          />
         )}
         {!isLoading && (
           <List>

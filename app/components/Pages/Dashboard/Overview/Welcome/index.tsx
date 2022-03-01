@@ -14,11 +14,7 @@ const useStyles = makeStyles(
       display: 'flex',
       borderRadius: theme.shape.borderRadius,
       flexDirection: 'column',
-<<<<<<< HEAD
-      padding: theme.spacing(0, 3)
-=======
       padding: theme.spacing(0, 5)
->>>>>>> fcb91453c274e571a3e4c6faad480c3bbe87772e
     },
     container: {
       display: 'flex',

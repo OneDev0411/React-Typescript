@@ -13,11 +13,7 @@ const styles = (theme: Theme) =>
       padding: ({
         noPadding
       }: Pick<GlobalHeaderWithBackgroundProps, 'noPadding'>) =>
-<<<<<<< HEAD
-        noPadding ? 0 : theme.spacing(4, 3),
-=======
         noPadding ? 0 : theme.spacing(4, 5),
->>>>>>> fcb91453c274e571a3e4c6faad480c3bbe87772e
       width: '100%',
       [theme.breakpoints.up('md')]: {
         flexDirection: 'row',

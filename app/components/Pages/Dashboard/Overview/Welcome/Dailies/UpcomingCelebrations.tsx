@@ -7,6 +7,8 @@ import CalendarEventListItem from 'components/CalendarEvent/ListItem'
 import { InlineBadge } from 'components/InlineBadge'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
+import { EmptyState } from '../../components/EmptyState'
+
 interface Props {
   isLoading: boolean
   events: ICalendarEvent[]
@@ -60,7 +62,7 @@ export function UpcomingCelebrations({ isLoading, events }: Props) {
         <SvgIcon path={mdiGiftOutline} rightMargined />
 
         <InlineBadge badgeContent={celebrationEvents.length} color="primary">
-          Upcoming Celebrations
+          To Contact
         </InlineBadge>
       </Typography>
       <Box className={classes.boxContainer}>
@@ -70,16 +72,10 @@ export function UpcomingCelebrations({ isLoading, events }: Props) {
           </>
         )}
         {!isLoading && celebrationEvents.length === 0 && (
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            height={1}
-          >
-            <Typography variant="body1">
-              You have no upcoming birthdays or anniversaries.
-            </Typography>
-          </Box>
+          <EmptyState
+            description="Your Birthdays and Anniversaries will Populate Here"
+            iconSrc="/static/icons/empty-states/congrats.svg"
+          />
         )}
         {!isLoading && (
           <List>
