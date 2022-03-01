@@ -150,7 +150,7 @@ function ShowingPropertyList({
 
   return (
     <Box minHeight="320px">
-      {headerColumns && <Header columns={headerColumns} />}
+      {sortedRows.length > 0 && <Header columns={headerColumns} />}
 
       <Table
         rows={sortedRows}

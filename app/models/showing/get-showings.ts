@@ -11,7 +11,9 @@ async function getShowings(): Promise<IShowing[]> {
         'showing_appointment.contact',
         'showing_appointment.approvals',
         'showing_approval.role',
-        'showing_appointment.notifications'
+        'showing_appointment.notifications',
+        'showing_role.agent',
+        'agent.office'
       ]
     })
   ).body.data

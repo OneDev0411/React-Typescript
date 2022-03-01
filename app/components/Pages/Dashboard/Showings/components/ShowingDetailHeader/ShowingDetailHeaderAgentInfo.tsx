@@ -16,6 +16,7 @@ function ShowingDetailHeaderAgentInfo({
 }: ShowingDetailHeaderAgentInfoProps) {
   const classes = useStyles()
   const sellerAgent = roles.find(user => user.role === 'SellerAgent')
+  const officeName = sellerAgent?.agent?.office?.name
 
   return (
     <Box display="flex" alignItems="center" ml={4}>
@@ -25,9 +26,9 @@ function ShowingDetailHeaderAgentInfo({
       <Typography noWrap variant="subtitle2" className={classes.agentName}>
         {`${sellerAgent?.first_name} ${sellerAgent?.last_name}`}
       </Typography>
-      {sellerAgent?.office_name && (
+      {officeName && (
         <Typography noWrap variant="subtitle2" color="textSecondary">
-          {sellerAgent?.office_name}
+          {officeName}
         </Typography>
       )}
     </Box>
