@@ -7,14 +7,14 @@ import Fetch from '../../../services/fetch'
  */
 
 export async function logUserActivity(
-  activity: TUserActivity,
+  activity: IUserActivity,
   isIpNeeded: boolean = false
 ): Promise<unknown> {
   try {
     let data = { ...activity }
 
     // Get user ip address from cookie which is set by the proxy server
-    if ('object_sa' in activity && !!activity.object_sa && isIpNeeded) {
+    if (isIpNeeded) {
       const userCookie = Cookies.get('user')
       const userIpAddress = userCookie
         ? (JSON.parse(userCookie)?.ip as string)
@@ -23,8 +23,8 @@ export async function logUserActivity(
       data = {
         ...activity,
         // add user ip address to object_sa if needed
-        object_sa: {
-          ...activity.object_sa,
+        object: {
+          ...activity.object,
           ip_address: userIpAddress
         }
       }
