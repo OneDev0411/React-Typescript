@@ -8,12 +8,11 @@ declare interface IShowingRole extends IModel<'showing_role'> {
   phone_number: string
   // TODO: the user of IShowingRoleInput is optional so this must be optional too. Am I wrong?
   user: Optional<IUser> // Probably wrong, comes with association as an IUser
-  agent: Optional<UUID> // Probably wrong, comes with association as an IAgent
+  agent?: IShowingAgent
   brand: UUID
   can_approve: boolean
   confirm_notification_type: INotificationDeliveryType[]
   cancel_notification_type: INotificationDeliveryType[]
   user_id: UUID
   agent_id: UUID
-  office_name?: string
 }
