@@ -6,7 +6,8 @@ export const logSearchListings = async (title: string) => {
       {
         action: 'UserSearchedListings',
         object_sa: {
-          title
+          title,
+          type: 'user_activity_search_listings'
         }
       },
       true

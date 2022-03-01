@@ -126,12 +126,26 @@ type TUserActivityActions =
   | 'UserRenamedFile'
   | 'UserRequiredTask'
 
+type TUserActivityObjectActions =
+  | 'user_activity_view_listing'
+  | 'user_activity_search_listings'
+  | 'user_activity_user_login'
+  | 'user_activity_user_logout'
+
 interface IUserActivityBase {
   action: TUserActivityActions
 }
 
 interface IUserActivityObjectSa extends IUserActivityBase {
-  object_sa: object
+  object_sa: {
+    title?: string
+    address?: string
+    listing?: UUID
+    mls?: string
+    mls_number?: number | string
+    ip_address?: string
+    type?: TUserActivityObjectActions
+  }
 }
 
 interface IUserActivityObjectClass extends IUserActivityBase {

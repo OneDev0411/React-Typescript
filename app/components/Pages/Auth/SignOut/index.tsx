@@ -17,7 +17,9 @@ export default function SignOut(props: Props) {
         await logUserActivity(
           {
             action: 'UserLoggedOut',
-            object_sa: {}
+            object_sa: {
+              type: 'user_activity_user_logout'
+            }
           },
           true
         )
