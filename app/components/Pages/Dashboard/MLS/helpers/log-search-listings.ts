@@ -5,7 +5,8 @@ export const logSearchListings = async (title: string) => {
     await logUserActivity(
       {
         action: 'UserSearchedListings',
-        object_sa: {
+        object_class: 'UserActivitySearchListings',
+        object: {
           title,
           type: 'user_activity_search_listings'
         }

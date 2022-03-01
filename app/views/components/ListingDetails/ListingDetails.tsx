@@ -184,7 +184,8 @@ function ListingDetails({
         await logUserActivity(
           {
             action: 'UserViewedListing',
-            object_sa: {
+            object_class: 'UserActivityViewListing',
+            object: {
               listing: listing.id,
               address: listingUtils.addressTitle(listing.property.address),
               mls: listing.mls,
