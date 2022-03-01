@@ -140,6 +140,12 @@ export function ActiveTeam() {
     try {
       setSelectedBrandToFetchUser(brand)
 
+      if (brand.member_count === 0) {
+        await handleSwitchTeam(brand)
+
+        return
+      }
+
       const { data: brandWithUsers } = await getBrands(brand.id, false)
       const selectedBrandUsers = getBrandUsers(brandWithUsers)
 
