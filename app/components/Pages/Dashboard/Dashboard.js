@@ -19,7 +19,6 @@ import { getAttributeDefs } from '../../../store_actions/contacts'
 import { getDeals, searchDeals } from '../../../store_actions/deals'
 import { fetchUnreadEmailThreadsCount } from '../../../store_actions/inbox'
 import { deactivateIntercom } from '../../../store_actions/intercom'
-import getFavorites from '../../../store_actions/listings/favorites/get-favorites'
 import { getAllNotifications } from '../../../store_actions/notifications'
 import { hasUserAccess, viewAsEveryoneOnTeam } from '../../../utils/user-teams'
 import CheckBrowser from '../../../views/components/CheckBrowser'
@@ -104,9 +103,6 @@ class Dashboard extends Component {
 
     dispatch(getAllNotifications())
 
-    // Get MLS favorites
-    dispatch(getFavorites(user))
-
     dispatch(syncOpenHouseData(user.access_token))
 
     if (this.hasCrmAccess) {
@@ -154,7 +150,7 @@ class Dashboard extends Component {
     return (
       <CheckBrowser id={this.props.params.id}>
         <Helmet>
-          <title>Rechat | Dashboard</title>
+          <title>Rechat | Home</title>
         </Helmet>
         <div className="u-scrollbar">
           {user && !user.email_confirmed && !user.fake_email && (

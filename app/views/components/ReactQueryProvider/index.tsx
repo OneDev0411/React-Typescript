@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
   Note: I just set some default options which I thought it's necessary for now,
   we can discuss on each option in the future.
 */
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,

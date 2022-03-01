@@ -198,3 +198,5 @@ server-dist
 // cypress
 tests/cypress/screenshots/
 tests/cypress/videos/
+
+/config

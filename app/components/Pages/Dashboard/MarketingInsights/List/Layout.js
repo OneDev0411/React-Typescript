@@ -6,14 +6,14 @@ import { useSelector, useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
-import { ACL } from '@app/constants/acl'
-import { useAcl } from '@app/views/components/Acl/use-acl'
 import { setUserSetting } from 'actions/user/set-setting'
 import PageLayout from 'components/GlobalPageLayout'
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import { selectUser } from 'selectors/user'
 import { noop } from 'utils/helpers'
 import { getUserSettingsInActiveTeam } from 'utils/user-teams'
+
+import { useHasSuperCampaignAccess } from '../../SuperCampaigns/hooks/use-has-super-campaign-access'
 
 import SortField from './SortField'
 
@@ -57,9 +57,9 @@ function InsightsLayout({
     }
   ]
 
-  const hasBetaAccess = useAcl(ACL.BETA)
+  const hasSuperCampaignAccess = useHasSuperCampaignAccess()
 
-  if (hasBetaAccess) {
+  if (hasSuperCampaignAccess) {
     items.push({
       label: 'Campaigns',
       to: urlGenerator('/super-campaign')
@@ -88,7 +88,7 @@ function InsightsLayout({
         <title>Email | Rechat</title>
       </Helmet>
       <PageLayout>
-        <PageLayout.Header title="Email Insight" onCreateEmail={onCreateEmail}>
+        <PageLayout.Header title="Email Insights" onCreateEmail={onCreateEmail}>
           <Box textAlign="right">
             <Button
               variant="outlined"

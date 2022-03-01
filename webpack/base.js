@@ -58,7 +58,8 @@ module.exports = {
       deals: resolvePath('../app/components/Pages/Dashboard/Deals'),
       crm: resolvePath('../app/components/Pages/Dashboard/Contacts'),
       animations: resolvePath('../app/animations'),
-      fixtures: resolvePath('../tests/unit/fixtures')
+      fixtures: resolvePath('../tests/unit/fixtures'),
+      tests: resolvePath('../tests')
     },
     fallback: {
       path: require.resolve('path-browserify'),
@@ -116,7 +117,8 @@ module.exports = {
         MAPBOX_ACCESS_TOKEN: JSON.stringify(process.env.MAPBOX_ACCESS_TOKEN),
         STRIPE_PUBLIC_KEY: JSON.stringify(process.env.STRIPE_PUBLIC_KEY),
         SHOWING_BOOKING_URL: JSON.stringify(process.env.SHOWING_BOOKING_URL),
-        ENABLE_FULLSTORY: JSON.stringify(process.env.ENABLE_FULLSTORY)
+        ENABLE_FULLSTORY: JSON.stringify(process.env.ENABLE_FULLSTORY),
+        NLP_SERVER: JSON.stringify(process.env.NLP_SERVER)
       },
       __DEV__,
       NODE_ENV: env,

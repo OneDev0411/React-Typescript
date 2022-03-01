@@ -1,3 +1,5 @@
+import { SuperAgentRequest } from 'superagent'
+
 import Fetch from 'services/fetch'
 
 export type FetchRange = {
@@ -5,13 +7,11 @@ export type FetchRange = {
   limit: number
 }
 
-export async function getAllSuperCampaign(
+export function getAllSuperCampaign(
   range: FetchRange,
   order?: string[]
-): Promise<ISuperCampaign[]> {
-  const response = await new Fetch()
+): SuperAgentRequest {
+  return new Fetch()
     .post('/email/super-campaigns/filter')
     .send({ ...range, order })
-
-  return response.body.data
 }

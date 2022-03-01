@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
 import { GetBrandListingsOptions } from '@app/models/listings/search/get-brand-listings'
+import { selectActiveBrandId } from '@app/selectors/brand'
 import { selectUserAgents } from '@app/selectors/user'
 import { isUserCoAgent } from '@app/utils/listing'
 import { Table } from '@app/views/components/Grid/Table'
@@ -12,9 +13,7 @@ import { TableColumn } from '@app/views/components/Grid/Table/types'
 import LoadingContainer from '@app/views/components/LoadingContainer'
 import { getFormattedPrice } from 'models/Deal/helpers/context'
 
-import ListingsListColumnActions, {
-  ListingsListColumnActionsProps
-} from './ListingsListColumnActions'
+import ListingsListColumnActions from './ListingsListColumnActions'
 import ListingsListColumnProperty from './ListingsListColumnProperty'
 import ListingsListColumnText from './ListingsListColumnText'
 import ListingsListEmptyState from './ListingsListEmptyState'
@@ -40,20 +39,20 @@ const OPTIONS: GetBrandListingsOptions = {
   status: ['Active']
 }
 
-interface ListingsListProps
-  extends Pick<ListingsListColumnActionsProps, 'hasActions'> {
-  brandId: UUID
+interface Props {
   searchTerm: string
 }
 
-function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
+function ListingsList({ searchTerm }: Props) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
+  const activeTeamBrandId = useSelector(selectActiveBrandId)
 
+  const isSearching = searchTerm.trim().length > 0
   const userAgents = useSelector(selectUserAgents)
 
   const { listings: rows, isLoading } = useBrandAndDealsListings(
-    brandId,
+    activeTeamBrandId,
     OPTIONS
   )
 
@@ -73,6 +72,7 @@ function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
               ? row.address.street_address
               : row.property.address.street_address
           }
+          mlsSource={row.mls_display_name}
           listingId={row.id}
         />
       )
@@ -128,7 +128,7 @@ function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
         <ListingsListColumnActions
           className={classes.actions}
           row={row}
-          hasActions={hasActions}
+          hasActions
         />
       )
     }
@@ -144,11 +144,19 @@ function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
         <LoadingContainer style={{ padding: '10% 0' }} />
       )}
       getTrProps={() => ({
-        className: classNames(classes.row, gridClasses.row)
+        className: classNames(classes.row, gridClasses.row),
+        'data-test': 'table-row'
       })}
       EmptyStateComponent={() => (
         <ListingsListEmptyState
-          message={searchTerm ? 'No results' : 'There are no listings.'}
+          title={
+            isSearching ? 'No Results ' : 'You don’t have any listings yet.'
+          }
+          subtitle={
+            isSearching
+              ? 'Make sure you have searched for the right address or try adding your other MLS Accounts using the button at the top'
+              : 'Use the “Add MLS Account” button at top to connect all your MLS accounts and let us retrieve your listings.'
+          }
         />
       )}
     />
