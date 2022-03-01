@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import {
   Box,
@@ -14,9 +14,9 @@ import {
 import { useSelector } from 'react-redux'
 
 import { useGetListing, UseGetListing } from '@app/hooks/use-get-listing'
+import { logUserActivity } from '@app/models/user/log-activity'
 import { noop } from '@app/utils/helpers.js'
 import LoadingContainer from 'components/LoadingContainer'
-import { useLogUserActivity } from 'hooks/use-log-user-activity'
 import { selectUserUnsafe } from 'selectors/user'
 import listingUtils from 'utils/listing'
 
@@ -172,16 +172,37 @@ function ListingDetails({
     mapSection.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  // Log user viewing the listing activity
-  useLogUserActivity(
-    {
-      action: 'UserViewedListing',
-      object_sa: {
-        listing: id
+  /* 
+    Log user viewing the listing activity
+    https://gitlab.com/rechat/web/-/issues/6111
+  */
+  useEffect(() => {
+    const logUserViewListingActivity = async (
+      listing: IListing<'proposed_agent'>
+    ) => {
+      try {
+        await logUserActivity(
+          {
+            action: 'UserViewedListing',
+            object_sa: {
+              listing: listing.id,
+              address: listingUtils.addressTitle(listing.property.address),
+              mls: listing.mls,
+              mls_number: listing.mls_number,
+              type: 'user_activity_view_listing'
+            }
+          },
+          true
+        )
+      } catch (e) {
+        console.log(e)
       }
-    },
-    true
-  )
+    }
+
+    if (listing && user) {
+      logUserViewListingActivity(listing)
+    }
+  }, [listing, user])
 
   const openShareModal = () => setIsShareModalOpen(true)
   const closeShareModal = () => setIsShareModalOpen(false)

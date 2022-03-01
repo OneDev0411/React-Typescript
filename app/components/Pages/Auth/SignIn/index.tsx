@@ -88,7 +88,9 @@ export default function Signin(props: Props) {
       await logUserActivity(
         {
           action: 'UserLoggedIn',
-          object_sa: {}
+          object_sa: {
+            type: 'user_activity_user_login'
+          }
         },
         true
       )
