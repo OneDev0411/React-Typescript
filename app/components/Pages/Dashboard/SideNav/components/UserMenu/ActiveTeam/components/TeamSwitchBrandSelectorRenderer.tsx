@@ -1,12 +1,6 @@
-import { memo } from 'react'
+import { memo, MouseEvent } from 'react'
 
-import {
-  Theme,
-  Button,
-  makeStyles,
-  MouseEvent,
-  CircularProgress
-} from '@material-ui/core'
+import { Theme, Button, makeStyles, CircularProgress } from '@material-ui/core'
 import cn from 'classnames'
 
 interface Props {
