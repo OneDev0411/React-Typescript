@@ -51,6 +51,11 @@ function ShowingPropertyList({
     goTo(`/dashboard/showings/${showingId}/detail`)
   }
 
+  const sortedRows = useSortPropertiesByNotificationCount(
+    rows,
+    showingNotificationCount
+  )
+
   const columns: TableColumn<IShowing<'showing'>>[] = [
     {
       id: 'property',
@@ -115,11 +120,6 @@ function ShowingPropertyList({
       )
     }
   ]
-
-  const sortedRows = useSortPropertiesByNotificationCount(
-    rows,
-    showingNotificationCount
-  )
 
   const headerColumns: HeaderColumn[] = [
     {
