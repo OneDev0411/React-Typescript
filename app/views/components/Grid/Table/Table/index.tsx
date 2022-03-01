@@ -10,7 +10,6 @@ import { Actions } from '../features/Actions'
 import { useRowsSelection } from '../features/Selection/use-row-selection'
 import { Sorting } from '../features/Sorting'
 import { useRowsSorting } from '../features/Sorting/use-row-sorting'
-import { Header } from '../Header'
 import { useGridContext } from '../hooks/use-grid-context'
 import { useTable } from '../hooks/use-table'
 import { GridHookPlugin, LoadingPosition } from '../types'
@@ -58,7 +57,6 @@ const useStyles = makeStyles(
 export function GridTable<Row>({
   columns,
   rows,
-  header,
   totalRows,
   getTdProps,
   getTrProps,
@@ -123,8 +121,6 @@ export function GridTable<Row>({
       )}
 
       <div className={gridClasses.tableContainer}>
-        {header && <Header columns={header} />}
-
         {rows && rows.length > 0 && (
           <Body<Row>
             columns={newColumns}

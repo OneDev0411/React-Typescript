@@ -13,7 +13,9 @@ import ShowingColumnProperty from '../ShowingColumnProperty'
 import ShowingEmptyState from '../ShowingEmptyState'
 import ShowingLabeledColumn from '../ShowingLabeledColumn'
 
+import { Header } from './Header'
 import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
+import { HeaderColumn } from './types'
 import useGetShowingNotificationCount from './use-get-showing-notification-count'
 import useSortPropertiesByNotificationCount from './use-sort-properties-by-notification-count'
 
@@ -119,35 +121,38 @@ function ShowingPropertyList({
     showingNotificationCount
   )
 
+  const headerColumns: HeaderColumn[] = [
+    {
+      title: 'Property',
+      icon: mdiOpenInNew,
+      width: '30%',
+      textAlign: 'left'
+    },
+    {
+      title: 'Approved',
+      icon: mdiCheck,
+      width: '100px',
+      textAlign: 'center'
+    },
+    {
+      title: 'Total Bookings',
+      icon: mdiEyeOutline,
+      width: '220px',
+      textAlign: 'center'
+    },
+    {
+      title: 'Agent',
+      icon: mdiAccountTie,
+      width: '15%',
+      textAlign: 'left'
+    }
+  ]
+
   return (
     <Box minHeight="320px">
+      {headerColumns && <Header columns={headerColumns} />}
+
       <Table
-        header={[
-          {
-            title: 'Property',
-            icon: mdiOpenInNew,
-            width: '30%',
-            textAlign: 'left'
-          },
-          {
-            title: 'Approved',
-            icon: mdiCheck,
-            width: '100px',
-            textAlign: 'center'
-          },
-          {
-            title: 'Total Bookings',
-            icon: mdiEyeOutline,
-            width: '220px',
-            textAlign: 'center'
-          },
-          {
-            title: 'Agent',
-            icon: mdiAccountTie,
-            width: '15%',
-            textAlign: 'left'
-          }
-        ]}
         rows={sortedRows}
         totalRows={sortedRows.length}
         columns={columns}
