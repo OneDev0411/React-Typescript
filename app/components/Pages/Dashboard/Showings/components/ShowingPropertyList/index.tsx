@@ -150,8 +150,12 @@ function ShowingPropertyList({
 
   return (
     <Box minHeight="320px">
-      {sortedRows.length > 0 && <Header columns={headerColumns} />}
-
+      {
+        sortedRows.length > 0 && <Header columns={headerColumns} /> /* TODO: 
+             do issue number 6198 when mukeva released new Table
+             Issue link: https://gitlab.com/rechat/web/-/issues/6198
+        */
+      }
       <Table
         rows={sortedRows}
         totalRows={sortedRows.length}
