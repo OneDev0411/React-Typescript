@@ -120,7 +120,7 @@ export default function InfoSection({ showing }: Props) {
 
       <Hidden xsDown>
         <Grid container item>
-          <AgentCard agent={showing.agent} />
+          <AgentCard agent={showing.agent!} />
         </Grid>
       </Hidden>
     </Grid>
