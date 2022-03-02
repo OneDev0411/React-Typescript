@@ -1,7 +1,7 @@
 import { getContextsChecklist } from '../get-checklist'
 
 export function createContextObject(
-  deal: IDeal,
+  deal: IDeal | IDeal<'listing_info'>,
   brandChecklists: IBrandChecklist[],
   checklists: IDealChecklist[],
   fieldKey: string,
