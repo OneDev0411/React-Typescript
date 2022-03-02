@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Typography, makeStyles, Theme } from '@material-ui/core'
 
 import { BasicSection } from '../components/Section/Basic'
