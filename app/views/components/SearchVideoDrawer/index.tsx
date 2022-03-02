@@ -86,7 +86,6 @@ function SearchVideoDrawer({
               video.width,
               video.height
             ),
-
             title: unescape(video.title),
             url: `https://vimeo.com/${video.video_id}`,
             publisher: video.author_name,
