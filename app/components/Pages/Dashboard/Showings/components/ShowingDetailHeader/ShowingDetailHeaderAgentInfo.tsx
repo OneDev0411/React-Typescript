@@ -15,8 +15,10 @@ function ShowingDetailHeaderAgentInfo({
   roles
 }: ShowingDetailHeaderAgentInfoProps) {
   const classes = useStyles()
-  const sellerAgent: any = roles.find(user => user.role === 'SellerAgent') // TODO: When I use IShowingRole type here it cause error, I should fixed it
-  const officeName: string = sellerAgent?.agent?.office?.name
+  const sellerAgent: Optional<IShowingRole> = roles.find(
+    user => user.role === 'SellerAgent'
+  ) // TODO: When I use IShowingRole type here it cause error, I should fixed it
+  const officeName = sellerAgent?.agent?.office?.name
 
   return (
     <Box display="flex" alignItems="center" ml={4}>

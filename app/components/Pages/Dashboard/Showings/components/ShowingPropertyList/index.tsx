@@ -152,7 +152,7 @@ function ShowingPropertyList({
     <Box minHeight="320px">
       {
         sortedRows.length > 0 && <Header columns={headerColumns} /> /* TODO: 
-             do issue number 6198 when mukeva released new Table
+             do issue number 6198 when mukewa released new Table
              Issue link: https://gitlab.com/rechat/web/-/issues/6198
         */
       }
