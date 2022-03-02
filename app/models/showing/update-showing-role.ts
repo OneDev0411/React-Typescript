@@ -7,6 +7,9 @@ async function updateShowingRole(
 ): Promise<void> {
   await new Fetch()
     .put(`/showings/${showingId}/roles/${showingRoleId}`)
+    .query({
+      'associations[]': ['showing.roles', 'showing_role.agent', 'agent.office']
+    })
     .send(data)
 }
 
