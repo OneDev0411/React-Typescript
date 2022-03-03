@@ -34,7 +34,7 @@ function Showings({ params }: ShowingsProps) {
     <PageLayout position="relative" overflow="hidden">
       <PageLayout.HeaderWithSearch
         title="Showings"
-        onSearch={searchQuery => setQuery(searchQuery)}
+        onSearch={setQuery}
         SearchInputProps={{
           placeholder: 'Search Address, MLS# or Agent',
           isLoading: !!query && isLoading
