@@ -105,7 +105,6 @@ export const UseFiltersWithQuery = (): [
   }, [userFilters.deal_type])
 
   useEffect(() => {
-    console.log('property_type changed', userFilters.property_type)
     setPropertyTypeParamValue(
       userFilters.property_type && userFilters.property_type.length
         ? userFilters.property_type.join(QUERY_ARRAY_PARAM_SPLITTER_CHAR)
