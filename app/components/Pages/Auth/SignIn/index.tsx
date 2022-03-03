@@ -110,8 +110,6 @@ export default function Signin(props: Props) {
 
       dispatch(setUserAndActiveTeam(user, activeTeam))
 
-      await logUserLoginActivity()
-
       Sentry.configureScope(scope => {
         scope.setUser({
           id: user.id,
@@ -122,6 +120,8 @@ export default function Signin(props: Props) {
           }
         })
       })
+
+      await logUserLoginActivity()
 
       const defaultHomePage = getUserDefaultHomepage(activeTeam)
 
