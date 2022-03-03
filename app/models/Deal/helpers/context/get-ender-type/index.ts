@@ -1,7 +1,7 @@
 import { getField } from '../get-field'
 import { getSide } from '../get-side'
 
-export function getEnderType(deal: IDeal | IDeal<'listing_info'>): string {
+export function getEnderType(deal: IDeal): string {
   const enderType = getField(deal, 'ender_type')
 
   const dealType = getSide(deal)

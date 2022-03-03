@@ -1,4 +1,4 @@
-export function getSide(deal: IDeal | IDeal<'listing_info'>): string {
+export function getSide(deal: IDeal): string {
   const isLeasing = deal.property_type.is_lease
 
   const saleTypes = {
