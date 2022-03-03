@@ -10,7 +10,7 @@ import { PropertyType } from './PropertyType'
 import { DealSide } from './Side'
 
 interface Props {
-  deal: IDeal<'listing_info'>
+  deal: IDeal
   isBackOffice: boolean
 }
 

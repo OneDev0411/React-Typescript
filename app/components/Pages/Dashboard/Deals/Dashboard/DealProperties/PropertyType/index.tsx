@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface Props {
-  deal: IDeal<'listing_info'>
+  deal: IDeal
   isBackOffice: boolean
 }
 
