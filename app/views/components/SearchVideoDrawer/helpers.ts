@@ -66,10 +66,12 @@ export function youtubeVideos(
   })
 }
 
-export async function getYouTubeVideoGif(url: string): Promise<void> {
+export async function getYouTubeVideoGif(
+  url: string
+): Promise<{ url: string }> {
   const response = await superagent
     .post('/api/utils/get-youtube-video-gif')
     .send({ url })
 
-  console.log({ response })
+  return response.body
 }
