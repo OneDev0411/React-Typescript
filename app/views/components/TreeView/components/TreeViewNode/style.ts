@@ -27,7 +27,7 @@ export const useStyles = makeStyles(
         background: theme.palette.grey[200]
       }
     },
-    isNodeExpanded: {
+    isNodeNotExpanded: {
       color: theme.palette.common.black,
       ...theme.typography.subtitle2
     },

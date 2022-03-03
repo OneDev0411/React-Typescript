@@ -1,5 +1,5 @@
 export function getContextsChecklist(
-  deal: IDeal,
+  deal: IDeal | IDeal<'listing_info'>,
   brandChecklists: IBrandChecklist[]
 ) {
   const checklistTypes = deal.has_active_offer

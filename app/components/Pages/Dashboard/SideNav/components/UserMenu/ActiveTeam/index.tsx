@@ -140,6 +140,12 @@ export function ActiveTeam() {
     try {
       setSelectedBrandToFetchUser(brand)
 
+      if (brand.member_count === 0) {
+        await handleSwitchTeam(brand)
+
+        return
+      }
+
       const { data: brandWithUsers } = await getBrands(brand.id, false)
       const selectedBrandUsers = getBrandUsers(brandWithUsers)
 
@@ -230,7 +236,7 @@ export function ActiveTeam() {
         )}
         <div>
           <Typography variant="overline" className={classes.header}>
-            Active Team
+            Active Account
           </Typography>
           <div className={classes.activeTeamContainer}>
             <div className={classes.activeTeam}>
@@ -250,11 +256,10 @@ export function ActiveTeam() {
       {isBrandSelectorOpen && (
         <BrandAvailableToUserSelectorDrawer
           open
-          drawerTitle="Switch Team"
+          drawerTitle="Select an Account"
           width="43rem"
           onClose={hanldeCloseBrandSelectorDrawer}
           brandSelectorProps={{
-            searchPlaceholder: 'Search for teams',
             shouldExpandOnNodeClick: true,
             nodeRenderer: renderBrandNode
           }}
