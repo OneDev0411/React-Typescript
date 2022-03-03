@@ -86,7 +86,7 @@ export default function SectionLayout({
       >
         <Grid item className={classes.titleContainer}>
           <Box pr={1}>
-            <Typography variant={dashboardStyles ? 'subtitle1' : 'h5'}>
+            <Typography variant={dashboardStyles ? 'h6' : 'h5'}>
               {title}
             </Typography>
           </Box>

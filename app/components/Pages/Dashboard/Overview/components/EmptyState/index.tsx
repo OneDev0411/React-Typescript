@@ -14,13 +14,17 @@ const styles = makeStyles(
   (theme: Theme) => ({
     description: {
       color: theme.palette.grey[500],
-      marginTop: theme.spacing(2)
+      maxWidth: '520px',
+      marginTop: theme.spacing(1)
     },
     icon: {
+      display: 'inline-block',
       height: theme.spacing(7),
-      display: 'inline-block'
+      marginBottom: theme.spacing(1.5)
     },
-    title: {}
+    title: {
+      marginTop: theme.spacing(1)
+    }
   }),
   { name: 'EmptyState' }
 )

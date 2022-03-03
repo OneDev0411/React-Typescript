@@ -1,18 +1,11 @@
-import { Box, Typography, List } from '@material-ui/core'
+import { Box, List, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { mdiGiftOutline } from '@mdi/js'
 
 import { AnimatedLoader } from 'components/AnimatedLoader'
 import CalendarEventListItem from 'components/CalendarEvent/ListItem'
 import { InlineBadge } from 'components/InlineBadge'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { EmptyState } from '../../components/EmptyState'
-
-interface Props {
-  isLoading: boolean
-  events: ICalendarEvent[]
-}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -28,7 +21,7 @@ const useStyles = makeStyles(
     boxContainer: {
       border: `1px solid ${theme.palette.grey[300]}`,
       padding: theme.spacing(1),
-      height: '315px',
+      height: '300px',
       borderRadius: theme.shape.borderRadius,
       backgroundColor: theme.palette.background.paper,
       overflowY: 'scroll'
@@ -41,6 +34,11 @@ const useStyles = makeStyles(
   { name: 'UpcomingCelebrations' }
 )
 
+interface Props {
+  isLoading: boolean
+  events: ICalendarEvent[]
+}
+
 export function UpcomingCelebrations({ isLoading, events }: Props) {
   const classes = useStyles()
 
@@ -48,6 +46,7 @@ export function UpcomingCelebrations({ isLoading, events }: Props) {
     'wedding_anniversary',
     'birthday',
     'child_birthday',
+    'work_anniversary',
     'home_anniversary'
   ]
 
@@ -58,9 +57,7 @@ export function UpcomingCelebrations({ isLoading, events }: Props) {
 
   return (
     <Box className={classes.boxWrapper}>
-      <Typography variant="subtitle1" className={classes.boxTitle}>
-        <SvgIcon path={mdiGiftOutline} rightMargined />
-
+      <Typography variant="h6" className={classes.boxTitle}>
         <InlineBadge badgeContent={celebrationEvents.length} color="primary">
           To Contact
         </InlineBadge>
