@@ -80,3 +80,12 @@ export function futureTimeValidator(value: Optional<Date>): Optional<string> {
 
   return isAfter(new Date(), value) ? 'Time must be in the future' : undefined
 }
+
+export function toRawSuperCampaign(
+  superCampaign: ISuperCampaign<'template_instance'>
+): ISuperCampaign {
+  return {
+    ...superCampaign,
+    template_instance: superCampaign.template_instance?.id
+  }
+}

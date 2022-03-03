@@ -5,9 +5,7 @@ import { goTo } from '@app/utils/go-to'
 import SuperCampaignAdminMoreActions from '../../components/SuperCampaignAdminMoreActions'
 
 import SuperCampaignCloseButton from './SuperCampaignCloseButton'
-import SuperCampaignDetailHeaderSchedule, {
-  SuperCampaignDetailHeaderScheduleProps
-} from './SuperCampaignDetailHeaderSchedule'
+import SuperCampaignDetailHeaderSchedule from './SuperCampaignDetailHeaderSchedule'
 import { useGetSuperCampaignBackUrl } from './use-get-super-campaign-back-url'
 
 const useStyles = makeStyles(
@@ -21,27 +19,21 @@ const useStyles = makeStyles(
   { name: 'SuperCampaignDetailHeader' }
 )
 
-interface SuperCampaignDetailHeaderProps
-  extends Pick<SuperCampaignDetailHeaderScheduleProps, 'setSuperCampaign'> {
-  superCampaign: Nullable<ISuperCampaign<'template_instance'>>
+interface SuperCampaignDetailHeaderProps {
+  superCampaign: Optional<ISuperCampaign<'template_instance'>>
 }
 
 function SuperCampaignDetailHeader({
-  superCampaign,
-  setSuperCampaign
+  superCampaign
 }: SuperCampaignDetailHeaderProps) {
   const classes = useStyles()
   const backUrl = useGetSuperCampaignBackUrl()
 
-  const handleSendNow = (newSuperCampaign: ISuperCampaign) =>
-    setSuperCampaign({
-      ...newSuperCampaign,
-      template_instance: superCampaign?.template_instance
-    })
-
   const handleDelete = () => goTo(backUrl)
 
-  const handleDuplicate = (newSuperCampaign: ISuperCampaign) => {
+  const handleDuplicate = (
+    newSuperCampaign: ISuperCampaign<'template_instance'>
+  ) => {
     goTo(`/dashboard/insights/super-campaign/${newSuperCampaign.id}/detail`)
   }
 
@@ -52,17 +44,12 @@ function SuperCampaignDetailHeader({
           <SuperCampaignDetailHeaderSchedule
             className={classes.margin}
             superCampaign={superCampaign}
-            setSuperCampaign={setSuperCampaign}
           />
           <SuperCampaignAdminMoreActions
             className={classes.margin}
-            superCampaign={{
-              ...superCampaign,
-              template_instance: superCampaign.template_instance?.id
-            }}
-            onSendNow={handleSendNow}
-            onDelete={handleDelete}
-            onDuplicate={handleDuplicate}
+            superCampaign={superCampaign}
+            onDeleteSuccess={handleDelete}
+            onDuplicateSuccess={handleDuplicate}
           />
         </>
       )}
