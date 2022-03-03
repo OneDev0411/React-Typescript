@@ -10,7 +10,7 @@ import OverlayDrawer from 'components/OverlayDrawer'
 import { SearchInput } from '../GlobalHeaderWithSearch/SearchInput'
 import LoadingContainer from '../LoadingContainer'
 
-import { getYouTubeVideoGif } from './helpers'
+import { getYouTubeVideoGif, makeVimeoDateStandard } from './helpers'
 import SearchVideoEmptyState from './SearchVideoEmptyState'
 import SearchVideoResults from './SearchVideoResults'
 import { SearchVideoResult, Video } from './types'
