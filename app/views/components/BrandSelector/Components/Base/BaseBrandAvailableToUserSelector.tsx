@@ -68,6 +68,7 @@ export function BaseBrandAvailableToUserSelector(
         {...commonProps}
         {...props}
         searchPlaceholder="Search my accounts"
+        initialExpandedNodes={[]}
         nodes={userTeams}
       />
     )
@@ -85,11 +86,7 @@ export function BaseBrandAvailableToUserSelector(
         centered
       >
         <Tab value={View.UserTeams} disabled={isLoading} label="My Accounts" />
-        <Tab
-          value={View.AllTeams}
-          disabled={isLoading}
-          label="Other Accounts"
-        />
+        <Tab value={View.AllTeams} disabled={isLoading} label="All Accounts" />
       </Tabs>
       {renderTreeView()}
     </>

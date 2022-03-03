@@ -1,13 +1,12 @@
 import { Button, ButtonProps, CircularProgress } from '@material-ui/core'
 
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
+import { createSuperCampaign } from '@app/models/super-campaign'
 import { goTo } from '@app/utils/go-to'
 import {
   createTemplateInstance,
   TemplateInstanceInputData
 } from 'models/instant-marketing/create-template-instance'
-
-import { useCreateSuperCampaign } from './use-create-super-campaign'
 
 interface CreateSuperCampaignButtonProps
   extends Omit<
@@ -28,8 +27,6 @@ function CreateSuperCampaignButton({
 }: CreateSuperCampaignButtonProps) {
   const { isRunning: isCreatingSuperCampaign, runActionThenNotify } =
     useRunActionThenNotify()
-
-  const { createSuperCampaign } = useCreateSuperCampaign()
 
   const createSuperCampaignAndRedirect = () => {
     if (!template) {

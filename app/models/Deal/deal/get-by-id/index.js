@@ -10,6 +10,7 @@ export async function getById(id) {
       .query({ 'associations[]': ['room.attachments'] })
       .query({ 'associations[]': ['deal.checklists'] })
       .query({ 'associations[]': ['deal.envelopes'] })
+      .query({ 'associations[]': ['deal.listing_info'] })
       .query({ 'associations[]': ['room.latest_activity'] })
       .query({ 'associations[]': ['deal.files'] })
       .query({ 'associations[]': ['deal.brand'] })
