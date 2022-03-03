@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { Button, Grid, Tooltip } from '@material-ui/core'
 import {
@@ -18,9 +18,7 @@ import { isEqual, pickBy } from 'lodash'
 import { useDispatch } from 'react-redux'
 import { useDebounce, useFirstMountState } from 'react-use'
 
-import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useActiveTeam } from '@app/hooks/team/use-active-team'
-import { useBrandPropertyTypes } from '@app/hooks/use-get-brand-property-types'
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { exportFilter } from '@app/models/Deal/deal'
 import { Filters as BaseFilters } from '@app/views/components/Filters'
@@ -33,17 +31,15 @@ import {
   CHANGE_FILTERS_DEBOUNCE_MS,
   DEALS_LIST_DEFAULT_FILTERS,
   DEALS_LIST_DEFUALT_ORDER,
-  DEAL_TYPES,
-  QUERY_ARRAY_PARAM_SPLITTER_CHAR
+  DEAL_TYPES
 } from '../../constants'
-import { getActivePropertyGroups } from '../../helpers/get-active-property-groups'
+import { usePropertyTypeFilter } from '../../hooks/use-property-type-filter'
 import {
   DealsListFilters,
   DealsListPayload,
   DealsOrder,
   SearchQuery,
-  TPropertyGroupType,
-  TPropertyGroup
+  TPropertyGroupType
 } from '../../types'
 
 import { DateFilterEditor } from './dateFilterEditor'
@@ -67,34 +63,9 @@ export const Filters = ({
   const classes = useStyles()
   const dispatch = useDispatch()
   const isFirstMount = useFirstMountState()
-  const activeBrandId = useActiveBrandId()
-  const [propertyTypeParamValue] = useQueryParam('propertyType')
-  const { propertyTypes } = useBrandPropertyTypes(activeBrandId)
 
-  const groupedProperties = useMemo(() => {
-    return propertyTypes.reduce((acc, propertyType) => {
-      const group: TPropertyGroupType = propertyType.is_lease ? 'lease' : 'sale'
-      const oldGroupItems: IDealPropertyType[] = acc[group] || []
-
-      acc[group] = [...oldGroupItems, propertyType]
-
-      return acc
-    }, {} as TPropertyGroup)
-  }, [propertyTypes])
-
-  const [propertyGroup, setPropertyGroup] = useState<TPropertyGroupType[]>([])
-
-  useEffect(() => {
-    const initialPropertyGroupValue = getActivePropertyGroups(
-      propertyTypeParamValue.split(QUERY_ARRAY_PARAM_SPLITTER_CHAR) as UUID[],
-      propertyTypes
-    )
-
-    setPropertyGroup(initialPropertyGroupValue)
-    // it should be called only once when propertyTypes is loaded
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propertyTypes])
-
+  const [propertyGroup, setPropertyGroup, groupedProperties] =
+    usePropertyTypeFilter()
   const [queryParamValue] = useQueryParam('q')
 
   // TODO: We should refactor the whole mechanism for ordering deals lists.
