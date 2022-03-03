@@ -240,7 +240,12 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   const onMapChange = useCallback(
     (center: ICoord, zoom: number, bounds: IBounds) => {
-      dispatch(setMapBounds(center, zoom, bounds))
+      const compactBounds: ICompactBounds = {
+        ne: { lat: bounds.ne.lat, lng: bounds.ne.lng },
+        sw: { lat: bounds.sw.lat, lng: bounds.sw.lng }
+      }
+
+      dispatch(setMapBounds(center, zoom, compactBounds))
 
       // Anonymous user's can also see /mls and explore the map
       // So updatingLastBrowsing location should not be run for them

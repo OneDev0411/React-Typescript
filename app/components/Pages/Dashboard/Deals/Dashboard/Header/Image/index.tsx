@@ -1,7 +1,7 @@
 import { Theme, makeStyles, createStyles } from '@material-ui/core'
 
+import { getField } from '@app/models/Deal/helpers/context'
 import { Avatar } from 'components/Avatar'
-import Deal from 'models/Deal'
 
 interface Props {
   deal: IDeal
@@ -18,14 +18,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function ListingImage({ deal }: Props) {
   const classes = useStyles()
-  const imageUrl = Deal.get.field(deal, 'photo')
-  const placeholderImageUrl = '/static/images/deals/group-146.svg'
+  const imageUrl =
+    getField(deal, 'photo') ?? '/static/images/deals/group-146.svg'
 
-  return (
-    <Avatar
-      url={imageUrl || placeholderImageUrl}
-      variant="circle"
-      className={classes.avatar}
-    />
-  )
+  return <Avatar url={imageUrl} variant="circle" className={classes.avatar} />
 }

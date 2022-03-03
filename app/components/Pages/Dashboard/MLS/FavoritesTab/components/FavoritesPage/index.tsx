@@ -158,7 +158,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
   }
 
   const onMapChange = useCallback(
-    (center: ICoord, zoom: number, bounds: IBounds) => {
+    (center: ICoord, zoom: number) => {
       dispatch(setMapLocation(center, zoom))
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
