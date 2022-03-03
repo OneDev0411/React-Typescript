@@ -53,7 +53,10 @@ export function Address({
   originQueryParam = ''
 }: Props) {
   const classes = useStyles()
-  const photo = getField(deal, 'photo')
+  const photo: string =
+    getField(deal, 'listing_info')?.cover_image_url ||
+    getField(deal, 'photo') ||
+    ''
 
   return (
     <Link
