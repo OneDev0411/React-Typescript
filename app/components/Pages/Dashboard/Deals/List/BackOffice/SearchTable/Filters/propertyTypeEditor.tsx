@@ -25,14 +25,18 @@ const PROPERTY_GROUPS: Record<TPropertyGroupType, string> = {
 }
 
 interface Props extends FilterButtonDropDownProp<DealsListFilters> {
-  propertyGroups: TPropertyGroup
+  groupedProperties: TPropertyGroup
+  propertyGroup: TPropertyGroupType[]
+  onChangePropertyGroup: (newGroupValues: TPropertyGroupType[]) => void
 }
 
 export const PropertyTypeEditor = ({
   filters,
   defaultFilters,
   updateFilters,
-  propertyGroups
+  groupedProperties,
+  propertyGroup,
+  onChangePropertyGroup
 }: Props) => {
   const classes = useStyles()
 
@@ -51,20 +55,18 @@ export const PropertyTypeEditor = ({
       })
       toggledProperyTypes = currentProperyTypes.filter(id => {
         // uncheck group items by removing it from the list
-        return !propertyGroups[changedGroup].some(item => item.id === id)
+        return !groupedProperties[changedGroup].some(item => item.id === id)
       })
     } else {
       toggledProperyGroups = [...currentProperyGroups, changedGroup]
       toggledProperyTypes = [
         ...currentProperyTypes,
-        ...propertyGroups[changedGroup].map(item => item.id)
+        ...groupedProperties[changedGroup].map(item => item.id)
       ]
     }
 
+    onChangePropertyGroup(toggledProperyGroups)
     updateFilters({
-      property_group: toggledProperyGroups.length
-        ? toggledProperyGroups
-        : undefined,
       property_type: toggledProperyTypes.length
         ? toggledProperyTypes
         : undefined
@@ -83,7 +85,7 @@ export const PropertyTypeEditor = ({
       })
 
       // check if all items of the group are unchecked
-      const isAllItemsInGroupUnchecked = !propertyGroups[
+      const isAllItemsInGroupUnchecked = !groupedProperties[
         changedPropertyTypeGroup
       ].some(item => toggledProperyTypes.includes(item.id))
 
@@ -92,12 +94,11 @@ export const PropertyTypeEditor = ({
         ? currentProperyGroups.filter(item => item !== changedPropertyTypeGroup)
         : currentProperyGroups
 
+      onChangePropertyGroup(toggledProperyGroups)
+
       updateFilters({
         property_type: toggledProperyTypes.length
           ? toggledProperyTypes
-          : undefined,
-        property_group: toggledProperyGroups.length
-          ? toggledProperyGroups
           : undefined
       })
     } else {
@@ -115,46 +116,40 @@ export const PropertyTypeEditor = ({
         </Typography>
       </Grid>
 
-      {Object.keys(propertyGroups).map((propertyGroup: TPropertyGroupType) => (
+      {Object.keys(groupedProperties).map((item: TPropertyGroupType) => (
         <>
           <FormControlLabel
-            key={propertyGroup}
+            key={item}
             classes={{
               root: classes.switchControlLabel
             }}
             control={
               <Switch
-                checked={!!filters.property_group?.includes(propertyGroup)}
+                checked={!!propertyGroup.includes(item)}
                 className={classes.switchControlButton}
                 color="primary"
-                name={PROPERTY_GROUPS[propertyGroup]}
+                name={PROPERTY_GROUPS[item]}
                 onChange={() => {
-                  toggleGroupValues(
-                    filters.property_group,
-                    filters.property_type,
-                    propertyGroup
-                  )
+                  toggleGroupValues(propertyGroup, filters.property_type, item)
                 }}
                 inputProps={{
-                  'aria-label': `${PROPERTY_GROUPS[propertyGroup]} checkbox`
+                  'aria-label': `${PROPERTY_GROUPS[item]} checkbox`
                 }}
               />
             }
             label={
               <Grid container alignItems="center">
-                <Typography variant="body1">{`${PROPERTY_GROUPS[propertyGroup]}`}</Typography>
+                <Typography variant="body1">{`${PROPERTY_GROUPS[item]}`}</Typography>
               </Grid>
             }
           />
           <FormGroup row>
-            {propertyGroups[propertyGroup].map(propertyType => (
+            {groupedProperties[item].map(propertyType => (
               <Grid item key={propertyType.id} xs={12}>
                 <FormControlLabel
                   control={
                     <Checkbox
-                      disabled={
-                        !filters.property_group?.includes(propertyGroup)
-                      }
+                      disabled={!propertyGroup.includes(item)}
                       color="primary"
                       checked={
                         !!filters.property_type?.includes(propertyType.id)
@@ -162,9 +157,9 @@ export const PropertyTypeEditor = ({
                       onChange={() => {
                         togglePropertyValues(
                           filters.property_type,
-                          filters.property_group,
+                          propertyGroup,
                           propertyType.id,
-                          propertyGroup
+                          item
                         )
                       }}
                       name={propertyType.label}
@@ -184,8 +179,8 @@ export const PropertyTypeEditor = ({
           defaultFilters.property_type
         )}
         onClickReset={() => {
+          onChangePropertyGroup([])
           updateFilters({
-            property_group: defaultFilters.property_group,
             property_type: defaultFilters.property_type
           })
         }}

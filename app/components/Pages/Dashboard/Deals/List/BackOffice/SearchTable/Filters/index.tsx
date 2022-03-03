@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Button, Grid, Tooltip } from '@material-ui/core'
 import {
@@ -33,8 +33,10 @@ import {
   CHANGE_FILTERS_DEBOUNCE_MS,
   DEALS_LIST_DEFAULT_FILTERS,
   DEALS_LIST_DEFUALT_ORDER,
-  DEAL_TYPES
+  DEAL_TYPES,
+  QUERY_ARRAY_PARAM_SPLITTER_CHAR
 } from '../../constants'
+import { getActivePropertyGroups } from '../../helpers/get-active-property-groups'
 import {
   DealsListFilters,
   DealsListPayload,
@@ -66,10 +68,10 @@ export const Filters = ({
   const dispatch = useDispatch()
   const isFirstMount = useFirstMountState()
   const activeBrandId = useActiveBrandId()
-
+  const [propertyTypeParamValue] = useQueryParam('propertyType')
   const { propertyTypes } = useBrandPropertyTypes(activeBrandId)
 
-  const propertyGroups = useMemo(() => {
+  const groupedProperties = useMemo(() => {
     return propertyTypes.reduce((acc, propertyType) => {
       const group: TPropertyGroupType = propertyType.is_lease ? 'lease' : 'sale'
       const oldGroupItems: IDealPropertyType[] = acc[group] || []
@@ -78,6 +80,19 @@ export const Filters = ({
 
       return acc
     }, {} as TPropertyGroup)
+  }, [propertyTypes])
+
+  const [propertyGroup, setPropertyGroup] = useState<TPropertyGroupType[]>([])
+
+  useEffect(() => {
+    const initialPropertyGroupValue = getActivePropertyGroups(
+      propertyTypeParamValue.split(QUERY_ARRAY_PARAM_SPLITTER_CHAR) as UUID[],
+      propertyTypes
+    )
+
+    setPropertyGroup(initialPropertyGroupValue)
+    // it should be called only once when propertyTypes is loaded
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propertyTypes])
 
   const [queryParamValue] = useQueryParam('q')
@@ -107,16 +122,16 @@ export const Filters = ({
     saveAs(response.body, 'deals.xlsx')
   }, [sortOption, activeBrand.id, searchQuery?.term, userFilters])
 
+  const onChangePropertyGroup = (newGroupValues: TPropertyGroupType[]) => {
+    setPropertyGroup(newGroupValues)
+  }
+
   useDebounce(
     () => {
       if (!isFirstMount) {
-        // property_group is not an actual filter that API needed, it's just a way to group properties by type
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { property_group, ...actualFilters } = userFilters
-
         // remove false statuses from the user filters
         const cleanedUserFilters: DealsListFilters = {
-          ...actualFilters,
+          ...userFilters,
           status: pickBy(userFilters.status, v => v === true)
         }
 
@@ -194,7 +209,9 @@ export const Filters = ({
                 )}
                 renderDropdown={() => (
                   <PropertyTypeEditor
-                    propertyGroups={propertyGroups}
+                    groupedProperties={groupedProperties}
+                    propertyGroup={propertyGroup}
+                    onChangePropertyGroup={onChangePropertyGroup}
                     filters={currentFilters}
                     updateFilters={updateFilters}
                     defaultFilters={systemDefaultFilters}
@@ -283,128 +300,126 @@ export const Filters = ({
               </div>
 
               {/* Only `Sale` type related date filters  */}
-              {currentFilters.property_group?.length === 1 &&
-                currentFilters.property_group[0] === 'sale' && (
-                  <div className={classes.buttonGroup}>
-                    {/* contract date Filter  */}
-                    <BaseFilterButton
-                      renderButton={({ onClick }) => (
-                        <FilterButton
-                          onClick={onClick}
-                          title="Executed Date"
-                          startIconPath={mdiCalendarCursor}
-                          isActive={
-                            !isEqual(
-                              systemDefaultFilters.contexts.contract_date?.date,
-                              currentFilters.contexts.contract_date?.date
-                            )
-                          }
-                        />
-                      )}
-                      renderDropdown={() => (
-                        <DateFilterEditor
-                          id="contract_date"
-                          title="Executed Date"
-                          iconPath={mdiCalendarCursor}
-                          filters={currentFilters}
-                          updateFilters={updateFilters}
-                          defaultFilters={systemDefaultFilters}
-                        />
-                      )}
-                    />
+              {propertyGroup.length === 1 && propertyGroup[0] === 'sale' && (
+                <div className={classes.buttonGroup}>
+                  {/* contract date Filter  */}
+                  <BaseFilterButton
+                    renderButton={({ onClick }) => (
+                      <FilterButton
+                        onClick={onClick}
+                        title="Executed Date"
+                        startIconPath={mdiCalendarCursor}
+                        isActive={
+                          !isEqual(
+                            systemDefaultFilters.contexts.contract_date?.date,
+                            currentFilters.contexts.contract_date?.date
+                          )
+                        }
+                      />
+                    )}
+                    renderDropdown={() => (
+                      <DateFilterEditor
+                        id="contract_date"
+                        title="Executed Date"
+                        iconPath={mdiCalendarCursor}
+                        filters={currentFilters}
+                        updateFilters={updateFilters}
+                        defaultFilters={systemDefaultFilters}
+                      />
+                    )}
+                  />
 
-                    {/* Closing date Filter  */}
-                    <BaseFilterButton
-                      renderButton={({ onClick }) => (
-                        <FilterButton
-                          onClick={onClick}
-                          title="Closing Date"
-                          startIconPath={mdiCalendarCheckOutline}
-                          isActive={
-                            !isEqual(
-                              systemDefaultFilters.contexts.closing_date?.date,
-                              currentFilters.contexts.closing_date?.date
-                            )
-                          }
-                        />
-                      )}
-                      renderDropdown={() => (
-                        <DateFilterEditor
-                          id="closing_date"
-                          title="Closing Date"
-                          iconPath={mdiCalendarCheckOutline}
-                          filters={currentFilters}
-                          updateFilters={updateFilters}
-                          defaultFilters={systemDefaultFilters}
-                        />
-                      )}
-                    />
-                  </div>
-                )}
+                  {/* Closing date Filter  */}
+                  <BaseFilterButton
+                    renderButton={({ onClick }) => (
+                      <FilterButton
+                        onClick={onClick}
+                        title="Closing Date"
+                        startIconPath={mdiCalendarCheckOutline}
+                        isActive={
+                          !isEqual(
+                            systemDefaultFilters.contexts.closing_date?.date,
+                            currentFilters.contexts.closing_date?.date
+                          )
+                        }
+                      />
+                    )}
+                    renderDropdown={() => (
+                      <DateFilterEditor
+                        id="closing_date"
+                        title="Closing Date"
+                        iconPath={mdiCalendarCheckOutline}
+                        filters={currentFilters}
+                        updateFilters={updateFilters}
+                        defaultFilters={systemDefaultFilters}
+                      />
+                    )}
+                  />
+                </div>
+              )}
 
               {/* Only `Lease` type related date filters  */}
-              {currentFilters.property_group?.length === 1 &&
-                currentFilters.property_group[0] === 'lease' && (
-                  <div className={classes.buttonGroup}>
-                    {/* lease begin Filter  */}
-                    <BaseFilterButton
-                      renderButton={({ onClick }) => (
-                        <FilterButton
-                          onClick={onClick}
-                          title="Lease Begin"
-                          startIconPath={mdiCalendarPlus}
-                          isActive={
-                            !isEqual(
-                              systemDefaultFilters.contexts.lease_begin?.date,
-                              currentFilters.contexts.lease_begin?.date
-                            )
-                          }
-                        />
-                      )}
-                      renderDropdown={() => (
-                        <DateFilterEditor
-                          id="lease_begin"
-                          title="Lease Begin"
-                          iconPath={mdiCalendarPlus}
-                          filters={currentFilters}
-                          updateFilters={updateFilters}
-                          defaultFilters={systemDefaultFilters}
-                        />
-                      )}
-                    />
+              {propertyGroup.length === 1 && propertyGroup[0] === 'lease' && (
+                <div className={classes.buttonGroup}>
+                  {/* lease begin Filter  */}
+                  <BaseFilterButton
+                    renderButton={({ onClick }) => (
+                      <FilterButton
+                        onClick={onClick}
+                        title="Lease Begin"
+                        startIconPath={mdiCalendarPlus}
+                        isActive={
+                          !isEqual(
+                            systemDefaultFilters.contexts.lease_begin?.date,
+                            currentFilters.contexts.lease_begin?.date
+                          )
+                        }
+                      />
+                    )}
+                    renderDropdown={() => (
+                      <DateFilterEditor
+                        id="lease_begin"
+                        title="Lease Begin"
+                        iconPath={mdiCalendarPlus}
+                        filters={currentFilters}
+                        updateFilters={updateFilters}
+                        defaultFilters={systemDefaultFilters}
+                      />
+                    )}
+                  />
 
-                    {/* Lease End Filter  */}
-                    <BaseFilterButton
-                      renderButton={({ onClick }) => (
-                        <FilterButton
-                          onClick={onClick}
-                          title="Lease End"
-                          startIconPath={mdiCalendarRemove}
-                          isActive={
-                            !isEqual(
-                              systemDefaultFilters.contexts.lease_end?.date,
-                              currentFilters.contexts.lease_end?.date
-                            )
-                          }
-                        />
-                      )}
-                      renderDropdown={() => (
-                        <DateFilterEditor
-                          id="lease_end"
-                          title="Lease End"
-                          iconPath={mdiCalendarRemove}
-                          filters={currentFilters}
-                          updateFilters={updateFilters}
-                          defaultFilters={systemDefaultFilters}
-                        />
-                      )}
-                    />
-                  </div>
-                )}
+                  {/* Lease End Filter  */}
+                  <BaseFilterButton
+                    renderButton={({ onClick }) => (
+                      <FilterButton
+                        onClick={onClick}
+                        title="Lease End"
+                        startIconPath={mdiCalendarRemove}
+                        isActive={
+                          !isEqual(
+                            systemDefaultFilters.contexts.lease_end?.date,
+                            currentFilters.contexts.lease_end?.date
+                          )
+                        }
+                      />
+                    )}
+                    renderDropdown={() => (
+                      <DateFilterEditor
+                        id="lease_end"
+                        title="Lease End"
+                        iconPath={mdiCalendarRemove}
+                        filters={currentFilters}
+                        updateFilters={updateFilters}
+                        defaultFilters={systemDefaultFilters}
+                      />
+                    )}
+                  />
+                </div>
+              )}
 
               {/* Display the help button if both lease and sale are selected or neither  */}
-              {currentFilters.property_group?.length !== 1 && (
-                <Tooltip title="To see date filters related to lease or sale property types, you mus only select from one of those property type categories at once.">
+              {propertyGroup?.length !== 1 && (
+                <Tooltip title="To see date filters related to lease or sale property types, you must only select from one of those property type categories at once.">
                   <div className={classes.helpWrapper}>
                     <SvgIcon
                       size={muiIconSizes.small}

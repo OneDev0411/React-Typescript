@@ -23,7 +23,6 @@ export type TDealsContexts = {
 
 export interface DealsListFilters {
   deal_type?: IDealType[]
-  property_group?: TPropertyGroupType[]
   property_type?: UUID[]
   status: TDealsStatusList
   contexts: TDealsContexts

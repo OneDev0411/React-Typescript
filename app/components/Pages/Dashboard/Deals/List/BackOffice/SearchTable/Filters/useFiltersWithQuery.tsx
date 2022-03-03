@@ -101,7 +101,8 @@ export const UseFiltersWithQuery = (): [
         ? userFilters.deal_type.join(QUERY_ARRAY_PARAM_SPLITTER_CHAR)
         : ''
     )
-  }, [setDealTypeParamValue, userFilters.deal_type])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userFilters.deal_type])
 
   useEffect(() => {
     console.log('property_type changed', userFilters.property_type)
@@ -110,7 +111,8 @@ export const UseFiltersWithQuery = (): [
         ? userFilters.property_type.join(QUERY_ARRAY_PARAM_SPLITTER_CHAR)
         : ''
     )
-  }, [setPropertyTypeParamValue, userFilters.property_type])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userFilters.property_type])
 
   useEffect(() => {
     setStatusParamValue(
@@ -118,7 +120,8 @@ export const UseFiltersWithQuery = (): [
         ? stringifyStatusFilter(userFilters.status)
         : ''
     )
-  }, [setStatusParamValue, userFilters.status])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userFilters.status])
 
   useEffect(() => {
     setClosingDateParamValue(
@@ -126,7 +129,8 @@ export const UseFiltersWithQuery = (): [
         ? stringifyRangeDateFilter(userFilters.contexts.closing_date)
         : ''
     )
-  }, [setClosingDateParamValue, userFilters.contexts.closing_date])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userFilters.contexts.closing_date])
 
   useEffect(() => {
     setListDateParamValue(
@@ -134,7 +138,8 @@ export const UseFiltersWithQuery = (): [
         ? stringifyRangeDateFilter(userFilters.contexts.list_date)
         : ''
     )
-  }, [setListDateParamValue, userFilters.contexts.list_date])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userFilters.contexts.list_date])
 
   useEffect(() => {
     setExpirationDateParamValue(
@@ -142,7 +147,8 @@ export const UseFiltersWithQuery = (): [
         ? stringifyRangeDateFilter(userFilters.contexts.expiration_date)
         : ''
     )
-  }, [setExpirationDateParamValue, userFilters.contexts.expiration_date])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userFilters.contexts.expiration_date])
 
   useEffect(() => {
     setContractDateParamValue(
@@ -150,7 +156,8 @@ export const UseFiltersWithQuery = (): [
         ? stringifyRangeDateFilter(userFilters.contexts.contract_date)
         : ''
     )
-  }, [setContractDateParamValue, userFilters.contexts.contract_date])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userFilters.contexts.contract_date])
 
   useEffect(() => {
     setLeaseBeginParamValue(
@@ -158,7 +165,8 @@ export const UseFiltersWithQuery = (): [
         ? stringifyRangeDateFilter(userFilters.contexts.lease_begin)
         : ''
     )
-  }, [setLeaseBeginParamValue, userFilters.contexts.lease_begin])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userFilters.contexts.lease_begin])
 
   useEffect(() => {
     setLeaseEndParamValue(
@@ -166,7 +174,8 @@ export const UseFiltersWithQuery = (): [
         ? stringifyRangeDateFilter(userFilters.contexts.lease_end)
         : ''
     )
-  }, [setLeaseEndParamValue, userFilters.contexts.lease_end])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userFilters.contexts.lease_end])
 
   return [userFilters, setUserFilters]
 }
