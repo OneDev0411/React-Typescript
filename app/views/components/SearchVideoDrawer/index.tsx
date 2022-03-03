@@ -133,13 +133,17 @@ function SearchVideoDrawer({
     }
 
     if (video.source === 'youtube') {
-      setIsGeneratingThumbnail(true)
+      try {
+        setIsGeneratingThumbnail(true)
 
-      const result = await getYouTubeVideoGif(video.url)
+        const result = await getYouTubeVideoGif(video.url)
 
-      video.thumbnail = result.url
-
-      setIsGeneratingThumbnail(false)
+        video.thumbnail = result.url
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setIsGeneratingThumbnail(false)
+      }
     }
 
     const videoInfo: Video = {
