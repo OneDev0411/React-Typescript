@@ -14,7 +14,7 @@ interface UseGetShowingsReturn {
   setShowings: Dispatch<SetStateAction<IShowing<'showing'>[]>>
 }
 
-function useGetShowings(): UseGetShowingsReturn {
+function useGetShowings(query: string): UseGetShowingsReturn {
   const {
     data: rows,
     isLoading,
@@ -27,7 +27,7 @@ function useGetShowings(): UseGetShowingsReturn {
 
   useEffect(() => {
     run(async () => {
-      const showings = await getShowings()
+      const showings = await getShowings(query)
 
       return showings.map(showing => ({
         ...showing,
@@ -42,7 +42,7 @@ function useGetShowings(): UseGetShowingsReturn {
           : null
       }))
     })
-  }, [run])
+  }, [run, query])
 
   const appointments = useMemo(
     () =>
