@@ -10,7 +10,7 @@ import OverlayDrawer from 'components/OverlayDrawer'
 import { SearchInput } from '../GlobalHeaderWithSearch/SearchInput'
 import LoadingContainer from '../LoadingContainer'
 
-import { makeVimeoDateStandard } from './helpers'
+import { getYouTubeVideoGif } from './helpers'
 import SearchVideoEmptyState from './SearchVideoEmptyState'
 import SearchVideoResults from './SearchVideoResults'
 import { SearchVideoResult, Video } from './types'
@@ -63,6 +63,8 @@ function SearchVideoDrawer({
   const [video, setVideo] = useState<Nullable<SearchVideoResult>>(null)
   const { isYouTubeReady, safeSearchYouTube } = useSearchYouTube()
   const { safeSearchVimeo } = useSearchVimeo()
+  const [isGeneratingThumbnail, setIsGeneratingThumbnail] =
+    useState<boolean>(false)
 
   const searchVideos = useCallback(
     (value: string) => {
@@ -86,7 +88,8 @@ function SearchVideoDrawer({
             url: `https://vimeo.com/${video.video_id}`,
             publisher: video.author_name,
             publishedAt: makeVimeoDateStandard(video.upload_date),
-            sourceIcon: 'https://f.vimeocdn.com/images_v6/favicon.ico'
+            sourceIcon: 'https://f.vimeocdn.com/images_v6/favicon.ico',
+            source: 'vimeo'
           })),
           ...youtubeVideos.map<SearchVideoResult>(video => ({
             thumbnail: video.snippet?.thumbnails?.high?.url ?? '',
@@ -95,7 +98,8 @@ function SearchVideoDrawer({
             publisher: video.snippet?.channelTitle ?? '',
             publishedAt: video.snippet?.publishedAt ?? '',
             sourceIcon:
-              'https://www.youtube.com/s/desktop/8cdd1596/img/favicon_32x32.png'
+              'https://www.youtube.com/s/desktop/8cdd1596/img/favicon_32x32.png',
+            source: 'youtube'
           }))
         ]
 
@@ -123,9 +127,19 @@ function SearchVideoDrawer({
     target
   }: React.ChangeEvent<HTMLInputElement>) => searchVideos(target.value)
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!video) {
       return
+    }
+
+    if (video.source === 'youtube') {
+      setIsGeneratingThumbnail(true)
+
+      const result = await getYouTubeVideoGif(video.url)
+
+      video.thumbnail = result.url
+
+      setIsGeneratingThumbnail(false)
     }
 
     const videoInfo: Video = {
@@ -182,7 +196,7 @@ function SearchVideoDrawer({
       </OverlayDrawer.Body>
       <OverlayDrawer.Footer rowReverse>
         <Button
-          disabled={!video}
+          disabled={!video || isGeneratingThumbnail}
           color="primary"
           variant="contained"
           onClick={handleConfirm}

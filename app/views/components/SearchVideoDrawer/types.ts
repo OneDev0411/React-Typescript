@@ -5,6 +5,7 @@ export interface SearchVideoResult {
   publisher: string
   publishedAt: string
   sourceIcon: string
+  source: 'youtube' | 'vimeo'
 }
 
 export type YouTubeVideoResource = gapi.client.youtube.SearchResult
