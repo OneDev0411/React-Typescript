@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+import { v4 as uuidv4 } from 'uuid'
 
 import { TRANSCODER_GIF_PRESET_ID, TRANSCODER_PIPELINE_ID } from './constants'
 import {
@@ -25,7 +26,7 @@ export default async (req: Request, res: Response) => {
 
     const metadata = await getUrlMetadata(url)
 
-    const videoId = metadata.videoDetails.videoId
+    const videoId = `${metadata.videoDetails.videoId}_${uuidv4()}`
     const downloadedVideo = await downloadFirstFewSecondsOfYouTubeVideo(
       metadata
     )
