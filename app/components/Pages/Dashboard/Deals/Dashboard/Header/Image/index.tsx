@@ -1,9 +1,10 @@
 import { Theme, makeStyles, createStyles } from '@material-ui/core'
 
+import { getField } from '@app/models/Deal/helpers/context'
 import { Avatar } from 'components/Avatar'
 
 interface Props {
-  deal: IDeal // TODO: all related IDeal should change to IDeal<'listing_info'>
+  deal: IDeal
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -18,8 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export function ListingImage({ deal }: Props) {
   const classes = useStyles()
   const imageUrl =
-    (deal as unknown as IDeal<'listing_info'>).listing_info?.cover_image_url ??
-    '/static/images/deals/group-146.svg'
+    getField(deal, 'photo') ?? '/static/images/deals/group-146.svg'
 
   return <Avatar url={imageUrl} variant="circle" className={classes.avatar} />
 }

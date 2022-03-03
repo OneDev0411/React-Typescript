@@ -1,9 +1,10 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 
 import { Box } from '@material-ui/core'
 import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
+import NoSearchResults from '@app/components/Partials/no-search-results'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import TabContentSwitch from 'components/TabContentSwitch'
@@ -24,11 +25,21 @@ function Showings({ params }: ShowingsProps) {
 
   const tab = params.tab || showingsTabs.Properties
 
-  const { isLoading, showings, appointments, setShowings } = useGetShowings()
+  const [query, setQuery] = useState<string>('')
+
+  const { isLoading, showings, appointments, setShowings } =
+    useGetShowings(query)
 
   return (
     <PageLayout position="relative" overflow="hidden">
-      <PageLayout.Header title="Showings" />
+      <PageLayout.HeaderWithSearch
+        title="Showings"
+        onSearch={setQuery}
+        SearchInputProps={{
+          placeholder: 'Search Address, MLS# or Agent',
+          isLoading: !!query && isLoading
+        }}
+      />
       <PageLayout.Main>
         <Box mb={4}>
           <ShowingsTabs value={tab} />
@@ -38,13 +49,21 @@ function Showings({ params }: ShowingsProps) {
         ) : (
           <TabContentSwitch.Container value={tab}>
             <TabContentSwitch.Item value={showingsTabs.Properties}>
-              <ShowingsTabProperties showings={showings} />
+              {query && showings?.length === 0 ? (
+                <NoSearchResults description="Try typing another address, MLS# or agent." />
+              ) : (
+                <ShowingsTabProperties showings={showings} />
+              )}
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingsTabs.Bookings}>
-              <ShowingsTabBookings
-                appointments={appointments}
-                setShowings={setShowings}
-              />
+              {query && appointments?.length === 0 ? (
+                <NoSearchResults description="Try typing another address, MLS# or agent." />
+              ) : (
+                <ShowingsTabBookings
+                  appointments={appointments}
+                  setShowings={setShowings}
+                />
+              )}
             </TabContentSwitch.Item>
           </TabContentSwitch.Container>
         )}
