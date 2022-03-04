@@ -1,5 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
 
+import { mdiSendOutline } from '@mdi/js'
 import { useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
@@ -11,17 +12,24 @@ import {
   selectUserFormattedPhoneNumber
 } from '@app/selectors/user'
 import { isValidPhoneNumber } from '@app/utils/helpers'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import { Section } from '../components/Section'
+import SocialDrawerSection from './SocialDrawerSection'
 
-interface SendSMSProps {
+interface SocialDrawerSendSMSProps {
+  className?: string
   instance: IMarketingTemplateInstance | IBrandAsset
 }
 
-function SendSMS({ instance }: SendSMSProps) {
+function SocialDrawerSendSMS({
+  className,
+  instance
+}: SocialDrawerSendSMSProps) {
   const notify = useNotify()
   const phoneNumber = useSelector(selectUserFormattedPhoneNumber)
   const displayName = useSelector(selectUserDisplayName)
+
   const [isSending, setIsSending] = useState<boolean>(false)
   const [isValidPhone, setIsValidPhone] = useState<boolean>(false)
 
@@ -35,7 +43,7 @@ function SendSMS({ instance }: SendSMSProps) {
     initValidPhoneValue()
   })
 
-  const handleChangePhone = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setIsValidPhone(await isValidPhoneNumber(e.target.value))
   }
 
@@ -81,30 +89,28 @@ function SendSMS({ instance }: SendSMSProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Section
-        title="Send via SMS:"
-        buttonCaption={isSending ? 'Sending...' : 'Send'}
+    <form className={className} onSubmit={handleSubmit}>
+      <SocialDrawerSection
+        textFieldProps={{
+          helperText:
+            'Send image to yourself and post it directly from your phone',
+          placeholder: 'Add phone number',
+          label: 'SMS:',
+          name: 'phone',
+          onChange: handleChange,
+          defaultValue: phoneNumber || ''
+        }}
         buttonProps={{
+          children: isSending ? 'Sending...' : 'Send',
+          startIcon: (
+            <SvgIcon path={mdiSendOutline} size={muiIconSizes.small} />
+          ),
           type: 'submit',
           disabled: isSending || isValidPhone === false
         }}
-        description="Send image to yourself and post it directly from your phone."
-        styles={{
-          info: {
-            padding: 0
-          }
-        }}
-      >
-        <input
-          name="phone"
-          onChange={handleChangePhone}
-          placeholder="Add phone number"
-          defaultValue={phoneNumber || ''}
-        />
-      </Section>
+      />
     </form>
   )
 }
 
-export default SendSMS
+export default SocialDrawerSendSMS
