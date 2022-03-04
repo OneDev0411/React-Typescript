@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { Box } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
@@ -10,12 +11,9 @@ import {
   createTemplateInstance,
   TemplateInstanceInputData
 } from 'models/instant-marketing/create-template-instance'
-import { getFileType } from 'utils/file-utils/get-file-type'
 
-import CopyFileUrl from './CopyFileUrl'
-import DownloadFile from './DownloadFile'
-import PreviewFile from './PreviewFile'
-import SendSMS from './SendSMS'
+import SocialDrawerActions from './SocialDrawerActions'
+import SocialDrawerPreviewFile from './SocialDrawerPreviewFile'
 
 interface Props {
   template: (IBrandMarketingTemplate | IMarketingTemplate) & { result: string }
@@ -73,42 +71,16 @@ export default function SocialDrawer({
     makeTemplateInstance()
   }, [dispatch, template, templateInstance, templateInstanceData])
 
-  const getActions = () => {
-    if (brandAsset) {
-      return [DownloadFile, SendSMS, CopyFileUrl]
-    }
-
-    if (templateInstance && getFileType(templateInstance.file) === 'pdf') {
-      return [DownloadFile, CopyFileUrl]
-    }
-
-    return [DownloadFile, SendSMS, CopyFileUrl]
-  }
+  const instance = templateInstance || brandAsset
 
   return (
     <Drawer open onClose={onClose}>
-      <Drawer.Header title="How would you like to share?" />
+      <Drawer.Header title="Schedule or Share?" />
       <Drawer.Body>
-        <PreviewFile
-          instance={templateInstance || brandAsset}
-          error={errorMessage}
-        />
-
-        {templateInstance && (
-          <>
-            {getActions().map((Component, index) => (
-              <Component key={index} instance={templateInstance} />
-            ))}
-          </>
-        )}
-
-        {brandAsset && (
-          <>
-            {getActions().map((Component, index) => (
-              <Component key={index} instance={brandAsset} />
-            ))}
-          </>
-        )}
+        <Box my={3}>
+          <SocialDrawerPreviewFile instance={instance} error={errorMessage} />
+          {instance && <SocialDrawerActions instance={instance} />}
+        </Box>
       </Drawer.Body>
     </Drawer>
   )
