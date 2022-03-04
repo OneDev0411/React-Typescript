@@ -423,7 +423,10 @@ export const Filters = ({
               <Button
                 className={classes.resetButton}
                 variant="outlined"
-                onClick={resetFilters}
+                onClick={() => {
+                  resetFilters()
+                  setPropertyGroup([])
+                }}
                 disabled={isEqual(currentFilters, systemDefaultFilters)}
                 size="small"
                 startIcon={

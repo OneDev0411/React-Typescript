@@ -65,11 +65,29 @@ export const PropertyTypeEditor = ({
       ]
     }
 
+    const newContext: Partial<DealsListFilters> =
+      toggledProperyTypes.length !== 1
+        ? {
+            contexts: {
+              ...(filters.contexts ?? {}),
+              lease_begin: undefined,
+              lease_end: undefined,
+              contract_date: undefined,
+              closing_date: undefined
+            }
+          }
+        : {
+            contexts: {
+              ...(filters.contexts ?? {})
+            }
+          }
+
     onChangePropertyGroup(toggledProperyGroups)
     updateFilters({
       property_type: toggledProperyTypes.length
         ? toggledProperyTypes
-        : undefined
+        : undefined,
+      ...newContext
     })
   }
 

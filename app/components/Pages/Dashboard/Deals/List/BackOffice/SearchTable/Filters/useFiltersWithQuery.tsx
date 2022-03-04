@@ -1,180 +1,169 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useQueryState } from 'use-location-state'
 
-import { isEqual } from 'lodash'
-
-import { useReplaceAutoQueryParam } from '@app/hooks/use-query-param'
-
-import {
-  DEALS_LIST_DEFAULT_FILTERS,
-  QUERY_ARRAY_PARAM_SPLITTER_CHAR
-} from '../../constants'
+import { DEALS_LIST_DEFAULT_FILTERS } from '../../constants'
 import { DealsListFilters } from '../../types'
 
 import {
   parseStatusFilterString,
   parseRangeDateFilterString,
-  stringifyRangeDateFilter,
-  stringifyStatusFilter
+  arrayifyRangeDateFilter
 } from './utils'
 
 export const UseFiltersWithQuery = (): [
   DealsListFilters,
-  Dispatch<SetStateAction<DealsListFilters>>
+  (newFilters: Partial<DealsListFilters>) => void
 ] => {
-  const [dealTypeParamValue, setDealTypeParamValue] =
-    useReplaceAutoQueryParam('dealType')
-  const [propertyTypeParamValue, setPropertyTypeParamValue] =
-    useReplaceAutoQueryParam('propertyType')
-  const [statusParamValue, setStatusParamValue] =
-    useReplaceAutoQueryParam('status')
-  const [closingDateParamValue, setClosingDateParamValue] =
-    useReplaceAutoQueryParam('closingDate')
-  const [listDateParamValue, setListDateParamValue] =
-    useReplaceAutoQueryParam('listDate')
-  const [expirationDateParamValue, setExpirationDateParamValue] =
-    useReplaceAutoQueryParam('expirationDate')
-  const [contractDateParamValue, setContractDateParamValue] =
-    useReplaceAutoQueryParam('contractDate')
-  const [leaseBeginParamValue, setLeaseBeginParamValue] =
-    useReplaceAutoQueryParam('leaseBegin')
-  const [leaseEndParamValue, setLeaseEndParamValue] =
-    useReplaceAutoQueryParam('leaseEnd')
+  const [dealType, setDealType] = useQueryState(
+    'dealType',
+    DEALS_LIST_DEFAULT_FILTERS.deal_type || []
+  )
+  const [propertyType, setPropertyType] = useQueryState(
+    'propertyType',
+    DEALS_LIST_DEFAULT_FILTERS.property_type || []
+  )
+  const [status, setStatus] = useQueryState<string[]>('status', [])
 
-  const [userFilters, setUserFilters] = useState<DealsListFilters>({
+  const [closingDate, setClosingDate] = useQueryState<[string, string] | []>(
+    'closingDate',
+    []
+  )
+  const [listDate, setListDate] = useQueryState<[string, string] | []>(
+    'listDate',
+    []
+  )
+  const [expirationDate, setExpirationDate] = useQueryState<
+    [string, string] | []
+  >('expirationDate', [])
+  const [contractDate, setContractDate] = useQueryState<[string, string] | []>(
+    'contractDate',
+    []
+  )
+  const [leaseBegin, setLeaseBegin] = useQueryState<[string, string] | []>(
+    'leaseBegin',
+    []
+  )
+  const [leaseEnd, setLeaseEnd] = useQueryState<[string, string] | []>(
+    'leaseEnd',
+    []
+  )
+
+  const userFilters: DealsListFilters = {
     ...DEALS_LIST_DEFAULT_FILTERS,
-    ...(dealTypeParamValue
+    ...(dealType
       ? {
-          deal_type: dealTypeParamValue.split(
-            QUERY_ARRAY_PARAM_SPLITTER_CHAR
-          ) as IDealType[]
+          deal_type: dealType as IDealType[]
         }
       : {}),
-    ...(propertyTypeParamValue
+    ...(propertyType.length
       ? {
-          property_type: propertyTypeParamValue.split(
-            QUERY_ARRAY_PARAM_SPLITTER_CHAR
-          ) as UUID[]
+          property_type: propertyType as UUID[]
         }
       : {}),
     status: {
       ...DEALS_LIST_DEFAULT_FILTERS.status,
-      ...(statusParamValue ? parseStatusFilterString(statusParamValue) : {})
+      ...(status.length ? parseStatusFilterString(status) : {})
     },
     contexts: {
       ...DEALS_LIST_DEFAULT_FILTERS.contexts,
-      ...(closingDateParamValue
-        ? { closing_date: parseRangeDateFilterString(closingDateParamValue) }
+      ...(closingDate.length
+        ? { closing_date: parseRangeDateFilterString(closingDate) }
         : {}),
-      ...(listDateParamValue
-        ? { list_date: parseRangeDateFilterString(listDateParamValue) }
+      ...(listDate.length
+        ? { list_date: parseRangeDateFilterString(listDate) }
         : {}),
-      ...(expirationDateParamValue
+      ...(expirationDate.length
         ? {
-            expiration_date: parseRangeDateFilterString(
-              expirationDateParamValue
-            )
+            expiration_date: parseRangeDateFilterString(expirationDate)
           }
         : {}),
-      ...(contractDateParamValue
+      ...(contractDate.length
         ? {
-            contract_date: parseRangeDateFilterString(contractDateParamValue)
+            contract_date: parseRangeDateFilterString(contractDate)
           }
         : {}),
-      ...(leaseBeginParamValue
+      ...(leaseBegin.length
         ? {
-            lease_begin: parseRangeDateFilterString(leaseBeginParamValue)
+            lease_begin: parseRangeDateFilterString(leaseBegin)
           }
         : {}),
-      ...(leaseEndParamValue
+      ...(leaseEnd.length
         ? {
-            lease_end: parseRangeDateFilterString(leaseEndParamValue)
+            lease_end: parseRangeDateFilterString(leaseEnd)
           }
         : {})
     }
-  })
+  }
 
-  // Set query params after each change
-  useEffect(() => {
-    setDealTypeParamValue(
-      userFilters.deal_type &&
-        !isEqual(userFilters.deal_type, DEALS_LIST_DEFAULT_FILTERS.deal_type)
-        ? userFilters.deal_type.join(QUERY_ARRAY_PARAM_SPLITTER_CHAR)
-        : ''
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userFilters.deal_type])
+  const setUserFilters = (newFilters: Partial<DealsListFilters>) => {
+    const changedKeys = Object.keys(newFilters)
 
-  useEffect(() => {
-    setPropertyTypeParamValue(
-      userFilters.property_type && userFilters.property_type.length
-        ? userFilters.property_type.join(QUERY_ARRAY_PARAM_SPLITTER_CHAR)
-        : ''
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userFilters.property_type])
+    changedKeys.forEach(changedKey => {
+      switch (changedKey) {
+        case 'deal_type':
+          setDealType(newFilters.deal_type as IDealType[])
+          break
+        case 'property_type':
+          setPropertyType(newFilters.property_type as UUID[])
+          break
+        case 'status':
+          setStatus(
+            newFilters.status
+              ? Object.keys(newFilters.status).filter(
+                  key => newFilters.status && !!newFilters.status[key]
+                )
+              : []
+          )
+          break
+        case 'contexts':
+          setContext(newFilters.contexts)
+          break
+        default:
+          break
+      }
+    })
+  }
 
-  useEffect(() => {
-    setStatusParamValue(
-      !isEqual(userFilters.status, DEALS_LIST_DEFAULT_FILTERS.status)
-        ? stringifyStatusFilter(userFilters.status)
-        : ''
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userFilters.status])
+  const setContext = (newContexts?: Partial<DealsListFilters['contexts']>) => {
+    if (!newContexts || !Object.keys(newContexts).length) {
+      setClosingDate([])
+      setListDate([])
+      setExpirationDate([])
+      setContractDate([])
+      setLeaseBegin([])
+      setLeaseEnd([])
 
-  useEffect(() => {
-    setClosingDateParamValue(
-      userFilters.contexts.closing_date?.date
-        ? stringifyRangeDateFilter(userFilters.contexts.closing_date)
-        : ''
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userFilters.contexts.closing_date])
+      return
+    }
 
-  useEffect(() => {
-    setListDateParamValue(
-      userFilters.contexts.list_date?.date
-        ? stringifyRangeDateFilter(userFilters.contexts.list_date)
-        : ''
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userFilters.contexts.list_date])
+    const changedKeys = Object.keys(newContexts)
 
-  useEffect(() => {
-    setExpirationDateParamValue(
-      userFilters.contexts.expiration_date?.date
-        ? stringifyRangeDateFilter(userFilters.contexts.expiration_date)
-        : ''
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userFilters.contexts.expiration_date])
-
-  useEffect(() => {
-    setContractDateParamValue(
-      userFilters.contexts.contract_date?.date
-        ? stringifyRangeDateFilter(userFilters.contexts.contract_date)
-        : ''
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userFilters.contexts.contract_date])
-
-  useEffect(() => {
-    setLeaseBeginParamValue(
-      userFilters.contexts.lease_begin?.date
-        ? stringifyRangeDateFilter(userFilters.contexts.lease_begin)
-        : ''
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userFilters.contexts.lease_begin])
-
-  useEffect(() => {
-    setLeaseEndParamValue(
-      userFilters.contexts.lease_end?.date
-        ? stringifyRangeDateFilter(userFilters.contexts.lease_end)
-        : ''
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userFilters.contexts.lease_end])
+    changedKeys.forEach(changedKey => {
+      switch (changedKey) {
+        case 'closing_date':
+          setClosingDate(arrayifyRangeDateFilter(newContexts.closing_date))
+          break
+        case 'list_date':
+          setListDate(arrayifyRangeDateFilter(newContexts.list_date))
+          break
+        case 'expiration_date':
+          setExpirationDate(
+            arrayifyRangeDateFilter(newContexts.expiration_date)
+          )
+          break
+        case 'contract_date':
+          setContractDate(arrayifyRangeDateFilter(newContexts.contract_date))
+          break
+        case 'lease_begin':
+          setLeaseBegin(arrayifyRangeDateFilter(newContexts.lease_begin))
+          break
+        case 'lease_end':
+          setLeaseEnd(arrayifyRangeDateFilter(newContexts.lease_end))
+          break
+        default:
+          break
+      }
+    })
+  }
 
   return [userFilters, setUserFilters]
 }

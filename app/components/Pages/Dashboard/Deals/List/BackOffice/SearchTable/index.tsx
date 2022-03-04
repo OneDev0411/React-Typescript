@@ -2,7 +2,7 @@ import { isEqual } from 'lodash'
 
 import { DEALS_LIST_DEFAULT_FILTERS } from '../constants'
 import Grid from '../Grid'
-import { DealsListFilters, SearchQuery } from '../types'
+import { SearchQuery } from '../types'
 
 import { Filters } from './Filters'
 import { UseFiltersWithQuery } from './Filters/useFiltersWithQuery'
@@ -15,10 +15,6 @@ interface Props {
 function SearchTable({ searchQuery, statuses }: Props) {
   const [userFilters, setUserFilters] = UseFiltersWithQuery()
 
-  const onFiltersChange = (changedFilters: Partial<DealsListFilters>) => {
-    setUserFilters(oldFilters => ({ ...oldFilters, ...changedFilters }))
-  }
-
   const isSearching: boolean =
     searchQuery.term.length > 0 ||
     !isEqual(userFilters, DEALS_LIST_DEFAULT_FILTERS)
@@ -28,7 +24,7 @@ function SearchTable({ searchQuery, statuses }: Props) {
       <Filters
         searchQuery={searchQuery}
         userFilters={userFilters}
-        onFiltersChange={onFiltersChange}
+        onFiltersChange={setUserFilters}
       />
       <Grid
         searchQuery={searchQuery}
