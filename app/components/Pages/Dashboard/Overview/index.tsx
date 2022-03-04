@@ -22,7 +22,7 @@ function OverviewDashboard() {
       </Helmet>
       <PageLayout className={classes.layout} padding={0}>
         <PageLayout.HeaderWithBackground title="Today" />
-        <PageLayout.Main mt={4}>
+        <PageLayout.Main mt={0}>
           <Welcome />
         </PageLayout.Main>
       </PageLayout>

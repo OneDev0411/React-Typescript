@@ -1,14 +1,45 @@
+import React from 'react'
+
 import { Box, Button, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
+import {
+  mdiNewspaperVariantOutline,
+  mdiCurrencyUsd,
+  mdiBellOutline,
+  mdiCalendarAccount,
+  mdiHeadphones
+} from '@mdi/js'
+import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { ThunkDispatch } from 'redux-thunk'
 
+import { AccessButton } from '@app/components/Pages/Dashboard/Overview/components/AccessButton'
 import { EmptyState } from '@app/components/Pages/Dashboard/Overview/components/EmptyState'
+import { ACL } from '@app/constants/acl'
+import { activateIntercom } from '@app/store_actions/intercom'
 // import MetabaseDashboard from 'components/MetabaseIFrame'
+import { IAppState } from 'reducers'
+import { InboxAction } from 'reducers/inbox/types'
 import Acl from 'views/components/Acl'
 
 import PromoteListingsSection from '../../Marketing/Overview/Sections/PromoteListingsSection'
+import { AccessButtonType } from '../types.d'
 
 import { Dailies } from './Dailies'
+
+const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
+const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
+const marketingAccess = { oneOf: [ACL.MARKETING, ACL.AGENT_NETWORK] }
+const allAccess = {
+  oneOf: [
+    ACL.DEALS,
+    ACL.BACK_OFFICE,
+    ACL.MARKETING,
+    ACL.CRM,
+    ACL.MARKETING,
+    ACL.AGENT_NETWORK
+  ]
+}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -49,8 +80,74 @@ const useStyles = makeStyles(
 function OverviewDashboard() {
   const classes = useStyles()
 
+  const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
+
+  const { isActive: isIntercomActive } = useSelector(
+    (state: IAppState) => state.intercom
+  )
+
+  const handleOpenSupportDialogueBox = () =>
+    !isIntercomActive && dispatch(activateIntercom(isIntercomActive))
+
+  const AccessItems: AccessButtonType[] = [
+    {
+      access: marketingAccess,
+      icon: mdiBellOutline,
+      id: 'marketing',
+      label: 'Marketing',
+      to: '/dashboard/marketing'
+    },
+    {
+      access: dealsAccess,
+      icon: mdiCurrencyUsd,
+      id: 'deals',
+      label: 'Deals',
+      to: '/dashboard/deals'
+    },
+    {
+      access: ['CRM'],
+      icon: mdiCalendarAccount,
+      id: 'contacts',
+      label: 'Contacts',
+      to: '/dashboard/contacts'
+    },
+    {
+      access: marketingAccess,
+      icon: mdiNewspaperVariantOutline,
+      id: 'agent-network',
+      label: 'Agent Network',
+      to: '/dashboard/agent-network'
+    },
+    {
+      access: insightAccess,
+      icon: mdiNewspaperVariantOutline,
+      id: 'insight',
+      label: 'Insight',
+      to: '/dashboard/insights'
+    },
+    {
+      access: ACL.WEBSITES,
+      icon: mdiNewspaperVariantOutline,
+      id: 'blog',
+      label: 'Blog',
+      to: '/dashboard/websites'
+    },
+    {
+      access: allAccess,
+      icon: mdiHeadphones,
+      id: 'support',
+      label: 'Support',
+      action: handleOpenSupportDialogueBox
+    }
+  ]
+
   return (
     <Box className={classes.main}>
+      <Box mb={6}>
+        {AccessItems.map(item => (
+          <AccessButton key={item.id} data={item} />
+        ))}
+      </Box>
       <Acl.Crm>
         <Box className={classes.dailies}>
           <Box className={classes.container}>
