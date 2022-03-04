@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { useTheme, Theme } from '@material-ui/core'
 
@@ -18,10 +18,11 @@ export function List({ deals, contact }: Props) {
   const theme: Theme = useTheme()
   const activeBrandId = useUnsafeActiveBrandId()
   const [statuses] = useBrandStatuses(activeBrandId || '')
-  const sortedDealsByStatus = useMemo(
-    () => sortDealsStatus(deals, statuses),
-    [deals, statuses]
-  )
+  const sortedDealsByStatus = useMemo(() => {
+    const activeDeals = deals.filter(deal => !deal.deleted_at)
+
+    return sortDealsStatus(activeDeals, statuses)
+  }, [deals, statuses])
 
   return (
     <ShowMoreLess

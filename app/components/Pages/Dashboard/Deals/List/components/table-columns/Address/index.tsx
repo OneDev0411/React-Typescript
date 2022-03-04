@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { makeStyles, Theme, Typography } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 import { mdiHomeOutline } from '@mdi/js'
 import { Link } from 'react-router'
 
@@ -13,7 +11,7 @@ import { Notification } from '../../Notification'
 import { Side } from '../Side'
 
 const useStyles = makeStyles(
-  (theme: Theme) => ({
+  theme => ({
     container: {
       display: 'flex',
       alignItems: 'center'
@@ -24,13 +22,6 @@ const useStyles = makeStyles(
     photoContainer: {
       marginRight: theme.spacing(1),
       position: 'relative'
-    },
-    circle: {
-      width: theme.spacing(0.5),
-      height: theme.spacing(0.5),
-      margin: theme.spacing(0, 1),
-      borderRadius: '100%',
-      backgroundColor: theme.palette.grey[500]
     },
     side: {
       color: theme.palette.grey[600]
@@ -89,17 +80,14 @@ export function Address({
           </Typography>
 
           {roles && (
-            <>
-              <div className={classes.circle} />
-              <div className={classes.side}>
-                <Side
-                  deal={deal}
-                  roles={roles}
-                  rowId={rowIndex! + 1}
-                  rowsCount={totalRows!}
-                />
-              </div>
-            </>
+            <div className={classes.side}>
+              <Side
+                deal={deal}
+                roles={roles}
+                rowId={rowIndex! + 1}
+                rowsCount={totalRows!}
+              />
+            </div>
           )}
         </div>
       </div>
