@@ -129,5 +129,5 @@ type TUserActivityActions =
 declare interface IUserActivity {
   action: TUserActivityActions
   object_class: string
-  object?: any
+  object?: unknown
 }
