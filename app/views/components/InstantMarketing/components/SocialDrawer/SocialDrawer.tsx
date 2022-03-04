@@ -15,7 +15,7 @@ import {
 import SocialDrawerActions from './SocialDrawerActions'
 import SocialDrawerPreviewFile from './SocialDrawerPreviewFile'
 
-interface Props {
+interface SocialDrawerProps {
   template: (IBrandMarketingTemplate | IMarketingTemplate) & { result: string }
   instance?: IMarketingTemplateInstance
   brandAsset?: IBrandAsset
@@ -23,13 +23,13 @@ interface Props {
   onClose: () => void
 }
 
-export default function SocialDrawer({
+function SocialDrawer({
   template,
   instance: passedInstance,
   brandAsset,
   templateInstanceData = {},
   onClose
-}: Props) {
+}: SocialDrawerProps) {
   const dispatch = useDispatch()
 
   const [templateInstance, setTemplateInstance] =
@@ -85,3 +85,5 @@ export default function SocialDrawer({
     </Drawer>
   )
 }
+
+export default SocialDrawer
