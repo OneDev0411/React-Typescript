@@ -3,8 +3,7 @@ import { OAuthProvider } from '../../../constants/contacts'
 import {
   importDone,
   importFail,
-  loginSuccessful,
-  setWorkerState
+  loginSuccessful
 } from '../../../store_actions/contacts'
 import { fetchOAuthAccounts } from '../../../store_actions/contacts/fetch-o-auth-accounts'
 import store from '../../../stores'
@@ -31,7 +30,8 @@ export default class ContactSocket extends Socket {
     socket.on('importSuccesfullLogin', () => store.dispatch(loginSuccessful()))
     socket.on('importFail', () => store.dispatch(importFail()))
     socket.on('contact:import', ({ state }) =>
-      store.dispatch(setWorkerState(state))
+      // store.dispatch(setWorkerState(state))
+      console.log(state)
     )
   }
 }

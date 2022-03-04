@@ -133,7 +133,6 @@ class OpenHouse extends React.Component {
         <EventsList
           events={this.state.events}
           isFetching={this.state.isFetching}
-          user={this.props.user}
           onEditEvent={this.handleEditEvent}
           onDeleteEvent={this.handleDeleteEvent}
         />

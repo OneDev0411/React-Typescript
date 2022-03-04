@@ -8,7 +8,7 @@ const TEMPLATE_TYPE_LABEL_MAP: {
   Blank: 'Blank',
   Blog: 'Blog Content',
   Brand: 'Brand Campaigns',
-  ChineseNewYear: 'Chinese New Year',
+  ChineseNewYear: 'Lunar New Year',
   Christmas: 'Christmas',
   ColumbusDay: 'Columbus Day',
   ComingSoon: 'Coming Soon',

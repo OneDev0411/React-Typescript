@@ -2,18 +2,16 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Box } from '@material-ui/core'
 import { DropResult } from 'react-beautiful-dnd'
-import { useSelector } from 'react-redux'
 import { browserHistory, RouteComponentProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import { DealRolesProvider } from '@app/contexts/deals-roles-definitions/provider'
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { reorder } from '@app/utils/dnd-reorder'
 import Acl from 'components/Acl'
 import { PageTabs, TabLink } from 'components/PageTabs'
 import { Container, Content } from 'components/SlideMenu'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { ChecklistCreate } from './components/ChecklistCreate'
 import { ChecklistHeader } from './components/ChecklistHeader'
@@ -33,14 +31,10 @@ export default function ChecklistsPage({ location }: Props) {
 
   const propertyTypeId = location.query.property
   const checklistType = location.query.checklist_type
-
   const [isFormOpen, setIsFormOpen] = useState(false)
-
-  const user = useSelector(selectUser)
+  const activeBrandId = useActiveBrandId()
 
   const lastTaskNameEditorRef = useRef<any>(null)
-
-  const activeTeamId = getActiveTeamId(user)
 
   const {
     forms,
@@ -55,18 +49,18 @@ export default function ChecklistsPage({ location }: Props) {
     addFormTask,
     deleteTask,
     reorderTasks
-  } = useChecklistsPage(activeTeamId)
+  } = useChecklistsPage(activeBrandId)
 
   const {
     propertyTypes,
     addPropertyTypes,
     updatePropertyType,
     reorderPropertyTypes
-  } = useBrandPropertyTypes(activeTeamId!)
+  } = useBrandPropertyTypes(activeBrandId)
 
   const checklist = checklists?.find(
     checklist =>
-      checklist.brand === activeTeamId &&
+      checklist.brand === activeBrandId &&
       checklist.property_type === propertyTypeId &&
       checklist.checklist_type === checklistType
   )
@@ -179,7 +173,7 @@ export default function ChecklistsPage({ location }: Props) {
               ) : (
                 <Box my={3}>
                   <ChecklistCreate
-                    brandId={activeTeamId!}
+                    brandId={activeBrandId}
                     propertyTypeId={propertyTypeId}
                     checklistType={checklistType}
                     onCreateChecklist={checklist => addChecklists([checklist])}
@@ -192,7 +186,7 @@ export default function ChecklistsPage({ location }: Props) {
           {isFormOpen && (
             <PropertyTypeForm
               isOpen
-              onSave={handleCreatePropertyType}
+              onCreate={handleCreatePropertyType}
               onClose={() => setIsFormOpen(false)}
             />
           )}

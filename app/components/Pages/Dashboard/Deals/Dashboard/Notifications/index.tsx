@@ -4,7 +4,6 @@ import { IconButton, makeStyles, Theme, Typography } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 import { mdiClose } from '@mdi/js'
 import { useDispatch } from 'react-redux'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { clearDealNotifications } from 'actions/deals'
 import { Callout } from 'components/Callout'
@@ -58,10 +57,6 @@ export default function Notifications({ deal }: Props) {
     clearNotifications()
     setUnreadNotifications([])
   }
-
-  useEffectOnce(() => {
-    clearNotifications()
-  })
 
   useEffect(() => {
     if (newNotificationsCount > 0) {

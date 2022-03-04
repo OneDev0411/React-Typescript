@@ -15,7 +15,7 @@ export const withGuest = connectedRouterRedirect({
   redirectPath: (state, { location: { query = {}, locationState = {} } }) => {
     const { redirectTo } = query || locationState
 
-    return redirectTo || getUserDefaultHomepage(state.user)
+    return redirectTo || getUserDefaultHomepage(state.activeTeam ?? null)
   },
   // This prevents us from adding the query parameter
   // when we send the user away from the login page

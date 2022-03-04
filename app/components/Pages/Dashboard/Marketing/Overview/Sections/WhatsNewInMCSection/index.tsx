@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import {
   Grid,
@@ -8,13 +8,11 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
-import { useSelector } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import CardSkeleton from 'components/CardSkeleton'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
 import TemplateAction from 'components/TemplatesList/TemplateAction'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { useTemplates } from '../../../hooks/use-templates'
 import SectionLayout from '../SectionLayout'
@@ -46,14 +44,13 @@ const useStyles = makeStyles(
 
 export default function WhatsNewInMCSection() {
   const classes = useStyles()
-  const user = useSelector(selectUser)
-  const activeBrand = getActiveTeamId(user)
+  const activeBrandId = useActiveBrandId()
   const [selectedTemplate, setSelectedTemplate] =
     useState<Nullable<IBrandMarketingTemplate>>(null)
   const [isTemplateClicked, setIsTemplateClicked] = useState<boolean>(false)
 
   const { templates, isLoading } = useTemplates(
-    activeBrand,
+    activeBrandId,
     SOCIAL_TEMPLATE_MEDIUMS
   )
 

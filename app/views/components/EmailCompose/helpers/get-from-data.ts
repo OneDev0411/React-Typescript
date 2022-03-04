@@ -1,10 +1,11 @@
+import { IImpersonateUser } from '@app/reducers/user/impersonate-user'
 import {
   GOOGLE_CREDENTIAL,
   MICROSOFT_CREDENTIAL
 } from 'constants/oauth-accounts'
 
 export function getFromData(
-  from: IUser | IOAuthAccount,
+  from: IUser | IImpersonateUser | IOAuthAccount,
   defaultValue: string = ''
 ): {
   from: UUID

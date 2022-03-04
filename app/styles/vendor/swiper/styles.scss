@@ -6,12 +6,3 @@
   --swiper-navigation-size: 1rem;
   --swiper-navigation-color: #3a3b3e; // grey.800;
 }
-
-// Fix Preloader CSS animation is CPU heavy
-// https://github.com/nolimits4web/Swiper/issues/1451
-.swiper-lazy-preloader {
-  animation: none !important;
-}
-.swiper-slide-active .swiper-lazy-preloader {
-  animation: swiper-preloader-spin 1s infinite linear !important;
-}

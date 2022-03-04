@@ -9,12 +9,12 @@ import {
   Button
 } from '@material-ui/core'
 import Fuse from 'fuse.js'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useBrandStatuses } from '@app/hooks/use-brand-statuses'
 import useNotify from '@app/hooks/use-notify'
-import { selectActiveTeamId } from '@app/selectors/team'
 import { confirmation } from '@app/store_actions/confirmation'
 import { getDealStatusColor } from '@app/utils/get-deal-status-color'
 import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch'
@@ -57,9 +57,9 @@ export default function DealStatusesAdmin({ params }: Props) {
   const dispatch = useDispatch()
   const notify = useNotify()
 
-  const teamId = useSelector(selectActiveTeamId)
+  const activeBrandId = useActiveBrandId()
 
-  const [statuses, upsertStatus, deleteStatus] = useBrandStatuses(teamId)
+  const [statuses, upsertStatus, deleteStatus] = useBrandStatuses(activeBrandId)
   const [criteria, setCriteria] = useState('')
 
   const statusesList = useMemo(() => {

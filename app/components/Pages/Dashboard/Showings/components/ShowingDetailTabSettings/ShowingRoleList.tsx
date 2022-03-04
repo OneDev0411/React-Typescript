@@ -1,14 +1,13 @@
 import { useState, ReactNode } from 'react'
 
 import { Box } from '@material-ui/core'
-import { useSelector } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import useAsync from 'hooks/use-async'
 import useNotify from 'hooks/use-notify'
 import addShowingRole from 'models/showing/add-showing-role'
-import { selectActiveTeamId } from 'selectors/team'
 
 import { goAndShowNotificationTypes } from '../../constants'
 import { getShowingRoleLabel } from '../../helpers'
@@ -40,7 +39,7 @@ function ShowingRoleList({
   hasNotificationTypeFields,
   children
 }: ShowingRoleListProps) {
-  const activeTeamId = useSelector(selectActiveTeamId)
+  const activeBrandId = useActiveBrandId()
   const [addRole, setAddRole] = useState<Nullable<IShowingRoleType>>(null)
 
   const openAddDialog = (role: IShowingRoleType) => setAddRole(role)
@@ -58,7 +57,7 @@ function ShowingRoleList({
           ...role,
           user: role.user?.id,
           ...(!hasNotificationTypeFields ? goAndShowNotificationTypes : {}),
-          brand: activeTeamId
+          brand: activeBrandId
         })
 
         onChange([...roles, newRole])

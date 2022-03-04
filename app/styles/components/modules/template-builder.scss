@@ -174,7 +174,7 @@
     border-bottom: none !important;
   }
 
-  .gjs-sm-title {
+  .gjs-sm-sector-title {
     display: none;
   }
 
@@ -328,10 +328,9 @@
   .gjs-toolbar {
     display: flex;
     flex-direction: column;
-    background-color: #e7e9ec;
-    border: 2px solid rgba(0, 0, 0, 0.08);
+    background-color: #f0f2f5;
+    border: 1px solid #d7d9dc;
     color: #000;
-    padding: 0.2rem;
     border-radius: 4px;
 
     &:empty {
@@ -341,6 +340,13 @@
     > div {
       display: flex;
       align-items: center;
+      padding: 0 8px;
+      background-color: #f0f2f5;
+
+      &:first-child {
+        flex-direction: row-reverse;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      }
 
       .gjs-toolbar-item {
         width: auto;
@@ -441,7 +447,7 @@
   }
 
   .cke_top {
-    background-color: #e7e9ec;
+    background-color: #f0f2f5;
     border: none;
     padding: 0;
   }

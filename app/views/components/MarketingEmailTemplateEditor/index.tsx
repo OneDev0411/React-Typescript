@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import useListingsEditorAssets from '@app/hooks/use-listings-editor-assets'
 import useSafeState from '@app/hooks/use-safe-state'
 import { createTemplateInstance } from '@app/models/instant-marketing/create-template-instance'
-import { selectUser } from '@app/selectors/user'
+import { selectUserImpersonateFirst } from '@app/selectors/user'
 import { BulkEmailComposeDrawer } from '@app/views/components/EmailCompose'
 import getTemplateObject from '@app/views/components/InstantMarketing/helpers/get-template-object'
 import getTemplateInstancePreviewImage from '@app/views/components/InstantMarketing/helpers/get-template-preview-image'
@@ -40,7 +40,7 @@ function MarketingEmailTemplateEditor({
     }>
   >(null)
 
-  const user = useSelector(selectUser)
+  const user = useSelector(selectUserImpersonateFirst)
 
   const openComposeEmail = () => setIsComposeEmailOpen(true)
 
@@ -105,7 +105,7 @@ function MarketingEmailTemplateEditor({
         onClose={closeBuilder}
         onSave={handleSave}
         templateData={{
-          user,
+          user: user!,
           listings: template.listings ?? undefined,
           listing: template.listings?.[0],
           contact: template.contacts?.[0]
@@ -120,7 +120,7 @@ function MarketingEmailTemplateEditor({
           isOpen
           hasStaticBody
           initialValues={{
-            from: user,
+            from: user!,
             to: initialEmailTo,
             subject: initialEmailSubject,
             due_at: initialEmailDueAt,

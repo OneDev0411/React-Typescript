@@ -1,17 +1,21 @@
 import * as t from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+
+import templateInstance from 'fixtures/marketing-center/template-instance.json'
 import { TestBed } from 'tests/unit/TestBed'
 import { makeControlledAsync } from 'tests/unit/utils/controllable-promise'
 
-import templateInstance from 'fixtures/marketing-center/template-instance.json'
-import { SuperCampaignDetailProvider } from '../SuperCampaignDetailProvider'
+import { SuperCampaignProvider } from '../SuperCampaignProvider'
+
 import SuperCampaignOverviewDetail from './SuperCampaignOverviewDetail'
 
 const mockUpdateCampaignModel = makeControlledAsync(jest.fn())
+
 jest.mock(
-  '@app/models/super-campaign/update-super-campaign',
+  '@app/models/super-campaign/update-super-campaign/update-super-campaign',
   () => async (superCampaignId: UUID, data: ISuperCampaignInput) => {
     await mockUpdateCampaignModel.fn(superCampaignId, data)
+
     return data
   }
 )
@@ -50,12 +54,9 @@ interface Props {
 function Test({ superCampaign, setSuperCampaign }: Props) {
   return (
     <TestBed>
-      <SuperCampaignDetailProvider
-        superCampaign={superCampaign}
-        setSuperCampaign={setSuperCampaign}
-      >
+      <SuperCampaignProvider superCampaign={superCampaign}>
         <SuperCampaignOverviewDetail />
-      </SuperCampaignDetailProvider>
+      </SuperCampaignProvider>
     </TestBed>
   )
 }
@@ -64,6 +65,7 @@ function testRenderEmpty() {
   const $ = t.render(
     <Test superCampaign={testData.empty} setSuperCampaign={jest.fn()} />
   )
+
   expect($.getByTestId('super-campaign-details')).toMatchSnapshot(
     'details box without template'
   )
@@ -74,6 +76,7 @@ function testRenderFilledWithTemplate() {
   const $ = t.render(
     <Test superCampaign={testData.filled} setSuperCampaign={jest.fn()} />
   )
+
   expect($.getByTestId('super-campaign-details')).toMatchSnapshot(
     'details box without template'
   )
@@ -104,11 +107,14 @@ async function testEditFlow() {
   const form = $.getByTestId('super-campaign-edit-form')
   const find = (testId: string, selector: string) => {
     const res = t.within(form).getByTestId(testId).querySelector(selector)
+
     if (!res) {
       throw new Error(`Element ${selector} not found.`)
     }
+
     return res
   }
+
   userEvent.type(
     find('subject', 'input'),
     `{selectall}${testData.filled.subject}`
@@ -120,6 +126,7 @@ async function testEditFlow() {
 
   // Click on Save
   const saveButton = $.getByText('Save')
+
   t.fireEvent.click(saveButton)
 
   // Expect `updateSuperCampaign` model to have been called correctly
@@ -127,10 +134,12 @@ async function testEditFlow() {
   await t.waitFor(() =>
     expect(mockUpdateCampaignModel.mockFn).toHaveBeenCalledTimes(1)
   )
+
   const expected = expect.objectContaining({
     subject: testData.filled.subject,
     description: testData.filled.description
   })
+
   expect(mockUpdateCampaignModel.mockFn).toHaveBeenCalledWith(
     testData.empty.id,
     expected
@@ -146,6 +155,7 @@ function testReadOnlyMode() {
     executed_at: Date.now() / 1000
   }
   const $ = t.render(<Test superCampaign={data} setSuperCampaign={jest.fn()} />)
+
   expect($.queryByText('Edit')).toBeNull()
 }
 

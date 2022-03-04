@@ -1,22 +1,22 @@
-import { useEffect } from 'react'
-
-import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { useEffectOnce } from 'react-use'
+
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 
 import { getUserDefaultHomepage } from '../../../utils/get-default-home-page'
 
-function GoToDashboard(props) {
-  let to = '/signin'
+export default function GoToDashboard() {
+  const activeTeam = useUnsafeActiveTeam()
 
-  if (props.user) {
-    to = getUserDefaultHomepage(props.user)
-  }
+  useEffectOnce(() => {
+    let to = '/signin'
 
-  useEffect(() => {
+    if (activeTeam) {
+      to = getUserDefaultHomepage(activeTeam)
+    }
+
     browserHistory.push(to)
-  }, [to])
+  })
 
   return null
 }
-
-export default connect(({ user }) => ({ user }))(GoToDashboard)

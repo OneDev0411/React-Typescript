@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Box, Button, useTheme } from '@material-ui/core'
-import { ArrowBack } from '@material-ui/icons'
+import { mdiArrowLeft } from '@mdi/js'
 import { useDispatch } from 'react-redux'
 
 import { addNotification as notify } from 'components/notification'
 import { QuestionSection, QuestionWizard } from 'components/QuestionWizard'
 import { IWizardState } from 'components/QuestionWizard/context'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useAsync from 'hooks/use-async'
 import purchaseDomain from 'models/domains/purchase-domain'
 import addHostnameToWebsite from 'models/website/add-hostname-to-website'
@@ -118,7 +119,7 @@ function DomainManagementNewDomain({
           type="button"
           onClick={onBack}
           disabled={isWorking}
-          startIcon={<ArrowBack />}
+          startIcon={<SvgIcon path={mdiArrowLeft} />}
           color="inherit"
         >
           Back to domain list

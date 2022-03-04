@@ -109,7 +109,7 @@ export function CardItem({
   const dispatch = useDispatch()
   const theme = useTheme<Theme>()
 
-  const handleChangeTag = (tags: SelectorOption[]) => {
+  const handleChangeTag = async (tags: SelectorOption[]) => {
     const newTags = tags.filter(tag => !!tag.value).map(tag => tag.value!)
 
     dispatch(updateContactTags(contact.id, newTags))
@@ -182,7 +182,7 @@ export function CardItem({
           filter={{
             selectedIds: [contact.id]
           }}
-          callback={handleChangeTag}
+          onSaveCallback={handleChangeTag}
           anchorRenderer={onClick => (
             <Box display="flex" alignItems="center" mt={2} onClick={onClick}>
               {(contact.tags || []).length > 0 ? (

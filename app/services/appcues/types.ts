@@ -7,3 +7,4 @@ export interface AppcuesUserInfo {
 }
 
 export type AppcuesUserAccessList = Record<`has${IPermission}Access`, boolean>
+export type AppcuesBrandsList = Record<string, UUID>

@@ -1,5 +1,7 @@
 import { Editor } from 'grapesjs'
 
+import { supportNunjucksVariables } from './ckeditor-patches/support-nunjucks-variables'
+
 const CK_EDITOR_LINE_HEIGHT_VALUES = [
   '1',
   '1.1',
@@ -189,6 +191,13 @@ export async function attachCKEditor(
 
   editor.setCustomRte({
     enable(el, rte) {
+      // If already exists I'll just focus on it
+      if (rte && rte.status != 'destroyed') {
+        this.focus(el, rte)
+
+        return rte
+      }
+
       el.contentEditable = true
 
       // Seems like 'sharedspace' plugin doesn't work exactly as expected
@@ -264,10 +273,26 @@ export async function attachCKEditor(
         ;['off', 'on'].forEach(m => editorEls[m]('mousedown', stopPropagation))
       })
 
+      rte.on(
+        'doubleclick',
+        evt => {
+          const element = evt.data.element
+
+          if (element.is('a')) {
+            evt.stop() // don't do the other listeners
+          }
+        },
+        null,
+        null,
+        1
+      )
+
       this.focus(el, rte)
 
       editor.once('rendered', () => {
-        rte.destroy(true)
+        if (rte && rte.status !== 'destroyed') {
+          rte.destroy(true)
+        }
       })
 
       return rte
@@ -280,20 +305,30 @@ export async function attachCKEditor(
         rte.focusManager.blur(true)
       }
 
-      rte.destroy(true)
+      // Close the current dialog before destroying the editor
+      // @ts-ignore
+      CKEDITOR.dialog.getCurrent()?.hide()
+
+      if (rte && rte.status !== 'destroyed') {
+        rte.destroy(true)
+      }
     },
 
     focus(el, rte) {
+      el.contentEditable = true
+
       // Do nothing if already focused
       if (rte && rte.focusManager.hasFocus) {
         return
       }
 
-      el.contentEditable = true
       editor.RichTextEditor.updatePosition()
       setTimeout(() => {
         rte && rte.focus()
       }, 200)
     }
   })
+
+  // Apply all available patches
+  supportNunjucksVariables()
 }

@@ -3,6 +3,7 @@ import { useMemo, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-use'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { OAuthProvider } from 'constants/contacts'
 import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
 import { selectUserAccessList, selectUserUnsafe } from 'selectors/user'
@@ -19,6 +20,7 @@ export function useAppcues() {
 
   const location = useLocation()
   const user = useSelector(selectUserUnsafe)
+  const activeBrand = useUnsafeActiveBrand()
 
   const [gmailOrOutlookSynced, setGmailOrOutlookSynced] =
     useState<Nullable<boolean>>(null)
@@ -69,10 +71,11 @@ export function useAppcues() {
     const { id, ...appcuesUserInfo } = userInfoToWatch
 
     prepareAndSendUserData(
+      activeBrand,
       accessList,
       id,
       appcuesUserInfo,
       gmailOrOutlookSynced
     )
-  }, [pathname, userInfoToWatch, accessList, gmailOrOutlookSynced])
+  }, [pathname, userInfoToWatch, accessList, activeBrand, gmailOrOutlookSynced])
 }

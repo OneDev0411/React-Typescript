@@ -4,10 +4,10 @@ import { connect } from 'react-redux'
 
 import ActionButton from 'components/Button/ActionButton'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
+import { hasUserAccessToMarketingCenter } from 'utils/acl'
 
 import SocialDrawer from '../../components/SocialDrawer'
 import getTemplateInstancePreviewImage from '../../helpers/get-template-preview-image'
-import hasMarketingAccess from '../../helpers/has-marketing-access'
 
 import { getMedium } from './helpers'
 
@@ -93,7 +93,7 @@ class ShareInstance extends React.Component {
   render() {
     const { props, state } = this
 
-    if (hasMarketingAccess(props.user) === false) {
+    if (!hasUserAccessToMarketingCenter(props.activeTeam)) {
       return null
     }
 
@@ -133,9 +133,9 @@ class ShareInstance extends React.Component {
   }
 }
 
-function mapStateToProps({ user, contacts }) {
+function mapStateToProps({ activeTeam = null, contacts }) {
   return {
-    user,
+    activeTeam,
     attributeDefs: contacts.attributeDefs
   }
 }

@@ -8,7 +8,7 @@ export function getAttributeDefs() {
         type: actionTypes.FETCH_CONTACT_ATTR_DEFS_REQUEST
       })
 
-      const definitions = await fetchAttributeDefs()
+      const { list: definitions } = await fetchAttributeDefs()
 
       dispatch({
         definitions,

@@ -3,7 +3,6 @@ import { combineReducers } from 'redux'
 import { contactsFilterSegments } from '../filter-segments'
 
 import { attributeDefs, IAttributeDefsState } from './attributeDefs'
-import importCsv from './importCsv'
 import importOutlook from './importOutlook'
 import list from './list'
 import { oAuthAccounts } from './oAuthAccounts'
@@ -26,7 +25,6 @@ export default combineReducers({
   tags,
   spinner,
   importOutlook,
-  importCsv,
   oAuthAccounts,
   filterSegments: contactsFilterSegments
 })

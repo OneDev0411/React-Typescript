@@ -6,6 +6,11 @@ import juice from 'juice'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import {
+  selectActiveBrand,
+  selectActiveBrandSettings
+} from '@app/selectors/brand'
+import { selectActiveTeamUnsafe } from '@app/selectors/team'
 import SearchArticleDrawer from '@app/views/components/SearchArticleDrawer'
 import SearchVideoDrawer from '@app/views/components/SearchVideoDrawer'
 import CarouselDrawer from 'components/CarouselDrawer'
@@ -23,14 +28,10 @@ import SearchListingDrawer from 'components/SearchListingDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
 import { uploadAsset } from 'models/instant-marketing/upload-asset'
+import { isAdmin } from 'utils/acl'
 import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
 import { getBrandColors } from 'utils/get-brand-colors'
 import { loadJS, unloadJS } from 'utils/load-js'
-import {
-  isAdmin,
-  getActiveTeamSettings,
-  getActiveBrand
-} from 'utils/user-teams'
 
 import {
   hasCreateSuperCampaignButton,
@@ -54,6 +55,8 @@ import { registerCommands } from './commands'
 import { BASICS_BLOCK_CATEGORY } from './constants'
 import CreateSuperCampaignButton from './CreateSuperCampaignButton'
 import DeviceManager from './DeviceManager'
+import { addFallbackSrcToImage } from './extensions/add-fallback-src-to-image'
+import { addFallbackSrcToMjImage } from './extensions/add-fallback-src-to-mj-image'
 import {
   Container,
   Actions,
@@ -179,7 +182,7 @@ class Builder extends React.Component {
     const { load: loadAssetManagerPlugin } = await import('./AssetManager')
     const { load: loadStyleManagerPlugin } = await import('./StyleManager')
 
-    const activeBrand = getActiveBrand(this.props.user)
+    const activeBrand = this.props.activeBrand
     const colors =
       this.selectedTemplateColors.length > 0
         ? this.selectedTemplateColors
@@ -218,6 +221,7 @@ class Builder extends React.Component {
       const iframe = this.editor.Canvas.getBody()
 
       iframe.removeEventListener('paste', this.iframePasteHandler)
+      iframe.removeEventListener('click', this.iframeClickHandler)
     }
 
     unloadJS('ckeditor')
@@ -328,7 +332,7 @@ class Builder extends React.Component {
   }
 
   loadCKEditorRTE = async () => {
-    const activeBrand = getActiveBrand(this.props.user)
+    const { activeBrand } = this.props
     const colors =
       this.selectedTemplateColors.length > 0
         ? this.selectedTemplateColors
@@ -481,16 +485,17 @@ class Builder extends React.Component {
     this.disableAssetManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
+    this.deselectComponentsOnCanvasClick()
     this.disableDefaultDeviceManager()
     this.scrollSidebarToTopOnComponentSelect()
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       await this.registerEmailBlocks()
-    }
-
-    if (this.isWebsiteTemplate) {
+    } else if (this.isWebsiteTemplate) {
       await this.registerWebsiteBlocks()
     }
+
+    this.registerComponentExtensions()
 
     this.setupImageDoubleClickHandler()
 
@@ -512,13 +517,17 @@ class Builder extends React.Component {
         onDrop: () => {
           this.setState({ isAgentDrawerOpen: true })
         },
-        shouldUseDefaultAgents: this.isEmailTemplateForCampaigns,
-        defaultAgents: [
-          {
-            agent: this.props.user,
-            contacts: []
-          }
-        ]
+        shouldUseDefaultAgents:
+          this.isEmailTemplateForCampaigns || this.isTemplateForOtherAgents,
+        defaultAgents:
+          this.props.templateData && this.props.templateData.user
+            ? [
+                {
+                  agent: this.props.templateData.user,
+                  contacts: []
+                }
+              ]
+            : []
       },
       image: {
         onDrop: () => {
@@ -535,7 +544,7 @@ class Builder extends React.Component {
       }
     }
 
-    const activeTeamSettings = getActiveTeamSettings(this.props.user, true)
+    const activeTeamSettings = this.props.activeBrandSetting
 
     const { enable_liveby: shouldShowNeighborhoodsBlocks } = activeTeamSettings
 
@@ -561,7 +570,7 @@ class Builder extends React.Component {
 
     this.emailBlocksRegistered = true
 
-    const activeBrand = getActiveBrand(this.props.user)
+    const { activeBrand, templateData } = this.props
     const renderData = getTemplateRenderData(activeBrand)
 
     removeUnusedBlocks(this.editor)
@@ -576,7 +585,7 @@ class Builder extends React.Component {
     this.blocks = registerEmailBlocks(
       this.editor,
       {
-        ...this.props.templateData,
+        ...templateData,
         ...renderData
       },
       templateBlockOptions,
@@ -585,7 +594,7 @@ class Builder extends React.Component {
   }
 
   async registerSocialBlocks() {
-    const activeBrand = getActiveBrand(this.props.user)
+    const { activeBrand, templateData } = this.props
     const renderData = getTemplateRenderData(activeBrand)
 
     const templateBlockOptions = await getTemplateBlockOptions(
@@ -597,7 +606,7 @@ class Builder extends React.Component {
     this.blocks = registerSocialBlocks(
       this.editor,
       {
-        ...this.props.templateData,
+        ...templateData,
         ...renderData
       },
       templateBlockOptions
@@ -612,7 +621,7 @@ class Builder extends React.Component {
 
     this.websiteBlocksRegistered = true
 
-    const activeBrand = getActiveBrand(this.props.user)
+    const { activeBrand, templateData } = this.props
     const renderData = getTemplateRenderData(activeBrand)
 
     const dynamicBlocksOptions = this.getBlocksOptions()
@@ -640,12 +649,33 @@ class Builder extends React.Component {
     this.blocks = registerWebsiteBlocks(
       this.editor,
       {
-        ...this.props.templateData,
+        ...templateData,
         ...renderData
       },
       templateBlockOptions,
       blocksOptions
     )
+  }
+
+  registerComponentExtensions() {
+    // We should not re-register extensions if it's already done!
+    if (this.componentExtensionsRegistered) {
+      return
+    }
+
+    this.componentExtensionsRegistered = true
+
+    if (this.isWebsiteTemplate) {
+      return
+    }
+
+    if (this.isEmailTemplate && this.isMjmlTemplate) {
+      addFallbackSrcToMjImage(this.editor)
+
+      return
+    }
+
+    addFallbackSrcToImage(this.editor)
   }
 
   setupDependentComponents = () => {
@@ -840,6 +870,12 @@ class Builder extends React.Component {
     iframe.addEventListener('paste', this.iframePasteHandler)
   }
 
+  deselectComponentsOnCanvasClick = () => {
+    const iframeBody = this.editor.Canvas.getBody()
+
+    iframeBody.addEventListener('click', this.iframeClickHandler)
+  }
+
   iframePasteHandler = ev => {
     if (!ev.target.contentEditable) {
       return
@@ -849,6 +885,17 @@ class Builder extends React.Component {
 
     ev.target.ownerDocument.execCommand('insertText', false, text)
     ev.preventDefault()
+  }
+
+  iframeClickHandler = ev => {
+    const parentNode = ev.target.parentNode
+
+    if (parentNode.id !== 'wrapper') {
+      return
+    }
+
+    this.deselectAll()
+    ev.stopPropagation()
   }
 
   setTraits = model => {
@@ -976,7 +1023,7 @@ class Builder extends React.Component {
   }
 
   generateBrandedTemplate = (templateMarkup, data) => {
-    const activeBrand = getActiveBrand(this.props.user)
+    const activeBrand = this.props.activeBrand
     const renderData = getTemplateRenderData(activeBrand)
 
     return nunjucks.renderString(templateMarkup, {
@@ -1028,6 +1075,8 @@ class Builder extends React.Component {
     } else if (this.isWebsiteTemplate) {
       this.registerWebsiteBlocks()
     }
+
+    this.registerComponentExtensions()
   }
 
   deselectAll = () => {
@@ -1253,12 +1302,10 @@ class Builder extends React.Component {
       return false
     }
 
-    const isAdminUser = isAdmin(this.props.user)
-
     return hasSaveAsTemplateButton(
       this.isBareMode,
       !!this.state.selectedTemplate,
-      isAdminUser,
+      this.props.isAdminUser,
       this.isOpenHouseMedium
     )
   }
@@ -1269,12 +1316,10 @@ class Builder extends React.Component {
       return false
     }
 
-    const isAdminUser = isAdmin(this.props.user)
-
     return hasCreateSuperCampaignButton(
       this.isBareMode,
       !!this.state.selectedTemplate,
-      isAdminUser,
+      this.props.isAdminUser,
       this.isEmailMedium
     )
   }
@@ -1391,8 +1436,8 @@ class Builder extends React.Component {
           )}
           {this.state.isAgentDrawerOpen && (
             <TeamAgentsDrawer
+              open
               multiSelection
-              user={this.props.user}
               title="Select Agents"
               onClose={() => {
                 this.blocks.agent.selectHandler()
@@ -1694,9 +1739,12 @@ Builder.defaultProps = {
   onBuilderLoad: () => null
 }
 
-function mapStateToProps({ user }) {
+function mapStateToProps({ user, ...state }) {
   return {
-    user
+    user,
+    isAdminUser: isAdmin(selectActiveTeamUnsafe(state)),
+    activeBrand: selectActiveBrand(state),
+    activeBrandSetting: selectActiveBrandSettings(state, true)
   }
 }
 

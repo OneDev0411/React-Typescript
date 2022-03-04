@@ -35,7 +35,7 @@ export default function AddToContacts({ user, agents }: Props) {
 
   useEffectOnce(() => {
     async function fetchAttributeDefsMap() {
-      const fetchedAttributeDefs = await getAttributeDefs()
+      const { list: fetchedAttributeDefs } = await getAttributeDefs()
       const newAttributeDefsMap: StringMap<IContactAttributeDef> = {}
 
       fetchedAttributeDefs.forEach(item => {

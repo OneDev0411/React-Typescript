@@ -44,6 +44,7 @@ interface Props {
   onChangeHoverState?: (id: UUID, hover: boolean) => void
   onToggleListingModal?: (id: UUID, isOpen: boolean) => void
   onMapClick?: () => void
+  onMapDrag?: () => void
   onClickToggleMap?: () => void
   onToggleFavorite?: (id: UUID) => void
   onMarkerClick?: (key: UUID) => void
@@ -74,6 +75,7 @@ export const Map = memo(
     onChangeHoverState = noop,
     onMarkerClick = noop,
     onMapClick = noop,
+    onMapDrag = noop,
     onClickToggleMap = noop,
     onToggleFavorite = noop,
     onClickLocate
@@ -274,6 +276,7 @@ export const Map = memo(
           onClick={onMapClick}
           onChange={handleChange}
           onGoogleApiLoaded={onLoad}
+          onDrag={onMapDrag}
           yesIWantToUseGoogleMapApiInternals
           style={{ height: '100%', width: '100%' }}
         >

@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { useEffectOnce, useLocalStorage } from 'react-use'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { getPlace } from '@app/models/listings/search/get-place'
 import { confirmation } from '@app/store_actions/confirmation'
 import { getLocationErrorMessage } from '@app/utils/map'
@@ -53,6 +54,7 @@ interface Props extends WithRouterProps {
 
 function ExploreTab({ isWidget, user, location }: Props) {
   const classes = useStyles()
+  const activeTeam = useUnsafeActiveTeam()
 
   const [filtersStorageValue, setFiltersStorageValue] = useLocalStorage<
     Nullable<string>
@@ -63,8 +65,8 @@ function ExploreTab({ isWidget, user, location }: Props) {
 
   const hasUrlQuery = !!(brokerageQuery || searchQuery)
 
-  const userLastBrowsingLocation = getUserLastBrowsingLocation(user)
-  const userActiveSort = parseSortIndex(getDefaultSort(user))
+  const userLastBrowsingLocation = getUserLastBrowsingLocation(activeTeam)
+  const userActiveSort = parseSortIndex(getDefaultSort(activeTeam))
 
   const mapInitialLocation =
     userLastBrowsingLocation?.center && userLastBrowsingLocation?.zoom

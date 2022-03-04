@@ -134,6 +134,10 @@ describe('createAppcuesUserData', () => {
       hasWebsitesAccess: false
     }
 
+    const appcuesBrandsList = {
+      Team: '1'
+    }
+
     const expected = {
       firstName: 'some first name',
       fullName: 'some first name lastnameian',
@@ -141,13 +145,15 @@ describe('createAppcuesUserData', () => {
       userType: 'Admin',
       accountAgeInDays: 5,
       gmailOrOutlookSynced,
-      ...appcuesAccessList
+      ...appcuesAccessList,
+      ...appcuesBrandsList
     }
 
     const actual = createAppcuesUserData(
       gmailOrOutlookSynced,
       userInfo,
-      appcuesAccessList
+      appcuesAccessList,
+      appcuesBrandsList
     )
 
     expect(actual).toEqual(expected)
@@ -177,6 +183,10 @@ describe('createAppcuesUserData', () => {
       hasWebsitesAccess: false
     }
 
+    const appcuesBrandsList = {
+      Team: '1'
+    }
+
     const expected = {
       firstName: 'some first name',
       fullName: 'some first name lastnameian',
@@ -184,13 +194,15 @@ describe('createAppcuesUserData', () => {
       userType: 'Admin',
       accountAgeInDays: 1,
       gmailOrOutlookSynced,
-      ...appcuesAccessList
+      ...appcuesAccessList,
+      ...appcuesBrandsList
     }
 
     const actual = createAppcuesUserData(
       gmailOrOutlookSynced,
       userInfo,
-      appcuesAccessList
+      appcuesAccessList,
+      appcuesBrandsList
     )
 
     expect(actual).toEqual(expected)
@@ -220,6 +232,10 @@ describe('createAppcuesUserData', () => {
       hasWebsitesAccess: false
     }
 
+    const appcuesBrandsList = {
+      Team: '1'
+    }
+
     const expected = {
       firstName: 'some first name',
       fullName: 'some first name lastnameian',
@@ -227,13 +243,15 @@ describe('createAppcuesUserData', () => {
       userType: 'Admin',
       accountAgeInDays: 0,
       gmailOrOutlookSynced,
-      ...appcuesAccessList
+      ...appcuesAccessList,
+      ...appcuesBrandsList
     }
 
     const actual = createAppcuesUserData(
       gmailOrOutlookSynced,
       userInfo,
-      appcuesAccessList
+      appcuesAccessList,
+      appcuesBrandsList
     )
 
     expect(actual).toEqual(expected)
@@ -263,6 +281,10 @@ describe('createAppcuesUserData', () => {
       hasWebsitesAccess: false
     }
 
+    const appcuesBrandsList = {
+      Team: '1'
+    }
+
     const expected = {
       firstName: 'some first name',
       fullName: 'some first name lastnameian',
@@ -270,13 +292,15 @@ describe('createAppcuesUserData', () => {
       userType: 'Admin',
       accountAgeInDays: 5,
       gmailOrOutlookSynced,
-      ...appcuesAccessList
+      ...appcuesAccessList,
+      ...appcuesBrandsList
     }
 
     const actual = createAppcuesUserData(
       gmailOrOutlookSynced,
       userInfo,
-      appcuesAccessList
+      appcuesAccessList,
+      appcuesBrandsList
     )
 
     expect(actual).toEqual(expected)
@@ -306,6 +330,10 @@ describe('createAppcuesUserData', () => {
       hasWebsitesAccess: true
     }
 
+    const appcuesBrandsList = {
+      Team: '1'
+    }
+
     const expected = {
       firstName: 'some first name',
       fullName: 'some first name lastnameian',
@@ -313,13 +341,15 @@ describe('createAppcuesUserData', () => {
       userType: 'Admin',
       accountAgeInDays: 5,
       gmailOrOutlookSynced,
-      ...appcuesAccessList
+      ...appcuesAccessList,
+      ...appcuesBrandsList
     }
 
     const actual = createAppcuesUserData(
       gmailOrOutlookSynced,
       userInfo,
-      appcuesAccessList
+      appcuesAccessList,
+      appcuesBrandsList
     )
 
     expect(actual).toEqual(expected)
@@ -349,6 +379,10 @@ describe('createAppcuesUserData', () => {
       hasWebsitesAccess: false
     }
 
+    const appcuesBrandsList = {
+      Team: '1'
+    }
+
     const expected = {
       firstName: 'some first name',
       fullName: 'some first name lastnameian',
@@ -356,13 +390,15 @@ describe('createAppcuesUserData', () => {
       userType: 'Admin',
       accountAgeInDays: 5,
       gmailOrOutlookSynced,
-      ...appcuesAccessList
+      ...appcuesAccessList,
+      ...appcuesBrandsList
     }
 
     const actual = createAppcuesUserData(
       gmailOrOutlookSynced,
       userInfo,
-      appcuesAccessList
+      appcuesAccessList,
+      appcuesBrandsList
     )
 
     expect(actual).toEqual(expected)

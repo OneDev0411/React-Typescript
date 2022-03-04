@@ -1,13 +1,12 @@
 import { Button, ButtonProps, CircularProgress } from '@material-ui/core'
 
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
+import { createSuperCampaign } from '@app/models/super-campaign'
 import { goTo } from '@app/utils/go-to'
 import {
   createTemplateInstance,
   TemplateInstanceInputData
 } from 'models/instant-marketing/create-template-instance'
-
-import { useCreateSuperCampaign } from './use-create-super-campaign'
 
 interface CreateSuperCampaignButtonProps
   extends Omit<
@@ -29,16 +28,19 @@ function CreateSuperCampaignButton({
   const { isRunning: isCreatingSuperCampaign, runActionThenNotify } =
     useRunActionThenNotify()
 
-  const { createSuperCampaign } = useCreateSuperCampaign()
+  const createSuperCampaignAndRedirect = () => {
+    if (!template) {
+      return
+    }
 
-  const createSuperCampaignAndRedirect = () =>
+    const html = getTemplateMarkup()
+
+    if (!html) {
+      return
+    }
+
     runActionThenNotify(
       async () => {
-        if (!template) {
-          return
-        }
-
-        const html = getTemplateMarkup()
         const templateInstance = await createTemplateInstance(template.id, {
           ...templateInstanceData,
           html
@@ -58,6 +60,7 @@ function CreateSuperCampaignButton({
       'The campaign has been created',
       'Something went wrong while saving the template or creating a campaign. Please try again.'
     )
+  }
 
   return (
     <>

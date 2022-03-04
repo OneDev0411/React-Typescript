@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { deleteBrandAsset } from 'models/brand/delete-brand-asset'
 import { getBrandAssets } from 'models/brand/get-brand-assets'
 import { uploadBrandAsset } from 'models/brand/upload-asset'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { DEFAULT_ASSET_LABEL } from './constants'
 
@@ -22,13 +22,13 @@ export function useTeamLibrary(
   user: IUser,
   searchQuery: string
 ): UseTeamLibrary {
+  const activeBrandId = useActiveBrandId()
+
   const [brandAssets, setBrandAssets] = useState<Nullable<IBrandAsset[]>>(null)
   const [results, setResults] = useState<IBrandAsset[]>([])
   const [labels, setLabels] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isUploading, setIsUploading] = useState<boolean>(false)
-
-  const activeBrandId = getActiveTeamId(user)
 
   const hasDeleteAccess = (assetId: UUID) => {
     if (!brandAssets || !activeBrandId) {
@@ -64,15 +64,17 @@ export function useTeamLibrary(
 
     const currentBrandAssets = brandAssets ?? []
 
-    const newUploadedAsset = await uploadBrandAsset([brandId], file, {
+    const newUploadedAssets = await uploadBrandAsset([brandId], file, {
       label
-    })[0]
+    })
 
-    setBrandAssets([newUploadedAsset, ...currentBrandAssets])
+    const uploadedAsset = newUploadedAssets[0]
+
+    setBrandAssets([uploadedAsset, ...currentBrandAssets])
 
     setIsUploading(false)
 
-    return newUploadedAsset
+    return uploadedAsset
   }
 
   useEffect(() => {

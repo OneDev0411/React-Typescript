@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 
 import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
 import {
@@ -8,6 +8,7 @@ import {
   mdiClockTimeFourOutline
 } from '@mdi/js'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -77,7 +78,7 @@ const defaultProps = {
  * after opening until we can reinitialize it.
  *
  */
-export class TourDrawer extends React.Component {
+class TourDrawerRaw extends Component {
   constructor(props) {
     super(props)
 
@@ -175,7 +176,7 @@ export class TourDrawer extends React.Component {
   }
 
   render() {
-    const { user } = this.props
+    const { user, activeTeam } = this.props
     const { isDisabled, shouldShowDescription } = this.state
 
     return (
@@ -303,30 +304,20 @@ export class TourDrawer extends React.Component {
                           />
                         </>
                       )}
-                      {!isSoloActiveTeam(user) && (
+                      {!isSoloActiveTeam(activeTeam) && (
                         <AssigneesField
                           buttonText="Assignee"
                           name="assignees"
-                          owner={user}
                         />
                       )}
                     </Flex>
                     <Flex alignCenter>
-                      <Tooltip
-                        placement="top"
-                        title="Preview and print tour sheets"
-                      >
-                        <div>
-                          <PreviewTourSheets
-                            agent={user}
-                            disabled={isDisabled}
-                            listings={values.locations.map(
-                              l => l.listing.original
-                            )}
-                            tour={prePreviewFormat(values, this.state.tour)}
-                          />
-                        </div>
-                      </Tooltip>
+                      <PreviewTourSheets
+                        agent={user}
+                        disabled={isDisabled}
+                        listings={values.locations.map(l => l.listing.original)}
+                        tour={prePreviewFormat(values, this.state.tour)}
+                      />
                       <Button
                         variant="contained"
                         type="submit"
@@ -349,5 +340,9 @@ export class TourDrawer extends React.Component {
   }
 }
 
-TourDrawer.propTypes = propTypes
-TourDrawer.defaultProps = defaultProps
+TourDrawerRaw.propTypes = propTypes
+TourDrawerRaw.defaultProps = defaultProps
+
+export const TourDrawer = connect(({ activeTeam = null }) => ({ activeTeam }))(
+  TourDrawerRaw
+)

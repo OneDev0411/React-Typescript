@@ -12,9 +12,7 @@ import { TableColumn } from '@app/views/components/Grid/Table/types'
 import LoadingContainer from '@app/views/components/LoadingContainer'
 import { getFormattedPrice } from 'models/Deal/helpers/context'
 
-import ListingsListColumnActions, {
-  ListingsListColumnActionsProps
-} from './ListingsListColumnActions'
+import ListingsListColumnActions from './ListingsListColumnActions'
 import ListingsListColumnProperty from './ListingsListColumnProperty'
 import ListingsListColumnText from './ListingsListColumnText'
 import ListingsListEmptyState from './ListingsListEmptyState'
@@ -40,22 +38,18 @@ const OPTIONS: GetBrandListingsOptions = {
   status: ['Active']
 }
 
-interface ListingsListProps
-  extends Pick<ListingsListColumnActionsProps, 'hasActions'> {
-  brandId: UUID
+interface Props {
   searchTerm: string
 }
 
-function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
+function ListingsList({ searchTerm }: Props) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
 
+  const isSearching = searchTerm.trim().length > 0
   const userAgents = useSelector(selectUserAgents)
 
-  const { listings: rows, isLoading } = useBrandAndDealsListings(
-    brandId,
-    OPTIONS
-  )
+  const { listings: rows, isLoading } = useBrandAndDealsListings(OPTIONS)
 
   const resultRows = useListingsSearchRows(rows, searchTerm)
   const sortedRows = useListingsListSort(resultRows)
@@ -73,6 +67,7 @@ function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
               ? row.address.street_address
               : row.property.address.street_address
           }
+          mlsSource={row.mls_display_name}
           listingId={row.id}
         />
       )
@@ -128,7 +123,7 @@ function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
         <ListingsListColumnActions
           className={classes.actions}
           row={row}
-          hasActions={hasActions}
+          hasActions
         />
       )
     }
@@ -144,11 +139,19 @@ function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
         <LoadingContainer style={{ padding: '10% 0' }} />
       )}
       getTrProps={() => ({
-        className: classNames(classes.row, gridClasses.row)
+        className: classNames(classes.row, gridClasses.row),
+        'data-test': 'table-row'
       })}
       EmptyStateComponent={() => (
         <ListingsListEmptyState
-          message={searchTerm ? 'No results' : 'There are no listings.'}
+          title={
+            isSearching ? 'No Results ' : 'You don’t have any listings yet.'
+          }
+          subtitle={
+            isSearching
+              ? 'Make sure you have searched for the right address or try adding your other MLS Accounts using the button at the top'
+              : 'Use the “Add MLS Account” button at top to connect all your MLS accounts and let us retrieve your listings.'
+          }
         />
       )}
     />

@@ -20,7 +20,9 @@ const useStyles = makeStyles(
     },
     icon: {
       width: theme.spacing(6),
-      fontSize: 0
+      fontSize: 0,
+      flexShrink: 0,
+      flexGrow: 0
     },
     helpText: { color: theme.palette.grey[600] }
   }),
@@ -54,7 +56,9 @@ function MarketingTemplatePurposeOption({
       </div>
       <div>
         <Typography variant="body1">{title}</Typography>
-        <Typography variant="body2">{description}</Typography>
+        <Typography className={classes.helpText} variant="body2">
+          {description}
+        </Typography>
       </div>
     </MenuItem>
   )

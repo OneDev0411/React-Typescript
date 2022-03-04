@@ -79,8 +79,17 @@ export const mapPostcodesToOptions = (
     return []
   }
 
-  return postcodes.map(postcode => ({
-    id: postcode,
-    title: postcode
-  }))
+  return postcodes.reduce((acc: ZipcodeOption[], postcode) => {
+    if (!postcode || postcode.trim() === '') {
+      return acc
+    }
+
+    return [
+      ...acc,
+      {
+        id: postcode,
+        title: postcode
+      }
+    ]
+  }, [])
 }

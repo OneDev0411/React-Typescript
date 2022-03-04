@@ -1,6 +1,6 @@
 import { useMemo, memo } from 'react'
 
-import { Typography, Theme, makeStyles } from '@material-ui/core'
+import { Theme, makeStyles } from '@material-ui/core'
 import cn from 'classnames'
 
 import { areRecipientsEqual } from '../../../../helpers/are-recipients-equal'
@@ -51,7 +51,7 @@ function RawBrand({ brand, currentRecipients = [], onClick }: Props) {
       className={cn(classes.name, { [classes.disabled]: isSelected })}
       onClick={handleOnClick}
     >
-      <Typography variant="body2">{brand.name}</Typography>
+      {brand.name}
     </div>
   )
 }

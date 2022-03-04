@@ -1,13 +1,11 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 
-import { useSelector } from 'react-redux'
-
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { getBrands } from 'models/BrandConsole/Brands'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 export function useBrandTree() {
-  const user = useSelector(selectUser)
+  const activeTeam = useUnsafeActiveTeam()
+  const activeBrandId = activeTeam?.brand.id
 
   const [rootTeam, setRootTeam] = useState<IBrand | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -20,14 +18,12 @@ export function useBrandTree() {
   useEffect(() => {
     setIsLoading(true)
 
-    const activeTeamId = getActiveTeamId(user)
-
-    if (activeTeamId) {
-      getBrands(activeTeamId)
+    if (activeBrandId) {
+      getBrands(activeBrandId)
         .then(({ data }) => {
           const tree = {
             ...data,
-            children: getChildren(user, data, findParents(data))
+            children: getChildren(activeTeam, data, findParents(data))
           }
 
           setRootTeam(tree)
@@ -37,7 +33,7 @@ export function useBrandTree() {
           setIsLoading(false)
         })
     }
-  }, [user])
+  }, [activeBrandId, activeTeam])
 
   const initialExpandedNodes = useMemo(
     () =>
@@ -57,20 +53,20 @@ export function useBrandTree() {
 
 /**
  *
- * @param user
+ * @param team
  * @param brand
  */
 function getChildren(
-  user: IUser,
+  team: Nullable<IUserTeam>,
   brand: IBrand,
   parents: ReturnType<typeof findParents>
 ) {
   return brand.children?.filter(child => {
     if (child.children) {
-      return getChildren(user, child, parents)
+      return getChildren(team, child, parents)
     }
 
-    return hasAccessToBrand(user, brand, parents)
+    return hasAccessToBrand(team, brand, parents)
   })
 }
 
@@ -98,21 +94,18 @@ function findParents(
 
 /**
  * checks whether given brand has access to backoffice or not
- * @param user
+ * @param team
  * @param brand
  */
 function hasAccessToBrand(
-  user: IUser,
+  team: Nullable<IUserTeam>,
   brand: IBrand,
   parents: ReturnType<typeof findParents>
 ) {
   let currentBrand: IBrand | null = brand
 
   while (currentBrand) {
-    const brandId = currentBrand.id
-    const userTeam = user.teams?.find(team => team.brand.id === brandId)
-
-    if (userTeam?.acl?.includes('BackOffice')) {
+    if (team?.acl?.includes('BackOffice')) {
       return true
     }
 

@@ -2,13 +2,11 @@ import React, { useState, useRef, useEffect } from 'react'
 
 import { Popover } from '@material-ui/core'
 import { PopoverActions } from '@material-ui/core/Popover'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
+import { useActiveBrandSettings } from '@app/hooks/brand/use-active-brand-settings'
 import { setSelectedTask } from 'actions/deals'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
-import { IAppState } from 'reducers'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamSettings } from 'utils/user-teams'
 
 import Form from './Create'
 import List from './List'
@@ -23,12 +21,9 @@ function YardSign({ deal, style }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [showForm, setShowForm] = useState<boolean>(false)
   const dispatch = useDispatch()
-  const user = useSelector((state: IAppState) => selectUser(state))
 
-  const { enable_yard_sign_requests: showYardSign } = getActiveTeamSettings(
-    user,
-    true
-  )
+  const { enable_yard_sign_requests: showYardSign } =
+    useActiveBrandSettings(true)
 
   useEffect(() => {
     if (popoverActions.current) {

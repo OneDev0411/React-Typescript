@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core'
 import cn from 'classnames'
 
+import { useReplaceQueryParam } from '@app/hooks/use-query-param'
 import { AddMlsAgent } from 'components/AddMlsAgent'
 
 interface Props {
@@ -41,7 +42,18 @@ const useStyles = makeStyles(
 
 export default function ConnectedAgents({ user, onDelete }: Props) {
   const classes = useStyles()
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [actionQueryParam, , removeActionQueryParam] =
+    useReplaceQueryParam('action')
+
+  // Automatically open the dialog when the url has the action query param
+  const [isDialogOpen, setIsDialogOpen] = useState(
+    Boolean(actionQueryParam && actionQueryParam === 'add-mls-account')
+  )
+
+  const oncloseDialog = () => {
+    setIsDialogOpen(false)
+    removeActionQueryParam()
+  }
 
   return (
     <>
@@ -119,11 +131,7 @@ export default function ConnectedAgents({ user, onDelete }: Props) {
         </ListItem>
       ))}
 
-      <AddMlsAgent
-        isOpen={isDialogOpen}
-        user={user}
-        onClose={() => setIsDialogOpen(false)}
-      />
+      <AddMlsAgent isOpen={isDialogOpen} user={user} onClose={oncloseDialog} />
     </>
   )
 }

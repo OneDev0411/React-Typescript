@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 import { Box, makeStyles, Theme } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
@@ -6,6 +6,7 @@ import idx from 'idx'
 import { useSelector, useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { updateUser } from 'actions/user'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
@@ -13,7 +14,6 @@ import { editUser } from 'models/user/edit'
 import { uploadUserProfileImage } from 'models/user/upload-avatar'
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-import { selectUserUnsafe } from 'selectors/user'
 import { getUserDefaultHomepage } from 'utils/get-default-home-page'
 
 import Container from '../Container'
@@ -46,12 +46,14 @@ export function Profile() {
 
   const classes = useStyles()
   const dispatch = useDispatch()
-  const user = useSelector(selectUserUnsafe)
+  const activeTeam = useUnsafeActiveTeam()
   const brand = useSelector((store: IAppState) => store.brand)
 
   const [editorState, setEditorState, signatureEditor] = useEditorState('')
 
-  const [nextStepUrl, setNextStepUrl] = useState(getUserDefaultHomepage(user))
+  const [nextStepUrl, setNextStepUrl] = useState(
+    getUserDefaultHomepage(activeTeam)
+  )
 
   const [submitError, setSubmitError] = useState('')
   const [submitting, setSubmitting] = useState(false)

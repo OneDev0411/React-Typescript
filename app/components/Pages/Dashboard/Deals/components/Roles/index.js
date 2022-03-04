@@ -299,9 +299,9 @@ class Roles extends React.Component {
 
         {this.state.isReplaceAgentDrawerOpen && !this.state.isRoleFormOpen && (
           <TeamAgentsDrawer
+            open
             isPrimaryAgent
             withRelatedContacts={false}
-            user={this.props.user}
             title="Select New Primary Agent"
             onSelectAgents={this.handleReplaceAgent}
             onClose={this.toggleReplaceAgentDrawer}

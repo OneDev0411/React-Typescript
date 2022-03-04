@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core'
 import { mdiDotsVertical } from '@mdi/js'
 
+import { useUpdateMySuperCampaignEnrollment } from '@app/models/super-campaign'
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import {
   useHandleSuperCampaignOptOutAndCopy,
@@ -18,8 +19,6 @@ import {
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { isSuperCampaignReadOnly } from '../../helpers'
-
-import { useToggleEnrollmentNotificationsEnabled } from './use-toggle-enrollment-notifications-enabled'
 
 const useStyles = makeStyles(
   theme => ({
@@ -32,15 +31,11 @@ const useStyles = makeStyles(
 interface SuperCampaignAgentListColumnActionsProps {
   superCampaign: ISuperCampaignWithEnrollment
   onParticipateClick: () => void
-  onNotificationsEnabledChange: (enabled: boolean) => void
-  onUnenroll: () => void
 }
 
 function SuperCampaignAgentListColumnActions({
   superCampaign,
-  onParticipateClick,
-  onUnenroll,
-  onNotificationsEnabledChange
+  onParticipateClick
 }: SuperCampaignAgentListColumnActionsProps) {
   const classes = useStyles()
 
@@ -55,18 +50,15 @@ function SuperCampaignAgentListColumnActions({
   }
 
   const { isDeleting, handleOptOut, handleOptOutAndCopy } =
-    useHandleSuperCampaignOptOutAndCopy(
-      superCampaign.id,
-      onUnenroll,
-      undefined,
-      handleCopy
-    )
+    useHandleSuperCampaignOptOutAndCopy({ onOptOutAndCopy: handleCopy })
 
-  const { isToggling, toggleEnrollmentNotificationsEnabled } =
-    useToggleEnrollmentNotificationsEnabled(
-      superCampaign,
-      onNotificationsEnabledChange
-    )
+  const { isLoading: isToggling, mutate: updateMySuperCampaignEnrollment } =
+    useUpdateMySuperCampaignEnrollment({
+      notify: {
+        onSuccess: 'The enrollment notifications status has been updated',
+        onError: 'Something went wrong while updating the notifications status'
+      }
+    })
 
   const isWorking = isDeleting || isToggling
 
@@ -80,7 +72,7 @@ function SuperCampaignAgentListColumnActions({
           onClick={onParticipateClick}
           disabled={isWorking}
         >
-          Participate to This Campaign
+          Preview and Participate
         </Button>
       )}
       <BaseDropdown
@@ -105,7 +97,17 @@ function SuperCampaignAgentListColumnActions({
           <div onClick={close}>
             {(isExecuted || isEnrolled) && (
               <>
-                <MenuItem onClick={toggleEnrollmentNotificationsEnabled}>
+                <MenuItem
+                  onClick={() =>
+                    updateMySuperCampaignEnrollment({
+                      superCampaignId: superCampaign.id,
+                      data: {
+                        notifications_enabled:
+                          !superCampaign.enrollment?.notifications_enabled
+                      }
+                    })
+                  }
+                >
                   <Typography variant="body2">
                     Notify when opened or clicked
                   </Typography>
@@ -126,12 +128,12 @@ function SuperCampaignAgentListColumnActions({
             )}
             {!isExecuted && isEnrolled && (
               <>
-                <MenuItem onClick={handleOptOutAndCopy}>
+                <MenuItem onClick={() => handleOptOutAndCopy(superCampaign.id)}>
                   <Typography variant="body2">
                     Opt-out and copy this campaign
                   </Typography>
                 </MenuItem>
-                <MenuItem onClick={handleOptOut}>
+                <MenuItem onClick={() => handleOptOut(superCampaign.id)}>
                   <Typography variant="body2">Opt-out</Typography>
                 </MenuItem>
               </>

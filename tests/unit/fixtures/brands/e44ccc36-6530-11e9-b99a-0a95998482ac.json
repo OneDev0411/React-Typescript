@@ -1,0 +1,47 @@
+{
+    "id": "e44ccc36-6530-11e9-b99a-0a95998482ac",
+    "created_at": 1555959627.45849,
+    "updated_at": 1555959627.45849,
+    "palette": {
+        "type": "brand_palette"
+    },
+    "assets": null,
+    "messages": {
+        "type": "brand_messages"
+    },
+    "parent": {
+        "type": "reference",
+        "object_type": "brand",
+        "id": "f8ba68ec-9ded-11e7-b2b3-0242ac110003"
+    },
+    "name": "James's Team",
+    "deleted_at": null,
+    "training": false,
+    "brand_type": "Office",
+    "type": "brand",
+    "hostnames": null,
+    "roles": [
+        {
+            "type": "reference",
+            "object_type": "brand_role",
+            "id": "d7481438-9757-11e9-9521-0a95998482ac"
+        },
+        {
+            "type": "reference",
+            "object_type": "brand_role",
+            "id": "e4fef4d8-6530-11e9-b99b-0a95998482ac"
+        },
+        {
+            "type": "reference",
+            "object_type": "brand_role",
+            "id": "7a95a068-01d4-11ec-a302-42010a960002"
+        }
+    ],
+    "settings": {
+        "type": "reference",
+        "object_type": "brand_settings",
+        "id": "e44ccc36-6530-11e9-b99a-0a95998482ac"
+    },
+    "member_count": 14,
+    "base_url": "https://beta.rechat.com"
+}

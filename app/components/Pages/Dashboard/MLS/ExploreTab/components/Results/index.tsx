@@ -66,7 +66,7 @@ const useStyles = makeStyles(
       padding: 30
     }
   }),
-  { name: 'PropertiesResults' }
+  { name: 'PropertiesResultsExploreTab' }
 )
 
 interface Props {

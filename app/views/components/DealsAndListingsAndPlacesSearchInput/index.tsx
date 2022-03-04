@@ -60,8 +60,8 @@ const useStyles = makeStyles<Theme, { inputValue: string }>(
       color: theme.palette.grey[700]
     },
     mlsSourceIcon: {
-      maxWidth: theme.spacing(1.75), // From figma
-      maxHeight: theme.spacing(1.75), // From figma
+      maxWidth: 14, // From figma
+      maxHeight: 14, // From figma
       marginRight: theme.spacing(0.5)
     }
   }),

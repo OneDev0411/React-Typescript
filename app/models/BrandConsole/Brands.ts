@@ -2,17 +2,6 @@ import Fetch from 'services/fetch'
 
 const defaultAssociations = ['brand.roles', 'brand_role.users']
 
-export async function deprecatedGetBrands(brandId) {
-  try {
-    return await new Fetch().get(
-      // eslint-disable-next-line max-len
-      `/brands/${brandId}?associations[]=brand.roles&associations[]=brand_role.members`
-    )
-  } catch (error) {
-    return { error }
-  }
-}
-
 export async function getBrands(
   brandId: string,
   fetchChildren: boolean = true,
@@ -29,6 +18,27 @@ export async function getBrands(
       associations
     })
   ).body
+}
+
+export async function getAvailableBrandsToSwitch(
+  fetchChildren: boolean = true,
+  customeAssociations: string[] = []
+): Promise<IBrand[]> {
+  const associations = [...customeAssociations]
+
+  if (fetchChildren) {
+    associations.push('brand.children')
+  }
+
+  try {
+    const response = await new Fetch().get('/users/self/brands').query({
+      associations
+    })
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
 }
 
 export async function getChildrenBrands(brandId) {
@@ -86,7 +96,6 @@ export async function deleteBrand(brandId: string) {
 }
 
 export default {
-  deprecatedGetBrands,
   getBrands,
   getChildrenBrands,
   addBrand,

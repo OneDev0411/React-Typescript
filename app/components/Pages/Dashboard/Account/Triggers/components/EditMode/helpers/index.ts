@@ -1,5 +1,6 @@
 import { convertSecondsToDay } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/TriggerEditMode/helpers'
 import { createTemplateInstance } from '@app/models/instant-marketing/triggers/helpers'
+import { getUserWithOnBehalfVariable } from '@app/utils/marketing-center/get-user-with-on-behalf-variable'
 
 import { getAttributeName } from '../../Items/components/helpers'
 
@@ -51,7 +52,9 @@ export const generatePayload = async (
   const templateInstance =
     template?.type === 'template_instance'
       ? template
-      : await createTemplateInstance(template!, brand, { user })
+      : await createTemplateInstance(template!, brand, {
+          user: getUserWithOnBehalfVariable(user)
+        })
 
   // -86400 number of millisecond of a day
   const waitFor = Math.abs(Number(wait_for)) * -86400

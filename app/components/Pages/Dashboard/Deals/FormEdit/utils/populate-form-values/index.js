@@ -63,6 +63,8 @@ function getContextsByType(annotations, type, deal, brandChecklists, fields) {
 }
 
 function getRoles(annotations, deal, roles) {
+  // console.log(getAnnotationsByType(annotations, 'roles'))
+
   return getAnnotationsByType(annotations, 'roles').reduce((current, group) => {
     const value = getRoleText(roles, deal, group[0].role, group[0])
 

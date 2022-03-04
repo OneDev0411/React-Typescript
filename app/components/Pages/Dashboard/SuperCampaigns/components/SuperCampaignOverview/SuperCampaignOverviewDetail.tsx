@@ -1,14 +1,14 @@
 import { makeStyles } from '@material-ui/core'
 
 import { useReplaceQueryParam } from '@app/hooks/use-query-param'
+import { useUpdateSuperCampaign } from '@app/models/super-campaign'
 
 import { isSuperCampaignReadOnly } from '../../helpers'
-import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
 import SuperCampaignCard from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
-import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 import SuperCampaignDrawer from '../SuperCampaignDrawer'
 import { SuperCampaignFormValues } from '../SuperCampaignDrawer/types'
+import { useSuperCampaign } from '../SuperCampaignProvider'
 import SuperCampaignTemplate from '../SuperCampaignTemplate/SuperCampaignTemplate'
 
 import SuperCampaignOverviewDetailLabelValue from './SuperCampaignOverviewDetailLabelValue'
@@ -30,11 +30,9 @@ const useStyles = makeStyles(
 
 function SuperCampaignOverviewDetail() {
   const classes = useStyles()
-  const { superCampaign, setSuperCampaign } = useSuperCampaignDetail()
-  const { isSaving, saveSuperCampaign } = useSaveSuperCampaign(
-    superCampaign,
-    setSuperCampaign
-  )
+  const superCampaign = useSuperCampaign()
+
+  const { isLoading, mutateAsync } = useUpdateSuperCampaign()
   const [editDrawerParam, setEditDrawerParam, deleteEditDrawerParam] =
     useReplaceQueryParam('edit-drawer')
 
@@ -44,13 +42,17 @@ function SuperCampaignOverviewDetail() {
 
   const closeDrawer = () => deleteEditDrawerParam()
 
-  const handleTemplateChange = (template: IMarketingTemplateInstance) =>
-    saveSuperCampaign({ template_instance: template })
+  const handleTemplateChange = async (template: IMarketingTemplateInstance) => {
+    await mutateAsync({
+      superCampaign,
+      inputData: { template_instance: template }
+    })
+  }
 
   const handleSuperCampaignConfirm = async (
     formValues: SuperCampaignFormValues
   ) => {
-    await saveSuperCampaign(formValues)
+    await mutateAsync({ superCampaign, inputData: formValues })
     closeDrawer()
   }
 
@@ -76,6 +78,7 @@ function SuperCampaignOverviewDetail() {
           template={superCampaign.template_instance}
           onTemplateChange={handleTemplateChange}
           readOnly={isReadOnly}
+          viewAsAdmin
         />
       )}
       <SuperCampaignDrawer
@@ -83,7 +86,7 @@ function SuperCampaignOverviewDetail() {
         onClose={closeDrawer}
         formInitialValues={superCampaign}
         onConfirm={handleSuperCampaignConfirm}
-        actionButtonsDisabled={isSaving}
+        actionButtonsDisabled={isLoading}
       />
     </SuperCampaignCard>
   )

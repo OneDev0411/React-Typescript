@@ -1,8 +1,5 @@
-import { useSelector } from 'react-redux'
-
-import { selectUser } from '@app/selectors/user'
-import { useBrandStatuses } from 'hooks/use-brand-statuses'
-import { getActiveTeamId } from 'utils/user-teams'
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
+import { useBrandStatuses } from '@app/hooks/use-brand-statuses'
 
 import Grid from './Grid'
 import { useSearchQuery } from './hooks/use-search-query'
@@ -13,11 +10,12 @@ interface Props {
 }
 
 export function OtherTabsWrapper({ searchQuery }: Props) {
-  const user = useSelector(selectUser)
-
-  const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
+  const activeBrandId = useActiveBrandId()
+  const [statuses] = useBrandStatuses(activeBrandId)
 
   useSearchQuery(searchQuery, statuses)
 
-  return <Grid searchQuery={searchQuery} statuses={statuses} />
+  return (
+    <Grid searchQuery={searchQuery} statuses={statuses} isSearching={false} />
+  )
 }

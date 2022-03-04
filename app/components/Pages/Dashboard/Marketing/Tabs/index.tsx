@@ -20,8 +20,7 @@ const MarketingTabs = ({
   mediums,
   templateTypes,
   isMyDesignsActive,
-  isOverviewActive,
-  ...props
+  isOverviewActive
 }: Props) => {
   const sectionsList = Object.keys(sections).map(
     sectionKey => sections[sectionKey]

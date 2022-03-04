@@ -13,10 +13,9 @@ interface UseBrandAndDealsListings {
 }
 
 function useBrandAndDealsListings(
-  brandId: UUID,
   options?: GetBrandListingsOptions
 ): UseBrandAndDealsListings {
-  const brandListings = useBrandListings(brandId, options)
+  const brandListings = useBrandListings(options)
   const brandListingsIds = useMemo(
     () => brandListings?.map(listing => listing.id),
     [brandListings]

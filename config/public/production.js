@@ -23,6 +23,9 @@ export default {
       imgix_url: process.env.IMGIX_URL // https://avatars.imgix.net (production) or https://avatars-test.imgix.net (test)
     }
   },
+  nlp: {
+    server: process.env.NLP_SERVER
+  },
   branch: {
     key: process.env.BRANCH_KEY
   },

@@ -6,6 +6,8 @@ import { selectActiveBrand } from '@app/selectors/brand'
 import { selectUser } from '@app/selectors/user'
 import TemplateThumbnail from 'components/TemplateThumbnail'
 
+import { getCorrectedUser } from './helpers'
+
 const useStyles = makeStyles(
   {
     readOnly: { pointerEvents: 'none' }
@@ -18,13 +20,15 @@ interface SuperCampaignTemplatePreviewProps {
   template: IMarketingTemplateInstance
   onClick?: () => void
   readOnly: boolean
+  viewAsAdmin?: boolean
 }
 
 function SuperCampaignTemplatePreview({
   className,
   template,
   onClick,
-  readOnly
+  readOnly,
+  viewAsAdmin = false
 }: SuperCampaignTemplatePreviewProps) {
   const classes = useStyles()
 
@@ -40,7 +44,7 @@ function SuperCampaignTemplatePreview({
         template={template}
         brand={brand}
         data={{
-          user,
+          user: getCorrectedUser(user, viewAsAdmin),
           listing: template.listings?.[0],
           contact: template.contacts?.[0]
         }}

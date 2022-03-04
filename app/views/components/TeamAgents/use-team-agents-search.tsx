@@ -1,6 +1,4 @@
-import { useSelector } from 'react-redux'
-
-import { selectUser } from '@app/selectors/user'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 
 import { normalizeTeams } from './helpers/normalize-teams'
 import { NormalizedBrand } from './types'
@@ -12,9 +10,9 @@ function useTeamAgentsSearch(
   criteria: string,
   flattenTeams: boolean
 ): UseTeamAgentsSearch {
-  const user = useSelector(selectUser)
+  const activeTeam = useUnsafeActiveTeam()
 
-  return normalizeTeams(user, teamAgents, flattenTeams, criteria)
+  return normalizeTeams(activeTeam, teamAgents, flattenTeams, criteria)
 }
 
 export default useTeamAgentsSearch

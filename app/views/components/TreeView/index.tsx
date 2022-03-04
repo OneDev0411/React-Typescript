@@ -1,19 +1,10 @@
-import { ReactNode, useCallback, useEffect, memo } from 'react'
+import { useCallback, useEffect, useState, useMemo, memo } from 'react'
 
 import { Typography } from '@material-ui/core'
 import { useControllableState } from 'react-use-controllable-state'
 
 import { TreeViewNode } from './components/TreeViewNode'
-
-interface Props<NodeType> {
-  renderNode: (node: NodeType) => ReactNode
-  getNodeId?: (node: NodeType) => string
-  selectable: boolean
-  getChildNodes?: (node?: NodeType) => NodeType[]
-  expandedNodes?: string[]
-  onExpandedNodesChanged?: (nodes: string[]) => void
-  initialExpandedNodes?: string[]
-}
+import { TreeViewProps } from './type'
 
 /**
  * Rechat treeview component with support for:
@@ -41,20 +32,18 @@ export default memo(function TreeView<NodeType = any>({
   getNodeId = (node => node.id) as any,
   getChildNodes = (node => node.children) as any,
   ...props
-}: Props<NodeType>) {
+}: TreeViewProps<NodeType>) {
+  const [selectedNodes, setSelectedNodes] = useState<NodeType[]>([])
+
   const [expandedNodes, setExpandedNodes] = useControllableState(
     props.expandedNodes,
     props.onExpandedNodesChanged,
     props.initialExpandedNodes || []
   )
-
-  useEffect(() => {
-    if (props.initialExpandedNodes) {
-      setExpandedNodes(expandedNodes => {
-        return [...expandedNodes, ...(props.initialExpandedNodes || [])]
-      })
-    }
-  }, [props.initialExpandedNodes, setExpandedNodes])
+  const selectedNodeIds: UUID[] = useMemo(
+    () => selectedNodes.map(node => getNodeId(node)),
+    [selectedNodes, getNodeId]
+  )
 
   const toggleNode = useCallback(
     node => {
@@ -69,6 +58,43 @@ export default memo(function TreeView<NodeType = any>({
 
   const onToggleExpanded = useCallback(node => toggleNode(node), [toggleNode])
 
+  const onCheckNode = useCallback(
+    (node: NodeType) => {
+      if (!props.multiSelectable) {
+        return
+      }
+
+      const newSelectedNodes = generateNewSelecedNode()
+
+      setSelectedNodes(newSelectedNodes)
+
+      function generateNewSelecedNode(): NodeType[] {
+        const nodeId = getNodeId(node)
+
+        if (selectedNodeIds.includes(nodeId)) {
+          return selectedNodes.filter(n => getNodeId(n) !== nodeId)
+        }
+
+        return [...selectedNodes, node]
+      }
+    },
+    [getNodeId, props.multiSelectable, selectedNodeIds, selectedNodes]
+  )
+
+  useEffect(() => {
+    if (props.initialExpandedNodes) {
+      setExpandedNodes(expandedNodes => {
+        const newExpandedNodes = props.initialExpandedNodes || []
+
+        if (newExpandedNodes.length === 0) {
+          return []
+        }
+
+        return [...expandedNodes, ...newExpandedNodes]
+      })
+    }
+  }, [props.initialExpandedNodes, setExpandedNodes])
+
   const root = getChildNodes()
 
   if (root.length === 0) {
@@ -80,19 +106,22 @@ export default memo(function TreeView<NodeType = any>({
   }
 
   return (
-    <>
-      {([] as NodeType[]).concat(root).map(node => (
+    <div>
+      {(root ?? []).map(node => (
         <TreeViewNode
           node={node}
           key={getNodeId(node)}
+          selectable={props.selectable}
+          multiSelectable={props.multiSelectable}
+          shouldExpandOnNodeClick={props.shouldExpandOnNodeClick}
           expandedNodes={expandedNodes}
           onToggleExpanded={onToggleExpanded}
-          getId={getNodeId}
+          getNodeId={getNodeId}
+          onCheckNode={onCheckNode}
           getChildNodes={getChildNodes}
-          selectable={props.selectable}
           renderNode={props.renderNode}
         />
       ))}
-    </>
+    </div>
   )
 })

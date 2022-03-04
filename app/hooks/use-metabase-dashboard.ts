@@ -3,16 +3,16 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useAsync } from 'react-use'
 
+import { useActiveBrand } from '@app/hooks/brand/use-active-brand'
 import dashboards, { IDashboard } from 'constants/metabase'
 import { selectUser } from 'selectors/user'
-import { getActiveBrand, getActiveTeamId } from 'utils/user-teams'
 
 export function useMetaBaseDashboard(key: string) {
   const [analyticsUrl, setAnalyticsUrl] = useState<string>()
 
   const user = useSelector(selectUser)
-  const activeBrand = getActiveBrand(user)
-  const activeBrandId = getActiveTeamId(user)
+  const activeBrand = useActiveBrand()
+  const activeBrandId = activeBrand.id
   const brandType: IBrandType = activeBrand?.brand_type!
 
   const dashboard: IDashboard = brandType ? dashboards[brandType][key] : null
