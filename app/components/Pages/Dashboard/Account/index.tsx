@@ -1,8 +1,8 @@
-import React, { ReactElement } from 'react'
+import { ReactElement } from 'react'
 
 import Box from '@material-ui/core/Box'
-import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
+import { useTitle } from 'react-use'
 
 import PageLayout from 'components/GlobalPageLayout'
 import { IAppState } from 'reducers'
@@ -15,19 +15,16 @@ interface Props {
 }
 
 const AccountLayout = ({ user, children }: Props) => {
+  useTitle('My Settings | Rechat')
+
   return (
-    <>
-      <Helmet>
-        <title>Account | Rechat</title>
-      </Helmet>
-      <PageLayout>
-        <PageLayout.Header title="Account Settings" />
-        <PageLayout.Main>
-          <SettingsTabs user={user} />
-          <Box paddingTop={1}>{children}</Box>
-        </PageLayout.Main>
-      </PageLayout>
-    </>
+    <PageLayout>
+      <PageLayout.Header title="My Settings" />
+      <PageLayout.Main>
+        <SettingsTabs user={user} />
+        <Box paddingTop={1}>{children}</Box>
+      </PageLayout.Main>
+    </PageLayout>
   )
 }
 

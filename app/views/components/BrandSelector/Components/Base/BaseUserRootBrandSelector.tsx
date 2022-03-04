@@ -11,11 +11,19 @@ export function BaseUserRootBrandSelector({
   rootBrandId,
   ...props
 }: BaseUserRootBrandSelectorProps) {
-  const { isError, isLoading, initialExpandedNodes, teams } =
-    useUserRootTeams(rootBrandId)
+  const {
+    isError,
+    isLoading,
+    searchTerm,
+    initialExpandedNodes,
+    handleSearch,
+    teams
+  } = useUserRootTeams(rootBrandId)
 
   return (
     <BaseTreeViewBrandSelector
+      searchTerm={searchTerm}
+      handleSearch={handleSearch}
       isLoading={isLoading}
       hasError={isError}
       initialExpandedNodes={initialExpandedNodes}

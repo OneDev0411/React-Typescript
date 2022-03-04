@@ -21,7 +21,7 @@ const useStyles = makeStyles(
     popup: {
       marginTop: theme.spacing(1),
       marginRight: theme.spacing(1),
-      zIndex: theme.zIndex.modal
+      zIndex: theme.zIndex.modal - 1
     },
     container: {
       marginTop: theme.spacing(1),

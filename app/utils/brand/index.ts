@@ -25,3 +25,38 @@ export const getBrandHelpCenterURL = (brand: IBrand): string => {
 
   return brandSettings.help_center
 }
+
+export const hasBrandCustomTheme = (brand: IBrand): boolean => {
+  const theme = brand.settings?.theme
+
+  if (!theme) {
+    return false
+  }
+
+  if (theme.navbar_logo) {
+    return true
+  }
+
+  const paletteKeysToCheck = Object.keys(theme.palette ?? [])
+
+  return paletteKeysToCheck.some(
+    key => Object.keys(theme.palette?.[key]).length > 0
+  )
+}
+
+export const isBrandUnderAncestor = (
+  brand: IBrand,
+  ancestor: IBrand
+): boolean => {
+  let currentAncestor: Nullable<IBrand> = brand.parent
+
+  while (currentAncestor) {
+    if (currentAncestor.id === ancestor.id) {
+      return true
+    }
+
+    currentAncestor = currentAncestor?.parent
+  }
+
+  return false
+}
