@@ -47,7 +47,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  accounts: Optional<IOAuthAccount[]>
+  accounts?: Optional<IOAuthAccount[]>
   isLoading: boolean
   events: ICalendarEvent[]
 }
