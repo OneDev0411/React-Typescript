@@ -23,8 +23,8 @@ const useStyles = makeStyles(
     boxContainer: {
       border: `1px solid ${theme.palette.grey[300]}`,
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.background.paper,
-      height: '295px',
+      backgroundColor: theme.palette.common.white,
+      height: '300px',
       padding: theme.spacing(1),
       overflowY: 'scroll',
       width: '100%'
@@ -35,13 +35,11 @@ const useStyles = makeStyles(
 
 interface Props {
   title?: string
-  emptyListingText?: string
   dashboardStyles?: boolean
 }
 
 export default function PromoteListingsSection({
   title = 'Promote Your Listings',
-  emptyListingText = 'No listing yet!',
   dashboardStyles = false
 }: Props) {
   const classes = useStyles()

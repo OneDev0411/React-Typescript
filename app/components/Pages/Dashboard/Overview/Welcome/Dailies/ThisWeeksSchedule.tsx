@@ -25,7 +25,7 @@ const useStyles = makeStyles(
       flex: 1
     },
     boxTitle: {
-      marginBottom: theme.spacing(2),
+      marginBottom: theme.spacing(1.5),
       display: 'flex',
       alignItems: 'flex-start'
     },
@@ -34,7 +34,7 @@ const useStyles = makeStyles(
       padding: theme.spacing(1),
       height: '300px',
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.background.paper,
+      backgroundColor: theme.palette.common.white,
       overflowY: 'scroll'
     },
     boxFooter: {
@@ -112,7 +112,7 @@ export function ThisWeeksSchedule({ accounts, isLoading, events }: Props) {
             iconSrc="/static/icons/empty-states/letter.svg"
             title="Connect Your Google / Outlook"
           >
-            <Box pt={3} display="flex">
+            <Box pt={3} display="flex" flexWrap="wrap">
               <Box mr={1} mb={1}>
                 <Button
                   variant="outlined"

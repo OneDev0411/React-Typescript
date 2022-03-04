@@ -14,7 +14,7 @@ const useStyles = makeStyles(
       flex: 1
     },
     boxTitle: {
-      marginBottom: theme.spacing(2),
+      marginBottom: theme.spacing(1.5),
       display: 'flex',
       alignItems: 'flex-start'
     },
@@ -23,7 +23,7 @@ const useStyles = makeStyles(
       padding: theme.spacing(1),
       height: '300px',
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.background.paper,
+      backgroundColor: theme.palette.common.white,
       overflowY: 'scroll'
     },
     boxFooter: {
