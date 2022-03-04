@@ -55,14 +55,10 @@ const AsyncSignIn = withGuest(
   })
 )
 
-const AsyncSignOut = withSignedInUser(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Auth/SignOut' /* webpackChunkName: "signout" */
-      )
-  })
-)
+const AsyncSignOut = Load({
+  loader: () =>
+    import('../components/Pages/Auth/SignOut' /* webpackChunkName: "signout" */)
+})
 
 const AsyncVerifyRequest = Load({
   loader: () =>
