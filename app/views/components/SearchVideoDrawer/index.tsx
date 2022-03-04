@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { Box, Button, makeStyles, Typography } from '@material-ui/core'
+import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import type { Model } from 'backbone'
 import unescape from 'lodash/unescape'
 
@@ -162,6 +162,25 @@ function SearchVideoDrawer({
     setVideo(null)
   }
 
+  const renderGeneratingThumbnail = () => {
+    return (
+      <Box mt="30%">
+        <Grid direction="column" alignItems="center" justifyContent="center">
+          <Grid item>
+            <LoadingContainer noPaddings />
+          </Grid>
+          <Grid item>
+            <Typography variant="body1" align="center">
+              Generating GIF thumbnail
+              <br />
+              This may take a few seconds.
+            </Typography>
+          </Grid>
+        </Grid>
+      </Box>
+    )
+  }
+
   const isLoadingState = isLoading || !isYouTubeReady
   const isEmptyState = !isLoadingState && result.length === 0
 
@@ -169,34 +188,40 @@ function SearchVideoDrawer({
     <OverlayDrawer open={isOpen} onClose={handleClose} width="690px">
       <OverlayDrawer.Header title="Insert a Youtube/Vimeo video" />
       <OverlayDrawer.Body className={classes.body}>
-        {isYouTubeReady && (
-          <Box flex={0} px={3} py={2}>
-            <SearchInput
-              onChange={handleSearchChange}
-              fullWidth
-              autoFocus
-              isLoading={isLoading}
-              placeholder="Search"
-              debounceTime={500}
-            />
-            <Typography className={classes.helpText} variant="caption">
-              Youtube and Vimeo links supported
-            </Typography>
-          </Box>
+        {isGeneratingThumbnail ? (
+          renderGeneratingThumbnail()
+        ) : (
+          <>
+            {isYouTubeReady && (
+              <Box flex={0} px={3} py={2}>
+                <SearchInput
+                  onChange={handleSearchChange}
+                  fullWidth
+                  autoFocus
+                  isLoading={isLoading}
+                  placeholder="Search"
+                  debounceTime={500}
+                />
+                <Typography className={classes.helpText} variant="caption">
+                  Youtube and Vimeo links supported
+                </Typography>
+              </Box>
+            )}
+            <Box flex={1} className={classes.result} px={3}>
+              {isLoadingState ? (
+                <LoadingContainer />
+              ) : isEmptyState ? (
+                <SearchVideoEmptyState />
+              ) : (
+                <SearchVideoResults
+                  videos={result}
+                  selected={video}
+                  onSelect={setVideo}
+                />
+              )}
+            </Box>
+          </>
         )}
-        <Box flex={1} className={classes.result} px={3}>
-          {isLoadingState ? (
-            <LoadingContainer />
-          ) : isEmptyState ? (
-            <SearchVideoEmptyState />
-          ) : (
-            <SearchVideoResults
-              videos={result}
-              selected={video}
-              onSelect={setVideo}
-            />
-          )}
-        </Box>
       </OverlayDrawer.Body>
       <OverlayDrawer.Footer rowReverse>
         <Button
