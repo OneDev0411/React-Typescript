@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react'
+
 import { Box, Button, List, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { connect, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 
+import { getOAuthAccounts } from '@app/models/o-auth-accounts/get-o-auth-accounts'
 import { AnimatedLoader } from 'components/AnimatedLoader'
 import CalendarEventListItem from 'components/CalendarEvent/ListItem'
 import { InlineBadge } from 'components/InlineBadge'
@@ -12,8 +15,6 @@ import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import OutlookIcon from 'components/SvgIcons/Outlook/IconOutlook'
 import { OAuthProvider } from 'constants/contacts'
 import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
-import { IAppState } from 'reducers'
-import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { EmptyState } from '../../components/EmptyState'
 
@@ -47,13 +48,30 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  accounts?: Optional<IOAuthAccount[]>
   isLoading: boolean
   events: ICalendarEvent[]
 }
 
-export function ThisWeeksSchedule({ accounts, isLoading, events }: Props) {
+export function ThisWeeksSchedule({ isLoading, events }: Props) {
   const dispatch = useDispatch()
+  const [gmailOrOutlookLoading, setGmailOrOutlookLoading] = useState(true)
+  const [gmailOrOutlookSynced, setGmailOrOutlookSynced] = useState(false)
+  const [googleAccount, setGoogleAccount] = useState(0)
+  const [outlookAccount, setOutlookAccount] = useState(0)
+
+  useEffect(() => {
+    async function checkOAuthAccounts() {
+      const google = await getOAuthAccounts(OAuthProvider.Google)
+      const outlook = await getOAuthAccounts(OAuthProvider.Outlook)
+
+      setGmailOrOutlookSynced(Boolean(google.length || outlook.length))
+      setGoogleAccount(google.length)
+      setOutlookAccount(outlook.length)
+      setGmailOrOutlookLoading(false)
+    }
+
+    checkOAuthAccounts()
+  }, [])
 
   const classes = useStyles()
 
@@ -100,52 +118,62 @@ export function ThisWeeksSchedule({ accounts, isLoading, events }: Props) {
             <AnimatedLoader />
           </>
         )}
-        {!isLoading && accounts?.length && filteredEvents.length === 0 && (
-          <EmptyState
-            description="You're all caught up!"
-            iconSrc="/static/icons/empty-states/letter.svg"
-          />
-        )}
-        {!isLoading && !accounts?.length && filteredEvents.length === 0 && (
-          <EmptyState
-            description="By connecting one or more of your accounts you’ll have your contacts, email and calendar all synced, both ways. Learn more."
-            iconSrc="/static/icons/empty-states/letter.svg"
-            title="Connect Your Google / Outlook"
-          >
-            <Box pt={3} display="flex" flexWrap="wrap">
-              <Box mr={1} mb={1}>
-                <Button
-                  variant="outlined"
-                  disabled={google.connecting}
-                  onClick={() => {
-                    handleGoogleConnect()
-                  }}
-                >
-                  <GoogleIcon
-                    size={iconSizes.medium}
-                    className={classes.listIcon}
-                  />
-                  Connect Your Google
-                </Button>
+        {!isLoading &&
+          !gmailOrOutlookLoading &&
+          gmailOrOutlookSynced &&
+          filteredEvents.length === 0 && (
+            <EmptyState
+              description="You're all caught up!"
+              iconSrc="/static/icons/empty-states/letter.svg"
+            />
+          )}
+        {!isLoading &&
+          !gmailOrOutlookLoading &&
+          !gmailOrOutlookSynced &&
+          filteredEvents.length === 0 && (
+            <EmptyState
+              description="By connecting one or more of your accounts you’ll have your contacts, email and calendar all synced, both ways. Learn more."
+              iconSrc="/static/icons/empty-states/letter.svg"
+              title="Connect Your Google / Outlook"
+            >
+              <Box pt={3} display="flex" flexWrap="wrap">
+                {!googleAccount && (
+                  <Box mr={1} mb={1}>
+                    <Button
+                      variant="outlined"
+                      disabled={google.connecting}
+                      onClick={() => {
+                        handleGoogleConnect()
+                      }}
+                    >
+                      <GoogleIcon
+                        size={iconSizes.medium}
+                        className={classes.listIcon}
+                      />
+                      Connect Your Google
+                    </Button>
+                  </Box>
+                )}
+                {!outlookAccount && (
+                  <Box>
+                    <Button
+                      variant="outlined"
+                      disabled={outlook.connecting}
+                      onClick={() => {
+                        outlook.connect()
+                      }}
+                    >
+                      <OutlookIcon
+                        size={iconSizes.medium}
+                        className={classes.listIcon}
+                      />
+                      Connect Your Outlook
+                    </Button>
+                  </Box>
+                )}
               </Box>
-              <Box>
-                <Button
-                  variant="outlined"
-                  disabled={outlook.connecting}
-                  onClick={() => {
-                    outlook.connect()
-                  }}
-                >
-                  <OutlookIcon
-                    size={iconSizes.medium}
-                    className={classes.listIcon}
-                  />
-                  Connect Your Outlook
-                </Button>
-              </Box>
-            </Box>
-          </EmptyState>
-        )}
+            </EmptyState>
+          )}
         {!isLoading && (
           <List>
             {filteredEvents.slice(0, NUMBER_OF_EVENTS_TO_SHOW).map(event => (
@@ -167,11 +195,4 @@ export function ThisWeeksSchedule({ accounts, isLoading, events }: Props) {
   )
 }
 
-function mapStateToProps(state: IAppState) {
-  return {
-    accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts),
-    user: state.user
-  }
-}
-
-export default connect(mapStateToProps)(ThisWeeksSchedule)
+export default ThisWeeksSchedule
