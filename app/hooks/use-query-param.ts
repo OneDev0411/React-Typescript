@@ -71,7 +71,9 @@ function useQueryParamBase(
  *
  * Please consider that it calls the `pushState` method under the hood to
  * insert a new state into the browser history.
+ * This hook will not store default value.
  * @param name The param name
+ * @param defaultValue The param default value
  * @returns [the param value, the setter function, the delete function]
  */
 export function useQueryParam(
@@ -87,7 +89,9 @@ export function useQueryParam(
  *
  * Please consider that it calls the `replaceState` method under the hood to
  * replace the state on the browser history.
+ * This hook will not store default value.
  * @param name The param name
+ * @param defaultValue The param default value
  * @returns [the param value, the setter function, the delete function]
  */
 export function useReplaceQueryParam(
@@ -104,8 +108,9 @@ export function useReplaceQueryParam(
  * Please consider that it calls the `pushState` method under the hood to insert
  * a new state into the browser history.
  *
- * Also, this hook deletes the param automatically if you pass an empty string.
+ * This hook will not store default value. Also, this hook deletes the param automatically if you pass an empty string.
  * @param name The param name
+ * @param defaultValue The param default value
  * @returns [the param value, the setter function, the delete function]
  */
 export function useAutoQueryParam(
@@ -122,8 +127,9 @@ export function useAutoQueryParam(
  * Please consider that it calls the `replaceState` method under the hood to
  * replace the state on the browser history.
  *
- * Also, this hook deletes the param automatically if you pass an empty string.
+ * This hook will not store default value. Also, this hook deletes the param automatically if you pass an empty string.
  * @param name The param name
+ * @param defaultValue The param default value
  * @returns [the param value, the setter function, the delete function]
  */
 export function useReplaceAutoQueryParam(
