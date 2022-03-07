@@ -3,11 +3,9 @@ import { useRef } from 'react'
 import { Box, Button, Grid } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { mdiPlus } from '@mdi/js'
-import { useSelector } from 'react-redux'
 
 import { EmptyState } from '@app/components/Pages/Dashboard/Overview/components/EmptyState'
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
-import { selectActiveBrandId } from '@app/selectors/brand'
 import { goTo } from '@app/utils/go-to'
 import Link from '@app/views/components/ALink'
 import CardSkeleton from '@app/views/components/CardSkeleton'
@@ -44,10 +42,9 @@ export default function PromoteListingsSection({
 }: Props) {
   const classes = useStyles()
 
-  const brandId = useSelector(selectActiveBrandId)
   const addMlsAccountButtonRef = useRef<Nullable<HTMLButtonElement>>(null)
 
-  const { listings, isLoading } = useBrandAndDealsListings(brandId)
+  const { listings, isLoading } = useBrandAndDealsListings()
 
   const handleAddMlsAccountClick = () => {
     // Go to settings and open add MLS account dialog

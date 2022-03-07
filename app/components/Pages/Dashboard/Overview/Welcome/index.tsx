@@ -16,13 +16,12 @@ import { ThunkDispatch } from 'redux-thunk'
 import { AccessButton } from '@app/components/Pages/Dashboard/Overview/components/AccessButton'
 import { EmptyState } from '@app/components/Pages/Dashboard/Overview/components/EmptyState'
 import { ACL } from '@app/constants/acl'
+import { useActiveBrandId } from '@app/hooks/brand'
 import { activateIntercom } from '@app/store_actions/intercom'
-import { getActiveTeamId } from '@app/utils/user-teams'
 import MetabaseDashboard from 'components/MetabaseIFrame'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { IAppState } from 'reducers'
 import { InboxAction } from 'reducers/inbox/types'
-import { selectUser } from 'selectors/user'
 import Acl from 'views/components/Acl'
 
 import PromoteListingsSection from '../../Marketing/Overview/Sections/PromoteListingsSection'
@@ -85,8 +84,8 @@ function OverviewDashboard() {
 
   const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
 
-  const user = useSelector(selectUser)
-  const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
+  const activeBrandId = useActiveBrandId()
+  const [statuses] = useBrandStatuses(activeBrandId)
 
   const { isActive: isIntercomActive } = useSelector(
     (state: IAppState) => state.intercom
