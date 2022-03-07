@@ -5,7 +5,7 @@ import AddToFlowButton from 'components/AddToFlowButton'
 
 import { CellProps } from '../../types'
 
-import CellContainer from './CellContainer'
+import { CellContainer } from './CellContainer'
 
 const useStyles = makeStyles(
   theme => ({

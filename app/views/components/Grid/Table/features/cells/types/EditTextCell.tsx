@@ -4,7 +4,7 @@ import cn from 'classnames'
 import { TextInlineEdit } from '@app/views/components/Grid/Table/features/inline-edit/Text'
 
 import { CellProps } from '../../../types'
-import CellContainer from '../CellContainer'
+import { CellContainer } from '../CellContainer'
 
 const useStyles = makeStyles(
   theme => ({

@@ -99,7 +99,7 @@ const useStyles = makeStyles(
   { name: 'CellContainer' }
 )
 
-const CellContainer = ({
+export const CellContainer = ({
   actionsActivated = false,
   isEmpty = true,
   isSelectable = false,
@@ -237,5 +237,3 @@ const CellContainer = ({
     </ClickAwayListener>
   )
 }
-
-export default CellContainer

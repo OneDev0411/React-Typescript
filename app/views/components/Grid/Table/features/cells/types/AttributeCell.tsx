@@ -2,12 +2,9 @@ import { Chip, makeStyles } from '@material-ui/core'
 import { mdiClose, mdiContentCopy } from '@mdi/js'
 import cn from 'classnames'
 
-import CellContainer, {
-  CellAction
-} from '@app/views/components/Grid/Table/features/cells/CellContainer'
-
 import { CellProps } from '../../../types'
 import AttributeInlineEdit from '../../inline-edit/Attribute'
+import { CellContainer, CellAction } from '../CellContainer'
 
 interface Props {
   attributes: IContactAttribute[]

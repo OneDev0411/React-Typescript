@@ -11,7 +11,7 @@ import { SelectorOption } from '@app/views/components/TagSelector/type'
 
 import { CellProps } from '../../types'
 
-import CellContainer from './CellContainer'
+import { CellContainer } from './CellContainer'
 
 const useStyles = makeStyles(
   theme => ({

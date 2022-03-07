@@ -1,6 +1,6 @@
 import { CellProps } from '../../../../types'
 import { DateInlineEdit } from '../../../inline-edit/Date'
-import CellContainer from '../../CellContainer'
+import { CellContainer } from '../../CellContainer'
 
 interface Props {
   value: Nullable<Date>
