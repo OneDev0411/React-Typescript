@@ -16,11 +16,12 @@ import LoadingContainer from 'components/LoadingContainer'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { getField } from 'models/Deal/helpers/context'
 
 import { ItemValue, ItemActions } from '../../Factsheet/styled'
 
 interface Props {
-  deal: IDeal<'listing_info'>
+  deal: IDeal
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -81,7 +82,7 @@ export function MlsConnect({ deal }: Props) {
     <>
       <ItemValue>
         {deal.listing ? (
-          <span>MLS# {deal.listing_info?.mls_number}</span>
+          <span>MLS# {getField(deal, 'mls_number')}</span>
         ) : (
           <Button
             size="small"
