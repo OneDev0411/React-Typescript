@@ -1,13 +1,11 @@
-import React from 'react'
-
 import { Box, Grid, Typography, makeStyles } from '@material-ui/core'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import LoadingContainer from 'components/LoadingContainer'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
 import { MarketingTemplatePickerProps } from 'components/MarketingTemplatePickers/types'
 import Masonry from 'components/Masonry'
 import { useInfinitePagination } from 'hooks/use-infinite-pagination'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { useTemplates } from '../../../../components/Pages/Dashboard/Marketing/hooks/use-templates'
 
@@ -23,17 +21,16 @@ const useStyles = makeStyles(
 )
 
 export default function TemplatesList({
-  user,
   templateTypes,
   mediums = [],
   containerRef,
   onSelect
 }: MarketingTemplatePickerProps) {
   const classes = useStyles()
-  const activeBrand = getActiveTeamId(user)
+  const activeBrandId = useActiveBrandId()
 
   const { templates, isLoading } = useTemplates(
-    activeBrand,
+    activeBrandId,
     mediums,
     templateTypes
   )

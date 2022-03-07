@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -6,7 +6,9 @@ import _ from 'underscore'
 import isEmail from 'validator/es/lib/isEmail'
 
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
+import { ACL } from 'constants/acl'
 import { searchContacts } from 'models/contacts/search-contacts'
+import { getTeamACL } from 'utils/acl'
 
 import {
   getContactUsers,
@@ -16,12 +18,11 @@ import {
 import { selectDefinitionByName } from '../../../reducers/contacts/attributeDefs'
 import Fetch from '../../../services/fetch'
 import { isValidPhoneNumber, formatPhoneNumber } from '../../../utils/helpers'
-import { getActiveTeamACL } from '../../../utils/user-teams'
 
 import Recipients from './recipients'
 import Suggestions from './suggestions'
 
-class Compose extends React.Component {
+class Compose extends Component {
   constructor(props) {
     super(props)
 
@@ -40,9 +41,9 @@ class Compose extends React.Component {
     // if component reopen, clear recipient
     this.onChangeRecipients()
 
-    const acl = getActiveTeamACL(this.props.user)
+    const acl = getTeamACL(this.props.activeTeam)
 
-    this.hasContactsPermission = acl.includes('CRM')
+    this.hasContactsPermission = acl.includes(ACL.CRM)
   }
 
   /**
@@ -418,11 +419,12 @@ Compose.defaultProps = {
   roomUsers: []
 }
 
-function mapStateToProps({ contacts, user }) {
+function mapStateToProps({ contacts, user, activeTeam = null }) {
   const { attributeDefs } = contacts
 
   return {
     attributeDefs,
+    activeTeam,
     user
   }
 }

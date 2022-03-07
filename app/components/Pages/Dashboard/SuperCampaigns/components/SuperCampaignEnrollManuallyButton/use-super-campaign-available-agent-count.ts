@@ -5,7 +5,8 @@ import useAsync from '@app/hooks/use-async'
 export function useSuperCampaignAvailableAgentCount(
   teamAgentsModelFn: () => Promise<IBrand[]>,
   enrolledAgentCount: number,
-  eligibleBrands: Nullable<string[]>
+  eligibleBrands: Nullable<string[]>,
+  superCampaignTags: Nullable<string[]>
 ): number {
   const {
     run,
@@ -36,7 +37,7 @@ export function useSuperCampaignAvailableAgentCount(
         )
       }, 0)
     })
-  }, [run, teamAgentsModelFn, eligibleBrands])
+  }, [run, teamAgentsModelFn, eligibleBrands, superCampaignTags])
 
   if (isLoading) {
     return 0

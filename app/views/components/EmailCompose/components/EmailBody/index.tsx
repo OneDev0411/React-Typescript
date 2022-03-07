@@ -1,4 +1,4 @@
-import React, { ReactNode, RefObject, useCallback, useState } from 'react'
+import { ReactNode, RefObject, useCallback, useState } from 'react'
 
 import { EditorState } from 'draft-js'
 import { Options as ImportOptions } from 'draft-js-import-html'
@@ -10,7 +10,7 @@ import {
   uploadEmailAttachment,
   UploadOrigin
 } from 'models/email/upload-email-attachment'
-import { selectUserEmailSignature } from 'selectors/user'
+import { selectUserEmailSignatureImpersonateFirst } from 'selectors/user'
 
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
 import { TextEditorProps, TextEditorRef } from '../../../TextEditor/types'
@@ -56,7 +56,7 @@ const EmailBody = ({
   const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
   const [upload] = useUploadAttachment(uploadAttachment, uploadOrigin)
 
-  const signature = useSelector(selectUserEmailSignature)
+  const signature = useSelector(selectUserEmailSignatureImpersonateFirst)
 
   const uploadImage = useCallback(
     async file => {

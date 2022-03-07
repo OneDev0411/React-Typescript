@@ -5,10 +5,10 @@ import moment from 'moment'
 import { useSelector } from 'react-redux'
 import { WithRouterProps, withRouter } from 'react-router'
 
+import { useActiveTeam } from '@app/hooks/team/use-active-team'
 import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
 import { useMakeOriginQueryParamFromLocation } from '@app/hooks/use-make-origin-query-param-from-location'
 import { goTo } from '@app/utils/go-to'
-import { getActiveTeamId } from '@app/utils/user-teams'
 import { TrProps } from '@app/views/components/Grid/Table/types'
 import Grid from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
@@ -19,7 +19,6 @@ import {
   getPrice
 } from 'models/Deal/helpers/context'
 import { IAppState } from 'reducers'
-import { selectUser } from 'selectors/user'
 import { sortDealsStatus } from 'utils/sort-deals-status'
 
 import onDealOpened from '../../../utils/on-deal-opened'
@@ -46,14 +45,14 @@ interface Props {
 
 function BackOfficeGrid(props: Props & WithRouterProps) {
   const gridClasses = useGridStyles()
-
+  const activeTeam = useActiveTeam()
   const isFetchingDeals = useSelector(
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
   const deals = useSelector(({ deals }: IAppState) => deals.list)
   const roles = useSelector(({ deals }: IAppState) => deals.roles)
-  const user = useSelector(selectUser)
-  const brandChecklists = useBrandChecklists(getActiveTeamId(user)!)
+  const activeBrandId = activeTeam.brand.id
+  const brandChecklists = useBrandChecklists(activeBrandId)
 
   const getOffice = (deal: IDeal) => {
     let brand: IBrand | null = deal.brand
@@ -203,7 +202,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
           sorting={{
             columns: SORTABLE_COLUMNS,
             sortBy: getGridSort(
-              user,
+              activeTeam,
               columns,
               props.location,
               SORT_FIELD_SETTING_KEY

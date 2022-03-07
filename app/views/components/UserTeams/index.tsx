@@ -1,12 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 import { Button } from '@material-ui/core'
 import pluralize from 'pluralize'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { getTeams } from '@app/models/user/get-teams'
 import Drawer from 'components/OverlayDrawer'
 import { SearchContext } from 'components/TextWithHighlights'
 import { getAgents } from 'models/Deal/agent'
-import { getBrandUsers, isBackOffice, getActiveTeam } from 'utils/user-teams'
+import { isBackOffice } from 'utils/acl'
+import { getBrandUsers } from 'utils/user-teams'
 
 import Search from './Search'
 import Team from './Team'
@@ -35,28 +38,21 @@ export default function UserTeams({
   const [filteredBrandsWithMembers, setFilteredBrandsWithMembers] = useState<
     BrandWithMembers[]
   >([])
+  const activeTeam = useUnsafeActiveTeam()
   const [selectedBrands, setSelectedBrands] = useState<UUID[]>([])
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
     async function fetchBrandsWithMembers() {
-      if (!user.teams) {
+      if (!activeTeam) {
         setBrandsWithMembers([])
 
         return
       }
 
       // We should send a req and get all child brands if the user is BO
-      if (isBackOffice(user)) {
-        const activeTeam = getActiveTeam(user)
-
-        if (!activeTeam) {
-          setBrandsWithMembers([])
-
-          return
-        }
-
+      if (isBackOffice(activeTeam)) {
         const allAccessibleBrands: IBrand[] = await getAgents(
           activeTeam.brand.id
         )
@@ -73,8 +69,10 @@ export default function UserTeams({
         return
       }
 
+      const availableTeamToUser = await getTeams()
+
       setBrandsWithMembers(
-        user.teams.map(team => {
+        availableTeamToUser.map(team => {
           const brand = team.brand
 
           return {
@@ -86,7 +84,7 @@ export default function UserTeams({
     }
 
     fetchBrandsWithMembers()
-  }, [user, user.teams])
+  }, [activeTeam])
 
   useEffect(() => {
     if (!searchQuery) {

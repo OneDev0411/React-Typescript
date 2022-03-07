@@ -1,18 +1,21 @@
+import { IImpersonateUserState } from '@app/reducers/user/impersonate-user'
 import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
 
 import { EmailFormValues } from '../types'
 
 interface GetInitialValuesParams {
   allAccounts: IOAuthAccount[]
-  defaultValues?: Partial<EmailFormValues>
   defaultUser: IUser
+  impersonateUser?: IImpersonateUserState
+  defaultValues?: Partial<EmailFormValues>
   preferredAccountId?: UUID
 }
 
 export const getInitialValues = ({
   allAccounts,
-  defaultValues = {},
   defaultUser,
+  impersonateUser = null,
+  defaultValues = {},
   preferredAccountId = ''
 }: GetInitialValuesParams): Partial<EmailFormValues> => {
   let from = defaultValues.from
@@ -23,6 +26,7 @@ export const getInitialValues = ({
 
   from =
     from ??
+    impersonateUser ??
     allAccounts.find(({ type }) => type === GOOGLE_CREDENTIAL) ??
     allAccounts[0] ??
     defaultUser

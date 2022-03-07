@@ -5,25 +5,23 @@ import { mdiCogOutline, mdiPlus } from '@mdi/js'
 import { orderBy } from 'lodash'
 import pluralize from 'pluralize'
 import { Helmet } from 'react-helmet'
-import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useActiveTeam } from '@app/hooks/team/use-active-team'
 import { useBrandAssets } from '@app/hooks/use-brand-assets'
 import { useMarketingCenterMediums } from '@app/hooks/use-marketing-center-mediums'
 import { useMarketingCenterSections } from '@app/hooks/use-marketing-center-sections'
 import { useMarketingTemplateTypesWithMediums } from '@app/hooks/use-marketing-template-types-with-mediums'
 import useNotify from '@app/hooks/use-notify'
-import { selectActiveTeamId } from '@app/selectors/team'
-import { selectUser } from '@app/selectors/user'
+import {
+  hasUserAccessToBrandSettings,
+  hasUserAccessToUploadBrandAssets
+} from '@app/utils/acl'
 import { goTo } from '@app/utils/go-to'
 import {
   isBrandAsset,
   isTemplateInstance
 } from '@app/utils/marketing-center/helpers'
-import {
-  hasUserAccessToBrandSettings,
-  hasUserAccessToUploadBrandAssets
-} from '@app/utils/user-teams'
 import Acl from '@app/views/components/Acl'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import MarketingAssetUploadDrawer from '@app/views/components/MarketingAssetUploadDrawer'
@@ -81,9 +79,9 @@ export function MarketingLayout({
     { templateId?: UUID }
   >) {
   const classes = useStyles()
+  const activeTeam = useActiveTeam()
   const notify = useNotify()
-  const activeBrand = useSelector(selectActiveTeamId)
-  const user = useSelector(selectUser)
+  const activeBrandId = activeTeam.brand.id
   const [
     isMarketingAssetUploadDrawerOpen,
     setIsMarketingAssetUploadDrawerOpen
@@ -98,7 +96,7 @@ export function MarketingLayout({
     templates,
     isLoading: isLoadingTemplates,
     deleteTemplate
-  } = useTemplates(activeBrand)
+  } = useTemplates(activeBrandId)
 
   const currentMedium = params.medium
   const {
@@ -107,7 +105,7 @@ export function MarketingLayout({
     refetch: refetchBrandAssets,
     delete: deleteBrandAsset,
     hasDeleteAccess: hasDeleteAccessOnBrandAsset
-  } = useBrandAssets(activeBrand)
+  } = useBrandAssets(activeBrandId)
   const mediums = useMarketingCenterMediums(templates, assets)
 
   const templateTypesWithMediums = useMarketingTemplateTypesWithMediums(
@@ -155,8 +153,9 @@ export function MarketingLayout({
     return currentPageTemplatesAndAssets
   }, [currentMedium, templateTypes, templates, assets])
 
-  const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)
-  const hasAccessToUploadBrandAssets = hasUserAccessToUploadBrandAssets(user)
+  const hasAccessToBrandSettings = hasUserAccessToBrandSettings(activeTeam)
+  const hasAccessToUploadBrandAssets =
+    hasUserAccessToUploadBrandAssets(activeTeam)
 
   const onSelectTemplate = (
     template: IBrandMarketingTemplate | IMarketingTemplateInstance | IBrandAsset

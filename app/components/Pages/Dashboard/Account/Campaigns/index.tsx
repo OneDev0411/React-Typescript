@@ -5,11 +5,12 @@ import {
   makeStyles,
   Radio
 } from '@material-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
-import { selectUserSettingsInActiveTeam } from '@app/selectors/user'
-import { setUserSetting } from 'actions/user/set-setting'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
+import { getSettingFromTeam } from '@app/utils/user-teams'
 
 const SUPER_CAMPAIGN_ADMIN_PERMISSION = 'super_campaign_admin_permission'
 
@@ -27,19 +28,20 @@ const useStyles = makeStyles(
 
 function Campaigns() {
   const classes = useStyles()
-
+  const activeTeam = useUnsafeActiveTeam()
   const dispatch = useDispatch()
   const { isRunning, runActionThenNotify } = useRunActionThenNotify()
 
-  const superCampaignAdminPermission = useSelector(
-    selectUserSettingsInActiveTeam
-  )[SUPER_CAMPAIGN_ADMIN_PERMISSION]
+  const superCampaignAdminPermission = getSettingFromTeam(
+    activeTeam,
+    SUPER_CAMPAIGN_ADMIN_PERMISSION
+  )
 
   const handleChange = async (_: unknown, value: string) => {
     runActionThenNotify(
       async () => {
         await dispatch(
-          setUserSetting(SUPER_CAMPAIGN_ADMIN_PERMISSION, value === 'yes')
+          setActiveTeamSetting(SUPER_CAMPAIGN_ADMIN_PERMISSION, value === 'yes')
         )
       },
       'Campaigns enrollment has been saved',

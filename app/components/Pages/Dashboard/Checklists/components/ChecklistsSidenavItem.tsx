@@ -14,16 +14,15 @@ import {
   DraggableProvided,
   DraggableStateSnapshot
 } from 'react-beautiful-dnd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { browserHistory, Link } from 'react-router'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { confirmation } from 'actions/confirmation'
 import { addNotification as notify } from 'components/notification'
 import { deletePropertyType } from 'models/property-types/delete-property-type'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { getChecklistPageLink } from '../helpers/get-checklist-page-link'
 
@@ -85,14 +84,13 @@ export function ChecklistsSidenavItem({
   propertyType,
   onUpdate
 }: Props) {
-  const [isDeleted, setIsDeleted] = useState(false)
-
-  const user = useSelector(selectUser)
-  const dispatch = useDispatch()
   const classes = useStyles()
+  const [isDeleted, setIsDeleted] = useState(false)
+  const activeBrandId = useActiveBrandId()
+  const dispatch = useDispatch()
 
   const requestDelete = (propertyType: IDealPropertyType) => {
-    if (propertyType.brand !== getActiveTeamId(user)) {
+    if (propertyType.brand !== activeBrandId) {
       dispatch(
         confirmation({
           description: `You can not delete this property type because 
@@ -119,7 +117,7 @@ export function ChecklistsSidenavItem({
   const handleDelete = async (id: UUID) => {
     try {
       setIsDeleted(true)
-      await deletePropertyType(getActiveTeamId(user)!, id)
+      await deletePropertyType(activeBrandId, id)
 
       browserHistory.push('/dashboard/checklists')
 

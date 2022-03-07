@@ -1,7 +1,7 @@
 import {
   useQueryClient,
   MutationFunction,
-  UseMutationOptions,
+  UseMutationOptions as UseMutationOptionsOriginal,
   UseMutationResult,
   useMutation as useMutationOriginal,
   QueryKey
@@ -9,14 +9,19 @@ import {
 
 import { useQueryNotify, NotifyOptions } from './notify'
 
-interface Options<
+export interface UseMutationOptions<
   TData = unknown,
   TError = unknown,
   TVariables = void,
   TContext = unknown
-> extends UseMutationOptions<TData, TError, TVariables, TContext> {
+> extends Omit<
+    UseMutationOptionsOriginal<TData, TError, TVariables, TContext>,
+    'mutationFn'
+  > {
   notify?: NotifyOptions<TData, TError>
-  invalidates?: QueryKey[]
+  invalidates?:
+    | QueryKey[]
+    | ((data: TData, variables: TVariables, context: TContext) => QueryKey[])
 }
 
 export function useMutation<
@@ -26,7 +31,7 @@ export function useMutation<
   TContext = unknown
 >(
   mutationFn: MutationFunction<TData, TVariables>,
-  options?: Omit<Options<TData, TError, TVariables, TContext>, 'mutationFn'>
+  options?: UseMutationOptions<TData, TError, TVariables, TContext>
 ): UseMutationResult<TData, TError, TVariables, TContext> {
   const notify = useQueryNotify(options?.notify)
   const queryClient = useQueryClient()
@@ -50,7 +55,12 @@ export function useMutation<
     // No-op if options.notify is undefined
     notify.success(data)
 
-    options?.invalidates?.forEach?.(key => queryClient.invalidateQueries(key))
+    const invalidates =
+      typeof options?.invalidates === 'function'
+        ? options?.invalidates(data, variables, context)
+        : options?.invalidates
+
+    invalidates?.forEach?.(key => queryClient.invalidateQueries(key))
 
     return options?.onSuccess?.(data, variables, context)
   }

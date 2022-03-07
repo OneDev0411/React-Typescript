@@ -9,7 +9,7 @@ import * as schema from '../../schema'
 import { setTasks } from '../../task'
 import { setDeals } from '../set-deals'
 
-export function getDeals(user) {
+export function getDeals(team) {
   return async dispatch => {
     try {
       dispatch({
@@ -17,7 +17,7 @@ export function getDeals(user) {
         status: true
       })
 
-      const data = await Deal.getAll(user)
+      const data = await Deal.getAll(team)
 
       if (data.length === 0) {
         return dispatch({ type: actionTypes.NO_DEAL })

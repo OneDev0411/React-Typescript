@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, ReactElement } from 'react'
 
 import { Snackbar, Link, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -20,16 +20,16 @@ const useStyles = makeStyles((theme: Theme) => {
   }
 })
 
-interface CheckBrowserPropsType extends React.FC {
+interface CheckBrowserPropsType {
   id: string
-  children: React.ReactNode
+  children: ReactElement
 }
 
 function CheckBrowser(props: CheckBrowserPropsType) {
   const classes = useStyles()
   const status = browserStatus()
   const message = getMessage(status)
-  const [isShowSnackbar, setShowSnackbar] = React.useState(
+  const [isShowSnackbar, setShowSnackbar] = useState(
     !status.isSupported || status.isOutdated
   )
 

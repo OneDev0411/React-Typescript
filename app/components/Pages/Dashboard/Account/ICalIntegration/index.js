@@ -3,8 +3,8 @@ import React from 'react'
 import { Box, Typography } from '@material-ui/core'
 import omit from 'lodash/omit'
 import { Helmet } from 'react-helmet'
-import { connect } from 'react-redux'
 
+import { getTeams } from '@app/models/user/get-teams'
 import { addNotification as notify } from 'components/notification'
 import getCalenderFeedSetting from 'models/user/calendar-feed-setting'
 import { getTeamAvailableMembers } from 'utils/user-teams'
@@ -19,6 +19,7 @@ import UpdateGenerateUrlInfo from './UpdateGenerateUrlInfo'
 
 class ICalIntegration extends React.Component {
   state = {
+    teams: [],
     feedURl: '',
     selectedTypes: [],
     selectedMembers: {},
@@ -30,10 +31,10 @@ class ICalIntegration extends React.Component {
   }
 
   fetchData = async () => {
-    const { dispatch, user } = this.props
-    const { teams } = user
+    const { dispatch } = this.props
 
     try {
+      const teams = await getTeams()
       const feed = await getCalenderFeedSetting()
       const hasFeed = feed && Object.keys(feed).length > 0
 
@@ -64,6 +65,7 @@ class ICalIntegration extends React.Component {
       this.setState(() => {
         if (!hasFeed) {
           return {
+            teams,
             feedURl: '',
             selectedMembers,
             selectedTypes: []
@@ -71,6 +73,7 @@ class ICalIntegration extends React.Component {
         }
 
         return {
+          teams,
           feedURl: feed.url || '',
           selectedMembers,
           selectedTypes:
@@ -178,8 +181,7 @@ class ICalIntegration extends React.Component {
   }
 
   render() {
-    const { teams } = this.props.user
-    const { selectedTypes, selectedMembers } = this.state
+    const { teams, selectedTypes, selectedMembers } = this.state
 
     if (this.state.isFetchingSetting) {
       return <Loading />
@@ -226,6 +228,4 @@ class ICalIntegration extends React.Component {
   }
 }
 
-export default connect(({ user }) => ({
-  user
-}))(ICalIntegration)
+export default ICalIntegration

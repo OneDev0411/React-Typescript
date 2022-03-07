@@ -5,6 +5,7 @@ import cn from 'classnames'
 import { useSelector } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
 import { getTemplates } from 'models/instant-marketing/get-templates'
@@ -14,7 +15,6 @@ import {
 } from 'models/instant-marketing/triggers/helpers'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
-import { getActiveBrand } from 'utils/user-teams'
 
 import { getTemplateType } from '../helpers'
 
@@ -80,11 +80,12 @@ export const TemplateSelector = ({
 }: Props) => {
   const classes = useStyles()
   const user = useSelector<IAppState, IUser>(selectUser)
+  const activeBrand: Nullable<IBrand> = useUnsafeActiveBrand()
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
     useState<boolean>(false)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const brand: Nullable<IBrand> = useMemo(() => getActiveBrand(user), [user])
+
   const templatePreviewUrl: Nullable<string> = useMemo(() => {
     if (!selectedTemplate) {
       return null
@@ -103,7 +104,7 @@ export const TemplateSelector = ({
 
   const handleCreateTemplateInstance = async (
     template: IBrandMarketingTemplate
-  ) => createTemplateInstance(template, brand, { user })
+  ) => createTemplateInstance(template, activeBrand, { user })
 
   const handleSelectTemplate = async (
     template: IBrandMarketingTemplate | IMarketingTemplateInstance
@@ -169,14 +170,14 @@ export const TemplateSelector = ({
   useEffectOnce(() => {
     async function setInitialTemplate() {
       try {
-        if (!brand?.id || disabled) {
+        if (!activeBrand || disabled) {
           return
         }
 
         setIsLoading(true)
 
         const templates = await getTemplates(
-          brand.id,
+          activeBrand.id,
           [getTemplateType(attributeName)],
           ['Email']
         )

@@ -1,23 +1,25 @@
-import React, { Fragment } from 'react'
+import { Component, Fragment } from 'react'
 
 import { Button } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import { selectActiveBrandIdUnsafe } from '@app/selectors/brand'
+import { selectActiveTeamUnsafe } from '@app/selectors/team'
+import { selectUserImpersonateFirst } from '@app/selectors/user'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 import { PLACEHOLDER_IMAGE_URL } from 'components/InstantMarketing/constants'
 import { getHipPocketTemplateImagesUploader } from 'components/InstantMarketing/helpers/get-hip-pocket-template-image-uploader'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
-import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
 import { getBrandListings } from 'models/listings/search/get-brand-listings'
 import { selectContact } from 'reducers/contacts/list'
+import { hasUserAccessToMarketingCenter } from 'utils/acl'
 import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import SocialDrawer from '../../components/SocialDrawer'
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
@@ -43,7 +45,7 @@ const defaultProps = {
   isMultiListing: false
 }
 
-class SendMlsListingCard extends React.Component {
+class SendMlsListingCard extends Component {
   state = {
     listings: [],
     listingDrawerListings: [],
@@ -126,10 +128,10 @@ class SendMlsListingCard extends React.Component {
     }
 
     if (!this.props.isEdit) {
-      const brand = getActiveTeamId(this.props.user)
-
       try {
-        const listingDrawerListings = await getBrandListings(brand)
+        const listingDrawerListings = await getBrandListings(
+          this.props.activeBrandId
+        )
 
         this.setState({ listingDrawerListings })
       } catch (e) {
@@ -364,9 +366,9 @@ class SendMlsListingCard extends React.Component {
   }
 
   render() {
-    const { user, disabled } = this.props
+    const { activeTeam, disabled } = this.props
 
-    if (hasMarketingAccess(user) === false) {
+    if (!hasUserAccessToMarketingCenter(activeTeam)) {
       return null
     }
 
@@ -471,12 +473,14 @@ class SendMlsListingCard extends React.Component {
 SendMlsListingCard.propTypes = propTypes
 SendMlsListingCard.defaultProps = defaultProps
 
-function mapStateToProps({ contacts, deals, user }) {
+function mapStateToProps({ contacts, deals, ...state }) {
   return {
     contacts: contacts.list,
     deals: deals.list,
     attributeDefs: contacts.attributeDefs,
-    user
+    user: selectUserImpersonateFirst(state),
+    activeTeam: selectActiveTeamUnsafe(state),
+    activeBrandId: selectActiveBrandIdUnsafe(state)
   }
 }
 

@@ -1,8 +1,9 @@
-import React from 'react'
+import { Component } from 'react'
 
 import { Button } from '@material-ui/core'
 import uniqBy from 'lodash/uniqBy'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
 import { getUserTitle } from '../../../../models/user/helpers'
@@ -15,15 +16,14 @@ import { TeamMember } from '../TeamMember'
 const propTypes = {
   assignees: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   onChangeHandler: PropTypes.func.isRequired,
-  onRemoveHandler: PropTypes.func.isRequired,
-  owner: PropTypes.PropTypes.shape().isRequired
+  onRemoveHandler: PropTypes.func.isRequired
 }
 
-export class Assignees extends React.Component {
+class PresentationalAssignees extends Component {
   constructor(props) {
     super(props)
 
-    this.isSolo = isSoloActiveTeam(props.owner)
+    this.isSolo = isSoloActiveTeam(props.activeTeam)
 
     this.state = {
       isFetching: false,
@@ -38,10 +38,12 @@ export class Assignees extends React.Component {
   }
 
   loadMembers = async () => {
+    const { activeTeam } = this.props
+
     try {
       this.setState({ isFetching: true })
 
-      const members = await getMembers(this.props.owner)
+      const members = await getMembers(activeTeam?.brand.id)
 
       this.setState({
         isFetching: false,
@@ -121,4 +123,8 @@ export class Assignees extends React.Component {
   }
 }
 
-Assignees.propTypes = propTypes
+PresentationalAssignees.propTypes = propTypes
+
+export const Assignees = connect(({ activeTeam = null }) => ({ activeTeam }))(
+  PresentationalAssignees
+)

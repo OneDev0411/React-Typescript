@@ -5,12 +5,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { useQueryParam } from '@app/hooks/use-query-param'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { searchDeals, getDeals } from 'actions/deals'
-import { setUserSetting } from 'actions/user/set-setting'
 import PageLayout from 'components/GlobalPageLayout'
 import { IAppState } from 'reducers'
-import { selectUser } from 'selectors/user'
 
 import { DEAL_GRID_FILTER_SETTING_KEY } from '../../constants/settings'
 import { ExportDeals } from '../components/ExportDeals'
@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function AgentTable(props: WithRouterProps) {
   const classes = useStyles()
+  const activeTeam = useUnsafeActiveTeam()
   const [searchCriteria, setSearchCriteria] = useQueryParam('q')
   const dispatch = useDispatch()
 
@@ -48,12 +49,11 @@ export default function AgentTable(props: WithRouterProps) {
   const isFetchingDeals = useSelector(
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
-  const user = useSelector(selectUser)
 
   const fetch = useCallback(
-    (user: IUser, searchCriteria: string) => {
+    (team: Nullable<IUserTeam>, searchCriteria: string) => {
       dispatch(
-        searchCriteria ? searchDeals(user, searchCriteria) : getDeals(user)
+        searchCriteria ? searchDeals(team, searchCriteria) : getDeals(team)
       )
     },
     [dispatch]
@@ -61,13 +61,13 @@ export default function AgentTable(props: WithRouterProps) {
 
   useEffectOnce(() => {
     if (searchCriteria.length > 0 && !isFetchingDeals) {
-      fetch(user, searchCriteria)
+      fetch(activeTeam, searchCriteria)
     }
   })
 
   useEffect(() => {
     dispatch(
-      setUserSetting(DEAL_GRID_FILTER_SETTING_KEY, {
+      setActiveTeamSetting(DEAL_GRID_FILTER_SETTING_KEY, {
         term: searchCriteria
       })
     )
@@ -79,7 +79,7 @@ export default function AgentTable(props: WithRouterProps) {
     }
 
     setSearchCriteria(value)
-    fetch(user, value)
+    fetch(activeTeam, value)
   }
 
   return (

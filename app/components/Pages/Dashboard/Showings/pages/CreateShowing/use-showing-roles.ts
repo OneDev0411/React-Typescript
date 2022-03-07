@@ -2,9 +2,9 @@ import { useRef, useState } from 'react'
 
 import { useSelector } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { ACL } from 'constants/acl'
 import { selectDealRoles } from 'selectors/deals'
-import { selectActiveTeamId } from 'selectors/team'
 import { getBrandUsers } from 'utils/user-teams'
 
 import useActiveTeamBrandWithPermission from '../../hooks/use-active-team-brand-with-permission'
@@ -32,7 +32,7 @@ function useShowingRoles(): UseShowingRolesReturn {
   const dealRoles = useSelector(selectDealRoles)
   const activeBrand = useActiveTeamBrandWithPermission(ACL.SHOWINGS)
   const teamMembers = activeBrand ? getBrandUsers(activeBrand) : []
-  const teamId = useSelector(selectActiveTeamId)
+  const activeBrandId = useActiveBrandId()
   const nextRoleId = useRef<number>(1)
 
   const defaultRoles: ShowingRoleInput[] = [
@@ -41,7 +41,7 @@ function useShowingRoles(): UseShowingRolesReturn {
       role: 'SellerAgent',
       user: undefined,
       agent: undefined,
-      brand: teamId,
+      brand: activeBrandId,
       first_name: '',
       last_name: '',
       email: '',
@@ -69,9 +69,7 @@ function useShowingRoles(): UseShowingRolesReturn {
       id: `role-${nextRoleId.current++}`,
       ...person,
       agent:
-        person.user?.agents?.length === 1
-          ? person.user.agents[0].id
-          : undefined,
+        person.user?.agents?.length === 1 ? person.user.agents[0] : undefined,
       role,
       mode: 'form',
       deletable: role !== 'SellerAgent',
@@ -150,7 +148,7 @@ function useShowingRoles(): UseShowingRolesReturn {
       role,
       user: undefined,
       agent: undefined,
-      brand: teamId,
+      brand: activeBrandId,
       first_name: '',
       last_name: '',
       email: '',

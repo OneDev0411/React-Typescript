@@ -1,6 +1,5 @@
 import { useRef } from 'react'
 
-import { WithRouterProps } from 'react-router'
 import { useEffectOnce, useTitle } from 'react-use'
 
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
@@ -13,7 +12,7 @@ import { ViewAs } from 'components/ViewAs'
 
 import { useStyles as useCommonStyles } from './use-styles'
 
-export default function CalendarPage(props: WithRouterProps) {
+export default function CalendarPage() {
   useTitle('Calendar | Rechat')
 
   const classes = useCommonStyles()

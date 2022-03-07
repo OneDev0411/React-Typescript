@@ -1,8 +1,8 @@
-import React from 'react'
-
 import { Box, Typography, Tooltip, makeStyles } from '@material-ui/core'
 
-import { isSoloActiveTeam } from '../../../../../../utils/user-teams'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { isSoloActiveTeam } from 'utils/user-teams'
+
 import { ItemChangelog } from '../../../../../../views/components/TeamContact/ItemChangelog'
 import { TeamContactSelect } from '../../../../../../views/components/TeamContact/TeamContactSelect'
 
@@ -29,8 +29,9 @@ const useStyles = makeStyles(
 )
 export const Owner = props => {
   const classes = useStyles(props)
+  const activeTeam = useUnsafeActiveTeam()
 
-  if (props.user && isSoloActiveTeam(props.user)) {
+  if (isSoloActiveTeam(activeTeam)) {
     return null
   }
 

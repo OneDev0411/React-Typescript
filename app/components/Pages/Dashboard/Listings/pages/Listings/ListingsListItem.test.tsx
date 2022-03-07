@@ -8,6 +8,7 @@ import {
 } from '@testing-library/react'
 import { browserHistory } from 'react-router'
 
+import MockActiveTeam from 'tests/unit/fixtures/active-team/8cb4a358-8973-11e7-9089-0242ac110003.json'
 import MockBrand from 'tests/unit/fixtures/brands/e44ccc36-6530-11e9-b99a-0a95998482ac.json'
 import MockBrandListingsWithData from 'tests/unit/fixtures/listing/brandListings/brandListingsWithData.json'
 import MockDealsListingsWithData from 'tests/unit/fixtures/listing/dealsListings/dealsListingsWithData.json'
@@ -313,14 +314,9 @@ describe('Listings page / List item buttons', () => {
 
     it('should not render OH button if user has not access to CRM', async () => {
       const customReduxState = {
-        user: {
-          ...MockUserWithoutDeals,
-          teams: [
-            {
-              ...MockUserWithoutDeals.teams[0],
-              acl: ['STORE', 'Websites', 'Marketing', 'Admin']
-            }
-          ]
+        activeTeam: {
+          ...MockActiveTeam,
+          acl: ['STORE', 'Websites', 'Marketing', 'Admin']
         }
       }
 
@@ -350,14 +346,9 @@ describe('Listings page / List item buttons', () => {
 
     it('should not render OH button if user has not access to Marketing', async () => {
       const customReduxState = {
-        user: {
-          ...MockUserWithoutDeals,
-          teams: [
-            {
-              ...MockUserWithoutDeals.teams[0],
-              acl: ['STORE', 'Websites', 'CRM', 'Admin']
-            }
-          ]
+        activeTeam: {
+          ...MockActiveTeam,
+          acl: ['STORE', 'Websites', 'CRM', 'Admin']
         }
       }
 

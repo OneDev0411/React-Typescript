@@ -98,6 +98,7 @@ export const TemplateSelector = ({
 }: Props) => {
   const classes = useStyles()
   const user = useSelector<IAppState, IUser>(selectUser)
+
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
     useState<boolean>(false)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)

@@ -1,27 +1,27 @@
-import React from 'react'
-
 import { Helmet } from 'react-helmet'
-import { connect } from 'react-redux'
 
-import { isBackOffice } from '../../../../../utils/user-teams'
+import { ACL } from '@app/constants/acl'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 
 import AgentTable from './Agent'
 import BackOfficeTable from './BackOffice'
 
-const List = ({ isBackOffice, ...rest }) => (
-  <div data-test="deals-list">
-    <Helmet>
-      <title>Deals | Rechat</title>
-    </Helmet>
+const List = props => {
+  const isBackOffice = useAcl(ACL.BACK_OFFICE)
 
-    {isBackOffice ? <BackOfficeTable {...rest} /> : <AgentTable {...rest} />}
-  </div>
-)
+  return (
+    <div data-test="deals-list">
+      <Helmet>
+        <title>Deals | Rechat</title>
+      </Helmet>
 
-function mapStateToProps({ user }) {
-  return {
-    isBackOffice: isBackOffice(user)
-  }
+      {isBackOffice ? (
+        <BackOfficeTable {...props} />
+      ) : (
+        <AgentTable {...props} />
+      )}
+    </div>
+  )
 }
 
-export default connect(mapStateToProps)(List)
+export default List

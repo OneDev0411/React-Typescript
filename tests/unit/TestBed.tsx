@@ -13,6 +13,7 @@ import ConfirmationModalProvider from '@app/views/components/ConfirmationModal/c
 import { AppTheme } from '../../app/AppTheme'
 import reducers, { IAppState } from '../../app/reducers'
 
+import activeTeam from './fixtures/active-team/8cb4a358-8973-11e7-9089-0242ac110003.json'
 import user from './fixtures/users/agent.json'
 
 export const queryClient = new QueryClient({
@@ -38,7 +39,7 @@ interface Props {
 export function TestBed({ reduxState, children }: Props) {
   const store = createStore(
     enableBatching(reducers),
-    { user, ...reduxState },
+    { user, activeTeam, ...reduxState },
     applyMiddleware(thunk)
   )
 

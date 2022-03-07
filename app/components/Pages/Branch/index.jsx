@@ -1,5 +1,5 @@
 // Branch.js
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import * as BranchSDK from 'branch-sdk-rechat'
 import idx from 'idx'
@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { useDeepCompareEffect } from 'react-use'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { selectUser } from 'selectors/user'
-import { getActiveBrand } from 'utils/user-teams'
 
 import publicConfig from '../../../../config/public'
 import { lookUpUserByEmail } from '../../../models/user/lookup-user-by-email'
@@ -23,6 +23,10 @@ import redirectHandler from './helpers/redirectHandler'
 const branchKey = publicConfig.branch.key
 
 const Branch = ({ location }) => {
+  const dispatch = useDispatch()
+  const loggedInUser = useSelector(selectUser)
+  const activeBrand = useUnsafeActiveBrand()
+
   const [activeModal, setActiveModal] = useState(null)
   const [branchData, setBranchData] = useState(null)
   const [content, setContent] = useState(<Loading />)
@@ -30,14 +34,9 @@ const Branch = ({ location }) => {
     'waitingForRedirect'
   )
 
-  const dispatch = useDispatch()
-  const loggedInUser = useSelector(selectUser)
-
-  const brand = getActiveBrand(loggedInUser)
-
   useDeepCompareEffect(() => {
     if (activeModal) {
-      const brandInfo = getBrandInfo(brand)
+      const brandInfo = getBrandInfo(activeBrand)
       const { name, params } = activeModal
 
       switch (name) {
