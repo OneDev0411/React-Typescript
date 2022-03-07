@@ -1,12 +1,8 @@
-import { useMemo, useState, useEffect, SetStateAction, Dispatch } from 'react'
-
-import { useQueryState } from 'use-location-state'
+import { useMemo, useState, SetStateAction, Dispatch } from 'react'
 
 import { useActiveBrandId } from '@app/hooks/brand'
 import { useBrandPropertyTypes } from '@app/hooks/use-get-brand-property-types'
 
-import { DEALS_LIST_DEFAULT_FILTERS } from '../constants'
-import { getActivePropertyGroups } from '../helpers/get-active-property-groups'
 import { TPropertyGroupType, TPropertyGroup } from '../types'
 
 export const usePropertyTypeFilter = (): [
@@ -16,10 +12,6 @@ export const usePropertyTypeFilter = (): [
 ] => {
   const activeBrandId = useActiveBrandId()
 
-  const [propertyTypeParamValue] = useQueryState(
-    'propertyType',
-    DEALS_LIST_DEFAULT_FILTERS.property_type || []
-  )
   const { propertyTypes } = useBrandPropertyTypes(activeBrandId)
 
   const groupedProperties = useMemo(() => {
@@ -35,17 +27,6 @@ export const usePropertyTypeFilter = (): [
   }, [propertyTypes])
 
   const [propertyGroup, setPropertyGroup] = useState<TPropertyGroupType[]>([])
-
-  useEffect(() => {
-    const initialPropertyGroupValue = getActivePropertyGroups(
-      propertyTypeParamValue as UUID[],
-      propertyTypes
-    )
-
-    setPropertyGroup(initialPropertyGroupValue)
-    // it should be called only once when propertyTypes is loaded
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propertyTypes])
 
   return [propertyGroup, setPropertyGroup, groupedProperties]
 }

@@ -69,11 +69,12 @@ export const PropertyTypeEditor = ({
       toggledProperyTypes.length !== 1
         ? {
             contexts: {
-              ...(filters.contexts ?? {}),
-              lease_begin: undefined,
-              lease_end: undefined,
-              contract_date: undefined,
-              closing_date: undefined
+              ...(filters.contexts?.expiration_date
+                ? { expiration_date: filters.contexts.expiration_date }
+                : {}),
+              ...(filters.contexts?.list_date
+                ? { expiration_date: filters.contexts.list_date }
+                : {})
             }
           }
         : {
@@ -197,6 +198,7 @@ export const PropertyTypeEditor = ({
           defaultFilters.property_type
         )}
         onClickReset={() => {
+          console.log('reset', defaultFilters.property_type)
           onChangePropertyGroup([])
           updateFilters({
             property_type: defaultFilters.property_type
