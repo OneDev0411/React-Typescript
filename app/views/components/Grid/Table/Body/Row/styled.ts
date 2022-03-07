@@ -6,18 +6,15 @@ export const RowContainer = styled.div<{
   selected: boolean
   theme: Theme
 }>`
-  ${({ theme, index, selected }) => css`
+  ${({ theme, index, selected }) => `
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-family: '${theme.typography.body2.fontFamily}';
-    font-weight: ${theme.typography.body2.fontWeight};
-    font-size: ${theme.typography.body2.fontSize};
-    line-height: ${theme.typography.body2.lineHeight};
+    ${theme.typography.body2};
 
-    background-color: ${index % 2 === 0
-      ? theme.palette.grey[50]
-      : 'transparent'};
+    background-color: ${
+      index % 2 === 0 ? theme.palette.grey[50] : 'transparent'
+    };
 
     .column:first-child {
       padding-left: ${theme.spacing(1)}px;
@@ -44,35 +41,11 @@ export const RowContainer = styled.div<{
       display: block !important;
     }
 
-    ${selected &&
-    css`
-      background-color: ${theme.palette.action.selected};
-    `}
-  `}
-`
-
-export const GridRowContainer = styled.div<{
-  selected: boolean
-  theme: Theme
-}>`
-  ${({ theme, selected }) => `
-    cursor: pointer;
-    ${selected ? `background-color: ${theme.palette.grey[100]};` : ''}
-    
-    display: flex;
-    align-items: stretch;
-    background-color: transparent;
-
-    &:hover {
-      background-color: ${theme.palette.grey[50]};
-    }
-
-    &:hover .selection--default-value {
-      display: none !important;
-    }
-
-    &:hover .selection--checkbox {
-      display: block !important;
+    ${
+      selected &&
+      css`
+        background-color: ${theme.palette.action.selected};
+      `
     }
   `}
 `

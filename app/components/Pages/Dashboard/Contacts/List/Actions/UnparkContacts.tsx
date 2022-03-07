@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { mdiAccountArrowLeftOutline } from '@mdi/js'
 import { useDispatch } from 'react-redux'
 
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
+import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
 import { addNotification as notify } from 'components/notification'
 import { generateContactFilters } from 'models/contacts/bulk-tag/utils/generate-contact-filters'
 import { unparkContact } from 'models/contacts/unparak-contact'

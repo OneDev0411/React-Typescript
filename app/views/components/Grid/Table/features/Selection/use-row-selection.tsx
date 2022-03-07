@@ -1,6 +1,12 @@
+import React from 'react'
+
+import { SELECTION__TOGGLE_ROW } from '../../context/constants'
+import { getRowId } from '../../helpers/get-row-id'
+import { useGridContext } from '../../hooks/use-grid-context'
 import { TableColumn, RenderProps, GridSelectionOptions } from '../../types'
 
-import ToggleRow from './ToggleRow'
+import Checkbox from './Checkbox'
+import { isRowSelected } from './helpers/is-row-selected'
 
 export function useRowsSelection<Row>(
   columns: TableColumn<Row>[],
@@ -10,18 +16,61 @@ export function useRowsSelection<Row>(
   columns: TableColumn<Row>[]
   rows: Row[]
 } {
+  const [state, dispatch] = useGridContext()
+
+  const handleToggleRow = (rowItem: RenderProps<Row>): void => {
+    const rowId = getRowId<Row>(rowItem.row, rowItem.rowIndex)
+
+    dispatch({
+      type: SELECTION__TOGGLE_ROW,
+      id: rowId,
+      totalRows: rowItem.totalRows
+    })
+  }
+
   const newColumns = [
     {
       id: 'row-selection',
-      width: 'auto', // default value
+      class: 'opaque',
+      width: '40px', // default value
       ...(options.columnProps || {}),
       render: (rowItem: RenderProps<Row>) => {
+        const showDefaultValue =
+          options.defaultRender &&
+          state.selection.selectedRowIds.length === 0 &&
+          !state.selection.isAllRowsSelected &&
+          !state.selection.isEntireRowsSelected
+
         return (
-          <ToggleRow
-            rowItem={rowItem}
-            render={options.render}
-            defaultRender={options.defaultRender}
-          />
+          <>
+            <div
+              className="selection--default-value"
+              style={{
+                display: showDefaultValue ? 'block' : 'none'
+              }}
+            >
+              {options.defaultRender && options.defaultRender(rowItem)}
+            </div>
+
+            <div
+              className="selection--checkbox"
+              style={{ display: showDefaultValue ? 'none' : 'block' }}
+              onClick={e => e.stopPropagation()}
+            >
+              {options.render ? (
+                options.render(rowItem)
+              ) : (
+                <Checkbox
+                  checked={isRowSelected<Row>(
+                    state,
+                    rowItem.row,
+                    rowItem.rowIndex
+                  )}
+                  onChange={() => handleToggleRow(rowItem)}
+                />
+              )}
+            </div>
+          </>
         )
       }
     },

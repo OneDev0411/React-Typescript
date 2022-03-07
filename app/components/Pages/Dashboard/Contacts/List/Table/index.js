@@ -12,18 +12,18 @@ import cn from 'classnames'
 import { useBreakpoint } from '@app/hooks/use-breakpoint'
 import { Table } from '@app/views/components/Grid/Table'
 import { resetRows } from '@app/views/components/Grid/Table/context/actions/selection/reset-rows'
-import { BirthdayCell } from '@app/views/components/Grid/Table/features/cells/BirthdayCell'
-import { EmailCell } from '@app/views/components/Grid/Table/features/cells/EmailCell'
-import FlowsCell from '@app/views/components/Grid/Table/features/cells/FlowsCell'
-import ColumnHeaderCell from '@app/views/components/Grid/Table/features/cells/header/ColumnHeaderCell'
-import { LastTouchCell } from '@app/views/components/Grid/Table/features/cells/LastTouchCell'
-import { PhoneNumberCell } from '@app/views/components/Grid/Table/features/cells/PhoneNumberCell'
-import TagsCell from '@app/views/components/Grid/Table/features/cells/TagsCell'
-import { EditTextCell } from '@app/views/components/Grid/Table/features/cells/types/EditTextCell'
+// import { BirthdayCell } from '@app/views/components/Grid/Table/features/cells.bkp/BirthdayCell'
+// import { EmailCell } from '@app/views/components/Grid/Table/features/cells.bkp/EmailCell'
+// import FlowsCell from '@app/views/components/Grid/Table/features/cells.bkp/FlowsCell'
+// import ColumnHeaderCell from '@app/views/components/Grid/Table/features/cells/header/ColumnHeaderCell'
+// import { LastTouchCell } from '@app/views/components/Grid/Table/features/cells.bkp/LastTouchCell'
+// import { PhoneNumberCell } from '@app/views/components/Grid/Table/features/cells.bkp/PhoneNumberCell'
+// import TagsCell from '@app/views/components/Grid/Table/features/cells.bkp/TagsCell'
+// import { EditTextCell } from '@app/views/components/Grid/Table/features/cells.bkp/types/EditTextCell'
 import { useGridContext } from '@app/views/components/Grid/Table/hooks/use-grid-context'
 import {
-  useGridStyles,
-  useInlineGridStyles
+  useGridStyles
+  // useInlineGridStyles
 } from '@app/views/components/Grid/Table/styles'
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 
@@ -61,7 +61,7 @@ const ContactsList = props => {
   const [state, dispatch] = useGridContext()
 
   const gridClasses = useGridStyles()
-  const inlineGridClasses = useInlineGridStyles()
+  // const inlineGridClasses = useInlineGridStyles()
   const customGridClasses = useCustomGridStyles()
   const breakpoint = useBreakpoint()
 
@@ -99,206 +99,220 @@ const ContactsList = props => {
   const columns = [
     {
       id: 'name',
-      headerName: ({ rows, column, width }) => (
-        <ColumnHeaderCell
-          title={getSelectedInfo(rows.length)}
-          isPrimary
-          width={width}
-          sortable={column.sortable}
-        />
-      ),
+      // headerName: ({ rows, column, width }) => (
+      //   <ColumnHeaderCell
+      //     title={getSelectedInfo(rows.length)}
+      //     isPrimary
+      //     width={width}
+      //     sortable={column.sortable}
+      //   />
+      // ),
       width: '230px',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
       render: ({ row: contact, isRowSelected, column }) => {
         const name = getAttributeFromSummary(contact, 'display_name')
 
-        if (column.isHidden) {
-          return null
-        }
+        // if (column.isHidden) {
+        //   return null
+        // }
 
-        return (
-          <EditTextCell
-            text={name}
-            isPrimary
-            isRowSelected={isRowSelected}
-            width={column.width}
-          />
-        )
+        // return (
+        //   <EditTextCell
+        //     text={name}
+        //     isPrimary
+        //     isRowSelected={isRowSelected}
+        //     // width={column.width}
+        //   />
+        // )
+
+        return <div>1</div>
       }
     },
     {
       id: 'tag',
-      headerName: ({ column, width }) => (
-        <ColumnHeaderCell
-          title="Tags"
-          iconPath={mdiTagMultipleOutline}
-          sortable={column.sortable}
-          width={width}
-        />
-      ),
+      // headerName: ({ column, width }) => (
+      //   <ColumnHeaderCell
+      //     title="Tags"
+      //     iconPath={mdiTagMultipleOutline}
+      //     sortable={column.sortable}
+      //     width={width}
+      //   />
+      // ),
       isHidden: ['xs', 'sm'].includes(breakpoint),
       sortable: false,
       width: '200px',
       render: ({ row: contact, isRowSelected, column }) => {
-        if (column.isHidden) {
-          return null
-        }
+        // if (column.isHidden) {
+        //   return null
+        // }
 
-        return (
-          <TagsCell
-            contact={contact}
-            reloadContacts={props.reloadContacts}
-            hasAttributeFilters={
-              (props.filters?.attributeFilters || []).length > 0
-            }
-            isParkTabActive={isParkTabActive}
-            isRowSelected={isRowSelected}
-            width={column.width}
-          />
-        )
+        // return (
+        //   <TagsCell
+        //     contact={contact}
+        //     reloadContacts={props.reloadContacts}
+        //     hasAttributeFilters={
+        //       (props.filters?.attributeFilters || []).length > 0
+        //     }
+        //     isParkTabActive={isParkTabActive}
+        //     isRowSelected={isRowSelected}
+        //     // width={column.width}
+        //   />
+        // )
+
+        return <div>2</div>
       }
     },
     {
       id: 'phone',
-      headerName: ({ column, width }) => (
-        <ColumnHeaderCell
-          title="Phone"
-          iconPath={mdiPhoneOutline}
-          sortable={column.sortable}
-          width={width}
-        />
-      ),
+      // headerName: ({ column, width }) => (
+      //   <ColumnHeaderCell
+      //     title="Phone"
+      //     iconPath={mdiPhoneOutline}
+      //     sortable={column.sortable}
+      //     width={width}
+      //   />
+      // ),
       sortable: false,
       width: '210px',
       render: ({ row: contact, isRowSelected, column }) => {
-        if (column.isHidden) {
-          return null
-        }
+        // if (column.isHidden) {
+        //   return null
+        // }
 
-        return (
-          <PhoneNumberCell
-            contact={contact}
-            isRowSelected={isRowSelected}
-            width={column.width}
-          />
-        )
+        // return (
+        //   <PhoneNumberCell
+        //     contact={contact}
+        //     isRowSelected={isRowSelected}
+        //     // width={column.width}
+        //   />
+        // )
+
+        return <div>3</div>
       }
     },
     {
       id: 'email',
-      headerName: ({ column, width }) => (
-        <ColumnHeaderCell
-          title="Email"
-          iconPath={mdiEmailOutline}
-          sortable={column.sortable}
-          width={width}
-        />
-      ),
+      // headerName: ({ column, width }) => (
+      //   <ColumnHeaderCell
+      //     title="Email"
+      //     iconPath={mdiEmailOutline}
+      //     sortable={column.sortable}
+      //     width={width}
+      //   />
+      // ),
       sortable: false,
       isHidden: ['xs'].includes(breakpoint),
       width: '290px',
       render: ({ row: contact, isRowSelected, column }) => {
-        if (column.isHidden) {
-          return null
-        }
+        // if (column.isHidden) {
+        //   return null
+        // }
 
-        return (
-          <EmailCell
-            contact={contact}
-            isRowSelected={isRowSelected}
-            width={column.width}
-          />
-        )
+        // return (
+        //   <EmailCell
+        //     contact={contact}
+        //     isRowSelected={isRowSelected}
+        //     // width={column.width}
+        //   />
+        // )
+
+        return <div>4</div>
       }
     },
     {
       id: 'last_touched',
-      headerName: ({ column, width }) => (
-        <ColumnHeaderCell
-          title="Last Touch"
-          iconPath={mdiCalendarOutline}
-          sortable={column.sortable}
-          width={width}
-          // sortDirection={(
-          //   ["last_touch", "-last_touch"].includes(sortOrder) &&
-          //   (sortOrder.startsWith("-") ? "desc" : "asc")
-          // )}
-        />
-      ),
+      // headerName: ({ column, width }) => (
+      //   <ColumnHeaderCell
+      //     title="Last Touch"
+      //     iconPath={mdiCalendarOutline}
+      //     sortable={column.sortable}
+      //     width={width}
+      //     // sortDirection={(
+      //     //   ["last_touch", "-last_touch"].includes(sortOrder) &&
+      //     //   (sortOrder.startsWith("-") ? "desc" : "asc")
+      //     // )}
+      //   />
+      // ),
       isHidden: ['xs'].includes(breakpoint),
       sortable: false,
       width: '150px',
       render: ({ row: contact, isRowSelected, column }) => {
-        if (column.isHidden) {
-          return null
-        }
+        // if (column.isHidden) {
+        //   return null
+        // }
 
-        return (
-          <LastTouchCell
-            contact={contact}
-            isRowSelected={isRowSelected}
-            width={column.width}
-          />
-        )
+        // return (
+        //   <LastTouchCell
+        //     contact={contact}
+        //     isRowSelected={isRowSelected}
+        //     // width={column.width}
+        //   />
+        // )
+
+        return <div>5</div>
       }
     },
     {
       id: 'flows',
-      headerName: ({ column, width }) => (
-        <ColumnHeaderCell
-          title="Flows"
-          iconPath={mdiLightningBoltOutline}
-          sortable={column.sortable}
-          width={width}
-        />
-      ),
+      // headerName: ({ column, width }) => (
+      //   <ColumnHeaderCell
+      //     title="Flows"
+      //     iconPath={mdiLightningBoltOutline}
+      //     sortable={column.sortable}
+      //     width={width}
+      //   />
+      // ),
       width: '110px',
       isHidden: breakpoint !== 'xl',
       render: ({ row: contact, isRowSelected, column }) => {
-        if (column.isHidden) {
-          return null
-        }
+        // if (column.isHidden) {
+        //   return null
+        // }
 
-        return (
-          <FlowsCell
-            contact={contact}
-            callback={() => {
-              resetSelectedRow()
-              // find a way to reload without refreshing page
-              // props.reloadContacts()
-            }}
-            width={column.width}
-            isRowSelected={isRowSelected}
-            flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
-          />
-        )
+        // return (
+        //   <FlowsCell
+        //     contact={contact}
+        //     callback={() => {
+        //       resetSelectedRow()
+        //       // find a way to reload without refreshing page
+        //       // props.reloadContacts()
+        //     }}
+        //     // width={column.width}
+        //     isRowSelected={isRowSelected}
+        //     flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
+        //   />
+        // )
+
+        return <div>6</div>
       }
     },
     {
       id: 'birthday',
-      headerName: ({ column, width }) => (
-        <ColumnHeaderCell
-          title="Birthday"
-          iconPath={mdiCake}
-          sortable={column.sortable}
-          width={width}
-        />
-      ),
+      // headerName: ({ column, width }) => (
+      //   <ColumnHeaderCell
+      //     title="Birthday"
+      //     iconPath={mdiCake}
+      //     sortable={column.sortable}
+      //     width={width}
+      //   />
+      // ),
       sortable: false,
       isHidden: breakpoint !== 'xl',
       width: '180px',
       render: ({ row: contact, isRowSelected, column }) => {
-        if (column.isHidden) {
-          return null
-        }
+        // if (column.isHidden) {
+        //   return null
+        // }
 
-        return (
-          <BirthdayCell
-            contact={contact}
-            isRowSelected={isRowSelected}
-            width={column.width}
-          />
-        )
+        // return (
+        //   <BirthdayCell
+        //     contact={contact}
+        //     isRowSelected={isRowSelected}
+        //     // width={column.width}
+        //   />
+        // )
+
+        return <div>7</div>
       }
     }
   ]
@@ -329,12 +343,12 @@ const ContactsList = props => {
   return (
     <>
       <Table
-        hasHeader
+        // hasHeader
         rows={props.data}
         totalRows={props.totalRows}
         loading={getLoading()}
         columns={columns}
-        inlineGridEnabled
+        // inlineGridEnabled
         rowSize={5}
         LoadingStateComponent={LoadingComponent}
         getTrProps={getRowProps}
@@ -344,9 +358,11 @@ const ContactsList = props => {
           columnProps: {},
           showSelectAll: false
         }}
-        classes={{
-          row: cn(gridClasses.row, inlineGridClasses.row, customGridClasses.row)
-        }}
+        classes={
+          {
+            // row: cn(gridClasses.row, inlineGridClasses.row, customGridClasses.row)
+          }
+        }
         infiniteScrolling={{
           onReachEnd: props.onRequestLoadMore,
           onReachStart: props.onRequestLoadMoreBefore

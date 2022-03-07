@@ -33,7 +33,7 @@ export default function Checkbox({
   const checkBox = (
     <MUICheckbox
       {...props}
-      size="small"
+      color="secondary"
       checked={isChecked}
       indeterminate={indeterminate}
       onChange={handleToggleRow}

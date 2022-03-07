@@ -1,4 +1,10 @@
-import { useState, useRef, ComponentProps, useEffect, useMemo } from 'react'
+import React, {
+  useState,
+  useRef,
+  ComponentProps,
+  useEffect,
+  useMemo
+} from 'react'
 
 import { Theme } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
@@ -20,39 +26,29 @@ import {
   GridClasses,
   TrProps,
   TdProps,
-  InfiniteScrollingOptions,
-  GridSelectionOptions
+  InfiniteScrollingOptions
 } from '../types'
 
-import { Header } from './Header'
 import Row from './Row'
 
 interface Props<Row> {
-  inlineGridEnabled?: boolean
   columns: TableColumn<Row>[]
   rows: (Row & { id?: UUID })[]
-  totalRows: number
   classes: GridClasses
   virtualize: boolean
   rowSize?: number
   infiniteScrolling: InfiniteScrollingOptions | null
-  selection: GridSelectionOptions<Row> | null
-  hasHeader?: boolean
   getTrProps?: (data: TrProps<Row>) => object
   getTdProps?: (data: TdProps<Row>) => object
 }
 
 export function Body<Row>({
-  inlineGridEnabled = false,
   columns,
   rows,
-  totalRows,
   classes,
   virtualize,
   rowSize = 8,
   infiniteScrolling,
-  hasHeader,
-  selection,
   getTdProps = () => ({}),
   getTrProps = () => ({})
 }: Props<Row>) {
@@ -80,6 +76,11 @@ export function Body<Row>({
     listRef.current && listRef.current.scrollTo(scrollTop)
   }, [scrollTop])
 
+  const getItemKey = (
+    index: number,
+    { rows }: ComponentProps<typeof Row>['data']
+  ) => rows[index].id ?? index
+
   const onItemsRendered = (data: ListOnItemsRenderedProps): void => {
     if (!scroll) {
       return
@@ -99,21 +100,13 @@ export function Body<Row>({
   if (!virtualize) {
     return (
       <>
-        {hasHeader && (
-          <Header
-            columns={columns}
-            rows={rows}
-            selection={selection}
-            totalRows={totalRows}
-            rowSize={rowSize}
-            inlineGridEnabled={inlineGridEnabled}
-            columnsSize={columnsSize}
-          />
-        )}
         {rows.map((row, rowIndex) => (
           <Row
             key={row.id || rowIndex}
             index={rowIndex}
+            style={{
+              height: theme.spacing(rowSize)
+            }}
             data={{
               rows,
               columns,
@@ -121,8 +114,7 @@ export function Body<Row>({
               classes,
               getTrProps,
               getTdProps,
-              columnsSize,
-              inlineGridEnabled
+              columnsSize
             }}
           />
         ))}
@@ -131,20 +123,9 @@ export function Body<Row>({
   }
 
   return (
-    <AutoSizer disableHeight>
-      {({ width }) => (
-        <>
-          {hasHeader && (
-            <Header
-              columns={columns}
-              rows={rows}
-              selection={selection}
-              totalRows={totalRows}
-              rowSize={rowSize}
-              width={width}
-              columnsSize={columnsSize}
-            />
-          )}
+    <>
+      <AutoSizer disableHeight>
+        {({ width }) => (
           <FixedSizeList
             ref={listRef}
             itemCount={rows.length}
@@ -152,25 +133,19 @@ export function Body<Row>({
             width={width}
             height={windowHeight}
             overscanCount={8}
-            itemKey={(
-              index: number,
-              { rows }: ComponentProps<typeof Row>['data']
-            ) => rows[index].id || index}
+            itemKey={getItemKey}
             itemData={
               {
                 rows,
                 columns,
-                selection,
                 state,
                 classes,
                 getTrProps,
                 getTdProps,
-                columnsSize,
-                inlineGridEnabled
+                columnsSize
               } as ComponentProps<typeof Row>['data']
             }
             style={{
-              // I've searched 1.5 days to find this
               height: '100% !important'
             }}
             {...(infiniteScrolling
@@ -182,9 +157,9 @@ export function Body<Row>({
           >
             {Row}
           </FixedSizeList>
-        </>
-      )}
-    </AutoSizer>
+        )}
+      </AutoSizer>
+    </>
   )
 }
 

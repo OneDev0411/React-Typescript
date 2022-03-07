@@ -32,22 +32,9 @@ export const styles = (theme: Theme) =>
           color: theme.palette.secondary.main
         }
       }
-    },
-    header: {},
-    headerHasSelected: {}
-  })
-
-export const inlineGridStyles = (theme: Theme) =>
-  createStyles({
-    row: {},
-    header: {},
-    headerHasSelected: {}
+    }
   })
 
 export const useGridStyles = makeStyles(styles, {
   name: 'grid-default-styles'
-})
-
-export const useInlineGridStyles = makeStyles(inlineGridStyles, {
-  name: 'inline-grid-default-styles'
 })

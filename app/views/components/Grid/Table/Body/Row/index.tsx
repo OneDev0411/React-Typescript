@@ -1,15 +1,15 @@
-import { CSSProperties, memo, useMemo } from 'react'
+import React, { CSSProperties, memo } from 'react'
 
 import cn from 'classnames'
 
 import { StateContext } from '../../context'
 import { TableColumn, TrProps, TdProps, GridClasses } from '../../types'
 
-import { RowContainer, GridRowContainer } from './styled'
+import { RowContainer } from './styled'
 
 interface Props<Row> {
   index: number
-  style?: CSSProperties
+  style: CSSProperties
   data: {
     rows: Row[]
     columns: TableColumn<Row>[]
@@ -18,7 +18,6 @@ interface Props<Row> {
     columnsSize: string[]
     getTrProps?: (data: TrProps<Row>) => object
     getTdProps?: (data: TdProps<Row>) => object
-    inlineGridEnabled?: boolean
   }
 }
 
@@ -32,44 +31,15 @@ function Row<T>({
     classes,
     columnsSize,
     getTrProps = () => ({}),
-    getTdProps = () => ({}),
-    inlineGridEnabled = false
+    getTdProps = () => ({})
   }
 }: Props<T & { id?: string }>) {
   const row = rows[rowIndex]
 
-  const isRowSelected = useMemo(
-    () =>
-      state.selection.isAllRowsSelected ||
-      state.selection.isEntireRowsSelected ||
-      state.selection.selectedRowIds.includes(row.id || rowIndex.toString()),
-    [state.selection, row.id, rowIndex]
-  )
-
-  if (inlineGridEnabled) {
-    return (
-      <GridRowContainer
-        selected={isRowSelected}
-        style={style}
-        data-tour-id={`row-${rowIndex}`}
-        {...getTrProps({
-          rowIndex,
-          row,
-          selected: isRowSelected
-        })}
-      >
-        {getRowCells(
-          rows,
-          rowIndex,
-          columns,
-          columnsSize,
-          inlineGridEnabled,
-          getTdProps,
-          isRowSelected
-        )}
-      </GridRowContainer>
-    )
-  }
+  const isRowSelected =
+    state.selection.isAllRowsSelected ||
+    state.selection.isEntireRowsSelected ||
+    state.selection.selectedRowIds.includes(row.id || rowIndex.toString())
 
   return (
     <RowContainer
@@ -84,74 +54,32 @@ function Row<T>({
         selected: isRowSelected
       })}
     >
-      {getRowCells(
-        rows,
-        rowIndex,
-        columns,
-        columnsSize,
-        inlineGridEnabled,
-        getTdProps,
-        isRowSelected
-      )}
+      {columns
+        .filter((column: TableColumn<T>) => column.render)
+        .map((column: TableColumn<T>, columnIndex: number) => (
+          <div
+            key={columnIndex}
+            className={cn('column', column.class, {
+              primary: column.primary === true
+            })}
+            style={{
+              width: columnsSize[columnIndex],
+              textAlign: column.align || 'left',
+              ...(column.rowStyle || {}),
+              ...(column.style || {})
+            }}
+            {...getTdProps({
+              columnIndex,
+              column,
+              rowIndex,
+              row
+            })}
+          >
+            {getCell(column, row, rowIndex, columnIndex, rows.length)}
+          </div>
+        ))}
     </RowContainer>
   )
-}
-
-function getRowCells<Row>(
-  rows,
-  rowIndex,
-  columns,
-  columnsSize,
-  inlineGridEnabled,
-  getTdProps,
-  isRowSelected
-) {
-  if (inlineGridEnabled) {
-    return columns
-      .filter((column: TableColumn<Row>) => !!column.render)
-      .map((column: TableColumn<Row>, columnIndex: number) =>
-        getCell(
-          column,
-          rows[rowIndex],
-          rowIndex,
-          columnIndex,
-          rows.length,
-          isRowSelected
-        )
-      )
-  }
-
-  return columns
-    .filter((column: TableColumn<Row>) => !!column.render)
-    .map((column: TableColumn<Row>, columnIndex: number) => (
-      <div
-        key={columnIndex}
-        className={cn(column.class, column, {
-          primary: column.primary === true
-        })}
-        style={{
-          width: columnsSize[columnIndex],
-          textAlign: column.align || 'left',
-          ...(column.rowStyle || {}),
-          ...(column.style || {})
-        }}
-        {...getTdProps({
-          columnIndex,
-          column,
-          rowIndex,
-          row: rows[rowIndex]
-        })}
-      >
-        {getCell(
-          column,
-          rows[rowIndex],
-          rowIndex,
-          columnIndex,
-          rows.length,
-          isRowSelected
-        )}
-      </div>
-    ))
 }
 
 function getCell<Row>(
@@ -159,17 +87,14 @@ function getCell<Row>(
   row: Row,
   rowIndex: number,
   columnIndex: number,
-  totalRows: number,
-  isRowSelected: boolean = false
+  totalRows: number
 ) {
   if (column.render) {
     return column.render({
-      column,
       row,
       totalRows,
       rowIndex,
-      columnIndex,
-      isRowSelected
+      columnIndex
     })
   }
 

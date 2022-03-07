@@ -12,17 +12,19 @@ interface Props {
 function ContactAvatar({ contact }: Props) {
   const name = getAttributeFromSummary(contact, 'display_name')
 
-  return (
-    <Avatar
-      size="small"
-      alt={name}
-      contact={contact}
-      showStatus
-      isOnline={getContactOnlineStatus(contact)}
-    >
-      {getContactNameInitials(contact)}
-    </Avatar>
-  )
+  // return (
+  //   <Avatar
+  //     size="small"
+  //     alt={name}
+  //     contact={contact}
+  //     showStatus
+  //     isOnline={getContactOnlineStatus(contact)}
+  //   >
+  //     {getContactNameInitials(contact)}
+  //   </Avatar>
+  // )
+
+  return <div>0</div>
 }
 
 export default ContactAvatar

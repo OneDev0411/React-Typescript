@@ -3,9 +3,9 @@ import React, { Component } from 'react'
 import { mdiCalendar } from '@mdi/js'
 import { connect } from 'react-redux'
 
+import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
 import { searchContacts } from 'actions/contacts'
 import { EventDrawer } from 'components/EventDrawer'
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 import { selectContact } from 'reducers/contacts/list'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 

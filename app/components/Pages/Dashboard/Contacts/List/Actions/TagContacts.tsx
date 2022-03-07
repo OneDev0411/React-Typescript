@@ -4,7 +4,7 @@ import { mdiTagOutline } from '@mdi/js'
 import intersection from 'lodash/intersection'
 import { useSelector } from 'react-redux'
 
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
+import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
 import { PopoverContactTagSelector } from 'components/TagSelector'
 import { SelectorOption } from 'components/TagSelector/type'
 import { selectContact } from 'reducers/contacts/list'
