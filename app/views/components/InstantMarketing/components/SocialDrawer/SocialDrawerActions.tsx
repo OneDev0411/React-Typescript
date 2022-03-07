@@ -4,6 +4,7 @@ import { getFileType } from 'utils/file-utils/get-file-type'
 
 import SocialDrawerCopyLink from './SocialDrawerCopyLink'
 import SocialDrawerDownloadButton from './SocialDrawerDownloadButton'
+import SocialDrawerInstagramButton from './SocialDrawerInstagramButton'
 import SocialDrawerSendSMS from './SocialDrawerSendSMS'
 
 const useStyles = makeStyles(
@@ -28,9 +29,11 @@ function SocialDrawerActions({ instance }: SocialDrawerActionsProps) {
   return (
     <>
       <div className={classes.row}>
-        <Grid container>
+        <Grid container spacing={2}>
           <Grid item sm={6}>
-            left
+            <SocialDrawerInstagramButton
+              onClick={() => console.log('Go for scheduling the post')}
+            />
           </Grid>
           <Grid item sm={6}>
             <SocialDrawerDownloadButton instance={instance} />
