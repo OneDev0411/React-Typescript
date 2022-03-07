@@ -85,7 +85,7 @@ export function BaseTreeViewBrandSelector({
     return (
       <div className={classes.placeholderContainer}>
         <Typography variant="body1" color="textSecondary">
-          Somthing Went Wrong!
+          Something Went Wrong!
         </Typography>
       </div>
     )
