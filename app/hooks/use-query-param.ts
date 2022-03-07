@@ -5,7 +5,10 @@ import { browserHistory } from 'react-router'
 
 type UseQueryParam = [string, (value: string) => void, () => void]
 
-export function useQueryParamValue(name: string): string {
+export function useQueryParamValue(
+  name: string,
+  defaultValue: string = ''
+): string {
   const location = window.location
 
   const value = useMemo(
@@ -13,15 +16,16 @@ export function useQueryParamValue(name: string): string {
     [location.search, name]
   )
 
-  return decodeURIComponent(value || '')
+  return decodeURIComponent(value || defaultValue)
 }
 
 function useQueryParamBase(
   historyAction: (path: LocationDescriptor) => void,
   name: string,
+  defaultValue: string,
   deleteIfEmpty: boolean
 ): UseQueryParam {
-  const value = useQueryParamValue(name)
+  const value = useQueryParamValue(name, defaultValue)
 
   const setValue = useCallback(
     (newValue: string) => {
@@ -33,7 +37,7 @@ function useQueryParamBase(
 
       const url = new URL(location.href)
 
-      if (deleteIfEmpty && !newValue) {
+      if ((deleteIfEmpty && !newValue) || newValue === defaultValue) {
         url.searchParams.delete(name)
       } else {
         url.searchParams.set(name, encodeURIComponent(newValue))
@@ -41,7 +45,7 @@ function useQueryParamBase(
 
       historyAction(url.pathname + url.search)
     },
-    [historyAction, name, deleteIfEmpty]
+    [deleteIfEmpty, defaultValue, historyAction, name]
   )
 
   const deleteValue = useCallback(() => {
@@ -70,8 +74,11 @@ function useQueryParamBase(
  * @param name The param name
  * @returns [the param value, the setter function, the delete function]
  */
-export function useQueryParam(name: string): UseQueryParam {
-  return useQueryParamBase(browserHistory.push, name, false)
+export function useQueryParam(
+  name: string,
+  defaultValue: string = ''
+): UseQueryParam {
+  return useQueryParamBase(browserHistory.push, name, defaultValue, false)
 }
 
 /**
@@ -83,8 +90,11 @@ export function useQueryParam(name: string): UseQueryParam {
  * @param name The param name
  * @returns [the param value, the setter function, the delete function]
  */
-export function useReplaceQueryParam(name: string): UseQueryParam {
-  return useQueryParamBase(browserHistory.replace, name, false)
+export function useReplaceQueryParam(
+  name: string,
+  defaultValue: string = ''
+): UseQueryParam {
+  return useQueryParamBase(browserHistory.replace, name, defaultValue, false)
 }
 
 /**
@@ -98,8 +108,11 @@ export function useReplaceQueryParam(name: string): UseQueryParam {
  * @param name The param name
  * @returns [the param value, the setter function, the delete function]
  */
-export function useAutoQueryParam(name: string): UseQueryParam {
-  return useQueryParamBase(browserHistory.push, name, true)
+export function useAutoQueryParam(
+  name: string,
+  defaultValue: string = ''
+): UseQueryParam {
+  return useQueryParamBase(browserHistory.push, name, defaultValue, true)
 }
 
 /**
@@ -113,6 +126,9 @@ export function useAutoQueryParam(name: string): UseQueryParam {
  * @param name The param name
  * @returns [the param value, the setter function, the delete function]
  */
-export function useReplaceAutoQueryParam(name: string): UseQueryParam {
-  return useQueryParamBase(browserHistory.replace, name, true)
+export function useReplaceAutoQueryParam(
+  name: string,
+  defaultValue: string = ''
+): UseQueryParam {
+  return useQueryParamBase(browserHistory.replace, name, defaultValue, true)
 }
