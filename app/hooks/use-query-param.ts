@@ -1,34 +1,47 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 
 import { LocationDescriptor } from 'history'
+import { isEqual } from 'lodash'
 import { browserHistory } from 'react-router'
 
-type UseQueryParam = [string, (value: string) => void, () => void]
+type ParamInputType = string | string[]
 
-export function useQueryParamValue(
+type UseQueryParam<T extends ParamInputType = string> = [
+  T,
+  (value: T) => void,
+  () => void
+]
+
+function useQueryParamValue<T extends ParamInputType = string>(
   name: string,
-  defaultValue: string = ''
-): string {
+  defaultValue: T = '' as T
+): T {
   const location = window.location
 
-  const value = useMemo(
-    () => new URLSearchParams(location.search).get(name),
-    [location.search, name]
-  )
+  const value = useMemo(() => {
+    return Array.isArray(defaultValue)
+      ? new URLSearchParams(location.search)
+          .getAll(name)
+          .map(decodeURIComponent)
+      : decodeURIComponent(
+          new URLSearchParams(location.search).get(name) || defaultValue
+        )
+  }, [defaultValue, location.search, name])
 
-  return decodeURIComponent(value || defaultValue)
+  return value as T
 }
 
-function useQueryParamBase(
+function useQueryParamBase<T extends ParamInputType = string>(
   historyAction: (path: LocationDescriptor) => void,
   name: string,
-  defaultValue: string,
+  defaultValue: T = '' as T,
   deleteIfEmpty: boolean
-): UseQueryParam {
+): UseQueryParam<T> {
   const value = useQueryParamValue(name, defaultValue)
+  const defaultValueRef = useRef(defaultValue)
 
   const setValue = useCallback(
-    (newValue: string) => {
+    (newValue: T) => {
       const location = window.location
 
       if (!location.href) {
@@ -37,15 +50,23 @@ function useQueryParamBase(
 
       const url = new URL(location.href)
 
-      if ((deleteIfEmpty && !newValue) || newValue === defaultValue) {
+      if (
+        (deleteIfEmpty && !newValue.length) ||
+        isEqual(newValue, defaultValueRef.current)
+      ) {
         url.searchParams.delete(name)
+      } else if (Array.isArray(newValue)) {
+        url.searchParams.delete(name)
+        newValue.forEach(v => {
+          url.searchParams.append(name, encodeURIComponent(v))
+        })
       } else {
         url.searchParams.set(name, encodeURIComponent(newValue))
       }
 
       historyAction(url.pathname + url.search)
     },
-    [deleteIfEmpty, defaultValue, historyAction, name]
+    [deleteIfEmpty, historyAction, name]
   )
 
   const deleteValue = useCallback(() => {
@@ -76,10 +97,10 @@ function useQueryParamBase(
  * @param defaultValue The param default value
  * @returns [the param value, the setter function, the delete function]
  */
-export function useQueryParam(
+export function useQueryParam<T extends ParamInputType = string>(
   name: string,
-  defaultValue: string = ''
-): UseQueryParam {
+  defaultValue: T = '' as T
+): UseQueryParam<T> {
   return useQueryParamBase(browserHistory.push, name, defaultValue, false)
 }
 
@@ -94,10 +115,10 @@ export function useQueryParam(
  * @param defaultValue The param default value
  * @returns [the param value, the setter function, the delete function]
  */
-export function useReplaceQueryParam(
+export function useReplaceQueryParam<T extends ParamInputType = string>(
   name: string,
-  defaultValue: string = ''
-): UseQueryParam {
+  defaultValue: T = '' as T
+): UseQueryParam<T> {
   return useQueryParamBase(browserHistory.replace, name, defaultValue, false)
 }
 
@@ -113,10 +134,10 @@ export function useReplaceQueryParam(
  * @param defaultValue The param default value
  * @returns [the param value, the setter function, the delete function]
  */
-export function useAutoQueryParam(
+export function useAutoQueryParam<T extends ParamInputType = string>(
   name: string,
-  defaultValue: string = ''
-): UseQueryParam {
+  defaultValue: T = '' as T
+): UseQueryParam<T> {
   return useQueryParamBase(browserHistory.push, name, defaultValue, true)
 }
 
@@ -132,9 +153,9 @@ export function useAutoQueryParam(
  * @param defaultValue The param default value
  * @returns [the param value, the setter function, the delete function]
  */
-export function useReplaceAutoQueryParam(
+export function useReplaceAutoQueryParam<T extends ParamInputType = string>(
   name: string,
-  defaultValue: string = ''
-): UseQueryParam {
+  defaultValue: T = '' as T
+): UseQueryParam<T> {
   return useQueryParamBase(browserHistory.replace, name, defaultValue, true)
 }
