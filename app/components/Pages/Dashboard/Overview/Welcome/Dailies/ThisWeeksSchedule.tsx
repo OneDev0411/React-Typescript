@@ -56,8 +56,6 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
   const dispatch = useDispatch()
   const [gmailOrOutlookLoading, setGmailOrOutlookLoading] = useState(true)
   const [gmailOrOutlookSynced, setGmailOrOutlookSynced] = useState(false)
-  const [googleAccount, setGoogleAccount] = useState(0)
-  const [outlookAccount, setOutlookAccount] = useState(0)
 
   useEffect(() => {
     async function checkOAuthAccounts() {
@@ -65,8 +63,7 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
       const outlook = await getOAuthAccounts(OAuthProvider.Outlook)
 
       setGmailOrOutlookSynced(Boolean(google.length || outlook.length))
-      setGoogleAccount(google.length)
-      setOutlookAccount(outlook.length)
+
       setGmailOrOutlookLoading(false)
     }
 
@@ -113,20 +110,20 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
         </InlineBadge>
       </Typography>
       <Box className={classes.boxContainer}>
-        {isLoading && (
+        {(isLoading || gmailOrOutlookLoading) && (
           <>
             <AnimatedLoader />
           </>
         )}
         {!isLoading &&
-          !gmailOrOutlookLoading &&
-          gmailOrOutlookSynced &&
-          filteredEvents.length === 0 && (
-            <EmptyState
-              description="You're all caught up!"
-              iconSrc="/static/icons/empty-states/letter.svg"
-            />
-          )}
+        !gmailOrOutlookLoading &&
+        gmailOrOutlookSynced &&
+        filteredEvents.length === 0 ? (
+          <EmptyState
+            description="You're all caught up!"
+            iconSrc="/static/icons/empty-states/letter.svg"
+          />
+        ) : null}
         {!isLoading &&
           !gmailOrOutlookLoading &&
           !gmailOrOutlookSynced &&
@@ -137,40 +134,36 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
               title="Connect Your Google / Outlook"
             >
               <Box pt={3} display="flex" flexWrap="wrap">
-                {!googleAccount && (
-                  <Box mr={1} mb={1}>
-                    <Button
-                      variant="outlined"
-                      disabled={google.connecting}
-                      onClick={() => {
-                        handleGoogleConnect()
-                      }}
-                    >
-                      <GoogleIcon
-                        size={iconSizes.medium}
-                        className={classes.listIcon}
-                      />
-                      Connect Your Google
-                    </Button>
-                  </Box>
-                )}
-                {!outlookAccount && (
-                  <Box>
-                    <Button
-                      variant="outlined"
-                      disabled={outlook.connecting}
-                      onClick={() => {
-                        outlook.connect()
-                      }}
-                    >
-                      <OutlookIcon
-                        size={iconSizes.medium}
-                        className={classes.listIcon}
-                      />
-                      Connect Your Outlook
-                    </Button>
-                  </Box>
-                )}
+                <Box mr={1} mb={1}>
+                  <Button
+                    variant="outlined"
+                    disabled={google.connecting}
+                    onClick={() => {
+                      handleGoogleConnect()
+                    }}
+                  >
+                    <GoogleIcon
+                      size={iconSizes.medium}
+                      className={classes.listIcon}
+                    />
+                    Connect Your Google
+                  </Button>
+                </Box>
+                <Box>
+                  <Button
+                    variant="outlined"
+                    disabled={outlook.connecting}
+                    onClick={() => {
+                      outlook.connect()
+                    }}
+                  >
+                    <OutlookIcon
+                      size={iconSizes.medium}
+                      className={classes.listIcon}
+                    />
+                    Connect Your Outlook
+                  </Button>
+                </Box>
               </Box>
             </EmptyState>
           )}
