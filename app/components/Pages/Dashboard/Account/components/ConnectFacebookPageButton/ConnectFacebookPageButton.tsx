@@ -8,7 +8,7 @@ import { FacebookAuthErrorCode } from './types'
 import { useFacebookAuth, UseFacebookAuthOptions } from './use-facebook-auth'
 
 export interface ConnectFacebookPageButtonProps
-  extends Omit<ButtonProps, 'size' | 'onClick' | 'startIcon' | 'disabled'>,
+  extends Omit<ButtonProps, 'onClick' | 'startIcon' | 'disabled'>,
     Pick<
       UseFacebookAuthOptions,
       'onAuthSuccess' | 'onAuthError' | 'onAuthWindowOpen' | 'onAuthWindowClose'
