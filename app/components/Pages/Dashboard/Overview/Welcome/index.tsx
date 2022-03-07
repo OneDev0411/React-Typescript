@@ -17,9 +17,12 @@ import { AccessButton } from '@app/components/Pages/Dashboard/Overview/component
 import { EmptyState } from '@app/components/Pages/Dashboard/Overview/components/EmptyState'
 import { ACL } from '@app/constants/acl'
 import { activateIntercom } from '@app/store_actions/intercom'
-// import MetabaseDashboard from 'components/MetabaseIFrame'
+import { getActiveTeamId } from '@app/utils/user-teams'
+import MetabaseDashboard from 'components/MetabaseIFrame'
+import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { IAppState } from 'reducers'
 import { InboxAction } from 'reducers/inbox/types'
+import { selectUser } from 'selectors/user'
 import Acl from 'views/components/Acl'
 
 import PromoteListingsSection from '../../Marketing/Overview/Sections/PromoteListingsSection'
@@ -81,6 +84,9 @@ function OverviewDashboard() {
   const classes = useStyles()
 
   const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
+
+  const user = useSelector(selectUser)
+  const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
 
   const { isActive: isIntercomActive } = useSelector(
     (state: IAppState) => state.intercom
@@ -165,23 +171,28 @@ function OverviewDashboard() {
           <Box pb={1.5} pt={1.5}>
             <Typography variant="h6">To Track</Typography>
           </Box>
-          <Box className={classes.boxContainer}>
-            <EmptyState
-              description="Whether you are helping a seller, a buyer, a tenant or a land lord, you start by creating a deal."
-              iconSrc="/static/icons/empty-states/statistics.svg"
-              title="Start inputting your transactions and get your analytics here"
-            >
-              <Box pt={3}>
-                <Button
-                  variant="outlined"
-                  onClick={() => browserHistory.push('/dashboard/deals/create')}
-                >
-                  Create New Deal
-                </Button>
-              </Box>
-            </EmptyState>
-          </Box>
-          {/* <MetabaseDashboard dashboardId="e044be48-42c7-456f-8077-024c93feb99d" /> */}
+          {statuses?.length > 0 ? (
+            <MetabaseDashboard dashboardId="e044be48-42c7-456f-8077-024c93feb99d" />
+          ) : (
+            <Box className={classes.boxContainer}>
+              <EmptyState
+                description="Whether you are helping a seller, a buyer, a tenant or a land lord, you start by creating a deal."
+                iconSrc="/static/icons/empty-states/statistics.svg"
+                title="Start inputting your transactions and get your analytics here"
+              >
+                <Box pt={3}>
+                  <Button
+                    variant="outlined"
+                    onClick={() =>
+                      browserHistory.push('/dashboard/deals/create')
+                    }
+                  >
+                    Create New Deal
+                  </Button>
+                </Box>
+              </EmptyState>
+            </Box>
+          )}
         </Box>
       </Acl.Deals>
     </Box>
