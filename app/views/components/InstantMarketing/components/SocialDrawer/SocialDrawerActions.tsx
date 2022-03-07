@@ -6,6 +6,7 @@ import SocialDrawerCopyLink from './SocialDrawerCopyLink'
 import SocialDrawerDownloadButton from './SocialDrawerDownloadButton'
 import SocialDrawerInstagramButton from './SocialDrawerInstagramButton'
 import SocialDrawerSendSMS from './SocialDrawerSendSMS'
+import { useSetSocialDrawerStep } from './use-set-social-drawer-step'
 
 const useStyles = makeStyles(
   theme => ({
@@ -21,6 +22,9 @@ interface SocialDrawerActionsProps {
 
 function SocialDrawerActions({ instance }: SocialDrawerActionsProps) {
   const classes = useStyles()
+  const setStep = useSetSocialDrawerStep()
+
+  const gotoScheduleStep = () => setStep('Schedule')
 
   const isPDFType =
     instance.type === 'template_instance' &&
@@ -31,9 +35,7 @@ function SocialDrawerActions({ instance }: SocialDrawerActionsProps) {
       <div className={classes.row}>
         <Grid container spacing={2}>
           <Grid item sm={6}>
-            <SocialDrawerInstagramButton
-              onClick={() => console.log('Go for scheduling the post')}
-            />
+            <SocialDrawerInstagramButton onClick={gotoScheduleStep} />
           </Grid>
           <Grid item sm={6}>
             <SocialDrawerDownloadButton instance={instance} />

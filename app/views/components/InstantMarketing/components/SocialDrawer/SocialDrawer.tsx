@@ -1,6 +1,5 @@
 import { useState } from 'react'
 
-import { Box } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
@@ -12,8 +11,10 @@ import {
   TemplateInstanceInputData
 } from 'models/instant-marketing/create-template-instance'
 
-import SocialDrawerActions from './SocialDrawerActions'
-import SocialDrawerPreviewFile from './SocialDrawerPreviewFile'
+import SocialDrawerGeneral from './SocialDrawerGeneral'
+import SocialDrawerProvider from './SocialDrawerProvider'
+import SocialDrawerScheduleInstagramPost from './SocialDrawerScheduleInstagramPost'
+import { SocialDrawerStep } from './types'
 
 interface SocialDrawerProps {
   template: (IBrandMarketingTemplate | IMarketingTemplate) & { result: string }
@@ -35,6 +36,8 @@ function SocialDrawer({
   const [templateInstance, setTemplateInstance] =
     useState<Optional<IMarketingTemplateInstance>>(passedInstance)
   const [errorMessage, setErrorMessage] = useState<Nullable<string>>(null)
+
+  const [step, setStep] = useState<SocialDrawerStep>('General')
 
   useDeepCompareEffect(() => {
     async function makeTemplateInstance() {
@@ -73,15 +76,15 @@ function SocialDrawer({
 
   const instance = templateInstance || brandAsset
 
+  const Component =
+    step === 'General' ? SocialDrawerGeneral : SocialDrawerScheduleInstagramPost
+
   return (
     <Drawer open onClose={onClose}>
       <Drawer.Header title="Schedule or Share?" />
-      <Drawer.Body>
-        <Box my={3}>
-          <SocialDrawerPreviewFile instance={instance} error={errorMessage} />
-          {instance && <SocialDrawerActions instance={instance} />}
-        </Box>
-      </Drawer.Body>
+      <SocialDrawerProvider setStep={setStep}>
+        <Component instance={instance} errorMessage={errorMessage} />
+      </SocialDrawerProvider>
     </Drawer>
   )
 }
