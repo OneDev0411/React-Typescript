@@ -2,12 +2,11 @@ import { useCallback, useMemo } from 'react'
 
 import { LocationDescriptor } from 'history'
 import { browserHistory } from 'react-router'
-import { useLocation } from 'react-use'
 
 type UseQueryParam = [string, (value: string) => void, () => void]
 
 export function useQueryParamValue(name: string): string {
-  const location = useLocation()
+  const location = window.location
 
   const value = useMemo(
     () => new URLSearchParams(location.search).get(name),
@@ -23,28 +22,31 @@ function useQueryParamBase(
   deleteIfEmpty: boolean
 ): UseQueryParam {
   const value = useQueryParamValue(name)
-  const location = useLocation()
 
   const setValue = useCallback(
-    (value: string) => {
+    (newValue: string) => {
+      const location = window.location
+
       if (!location.href) {
         return
       }
 
       const url = new URL(location.href)
 
-      if (deleteIfEmpty && !value) {
+      if (deleteIfEmpty && !newValue) {
         url.searchParams.delete(name)
       } else {
-        url.searchParams.set(name, encodeURIComponent(value))
+        url.searchParams.set(name, encodeURIComponent(newValue))
       }
 
-      historyAction(url.toString())
+      historyAction(url.pathname + url.search)
     },
-    [location.href, historyAction, name, deleteIfEmpty]
+    [historyAction, name, deleteIfEmpty]
   )
 
   const deleteValue = useCallback(() => {
+    const location = window.location
+
     if (!location.href) {
       return
     }
@@ -53,8 +55,8 @@ function useQueryParamBase(
 
     url.searchParams.delete(name)
 
-    historyAction(url.toString())
-  }, [location.href, historyAction, name])
+    historyAction(url.pathname + url.search)
+  }, [historyAction, name])
 
   return [value, setValue, deleteValue]
 }
