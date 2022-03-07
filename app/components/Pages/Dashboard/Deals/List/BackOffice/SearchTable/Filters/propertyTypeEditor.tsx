@@ -78,9 +78,7 @@ export const PropertyTypeEditor = ({
             }
           }
         : {
-            contexts: {
-              ...(filters.contexts ?? {})
-            }
+            contexts: filters.contexts ?? {}
           }
 
     onChangePropertyGroup(toggledProperyGroups)
