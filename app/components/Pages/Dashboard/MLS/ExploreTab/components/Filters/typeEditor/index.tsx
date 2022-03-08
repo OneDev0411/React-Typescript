@@ -32,7 +32,7 @@ export const TypeEditor = ({
     <Grid className={classes.editorRoot}>
       <Grid container alignItems="center" className={classes.header}>
         <Typography variant="subtitle1" className={classes.title}>
-          Properties type
+          Property Type
         </Typography>
       </Grid>
 

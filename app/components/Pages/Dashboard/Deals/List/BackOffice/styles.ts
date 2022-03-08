@@ -13,7 +13,7 @@ export const useStyles = makeStyles(
         justifyContent: 'flex-end'
       },
       filtersContainer: {
-        margin: theme.spacing(5, 0)
+        marginBottom: theme.spacing(5)
       }
     }),
   { name: 'DealsListBackOffice' }
