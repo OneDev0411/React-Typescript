@@ -1,11 +1,13 @@
 import { Box, Button, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import {
-  mdiNewspaperVariantOutline,
-  mdiCurrencyUsd,
+  mdiAccountGroupOutline,
   mdiBellOutline,
   mdiCalendarAccount,
-  mdiHeadphones
+  mdiChartTimelineVariantShimmer,
+  mdiCurrencyUsd,
+  mdiHeadphones,
+  mdiNewspaperVariantOutline
 } from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
@@ -119,14 +121,14 @@ function OverviewDashboard() {
     },
     {
       access: marketingAccess,
-      icon: mdiNewspaperVariantOutline,
+      icon: mdiAccountGroupOutline,
       id: 'agent-network',
       label: 'Agent Network',
       to: '/dashboard/agent-network'
     },
     {
       access: insightAccess,
-      icon: mdiNewspaperVariantOutline,
+      icon: mdiChartTimelineVariantShimmer,
       id: 'insight',
       label: 'Insight',
       to: '/dashboard/insights'
