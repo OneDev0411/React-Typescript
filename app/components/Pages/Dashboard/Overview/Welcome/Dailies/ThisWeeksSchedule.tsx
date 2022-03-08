@@ -26,21 +26,21 @@ const useStyles = makeStyles(
       flex: 1
     },
     boxTitle: {
-      marginBottom: theme.spacing(1.5),
+      alignItems: 'flex-start',
       display: 'flex',
-      alignItems: 'flex-start'
+      marginBottom: theme.spacing(1.5)
     },
     boxContainer: {
-      border: `1px solid ${theme.palette.grey[300]}`,
-      padding: theme.spacing(1),
-      height: '300px',
-      borderRadius: theme.shape.borderRadius,
       backgroundColor: theme.palette.common.white,
+      border: `1px solid ${theme.palette.grey[300]}`,
+      borderRadius: theme.shape.borderRadius,
+      height: '300px',
+      padding: theme.spacing(1),
       overflowY: 'scroll'
     },
     boxFooter: {
-      textAlign: 'right',
-      marginTop: theme.spacing(1)
+      marginTop: theme.spacing(1),
+      textAlign: 'right'
     },
     listIcon: { marginRight: theme.spacing(2) }
   }),
