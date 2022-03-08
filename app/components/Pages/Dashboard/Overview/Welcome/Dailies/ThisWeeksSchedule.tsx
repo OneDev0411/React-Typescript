@@ -2,16 +2,18 @@ import { useEffect, useState } from 'react'
 
 import { Box, Button, List, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
+import { mdiArrowRight } from '@mdi/js'
 import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 
 import { getOAuthAccounts } from '@app/models/o-auth-accounts/get-o-auth-accounts'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { AnimatedLoader } from 'components/AnimatedLoader'
 import CalendarEventListItem from 'components/CalendarEvent/ListItem'
 import { InlineBadge } from 'components/InlineBadge'
 import { addNotification as notify } from 'components/notification'
 import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
-import { iconSizes } from 'components/SvgIcons/icon-sizes'
+import { iconSizes, muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import OutlookIcon from 'components/SvgIcons/Outlook/IconOutlook'
 import { OAuthProvider } from 'constants/contacts'
 import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
@@ -115,6 +117,7 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
         <Button
           variant="text"
           color="primary"
+          endIcon={<SvgIcon path={mdiArrowRight} size={muiIconSizes.small} />}
           onClick={() => browserHistory.push('/dashboard/calendar')}
         >
           View Calendar
