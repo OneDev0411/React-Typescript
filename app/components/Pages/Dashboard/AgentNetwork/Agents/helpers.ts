@@ -26,7 +26,6 @@ export async function getListingVAlertFilters(
     property_types: isLeaseProperty(listing)
       ? undefined
       : [listing.property.property_type],
-    property_subtypes: [listing.property.property_subtype],
     minimum_bedrooms: listing.property.bedroom_count
       ? Math.max(listing.property.bedroom_count - 2, 0)
       : undefined,
