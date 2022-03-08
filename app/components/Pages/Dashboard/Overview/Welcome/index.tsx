@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Box, Button, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import {
@@ -16,14 +14,14 @@ import { ThunkDispatch } from 'redux-thunk'
 import { AccessButton } from '@app/components/Pages/Dashboard/Overview/components/AccessButton'
 import { EmptyState } from '@app/components/Pages/Dashboard/Overview/components/EmptyState'
 import { ACL } from '@app/constants/acl'
-import { useActiveBrandId } from '@app/hooks/brand'
 import { activateIntercom } from '@app/store_actions/intercom'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 import MetabaseDashboard from 'components/MetabaseIFrame'
-import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { IAppState } from 'reducers'
 import { InboxAction } from 'reducers/inbox/types'
 import Acl from 'views/components/Acl'
 
+import { useDealsList } from '../../Deals/List/Agent/hooks/use-deals-list'
 import PromoteListingsSection from '../../Marketing/Overview/Sections/PromoteListingsSection'
 import { AccessButtonType } from '../types.d'
 
@@ -83,9 +81,9 @@ function OverviewDashboard() {
   const classes = useStyles()
 
   const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
-
-  const activeBrandId = useActiveBrandId()
-  const [statuses] = useBrandStatuses(activeBrandId)
+  const isAdmin = useAcl(ACL.ADMIN)
+  const getDealsList = useDealsList()
+  const deals = getDealsList()
 
   const { isActive: isIntercomActive } = useSelector(
     (state: IAppState) => state.intercom
@@ -93,6 +91,9 @@ function OverviewDashboard() {
 
   const handleOpenSupportDialogueBox = () =>
     !isIntercomActive && dispatch(activateIntercom(isIntercomActive))
+
+  const handleOpenExternalLink = link =>
+    window.open(link, '_blank', 'noopener noreferrer')
 
   const AccessItems: AccessButtonType[] = [
     {
@@ -131,11 +132,11 @@ function OverviewDashboard() {
       to: '/dashboard/insights'
     },
     {
-      access: ACL.WEBSITES,
+      access: allAccess,
       icon: mdiNewspaperVariantOutline,
       id: 'blog',
       label: 'Blog',
-      to: '/dashboard/websites'
+      action: () => handleOpenExternalLink('https://rechat.com/blog/')
     },
     {
       access: allAccess,
@@ -170,7 +171,7 @@ function OverviewDashboard() {
           <Box pb={1.5} pt={1.5}>
             <Typography variant="h6">To Track</Typography>
           </Box>
-          {statuses?.length > 0 ? (
+          {isAdmin || deals?.length > 0 ? (
             <MetabaseDashboard dashboardId="e044be48-42c7-456f-8077-024c93feb99d" />
           ) : (
             <Box className={classes.boxContainer}>

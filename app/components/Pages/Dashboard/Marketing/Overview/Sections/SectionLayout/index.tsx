@@ -25,9 +25,9 @@ const useStyles = makeStyles(
       backgroundColor: theme.palette.grey[100],
       borderRadius: theme.shape.borderRadius
     },
-    headerContainer: {
-      paddingBottom: theme.spacing(2)
-    },
+    headerContainer: dashboardStyles => ({
+      paddingBottom: dashboardStyles ? theme.spacing(1) : theme.spacing(2)
+    }),
     titleContainer: {
       paddingRight: theme.spacing(2)
     }
@@ -54,15 +54,15 @@ interface Props {
 }
 
 export default function SectionLayout({
-  title,
-  children,
   actionNode,
+  children,
   containerGridProps,
-  headerGridProps,
+  dashboardStyles = false,
   grayMode = false,
-  dashboardStyles = false
+  headerGridProps,
+  title
 }: Props) {
-  const classes = useStyles()
+  const classes = useStyles(dashboardStyles)
 
   return (
     <Grid

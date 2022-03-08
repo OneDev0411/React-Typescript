@@ -22,13 +22,19 @@ const NUMBER_OF_EVENTS_TO_SHOW = 50
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
+    boxHeader: {
+      alignItems: 'center',
+      display: 'flex',
+      height: theme.spacing(6),
+      justifyContent: 'space-between'
+    },
     boxWrapper: {
-      flex: 1
+      flex: 1,
+      marginBottom: theme.spacing(5)
     },
     boxTitle: {
       alignItems: 'flex-start',
-      display: 'flex',
-      marginBottom: theme.spacing(1.5)
+      display: 'flex'
     },
     boxContainer: {
       backgroundColor: theme.palette.common.white,
@@ -37,10 +43,6 @@ const useStyles = makeStyles(
       height: '300px',
       padding: theme.spacing(1),
       overflowY: 'scroll'
-    },
-    boxFooter: {
-      marginTop: theme.spacing(1),
-      textAlign: 'right'
     },
     listIcon: { marginRight: theme.spacing(2) }
   }),
@@ -104,11 +106,20 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
 
   return (
     <Box className={classes.boxWrapper}>
-      <Typography variant="h6" className={classes.boxTitle}>
-        <InlineBadge badgeContent={filteredEvents.length} color="primary">
-          To Do
-        </InlineBadge>
-      </Typography>
+      <Box className={classes.boxHeader}>
+        <Typography variant="h6" className={classes.boxTitle}>
+          <InlineBadge badgeContent={filteredEvents.length} color="primary">
+            To Do
+          </InlineBadge>
+        </Typography>
+        <Button
+          variant="text"
+          color="primary"
+          onClick={() => browserHistory.push('/dashboard/calendar')}
+        >
+          View Calendar
+        </Button>
+      </Box>
       <Box className={classes.boxContainer}>
         {(isLoading || gmailOrOutlookLoading) && (
           <>
@@ -174,15 +185,6 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
             ))}
           </List>
         )}
-      </Box>
-      <Box className={classes.boxFooter}>
-        <Button
-          variant="text"
-          color="primary"
-          onClick={() => browserHistory.push('/dashboard/calendar')}
-        >
-          View Calendar
-        </Button>
       </Box>
     </Box>
   )

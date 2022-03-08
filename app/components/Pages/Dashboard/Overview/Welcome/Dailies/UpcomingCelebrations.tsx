@@ -9,12 +9,18 @@ import { EmptyState } from '../../components/EmptyState'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
+    boxHeader: {
+      alignItems: 'center',
+      display: 'flex',
+      height: theme.spacing(6),
+      justifyContent: 'space-between'
+    },
     boxWrapper: {
+      flex: 1,
       marginLeft: theme.spacing(2),
-      flex: 1
+      marginBottom: theme.spacing(5)
     },
     boxTitle: {
-      marginBottom: theme.spacing(1.5),
       display: 'flex',
       alignItems: 'flex-start'
     },
@@ -25,10 +31,6 @@ const useStyles = makeStyles(
       borderRadius: theme.shape.borderRadius,
       backgroundColor: theme.palette.common.white,
       overflowY: 'scroll'
-    },
-    boxFooter: {
-      textAlign: 'right',
-      marginTop: theme.spacing(2)
     }
   }),
   { name: 'UpcomingCelebrations' }
@@ -57,11 +59,13 @@ export function UpcomingCelebrations({ isLoading, events }: Props) {
 
   return (
     <Box className={classes.boxWrapper}>
-      <Typography variant="h6" className={classes.boxTitle}>
-        <InlineBadge badgeContent={celebrationEvents.length} color="primary">
-          To Contact
-        </InlineBadge>
-      </Typography>
+      <Box className={classes.boxHeader}>
+        <Typography variant="h6" className={classes.boxTitle}>
+          <InlineBadge badgeContent={celebrationEvents.length} color="primary">
+            To Contact
+          </InlineBadge>
+        </Typography>
+      </Box>
       <Box className={classes.boxContainer}>
         {isLoading && (
           <>
@@ -82,7 +86,6 @@ export function UpcomingCelebrations({ isLoading, events }: Props) {
           </List>
         )}
       </Box>
-      <Box className={classes.boxFooter} />
     </Box>
   )
 }
