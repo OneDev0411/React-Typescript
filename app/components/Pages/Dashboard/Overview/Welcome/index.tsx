@@ -50,10 +50,10 @@ const useStyles = makeStyles(
       borderRadius: theme.shape.borderRadius,
       backgroundColor: theme.palette.common.white,
       height: '300px',
+      marginBottom: theme.spacing(3),
       padding: theme.spacing(1),
       overflowY: 'scroll',
-      width: '100%',
-      marginBottom: theme.spacing(3)
+      width: '100%'
     },
     container: {
       display: 'flex',
@@ -64,14 +64,14 @@ const useStyles = makeStyles(
       flex: 1
     },
     greeting: {
+      alignItems: 'center',
       display: 'flex',
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center'
+      justifyContent: 'center'
     },
     main: {
-      display: 'flex',
       borderRadius: theme.shape.borderRadius,
+      display: 'flex',
       flexDirection: 'column',
       padding: theme.spacing(0, 5)
     }
