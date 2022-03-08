@@ -25,9 +25,9 @@ const useStyles = makeStyles(
       backgroundColor: theme.palette.grey[100],
       borderRadius: theme.shape.borderRadius
     },
-    headerContainer: dashboardStyles => ({
-      paddingBottom: dashboardStyles ? theme.spacing(1) : theme.spacing(2)
-    }),
+    headerContainer: {
+      paddingBottom: theme.spacing(2)
+    },
     titleContainer: {
       paddingRight: theme.spacing(2)
     }
@@ -62,7 +62,7 @@ export default function SectionLayout({
   headerGridProps,
   title
 }: Props) {
-  const classes = useStyles(dashboardStyles)
+  const classes = useStyles()
 
   return (
     <Grid

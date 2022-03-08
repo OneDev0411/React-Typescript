@@ -2,11 +2,14 @@ import { ReactNode } from 'react'
 
 import { Box, Typography } from '@material-ui/core'
 import { Theme, makeStyles } from '@material-ui/core/styles'
+import { Link } from 'react-router'
 
 interface Props {
   children?: ReactNode
   description?: string
   iconSrc: string
+  moreLinkLabel?: string
+  moreLinkUrl?: string
   title?: string
 }
 
@@ -17,10 +20,22 @@ const styles = makeStyles(
       maxWidth: '520px',
       marginTop: theme.spacing(1)
     },
+    descriptionWrapper: {
+      display: 'flex'
+    },
     icon: {
       display: 'inline-block',
       height: theme.spacing(7),
       marginBottom: theme.spacing(1.5)
+    },
+    moreLinkLabel: {
+      color: theme.palette.primary.main,
+      marginLeft: theme.spacing(1),
+
+      '&:hover, &:focus': {
+        color: theme.palette.primary.dark,
+        textDecoration: 'none'
+      }
     },
     title: {
       marginTop: theme.spacing(1)
@@ -29,7 +44,14 @@ const styles = makeStyles(
   { name: 'EmptyState' }
 )
 
-export function EmptyState({ children, description, iconSrc, title }: Props) {
+export function EmptyState({
+  children,
+  description,
+  iconSrc,
+  moreLinkLabel,
+  moreLinkUrl,
+  title
+}: Props) {
   const classes = styles()
 
   return (
@@ -46,9 +68,20 @@ export function EmptyState({ children, description, iconSrc, title }: Props) {
         </Typography>
       )}
       {description && (
-        <Typography className={classes.description} variant="body1">
-          {description}
-        </Typography>
+        <Box className={classes.descriptionWrapper}>
+          <Typography className={classes.description} variant="body1">
+            {description}
+            {moreLinkUrl && (
+              <Link
+                className={classes.moreLinkLabel}
+                target="_blank"
+                to={moreLinkUrl}
+              >
+                {moreLinkLabel}
+              </Link>
+            )}
+          </Typography>
+        </Box>
       )}
       {children}
     </Box>
