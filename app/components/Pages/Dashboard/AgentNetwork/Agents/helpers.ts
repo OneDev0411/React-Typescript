@@ -1,24 +1,31 @@
+import { isLeaseProperty } from '@app/utils/listing'
 import { getPlace } from 'models/listings/search/get-place'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 
 import {
   DEFAULT_SEARCH_RADIUS,
-  ALL_PROPERTY_TYPES,
-  ALL_PROPERTY_SUBTYPES
+  DEFAULT_SEARCH_MONTHS_PERIOD
 } from '../constants'
 
-function getPastYearTimestamp() {
-  return (new Date().getTime() - 365 * 24 * 3600000) / 1000
+function getPastMonthsTimestamp(months: number) {
+  const now = new Date()
+  const past = new Date()
+
+  past.setMonth(now.getMonth() - months)
+
+  return past.getTime() / 1000
 }
 
 export async function getListingVAlertFilters(
   listing: IListing
 ): Promise<AlertFiltersWithRadiusAndCenter> {
-  const pastYearTimestamp = getPastYearTimestamp()
+  const pastYearTimestamp = getPastMonthsTimestamp(DEFAULT_SEARCH_MONTHS_PERIOD)
   const place = await getPlace(listing.property.address.full_address)
 
   return {
-    property_types: [listing.property.property_type],
+    property_types: isLeaseProperty(listing)
+      ? undefined
+      : [listing.property.property_type],
     property_subtypes: [listing.property.property_subtype],
     minimum_bedrooms: listing.property.bedroom_count
       ? Math.max(listing.property.bedroom_count - 2, 0)
@@ -36,11 +43,9 @@ export async function getListingVAlertFilters(
 export function getLocationVAlertFilters(
   location: google.maps.LatLngLiteral
 ): AlertFiltersWithRadiusAndCenter {
-  const pastYearTimestamp = getPastYearTimestamp()
+  const pastYearTimestamp = getPastMonthsTimestamp(DEFAULT_SEARCH_MONTHS_PERIOD)
 
   return {
-    property_types: ALL_PROPERTY_TYPES,
-    property_subtypes: ALL_PROPERTY_SUBTYPES,
     points: getMapBoundsInCircle(location, DEFAULT_SEARCH_RADIUS),
     center: {
       latitude: location.lat,
