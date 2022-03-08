@@ -12,7 +12,7 @@ import pluralize from 'pluralize'
 
 import { changeUrl } from '@app/utils/change-url'
 import Table from '@app/views/components/Grid/Table'
-import { useGridStyles } from '@app/views/components/Grid/Table/styles'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 import { useListSelection } from '@app/views/components/ListSelection/use-list-selection'
 import LoadingComponent from '@app/views/components/Spinner'

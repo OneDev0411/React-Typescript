@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 import pluralize from 'pluralize'
 
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import Table from 'components/Grid/Table'
-import { useGridStyles } from 'components/Grid/Table/styles'
 
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 

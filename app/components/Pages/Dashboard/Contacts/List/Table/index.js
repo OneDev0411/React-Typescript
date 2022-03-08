@@ -10,21 +10,11 @@ import {
 import cn from 'classnames'
 
 import { useBreakpoint } from '@app/hooks/use-breakpoint'
-import { Table } from '@app/views/components/Grid/Table'
-import { resetRows } from '@app/views/components/Grid/Table/context/actions/selection/reset-rows'
-// import { BirthdayCell } from '@app/views/components/Grid/Table/features/cells.bkp/BirthdayCell'
-// import { EmailCell } from '@app/views/components/Grid/Table/features/cells.bkp/EmailCell'
-// import FlowsCell from '@app/views/components/Grid/Table/features/cells.bkp/FlowsCell'
-// import ColumnHeaderCell from '@app/views/components/Grid/Table/features/cells/header/ColumnHeaderCell'
-// import { LastTouchCell } from '@app/views/components/Grid/Table/features/cells.bkp/LastTouchCell'
-// import { PhoneNumberCell } from '@app/views/components/Grid/Table/features/cells.bkp/PhoneNumberCell'
-// import TagsCell from '@app/views/components/Grid/Table/features/cells.bkp/TagsCell'
-// import { EditTextCell } from '@app/views/components/Grid/Table/features/cells.bkp/types/EditTextCell'
-import { useGridContext } from '@app/views/components/Grid/Table/hooks/use-grid-context'
-import {
-  useGridStyles
-  // useInlineGridStyles
-} from '@app/views/components/Grid/Table/styles'
+import { useGridBorderedStyles } from '@app/views/components/Grid/Table/styles/bordered'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
+import { Table } from 'components/Grid/Table'
+import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
+import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 
 import NoSearchResults from '../../../../../Partials/no-search-results'
@@ -61,7 +51,7 @@ const ContactsList = props => {
   const [state, dispatch] = useGridContext()
 
   const gridClasses = useGridStyles()
-  // const inlineGridClasses = useInlineGridStyles()
+  const gridBorderedClasses = useGridBorderedStyles()
   const customGridClasses = useCustomGridStyles()
   const breakpoint = useBreakpoint()
 
@@ -107,7 +97,7 @@ const ContactsList = props => {
       //     sortable={column.sortable}
       //   />
       // ),
-      width: '230px',
+      // width: '230px',
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
       render: ({ row: contact, isRowSelected, column }) => {
         const name = getAttributeFromSummary(contact, 'display_name')
@@ -140,7 +130,7 @@ const ContactsList = props => {
       // ),
       isHidden: ['xs', 'sm'].includes(breakpoint),
       sortable: false,
-      width: '200px',
+      // width: '200px',
       render: ({ row: contact, isRowSelected, column }) => {
         // if (column.isHidden) {
         //   return null
@@ -173,7 +163,7 @@ const ContactsList = props => {
       //   />
       // ),
       sortable: false,
-      width: '210px',
+      // width: '210px',
       render: ({ row: contact, isRowSelected, column }) => {
         // if (column.isHidden) {
         //   return null
@@ -202,7 +192,7 @@ const ContactsList = props => {
       // ),
       sortable: false,
       isHidden: ['xs'].includes(breakpoint),
-      width: '290px',
+      // width: '290px',
       render: ({ row: contact, isRowSelected, column }) => {
         // if (column.isHidden) {
         //   return null
@@ -235,7 +225,7 @@ const ContactsList = props => {
       // ),
       isHidden: ['xs'].includes(breakpoint),
       sortable: false,
-      width: '150px',
+      // width: '150px',
       render: ({ row: contact, isRowSelected, column }) => {
         // if (column.isHidden) {
         //   return null
@@ -252,40 +242,21 @@ const ContactsList = props => {
         return <div>5</div>
       }
     },
-    {
-      id: 'flows',
-      // headerName: ({ column, width }) => (
-      //   <ColumnHeaderCell
-      //     title="Flows"
-      //     iconPath={mdiLightningBoltOutline}
-      //     sortable={column.sortable}
-      //     width={width}
-      //   />
-      // ),
-      width: '110px',
-      isHidden: breakpoint !== 'xl',
-      render: ({ row: contact, isRowSelected, column }) => {
-        // if (column.isHidden) {
-        //   return null
-        // }
-
-        // return (
-        //   <FlowsCell
-        //     contact={contact}
-        //     callback={() => {
-        //       resetSelectedRow()
-        //       // find a way to reload without refreshing page
-        //       // props.reloadContacts()
-        //     }}
-        //     // width={column.width}
-        //     isRowSelected={isRowSelected}
-        //     flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
-        //   />
-        // )
-
-        return <div>6</div>
-      }
-    },
+    // {
+    //   id: 'unpark-contact',
+    //   class: 'opaque',
+    //   render: ({ row: contact }) => {
+    //     return contact?.parked ? (
+    //       <UnparkContact
+    //         contactId={contact.id}
+    //         callback={() => {
+    //           resetSelectedRow()
+    //           props.reloadContacts()
+    //         }}
+    //       />
+    //     ) : null
+    //   }
+    // },
     {
       id: 'birthday',
       // headerName: ({ column, width }) => (
@@ -298,7 +269,7 @@ const ContactsList = props => {
       // ),
       sortable: false,
       isHidden: breakpoint !== 'xl',
-      width: '180px',
+      // width: '180px',
       render: ({ row: contact, isRowSelected, column }) => {
         // if (column.isHidden) {
         //   return null
@@ -355,14 +326,18 @@ const ContactsList = props => {
         getTdProps={getColumnProps}
         selection={{
           defaultRender: ({ row }) => <Avatar contact={row} />,
-          columnProps: {},
+          columnProps: {
+            width: '80px'
+          },
           showSelectAll: false
         }}
-        classes={
-          {
-            // row: cn(gridClasses.row, inlineGridClasses.row, customGridClasses.row)
-          }
-        }
+        classes={{
+          row: cn(
+            gridClasses.row,
+            customGridClasses.row,
+            gridBorderedClasses.row
+          )
+        }}
         infiniteScrolling={{
           onReachEnd: props.onRequestLoadMore,
           onReachStart: props.onRequestLoadMoreBefore

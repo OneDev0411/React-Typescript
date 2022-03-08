@@ -18,6 +18,8 @@ function capitalize(text) {
 function normalizeAttribute(context) {
   const attributes = context.attributes || [context.attribute]
 
+  console.log(context, attributes)
+
   const list = attributes.map(attribute => {
     const text = attribute
       .split('.')
