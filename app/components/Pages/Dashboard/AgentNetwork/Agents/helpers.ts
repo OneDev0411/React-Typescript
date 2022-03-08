@@ -19,7 +19,7 @@ function getPastMonthsTimestamp(months: number) {
 export async function getListingVAlertFilters(
   listing: IListing
 ): Promise<AlertFiltersWithRadiusAndCenter> {
-  const pastYearTimestamp = getPastMonthsTimestamp(DEFAULT_SEARCH_MONTHS_PERIOD)
+  const minimumSoldDate = getPastMonthsTimestamp(DEFAULT_SEARCH_MONTHS_PERIOD)
   const place = await getPlace(listing.property.address.full_address)
 
   return {
@@ -33,7 +33,7 @@ export async function getListingVAlertFilters(
     maximum_bedrooms: listing.property.bedroom_count
       ? listing.property.bedroom_count + 2
       : undefined,
-    minimum_sold_date: pastYearTimestamp,
+    minimum_sold_date: minimumSoldDate,
     points: getMapBoundsInCircle(place.center, DEFAULT_SEARCH_RADIUS),
     radius: DEFAULT_SEARCH_RADIUS,
     center: { latitude: place.center.lat, longitude: place.center.lng }
@@ -43,7 +43,7 @@ export async function getListingVAlertFilters(
 export function getLocationVAlertFilters(
   location: google.maps.LatLngLiteral
 ): AlertFiltersWithRadiusAndCenter {
-  const pastYearTimestamp = getPastMonthsTimestamp(DEFAULT_SEARCH_MONTHS_PERIOD)
+  const minimumSoldDate = getPastMonthsTimestamp(DEFAULT_SEARCH_MONTHS_PERIOD)
 
   return {
     points: getMapBoundsInCircle(location, DEFAULT_SEARCH_RADIUS),
@@ -52,6 +52,6 @@ export function getLocationVAlertFilters(
       longitude: location.lng
     },
     radius: DEFAULT_SEARCH_RADIUS,
-    minimum_sold_date: pastYearTimestamp
+    minimum_sold_date: minimumSoldDate
   }
 }
