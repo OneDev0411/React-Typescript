@@ -38,7 +38,7 @@ function useQueryParamBase<T extends ParamInputType = string>(
   deleteIfEmpty: boolean
 ): UseQueryParam<T> {
   const value = useQueryParamValue(name, defaultValue)
-  const defaultValueRef = useRef(defaultValue)
+  const defaultValueRef = useRef<T>(defaultValue)
 
   const setValue = useCallback(
     (newValue: T) => {
@@ -92,7 +92,7 @@ function useQueryParamBase<T extends ParamInputType = string>(
  *
  * Please consider that it calls the `pushState` method under the hood to
  * insert a new state into the browser history.
- * This hook will not store default value.
+ * The default value will not appear on the URL
  * @param name The param name
  * @param defaultValue The param default value
  * @returns [the param value, the setter function, the delete function]
@@ -110,7 +110,7 @@ export function useQueryParam<T extends ParamInputType = string>(
  *
  * Please consider that it calls the `replaceState` method under the hood to
  * replace the state on the browser history.
- * This hook will not store default value.
+ * The default value will not appear on the URL.
  * @param name The param name
  * @param defaultValue The param default value
  * @returns [the param value, the setter function, the delete function]
@@ -129,7 +129,8 @@ export function useReplaceQueryParam<T extends ParamInputType = string>(
  * Please consider that it calls the `pushState` method under the hood to insert
  * a new state into the browser history.
  *
- * This hook will not store default value. Also, this hook deletes the param automatically if you pass an empty string.
+ * The default value will not appear on the URL.
+ * Also, this hook deletes the param automatically if you pass an empty string.
  * @param name The param name
  * @param defaultValue The param default value
  * @returns [the param value, the setter function, the delete function]
@@ -148,7 +149,8 @@ export function useAutoQueryParam<T extends ParamInputType = string>(
  * Please consider that it calls the `replaceState` method under the hood to
  * replace the state on the browser history.
  *
- * This hook will not store default value. Also, this hook deletes the param automatically if you pass an empty string.
+ * The default value will not appear on the URL.
+ * Also, this hook deletes the param automatically if you pass an empty string.
  * @param name The param name
  * @param defaultValue The param default value
  * @returns [the param value, the setter function, the delete function]
