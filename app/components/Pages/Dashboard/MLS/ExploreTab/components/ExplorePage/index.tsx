@@ -5,6 +5,7 @@ import cn from 'classnames'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
+import { createValertOptions } from '@app/components/Pages/Dashboard/MLS/helpers/get-listings-helpers'
 import { appSidenavWidth } from '@app/components/Pages/Dashboard/SideNav/variables'
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
@@ -28,7 +29,6 @@ import {
   clearListingUiStates
 } from '../../../context/actions'
 import useUiListingsContext from '../../../context/useUiListingsContext'
-import { createValertOptions } from '../../../helpers/get-listings-helpers'
 import {
   coordToPoint,
   estimateMapZoom,
