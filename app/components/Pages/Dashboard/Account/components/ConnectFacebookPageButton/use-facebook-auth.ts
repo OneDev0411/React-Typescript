@@ -37,17 +37,10 @@ export function useFacebookAuth({
       return
     }
 
-    // const token = user.access_token
-    // const login = window.open(
-    //   `/api/deals/docusign/login?access_token=${token}`,
-    //   'sharer',
-    //   'toolbar=0,status=0,width=548,height=325'
-    // )
-
     const windowHandle = window.open(
       `${facebookAuthUrl}?access_token=${accessToken}`,
       'sharer',
-      'toolbar=0,status=0,width=548,height=325'
+      'toolbar=0,status=0,location=0,width=548,height=325'
     )
 
     if (!windowHandle) {

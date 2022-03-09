@@ -22,6 +22,12 @@ export default async (req: Request, res: Response) => {
           .map((url: string) => url.trim())
 
         res.redirect(link)
+      } else {
+        // TODO: Uncomment this to redirect the user and close the popup if needed
+        // res.redirect(
+        //   `/api/facebook/auth-result?error=Unknown&message=${e.response?.data?.message}`
+        // )
+        res.send(e.response?.data?.message) // TODO: Remove this line when the above redirect was uncommented
       }
 
       res.status(e.response?.status || 500)
