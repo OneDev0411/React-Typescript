@@ -13,7 +13,9 @@ async function getShowings(query: string): Promise<IShowing[]> {
           'showing_appointment.contact',
           'showing_appointment.approvals',
           'showing_approval.role',
-          'showing_appointment.notifications'
+          'showing_appointment.notifications',
+          'showing_role.agent',
+          'agent.office'
         ]
       })
       .send({ query })

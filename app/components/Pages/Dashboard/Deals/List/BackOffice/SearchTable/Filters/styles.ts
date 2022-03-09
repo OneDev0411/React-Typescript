@@ -138,6 +138,11 @@ export const useStyles = makeStyles(
     },
     typeIcon: {
       color: theme.palette.primary.main
+    },
+    helpWrapper: {
+      margin: theme.spacing(0, 2),
+      alignItems: 'center',
+      display: 'flex'
     }
   }),
   { name: 'AllDealsFilters' }

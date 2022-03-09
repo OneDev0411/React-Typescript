@@ -1,17 +1,19 @@
 import { useState } from 'react'
 
-import { compareAsc } from 'date-fns'
+import { startOfDay, compareAsc } from 'date-fns'
 import { useSelector } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
+import { useLoadingEntities } from '@app/hooks/use-loading'
+import {
+  getCalendar,
+  CalendarObjectType
+} from '@app/models/calendar/get-calendar'
+import { selectUser } from '@app/selectors/user'
 import {
   getDateRange,
   Format
-} from 'components/ContactProfileTimeline/helpers/get-date-range'
-import { useLoadingEntities } from 'hooks/use-loading'
-import { getCalendar, CalendarObjectType } from 'models/calendar/get-calendar'
-import { selectUser } from 'selectors/user'
-import { convertToCurrentYear } from 'utils/date-utils'
+} from '@app/views/components/ContactProfileTimeline/helpers/get-date-range'
 
 interface UseCalendarEvents {
   isLoading: boolean
@@ -39,25 +41,7 @@ export function useCalendarEvents(
         users: [user.id]
       })) as ICalendarEvent[]
 
-      // API team made me do this and sort the events on the client side
-      // More info: https://gitlab.com/rechat/web/-/issues/5058#note_561554003
-      const sortedEvents = calendarEvents
-        .map(event => {
-          let newTimestamp = new Date(event.timestamp * 1000)
-
-          if (event.all_day) {
-            newTimestamp = convertToCurrentYear(newTimestamp)
-          }
-
-          return {
-            ...event,
-            timestamp: newTimestamp.getTime() / 1000,
-            next_occurence: newTimestamp.toISOString()
-          }
-        })
-        .sort((a, b) =>
-          compareAsc(new Date(a.timestamp), new Date(b.timestamp))
-        )
+      const sortedEvents = sortCalendarEventsOnNextOccurrence(calendarEvents)
 
       setEvents(sortedEvents)
     }
@@ -69,4 +53,25 @@ export function useCalendarEvents(
     events: events || [],
     isLoading
   }
+}
+
+export function sortCalendarEventsOnNextOccurrence(
+  events: ICalendarEvent[]
+): ICalendarEvent[] {
+  return events
+    .map(event => {
+      if (event.all_day) {
+        return {
+          ...event,
+          next_occurence: startOfDay(
+            new Date(event.next_occurence)
+          ).toISOString()
+        }
+      }
+
+      return event
+    })
+    .sort((a, b) => {
+      return compareAsc(new Date(a.next_occurence), new Date(b.next_occurence))
+    })
 }
