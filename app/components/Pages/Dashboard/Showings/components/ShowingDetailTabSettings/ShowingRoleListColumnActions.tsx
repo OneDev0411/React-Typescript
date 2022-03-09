@@ -79,7 +79,7 @@ function ShowingRoleListColumnActions({
         )
 
         const sellerAgent: Optional<IShowingRole> = updatedShowing.roles.find(
-          user => user.role === 'SellerAgent'
+          user => user.role === updatedRole.role
         )
 
         onEdit({
