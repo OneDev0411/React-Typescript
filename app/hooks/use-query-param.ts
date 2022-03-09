@@ -12,7 +12,7 @@ type UseQueryParam<T extends ParamInputType = string> = [
   () => void
 ]
 
-function useQueryParamValue<T extends ParamInputType = string>(
+export function useQueryParamValue<T extends ParamInputType = string>(
   name: string,
   defaultValue: T = '' as T
 ): T {
@@ -24,14 +24,15 @@ function useQueryParamValue<T extends ParamInputType = string>(
           .getAll(name)
           .map(decodeURIComponent)
       : decodeURIComponent(
-          new URLSearchParams(location.search).get(name) || defaultValue
+          new URLSearchParams(location.search).get(name) ||
+            (defaultValue as string)
         )
   }, [defaultValue, location.search, name])
 
   return value as T
 }
 
-function useQueryParamBase<T extends ParamInputType = string>(
+export function useQueryParamBase<T extends ParamInputType = string>(
   historyAction: (path: LocationDescriptor) => void,
   name: string,
   defaultValue: T = '' as T,
