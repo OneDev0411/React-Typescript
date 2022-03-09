@@ -18,7 +18,7 @@ function SocialDrawerInstagramButton({
 }: SocialDrawerInstagramButtonProps) {
   const [isDialogOpen, stIsDialogOpen] = useState<boolean>(false)
 
-  const { data: facebookPages } = useGetFacebookPages()
+  const { data: facebookPages, isLoading } = useGetFacebookPages()
   const hasAnyAccounts = !!facebookPages?.length
 
   const openDialog = () => stIsDialogOpen(true)
@@ -48,6 +48,7 @@ function SocialDrawerInstagramButton({
         color="primary"
         fullWidth
         onClick={handleClick}
+        disabled={isLoading}
       >
         Instagram ...
       </Button>
