@@ -61,7 +61,7 @@ function useQueryParamBase<T extends ParamInputType = string>(
           url.searchParams.append(name, encodeURIComponent(v))
         })
       } else {
-        url.searchParams.set(name, encodeURIComponent(newValue))
+        url.searchParams.set(name, encodeURIComponent(newValue as string))
       }
 
       historyAction(url.pathname + url.search)
