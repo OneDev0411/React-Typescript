@@ -16,6 +16,7 @@ export interface ColumnHeaderProps<Row> {
   rows: Row[]
   columnIndex: number
   totalRows: number
+  width: string | number
 }
 
 export interface GridClasses {
@@ -31,7 +32,6 @@ export type ColumnSortType = 'number' | 'string'
 export interface TableColumn<Row> {
   id: string
   header?: string | ColumnHeaderFunction<Row>
-  headerName?: string | ColumnHeaderFunction<Row>
   primary?: boolean
   align?: TableCellProps['align']
   width?: string

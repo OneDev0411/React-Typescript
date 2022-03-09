@@ -89,6 +89,7 @@ const ContactsList = props => {
   const columns = [
     {
       id: 'name',
+      header: 'Name',
       // headerName: ({ rows, column, width }) => (
       //   <ColumnHeaderCell
       //     title={getSelectedInfo(rows.length)}
@@ -120,7 +121,8 @@ const ContactsList = props => {
     },
     {
       id: 'tag',
-      // headerName: ({ column, width }) => (
+      header: ({ column }) => <div>Tags</div>,
+      // header: ({ column, width }) => (
       //   <ColumnHeaderCell
       //     title="Tags"
       //     iconPath={mdiTagMultipleOutline}
@@ -314,12 +316,10 @@ const ContactsList = props => {
   return (
     <>
       <Table
-        // hasHeader
         rows={props.data}
         totalRows={props.totalRows}
         loading={getLoading()}
         columns={columns}
-        // inlineGridEnabled
         rowSize={5}
         LoadingStateComponent={LoadingComponent}
         getTrProps={getRowProps}

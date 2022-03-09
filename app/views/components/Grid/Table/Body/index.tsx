@@ -37,6 +37,8 @@ interface Props<Row> {
   classes: GridClasses
   virtualize: boolean
   rowSize?: number
+  headless?: boolean
+  totalRows: number
   infiniteScrolling: InfiniteScrollingOptions | null
   getTrProps?: (data: TrProps<Row>) => object
   getTdProps?: (data: TdProps<Row>) => object
@@ -47,7 +49,9 @@ export function Body<Row>({
   rows,
   classes,
   virtualize,
+  headless = false,
   rowSize = 8,
+  totalRows,
   infiniteScrolling,
   getTdProps = () => ({}),
   getTrProps = () => ({})
@@ -79,7 +83,7 @@ export function Body<Row>({
   const getItemKey = (
     index: number,
     { rows }: ComponentProps<typeof Row>['data']
-  ) => rows[index].id ?? index
+  ) => rows[index]?.id ?? index
 
   const onItemsRendered = (data: ListOnItemsRenderedProps): void => {
     if (!scroll) {
@@ -108,7 +112,9 @@ export function Body<Row>({
               height: theme.spacing(rowSize)
             }}
             data={{
-              rows,
+              rows: headless ? rows : [undefined, ...rows],
+              totalRows,
+              headless,
               columns,
               state,
               classes,
@@ -128,7 +134,7 @@ export function Body<Row>({
         {({ width }) => (
           <FixedSizeList
             ref={listRef}
-            itemCount={rows.length}
+            itemCount={headless ? rows.length : rows.length + 1}
             itemSize={theme.spacing(rowSize)}
             width={width}
             height={windowHeight}
@@ -136,7 +142,9 @@ export function Body<Row>({
             itemKey={getItemKey}
             itemData={
               {
-                rows,
+                rows: headless ? rows : [undefined, ...rows],
+                totalRows,
+                headless,
                 columns,
                 state,
                 classes,

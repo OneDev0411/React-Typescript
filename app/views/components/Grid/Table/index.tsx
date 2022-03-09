@@ -15,13 +15,12 @@ import {
 } from './types'
 
 export interface Props<Row> {
-  inlineGridEnabled?: boolean
   columns: TableColumn<Row>[]
   rows: Row[]
   totalRows: number
   virtualize?: boolean
-  hasHeader?: boolean
   rowSize?: number
+  headless?: boolean
   selection?: GridSelectionOptions<Row> | null
   sorting?: GridSortingOption | null
   infiniteScrolling?: InfiniteScrollingOptions | null

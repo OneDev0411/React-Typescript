@@ -1,8 +1,9 @@
-import React, { CSSProperties, memo } from 'react'
+import { CSSProperties, memo } from 'react'
 
 import cn from 'classnames'
 
 import { StateContext } from '../../context'
+import { Header } from '../../Header'
 import { TableColumn, TrProps, TdProps, GridClasses } from '../../types'
 
 import { RowContainer } from './styled'
@@ -13,6 +14,8 @@ interface Props<Row> {
   data: {
     rows: Row[]
     columns: TableColumn<Row>[]
+    headless: boolean
+    totalRows: number
     state: StateContext
     classes: GridClasses
     columnsSize: string[]
@@ -27,13 +30,28 @@ function Row<T>({
   data: {
     columns,
     rows,
+    totalRows,
     state,
+    headless,
     classes,
     columnsSize,
     getTrProps = () => ({}),
     getTdProps = () => ({})
   }
 }: Props<T & { id?: string }>) {
+  if (headless === false && rowIndex === 0) {
+    return (
+      <Header<T>
+        columns={columns}
+        rows={rows}
+        totalRows={totalRows}
+        columnsSize={columnsSize}
+        classes={classes}
+        style={style}
+      />
+    )
+  }
+
   const row = rows[rowIndex]
 
   const isRowSelected =
@@ -42,43 +60,45 @@ function Row<T>({
     state.selection.selectedRowIds.includes(row.id || rowIndex.toString())
 
   return (
-    <RowContainer
-      index={rowIndex}
-      selected={isRowSelected}
-      className={classes.row}
-      style={style}
-      data-tour-id={`row-${rowIndex}`}
-      {...getTrProps({
-        rowIndex,
-        row,
-        selected: isRowSelected
-      })}
-    >
-      {columns
-        .filter((column: TableColumn<T>) => column.render)
-        .map((column: TableColumn<T>, columnIndex: number) => (
-          <div
-            key={columnIndex}
-            className={cn('column', column.class, {
-              primary: column.primary === true
-            })}
-            style={{
-              width: columnsSize[columnIndex],
-              textAlign: column.align || 'left',
-              ...(column.rowStyle || {}),
-              ...(column.style || {})
-            }}
-            {...getTdProps({
-              columnIndex,
-              column,
-              rowIndex,
-              row
-            })}
-          >
-            {getCell(column, row, rowIndex, columnIndex, rows.length)}
-          </div>
-        ))}
-    </RowContainer>
+    <>
+      <RowContainer
+        index={rowIndex}
+        selected={isRowSelected}
+        className={classes.row}
+        style={style}
+        data-tour-id={`row-${rowIndex}`}
+        {...getTrProps({
+          rowIndex,
+          row,
+          selected: isRowSelected
+        })}
+      >
+        {columns
+          .filter((column: TableColumn<T>) => column.render)
+          .map((column: TableColumn<T>, columnIndex: number) => (
+            <div
+              key={columnIndex}
+              className={cn('column', column.class, {
+                primary: column.primary === true
+              })}
+              style={{
+                width: columnsSize[columnIndex],
+                textAlign: column.align || 'left',
+                ...(column.rowStyle || {}),
+                ...(column.style || {})
+              }}
+              {...getTdProps({
+                columnIndex,
+                column,
+                rowIndex,
+                row
+              })}
+            >
+              {getCell(column, row, rowIndex, columnIndex, rows.length)}
+            </div>
+          ))}
+      </RowContainer>
+    </>
   )
 }
 
