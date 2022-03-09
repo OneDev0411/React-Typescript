@@ -76,14 +76,14 @@ function SocialDrawer({
 
   const instance = templateInstance || brandAsset
 
-  const Component =
+  const StepComponent =
     step === 'General' ? SocialDrawerGeneral : SocialDrawerScheduleInstagramPost
 
   return (
     <Drawer open onClose={onClose}>
       <Drawer.Header title="Schedule or Share?" />
       <SocialDrawerProvider setStep={setStep}>
-        <Component instance={instance} errorMessage={errorMessage} />
+        <StepComponent instance={instance} errorMessage={errorMessage} />
       </SocialDrawerProvider>
     </Drawer>
   )

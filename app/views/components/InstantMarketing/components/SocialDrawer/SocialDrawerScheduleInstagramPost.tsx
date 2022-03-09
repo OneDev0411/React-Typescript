@@ -3,6 +3,7 @@ import { Box, Button } from '@material-ui/core'
 import Drawer from '@app/views/components/OverlayDrawer'
 
 import SocialDrawerPreviewFile from './SocialDrawerPreviewFile'
+import SocialDrawerScheduleInstagramPostForm from './SocialDrawerScheduleInstagramPostForm'
 import { useSetSocialDrawerStep } from './use-set-social-drawer-step'
 
 interface SocialDrawerScheduleInstagramPostProps {
@@ -23,12 +24,14 @@ function SocialDrawerScheduleInstagramPost({
       <Drawer.Body>
         <Box my={3}>
           <SocialDrawerPreviewFile instance={instance} error={errorMessage} />
-          form fields
+          <Box my={2}>
+            <SocialDrawerScheduleInstagramPostForm />
+          </Box>
         </Box>
       </Drawer.Body>
       <Drawer.Footer>
         <Button onClick={gotoGeneralStep}>Back</Button>
-        <Button>Save</Button>
+        <Button type="submit">Save</Button>
       </Drawer.Footer>
     </>
   )
