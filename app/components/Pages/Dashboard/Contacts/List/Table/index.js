@@ -99,6 +99,7 @@ const ContactsList = props => {
       //   />
       // ),
       // width: '230px',
+      hidden: false,
       accessor: contact => getAttributeFromSummary(contact, 'display_name'),
       render: ({ row: contact, isRowSelected, column }) => {
         const name = getAttributeFromSummary(contact, 'display_name')
@@ -130,7 +131,7 @@ const ContactsList = props => {
       //     width={width}
       //   />
       // ),
-      isHidden: ['xs', 'sm'].includes(breakpoint),
+      hidden: ['xs', 'sm'].includes(breakpoint),
       sortable: false,
       // width: '200px',
       render: ({ row: contact, isRowSelected, column }) => {

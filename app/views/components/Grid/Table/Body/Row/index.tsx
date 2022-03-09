@@ -74,7 +74,10 @@ function Row<T>({
         })}
       >
         {columns
-          .filter((column: TableColumn<T>) => column.render)
+          .filter(
+            (column: TableColumn<T>) =>
+              (column.render || column.accessor) && column.hidden !== true
+          )
           .map((column: TableColumn<T>, columnIndex: number) => (
             <div
               key={columnIndex}

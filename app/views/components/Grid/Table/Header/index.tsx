@@ -42,28 +42,30 @@ export function Header<Row>({
 
   return (
     <div style={style} className={cn(classes.row, headerClasses.root)}>
-      {columns.map((column, columnIndex) => (
-        <div
-          key={columnIndex}
-          className={cn('column', headerClasses.column, column.id)}
-          style={{
-            width: columnsSize[columnIndex],
-            textAlign: column.align || 'left',
-            ...(column.headerStyle || {}),
-            ...(column.style || {})
-          }}
-        >
-          {typeof column.header === 'function'
-            ? column.header({
-                column,
-                columnIndex,
-                rows,
-                totalRows,
-                width: columnsSize[columnIndex]
-              })
-            : column.header}
-        </div>
-      ))}
+      {columns
+        .filter(column => column.hidden !== true)
+        .map((column, columnIndex) => (
+          <div
+            key={columnIndex}
+            className={cn('column', headerClasses.column, column.id)}
+            style={{
+              width: columnsSize[columnIndex],
+              textAlign: column.align || 'left',
+              ...(column.headerStyle || {}),
+              ...(column.style || {})
+            }}
+          >
+            {typeof column.header === 'function'
+              ? column.header({
+                  column,
+                  columnIndex,
+                  rows,
+                  totalRows,
+                  width: columnsSize[columnIndex]
+                })
+              : column.header}
+          </div>
+        ))}
     </div>
   )
 }

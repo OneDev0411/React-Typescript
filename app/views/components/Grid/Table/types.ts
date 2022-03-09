@@ -7,8 +7,6 @@ export interface RenderProps<Row> {
   totalRows: number
   rowIndex: number
   columnIndex: number
-  isRowSelected?: boolean
-  column?: TableColumn<Row>
 }
 
 export interface ColumnHeaderProps<Row> {
@@ -42,10 +40,10 @@ export interface TableColumn<Row> {
   sortType?: ColumnSortType
   sortTitle?: string
   class?: string
+  hidden?: boolean
   sortFn?: (rows: Row[]) => Row[]
   accessor?: (row: Row) => StringOrNumber | null | undefined
   render?: (data: RenderProps<Row>) => React.ReactNode | string
-  isHidden?: boolean
 }
 
 export type GridHookPlugin<Row, Options> = (
@@ -101,11 +99,4 @@ export interface TdProps<Row> {
   column: TableColumn<Row>
   rowIndex: number
   row: Row
-}
-
-export interface CellProps {
-  isSelected?: boolean
-  isHovered?: boolean
-  isRowSelected?: boolean
-  isHidden?: boolean
 }
