@@ -3,6 +3,7 @@ import { Theme, makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import Acl from 'views/components/Acl'
 
 import { AccessButtonType } from '../../types.d'
 
@@ -40,11 +41,13 @@ export function AccessButton({
   const classes = styles()
 
   return (
-    <Link className={classes.container} onClick={action} to={to}>
-      <SvgIcon path={icon} rightMargined color="grey" />
-      <Typography className={classes.label} variant="body1">
-        {label}
-      </Typography>
-    </Link>
+    <Acl access={access}>
+      <Link className={classes.container} onClick={action} to={to}>
+        <SvgIcon path={icon} rightMargined color="grey" />
+        <Typography className={classes.label} variant="body1">
+          {label}
+        </Typography>
+      </Link>
+    </Acl>
   )
 }
