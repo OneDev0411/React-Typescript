@@ -126,13 +126,13 @@ export default function Signin(props: Props) {
       const defaultHomePage = getUserDefaultHomepage(activeTeam)
 
       if (redirectTo && redirectTo.includes('http')) {
-        browserHistory.push('/branch?waitingForRedirect')
+        browserHistory.replace('/branch?waitingForRedirect')
         window.location.href = redirectTo
 
         return
       }
 
-      browserHistory.push(redirectTo || defaultHomePage)
+      browserHistory.replace(redirectTo || defaultHomePage)
     } catch (errorCode) {
       if (errorCode === 403) {
         setSignInFormSubmitMsg({
