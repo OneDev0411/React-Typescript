@@ -5,11 +5,11 @@ import { Tab, DropdownTab } from 'components/PageTabs'
 import dashboards from 'constants/metabase'
 
 interface Props {
-  brandType: IBrandType
+  brandType: Optional<IBrandType>
 }
 
 const AnalyticsDropdown = ({ brandType }: Props) => {
-  const availableDashboards = dashboards[brandType]
+  const availableDashboards = brandType ? dashboards[brandType] : undefined
 
   if (!availableDashboards) {
     return null

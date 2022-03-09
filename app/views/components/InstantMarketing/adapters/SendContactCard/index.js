@@ -1,15 +1,16 @@
-import React from 'react'
+import { Component } from 'react'
 
 import { Button } from '@material-ui/core'
 import idx from 'idx'
 import { connect } from 'react-redux'
 
+import { selectActiveTeamUnsafe } from '@app/selectors/team'
+import { selectUserImpersonateFirst } from '@app/selectors/user'
 import { confirmation } from 'actions/confirmation'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
-import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import MissingEmailModal from 'components/MissingEmailModal'
 import { addNotification as notify } from 'components/notification'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
@@ -17,10 +18,11 @@ import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
+import { hasUserAccessToMarketingCenter } from 'utils/acl'
 
 import SocialDrawer from '../../components/SocialDrawer'
 
-class SendContactCard extends React.Component {
+class SendContactCard extends Component {
   constructor(props) {
     super(props)
 
@@ -274,7 +276,7 @@ class SendContactCard extends React.Component {
   }
 
   render() {
-    if (hasMarketingAccess(this.props.user) === false) {
+    if (!hasUserAccessToMarketingCenter(this.props.activeTeam)) {
       return null
     }
 
@@ -347,9 +349,10 @@ class SendContactCard extends React.Component {
   }
 }
 
-function mapStateToProps({ user }) {
+function mapStateToProps(state) {
   return {
-    user
+    user: selectUserImpersonateFirst(state),
+    activeTeam: selectActiveTeamUnsafe(state)
   }
 }
 

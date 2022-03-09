@@ -1,22 +1,30 @@
+import { ACL } from 'constants/acl'
+import { getTeamACL } from 'utils/acl'
+
 import Fetch from '../../../../services/fetch'
-import { getActiveTeamId, getActiveTeamACL } from '../../../../utils/user-teams'
 
 /**
  * search deals
  */
 export async function searchDeals(
-  user,
+  team,
   criteria,
   order = ['deals.updated_at', 'DESC']
 ) {
   try {
-    const isBackOffice = getActiveTeamACL(user).includes('BackOffice')
+    const brandId = team?.brand?.id ?? null
+
+    if (!brandId) {
+      throw new Error('there is not active brand')
+    }
+
+    const isBackOffice = getTeamACL(team).includes(ACL.BACK_OFFICE)
 
     let url = '/deals/filter'
     let associations = ''
 
     let payload = {
-      brand: getActiveTeamId(user)
+      brand: brandId
     }
 
     if (criteria && typeof criteria === 'object') {

@@ -1,15 +1,14 @@
 import { memo, useState, useMemo } from 'react'
 
 import { Box } from '@material-ui/core'
-import { useSelector } from 'react-redux'
 import { InjectedRouter, PlainRoute } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import PageLayout from 'components/GlobalPageLayout'
 import { QuestionWizard } from 'components/QuestionWizard'
 import useAsync from 'hooks/use-async'
 import createShowing from 'models/showing/create-showing'
-import { selectActiveTeamId } from 'selectors/team'
 
 import ShowingCloseButton from '../../components/ShowingCloseButton'
 import ShowingStepAdvanceNotice from '../../components/ShowingStepAdvanceNotice'
@@ -47,7 +46,7 @@ interface CreateShowingProps {
 function CreateShowing({ router, route }: CreateShowingProps) {
   useTitle('Create New Showing | Rechat')
 
-  const teamId = useSelector(selectActiveTeamId)
+  const activeBrandId = useActiveBrandId()
 
   const [property, setProperty] = useState<Nullable<ShowingPropertyType>>(null)
 
@@ -163,7 +162,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
           role: role.role,
           user: role.user?.id ?? undefined,
           agent: role.agent ?? undefined,
-          brand: role.brand || teamId,
+          brand: role.brand || activeBrandId,
           first_name: role.first_name,
           last_name: role.last_name,
           email: role.email,
@@ -189,7 +188,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         // so please remove these fields after API
         start_date: new Date().toISOString(),
         duration,
-        brand: teamId
+        brand: activeBrandId
         // gallery?: IMediaGallery // TODO: use this field to pass gallery id
       })
     })

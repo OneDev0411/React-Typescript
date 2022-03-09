@@ -1,5 +1,5 @@
-import { SIGNIN_SUCCESS } from '../../constants/auth/signin'
-import * as actionTypes from '../../constants/user'
+import { SIGNIN_SUCCESS } from '@app/constants/auth/signin'
+import * as actionTypes from '@app/constants/user'
 
 export type IUserState = Nullable<IUser>
 
@@ -9,53 +9,8 @@ const userReducer = (state: IUserState = null, action) => {
     case SIGNIN_SUCCESS:
       return action.user
 
-    case actionTypes.SET_USER_SETTING:
-      return {
-        ...state,
-        teams: action.user.teams
-      }
-
-    case actionTypes.FETCH_USER_TEAMS_SUCCESS:
-      return {
-        ...state,
-        teams: action.teams,
-        is_fetching_teams: false
-      }
-
-    case actionTypes.FETCH_USER_TEAMS_REQUEST:
-      return {
-        ...state,
-        is_fetching_teams: true
-      }
-
-    case actionTypes.FETCH_USER_TEAMS_FAILURE:
-      return {
-        ...state,
-        is_fetching_teams: false
-      }
-
-    case actionTypes.SET_USER_BRAND_MEMBERS:
-      const teams = state?.teams
-
-      if (!teams) {
-        return null
-      }
-
-      const teamIndex = teams.findIndex(
-        team => team.brand.id === action.brand.id
-      )
-
-      return {
-        ...state,
-        teams: teams.map((team, index) =>
-          index !== teamIndex
-            ? team
-            : {
-                ...teams[teamIndex],
-                brand: action.brand
-              }
-        )
-      }
+    case actionTypes.SET_USER_AND_ACTIVE_TEAM:
+      return action.payload.user
 
     case actionTypes.UPDATE_USER:
     case actionTypes.EDIT_USER_SUCCESS:
@@ -77,5 +32,3 @@ const userReducer = (state: IUserState = null, action) => {
 }
 
 export default userReducer
-
-export const isFetchingSelectedTeam = state => state.is_fetching_teams

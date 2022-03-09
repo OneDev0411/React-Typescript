@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
@@ -8,8 +8,8 @@ import LoadingContainer from 'components/LoadingContainer'
 import { addNotification as notify } from 'components/notification'
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
+import { isBackOffice } from 'utils/acl'
 import { getFileType } from 'utils/file-utils/get-file-type'
-import { isBackOffice } from 'utils/user-teams'
 import { getEnvelopeFile } from 'views/utils/deal-files/get-envelope-file'
 
 import LoadDeal from '../components/LoadDeal'
@@ -22,7 +22,7 @@ import { FileDisplay } from './FileDisplay'
 import { Menu } from './Menu'
 import { LayoutContainer, PageContainer } from './styled'
 
-class FileViewer extends React.Component {
+class FileViewer extends Component {
   state = {
     isFactsheetOpen: false,
     isCommentsOpen: false
@@ -192,14 +192,14 @@ class FileViewer extends React.Component {
   }
 }
 
-function mapStateToProps({ deals, user }, props) {
+function mapStateToProps({ deals, activeTeam = null }, props) {
   return {
     deal: selectDealById(deals.list, props.params.id),
     tasks: deals.tasks,
     checklists: deals.checklists,
     envelopes: deals.envelopes,
     task: selectTaskById(deals.tasks, props.params.taskId),
-    isBackOffice: isBackOffice(user)
+    isBackOffice: isBackOffice(activeTeam)
   }
 }
 

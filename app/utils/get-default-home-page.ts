@@ -1,15 +1,13 @@
-import { IUserState } from 'reducers/user'
+import { hasUserAccessToCrm, hasUserAccessToDeals } from './acl'
 
-import { hasUserAccess } from './user-teams'
-
-export function getUserDefaultHomepage(user?: IUserState): string {
+export function getUserDefaultHomepage(team?: Nullable<IUserTeam>): string {
   const dashboardBaseUrl = '/dashboard'
 
-  if (!user) {
+  if (!team) {
     return `${dashboardBaseUrl}/mls`
   }
 
-  if (hasUserAccess(user, 'CRM') || hasUserAccess(user, 'Deals')) {
+  if (hasUserAccessToCrm(team) || hasUserAccessToDeals(team)) {
     return `${dashboardBaseUrl}/overview`
   }
 

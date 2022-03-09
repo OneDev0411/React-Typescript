@@ -49,10 +49,11 @@ export function Owner({ onSelect }: Props) {
         <Typography variant="body2">Contact Owner</Typography>
       </Box>
       <TeamContactSelect
+        // @ts-ignore
         upsideDown
         fullWidth
         user={user}
-        owner={owner}
+        owner={owner!}
         onSelect={({ value }) => onSelect(value)}
       />
     </Box>

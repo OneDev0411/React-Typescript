@@ -4,6 +4,7 @@ export const DEFAULT_QUERY = {
     'brand_flow_step.event',
     'brand_flow_step.email',
     'brand_flow_step.template',
-    'brand_flow_step.template_instance'
+    'brand_flow_step.template_instance',
+    'template_instance.template'
   ]
 }

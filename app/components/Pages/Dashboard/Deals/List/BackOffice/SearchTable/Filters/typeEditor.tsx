@@ -10,7 +10,7 @@ import { useStyles } from './styles'
 
 export const DEAL_TYPES_ITEMS: Record<IDealType, string> = {
   Selling: 'Listings',
-  Buying: 'Contracts'
+  Buying: 'Buyings'
 }
 
 export const TypeEditor = ({
@@ -49,7 +49,7 @@ export const TypeEditor = ({
     <Grid className={classes.editorRoot}>
       <Grid container alignItems="center" className={classes.header}>
         <Typography variant="subtitle1" className={classes.title}>
-          Listings & Contracts
+          Side
         </Typography>
       </Grid>
 

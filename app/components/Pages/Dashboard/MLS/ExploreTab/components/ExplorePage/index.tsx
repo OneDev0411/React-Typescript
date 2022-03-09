@@ -7,8 +7,8 @@ import { useEffectOnce } from 'react-use'
 
 import { appSidenavWidth } from '@app/components/Pages/Dashboard/SideNav/variables'
 import { useQueryParam } from '@app/hooks/use-query-param'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { confirmation } from '@app/store_actions/confirmation'
-import { setUserSetting } from '@app/store_actions/user/set-setting'
 import { changeUrl } from '@app/utils/change-url'
 import {
   GoogleMapLibrary,
@@ -159,7 +159,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   const onChangeSort = (sort: SortString) => {
     dispatch(changeSort(parseSortIndex(sort)))
-    reduxDispatch(setUserSetting(SORT_FIELD_SETTING_KEY, sort))
+    reduxDispatch(setActiveTeamSetting(SORT_FIELD_SETTING_KEY, sort))
   }
 
   const onToggleView = (to: ViewType) => {
@@ -250,7 +250,9 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
       // Anonymous user's can also see /mls and explore the map
       // So updatingLastBrowsing location should not be run for them
       if (user) {
-        reduxDispatch(setUserSetting(LAST_BROWSING_LOCATION, { center, zoom }))
+        reduxDispatch(
+          setActiveTeamSetting(LAST_BROWSING_LOCATION, { center, zoom })
+        )
       }
     },
     [dispatch, user, reduxDispatch]

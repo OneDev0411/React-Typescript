@@ -3,8 +3,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 
+import { useLoadUserAndActiveTeam } from '@app/hooks/use-load-user-and-active-team'
 import { AnimatedLoader } from 'components/AnimatedLoader'
-import { useLoadUser } from 'hooks/use-load-user'
 
 interface Props {
   location: WithRouterProps['location']
@@ -14,7 +14,7 @@ interface Props {
 function Authentication({ location, children }: Props) {
   // TODO: we must deprecate data object
   const data = useSelector(({ data }: { data: any }) => data)
-  const { user, isLoading: isLoadingUser } = useLoadUser()
+  const { user, isLoading: isLoadingUser } = useLoadUserAndActiveTeam()
 
   if (!user?.id && isLoadingUser) {
     return <AnimatedLoader />

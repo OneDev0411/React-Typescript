@@ -1,14 +1,15 @@
-import React, { MouseEvent, useState, useMemo, memo } from 'react'
+import { MouseEvent, useState, useMemo, memo } from 'react'
 
 import { useSelector } from 'react-redux'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { selectUserUnsafe } from 'selectors/user'
 import {
   hasUserAccessToCrm,
   hasUserAccessToDeals,
   hasUserAccessToMarketingCenter,
   hasUserAccessToShowings
-} from 'utils/user-teams'
+} from 'utils/acl'
 
 import Button from './components/Button'
 import items from './components/items'
@@ -16,9 +17,8 @@ import Menu from './components/Menu'
 import { useGlobalActionContext } from './hooks/use-global-action-context'
 import { Item, ItemType } from './types'
 
-interface Props {}
-
-export const GlobalActions = (props: Props) => {
+export const GlobalActions = () => {
+  const activeTeam = useUnsafeActiveTeam()
   const user = useSelector(selectUserUnsafe)
   const [state] = useGlobalActionContext()
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -26,24 +26,27 @@ export const GlobalActions = (props: Props) => {
   const availableItems: Item[] = useMemo(() => {
     const actions: ItemType[] = []
 
-    if (hasUserAccessToCrm(user)) {
+    if (hasUserAccessToCrm(activeTeam)) {
       actions.push('email', 'event', 'log', 'contact', 'tour')
     }
 
-    if (hasUserAccessToDeals(user)) {
+    if (hasUserAccessToDeals(activeTeam)) {
       actions.push('deal')
     }
 
-    if (hasUserAccessToCrm(user) && hasUserAccessToMarketingCenter(user)) {
+    if (
+      hasUserAccessToCrm(activeTeam) &&
+      hasUserAccessToMarketingCenter(activeTeam)
+    ) {
       actions.push('openhouse')
     }
 
-    if (hasUserAccessToShowings(user)) {
+    if (hasUserAccessToShowings(activeTeam)) {
       actions.push('showing')
     }
 
     return items.filter(item => actions.includes(item.type))
-  }, [user])
+  }, [activeTeam])
 
   const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setSelectedItem(null)

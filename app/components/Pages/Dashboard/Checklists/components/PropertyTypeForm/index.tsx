@@ -15,16 +15,14 @@ import {
 } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
 import { useForm, FormProvider, Controller } from 'react-hook-form'
-import { useSelector } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import {
   createPropertyType,
   PropertyTypeData
 } from 'models/property-types/create-property-type'
 import { updatePropertyType } from 'models/property-types/update-property-type'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { getDefaultRoles } from './helpers/get-default-roles'
 import { pickRoles } from './helpers/pick-roles'
@@ -49,7 +47,7 @@ export function PropertyTypeForm({
   onSave
 }: Props) {
   const [isSaving, setIsSaving] = useState(false)
-  const user = useSelector(selectUser)
+  const activeBrandId = useActiveBrandId()
 
   const methods = useForm({
     mode: 'all',
@@ -86,7 +84,6 @@ export function PropertyTypeForm({
     setIsSaving(true)
 
     const form = control.getValues() as FormValues
-    const activeTeamId = getActiveTeamId(user)!
 
     const values: PropertyTypeData = {
       label: form.label,
@@ -97,8 +94,8 @@ export function PropertyTypeForm({
 
     try {
       const data = await (propertyType
-        ? updatePropertyType(propertyType.id, activeTeamId, values)
-        : createPropertyType(activeTeamId, values))
+        ? updatePropertyType(propertyType.id, activeBrandId, values)
+        : createPropertyType(activeBrandId, values))
 
       onSave(data)
     } catch (e) {

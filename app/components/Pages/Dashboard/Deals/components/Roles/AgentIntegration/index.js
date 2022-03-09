@@ -159,6 +159,7 @@ export class RoleAgentIntegration extends React.Component {
       <>
         {this.state.isAgentDrawerOpen && (
           <TeamAgentsDrawer
+            open
             title={this.props.modalTitle}
             isPrimaryAgent={this.getIsPrimaryAgent()}
             flattenTeams={this.isOfficeDoubleEnded}

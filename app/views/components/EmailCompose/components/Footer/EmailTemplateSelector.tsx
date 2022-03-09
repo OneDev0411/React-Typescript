@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   Box,
@@ -19,6 +19,7 @@ import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
+import { selectActiveBrandIdUnsafe } from '@app/selectors/brand'
 import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
 import AddOrEditEmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
 import { ServerError } from 'components/ServerError'
@@ -30,7 +31,6 @@ import {
   selectEmailTemplatesError,
   selectEmailTemplatesIsFetching
 } from 'reducers/email-templates'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { useIconStyles } from '../../../../../styles/use-icon-styles'
 import { ScrollableArea } from '../../../ScrollableArea'
@@ -44,7 +44,7 @@ interface Props {
   templates: IBrandEmailTemplate[]
   error: string
   isFetching: boolean
-  brand: string
+  activeBrandId: UUID
   fetchEmailTemplates: IAsyncActionProp<typeof fetchEmailTemplates>
 }
 
@@ -69,12 +69,12 @@ function EmailTemplateSelector({
   fetchEmailTemplates,
   error,
   isFetching,
-  brand,
+  activeBrandId,
   onTemplateSelected
 }: Props) {
   useEffect(() => {
-    brand && fetchEmailTemplates(brand)
-  }, [brand, fetchEmailTemplates])
+    activeBrandId && fetchEmailTemplates(activeBrandId)
+  }, [activeBrandId, fetchEmailTemplates])
 
   const classes = useStyles()
   const iconClasses = useIconStyles()
@@ -225,13 +225,14 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   }
 }
 
-export default connect(({ emailTemplates, user }: IAppState) => {
-  const brandId = getActiveTeamId(user) || ''
+export default connect((state: IAppState) => {
+  const activeBrandId = selectActiveBrandIdUnsafe(state) ?? ''
+  const emailTemplates = state.emailTemplates
 
   return {
-    brand: brandId,
-    templates: selectEmailTemplates(emailTemplates, brandId),
-    isFetching: selectEmailTemplatesIsFetching(emailTemplates, brandId),
-    error: selectEmailTemplatesError(emailTemplates, brandId)
+    activeBrandId,
+    templates: selectEmailTemplates(emailTemplates, activeBrandId),
+    isFetching: selectEmailTemplatesIsFetching(emailTemplates, activeBrandId),
+    error: selectEmailTemplatesError(emailTemplates, activeBrandId)
   }
 }, mapDispatchToProps)(EmailTemplateSelector)

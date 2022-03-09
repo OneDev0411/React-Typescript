@@ -1,13 +1,13 @@
-import { getBrandById } from '../../../models/brand/get-brand-by-id'
-import { getActiveTeamId, getBrandUsers } from '../../../utils/user-teams'
+import { getBrandById } from '@app/models/brand/get-brand-by-id'
+import { getBrandUsers } from 'utils/user-teams'
 
-export async function getMembers(user) {
-  if (!user) {
-    throw new Error(`User is ${user}`)
+export async function getMembers(brandId) {
+  if (!brandId) {
+    throw new Error('brand id is not available')
   }
 
   try {
-    const brand = await getBrandById(getActiveTeamId(user))
+    const brand = await getBrandById(brandId)
 
     if (brand == null) {
       return null

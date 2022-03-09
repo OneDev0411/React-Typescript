@@ -26,7 +26,6 @@ interface StateProps {
 
 interface Props {
   deal: IDeal
-  activeTeamId: UUID | null
   onClickNewItem(): void
   onSelectItem(task: IDealTask): void
   onClickEdit(task: IDealTask): void

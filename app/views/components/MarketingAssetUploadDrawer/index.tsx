@@ -4,9 +4,10 @@ import { Button } from '@material-ui/core'
 import pluralize from 'pluralize'
 import { FormProvider, useForm } from 'react-hook-form'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import useNotify from '@app/hooks/use-notify'
 import { uploadBrandAsset } from '@app/models/brand/upload-asset'
-import { MultiSelectionBrandSelectorDrawer } from '@app/views/components/BrandSelector'
+import { BaseMultiSelectDrawer } from '@app/views/components/BrandSelector'
 import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
 import OverlayDrawer from '@app/views/components/OverlayDrawer'
 
@@ -26,6 +27,7 @@ export default function MarketingAssetUploadDrawer({
 }: Props) {
   const confirmation = useContext(ConfirmationModalContext)
   const notify = useNotify()
+  const activeBrandId = useActiveBrandId()
   const [activeStep, setActiveStep] = useState<DrawerStep>('teams')
   const [uploadProgress, setUploadProgress] = useState<number[]>([])
   const formMethods = useForm<AssetsUploadFormData>({
@@ -134,12 +136,15 @@ export default function MarketingAssetUploadDrawer({
   const renderActiveStep = () => {
     if (activeStep === 'teams') {
       return (
-        <MultiSelectionBrandSelectorDrawer
+        <BaseMultiSelectDrawer
           open
           drawerTitle="Save to Marketing Center for:"
           saveButtonText="Next: Select Files"
           selectedBrands={brands}
           onClose={closeDrawer}
+          brandSelectorProps={{
+            rootBrandId: activeBrandId
+          }}
           onSave={brands => {
             formMethods.setValue('brands', brands)
 

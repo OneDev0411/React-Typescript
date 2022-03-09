@@ -55,7 +55,9 @@ export function AddressEdit({
           position: 'absolute',
           top: style.top,
           left: style.left,
-          width: rect.width
+          width: rect.width,
+          display: 'flex',
+          alignItems: 'center'
         }}
         className="field-unlinkable"
         onClick={handleEdit}

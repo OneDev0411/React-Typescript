@@ -24,7 +24,7 @@ import {
 import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 import { IAppState } from 'reducers'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-import { isBackOffice } from 'utils/user-teams'
+import { isBackOffice } from 'utils/acl'
 import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
 import {
   getFileEmailAttachments,
@@ -620,11 +620,14 @@ class ActionsButton extends React.Component<
   }
 }
 
-function mapStateToProps({ deals, user }: IAppState, props: Props) {
+function mapStateToProps(
+  { deals, user, activeTeam = null }: IAppState,
+  props: Props
+) {
   return {
     user,
     envelopes: selectDealEnvelopes(props.deal, deals.envelopes),
-    isBackOffice: isBackOffice(user)
+    isBackOffice: isBackOffice(activeTeam)
   }
 }
 

@@ -7,7 +7,7 @@ import { teamMatches } from '../helpers/team-matches'
 export function useTeamsFilterHook(
   getChildNodes: TreeFn<IBrand>,
   searchTerm: string
-) {
+): TreeFn<IBrand> {
   const matches = useCallback(
     (team: IBrand) => {
       // performance improvement is possible by memoizing result of matches
@@ -24,7 +24,11 @@ export function useTeamsFilterHook(
     (parent?: IBrand) => {
       const nodes = getChildNodes(parent)
 
-      return searchTerm ? nodes.filter(matches) : nodes
+      if (!searchTerm) {
+        return nodes
+      }
+
+      return nodes.filter(matches)
     },
     [getChildNodes, matches, searchTerm]
   )

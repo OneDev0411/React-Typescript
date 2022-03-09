@@ -14,12 +14,11 @@ import { useDeepCompareEffect } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { areEqual } from 'react-window'
 
+import { useViewAs } from '@app/hooks/team/use-view-as'
 import { searchContacts } from '@app/models/contacts/search-contacts'
 import { IAppState } from '@app/reducers'
-import { selectUser } from '@app/selectors/user'
 import VirtualList, { LoadingPosition } from '@app/views/components/VirtualList'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { viewAs } from 'utils/user-teams'
 
 import { Tags } from '../constants'
 import { useColumnList } from '../hooks/use-column-list'
@@ -96,13 +95,13 @@ export const BoardColumn = memo(function BoardColumn({
   tag
 }: Props) {
   const classes = useStyles()
+  const viewAs = useViewAs()
   const [currentCriteria, setCurrentCriteria] = useState(criteria)
   const [list, updateList] = useColumnList(tag)
   const [loadingOffset, setLoadingOffset] = useState(0)
   const [loadingState, setLoadingState] =
     useState<Nullable<'initial' | 'more'>>(null)
   const [isReachedEnd, setIsReachedEnd] = useState(false)
-  const user = useSelector(selectUser)
   const tagAttributeDefinitionId = useSelector<IAppState, UUID>(
     ({ contacts }) => contacts.attributeDefs.byName.tag
   )
@@ -160,9 +159,10 @@ export const BoardColumn = memo(function BoardColumn({
         {
           start: loadingOffset,
           limit: loadingLimit,
+          order: criteria.sortOrder,
           filter_type: criteria.conditionOperator
         },
-        viewAs(user),
+        viewAs,
         criteria.flows,
         criteria.crmTasks
       )

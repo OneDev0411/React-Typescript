@@ -49,6 +49,8 @@ export function RoleField(props) {
         className="field-unlinkable"
         style={{
           ...props.style,
+          display: 'flex',
+          alignItems: 'center',
           cursor: annotationRoles.length > 0 ? props.style.cursor : 'normal',
           backgroundColor:
             annotationRoles.length > 0 ? '#d2e5f2' : 'transparent'
