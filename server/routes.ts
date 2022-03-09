@@ -10,10 +10,10 @@ import dealEnvelopeSignRoute from './app/routes/deal/envelope-sign'
 import dealExportRoute from './app/routes/deal/export'
 import dealReportRoute from './app/routes/deal/report'
 import facebookAuthResultRoute from './app/routes/facebook-auth-result'
+import facebookLoginRoute from './app/routes/facebook-login'
 import getPdfSizeRoute from './app/routes/get-pdf-size'
 import livebyNeighborhoodsRoute from './app/routes/liveby/neighborhoods'
 import livebyReportRoute from './app/routes/liveby/report'
-import mockFacebookAuth from './app/routes/mock-facebook-auth'
 import myMarketingMattersPunchoutRoute from './app/routes/my-marketing-matters/punchout'
 import openHouseRoute from './app/routes/openhouse/registration'
 import proxifierRoute from './app/routes/proxifier'
@@ -99,17 +99,19 @@ router.post(
 )
 
 /**
+ * facebook routes.
+ */
+router.get('/api/facebook/auth-result', facebookAuthResultRoute)
+router.get('/api/facebook/login', facebookLoginRoute)
+
+/**
  * utility routes
  */
 router.get('/unsupported', unsupportedRoute)
 router.get('/api/utils/cors/:url', corsRoute)
-router.get('/api/facebook/auth-result', facebookAuthResultRoute)
 router.post('/api/pdf/get-size', requestLimit, getPdfSizeRoute)
 router.post('/api/utils/render-mjml', requestLimit, renderMjmlRoute)
 router.post('/api/utils/get-url-metadata', requestLimit, urlMetadataRoute)
 router.post('/api/utils/rss-feeds', requestLimit, rssFeedsRoute)
-
-// TODO: This is just a mock and must be removed when the actual API is ready
-router.get('/users/self/facebook/auth', mockFacebookAuth)
 
 export default router

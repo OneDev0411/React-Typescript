@@ -1,11 +1,14 @@
 import { useRef } from 'react'
 
+import { useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
+
+import { selectUserAccessToken } from '@app/selectors/user'
 
 import { FacebookAuthErrorCode } from './types'
 import { useFacebookResultMessage } from './use-facebook-result-message'
 
-const facebookAuthUrl = '/users/self/facebook/auth'
+const facebookAuthUrl = '/api/facebook/login'
 
 export interface UseFacebookAuthOptions {
   onAuthWindowOpen?: () => void
@@ -26,6 +29,7 @@ export function useFacebookAuth({
 }: UseFacebookAuthOptions): UseFacebookAuth {
   const authWindowRef = useRef<Nullable<Window>>(null)
   const checkIntervalRef = useRef<Nullable<NodeJS.Timer>>(null)
+  const accessToken = useSelector(selectUserAccessToken)
 
   // Open the auth window
   const openAuthWindow = () => {
@@ -33,8 +37,15 @@ export function useFacebookAuth({
       return
     }
 
+    // const token = user.access_token
+    // const login = window.open(
+    //   `/api/deals/docusign/login?access_token=${token}`,
+    //   'sharer',
+    //   'toolbar=0,status=0,width=548,height=325'
+    // )
+
     const windowHandle = window.open(
-      facebookAuthUrl,
+      `${facebookAuthUrl}?access_token=${accessToken}`,
       'sharer',
       'toolbar=0,status=0,width=548,height=325'
     )
