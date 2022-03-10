@@ -1,14 +1,5 @@
 import { Box, Button, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import {
-  mdiAccountGroupOutline,
-  mdiBellOutline,
-  mdiCalendarAccount,
-  mdiChartTimelineVariantShimmer,
-  mdiCurrencyUsd,
-  mdiHeadphones,
-  mdiNewspaperVariantOutline
-} from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { ThunkDispatch } from 'redux-thunk'
@@ -100,49 +91,42 @@ function OverviewDashboard() {
   const AccessItems: AccessButtonType[] = [
     {
       access: marketingAccess,
-      icon: mdiBellOutline,
       id: 'marketing',
       label: 'Marketing',
       to: '/dashboard/marketing'
     },
     {
       access: dealsAccess,
-      icon: mdiCurrencyUsd,
       id: 'deals',
       label: 'Deals',
       to: '/dashboard/deals'
     },
     {
       access: ['CRM'],
-      icon: mdiCalendarAccount,
       id: 'contacts',
       label: 'Contacts',
       to: '/dashboard/contacts'
     },
     {
       access: marketingAccess,
-      icon: mdiAccountGroupOutline,
       id: 'agent-network',
       label: 'Agent Network',
       to: '/dashboard/agent-network'
     },
     {
       access: insightAccess,
-      icon: mdiChartTimelineVariantShimmer,
       id: 'insight',
       label: 'Insight',
       to: '/dashboard/insights'
     },
     {
       access: allAccess,
-      icon: mdiNewspaperVariantOutline,
       id: 'blog',
       label: 'Blog',
       action: () => handleOpenExternalLink('https://rechat.com/blog/')
     },
     {
       access: allAccess,
-      icon: mdiHeadphones,
       id: 'support',
       label: 'Support',
       action: handleOpenSupportDialogueBox

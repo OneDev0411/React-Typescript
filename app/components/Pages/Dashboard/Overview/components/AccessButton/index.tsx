@@ -14,22 +14,30 @@ interface Props {
 const styles = makeStyles(
   (theme: Theme) => ({
     container: {
-      display: 'inline-flex',
-      margin: theme.spacing(0, 1, 1, 0),
-      padding: theme.spacing(1.5),
-      borderRadius: theme.shape.borderRadius,
+      alignItems: 'center',
       backgroundColor: theme.palette.grey[100],
-      color: theme.palette.common.black,
+      border: `${theme.spacing(0.125)}px solid ${theme.palette.grey[300]}`,
+      borderRadius: theme.spacing(2),
+      color: theme.palette.grey.A400,
+      cursor: 'pointer',
+      display: 'inline-flex',
+      height: theme.spacing(4),
+      justifyContent: 'center',
+      margin: theme.spacing(1.5, 1.5, 1.5, 0),
+      padding: theme.spacing(1.75, 1.5, 1.5),
+      outline: 'none',
+      overflow: 'hidden',
+      userSelect: 'none',
 
-      '&:hover': {
-        color: theme.palette.common.black,
+      '&:hover, &:focus': {
         backgroundColor: theme.palette.grey[200],
+        color: theme.palette.common.black,
         cursor: 'pointer',
         textDecoration: 'none'
       }
     },
     label: {
-      marginRight: theme.spacing(1)
+      fontSize: theme.typography.subtitle2.fontSize
     }
   }),
   { name: 'AccessButton' }
@@ -43,7 +51,7 @@ export function AccessButton({
   return (
     <Acl access={access}>
       <Link className={classes.container} onClick={action} to={to}>
-        <SvgIcon path={icon} rightMargined color="grey" />
+        {icon && <SvgIcon path={icon} rightMargined color="grey" />}
         <Typography className={classes.label} variant="body1">
           {label}
         </Typography>
