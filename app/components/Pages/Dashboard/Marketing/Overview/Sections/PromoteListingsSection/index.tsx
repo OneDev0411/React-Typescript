@@ -23,6 +23,7 @@ const useStyles = makeStyles(
       borderRadius: theme.shape.borderRadius,
       backgroundColor: theme.palette.common.white,
       height: '300px',
+      margin: theme.spacing(1),
       padding: theme.spacing(1),
       overflowY: 'scroll',
       width: '100%'
