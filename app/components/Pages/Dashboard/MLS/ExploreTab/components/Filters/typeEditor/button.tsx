@@ -2,6 +2,7 @@ import { Button } from '@material-ui/core'
 import { mdiCheckboxBlankCircle } from '@mdi/js'
 import cn from 'classnames'
 
+import { getPropertyTypeFirstElement } from '@app/components/Pages/Dashboard/MLS/helpers/get-listings-helpers'
 import { FilterButtonToggler } from '@app/views/components/Filters/FilterButton'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -17,7 +18,8 @@ export const TypeButton = ({
   const classes = useStyles()
 
   const isActive =
-    filters.property_types[0] !== defaultFilters.property_types[0]
+    getPropertyTypeFirstElement(filters) !==
+    getPropertyTypeFirstElement(defaultFilters)
 
   return (
     <Button
@@ -37,7 +39,7 @@ export const TypeButton = ({
         />
       }
     >
-      {PROPERTY_TYPES[filters.property_types[0]]}
+      {filters.property_types && PROPERTY_TYPES[filters.property_types[0]]}
     </Button>
   )
 }
