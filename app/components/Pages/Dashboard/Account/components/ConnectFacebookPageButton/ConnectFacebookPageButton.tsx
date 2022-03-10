@@ -6,6 +6,7 @@ import ConfirmationModalContext from '@app/views/components/ConfirmationModal/co
 
 import { FacebookAuthErrorCode } from './types'
 import { useFacebookAuth, UseFacebookAuthOptions } from './use-facebook-auth'
+import { useInvalidateFacebookPagesListQuery } from './use-invalidate-facebook-pages-list-query'
 
 export interface ConnectFacebookPageButtonProps
   extends Omit<ButtonProps, 'onClick' | 'startIcon' | 'disabled'>,
@@ -27,8 +28,8 @@ function ConnectFacebookPageButton({
   ...buttonProps
 }: ConnectFacebookPageButtonProps) {
   const [isWorking, setIsWorking] = useState(false)
-
   const confirmation = useContext(ConfirmationModalContext)
+  const invalidateListQuery = useInvalidateFacebookPagesListQuery()
 
   const handleAuthError = (errorCode: FacebookAuthErrorCode) => {
     onErrorDialogOpen?.()
@@ -46,6 +47,11 @@ function ConnectFacebookPageButton({
     onAuthError?.(errorCode)
   }
 
+  const handleAuthSuccess = () => {
+    invalidateListQuery()
+    onAuthSuccess?.()
+  }
+
   const { openAuthWindow } = useFacebookAuth({
     onAuthWindowOpen: () => {
       setIsWorking(true)
@@ -55,7 +61,7 @@ function ConnectFacebookPageButton({
       setIsWorking(false)
       onAuthWindowClose?.()
     },
-    onAuthSuccess,
+    onAuthSuccess: handleAuthSuccess,
     onAuthError: handleAuthError
   })
 
