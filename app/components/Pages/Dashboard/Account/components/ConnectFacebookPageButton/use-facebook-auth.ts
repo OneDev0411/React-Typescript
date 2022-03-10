@@ -3,6 +3,7 @@ import { useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
+import { selectActiveBrandId } from '@app/selectors/brand'
 import { selectUserAccessToken } from '@app/selectors/user'
 
 import { FacebookAuthErrorCode } from './types'
@@ -30,6 +31,7 @@ export function useFacebookAuth({
   const authWindowRef = useRef<Nullable<Window>>(null)
   const checkIntervalRef = useRef<Nullable<NodeJS.Timer>>(null)
   const accessToken = useSelector(selectUserAccessToken)
+  const activeBrandId = useSelector(selectActiveBrandId)
 
   // Open the auth window
   const openAuthWindow = () => {
@@ -38,9 +40,9 @@ export function useFacebookAuth({
     }
 
     const windowHandle = window.open(
-      `${facebookAuthUrl}?access_token=${accessToken}`,
+      `${facebookAuthUrl}?access_token=${accessToken}&brand_id=${activeBrandId}`,
       'sharer',
-      'toolbar=0,status=0,location=0,width=548,height=325'
+      'toolbar=0,status=0,location=0,width=600,height=500'
     )
 
     if (!windowHandle) {

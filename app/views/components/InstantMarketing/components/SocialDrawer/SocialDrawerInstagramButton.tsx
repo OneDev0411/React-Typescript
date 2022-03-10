@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Button } from '@material-ui/core'
 import { mdiInstagram } from '@mdi/js'
 
-import { useGetFacebookPages } from '@app/models/facebook'
+import { useGetActiveBrandFacebookPages } from '@app/models/facebook'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
@@ -18,7 +18,7 @@ function SocialDrawerInstagramButton({
 }: SocialDrawerInstagramButtonProps) {
   const [isDialogOpen, stIsDialogOpen] = useState<boolean>(false)
 
-  const { data: facebookPages, isLoading } = useGetFacebookPages()
+  const { data: facebookPages, isLoading } = useGetActiveBrandFacebookPages()
   const hasAnyAccounts = !!facebookPages?.length
 
   const openDialog = () => stIsDialogOpen(true)

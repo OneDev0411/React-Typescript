@@ -1,6 +1,8 @@
 import { Button, makeStyles } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
 import { useDisconnectFacebookPage } from '@app/models/facebook'
+import { selectActiveBrandId } from '@app/selectors/brand'
 
 const useStyles = makeStyles(
   theme => ({
@@ -19,7 +21,10 @@ function FacebookPageListDisconnectButton({
   const classes = useStyles()
   const { mutate, isLoading: isDeleting } = useDisconnectFacebookPage()
 
-  const handleDisconnect = () => mutate(facebookPage)
+  const activeBrandId = useSelector(selectActiveBrandId)
+
+  const handleDisconnect = () =>
+    mutate({ brandId: activeBrandId, facebookPage })
 
   return (
     <Button

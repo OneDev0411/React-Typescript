@@ -1,5 +1,10 @@
 import Fetch from '@app/services/fetch'
 
-export async function disconnectFacebookPage(facebookPageId): Promise<void> {
-  await new Fetch().delete(`/users/self/facebook/${facebookPageId}`)
+export async function disconnectFacebookPage(
+  brandId: string,
+  facebookPageId: UUID
+): Promise<void> {
+  await new Fetch().delete(
+    `/brands/${brandId}/users/self/facebook/${facebookPageId}`
+  )
 }

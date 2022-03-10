@@ -9,7 +9,7 @@ import {
 import { Autocomplete } from '@material-ui/lab'
 import { Field, FieldProps, FieldRenderProps } from 'react-final-form'
 
-import { useGetFacebookPages } from '@app/models/facebook'
+import { useGetActiveBrandFacebookPages } from '@app/models/facebook'
 
 const useStyles = makeStyles(
   theme => ({
@@ -32,7 +32,7 @@ function InstagramAccountsAutocompleteField(
 ) {
   const classes = useStyles()
 
-  const { data: facebookPages, isLoading } = useGetFacebookPages()
+  const { data: facebookPages, isLoading } = useGetActiveBrandFacebookPages()
 
   if (isLoading) {
     return null

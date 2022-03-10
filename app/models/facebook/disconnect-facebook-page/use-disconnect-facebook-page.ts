@@ -12,11 +12,16 @@ import { deleteFromCacheAllList } from '../query-update'
 
 import { disconnectFacebookPage } from './disconnect-facebook-page'
 
+interface InputData {
+  brandId: UUID
+  facebookPage: Pick<IFacebookPage, 'id' | 'name'>
+}
+
 export type UseDisconnectFacebookPage = Omit<
   UseMutationResult<
     void,
     ResponseError,
-    Pick<IFacebookPage, 'id' | 'name'>,
+    InputData,
     { cache: UpdateCacheActions }
   >,
   'mutateAsync'
@@ -26,7 +31,7 @@ export type UseDisconnectFacebookPageOptions = Omit<
   UseMutationOptions<
     void,
     ResponseError,
-    Pick<IFacebookPage, 'id' | 'name'>,
+    InputData,
     { cache: UpdateCacheActions }
   >,
   'notify' | 'invalidates'
@@ -34,11 +39,12 @@ export type UseDisconnectFacebookPageOptions = Omit<
 
 export function useDisconnectFacebookPage(
   options?: UseDisconnectFacebookPageOptions
-) {
+): UseDisconnectFacebookPage {
   const queryClient = useQueryClient()
   const confirmation = useContext(ConfirmationModalContext)
   const mutation = useMutation(
-    async facebookPage => disconnectFacebookPage(facebookPage.id),
+    async ({ brandId, facebookPage }) =>
+      disconnectFacebookPage(brandId, facebookPage.id),
     {
       ...options,
       notify: {
@@ -46,9 +52,13 @@ export function useDisconnectFacebookPage(
         onError:
           'Something went wrong while disconnecting the account. Please try again.'
       },
-      invalidates: [list()],
-      onMutate: async facebookPage => ({
-        cache: await deleteFromCacheAllList(queryClient, facebookPage.id)
+      invalidates: (_, { brandId }) => [list(brandId)],
+      onMutate: async ({ brandId, facebookPage }) => ({
+        cache: await deleteFromCacheAllList(
+          queryClient,
+          brandId,
+          facebookPage.id
+        )
       }),
       onError: (error, variables, context) => {
         context?.cache.revert()
@@ -63,13 +73,13 @@ export function useDisconnectFacebookPage(
 
   return {
     ...mutation,
-    mutate: facebookPage => {
+    mutate: inputData => {
       confirmation.setConfirmationModal({
         message: 'Disconnecting your Instagram Account',
-        description: `Are you sure you want to disconnect your Instagram Account (${facebookPage.name}) from Rechat?
+        description: `Are you sure you want to disconnect your Instagram Account (${inputData.facebookPage.name}) from Rechat?
           Please note all of your scheduled posts related to this account will be canceled.`,
         confirmLabel: 'Disconnect',
-        onConfirm: () => mutation.mutate(facebookPage)
+        onConfirm: () => mutation.mutate(inputData)
       })
     }
   }

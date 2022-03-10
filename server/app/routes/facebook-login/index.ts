@@ -8,7 +8,7 @@ import { getParsedHeaders } from '../../utils/parse-headers'
 // TODO: Merge this with docusign-login if possible
 export default async (req: Request, res: Response) => {
   request(req, {
-    url: '/users/self/facebook/auth',
+    url: `/brands/${req.query.brand_id}/users/self/facebook/auth`,
     headers: getParsedHeaders(req),
     maxRedirects: 0
   })
@@ -23,11 +23,9 @@ export default async (req: Request, res: Response) => {
 
         res.redirect(link)
       } else {
-        // TODO: Uncomment this to redirect the user and close the popup if needed
-        // res.redirect(
-        //   `/api/facebook/auth-result?error=Unknown&message=${e.response?.data?.message}`
-        // )
-        res.send(e.response?.data?.message) // TODO: Remove this line when the above redirect was uncommented
+        res.redirect(
+          `/api/facebook/auth-result?error=Unknown&message=${e.response?.data?.message}`
+        )
       }
 
       res.status(e.response?.status || 500)

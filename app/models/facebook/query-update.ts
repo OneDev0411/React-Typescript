@@ -6,11 +6,12 @@ import { list } from './query-keys'
 
 export function deleteFromCacheAllList(
   queryClient: QueryClient,
+  brandId: UUID,
   facebookPageId: string
 ): UpdateCachePromise {
   return updateCacheActions<IFacebookPage[]>(
     queryClient,
-    list(),
+    list(brandId),
     facebookPages => {
       const index = facebookPages.findIndex(
         facebookPage => facebookPage.id === facebookPageId

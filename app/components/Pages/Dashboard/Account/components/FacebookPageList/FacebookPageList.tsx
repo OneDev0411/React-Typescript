@@ -5,7 +5,7 @@ import {
   MenuList
 } from '@material-ui/core'
 
-import { useGetFacebookPages } from '@app/models/facebook'
+import { useGetActiveBrandFacebookPages } from '@app/models/facebook'
 
 import FacebookPageListDisconnectButton from './FacebookPageListDisconnectButton'
 import FacebookPageListImageName from './FacebookPageListImageName'
@@ -23,7 +23,7 @@ const useStyles = makeStyles(
 
 function FacebookPageList() {
   const classes = useStyles()
-  const { data: pages, isLoading } = useGetFacebookPages()
+  const { data: pages, isLoading } = useGetActiveBrandFacebookPages()
 
   if (isLoading) {
     return <FacebookPageListLoadingState />
