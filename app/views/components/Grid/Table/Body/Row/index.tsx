@@ -1,10 +1,9 @@
 import { CSSProperties, memo } from 'react'
 
-import cn from 'classnames'
-
 import { StateContext } from '../../context'
 import { Header } from '../../Header'
 import { TableColumn, TrProps, TdProps, GridClasses } from '../../types'
+import { Column } from '../Column'
 
 import { RowContainer } from './styled'
 
@@ -24,7 +23,7 @@ interface Props<Row> {
   }
 }
 
-function Row<T>({
+function Row<Row>({
   index: rowIndex,
   style,
   data: {
@@ -38,10 +37,10 @@ function Row<T>({
     getTrProps = () => ({}),
     getTdProps = () => ({})
   }
-}: Props<T & { id?: string }>) {
+}: Props<Row & { id?: string }>) {
   if (headless === false && rowIndex === 0) {
     return (
-      <Header<T>
+      <Header<Row>
         columns={columns}
         rows={rows}
         totalRows={totalRows}
@@ -75,53 +74,24 @@ function Row<T>({
       >
         {columns
           .filter(
-            (column: TableColumn<T>) =>
+            (column: TableColumn<Row>) =>
               (column.render || column.accessor) && column.hidden !== true
           )
-          .map((column: TableColumn<T>, columnIndex: number) => (
-            <div
+          .map((column: TableColumn<Row>, columnIndex: number) => (
+            <Column<Row>
               key={columnIndex}
-              className={cn('column', column.class, {
-                primary: column.primary === true
-              })}
-              style={{
-                width: columnsSize[columnIndex],
-                textAlign: column.align || 'left',
-                ...(column.rowStyle || {}),
-                ...(column.style || {})
-              }}
-              {...getTdProps({
-                columnIndex,
-                column,
-                rowIndex,
-                row
-              })}
-            >
-              {getCell(column, row, rowIndex, columnIndex, rows.length)}
-            </div>
+              column={column}
+              columnIndex={columnIndex}
+              row={row}
+              rowIndex={rowIndex}
+              columnWidth={columnsSize[columnIndex]}
+              totalRows={rows.length}
+              getTdProps={getTdProps}
+            />
           ))}
       </RowContainer>
     </>
   )
-}
-
-function getCell<Row>(
-  column: TableColumn<Row>,
-  row: Row,
-  rowIndex: number,
-  columnIndex: number,
-  totalRows: number
-) {
-  if (column.render) {
-    return column.render({
-      row,
-      totalRows,
-      rowIndex,
-      columnIndex
-    })
-  }
-
-  return null
 }
 
 export default memo(Row)

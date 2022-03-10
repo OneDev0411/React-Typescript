@@ -31,6 +31,26 @@ export const styles = (theme: Theme) =>
           textDecoration: 'underline',
           color: theme.palette.secondary.main
         }
+      },
+      '& .inline-edit': {
+        position: 'relative',
+        '& .inline-edit-icon': {
+          position: 'absolute',
+          right: 0,
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          visibility: 'hidden',
+          '&.open': {
+            visibility: 'visible'
+          }
+        },
+        '&:hover .inline-edit-icon': {
+          visibility: 'visible'
+        },
+        '&:hover': {
+          border: `2px solid ${theme.palette.primary.main} !important`,
+          borderRadius: theme.shape.borderRadius
+        }
       }
     }
   })

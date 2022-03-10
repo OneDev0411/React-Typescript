@@ -8,8 +8,10 @@ import {
   mdiTagMultipleOutline
 } from '@mdi/js'
 import cn from 'classnames'
+import DayPicker from 'react-day-picker'
 
 import { useBreakpoint } from '@app/hooks/use-breakpoint'
+import { DateTimePicker } from '@app/views/components/DateTimePicker'
 import { useGridBorderedStyles } from '@app/views/components/Grid/Table/styles/bordered'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { Table } from 'components/Grid/Table'
@@ -118,6 +120,13 @@ const ContactsList = props => {
         // )
 
         return <div>1</div>
+      },
+      renderInlineEdit: () => {
+        return (
+          <div>
+            <DateTimePicker selectedDate={new Date()} />
+          </div>
+        )
       }
     },
     {
@@ -153,6 +162,17 @@ const ContactsList = props => {
         // )
 
         return <div>2</div>
+      },
+      renderInlineEdit: () => {
+        return (
+          <div>
+            <DayPicker
+              initialMonth={new Date()}
+              selectedDays={new Date()}
+              onDayClick={() => {}}
+            />
+          </div>
+        )
       }
     },
     {

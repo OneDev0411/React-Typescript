@@ -112,7 +112,7 @@ export function Body<Row>({
               height: theme.spacing(rowSize)
             }}
             data={{
-              rows: headless ? rows : [undefined, ...rows],
+              rows: headless ? rows : [{}, ...rows],
               totalRows,
               headless,
               columns,
@@ -142,7 +142,7 @@ export function Body<Row>({
             itemKey={getItemKey}
             itemData={
               {
-                rows: headless ? rows : [undefined, ...rows],
+                rows: headless ? rows : [{}, ...rows],
                 totalRows,
                 headless,
                 columns,
