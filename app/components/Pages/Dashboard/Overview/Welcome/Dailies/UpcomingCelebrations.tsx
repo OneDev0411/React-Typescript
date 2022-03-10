@@ -74,7 +74,7 @@ export function UpcomingCelebrations({ isLoading, events }: Props) {
         )}
         {!isLoading && celebrationEvents.length === 0 && (
           <EmptyState
-            description="You have no upcoming birthdays or anniversaries"
+            description="Your clients’ birthdays and home anniversaries will populate here. Remember to celebrate it with them, it only takes a click!"
             iconSrc="/static/icons/empty-states/congrats.svg"
           />
         )}

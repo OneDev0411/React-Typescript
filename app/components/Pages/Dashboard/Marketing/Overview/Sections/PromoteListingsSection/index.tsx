@@ -97,10 +97,10 @@ export default function PromoteListingsSection({
       {!isLoading && listings.length === 0 && (
         <Box className={classes.boxContainer}>
           <EmptyState
-            description="Please make sure all of your Listing Service Provider (or MLS)
-            IDs are entered"
+            description="Please add your MLS IDs here. Rechat will automatically fetch your listings and create marketing materials for them.
+            You can then share your listings in a few clicks."
             iconSrc="/static/icons/empty-states/list.svg"
-            title="You must add all of your Listing Service Provider (MLS) IDs."
+            title="Add Your MLS (Listing Service Provider) IDs "
           >
             <Box pt={3}>
               <Button

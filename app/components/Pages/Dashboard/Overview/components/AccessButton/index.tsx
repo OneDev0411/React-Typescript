@@ -24,7 +24,7 @@ const styles = makeStyles(
       height: theme.spacing(4),
       justifyContent: 'center',
       margin: theme.spacing(1.5, 1.5, 1.5, 0),
-      padding: theme.spacing(1.75, 1.5, 1.5),
+      padding: theme.spacing(1.5),
       outline: 'none',
       overflow: 'hidden',
       userSelect: 'none',

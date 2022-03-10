@@ -143,11 +143,11 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
           !gmailOrOutlookSynced &&
           filteredEvents.length === 0 && (
             <EmptyState
-              description="To have the account fully functioning. Emails, Calendars, and Contacts will all sync automatically, both ways."
+              description="Connect one or more of your accounts to have your email, contacts, and calendar(s) synced in both directions."
               iconSrc="/static/icons/empty-states/letter.svg"
               moreLinkLabel="Learn More"
               moreLinkUrl="https://help.rechat.com/guides/crm/connect-to-outlook-google"
-              title="You must connect to Google or Outlook"
+              title="Connect Your Google / Outlook"
             >
               <Box pt={3} display="flex" flexWrap="wrap">
                 <Box mr={1} mb={1}>

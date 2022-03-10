@@ -162,9 +162,9 @@ function OverviewDashboard() {
           ) : (
             <Box className={classes.boxContainer}>
               <EmptyState
-                description="Start managing your transactions all in one place and track your stats here. Whether you are helping a seller, a buyer, a tenant, or a landlord, you start by creating a deal."
+                description="Whether you’re helping a seller, buyer, renter, or landlord, your transactions begin here. Click on Create New Deal to get started."
                 iconSrc="/static/icons/empty-states/statistics.svg"
-                title="You don’t have any deals, yet."
+                title="Start inputting your transactions and get your analytics here"
               >
                 <Box pt={3}>
                   <Button
