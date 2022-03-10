@@ -120,7 +120,7 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
           endIcon={<SvgIcon path={mdiArrowRight} size={muiIconSizes.small} />}
           onClick={() => browserHistory.push('/dashboard/calendar')}
         >
-          View Calendar
+          Calendar
         </Button>
       </Box>
       <Box className={classes.boxContainer}>
@@ -143,11 +143,11 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
           !gmailOrOutlookSynced &&
           filteredEvents.length === 0 && (
             <EmptyState
-              description="By connecting one or more of your accounts you’ll have your contacts, email and calendar all synced, both ways."
+              description="To have the account fully functioning. Emails, Calendars, and Contacts will all sync automatically, both ways."
               iconSrc="/static/icons/empty-states/letter.svg"
               moreLinkLabel="Learn More"
               moreLinkUrl="https://help.rechat.com/guides/crm/connect-to-outlook-google"
-              title="Connect Your Google / Outlook"
+              title="You must connect to Google or Outlook"
             >
               <Box pt={3} display="flex" flexWrap="wrap">
                 <Box mr={1} mb={1}>

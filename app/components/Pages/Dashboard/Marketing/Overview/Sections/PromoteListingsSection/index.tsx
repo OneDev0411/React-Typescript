@@ -59,7 +59,7 @@ export default function PromoteListingsSection({
       dashboardStyles={dashboardStyles}
       actionNode={
         <LinkSectionAction
-          title="View all your listings"
+          title={dashboardStyles ? 'View All' : 'View all your listings'}
           url="/dashboard/listings"
         />
       }
@@ -97,9 +97,10 @@ export default function PromoteListingsSection({
       {!isLoading && listings.length === 0 && (
         <Box className={classes.boxContainer}>
           <EmptyState
-            description="To automate your listing marketing please add your MLS IDs and we will fetch them for you, and create all the marketing materials so you can share them with a click."
+            description="Please make sure all of your Listing Service Provider (or MLS)
+            IDs are entered"
             iconSrc="/static/icons/empty-states/list.svg"
-            title="Add Your MLS (Listing Service Provider) IDs"
+            title="You must add all of your Listing Service Provider (MLS) IDs."
           >
             <Box pt={3}>
               <Button
@@ -108,7 +109,7 @@ export default function PromoteListingsSection({
                 ref={addMlsAccountButtonRef}
                 onClick={handleAddMlsAccountClick}
               >
-                Add Listing Service Provider (MLS) ID
+                Add Your Listing Service Provider (MLS) ID
               </Button>
             </Box>
           </EmptyState>
