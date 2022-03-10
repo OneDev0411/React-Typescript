@@ -29,11 +29,16 @@ const styles = makeStyles(
       marginBottom: theme.spacing(1.5)
     },
     moreLinkLabel: {
-      color: theme.palette.primary.main,
+      color: theme.palette.grey[500],
+      borderBottom: `${theme.spacing(0.25)}px solid ${theme.palette.grey[400]}`,
       marginLeft: theme.spacing(1),
+      paddingBottom: theme.spacing(0.125),
 
       '&:hover, &:focus': {
         color: theme.palette.primary.dark,
+        borderBottom: `${theme.spacing(0.25)}px solid ${
+          theme.palette.primary.dark
+        }`,
         textDecoration: 'none'
       }
     },
