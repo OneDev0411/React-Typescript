@@ -53,3 +53,9 @@ export function createValertOptions(
     limit
   }
 }
+
+export const getPropertyTypeFirstElement = (
+  filters: AlertFilters
+): Optional<IPropertyType> => {
+  return filters.property_types ? filters.property_types[0] : undefined
+}
