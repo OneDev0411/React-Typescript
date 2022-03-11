@@ -39,6 +39,7 @@ const useStyles = makeStyles(
       margin: theme.spacing(0, 0.5, 0.5, 0)
     },
     list: {
+      minHeight: '250px',
       borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },
     listTitle: {
@@ -55,6 +56,10 @@ const useStyles = makeStyles(
       color: theme.palette.tertiary.dark,
       backgroundColor: theme.palette.grey['50'],
       zIndex: 1
+    },
+    createTag: {
+      cursor: 'pointer',
+      fontWeight: 500
     },
     manageTagsIcon: {
       marginRight: theme.spacing(0.5)
@@ -81,6 +86,7 @@ export function TagsInlineEdit({ contact }: Props) {
 
   const handleAdd = (tag: string) => {
     setSelectedTags(current => [...current, tag])
+    setSearchCriteria('')
   }
 
   const tagsList = useMemo(() => {
@@ -133,8 +139,15 @@ export function TagsInlineEdit({ contact }: Props) {
         ))}
 
         {tagsList.length === 0 && (
-          <Box textAlign="center" m={2}>
-            <Typography variant="body2">Nothing found</Typography>
+          <Box pl={2}>
+            <Typography
+              variant="subtitle1"
+              color="primary"
+              className={classes.createTag}
+              onClick={() => handleAdd(searchCriteria)}
+            >
+              Create "{searchCriteria}"
+            </Typography>
           </Box>
         )}
       </div>
