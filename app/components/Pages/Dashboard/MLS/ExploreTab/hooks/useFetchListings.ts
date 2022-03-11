@@ -4,6 +4,10 @@ import useThunkReducer, { Thunk } from 'react-hook-thunk-reducer'
 import { useSelector } from 'react-redux'
 import { useDebounce } from 'use-debounce'
 
+import {
+  createValertOptions,
+  createValertQueryString
+} from '@app/components/Pages/Dashboard/MLS/helpers/get-listings-helpers'
 import useNotify from '@app/hooks/use-notify'
 import api from '@app/models/listings/search'
 import { IAppState } from 'reducers'
@@ -13,10 +17,8 @@ import {
   QUERY_LIMIT,
   SEARCH_DEBOUNCE_MS
 } from '../../constants'
-import {
-  createValertOptions,
-  createValertQueryString
-} from '../../helpers/get-listings-helpers'
+import { logSearchListings } from '../../helpers/log-search-listings'
+import { stringifyFilters } from '../../helpers/stringifyFilters'
 import { Actions, setListings, setIsLoading } from '../context/actions'
 import { reducer, initialState, ListingsState } from '../context/reducers'
 
@@ -96,6 +98,11 @@ export default function useFetchListings(
     // We don't need to call fetchResults() on every state.map.zoom change
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch, dispatch, brand])
+
+  useEffect(() => {
+    // Log user searching for listings activity when filter is applied
+    logSearchListings(stringifyFilters(state.search.filters))
+  }, [state.search.filters])
 
   return [state, dispatch]
 }

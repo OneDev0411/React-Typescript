@@ -2,7 +2,6 @@ import { DealsListFilters, DealsOrder } from './types'
 
 export const CHANGE_FILTERS_DEBOUNCE_MS = 700
 export const SEARCH_INPUT_DEBOUNCE_MS = 700
-export const QUERY_ARRAY_PARAM_SPLITTER_CHAR = ','
 
 export const DEAL_TYPES: IDealType[] = ['Selling', 'Buying']
 
@@ -18,6 +17,7 @@ export const DEALS_STATUSES = {
 
 export const DEALS_LIST_DEFAULT_FILTERS: DealsListFilters = {
   deal_type: ['Buying', 'Selling'],
+  property_type: undefined,
   status: {},
   contexts: {}
 }

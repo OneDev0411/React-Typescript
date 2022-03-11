@@ -109,9 +109,7 @@ export const ContactsTabs = ({
   })
 
   const actions = [
-    ...(viewMode === 'table'
-      ? [<Tab key={1} label={<SortFields {...sortProps} />} />]
-      : []),
+    <Tab key={1} label={<SortFields {...sortProps} />} />,
     <ViewSwitcher key={2} onChangeView={onChangeView} activeView={viewMode} />
   ]
 

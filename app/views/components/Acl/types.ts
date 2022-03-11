@@ -1,4 +1,11 @@
+import { IUserState } from '@app/reducers/user'
+
+export type AccountInfo = {
+  team: IUserTeam
+  user: IUserState
+}
+
 export type Access =
   | IPermission
-  | ((team: IUserTeam) => boolean)
+  | ((accountInfo: AccountInfo) => boolean)
   | { oneOf: Access[] }
