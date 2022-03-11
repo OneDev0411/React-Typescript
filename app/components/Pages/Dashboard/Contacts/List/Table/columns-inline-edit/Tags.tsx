@@ -20,12 +20,18 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 const useStyles = makeStyles(
   theme => ({
     root: {
-      width: '400px'
+      position: 'relative',
+      width: '400px',
+      height: '400px',
+      overflowY: 'auto'
     },
     current: {
+      position: 'sticky',
+      top: 0,
       padding: theme.spacing(1, 2),
       backgroundColor: theme.palette.grey['50'],
-      borderBottom: `2px solid ${theme.palette.primary.main}`
+      borderBottom: `2px solid ${theme.palette.primary.main}`,
+      zIndex: 1
     },
     tagChip: {
       border: `1px solid ${theme.palette.grey['300']}`,
@@ -33,24 +39,22 @@ const useStyles = makeStyles(
       margin: theme.spacing(0, 0.5, 0.5, 0)
     },
     list: {
-      height: '300px',
-      overflow: 'auto',
-      position: 'relative',
       borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },
     listTitle: {
-      position: 'sticky',
-      top: 0,
       backgroundColor: '#fff',
-      zIndex: 1,
       color: theme.palette.grey['600'],
       padding: theme.spacing(1, 2)
     },
     manageTags: {
+      position: 'sticky',
+      bottom: 0,
       display: 'flex',
       alignItems: 'center',
       padding: theme.spacing(1, 1),
-      color: theme.palette.tertiary.dark
+      color: theme.palette.tertiary.dark,
+      backgroundColor: theme.palette.grey['50'],
+      zIndex: 1
     },
     manageTagsIcon: {
       marginRight: theme.spacing(0.5)
