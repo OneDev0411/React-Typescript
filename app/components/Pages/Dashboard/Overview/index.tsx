@@ -1,5 +1,5 @@
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { Helmet } from 'react-helmet'
+import { useTitle } from 'react-use'
 
 import PageLayout from 'components/GlobalPageLayout'
 
@@ -13,13 +13,12 @@ const useStyles = makeStyles(
 )
 
 function OverviewDashboard() {
+  useTitle('Rechat | Dashboard')
+
   const classes = useStyles()
 
   return (
     <>
-      <Helmet>
-        <title>Rechat | Today</title>
-      </Helmet>
       <PageLayout className={classes.layout} padding={0}>
         <PageLayout.HeaderWithBackground title="Today" />
         <PageLayout.Main mt={0}>
