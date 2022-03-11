@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { startOfDay, compareAsc } from 'date-fns'
+import { startOfDay, compareAsc, setYear, isToday } from 'date-fns'
 import { useSelector } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
@@ -61,11 +61,17 @@ export function sortCalendarEventsOnNextOccurrence(
   return events
     .map(event => {
       if (event.all_day) {
+        const defaultNextOccurrence = startOfDay(new Date(event.next_occurence))
+
+        const nextOccurrence = isToday(
+          setYear(defaultNextOccurrence, new Date().getFullYear())
+        )
+          ? setYear(defaultNextOccurrence, new Date().getFullYear())
+          : defaultNextOccurrence
+
         return {
           ...event,
-          next_occurence: startOfDay(
-            new Date(event.next_occurence)
-          ).toISOString()
+          next_occurence: nextOccurrence.toISOString()
         }
       }
 
