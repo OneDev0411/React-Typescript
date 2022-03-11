@@ -15,7 +15,7 @@ import iff from '@app/utils/iff'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      marginBottom: theme.spacing(8)
+      marginBottom: theme.spacing(3)
     },
     containerGray: {
       '&&': { padding: theme.spacing(3) }, // TODO: Find a better way to override the padding value
@@ -23,7 +23,7 @@ const useStyles = makeStyles(
       borderRadius: theme.shape.borderRadius
     },
     headerContainer: {
-      paddingBottom: theme.spacing(2)
+      paddingBottom: theme.spacing(1)
     },
     titleContainer: {
       paddingRight: theme.spacing(2)
@@ -50,12 +50,12 @@ interface Props {
 }
 
 export default function SectionLayout({
-  title,
-  children,
   actionNode,
+  children,
   containerGridProps,
+  grayMode = false,
   headerGridProps,
-  grayMode = false
+  title
 }: Props) {
   const classes = useStyles()
 
@@ -80,7 +80,7 @@ export default function SectionLayout({
       >
         <Grid item className={classes.titleContainer}>
           <Box pr={1}>
-            <Typography variant="h5">{title}</Typography>
+            <Typography variant="h6">{title}</Typography>
           </Box>
         </Grid>
         {actionNode && <Grid item>{actionNode}</Grid>}

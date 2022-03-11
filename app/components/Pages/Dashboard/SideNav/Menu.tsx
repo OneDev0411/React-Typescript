@@ -138,7 +138,7 @@ export function Menu() {
 
           <Acl access={insightAccess}>
             <SideNavLinkItem to="/dashboard/insights" tourId="nav-insight">
-              Email Insights
+              Insights
             </SideNavLinkItem>
           </Acl>
 

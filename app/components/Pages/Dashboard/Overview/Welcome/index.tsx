@@ -15,7 +15,7 @@ import { InboxAction } from 'reducers/inbox/types'
 import Acl from 'views/components/Acl'
 
 import { useDealsList } from '../../Deals/List/Agent/hooks/use-deals-list'
-import PromoteListingsSection from '../../Marketing/Overview/Sections/PromoteListingsSection'
+import PromoteListingsSection from '../components/PromoteListingsSection'
 import { AccessButtonType } from '../types.d'
 
 import { Dailies } from './Dailies'
@@ -149,7 +149,7 @@ function OverviewDashboard() {
       </Acl.Crm>
       <Acl.Marketing>
         <Box className={classes.container}>
-          <PromoteListingsSection title="To Market" dashboardStyles />
+          <PromoteListingsSection />
         </Box>
       </Acl.Marketing>
       <Acl.Deals>
