@@ -8,6 +8,7 @@ import {
   convertDateToTimestamp,
   convertTimestampToDate
 } from '@app/utils/date-utils'
+import { requiredTextValidator } from '@app/utils/validations'
 import {
   DateTimeField,
   FormTextField
@@ -18,7 +19,6 @@ import OverlayDrawer from 'components/OverlayDrawer'
 import { futureTimeValidator } from '../../helpers'
 import SuperCampaignTemplate from '../SuperCampaignTemplate'
 
-import { requiredTextValidator } from './helpers'
 import {
   SuperCampaignFormInternalValues,
   SuperCampaignFormValues
