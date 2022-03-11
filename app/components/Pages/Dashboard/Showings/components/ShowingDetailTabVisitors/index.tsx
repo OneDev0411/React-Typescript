@@ -1,12 +1,8 @@
-import { useEffect } from 'react'
-
 import { Box, makeStyles } from '@material-ui/core'
 
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
-import useAsync from 'hooks/use-async'
-import { searchContacts } from 'models/contacts/search-contacts'
 import { goTo } from 'utils/go-to'
 
 import ShowingColumnContactActions from '../ShowingColumnContactActions'
@@ -44,27 +40,12 @@ function ShowingDetailTabVisitors({
   showingBookingUrl
 }: ShowingDetailTabVisitorsProps) {
   const classes = useStyles()
-  const { data: contacts, run, isLoading } = useAsync<IContact[]>({ data: [] })
+
+  const contacts: IContact[] =
+    showing?.appointments?.map(appointment => appointment?.contact) || []
 
   const appointmentsByVisitorId =
     useShowingGroupAppointmentByVisitorId(appointments)
-
-  useEffect(() => {
-    run(
-      async () =>
-        (
-          await searchContacts(
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            [showing.id]
-          )
-        ).data
-    )
-  }, [run, showing.id])
 
   const columns: TableColumn<IContact>[] = [
     {
@@ -120,7 +101,6 @@ function ShowingDetailTabVisitors({
         rows={contacts}
         totalRows={contacts.length}
         columns={columns}
-        loading={isLoading ? 'middle' : null}
         LoadingStateComponent={() => (
           <LoadingContainer style={{ padding: '20% 0' }} />
         )}
