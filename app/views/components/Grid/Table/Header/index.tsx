@@ -13,7 +13,10 @@ const useStyles = makeStyles(
       justifyContent: 'space-between'
     },
     column: {
-      backgroundColor: `${theme.palette.grey['50']} !important`
+      display: 'flex',
+      alignItems: 'center',
+      backgroundColor: `${theme.palette.grey['50']} !important`,
+      color: theme.palette.grey['90']
     }
   }),
   {

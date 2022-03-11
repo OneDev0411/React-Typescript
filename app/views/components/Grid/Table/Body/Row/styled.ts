@@ -10,6 +10,7 @@ export const RowContainer = styled.div<{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-size: 14px !important;
     ${theme.typography.body2};
 
     background-color: ${

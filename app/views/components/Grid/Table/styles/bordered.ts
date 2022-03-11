@@ -11,8 +11,6 @@ export const styles = (theme: Theme) =>
         height: '100%',
         borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
         borderRight: `1px solid ${theme.palette.action.disabledBackground}`,
-        display: 'flex',
-        alignItems: 'center',
         backgroundColor: theme.palette.common.white,
         '&.row-selection': {
           borderRight: 'none'
