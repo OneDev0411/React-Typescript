@@ -4,6 +4,7 @@ import { Tooltip, Button, makeStyles } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 import { connect } from 'react-redux'
 
+import { useInfinitePagination } from '@app/hooks/use-infinite-pagination'
 import {
   isBrandAsset,
   isBrandTemplate,
@@ -50,6 +51,7 @@ function TemplatesList(props) {
   const [isActionTriggered, setActionTriggered] = useState(false)
   const [isEditActionTriggered, setEditActionTriggered] = useState(false)
   const modal = useContext(ConfirmationModalContext)
+  const currentPageItems = useInfinitePagination({ items: props.items })
 
   useEffect(() => {
     if (!props.defaultSelected || !props.items || props.items.length === 0) {
@@ -175,7 +177,7 @@ function TemplatesList(props) {
             568: 1
           }}
         >
-          {props.items.map(item => {
+          {currentPageItems.map(item => {
             if (item.type === 'brand_asset') {
               return (
                 <BrandAssetCard
