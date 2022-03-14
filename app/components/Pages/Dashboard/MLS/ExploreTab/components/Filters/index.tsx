@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react'
 
 import { Button } from '@material-ui/core'
+import { mdiRotateRight } from '@mdi/js'
 import { isEqual } from 'lodash'
 import { useLocalStorage } from 'react-use'
 
+import { getPropertyTypeFirstElement } from '@app/components/Pages/Dashboard/MLS/helpers/get-listings-helpers'
 import { Filters as BaseFilters } from '@app/views/components/Filters'
 import FilterButton from '@app/views/components/Filters/FilterButton'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import {
   PROPERTIES_FILTERS_STORAGE_KEY,
@@ -114,7 +118,7 @@ export const Filters = () => {
 
               {/* Beds Filter  */}
               {!['Lots & Acreage', 'Commercial'].includes(
-                currentFilters.property_types[0]
+                getPropertyTypeFirstElement(currentFilters) || ''
               ) && (
                 <div className={classes.buttonGroup}>
                   <FilterButton
@@ -186,7 +190,10 @@ export const Filters = () => {
                 }}
                 disabled={
                   isEqual(currentFilters, systemDefaultFilters) &&
-                  currentFilters.property_types[0] === 'Residential'
+                  getPropertyTypeFirstElement(currentFilters) === 'Residential'
+                }
+                startIcon={
+                  <SvgIcon path={mdiRotateRight} size={muiIconSizes.small} />
                 }
                 size="small"
               >

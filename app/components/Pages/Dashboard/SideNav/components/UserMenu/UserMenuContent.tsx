@@ -130,7 +130,7 @@ export function UserMenuContent({ showChecklists, onClose = noop }: Props) {
           onClick={() => {
             onClose()
             removeImpersonateUser()
-            window.location.pathname = 'signout'
+            browserHistory.push('/signout')
           }}
         >
           <ListItemIcon className={classes.listItemIcon}>

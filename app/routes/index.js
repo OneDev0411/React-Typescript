@@ -55,6 +55,11 @@ const AsyncSignIn = withGuest(
   })
 )
 
+const AsyncSignOut = Load({
+  loader: () =>
+    import('../components/Pages/Auth/SignOut' /* webpackChunkName: "signout" */)
+})
+
 const AsyncVerifyRequest = Load({
   loader: () =>
     import(
@@ -871,6 +876,7 @@ export default (
       <Route path="register" component={AsyncRegister} />
 
       <Route path="signin" component={AsyncSignIn} />
+      <Route path="signout" component={AsyncSignOut} />
       <Route path="signup" component={AsyncSignUp} />
 
       <Route path="verify/confirm/:verifyType" component={AsyncVerifyConfirm} />

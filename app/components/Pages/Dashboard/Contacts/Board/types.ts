@@ -4,4 +4,5 @@ export type FilterCriteria = {
   flows: UUID[]
   crmTasks: UUID[]
   conditionOperator: TContactFilterType
+  sortOrder: string
 }

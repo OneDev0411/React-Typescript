@@ -72,11 +72,20 @@ function ShowingRoleListColumnActions({
       }
 
       run(async () => {
-        await updateShowingRole(showingId, role.id, roleInput)
+        const updatedShowing: IShowing = await updateShowingRole(
+          showingId,
+          role.id,
+          roleInput
+        )
+
+        const sellerAgent: Optional<IShowingRole> = updatedShowing.roles.find(
+          user => user.role === updatedRole.role
+        )
+
         onEdit({
           ...role,
-          ...updatedRole,
-          user: updatedRole.user ?? role.user
+          ...sellerAgent,
+          user: sellerAgent?.user ?? role.user
         })
         notify({
           status: 'success',

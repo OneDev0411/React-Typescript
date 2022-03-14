@@ -39,10 +39,11 @@ const useStyles = makeStyles(
     },
     content: {
       flexGrow: 1,
-      paddingLeft: theme.spacing(2)
+      padding: theme.spacing(1, 1.5, 0.5)
     },
     description: {
-      color: theme.palette.grey['500']
+      ...theme.typography.caption,
+      color: theme.palette.grey['700']
     }
   }),
   {
@@ -94,7 +95,7 @@ export function RadioGroup<T extends string = string>({
           >
             <Box
               display="flex"
-              alignItems="center"
+              alignItems="flex-start"
               justifyContent="space-between"
             >
               <Box>

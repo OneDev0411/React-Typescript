@@ -23,9 +23,11 @@ export function getPersonFromUser(user: IUser): ShowingRoleInputPerson {
 }
 
 const validRoles: IShowingRoleType[] = [
+  'Admin/Assistant',
   'SellerAgent',
   'CoSellerAgent',
-  'Tenant'
+  'Tenant',
+  'Other'
 ]
 
 export function isValidShowingRoleType(
