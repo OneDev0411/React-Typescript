@@ -98,9 +98,7 @@ function ShowingDetailTabVisitors({
       render: ({ row }) =>
         row.hasAccessToContact ? (
           <ShowingColumnContactActions contact={row} className={classes.hide} />
-        ) : (
-          <></>
-        )
+        ) : null
     },
     {
       id: 'total-visits',
