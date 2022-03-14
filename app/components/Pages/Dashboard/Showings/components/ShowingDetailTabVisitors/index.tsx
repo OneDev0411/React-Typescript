@@ -1,8 +1,12 @@
+import { useEffect } from 'react'
+
 import { Box, makeStyles } from '@material-ui/core'
 
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
+import useAsync from 'hooks/use-async'
+import { searchContacts } from 'models/contacts/search-contacts'
 import { goTo } from 'utils/go-to'
 
 import ShowingColumnContactActions from '../ShowingColumnContactActions'
@@ -40,14 +44,44 @@ function ShowingDetailTabVisitors({
   showingBookingUrl
 }: ShowingDetailTabVisitorsProps) {
   const classes = useStyles()
-
-  const contacts: IContact[] =
-    showing?.appointments?.map(appointment => appointment?.contact) || []
+  const { data: contacts, run, isLoading } = useAsync<IContact[]>({ data: [] })
 
   const appointmentsByVisitorId =
     useShowingGroupAppointmentByVisitorId(appointments)
 
-  const columns: TableColumn<IContact>[] = [
+  const appointmentsContacts =
+    appointments?.map(appointment => appointment?.contact) || []
+
+  const uniqueAppointmentsContacts = [
+    ...new Set(appointmentsContacts.map(item => item))
+  ]
+
+  const updatedAppointmentsContacts = uniqueAppointmentsContacts?.map(item => {
+    return {
+      ...item,
+      hasAccessToContact:
+        contacts?.findIndex(contact => contact.id === item.id) !== -1
+    }
+  })
+
+  useEffect(() => {
+    run(
+      async () =>
+        (
+          await searchContacts(
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            [showing.id]
+          )
+        ).data
+    )
+  }, [run, showing.id])
+
+  const columns: TableColumn<IContact & { hasAccessToContact: boolean }>[] = [
     {
       header: 'Name',
       id: 'name',
@@ -61,9 +95,12 @@ function ShowingDetailTabVisitors({
       id: 'contact-action',
       width: '15%',
       sortable: false,
-      render: ({ row }) => (
-        <ShowingColumnContactActions contact={row} className={classes.hide} />
-      )
+      render: ({ row }) =>
+        row.hasAccessToContact ? (
+          <ShowingColumnContactActions contact={row} className={classes.hide} />
+        ) : (
+          <></>
+        )
     },
     {
       id: 'total-visits',
@@ -98,9 +135,10 @@ function ShowingDetailTabVisitors({
   return (
     <Box minHeight={300}>
       <Table
-        rows={contacts}
-        totalRows={contacts.length}
+        rows={updatedAppointmentsContacts}
+        totalRows={updatedAppointmentsContacts.length}
         columns={columns}
+        loading={isLoading ? 'middle' : null}
         LoadingStateComponent={() => (
           <LoadingContainer style={{ padding: '20% 0' }} />
         )}
@@ -118,7 +156,8 @@ function ShowingDetailTabVisitors({
           />
         )}
         getTrProps={({ row }) => ({
-          onClick: () => handleRowClick(row.id)
+          onClick: () =>
+            row.hasAccessToContact ? handleRowClick(row.id) : () => {}
         })}
         classes={{ row: classes.row }}
       />
