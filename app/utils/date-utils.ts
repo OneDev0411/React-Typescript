@@ -69,20 +69,6 @@ export function isToday(date: Date): boolean {
   return event.date() === today.date() && event.month() === today.month()
 }
 
-export function convertToCurrentYear(date: Date): Date {
-  const now = new Date()
-  const newDate = new Date(date)
-
-  newDate.setFullYear(
-    now.getUTCFullYear(),
-    newDate.getUTCMonth(),
-    newDate.getUTCDate()
-  )
-  newDate.setHours(0, 0, 0, 0)
-
-  return newDate
-}
-
 export function convertTimestampToDate(timestamp: number): Date {
   return new Date(timestamp * 1000)
 }

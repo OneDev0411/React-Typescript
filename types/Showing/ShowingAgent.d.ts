@@ -5,5 +5,5 @@ declare interface IShowingAgent extends IModel<'showing_agent'> {
   email: Nullable<string>
   phone_number: Nullable<string>
   profile_image_url: Nullable<string>
-  office: Nullable<string>
+  office?: IAgentOffice
 }
