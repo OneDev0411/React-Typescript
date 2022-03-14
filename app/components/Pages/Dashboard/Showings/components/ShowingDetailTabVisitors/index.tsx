@@ -20,31 +20,31 @@ import useShowingGroupAppointmentByVisitorId from './use-showing-group-appointme
 
 const useStyles = makeStyles(
   theme => ({
-    row: {
-      paddingRight: theme.spacing(1),
-      '&:hover $hide': { opacity: 1 }
-    },
     hide: {
       opacity: 0,
       transition: theme.transitions.create('opacity')
+    },
+    row: {
+      paddingRight: theme.spacing(1),
+      '&:hover $hide': { opacity: 1 }
     }
   }),
   { name: 'ShowingDetailTabVisitors' }
 )
 
 interface ShowingDetailTabVisitorsProps {
-  showing: IShowing<'showing'>
   appointments: IShowingAppointment<'showing'>[]
+  showing: IShowing<'showing'>
   showingBookingUrl?: string
 }
 
 function ShowingDetailTabVisitors({
-  showing,
   appointments,
+  showing,
   showingBookingUrl
 }: ShowingDetailTabVisitorsProps) {
   const classes = useStyles()
-  const { data: contacts, run, isLoading } = useAsync<IContact[]>({ data: [] })
+  const { data: contacts, isLoading, run } = useAsync<IContact[]>({ data: [] })
 
   const appointmentsByVisitorId =
     useShowingGroupAppointmentByVisitorId(appointments)
