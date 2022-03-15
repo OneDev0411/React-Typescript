@@ -13,19 +13,17 @@ const useStyles = makeStyles(
 )
 
 function OverviewDashboard() {
-  useTitle('Rechat | Dashboard')
+  useTitle('Rechat | Today')
 
   const classes = useStyles()
 
   return (
-    <>
-      <PageLayout className={classes.layout} padding={0}>
-        <PageLayout.HeaderWithBackground title="Today" />
-        <PageLayout.Main mt={0}>
-          <Welcome />
-        </PageLayout.Main>
-      </PageLayout>
-    </>
+    <PageLayout className={classes.layout} padding={0}>
+      <PageLayout.HeaderWithBackground title="Today" />
+      <PageLayout.Main mt={0}>
+        <Welcome />
+      </PageLayout.Main>
+    </PageLayout>
   )
 }
 
