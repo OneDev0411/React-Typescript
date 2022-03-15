@@ -5,7 +5,7 @@ import { useMutation, UseMutationOptions } from '@app/hooks/query'
 
 import { allList, myList } from '../query-keys/campaign'
 
-import { createSuperCampaign } from '.'
+import { createSuperCampaign } from './create-super-campaign'
 
 export type UseCreateSuperCampaign<
   TVariables extends ISuperCampaignInput | ISuperCampaign = ISuperCampaignInput
