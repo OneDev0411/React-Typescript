@@ -50,6 +50,7 @@ export function SearchAgent({ user, onComplete }: Props) {
     <Box display="flex" flexDirection="column" alignItems="flex-end">
       <TextField
         fullWidth
+        autoFocus
         value={agentNumber}
         label="Agent Number"
         placeholder="xxxxxx"

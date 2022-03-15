@@ -2,33 +2,33 @@ import { Button } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import useSafeState from '@app/hooks/use-safe-state'
+import { useUpdateSuperCampaignEligibility } from '@app/models/super-campaign'
 import { selectActiveBrandId } from '@app/selectors/brand'
 import { BaseMultiSelectDrawer } from '@app/views/components/BrandSelector'
 
 import { isSuperCampaignReadOnly } from '../../helpers'
-import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
-
-import { useUpdateSuperCampaignEligibility } from './use-update-super-campaign-eligibility'
+import { useSuperCampaign } from '../SuperCampaignProvider'
 
 function SuperCampaignEligibleCardBrands() {
   const activeBrandId = useSelector(selectActiveBrandId)
   const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useSafeState(false)
 
-  const { superCampaign, setSuperCampaign } = useSuperCampaignDetail()
+  const superCampaign = useSuperCampaign()
   const isReadOnly = isSuperCampaignReadOnly(superCampaign)
 
-  const updateSuperCampaignEligibility = useUpdateSuperCampaignEligibility(
-    superCampaign,
-    setSuperCampaign
-  )
+  const { mutateAsync } = useUpdateSuperCampaignEligibility({
+    onSuccess: () => closeBrandSelector()
+  })
 
   const openBrandSelector = () => setIsBrandSelectorOpen(true)
 
   const closeBrandSelector = () => setIsBrandSelectorOpen(false)
 
   const handleSelectedBrandSave = async (brandsId: UUID[]) => {
-    await updateSuperCampaignEligibility(brandsId)
-    closeBrandSelector()
+    await mutateAsync({
+      superCampaignId: superCampaign.id,
+      eligibleBrands: brandsId
+    })
   }
 
   const eligibleBrands: UUID[] = superCampaign.eligible_brands ?? []

@@ -1,8 +1,6 @@
 import { useState } from 'react'
 
-import SuperCampaignPreviewDrawer, {
-  SuperCampaignPreviewDrawerProps
-} from '@app/views/components/SuperCampaignPreviewDrawer'
+import SuperCampaignPreviewDrawer from '@app/views/components/SuperCampaignPreviewDrawer'
 
 import SuperCampaignCard from './SuperCampaignCard'
 import SuperCampaignWithEnrollmentCardEnrolledFooter from './SuperCampaignWithEnrollmentCardEnrolledFooter'
@@ -10,8 +8,7 @@ import SuperCampaignWithEnrollmentCardManagementFooter from './SuperCampaignWith
 import SuperCampaignWithEnrollmentCardParticipateFooter from './SuperCampaignWithEnrollmentCardParticipateFooter'
 import { useHasSuperCampaignManageAccess } from './use-has-super-campaign-manage-access'
 
-interface SuperCampaignWithEnrollmentCardProps
-  extends Pick<SuperCampaignPreviewDrawerProps, 'onEnroll' | 'onUnenroll'> {
+interface SuperCampaignWithEnrollmentCardProps {
   superCampaignWithEnrollment: ISuperCampaignWithEnrollment
 }
 
@@ -67,7 +64,6 @@ function SuperCampaignWithEnrollmentCard({
         superCampaign={superCampaign}
         hasUnenroll={!!enrollment}
         initialSelectedTags={enrollment?.tags}
-        {...otherProps}
       />
     </>
   )

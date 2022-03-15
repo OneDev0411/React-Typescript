@@ -122,7 +122,7 @@ export function UserMenuContent({ showChecklists, onClose = noop }: Props) {
           <ListItemIcon className={classes.listItemIcon}>
             <SvgIcon path={mdiCogOutline} />
           </ListItemIcon>
-          <ListItemText disableTypography>Account Settings</ListItemText>
+          <ListItemText disableTypography>My Settings</ListItemText>
         </ListItem>
         <ListItem
           button
@@ -130,7 +130,7 @@ export function UserMenuContent({ showChecklists, onClose = noop }: Props) {
           onClick={() => {
             onClose()
             removeImpersonateUser()
-            window.location.pathname = 'signout'
+            browserHistory.push('/signout')
           }}
         >
           <ListItemIcon className={classes.listItemIcon}>

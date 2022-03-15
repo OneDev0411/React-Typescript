@@ -965,7 +965,8 @@ class ContactsList extends React.Component {
                         filters: props.filters,
                         flows: props.flows,
                         crmTasks: props.crmTasks,
-                        conditionOperator: props.conditionOperator
+                        conditionOperator: props.conditionOperator,
+                        sortOrder: state.sortOrder
                       }}
                     />
                   )}

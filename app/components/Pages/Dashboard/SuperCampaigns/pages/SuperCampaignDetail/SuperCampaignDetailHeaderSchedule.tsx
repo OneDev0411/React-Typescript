@@ -1,9 +1,8 @@
-import { Dispatch, SetStateAction } from 'react'
-
 import { makeStyles } from '@material-ui/core'
 
+import { useUpdateSuperCampaign } from '@app/models/super-campaign'
+
 import { isSuperCampaignReadOnly } from '../../helpers'
-import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
 
 import SuperCampaignDetailHeaderScheduleChip from './SuperCampaignDetailHeaderScheduleChip'
 import SuperCampaignDueAtChangeButton from './SuperCampaignDueAtChangeButton'
@@ -24,29 +23,29 @@ const useStyles = makeStyles(
 export interface SuperCampaignDetailHeaderScheduleProps {
   className: string
   superCampaign: ISuperCampaign<'template_instance'>
-  setSuperCampaign: Dispatch<
-    SetStateAction<ISuperCampaign<'template_instance'>>
-  >
 }
 
 function SuperCampaignDetailHeaderSchedule({
   className,
-  superCampaign,
-  setSuperCampaign
+  superCampaign
 }: SuperCampaignDetailHeaderScheduleProps) {
   const classes = useStyles()
 
   const isExecuted = isSuperCampaignReadOnly(superCampaign)
 
-  const { saveSuperCampaign, isSaving } = useSaveSuperCampaign(
-    superCampaign,
-    setSuperCampaign
-  )
+  const { mutate, isLoading } = useUpdateSuperCampaign()
 
   const handleDueAtChange = (dueAt: number) =>
-    saveSuperCampaign({ due_at: dueAt })
+    mutate({
+      superCampaign,
+      inputData: { due_at: dueAt }
+    })
 
-  const handleDueAtRemove = () => saveSuperCampaign({ due_at: null })
+  const handleDueAtRemove = () =>
+    mutate({
+      superCampaign,
+      inputData: { due_at: null }
+    })
 
   return (
     <>
@@ -54,19 +53,19 @@ function SuperCampaignDetailHeaderSchedule({
         className={className}
         isExecuted={isExecuted}
         dueAt={superCampaign.due_at}
-        isSaving={isSaving}
+        isSaving={isLoading}
       >
         {!isExecuted && (
           <div className={classes.actions}>
             <SuperCampaignDueAtChangeButton
               dueAt={superCampaign.due_at}
-              isSaving={isSaving}
+              isSaving={isLoading}
               onDueAtChange={handleDueAtChange}
             />
             {superCampaign.due_at && (
               <SuperCampaignDueAtRemoveButton
                 className={classes.removeButton}
-                disabled={isSaving}
+                disabled={isLoading}
                 onClick={handleDueAtRemove}
               />
             )}

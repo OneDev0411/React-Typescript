@@ -40,6 +40,7 @@ export default memo(function TreeView<NodeType = any>({
     props.onExpandedNodesChanged,
     props.initialExpandedNodes || []
   )
+
   const selectedNodeIds: UUID[] = useMemo(
     () => selectedNodes.map(node => getNodeId(node)),
     [selectedNodes, getNodeId]
@@ -64,29 +65,31 @@ export default memo(function TreeView<NodeType = any>({
         return
       }
 
-      const newSelectedNodes = generateNewSelecedNode()
+      const nodeId = getNodeId(node)
 
-      setSelectedNodes(newSelectedNodes)
-
-      function generateNewSelecedNode(): NodeType[] {
-        const nodeId = getNodeId(node)
-
-        if (selectedNodeIds.includes(nodeId)) {
-          return selectedNodes.filter(n => getNodeId(n) !== nodeId)
-        }
-
-        return [...selectedNodes, node]
-      }
+      setSelectedNodes(nodes =>
+        selectedNodeIds.includes(nodeId)
+          ? nodes.filter(someNode => getNodeId(someNode) !== nodeId)
+          : [...nodes, node]
+      )
     },
-    [getNodeId, props.multiSelectable, selectedNodeIds, selectedNodes]
+    [getNodeId, props.multiSelectable, selectedNodeIds]
   )
 
   useEffect(() => {
-    if (props.initialExpandedNodes) {
-      setExpandedNodes(expandedNodes => {
-        return [...expandedNodes, ...(props.initialExpandedNodes || [])]
-      })
+    if (!props.initialExpandedNodes) {
+      return
     }
+
+    setExpandedNodes(expandedNodes => {
+      const newExpandedNodes = props.initialExpandedNodes || []
+
+      if (newExpandedNodes.length === 0) {
+        return []
+      }
+
+      return [...expandedNodes, ...newExpandedNodes]
+    })
   }, [props.initialExpandedNodes, setExpandedNodes])
 
   const root = getChildNodes()

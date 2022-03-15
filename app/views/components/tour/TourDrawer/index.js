@@ -312,21 +312,12 @@ class TourDrawerRaw extends Component {
                       )}
                     </Flex>
                     <Flex alignCenter>
-                      <Tooltip
-                        placement="top"
-                        title="Preview and print tour sheets"
-                      >
-                        <div>
-                          <PreviewTourSheets
-                            agent={user}
-                            disabled={isDisabled}
-                            listings={values.locations.map(
-                              l => l.listing.original
-                            )}
-                            tour={prePreviewFormat(values, this.state.tour)}
-                          />
-                        </div>
-                      </Tooltip>
+                      <PreviewTourSheets
+                        agent={user}
+                        disabled={isDisabled}
+                        listings={values.locations.map(l => l.listing.original)}
+                        tour={prePreviewFormat(values, this.state.tour)}
+                      />
                       <Button
                         variant="contained"
                         type="submit"

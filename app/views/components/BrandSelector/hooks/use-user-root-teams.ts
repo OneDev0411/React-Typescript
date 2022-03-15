@@ -8,7 +8,10 @@ import { getBrands } from 'models/BrandConsole/Brands'
 import { TreeFn } from 'utils/tree-utils/types'
 import { getRootBrand } from 'utils/user-teams'
 
-interface UseUserRootTeamsReturnType {
+import { useFilterTeams, UseFilterTeamsReturnType } from './use-filter-teams'
+
+interface UseUserRootTeamsReturnType
+  extends Omit<UseFilterTeamsReturnType, 'filterTeams'> {
   isError: boolean
   isLoading: boolean
   rootTeam: Nullable<IBrand>
@@ -26,6 +29,8 @@ export function useUserRootTeams(
     isError,
     run
   } = useAsync<Nullable<IBrand>>()
+  const { searchTerm, handleSearch, filterTeams }: UseFilterTeamsReturnType =
+    useFilterTeams()
 
   useEffectOnce(() => {
     run(async () => {
@@ -58,7 +63,9 @@ export function useUserRootTeams(
     isError,
     rootTeam,
     isLoading,
+    searchTerm,
+    handleSearch,
     initialExpandedNodes,
-    teams: getChildNodes
+    teams: filterTeams(getChildNodes)
   }
 }

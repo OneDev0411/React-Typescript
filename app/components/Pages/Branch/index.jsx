@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { useDeepCompareEffect } from 'react-use'
 
-import { useActiveBrand } from '@app/hooks/brand/use-active-brand'
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { selectUser } from 'selectors/user'
 
 import publicConfig from '../../../../config/public'
@@ -25,7 +25,7 @@ const branchKey = publicConfig.branch.key
 const Branch = ({ location }) => {
   const dispatch = useDispatch()
   const loggedInUser = useSelector(selectUser)
-  const activeBrand = useActiveBrand()
+  const activeBrand = useUnsafeActiveBrand()
 
   const [activeModal, setActiveModal] = useState(null)
   const [branchData, setBranchData] = useState(null)

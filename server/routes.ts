@@ -45,7 +45,7 @@ router.post('/api/users/lookup', bodyParser.json(), usersLookupRoute)
 router.post('/api/oauth2/token', bodyParser.json(), usersOAuthTokenRoute)
 router.post('/api/users', bodyParser.json(), signupRoute)
 router.get('/reset_password', bodyParser.json(), resetPasswordRoute)
-router.get('/signout', bodyParser.json(), signoutRoute)
+router.post('/api/users/signout', bodyParser.json(), signoutRoute)
 
 /**
  * deals routes.

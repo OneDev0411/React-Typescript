@@ -1,12 +1,6 @@
-import { memo } from 'react'
+import { memo, MouseEvent } from 'react'
 
-import {
-  Chip,
-  Theme,
-  Button,
-  makeStyles,
-  CircularProgress
-} from '@material-ui/core'
+import { Theme, Button, makeStyles, CircularProgress } from '@material-ui/core'
 import cn from 'classnames'
 
 interface Props {
@@ -23,14 +17,14 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: theme.spacing(1, 0),
+      padding: ({ isActive }: Pick<Props, 'isActive' | 'disabled'>) =>
+        isActive
+          ? '0.468rem 0' // I'm using this strange value due to hokm hokumati, sorry :\
+          : theme.spacing(1, 0),
       '&:hover': {
-        padding: ({
-          isActive,
-          disabled
-        }: Pick<Props, 'isActive' | 'disabled'>) =>
-          !isActive && !disabled
-            ? '0.161rem 0.161rem 0.161rem 0' // I'm using this strange value due to hokm hokumati :\
+        padding: ({ disabled }: Pick<Props, 'isActive' | 'disabled'>) =>
+          !disabled
+            ? '0.161rem 0.161rem 0.161rem 0' // I'm using this strange value due to hokm hokumati, sorry :\
             : theme.spacing(1, 0),
 
         '& $switchButton': {
@@ -45,7 +39,11 @@ const useStyles = makeStyles(
       display: 'none'
     },
     activeIndicator: {
-      marginLeft: theme.spacing(0.5)
+      marginLeft: theme.spacing(0.5),
+      background: theme.palette.divider,
+      padding: theme.spacing(0.25, 0.75),
+      borderRadius: '100px',
+      ...theme.typography.caption
     }
   }),
   { name: 'SwitchTeamNodeRenderer' }
@@ -54,7 +52,9 @@ const useStyles = makeStyles(
 function Brand({ brand, isActive, isFetchingUser, disabled, onClick }: Props) {
   const classes = useStyles({ isActive, disabled })
 
-  const handleOnClick = () => {
+  const handleOnClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+
     if (disabled) {
       return null
     }
@@ -67,11 +67,7 @@ function Brand({ brand, isActive, isFetchingUser, disabled, onClick }: Props) {
       <div>
         {brand.name}
         {isActive && (
-          <Chip
-            size="small"
-            label="You're here"
-            className={classes.activeIndicator}
-          />
+          <span className={classes.activeIndicator}>You're here</span>
         )}
       </div>
       {!disabled && (
@@ -86,7 +82,7 @@ function Brand({ brand, isActive, isFetchingUser, disabled, onClick }: Props) {
           }
           onClick={handleOnClick}
         >
-          {isFetchingUser ? 'Loading...' : 'Select Team'}
+          {isFetchingUser ? 'Loading...' : 'Select Account'}
         </Button>
       )}
     </div>

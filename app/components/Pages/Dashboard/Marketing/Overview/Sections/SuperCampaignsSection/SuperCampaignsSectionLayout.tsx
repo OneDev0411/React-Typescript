@@ -1,4 +1,4 @@
-import { useGetMySuperCampaignsWithEnrollment } from '@app/hooks/use-get-my-super-campaigns-with-enrollment'
+import { useGetMySuperCampaignsWithEnrollment } from '@app/components/Pages/Dashboard/SuperCampaigns/hooks/use-get-my-super-campaigns-with-enrollment'
 
 import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
@@ -7,12 +7,8 @@ import { SUPER_CAMPAIGN_CARDS_COUNT } from './constants'
 import SuperCampaignsSectionContent from './SuperCampaignsSectionContent'
 
 function SuperCampaignsSectionLayout() {
-  const {
-    isLoading,
-    superCampaignsWithEnrollment,
-    enrollToSuperCampaign,
-    unenrollFromSuperCampaign
-  } = useGetMySuperCampaignsWithEnrollment(SUPER_CAMPAIGN_CARDS_COUNT)
+  const { isLoading, superCampaignsWithEnrollment } =
+    useGetMySuperCampaignsWithEnrollment(SUPER_CAMPAIGN_CARDS_COUNT)
 
   const isEmpty = !isLoading && superCampaignsWithEnrollment.length === 0
 
@@ -34,8 +30,6 @@ function SuperCampaignsSectionLayout() {
         isEmpty={isEmpty}
         isLoading={isLoading}
         superCampaignsWithEnrollment={superCampaignsWithEnrollment}
-        onEnroll={enrollToSuperCampaign}
-        onUnenroll={unenrollFromSuperCampaign}
       />
     </SectionLayout>
   )

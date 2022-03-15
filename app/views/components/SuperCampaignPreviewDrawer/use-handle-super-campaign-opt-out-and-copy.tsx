@@ -1,50 +1,51 @@
 import { useContext } from 'react'
 
+import { useUnenrollMeFromSuperCampaign } from '@app/models/super-campaign'
 import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
-
-import { useUnenrollMeFromSuperCampaign } from './use-unenroll-me-from-super-campaign'
 
 interface UseOptOutAndCopySuperCampaign {
   isDeleting: boolean
-  handleOptOut: () => void
-  handleOptOutAndCopy: () => void
+  handleOptOut: (superCampaignId: UUID) => void
+  handleOptOutAndCopy: (superCampaignId: UUID) => void
 }
 
-export function useHandleSuperCampaignOptOutAndCopy(
-  superCampaignId: UUID,
-  onUnenroll: () => void,
-  onOptOut?: () => void,
+interface UseOptOutAndCopySuperCampaignOptions {
+  onOptOut?: () => void
   onOptOutAndCopy?: () => void
-): UseOptOutAndCopySuperCampaign {
+}
+
+export function useHandleSuperCampaignOptOutAndCopy({
+  onOptOut,
+  onOptOutAndCopy
+}: UseOptOutAndCopySuperCampaignOptions): UseOptOutAndCopySuperCampaign {
   const confirmation = useContext(ConfirmationModalContext)
 
-  const { unenrollMeFromSuperCampaign, isDeleting } =
-    useUnenrollMeFromSuperCampaign(superCampaignId, onUnenroll)
+  const { mutateAsync, isLoading } = useUnenrollMeFromSuperCampaign()
 
-  const handleOptOut = () => {
+  const handleOptOut = (superCampaignId: UUID) => {
     confirmation.setConfirmationModal({
       message: 'Are you sure about opting out of the campaign?',
       confirmLabel: 'Yes, I am',
       onConfirm: async () => {
-        await unenrollMeFromSuperCampaign()
+        await mutateAsync(superCampaignId)
         onOptOut?.()
       }
     })
   }
 
-  const handleOptOutAndCopy = () => {
+  const handleOptOutAndCopy = (superCampaignId: UUID) => {
     confirmation.setConfirmationModal({
       message: 'Are you sure about opting out of the campaign and copy it?',
       confirmLabel: 'Yes, I am',
       onConfirm: async () => {
-        await unenrollMeFromSuperCampaign()
+        await mutateAsync(superCampaignId)
         onOptOutAndCopy?.()
       }
     })
   }
 
   return {
-    isDeleting,
+    isDeleting: isLoading,
     handleOptOut,
     handleOptOutAndCopy
   }

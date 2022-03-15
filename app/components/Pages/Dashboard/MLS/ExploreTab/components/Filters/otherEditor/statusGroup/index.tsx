@@ -15,6 +15,7 @@ import {
   PENDING_STATUSES,
   OTHER_STATUSES
 } from '@app/components/Pages/Dashboard/MLS/constants'
+import { getPropertyTypeFirstElement } from '@app/components/Pages/Dashboard/MLS/helpers/get-listings-helpers'
 import { getStatusColorClass } from '@app/utils/listing'
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -135,7 +136,7 @@ export const StatusGroup = ({
 
   return (
     <EditorGroup>
-      {filters.property_types[0] === 'Residential Lease' ? (
+      {getPropertyTypeFirstElement(filters) === 'Residential Lease' ? (
         <FormControlLabel
           classes={{
             root: classes.switchControlLabel

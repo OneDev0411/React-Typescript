@@ -91,7 +91,7 @@ export const TreeViewNode = memo(function TreeViewNode<
       [classes.childNode]: isChildNode && !expandable,
       [classes.isExpandableOnNodeClick]:
         expandable && props.shouldExpandOnNodeClick,
-      [classes.isNodeExpanded]: expanded,
+      [classes.isNodeNotExpanded]: expandable && !expanded,
       [classes.isNodeSelectable]: props.selectable
     }
 

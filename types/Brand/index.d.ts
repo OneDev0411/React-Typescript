@@ -90,8 +90,8 @@ declare interface IBrand extends IModel<'brand'> {
 }
 
 declare interface IBrandTheme {
-  navbar_logo: string
-  palette: Palette
+  navbar_logo?: string | null
+  palette?: Palette
 }
 
 declare interface IBrandSettings extends IModel<'brand_settings'> {
@@ -100,7 +100,7 @@ declare interface IBrandSettings extends IModel<'brand_settings'> {
   enable_liveby: boolean | null
   marketing_palette: BrandMarketingPalette | null
   theme: IBrandTheme | null
-  help_center
+  help_center: string | null
 }
 
 declare interface IBrandMessage {

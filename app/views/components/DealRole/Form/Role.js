@@ -29,6 +29,7 @@ import { Roles } from './form-fields/Roles'
 import { TextInput } from './form-fields/TextInput'
 import { TitleInput } from './form-fields/TitleInput'
 import { TypeInput } from './form-fields/TypeInput'
+import { useRoleContacts } from './hooks/use-role-contacts'
 
 const Button = styled(MuiButton)(spacing)
 const Grid = styled(MuiGrid)(spacing)
@@ -39,13 +40,18 @@ export function RoleForm(props) {
     props.values.legal_prefix || props.values.legal_middle_name
   )
 
+  const relatedContacts = useRoleContacts(
+    props.isNewRecord ? null : props.values
+  )
+
   const hasErrors = Object.keys(props.errors).length > 0
   const isRequired = field => props.requiredFields.includes(field)
   const isVisible = field => props.visibleFields.includes(field)
   const showNewContactButton =
-    props.isNewRecord &&
-    props.values.email !== props.userEmail &&
-    !props.values.contact
+    relatedContacts?.length === 0 ||
+    (props.isNewRecord &&
+      props.values.email !== props.userEmail &&
+      !props.values.contact)
 
   const showUpdateContactButton =
     props.values.email !== props.userEmail && props.values.contact
