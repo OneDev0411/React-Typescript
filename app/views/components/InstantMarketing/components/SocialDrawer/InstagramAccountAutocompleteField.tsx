@@ -19,16 +19,16 @@ const useStyles = makeStyles(
     },
     listItemAvatar: { minWidth: theme.spacing(4) }
   }),
-  { name: 'InstagramAccountsAutocompleteField' }
+  { name: 'InstagramAccountAutocompleteField' }
 )
 
-type InstagramAccountsAutocompleteFieldProps = Pick<
-  FieldProps<IFacebookPage[], FieldRenderProps<IFacebookPage[]>>,
+type InstagramAccountAutocompleteFieldProps = Pick<
+  FieldProps<IFacebookPage, FieldRenderProps<IFacebookPage>>,
   'name' | 'validate'
 >
 
-function InstagramAccountsAutocompleteField(
-  props: InstagramAccountsAutocompleteFieldProps
+function InstagramAccountAutocompleteField(
+  props: InstagramAccountAutocompleteFieldProps
 ) {
   const classes = useStyles()
 
@@ -41,7 +41,7 @@ function InstagramAccountsAutocompleteField(
   const getOptionLabel = (option: IFacebookPage) => option.instagram_username
 
   return (
-    <Field<IFacebookPage[]>
+    <Field<IFacebookPage>
       {...props}
       render={({ input, meta }) => {
         const showError =
@@ -52,7 +52,6 @@ function InstagramAccountsAutocompleteField(
           <Autocomplete
             value={input.value}
             onChange={(_, value) => input.onChange(value)}
-            multiple
             options={facebookPages ?? []}
             getOptionLabel={getOptionLabel}
             filterSelectedOptions
@@ -101,4 +100,4 @@ function InstagramAccountsAutocompleteField(
   )
 }
 
-export default InstagramAccountsAutocompleteField
+export default InstagramAccountAutocompleteField
