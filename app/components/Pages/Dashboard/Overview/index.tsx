@@ -18,8 +18,8 @@ function OverviewDashboard() {
   const classes = useStyles()
 
   return (
-    <PageLayout className={classes.layout} padding={0}>
-      <PageLayout.HeaderWithBackground title="Today" />
+    <PageLayout className={classes.layout}>
+      <PageLayout.Header title="Today" />
       <PageLayout.Main mt={0}>
         <Welcome />
       </PageLayout.Main>

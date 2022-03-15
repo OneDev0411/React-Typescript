@@ -43,8 +43,7 @@ const useStyles = makeStyles(
     main: {
       borderRadius: theme.shape.borderRadius,
       display: 'flex',
-      flexDirection: 'column',
-      padding: theme.spacing(0, 5)
+      flexDirection: 'column'
     }
   }),
   { name: 'WelcomeBox' }
