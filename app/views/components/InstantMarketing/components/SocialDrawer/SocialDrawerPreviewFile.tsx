@@ -1,4 +1,5 @@
 import { CircularProgress, makeStyles, Typography } from '@material-ui/core'
+import classNames from 'classnames'
 
 import SocialDrawerPreviewFileThumbnail from './SocialDrawerPreviewFileThumbnail'
 
@@ -22,11 +23,13 @@ const useStyles = makeStyles(
 )
 
 interface SocialDrawerPreviewFileProps {
+  className?: string
   instance: Optional<IMarketingTemplateInstance | IBrandAsset>
   error: Nullable<string>
 }
 
 function SocialDrawerPreviewFile({
+  className,
   instance,
   error
 }: SocialDrawerPreviewFileProps) {
@@ -34,7 +37,7 @@ function SocialDrawerPreviewFile({
   const isLoading = !instance && !error
 
   return (
-    <div className={classes.root}>
+    <div className={classNames(classes.root, className)}>
       {error && (
         <Typography variant="body1" className={classes.error}>
           {error}

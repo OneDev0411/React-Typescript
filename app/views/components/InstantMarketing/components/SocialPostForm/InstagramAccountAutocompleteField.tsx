@@ -55,6 +55,7 @@ function InstagramAccountAutocompleteField(
             options={facebookPages ?? []}
             getOptionLabel={getOptionLabel}
             filterSelectedOptions
+            disableClearable
             size="small"
             renderOption={tag => (
               <>

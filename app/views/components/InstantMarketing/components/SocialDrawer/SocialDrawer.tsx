@@ -1,20 +1,38 @@
 import { useState } from 'react'
 
+import { makeStyles } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
-import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
-import { addNotification as notify } from 'components/notification'
-import Drawer from 'components/OverlayDrawer'
 import {
   createTemplateInstance,
   TemplateInstanceInputData
-} from 'models/instant-marketing/create-template-instance'
+} from '@app/models/instant-marketing/create-template-instance'
+import getTemplateObject from '@app/views/components/InstantMarketing/helpers/get-template-object'
+import { addNotification as notify } from '@app/views/components/notification'
+import Drawer from '@app/views/components/OverlayDrawer'
 
-import SocialDrawerGeneral from './SocialDrawerGeneral'
+import SocialDrawerActions from './SocialDrawerActions'
+import SocialDrawerPreviewFile from './SocialDrawerPreviewFile'
 import SocialDrawerProvider from './SocialDrawerProvider'
-import SocialDrawerScheduleInstagramPost from './SocialDrawerScheduleInstagramPost'
+import SocialDrawerSocialPostForm from './SocialDrawerSocialPostForm'
 import { SocialDrawerStep } from './types'
+
+const useStyles = makeStyles(
+  theme => ({
+    preview: {
+      margin: theme.spacing(3, 3, 0, 3),
+      flexGrow: 0,
+      flexShrink: 0
+    },
+    actions: { margin: theme.spacing(0, 3) },
+    form: {
+      margin: theme.spacing(4, 3, 0, 3),
+      flexGrow: 1
+    }
+  }),
+  { name: 'SocialDrawer' }
+)
 
 interface SocialDrawerProps {
   template: (IBrandMarketingTemplate | IMarketingTemplate) & { result: string }
@@ -31,13 +49,14 @@ function SocialDrawer({
   templateInstanceData = {},
   onClose
 }: SocialDrawerProps) {
+  const classes = useStyles()
   const dispatch = useDispatch()
 
   const [templateInstance, setTemplateInstance] =
     useState<Optional<IMarketingTemplateInstance>>(passedInstance)
   const [errorMessage, setErrorMessage] = useState<Nullable<string>>(null)
 
-  const [step, setStep] = useState<SocialDrawerStep>('General')
+  const [step, setStep] = useState<SocialDrawerStep>('Share')
 
   useDeepCompareEffect(() => {
     async function makeTemplateInstance() {
@@ -76,14 +95,31 @@ function SocialDrawer({
 
   const instance = templateInstance || brandAsset
 
-  const StepComponent =
-    step === 'General' ? SocialDrawerGeneral : SocialDrawerScheduleInstagramPost
-
   return (
     <Drawer open onClose={onClose}>
       <Drawer.Header title="Schedule or Share?" />
+      <SocialDrawerPreviewFile
+        className={classes.preview}
+        instance={instance}
+        error={errorMessage}
+      />
       <SocialDrawerProvider setStep={setStep}>
-        <StepComponent instance={instance} errorMessage={errorMessage} />
+        {instance && (
+          <>
+            {step === 'Share' && (
+              <SocialDrawerActions
+                className={classes.actions}
+                instance={instance}
+              />
+            )}
+            {step === 'Schedule' && (
+              <SocialDrawerSocialPostForm
+                className={classes.form}
+                instance={instance}
+              />
+            )}
+          </>
+        )}
       </SocialDrawerProvider>
     </Drawer>
   )

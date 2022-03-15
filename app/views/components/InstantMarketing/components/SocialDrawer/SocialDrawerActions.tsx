@@ -17,10 +17,14 @@ const useStyles = makeStyles(
 )
 
 interface SocialDrawerActionsProps {
+  className?: string
   instance: IMarketingTemplateInstance | IBrandAsset
 }
 
-function SocialDrawerActions({ instance }: SocialDrawerActionsProps) {
+function SocialDrawerActions({
+  className,
+  instance
+}: SocialDrawerActionsProps) {
   const classes = useStyles()
   const setStep = useSetSocialDrawerStep()
 
@@ -31,7 +35,7 @@ function SocialDrawerActions({ instance }: SocialDrawerActionsProps) {
     getFileType(instance.file) === 'pdf'
 
   return (
-    <>
+    <div className={className}>
       <div className={classes.row}>
         <Grid container spacing={2}>
           <Grid item sm={6}>
@@ -49,7 +53,7 @@ function SocialDrawerActions({ instance }: SocialDrawerActionsProps) {
         )}
         <SocialDrawerCopyLink className={classes.action} instance={instance} />
       </div>
-    </>
+    </div>
   )
 }
 

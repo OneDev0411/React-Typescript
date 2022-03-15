@@ -25,10 +25,10 @@ const useStyles = makeStyles(
       flexGrow: 0
     }
   }),
-  { name: 'SocialDrawerSection' }
+  { name: 'SocialDrawerAction' }
 )
 
-interface SocialDrawerSectionProps {
+interface SocialDrawerActionProps {
   className?: string
   textFieldProps: Omit<
     TextFieldProps,
@@ -37,11 +37,11 @@ interface SocialDrawerSectionProps {
   buttonProps: Omit<ButtonProps, 'size' | 'variant' | 'color' | 'className'>
 }
 
-function SocialDrawerSection({
+function SocialDrawerAction({
   className,
   textFieldProps,
   buttonProps
-}: SocialDrawerSectionProps) {
+}: SocialDrawerActionProps) {
   const classes = useStyles()
 
   return (
@@ -65,4 +65,4 @@ function SocialDrawerSection({
   )
 }
 
-export default SocialDrawerSection
+export default SocialDrawerAction

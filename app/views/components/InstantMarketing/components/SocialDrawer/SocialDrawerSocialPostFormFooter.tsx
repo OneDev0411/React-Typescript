@@ -34,23 +34,23 @@ const useStyles = makeStyles(
       paddingRight: 0
     }
   }),
-  { name: 'SocialDrawerScheduleInstagramPostFooter' }
+  { name: 'SocialDrawerSocialPostFormFooter' }
 )
 
-interface SocialDrawerScheduleInstagramPostFooterProps {
+interface SocialDrawerSocialPostFormFooterProps {
   formId: string
 }
 
-function SocialDrawerScheduleInstagramPostFooter({
+function SocialDrawerSocialPostFormFooter({
   formId
-}: SocialDrawerScheduleInstagramPostFooterProps) {
+}: SocialDrawerSocialPostFormFooterProps) {
   const classes = useStyles()
   const setStep = useSetSocialDrawerStep()
 
   const { submitting } = useFormState()
   const dueAtField = useField<Date>('dueAt')
 
-  const handleBack = () => setStep('General')
+  const handleBack = () => setStep('Share')
 
   const hasScheduled = !!dueAtField.input.value
   const selectedDate = dueAtField.input.value || new Date()
@@ -124,4 +124,4 @@ function SocialDrawerScheduleInstagramPostFooter({
   )
 }
 
-export default SocialDrawerScheduleInstagramPostFooter
+export default SocialDrawerSocialPostFormFooter

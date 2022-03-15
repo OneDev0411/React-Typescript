@@ -1,1 +1,1 @@
-export type SocialDrawerStep = 'General' | 'Schedule'
+export type SocialDrawerStep = 'Share' | 'Schedule'

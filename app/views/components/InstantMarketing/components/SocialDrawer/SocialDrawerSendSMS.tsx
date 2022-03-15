@@ -15,7 +15,7 @@ import { isValidPhoneNumber } from '@app/utils/helpers'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import SocialDrawerSection from './SocialDrawerSection'
+import SocialDrawerAction from './SocialDrawerAction'
 
 interface SocialDrawerSendSMSProps {
   className?: string
@@ -90,7 +90,7 @@ function SocialDrawerSendSMS({
 
   return (
     <form className={className} onSubmit={handleSubmit}>
-      <SocialDrawerSection
+      <SocialDrawerAction
         textFieldProps={{
           helperText:
             'Send image to yourself and post it directly from your phone',

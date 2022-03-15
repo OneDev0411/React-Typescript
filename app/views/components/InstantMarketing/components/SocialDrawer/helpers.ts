@@ -4,10 +4,10 @@ export function getFilenameFromURL(url: string): string {
   return truncateTextFromMiddle(url.substring(url.lastIndexOf('/') + 1), 40)
 }
 
-export function instagramAccountsValidator(
-  instagramAccounts: IFacebookPage[]
+export function instagramAccountValidator(
+  instagramAccount: IFacebookPage
 ): Optional<string> {
-  if (instagramAccounts && instagramAccounts.length) {
+  if (instagramAccount) {
     return
   }
 

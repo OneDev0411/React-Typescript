@@ -6,7 +6,7 @@ import { truncateTextFromMiddle } from '@app/utils/truncate-text-from-middle'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import SocialDrawerSection from './SocialDrawerSection'
+import SocialDrawerAction from './SocialDrawerAction'
 
 interface SocialDrawerCopyLinkProps {
   className?: string
@@ -29,7 +29,7 @@ function SocialDrawerCopyLink({
   }
 
   return (
-    <SocialDrawerSection
+    <SocialDrawerAction
       className={className}
       textFieldProps={{
         label: 'Link:',
