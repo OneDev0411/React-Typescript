@@ -1,38 +1,18 @@
 import { Box, Button, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { ThunkDispatch } from 'redux-thunk'
 
-import { AccessButton } from '@app/components/Pages/Dashboard/Overview/components/AccessButton'
 import { EmptyState } from '@app/components/Pages/Dashboard/Overview/components/EmptyState'
 import { ACL } from '@app/constants/acl'
-import { activateIntercom } from '@app/store_actions/intercom'
 import { useAcl } from '@app/views/components/Acl/use-acl'
 import MetabaseDashboard from 'components/MetabaseIFrame'
-import { IAppState } from 'reducers'
-import { InboxAction } from 'reducers/inbox/types'
 import Acl from 'views/components/Acl'
 
 import { useDealsList } from '../../Deals/List/Agent/hooks/use-deals-list'
+import { AccessButtons } from '../components/AccessButtons'
 import PromoteListingsSection from '../components/PromoteListingsSection'
-import { AccessButtonType } from '../types.d'
 
 import { Dailies } from './Dailies'
-
-const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
-const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
-const marketingAccess = { oneOf: [ACL.MARKETING, ACL.AGENT_NETWORK] }
-const allAccess = {
-  oneOf: [
-    ACL.DEALS,
-    ACL.BACK_OFFICE,
-    ACL.MARKETING,
-    ACL.CRM,
-    ACL.MARKETING,
-    ACL.AGENT_NETWORK
-  ]
-}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -73,73 +53,13 @@ const useStyles = makeStyles(
 function OverviewDashboard() {
   const classes = useStyles()
 
-  const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
   const isAdmin = useAcl(ACL.ADMIN)
   const getDealsList = useDealsList()
   const deals = getDealsList()
 
-  const { isActive: isIntercomActive } = useSelector(
-    (state: IAppState) => state.intercom
-  )
-
-  const handleOpenSupportDialogueBox = () =>
-    !isIntercomActive && dispatch(activateIntercom(isIntercomActive))
-
-  const handleOpenExternalLink = link =>
-    window.open(link, '_blank', 'noopener noreferrer')
-
-  const AccessItems: AccessButtonType[] = [
-    {
-      access: marketingAccess,
-      id: 'marketing',
-      label: 'Marketing',
-      to: '/dashboard/marketing'
-    },
-    {
-      access: dealsAccess,
-      id: 'deals',
-      label: 'Deals',
-      to: '/dashboard/deals'
-    },
-    {
-      access: ['CRM'],
-      id: 'contacts',
-      label: 'Contacts',
-      to: '/dashboard/contacts'
-    },
-    {
-      access: marketingAccess,
-      id: 'agent-network',
-      label: 'Agent Network',
-      to: '/dashboard/agent-network'
-    },
-    {
-      access: insightAccess,
-      id: 'insight',
-      label: 'Insight',
-      to: '/dashboard/insights'
-    },
-    {
-      access: allAccess,
-      id: 'blog',
-      label: 'Blog',
-      action: () => handleOpenExternalLink('https://rechat.com/blog/')
-    },
-    {
-      access: allAccess,
-      id: 'support',
-      label: 'Support',
-      action: handleOpenSupportDialogueBox
-    }
-  ]
-
   return (
     <Box className={classes.main}>
-      <Box mb={6}>
-        {AccessItems.map(item => (
-          <AccessButton key={item.id} data={item} />
-        ))}
-      </Box>
+      <AccessButtons />
       <Acl.Crm>
         <Box className={classes.dailies}>
           <Box className={classes.container}>

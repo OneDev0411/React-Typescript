@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { Typography } from '@material-ui/core'
 import { Theme, makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router'
@@ -48,14 +50,23 @@ export function AccessButton({
 }: Props) {
   const classes = styles()
 
-  return (
-    <Acl access={access}>
+  const AccessItem = useCallback(
+    () => (
       <Link className={classes.container} onClick={action} to={to}>
         {icon && <SvgIcon path={icon} rightMargined color="grey" />}
         <Typography className={classes.label} variant="body1">
           {label}
         </Typography>
       </Link>
+    ),
+    [action, classes, icon, label, to]
+  )
+
+  return access ? (
+    <Acl access={access}>
+      <AccessItem />
     </Acl>
+  ) : (
+    <AccessItem />
   )
 }

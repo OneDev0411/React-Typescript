@@ -1,0 +1,80 @@
+import { Box } from '@material-ui/core'
+import { useDispatch, useSelector } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
+
+import { AccessButton } from '@app/components/Pages/Dashboard/Overview/components/AccessButton'
+import { ACL } from '@app/constants/acl'
+import { activateIntercom } from '@app/store_actions/intercom'
+import { IAppState } from 'reducers'
+import { InboxAction } from 'reducers/inbox/types'
+
+import { AccessButtonType } from '../../types.d'
+
+const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
+const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
+const marketingAccess = { oneOf: [ACL.MARKETING, ACL.AGENT_NETWORK] }
+
+export function AccessButtons() {
+  const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
+
+  const { isActive: isIntercomActive } = useSelector(
+    (state: IAppState) => state.intercom
+  )
+
+  const handleOpenSupportDialogueBox = () =>
+    !isIntercomActive && dispatch(activateIntercom(isIntercomActive))
+
+  const handleOpenExternalLink = link =>
+    window.open(link, '_blank', 'noopener noreferrer')
+
+  const AccessItems: AccessButtonType[] = [
+    {
+      access: marketingAccess,
+      id: 'marketing',
+      label: 'Marketing',
+      to: '/dashboard/marketing'
+    },
+    {
+      access: dealsAccess,
+      id: 'deals',
+      label: 'Deals',
+      to: '/dashboard/deals'
+    },
+    {
+      access: ['CRM'],
+      id: 'contacts',
+      label: 'Contacts',
+      to: '/dashboard/contacts'
+    },
+    {
+      access: marketingAccess,
+      id: 'agent-network',
+      label: 'Agent Network',
+      to: '/dashboard/agent-network'
+    },
+    {
+      access: insightAccess,
+      id: 'insight',
+      label: 'Insight',
+      to: '/dashboard/insights'
+    },
+    {
+      id: 'blog',
+      label: 'Blog',
+      action: () => handleOpenExternalLink('https://rechat.com/blog/')
+    },
+    {
+      id: 'support',
+      label: 'Support',
+      action: handleOpenSupportDialogueBox
+    }
+  ]
+
+  return (
+    <Box mb={6}>
+      {AccessItems.map(item => (
+        <AccessButton key={item.id} data={item} />
+      ))}
+    </Box>
+  )
+}
