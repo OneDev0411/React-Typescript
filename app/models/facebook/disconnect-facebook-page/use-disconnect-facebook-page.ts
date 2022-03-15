@@ -8,7 +8,7 @@ import { UpdateCacheActions } from '@app/utils/react-query'
 import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
 
 import { list } from '../query-keys'
-import { deleteFromCacheAllList } from '../query-update'
+import { deleteFromCacheList } from '../query-update'
 
 import { disconnectFacebookPage } from './disconnect-facebook-page'
 
@@ -54,11 +54,7 @@ export function useDisconnectFacebookPage(
       },
       invalidates: (_, { brandId }) => [list(brandId)],
       onMutate: async ({ brandId, facebookPage }) => ({
-        cache: await deleteFromCacheAllList(
-          queryClient,
-          brandId,
-          facebookPage.id
-        )
+        cache: await deleteFromCacheList(queryClient, brandId, facebookPage.id)
       }),
       onError: (error, variables, context) => {
         context?.cache.revert()

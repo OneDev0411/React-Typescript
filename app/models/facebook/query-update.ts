@@ -4,7 +4,7 @@ import { UpdateCachePromise, updateCacheActions } from '@app/utils/react-query'
 
 import { list } from './query-keys'
 
-export function deleteFromCacheAllList(
+export function deleteFromCacheList(
   queryClient: QueryClient,
   brandId: UUID,
   facebookPageId: string
