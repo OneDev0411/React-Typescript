@@ -24,7 +24,7 @@ const useStyles = makeStyles(
 
 type InstagramAccountsAutocompleteFieldProps = Pick<
   FieldProps<IFacebookPage[], FieldRenderProps<IFacebookPage[]>>,
-  'name'
+  'name' | 'validate'
 >
 
 function InstagramAccountsAutocompleteField(
@@ -43,50 +43,60 @@ function InstagramAccountsAutocompleteField(
   return (
     <Field<IFacebookPage[]>
       {...props}
-      render={({ input, meta }) => (
-        <Autocomplete
-          value={input.value}
-          onChange={(_, value) => input.onChange(value)}
-          multiple
-          options={facebookPages ?? []}
-          getOptionLabel={getOptionLabel}
-          filterSelectedOptions
-          renderOption={tag => (
-            <>
-              <ListItemAvatar className={classes.listItemAvatar}>
-                <Avatar
-                  className={classes.avatar}
-                  alt={getOptionLabel(tag)}
-                  src={tag.instagram_profile_picture_url}
-                />
-              </ListItemAvatar>
-              <ListItemText primary={getOptionLabel(tag)} />
-            </>
-          )}
-          renderTags={(tags, getTagProps) => {
-            return tags.map((tag, index) => (
-              <Chip
-                key={tag.id}
-                avatar={
+      render={({ input, meta }) => {
+        const showError =
+          ((meta.submitError && !meta.dirtySinceLastSubmit) || meta.error) &&
+          meta.touched
+
+        return (
+          <Autocomplete
+            value={input.value}
+            onChange={(_, value) => input.onChange(value)}
+            multiple
+            options={facebookPages ?? []}
+            getOptionLabel={getOptionLabel}
+            filterSelectedOptions
+            size="small"
+            renderOption={tag => (
+              <>
+                <ListItemAvatar className={classes.listItemAvatar}>
                   <Avatar
+                    className={classes.avatar}
                     alt={getOptionLabel(tag)}
                     src={tag.instagram_profile_picture_url}
                   />
-                }
-                label={getOptionLabel(tag)}
-                {...getTagProps({ index })}
+                </ListItemAvatar>
+                <ListItemText primary={getOptionLabel(tag)} />
+              </>
+            )}
+            renderTags={(tags, getTagProps) => {
+              return tags.map((tag, index) => (
+                <Chip
+                  key={tag.id}
+                  avatar={
+                    <Avatar
+                      alt={getOptionLabel(tag)}
+                      src={tag.instagram_profile_picture_url}
+                    />
+                  }
+                  label={getOptionLabel(tag)}
+                  size="small"
+                  {...getTagProps({ index })}
+                />
+              ))
+            }}
+            renderInput={params => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Instagram Account"
+                helperText={showError ? meta.error || meta.submitError : ''}
+                error={showError}
               />
-            ))
-          }}
-          renderInput={params => (
-            <TextField
-              {...params}
-              variant="outlined"
-              label="Instagram Account"
-            />
-          )}
-        />
-      )}
+            )}
+          />
+        )
+      }}
     />
   )
 }

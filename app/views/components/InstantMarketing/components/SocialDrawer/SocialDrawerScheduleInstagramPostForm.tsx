@@ -1,18 +1,36 @@
-import { Form } from 'react-final-form'
+import { FormEventHandler } from 'react'
 
+import { requiredTextValidator } from '@app/utils/validations'
+import { FormTextField } from '@app/views/components/final-form-fields'
+
+import { instagramAccountsValidator } from './helpers'
 import InstagramAccountsAutocompleteField from './InstagramAccountsAutocompleteField'
 
-function SocialDrawerScheduleInstagramPostForm() {
+interface SocialDrawerScheduleInstagramPostFormProps {
+  formId: string
+  onSubmit: FormEventHandler
+}
+
+function SocialDrawerScheduleInstagramPostForm({
+  formId,
+  onSubmit
+}: SocialDrawerScheduleInstagramPostFormProps) {
   return (
-    <Form
-      onSubmit={values => console.log('Form::onSubmit', values)}
-      initialValues={{ instagramAccounts: [] }}
-      render={({ handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
-          <InstagramAccountsAutocompleteField name="instagramAccounts" />
-        </form>
-      )}
-    />
+    <form onSubmit={onSubmit} id={formId}>
+      <InstagramAccountsAutocompleteField
+        name="instagramAccounts"
+        validate={instagramAccountsValidator}
+      />
+      <FormTextField
+        name="caption"
+        multiline
+        label="Post Caption"
+        margin="normal"
+        size="small"
+        minRows={4}
+        validate={requiredTextValidator}
+      />
+    </form>
   )
 }
 
