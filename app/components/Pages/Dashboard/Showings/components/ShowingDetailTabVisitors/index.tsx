@@ -16,6 +16,8 @@ import ShowingDetailEmptyStateDescription from './ShowingDetailEmptyStateDescrip
 import ShowingDetailTabVisitorsColumnLatestVisit from './ShowingDetailTabVisitorsColumnLatestVisit'
 import ShowingDetailTabVisitorsColumnPerson from './ShowingDetailTabVisitorsColumnPerson'
 import ShowingDetailTabVisitorsColumnTotalVisit from './ShowingDetailTabVisitorsColumnTotalVisit'
+import { IContactWithAccess } from './types'
+import useShowingAddHasAccessToContacts from './use-showing-add-has-access-to-contacts'
 import useShowingGroupAppointmentByVisitorId from './use-showing-group-appointment-by-visitor-id'
 
 const useStyles = makeStyles(
@@ -49,20 +51,8 @@ function ShowingDetailTabVisitors({
   const appointmentsByVisitorId =
     useShowingGroupAppointmentByVisitorId(appointments)
 
-  const appointmentsContacts =
-    appointments?.map(appointment => appointment?.contact) || []
-
-  const uniqueAppointmentsContacts = [
-    ...new Set(appointmentsContacts.map(item => item))
-  ]
-
-  const updatedAppointmentsContacts = uniqueAppointmentsContacts?.map(item => {
-    return {
-      ...item,
-      hasAccessToContact:
-        contacts?.findIndex(contact => contact.id === item.id) !== -1
-    }
-  })
+  const updatedAppointmentsContacts: IContactWithAccess[] =
+    useShowingAddHasAccessToContacts(appointments, contacts)
 
   useEffect(() => {
     run(
@@ -81,7 +71,7 @@ function ShowingDetailTabVisitors({
     )
   }, [run, showing.id])
 
-  const columns: TableColumn<IContact & { hasAccessToContact: boolean }>[] = [
+  const columns: TableColumn<IContactWithAccess>[] = [
     {
       header: 'Name',
       id: 'name',
@@ -154,8 +144,13 @@ function ShowingDetailTabVisitors({
           />
         )}
         getTrProps={({ row }) => ({
-          onClick: () =>
-            row.hasAccessToContact ? handleRowClick(row.id) : () => {}
+          onClick: () => {
+            if (!row.hasAccessToContact) {
+              return
+            }
+
+            handleRowClick(row.id)
+          }
         })}
         classes={{ row: classes.row }}
       />

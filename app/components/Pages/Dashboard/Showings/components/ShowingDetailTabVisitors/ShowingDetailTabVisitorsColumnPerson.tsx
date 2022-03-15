@@ -2,6 +2,8 @@ import { Box, makeStyles, Typography } from '@material-ui/core'
 
 import { Avatar } from 'components/Avatar'
 
+import { IContactWithAccess } from './types'
+
 const useStyles = makeStyles(
   () => ({
     defaultCursor: {
@@ -12,7 +14,7 @@ const useStyles = makeStyles(
 )
 
 interface ShowingDetailTabVisitorsColumnPersonProps {
-  contact: IContact & { hasAccessToContact: boolean }
+  contact: IContactWithAccess
 }
 
 function ShowingDetailTabVisitorsColumnPerson({
