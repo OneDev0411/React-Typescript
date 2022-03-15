@@ -61,7 +61,6 @@ export default function CalendarEventListItem({ event }: Props) {
   let Icon
   let eventSubTitle
   let eventTitleLink
-  // let humanizedEventTime
   const eventTitle = getTitle(event)
 
   const classes = useStyles()
@@ -87,10 +86,10 @@ export default function CalendarEventListItem({ event }: Props) {
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
 
   const humanizedEventTime = useMemo(() => {
-    const eventTime = new Date(event.timestamp * 1000)
+    const eventTime = new Date(event.next_occurence)
 
     return fromNow(eventTime)
-  }, [event.timestamp])
+  }, [event.next_occurence])
 
   // Build avatars
   if (contact && contact.profile_image_url) {

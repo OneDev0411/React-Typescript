@@ -20,7 +20,7 @@ export type RequestActiveTeamAction = ReturnType<typeof requestActiveTeam>
 export const setActiveTeam = (team: IUserTeam) =>
   ({
     type: SET_ACTIVE_TEAM,
-    payload: null
+    payload: team
   } as const)
 
 export type SetActiveTeamAction = ReturnType<typeof setActiveTeam>
