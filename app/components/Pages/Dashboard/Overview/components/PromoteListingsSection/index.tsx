@@ -50,7 +50,10 @@ export default function PromoteListingsSection() {
     <SectionLayout
       title="To Market"
       actionNode={
-        <LinkSectionAction title="View All" url="/dashboard/listings" />
+        !isLoading &&
+        listings?.length > 0 && (
+          <LinkSectionAction title="View All" url="/dashboard/listings" />
+        )
       }
       headerGridProps={{ justifyContent: 'space-between' }}
     >

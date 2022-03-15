@@ -73,7 +73,7 @@ function OverviewDashboard() {
       </Acl.Marketing>
       <Acl.Deals>
         <Box className={classes.container} flexDirection="column">
-          <Box pb={1.5} pt={1.5}>
+          <Box pb={1.5} pt={3}>
             <Typography variant="h6">To Track</Typography>
           </Box>
           {isAdmin || deals?.length > 0 ? (
