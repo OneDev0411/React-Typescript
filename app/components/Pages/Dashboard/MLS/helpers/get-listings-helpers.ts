@@ -31,7 +31,7 @@ export function createValertQueryString(
     query += `order_by[]=${encodeURIComponent(sortDirQuery + orderByQuery)}`
   }
 
-  return `?${query}`
+  return query
 }
 
 export function createValertOptions(
