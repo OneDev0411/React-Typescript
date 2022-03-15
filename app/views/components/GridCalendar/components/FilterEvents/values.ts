@@ -16,6 +16,9 @@ export const AVAILABLE_FILTERS: FilterLable[] = [
   }
 ]
 
+// gird calendar filter key in user setting
+export const CALENDAR_FILTER_EVENTS_KEY = 'calendar_filters_events_key'
+
 // initial filters
 export const INITIAL_FILTERS: FilterShape = {
   userEvents: true,

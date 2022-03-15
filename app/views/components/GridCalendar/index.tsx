@@ -22,11 +22,13 @@ import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 
 import { makeStyles } from '@material-ui/core'
 import _map from 'lodash/map'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { useTeamSetting } from '@app/hooks/team/use-team-setting'
 import { useViewAs } from '@app/hooks/team/use-view-as'
 import { selectUser } from '@app/selectors/user'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import {
   CrmEventType,
   ApiOptions,
@@ -42,7 +44,10 @@ import { Event } from './components/Event'
 import { EventController } from './components/EventController'
 import { FilterEvents } from './components/FilterEvents'
 import { FilterShape } from './components/FilterEvents/type'
-import { INITIAL_FILTERS } from './components/FilterEvents/values'
+import {
+  CALENDAR_FILTER_EVENTS_KEY,
+  INITIAL_FILTERS
+} from './components/FilterEvents/values'
 import {
   getDateRange,
   shouldRecreateRange,
@@ -81,9 +86,9 @@ export const GridCalendarPresentation = ({
   associations = []
 }: Props) => {
   const classes = useStyles()
+  const dispatch = useDispatch()
   const user = useSelector(selectUser)
   const viewAsUsers = useViewAs()
-
   // list of server events
   const [rowEvents, setRowEvents] = useState<ICalendarEvent[]>([])
   // list of current events
@@ -104,7 +109,10 @@ export const GridCalendarPresentation = ({
 
   // filter events el
   const [filterEl, setFilterEl] = useState<HTMLButtonElement | null>(null)
-  const [activeFilter, setActiveFilter] = useState<FilterShape>(INITIAL_FILTERS)
+  const activeFilter: FilterShape = useTeamSetting(
+    CALENDAR_FILTER_EVENTS_KEY,
+    INITIAL_FILTERS
+  )
 
   const handleCloseFilterEvents = () => setFilterEl(null)
 
@@ -350,6 +358,14 @@ export const GridCalendarPresentation = ({
   )
 
   /**
+   * handle filter change
+   */
+  const handleFilterEvents = (value: FilterShape) => {
+    dispatch(setActiveTeamSetting(CALENDAR_FILTER_EVENTS_KEY, value))
+    updateEvents(rowEvents, value)
+  }
+
+  /**
    * Load initia events (behaves as componentDidMount)
    */
   useEffectOnce(() => {
@@ -397,10 +413,7 @@ export const GridCalendarPresentation = ({
       <FilterEvents
         el={filterEl}
         initialFilters={activeFilter}
-        setFilter={(value: FilterShape) => {
-          setActiveFilter(value)
-          updateEvents(rowEvents, value)
-        }}
+        setFilter={handleFilterEvents}
         onClose={handleCloseFilterEvents}
       />
       <div className={classes.calendarContainer}>
