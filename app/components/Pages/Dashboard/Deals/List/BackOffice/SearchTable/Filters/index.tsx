@@ -16,7 +16,8 @@ import {
 import { saveAs } from 'file-saver'
 import { isEqual, pickBy } from 'lodash'
 import { useDispatch } from 'react-redux'
-import { useDebounce, useFirstMountState } from 'react-use'
+import { useDeepCompareEffect, useFirstMountState } from 'react-use'
+import { useDebouncedCallback } from 'use-debounce/lib'
 
 import { useActiveTeam } from '@app/hooks/team/use-active-team'
 import { useQueryParam } from '@app/hooks/use-query-param'
@@ -97,27 +98,36 @@ export const Filters = ({
     setPropertyGroup(newGroupValues)
   }
 
-  useDebounce(
-    () => {
-      if (!isFirstMount) {
-        // remove false statuses from the user filters
-        const cleanedUserFilters: DealsListFilters = {
-          ...userFilters,
-          status: pickBy(userFilters.status, v => v === true)
-        }
-
-        const payload: DealsListPayload = {
-          ...cleanedUserFilters,
-          $order: sortOption,
-          query: queryParamValue ?? ''
-        }
-
-        dispatch(searchDeals(activeTeam, payload))
-      }
-    },
-    CHANGE_FILTERS_DEBOUNCE_MS,
-    [userFilters, isFirstMount, queryParamValue]
+  const [debouncedSeachDeals] = useDebouncedCallback(
+    (activeTeam: IUserTeam, payload: DealsListPayload) =>
+      dispatch(searchDeals(activeTeam, payload)),
+    CHANGE_FILTERS_DEBOUNCE_MS
   )
+
+  /*
+     Have to use deep compare here because:
+     The change in sort option, which is not a part of the userFilters object,
+     causes the change in array option of the useFiltersWithQuery hook.
+     TODO: We should remove this after refactoring the whole deal ordering mechanism
+  */
+  useDeepCompareEffect(() => {
+    // we dont want to search deals before userFilters are set
+    if (!isFirstMount) {
+      // remove false statuses from the user filters
+      const cleanedUserFilters: DealsListFilters = {
+        ...userFilters,
+        status: pickBy(userFilters.status, v => v === true)
+      }
+
+      const payload: DealsListPayload = {
+        ...cleanedUserFilters,
+        $order: sortOption,
+        query: queryParamValue ?? ''
+      }
+
+      debouncedSeachDeals(activeTeam, payload)
+    }
+  }, [userFilters, isFirstMount, queryParamValue])
 
   return (
     <Grid container className={classes.root}>
