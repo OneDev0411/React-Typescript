@@ -31,6 +31,7 @@ GlobalPageLayout.Header = (props: GlobalHeaderProps) => (
 GlobalPageLayout.HeaderWithSearch = (props: GlobalHeaderWithSearchProps) => (
   <GlobalHeaderWithSearch {...props} noPadding />
 )
+
 GlobalPageLayout.Main = ({ gutter = 0, ...props }: Props) => (
   <Box
     id="GlobalPageLayoutMain"
