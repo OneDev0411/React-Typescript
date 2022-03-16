@@ -1,10 +1,9 @@
-import { useState } from 'react'
-
 import { isEqual } from 'lodash'
 
 import { DEALS_LIST_DEFAULT_FILTERS } from '../constants'
 import Grid from '../Grid'
-import { DealsListFilters, SearchQuery } from '../types'
+import { useFiltersWithQuery } from '../hooks/use-filters-with-query'
+import { SearchQuery } from '../types'
 
 import { Filters } from './Filters'
 
@@ -14,24 +13,18 @@ interface Props {
 }
 
 function SearchTable({ searchQuery, statuses }: Props) {
-  const [userFilters, setUserFilters] = useState<DealsListFilters>(
-    DEALS_LIST_DEFAULT_FILTERS
-  )
+  const [userFilters, setUserFilters] = useFiltersWithQuery()
 
   const isSearching: boolean =
     searchQuery.term.length > 0 ||
     !isEqual(userFilters, DEALS_LIST_DEFAULT_FILTERS)
-
-  const onFiltersChange = (newFilters: Partial<DealsListFilters>) => {
-    setUserFilters(prevFilters => ({ ...prevFilters, ...newFilters }))
-  }
 
   return (
     <>
       <Filters
         searchQuery={searchQuery}
         userFilters={userFilters}
-        onFiltersChange={onFiltersChange}
+        onFiltersChange={setUserFilters}
       />
       <Grid
         searchQuery={searchQuery}
