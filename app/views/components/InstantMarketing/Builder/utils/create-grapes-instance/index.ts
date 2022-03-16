@@ -12,7 +12,8 @@ const STYLE_MANAGER_BG_COLORABLE_TAGS = [
   'mj-button',
   'mj-column',
   'mj-section',
-  'mj-wrapper'
+  'mj-wrapper',
+  'mj-image'
 ]
 const STYLE_MANAGER_BG_COLORABLE_TYPES = ['button', 'grid-column', 'grid-row']
 
@@ -102,6 +103,15 @@ export function createGrapesInstance(
             allowedTags: STYLE_MANAGER_BG_COLORABLE_TAGS,
             allowedTypes: STYLE_MANAGER_BG_COLORABLE_TYPES,
             forbiddenStyles: ['background-image']
+          },
+          getPropName: (model, defaultPropName) => {
+            // The mj-image component does not support the back-ground-color property. Instead,
+            // it has the container-background-color.
+            if (model.get('type') === 'mj-image') {
+              return 'container-background-color'
+            }
+
+            return defaultPropName
           }
         },
         widthPicker: {
