@@ -23,14 +23,19 @@ function SocialDrawerScheduleInstagramPost({
 
   const isCreated = !!data
 
-  const handleSubmit = async (values: FormValues) =>
-    mutateAsync({
+  const handleSubmit = async (values: FormValues) => {
+    if (!instance || !values.facebookPage) {
+      return
+    }
+
+    await mutateAsync({
       ...values,
-      facebookPage: values.facebookPage!.id, // TODO: remove this
+      facebookPage: values.facebookPage.id,
       due_at: values.dueAt ?? new Date(),
-      templateInstance: instance!.id,
+      templateInstance: instance.id,
       brand: activeBrandId
     })
+  }
 
   if (isCreated) {
     return (
