@@ -144,9 +144,14 @@ export default function SideNavAccordion({
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
-  const handleHoverPopper = (event: React.MouseEvent<HTMLElement>, menuId) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget)
-    setHoveredItem(menuId || null)
+  const handleShowPopper = (event: React.MouseEvent<HTMLElement>, menuId) => {
+    setAnchorEl(event.currentTarget)
+    setHoveredItem(menuId)
+  }
+
+  const handleHidePopper = () => {
+    setAnchorEl(null)
+    setHoveredItem(null)
   }
 
   const open = Boolean(anchorEl)
@@ -165,10 +170,10 @@ export default function SideNavAccordion({
           onMouseEnter={event =>
             subMenu &&
             expandedMenu !== menuId &&
-            handleHoverPopper(event, menuId)
+            handleShowPopper(event, menuId)
           }
-          onMouseLeave={() => subMenu && setAnchorEl(null)}
-          onClick={() => subMenu && setAnchorEl(null)}
+          onMouseLeave={() => subMenu && handleHidePopper()}
+          onClick={() => subMenu && handleHidePopper()}
         >
           <AccordionSummary
             aria-controls={`${menuId}-content`}
