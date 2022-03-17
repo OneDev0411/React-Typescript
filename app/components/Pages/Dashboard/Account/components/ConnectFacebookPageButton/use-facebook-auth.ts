@@ -9,7 +9,9 @@ import { selectUserAccessToken } from '@app/selectors/user'
 import { FacebookAuthErrorCode } from './types'
 import { useFacebookResultMessage } from './use-facebook-result-message'
 
-const facebookAuthUrl = '/api/facebook/login'
+const FACEBOOK_AUTH_URL = '/api/facebook/login'
+const POPUP_WIDTH = 600
+const POPUP_HEIGHT = 500
 
 export interface UseFacebookAuthOptions {
   onAuthWindowOpen?: () => void
@@ -39,10 +41,13 @@ export function useFacebookAuth({
       return
     }
 
+    const popupLeft = window.screen.width / 2 - POPUP_WIDTH / 2
+    const popupTop = window.screen.height / 2 - POPUP_HEIGHT / 2
+
     const windowHandle = window.open(
-      `${facebookAuthUrl}?access_token=${accessToken}&brand_id=${activeBrandId}`,
+      `${FACEBOOK_AUTH_URL}?access_token=${accessToken}&brand_id=${activeBrandId}`,
       'sharer',
-      'toolbar=0,status=0,location=0,width=600,height=500'
+      `toolbar=0,status=0,location=0,width=${POPUP_WIDTH},height=${POPUP_HEIGHT},top=${popupTop},left=${popupLeft}`
     )
 
     if (!windowHandle) {
