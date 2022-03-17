@@ -18,8 +18,10 @@ function SocialDrawerScheduleInstagramPost({
   className,
   instance
 }: SocialDrawerScheduleInstagramPostProps) {
-  const { mutateAsync } = useCreateSocialPost()
+  const { mutateAsync, data } = useCreateSocialPost()
   const activeBrandId = useSelector(selectActiveBrandId)
+
+  const isCreated = !!data
 
   const handleSubmit = async (values: FormValues) =>
     mutateAsync({
@@ -30,11 +32,14 @@ function SocialDrawerScheduleInstagramPost({
       brand: activeBrandId
     })
 
-  // {
-  //   // TODO: call the update model
-  //   console.log('values', values)
-  //   await new Promise(resolve => setTimeout(resolve, 2500))
-  // }
+  if (isCreated) {
+    return (
+      <div>
+        In this case, the insights button will be rendered next to a success
+        message
+      </div>
+    )
+  }
 
   return (
     <SocialPostForm
