@@ -10,10 +10,12 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import ConnectToInstagramDialog from './ConnectToInstagramDialog'
 
 interface SocialDrawerInstagramButtonProps {
+  disabled?: boolean
   onClick: () => void
 }
 
 function SocialDrawerInstagramButton({
+  disabled = false,
   onClick
 }: SocialDrawerInstagramButtonProps) {
   const [isDialogOpen, stIsDialogOpen] = useState<boolean>(false)
@@ -48,7 +50,7 @@ function SocialDrawerInstagramButton({
         color="primary"
         fullWidth
         onClick={handleClick}
-        disabled={isLoading}
+        disabled={isLoading || disabled}
       >
         Instagram ...
       </Button>

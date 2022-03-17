@@ -39,7 +39,10 @@ function SocialDrawerActions({
       <div className={classes.row}>
         <Grid container spacing={2}>
           <Grid item sm={6}>
-            <SocialDrawerInstagramButton onClick={gotoScheduleStep} />
+            <SocialDrawerInstagramButton
+              disabled={instance.type === 'brand_asset'}
+              onClick={gotoScheduleStep}
+            />
           </Grid>
           <Grid item sm={6}>
             <SocialDrawerDownloadButton instance={instance} />
