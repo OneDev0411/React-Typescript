@@ -16,11 +16,32 @@ function getPastMonthsTimestamp(months: number) {
   return past.getTime() / 1000
 }
 
+async function getListingLatLng(
+  listing: IListing
+): Promise<google.maps.LatLngLiteral> {
+  if (
+    !listing.property.address.location.latitude ||
+    !listing.property.address.location.longitude
+  ) {
+    const place = await getPlace(listing.property.address.full_address)
+
+    return {
+      lat: place.center.lat,
+      lng: place.center.lng
+    }
+  }
+
+  return {
+    lat: listing.property.address.location.latitude,
+    lng: listing.property.address.location.longitude
+  }
+}
+
 export async function getListingVAlertFilters(
   listing: IListing
 ): Promise<AlertFiltersWithRadiusAndCenter> {
   const minimumSoldDate = getPastMonthsTimestamp(DEFAULT_SEARCH_MONTHS_PERIOD)
-  const place = await getPlace(listing.property.address.full_address)
+  const { lat, lng } = await getListingLatLng(listing)
 
   return {
     property_types: isLeaseProperty(listing)
@@ -33,9 +54,9 @@ export async function getListingVAlertFilters(
       ? listing.property.bedroom_count + 2
       : undefined,
     minimum_sold_date: minimumSoldDate,
-    points: getMapBoundsInCircle(place.center, DEFAULT_SEARCH_RADIUS),
+    points: getMapBoundsInCircle({ lat, lng }, DEFAULT_SEARCH_RADIUS),
     radius: DEFAULT_SEARCH_RADIUS,
-    center: { latitude: place.center.lat, longitude: place.center.lng }
+    center: { latitude: lat, longitude: lng }
   }
 }
 
