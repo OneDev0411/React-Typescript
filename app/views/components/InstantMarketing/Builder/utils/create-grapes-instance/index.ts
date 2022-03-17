@@ -2,11 +2,8 @@ import { Editor } from 'grapesjs'
 
 import config from './config'
 
-const STYLE_MANAGER_COLORABLE_TAGS = ['section', 'a', 'mj-button']
-const STYLE_MANAGER_COLORABLE_TYPES = ['button']
-
-const STYLE_MANAGER_TEXT_TAGS = ['div', ...STYLE_MANAGER_COLORABLE_TAGS]
-const STYLE_MANAGER_TEXT_TYPES = [...STYLE_MANAGER_COLORABLE_TYPES]
+const STYLE_MANAGER_TEXT_TAGS = ['div', 'section', 'a', 'mj-button']
+const STYLE_MANAGER_TEXT_TYPES = ['button']
 
 const STYLE_MANAGER_ALIGNABLE_TAGS = ['mj-social']
 const STYLE_MANAGER_ALIGNABLE_TYPES = ['social-group']
@@ -96,8 +93,8 @@ export function createGrapesInstance(
         },
         colorPicker: {
           conditions: {
-            allowedTags: STYLE_MANAGER_COLORABLE_TAGS,
-            allowedTypes: STYLE_MANAGER_COLORABLE_TYPES,
+            allowedTags: STYLE_MANAGER_TEXT_TAGS,
+            allowedTypes: STYLE_MANAGER_TEXT_TYPES,
             forbiddenStyles: ['background-image']
           }
         },
