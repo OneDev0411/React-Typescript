@@ -228,7 +228,7 @@ export default function SideNavAccordion({
                 transition
               >
                 {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={350}>
+                  <Fade {...TransitionProps} timeout={0}>
                     <Paper>
                       <div className={classes.paper}>
                         <AccordionDetails
