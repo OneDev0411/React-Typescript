@@ -41,6 +41,7 @@ export const EditorWrapper = styled.div`
       display: none;
     }
   }
+  padding: ${({ theme }: ThemeProps<Theme>) => theme.spacing(1)}px;
   overflow: auto; // Allows float styles on images, without collapsing editor height
 
   display: flex;
