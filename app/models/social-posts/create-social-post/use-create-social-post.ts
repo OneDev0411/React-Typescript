@@ -25,10 +25,13 @@ export type UseCreateSocialPostOptions = Omit<
 export function useCreateSocialPost(
   options?: UseCreateSocialPostOptions
 ): UseCreateSocialPost {
-  return useMutation(async values => createSocialPost(values), {
-    ...options,
-    // Just invalidate the lists of campaigns because we dont know the list sort logic
-    // at this stage so having an optimistic update is not easy
-    invalidates: (_, values) => [list(values.brand)]
-  })
+  return useMutation(
+    async ({ brand, ...values }) => createSocialPost(brand, values),
+    {
+      ...options,
+      // Just invalidate the lists of campaigns because we dont know the list sort logic
+      // at this stage so having an optimistic update is not easy
+      invalidates: (_, values) => [list(values.brand)]
+    }
+  )
 }
