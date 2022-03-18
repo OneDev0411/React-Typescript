@@ -10,7 +10,7 @@ const useStyles = makeStyles(
     },
     icon: {
       margin: theme.spacing(0, 1, 0, 2),
-      color: theme.palette.grey['700'],
+      color: theme.palette.grey['900'],
       width: `${theme.spacing(2)}px !important`,
       height: `${theme.spacing(2)}px !important`
     },
