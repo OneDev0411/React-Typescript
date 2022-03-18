@@ -69,9 +69,7 @@ function useShowingRoles(): UseShowingRolesReturn {
       id: `role-${nextRoleId.current++}`,
       ...person,
       agent:
-        person.user?.agents?.length === 1
-          ? person.user.agents[0].id
-          : undefined,
+        person.user?.agents?.length === 1 ? person.user.agents[0] : undefined,
       role,
       mode: 'form',
       deletable: role !== 'SellerAgent',

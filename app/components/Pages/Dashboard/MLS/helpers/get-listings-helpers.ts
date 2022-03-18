@@ -31,7 +31,7 @@ export function createValertQueryString(
     query += `order_by[]=${encodeURIComponent(sortDirQuery + orderByQuery)}`
   }
 
-  return `?${query}`
+  return query
 }
 
 export function createValertOptions(
@@ -52,4 +52,10 @@ export function createValertOptions(
     ...(search.office ? { offices: [search.office] } : {}),
     limit
   }
+}
+
+export const getPropertyTypeFirstElement = (
+  filters: AlertFilters
+): Optional<IPropertyType> => {
+  return filters.property_types ? filters.property_types[0] : undefined
 }

@@ -1,20 +1,23 @@
-import React from 'react'
-
 import { mdiMapMarkerOutline } from '@mdi/js'
+import pluralize from 'pluralize'
 import PropTypes from 'prop-types'
 
+import { getFormattedPrice } from '@app/models/Deal/helpers/context'
+import {
+  addressTitle,
+  isLeaseProperty,
+  getListingAddressLine2,
+  getListingAddressObj,
+  getListingFeatures,
+  getListingPricePerSquareFoot
+} from '@app/utils/listing'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { prepareListingsProperties } from '../../../../../components/Pages/Dashboard/MLS/helpers/prepare-listings-properties'
 import { getUserTitle } from '../../../../../models/user/helpers/get-user-title'
 import {
   joinItemsWithString,
   getIndexLabel
 } from '../../../../../utils/helpers'
-import {
-  getListingAddressObj,
-  isLeaseProperty
-} from '../../../../../utils/listing'
 import { H1 } from '../../../Typography/headings'
 import { getFormatedDueDate } from '../helpers/get-formated-due-date'
 
@@ -29,15 +32,13 @@ const propTypes = {
 
 const TOUR_SHEETS = 'c-tour-sheets'
 const LOCATION_PAGE = 'c-tour-sheets__location-page'
-
+const MAIN_IMAGE_PLACEHOLDER_SRC = '/static/images/listing/large.jpg'
 export function LocationPage(props) {
   const { agent, tour, listing } = props
 
-  const listingData = prepareListingsProperties(props.agent, listing)
+  const city = getListingAddressObj(listing).city
 
-  const addressData = getListingAddressObj(listing)
-  const { neighborhood, city, state, postal_code } = addressData
-
+  const listingFeatures = getListingFeatures(listing)
   const pageMeta = joinItemsWithString(
     [
       getUserTitle(agent),
@@ -47,27 +48,47 @@ export function LocationPage(props) {
     ],
     ' | '
   )
-
-  const listing_subtitle = `${neighborhood ? `${neighborhood} - ` : ''}${
-    city ? `${city}, ` : ''
-  } ${state} ${postal_code}`
+  const listingAddress = addressTitle(listing.property.address)
+  const listing_subtitle = getListingAddressLine2(listing)
 
   const summary = joinItemsWithString(
     [
-      `${listingData.beds} Beds`,
-      `${listingData.baths} Baths`,
-      `${listingData.sqft.toLocaleString()} sqft`,
-      `${listingData.lotSizeArea.toLocaleString()} sqft lot size`
+      `${listingFeatures.bedroomCount} ${pluralize(
+        'bed',
+        listingFeatures.bedroomCount
+      )}`,
+      `${listingFeatures.bathroomCount} ${pluralize(
+        'Bath',
+        listingFeatures.bathroomCount
+      )}`,
+      ...(listingFeatures.areaSqft
+        ? [`${listingFeatures.areaSqft.toLocaleString()} sqft`]
+        : []),
+      ...(listingFeatures.lotSizeAreaAcre
+        ? [`${listingFeatures.lotSizeAreaAcre.toLocaleString()} sqft lot size`]
+        : [])
     ],
     ' . '
   )
 
+  const property =
+    listing.type === 'compact_listing'
+      ? listing.compact_property
+      : listing.property
+
   const details = [
     { label: 'Country', value: city },
-    { label: 'Property Type', value: listingData.propertyType },
-    { label: 'Price per Square Foot', value: listingData.pricePerSquareFoot },
-    { label: 'Year Built', value: listingData.builtYear }
+    { label: 'Property Type', value: property.property_type },
+    {
+      label: 'Price per Square Foot',
+      value: getListingPricePerSquareFoot(listing)
+    },
+    { label: 'Year Built', value: property.year_built }
   ]
+
+  const image = listing.gallery_image_urls?.length
+    ? listing.gallery_image_urls[0]
+    : MAIN_IMAGE_PLACEHOLDER_SRC
 
   return (
     <div className={`${TOUR_SHEETS}__page ${LOCATION_PAGE}`}>
@@ -90,7 +111,7 @@ export function LocationPage(props) {
           }}
         >
           <div
-            style={listingData.backgroundImage}
+            style={{ backgroundImage: `url("${image}")` }}
             className={`${LOCATION_PAGE}__image u-print-bg`}
           >
             <div className={`${LOCATION_PAGE}__location-index u-print-bg`}>
@@ -113,19 +134,19 @@ export function LocationPage(props) {
           }}
         >
           <H1 className={`${LOCATION_PAGE}__title u-print-bg`}>
-            {listingData.address}
+            {listingAddress}
           </H1>
           <div style={{ marginBottom: '0.25rem' }}>{listing_subtitle}</div>
           <div style={{ marginBottom: '1rem' }}>
             MLS#: <div style={{ display: 'inline' }}>{listing.mls_number}</div>
           </div>
           <div style={{ fontWeight: 600 }}>
-            {`$${listing.price.toLocaleString()}`}
+            {`${getFormattedPrice(listing.price, 'currency', 0)}`}
             {isLeaseProperty(listing) ? '/mo' : ''}
           </div>
           <p style={{ fontWeight: 500, fontSize: '0.625rem' }}>{summary}</p>
           <p className={`${LOCATION_PAGE}__description`}>
-            {listingData.description}
+            {property.description}
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             {details.map((d, i) => (

@@ -1,6 +1,6 @@
 import { FormControlLabel, Grid, Switch, Typography } from '@material-ui/core'
 import { mdiListStatus } from '@mdi/js'
-import { omit } from 'lodash'
+import { isEqual, omit } from 'lodash'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
@@ -9,11 +9,13 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { DEALS_STATUSES } from '../../constants'
 import { DealsListFilters, TDealsStatus, TDealsStatusList } from '../../types'
 
+import { FilterEditorFooter } from './filterEditorFooter'
 import { useStyles } from './styles'
 
 export const StatusEditor = ({
   filters,
-  updateFilters
+  updateFilters,
+  defaultFilters
 }: FilterButtonDropDownProp<DealsListFilters>) => {
   const classes = useStyles()
 
@@ -51,7 +53,7 @@ export const StatusEditor = ({
           }}
           control={
             <Switch
-              checked={filters.status[status]}
+              checked={!!filters.status[status]}
               className={classes.switchControlButton}
               color="primary"
               name={status}
@@ -70,6 +72,13 @@ export const StatusEditor = ({
           }
         />
       ))}
+
+      <FilterEditorFooter
+        disabledReset={isEqual(filters.status, defaultFilters.status)}
+        onClickReset={() => {
+          updateFilters({ status: defaultFilters.status })
+        }}
+      />
     </Grid>
   )
 }

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
+import { setActiveTeam } from '@app/store_actions/active-team'
 import { updateUser } from 'actions/user'
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
@@ -89,6 +90,8 @@ export function ConfigBrand() {
 
       if (personalTeam) {
         await putUserSetting('user_filter', [], personalTeam.brand.id)
+
+        dispatch(setActiveTeam(personalTeam))
 
         dispatch(
           updateUser({

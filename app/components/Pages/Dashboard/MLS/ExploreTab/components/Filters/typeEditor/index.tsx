@@ -1,5 +1,6 @@
 import { FormControlLabel, Grid, Switch, Typography } from '@material-ui/core'
 
+import { getPropertyTypeFirstElement } from '@app/components/Pages/Dashboard/MLS/helpers/get-listings-helpers'
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 
 import {
@@ -32,7 +33,7 @@ export const TypeEditor = ({
     <Grid className={classes.editorRoot}>
       <Grid container alignItems="center" className={classes.header}>
         <Typography variant="subtitle1" className={classes.title}>
-          Properties type
+          Property Type
         </Typography>
       </Grid>
 
@@ -46,7 +47,7 @@ export const TypeEditor = ({
             <Switch
               checked={
                 filters.property_types &&
-                filters.property_types[0] === propertyType
+                getPropertyTypeFirstElement(filters) === propertyType
               }
               className={classes.switchControlButton}
               color="primary"
@@ -67,7 +68,7 @@ export const TypeEditor = ({
 
       <FilterEditorFooter
         resultCount={resultsCount}
-        disabledReset={filters.property_types[0] === 'Residential'}
+        disabledReset={getPropertyTypeFirstElement(filters) === 'Residential'}
         onClickReset={() => {
           updateFilters({
             ...PROPERTY_TYPES_DEFAULT_VALUES.Residential

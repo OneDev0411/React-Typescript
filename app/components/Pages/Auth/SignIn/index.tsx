@@ -8,6 +8,7 @@ import { browserHistory } from 'react-router'
 import signin from '@app/models/auth/signin'
 import signup from '@app/models/auth/signup'
 import { getActiveTeam } from '@app/models/user/get-active-team'
+import { logUserActivity } from '@app/models/user/log-activity'
 import { lookUpUserByEmail } from '@app/models/user/lookup-user-by-email'
 import { setUserAndActiveTeam } from '@app/store_actions/active-team'
 
@@ -81,6 +82,24 @@ export default function Signin(props: Props) {
     }
   }
 
+  const logUserLoginActivity = async () => {
+    // Log user login activity
+    try {
+      await logUserActivity(
+        {
+          action: 'UserLoggedIn',
+          object_class: 'UserActivityLogin',
+          object: {
+            type: 'user_activity_user_login'
+          }
+        },
+        true
+      )
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const handleSignin = async values => {
     try {
       setIsLogging(true)
@@ -102,16 +121,18 @@ export default function Signin(props: Props) {
         })
       })
 
+      await logUserLoginActivity()
+
       const defaultHomePage = getUserDefaultHomepage(activeTeam)
 
       if (redirectTo && redirectTo.includes('http')) {
-        browserHistory.push('/branch?waitingForRedirect')
+        browserHistory.replace('/branch?waitingForRedirect')
         window.location.href = redirectTo
 
         return
       }
 
-      browserHistory.push(redirectTo || defaultHomePage)
+      browserHistory.replace(redirectTo || defaultHomePage)
     } catch (errorCode) {
       if (errorCode === 403) {
         setSignInFormSubmitMsg({
