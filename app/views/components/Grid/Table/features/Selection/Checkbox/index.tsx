@@ -50,7 +50,7 @@ export default function Checkbox({
     <MUICheckbox
       {...props}
       classes={{ root: classes.root }}
-      color="secondary"
+      color="primary"
       checked={isChecked}
       indeterminate={indeterminate}
       onChange={handleToggleRow}

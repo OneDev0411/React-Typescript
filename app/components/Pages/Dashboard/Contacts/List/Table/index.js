@@ -1,26 +1,17 @@
 import { makeStyles } from '@material-ui/core'
-import {
-  mdiCake,
-  mdiCalendarOutline,
-  mdiEmailOutline,
-  mdiLightningBoltOutline,
-  mdiPhoneOutline,
-  mdiTagMultipleOutline
-} from '@mdi/js'
 import cn from 'classnames'
-import DayPicker from 'react-day-picker'
+// import DayPicker from 'react-day-picker'
 
-import { useBreakpoint } from '@app/hooks/use-breakpoint'
-import { DateTimePicker } from '@app/views/components/DateTimePicker'
+// import { DateTimePicker } from '@app/views/components/DateTimePicker'
 import { useGridBorderedStyles } from '@app/views/components/Grid/Table/styles/bordered'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { Table } from 'components/Grid/Table'
-import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
-import { getAttributeFromSummary } from 'models/contacts/helpers'
+// import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
+// import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
+// import { getAttributeFromSummary } from 'models/contacts/helpers'
 
 import NoSearchResults from '../../../../../Partials/no-search-results'
-import { PARKED_CONTACTS_LIST_ID } from '../constants'
+// import { PARKED_CONTACTS_LIST_ID } from '../constants'
 
 import { TableActions } from './Actions'
 import Avatar from './columns/Avatar'
@@ -51,43 +42,42 @@ const useCustomGridStyles = makeStyles(theme => ({
 }))
 
 const ContactsList = props => {
-  const [state, dispatch] = useGridContext()
+  // const [state, dispatch] = useGridContext()
 
   const gridClasses = useGridStyles()
   const gridBorderedClasses = useGridBorderedStyles()
   const customGridClasses = useCustomGridStyles()
-  const breakpoint = useBreakpoint()
 
-  const isParkTabActive = props.activeSegment?.id === PARKED_CONTACTS_LIST_ID
-  const resetSelectedRow = () => {
-    const {
-      selection: { selectedRowIds, isAllRowsSelected, isEntireRowsSelected }
-    } = state
+  // const isParkTabActive = props.activeSegment?.id === PARKED_CONTACTS_LIST_ID
+  // const resetSelectedRow = () => {
+  //   const {
+  //     selection: { selectedRowIds, isAllRowsSelected, isEntireRowsSelected }
+  //   } = state
 
-    if (
-      selectedRowIds.length > 0 ||
-      isAllRowsSelected ||
-      isEntireRowsSelected
-    ) {
-      dispatch(resetRows())
-    }
-  }
+  //   if (
+  //     selectedRowIds.length > 0 ||
+  //     isAllRowsSelected ||
+  //     isEntireRowsSelected
+  //   ) {
+  //     dispatch(resetRows())
+  //   }
+  // }
 
-  const getSelectedInfo = contactCount => {
-    const {
-      selection: { selectedRowIds, isEntireRowsSelected, excludedRows }
-    } = state
+  // const getSelectedInfo = contactCount => {
+  //   const {
+  //     selection: { selectedRowIds, isEntireRowsSelected, excludedRows }
+  //   } = state
 
-    let selectedCount = selectedRowIds.length
+  //   let selectedCount = selectedRowIds.length
 
-    if (isEntireRowsSelected) {
-      selectedCount = contactCount - excludedRows.length
-    }
+  //   if (isEntireRowsSelected) {
+  //     selectedCount = contactCount - excludedRows.length
+  //   }
 
-    return selectedCount > 0
-      ? `${selectedCount} of ${contactCount} selected`
-      : `${contactCount} Contacts`
-  }
+  //   return selectedCount > 0
+  //     ? `${selectedCount} of ${contactCount} selected`
+  //     : `${contactCount} Contacts`
+  // }
 
   // const columns = [
   //   {
@@ -312,7 +302,9 @@ const ContactsList = props => {
   //   }
   // ]
 
-  const columns = useColumns()
+  const columns = useColumns({
+    totalRows: props.totalRows
+  })
 
   const getLoading = () => {
     const { isFetching, isFetchingMore, isFetchingMoreBefore } = props

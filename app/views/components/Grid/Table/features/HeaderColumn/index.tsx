@@ -24,8 +24,8 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  text: string
-  iconPath: string
+  text: string | React.ReactNode
+  iconPath?: string
 }
 
 /**
@@ -37,7 +37,7 @@ export function HeaderColumn({ text, iconPath }: Props) {
 
   return (
     <div className={classes.root}>
-      <SvgIcon className={classes.icon} path={iconPath} />
+      {iconPath && <SvgIcon className={classes.icon} path={iconPath} />}
       <Typography variant="body2" className={classes.title}>
         {text}
       </Typography>

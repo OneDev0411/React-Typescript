@@ -13,7 +13,7 @@ import Filters from 'components/Grid/Filters'
 import { OperatorAndOperandFilter } from 'components/Grid/Filters/FilterTypes/OparatorAndOperand'
 import { SimpleList } from 'components/Grid/Filters/FilterTypes/SimpleList'
 import SaveSegment from 'components/Grid/SavedSegments/Create'
-import { SELECTION__TOGGLE_ENTIRE_ROWS } from 'components/Grid/Table/context/constants'
+// import { SELECTION__TOGGLE_ENTIRE_ROWS } from 'components/Grid/Table/context/constants'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { selectTags } from 'reducers/contacts/tags'
@@ -50,8 +50,8 @@ const useStyles = makeStyles(theme =>
 )
 
 function ContactFilters(props) {
-  const [state, dispatch] = useGridContext()
-  const classes = useStyles()
+  const [state /* dispatch */] = useGridContext()
+  // const classes = useStyles()
   const activeBrandId = useActiveBrandId()
   const {
     isAllRowsSelected,
@@ -64,16 +64,16 @@ function ContactFilters(props) {
     selectedRowIds.length === props.contactCount ||
     (isEntireRowsSelected && excludedRows.length === 0)
 
-  const isSomeRowsSelected =
-    (isAllRowsSelected === false &&
-      selectedRowIds.length > 0 &&
-      selectedRowIds.length < props.contactCount) ||
-    (isEntireRowsSelected && excludedRows.length > 0)
+  // const isSomeRowsSelected =
+  //   (isAllRowsSelected === false &&
+  //     selectedRowIds.length > 0 &&
+  //     selectedRowIds.length < props.contactCount) ||
+  //   (isEntireRowsSelected && excludedRows.length > 0)
 
-  const tooltipTitle =
-    isAllSelected || isEntireRowsSelected
-      ? 'Deselect All Rows'
-      : 'Select All Rows'
+  // const tooltipTitle =
+  //   isAllSelected || isEntireRowsSelected
+  //     ? 'Deselect All Rows'
+  //     : 'Select All Rows'
 
   const getConfig = () => {
     const { attributeDefs, tags } = props
@@ -121,32 +121,32 @@ function ContactFilters(props) {
       }
     ]
   }
-  const getSummeryInfo = () => {
-    let selectedCount
+  // const getSummeryInfo = () => {
+  //   let selectedCount
 
-    if (isEntireRowsSelected) {
-      selectedCount = props.contactCount - excludedRows.length
-    } else if (selectedRowIds.length > 0) {
-      selectedCount = selectedRowIds.length
-    }
+  //   if (isEntireRowsSelected) {
+  //     selectedCount = props.contactCount - excludedRows.length
+  //   } else if (selectedRowIds.length > 0) {
+  //     selectedCount = selectedRowIds.length
+  //   }
 
-    return selectedCount
-      ? `${selectedCount} of ${props.contactCount} selected`
-      : `${props.contactCount} CONTACTS`
-  }
-  const toggleAll = () =>
-    dispatch({
-      type: SELECTION__TOGGLE_ENTIRE_ROWS
-    })
+  //   return selectedCount
+  //     ? `${selectedCount} of ${props.contactCount} selected`
+  //     : `${props.contactCount} CONTACTS`
+  // }
+  // const toggleAll = () =>
+  //   dispatch({
+  //     type: SELECTION__TOGGLE_ENTIRE_ROWS
+  //   })
 
-  const defaultSelectAllValue =
-    Number(props.contactCount) === 0 ? false : isAllSelected
+  // const defaultSelectAllValue =
+  //   Number(props.contactCount) === 0 ? false : isAllSelected
 
-  const isSelectAllDisable = Number(props.contactCount) === 0
+  // const isSelectAllDisable = Number(props.contactCount) === 0
 
   return (
     <Box display="flex" alignItems="center">
-      {props.viewMode === 'table' && (
+      {/* {props.viewMode === 'table' && (
         <div className={classes.infoContainer}>
           <Tooltip title={tooltipTitle}>
             <Checkbox
@@ -167,7 +167,7 @@ function ContactFilters(props) {
             {getSummeryInfo()}
           </span>
         </div>
-      )}
+      )} */}
 
       {props?.show && (
         <Filters

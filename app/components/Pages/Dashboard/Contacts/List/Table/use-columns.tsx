@@ -16,6 +16,7 @@ import { TableColumn } from '@app/views/components/Grid/Table/types'
 
 import { TagsInlineEdit } from './columns-inline-edit/Tags'
 import LastTouched from './columns/LastTouched'
+import { SelectedRowsCount } from './columns/SelectedRowsCount'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -28,16 +29,18 @@ const useStyles = makeStyles(
   }
 )
 
-export function useColumns(): TableColumn<IContact>[] {
+interface Data {
+  totalRows: number
+}
+
+export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
   const classes = useStyles()
   const breakpoint = useBreakpoint()
 
   return [
     {
       id: 'name',
-      header: ({ rows }) => {
-        return <div>{rows.length} contacts</div>
-      },
+      header: () => <SelectedRowsCount totalRows={totalRows} />,
       render: ({ row: contact }) => (
         <ALink to={`/dashboard/contacts/${contact.id}`}>
           {getAttributeFromSummary(contact, 'display_name')}
