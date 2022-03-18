@@ -1,6 +1,9 @@
+import React from 'react'
+
+import { Dialog, useTheme, Theme } from '@material-ui/core'
+
 import { noop } from '@app/utils/helpers'
 
-import InlineDialog from '../InlineDialog'
 import { ListingDetails } from '../ListingDetails'
 
 interface Props {
@@ -18,8 +21,19 @@ function ListingDetailsModal({
   isWidget = false,
   onToggleFavorite = noop
 }: Props) {
+  const theme: Theme = useTheme()
+
   return (
-    <InlineDialog open={isOpen} data-test="listing-details-modal">
+    <Dialog
+      open={isOpen}
+      fullScreen
+      scroll="paper"
+      data-test="listing-details-modal"
+      classes={{
+        root: 'u-scrollbar'
+      }}
+      style={{ zIndex: theme.zIndex.modal + 2 }}
+    >
       {listingId && (
         <>
           <ListingDetails
@@ -30,7 +44,7 @@ function ListingDetailsModal({
           />
         </>
       )}
-    </InlineDialog>
+    </Dialog>
   )
 }
 
