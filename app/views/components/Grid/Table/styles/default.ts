@@ -48,7 +48,7 @@ export const styles = (theme: Theme) =>
           visibility: 'visible'
         },
         '&:hover': {
-          border: `2px solid ${theme.palette.primary.main} !important`,
+          boxShadow: `inset 0px 0px 0px 2px ${theme.palette.primary.main} !important`,
           borderRadius: theme.shape.borderRadius
         }
       }
