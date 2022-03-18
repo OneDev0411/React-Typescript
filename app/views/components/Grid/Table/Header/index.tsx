@@ -44,7 +44,14 @@ export function Header<Row>({
   const headerClasses = useStyles()
 
   return (
-    <div style={style} className={cn(classes.row, headerClasses.root)}>
+    <div
+      style={{
+        ...style,
+        width: undefined,
+        minWidth: '100%'
+      }}
+      className={cn(classes.row, headerClasses.root)}
+    >
       {columns
         .filter(column => column.hidden !== true)
         .map((column, columnIndex) => (

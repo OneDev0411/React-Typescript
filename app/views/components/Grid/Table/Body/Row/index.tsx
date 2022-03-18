@@ -65,7 +65,8 @@ function Row<Row>({
       className={classes.row}
       style={{
         ...style,
-        width: 'auto'
+        width: undefined,
+        minWidth: '100%'
       }}
       data-tour-id={`row-${rowIndex}`}
       {...getTrProps({
