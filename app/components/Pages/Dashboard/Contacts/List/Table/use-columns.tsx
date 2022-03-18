@@ -65,7 +65,8 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       header: () => <HeaderColumn text="Phone" iconPath={mdiPhone} />,
       render: ({ row: contact }) => (
         <span className={classes.cell}>{contact.phone_number}</span>
-      )
+      ),
+      renderInlineEdit: ({ row: contact }) => <div>11</div>
     },
     {
       id: 'email',
@@ -73,7 +74,8 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       header: () => <HeaderColumn text="Email" iconPath={mdiEmail} />,
       render: ({ row: contact }) => (
         <span className={classes.cell}>{contact.email}</span>
-      )
+      ),
+      renderInlineEdit: ({ row: contact }) => <div>22</div>
     },
     {
       id: 'last-touch',
