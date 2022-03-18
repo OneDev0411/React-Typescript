@@ -25,8 +25,4 @@ function ContactAvatar({ contact }: Props) {
   )
 }
 
-function mapStateToProps({ contacts }: IAppState) {
-  return { attributeDefs: contacts.attributeDefs }
-}
-
 export default ContactAvatar
