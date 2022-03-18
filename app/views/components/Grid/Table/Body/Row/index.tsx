@@ -59,38 +59,39 @@ function Row<Row>({
     state.selection.selectedRowIds.includes(row.id || rowIndex.toString())
 
   return (
-    <>
-      <RowContainer
-        index={rowIndex}
-        selected={isRowSelected}
-        className={classes.row}
-        style={style}
-        data-tour-id={`row-${rowIndex}`}
-        {...getTrProps({
-          rowIndex,
-          row,
-          selected: isRowSelected
-        })}
-      >
-        {columns
-          .filter(
-            (column: TableColumn<Row>) =>
-              (column.render || column.accessor) && column.hidden !== true
-          )
-          .map((column: TableColumn<Row>, columnIndex: number) => (
-            <Column<Row>
-              key={columnIndex}
-              column={column}
-              columnIndex={columnIndex}
-              row={row}
-              rowIndex={rowIndex}
-              columnWidth={columnsSize[columnIndex]}
-              totalRows={rows.length}
-              getTdProps={getTdProps}
-            />
-          ))}
-      </RowContainer>
-    </>
+    <RowContainer
+      index={rowIndex}
+      selected={isRowSelected}
+      className={classes.row}
+      style={{
+        ...style,
+        width: 'auto'
+      }}
+      data-tour-id={`row-${rowIndex}`}
+      {...getTrProps({
+        rowIndex,
+        row,
+        selected: isRowSelected
+      })}
+    >
+      {columns
+        .filter(
+          (column: TableColumn<Row>) =>
+            (column.render || column.accessor) && column.hidden !== true
+        )
+        .map((column: TableColumn<Row>, columnIndex: number) => (
+          <Column<Row>
+            key={columnIndex}
+            column={column}
+            columnIndex={columnIndex}
+            row={row}
+            rowIndex={rowIndex}
+            columnWidth={columnsSize[columnIndex]}
+            totalRows={rows.length}
+            getTdProps={getTdProps}
+          />
+        ))}
+    </RowContainer>
   )
 }
 
