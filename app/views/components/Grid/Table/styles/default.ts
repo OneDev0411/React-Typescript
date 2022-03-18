@@ -15,6 +15,9 @@ export const styles = (theme: Theme) =>
           visibility: 'hidden'
         }
       },
+      '&.selected .column': {
+        backgroundColor: theme.palette.action.hover
+      },
       '&:hover .column': {
         cursor: 'pointer',
         '&.primary a': {

@@ -1,5 +1,7 @@
 import { CSSProperties, memo } from 'react'
 
+import cn from 'classnames'
+
 import { StateContext } from '../../context'
 import { Header } from '../../Header'
 import { TableColumn, TrProps, TdProps, GridClasses } from '../../types'
@@ -62,7 +64,9 @@ function Row<Row>({
     <RowContainer
       index={rowIndex}
       selected={isRowSelected}
-      className={classes.row}
+      className={cn(classes.row, {
+        selected: isRowSelected
+      })}
       style={{
         ...style,
         width: undefined,
