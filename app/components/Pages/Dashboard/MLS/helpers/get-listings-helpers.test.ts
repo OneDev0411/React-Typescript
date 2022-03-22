@@ -41,7 +41,7 @@ describe('createValertQueryString', () => {
 
   it('should contain office if brand has office', () => {
     const expected =
-      '?associations=compact_listing.proposed_agent&order_by[]=office&order_by[]=status&office=office1&order_by[]=%2Bprice'
+      'associations=compact_listing.proposed_agent&order_by[]=office&order_by[]=status&office=office1&order_by[]=%2Bprice'
 
     const actual = createValertQueryString(
       zoom,
@@ -57,7 +57,7 @@ describe('createValertQueryString', () => {
     brand.offices = []
 
     const expected =
-      '?associations=compact_listing.proposed_agent&order_by[]=%2Bprice'
+      'associations=compact_listing.proposed_agent&order_by[]=%2Bprice'
 
     const actual = createValertQueryString(
       zoom,
@@ -70,7 +70,7 @@ describe('createValertQueryString', () => {
   })
 
   it('should not contain associations if brand is null', () => {
-    const expected = '?order_by[]=%2Bprice'
+    const expected = 'order_by[]=%2Bprice'
 
     const actual = createValertQueryString(
       zoom,
@@ -86,7 +86,7 @@ describe('createValertQueryString', () => {
     zoom = 4
     proposedAgentZoomLevel = 8
 
-    const expected = '?order_by[]=%2Bprice'
+    const expected = 'order_by[]=%2Bprice'
 
     const actual = createValertQueryString(
       zoom,
@@ -103,7 +103,7 @@ describe('createValertQueryString', () => {
     proposedAgentZoomLevel = 4
 
     const expected =
-      '?associations=compact_listing.proposed_agent&order_by[]=office&order_by[]=status&office=office1&order_by[]=%2Bprice'
+      'associations=compact_listing.proposed_agent&order_by[]=office&order_by[]=status&office=office1&order_by[]=%2Bprice'
 
     const actual = createValertQueryString(
       zoom,
@@ -121,7 +121,7 @@ describe('createValertQueryString', () => {
       ascending: true
     }
 
-    const expected = '?order_by[]=%2Byear_built'
+    const expected = 'order_by[]=%2Byear_built'
 
     const actual = createValertQueryString(
       zoom,
@@ -139,7 +139,7 @@ describe('createValertQueryString', () => {
       ascending: false
     }
 
-    const expected = '?order_by[]=-year_built'
+    const expected = 'order_by[]=-year_built'
 
     const actual = createValertQueryString(
       zoom,
@@ -157,7 +157,7 @@ describe('createValertQueryString', () => {
       ascending: false
     }
 
-    const expected = `?order_by[]=-${parseToValertSort('beds')}`
+    const expected = `order_by[]=-${parseToValertSort('beds')}`
 
     const actual = createValertQueryString(
       zoom,
@@ -175,7 +175,7 @@ describe('createValertQueryString', () => {
       ascending: false
     }
 
-    const expected = `?order_by[]=-${parseToValertSort('baths')}`
+    const expected = `order_by[]=-${parseToValertSort('baths')}`
 
     const actual = createValertQueryString(
       zoom,

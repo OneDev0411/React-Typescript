@@ -40,9 +40,10 @@ jest.mock('@app/models/listings/search/get-brand-listings', () => ({
 // Listing modal mocks
 jest.mock('@app/utils/load-js')
 
-jest.mock('@app/hooks/use-log-user-activity.ts', () => ({
-  useLogUserActivity: jest.fn()
+jest.mock('@app/models/user/log-activity', () => ({
+  logUserActivity: jest.fn()
 }))
+
 jest.mock(
   '@app/models/listings/listing/get-listing',
   () => () => Promise.resolve(MockListing)

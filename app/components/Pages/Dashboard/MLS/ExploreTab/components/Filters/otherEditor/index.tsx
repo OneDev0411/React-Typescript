@@ -2,6 +2,7 @@ import { Grid, Typography } from '@material-ui/core'
 import { mdiTune } from '@mdi/js'
 import { isEqual } from 'lodash'
 
+import { getPropertyTypeFirstElement } from '@app/components/Pages/Dashboard/MLS/helpers/get-listings-helpers'
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -75,23 +76,23 @@ export const OtherEditor = ({
         <OpenHouseGroup {...otherEditorProps} />
 
         {!['Multi-Family', 'Lots & Acreage'].includes(
-          filters.property_types[0]
+          getPropertyTypeFirstElement(filters) || ''
         ) && <ParkingGroup {...otherEditorProps} />}
 
         {!['Multi-Family', 'Lots & Acreage'].includes(
-          filters.property_types[0]
+          getPropertyTypeFirstElement(filters) || ''
         ) && <SquareFootageGroup {...otherEditorProps} />}
 
         <LotSizeGroup {...otherEditorProps} />
 
-        {filters.property_types[0] !== 'Lots & Acreage' && (
+        {getPropertyTypeFirstElement(filters) !== 'Lots & Acreage' && (
           <YearBuiltGroup {...otherEditorProps} />
         )}
 
         <ZipcodeGroup hasMapDrawing={hasMapDrawing} {...otherEditorProps} />
 
         {['Residential', 'Residential Lease'].includes(
-          filters.property_types[0]
+          getPropertyTypeFirstElement(filters) || ''
         ) && <PoolGroup {...otherEditorProps} />}
       </Grid>
       <FilterEditorFooter

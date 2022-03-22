@@ -21,7 +21,7 @@ declare interface AlertFilters {
   furnished?: Nullable<boolean>
   fenced_yard?: Nullable<boolean>
   title?: Nullable<string>
-  property_types: IPropertyType[]
+  property_types?: IPropertyType[]
   property_subtypes?: IPropertySubtype[]
   listing_statuses?: Nullable<IListingStatus[]>
   open_house?: Nullable<boolean>

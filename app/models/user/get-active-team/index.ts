@@ -8,7 +8,8 @@ import Fetch from '../../../services/fetch'
 const DEFAULT_ASSOCIATIONS = [
   'brand_role.users',
   'brand.settings',
-  'brand.roles'
+  'brand.roles',
+  'agent.office'
 ]
 
 export async function getActiveTeam(

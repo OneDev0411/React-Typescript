@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { useLocation } from 'react-use'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { useUnsafeUser } from '@app/hooks/use-unsafe-user'
 import { selectUserIsSignedIn } from 'selectors/user'
 import { goTo } from 'utils/go-to'
 
@@ -11,6 +12,7 @@ import { hasAccess } from './helpers'
 import { Access } from './types'
 
 export function useAcl(access: Access | Access[]): boolean {
+  const user = useUnsafeUser()
   const activeTeam = useUnsafeActiveTeam()
 
   if (!activeTeam) {
@@ -19,7 +21,7 @@ export function useAcl(access: Access | Access[]): boolean {
 
   const userHasNeededAccess = ([] as Access[])
     .concat(access)
-    .every(accessItem => hasAccess(activeTeam, accessItem))
+    .every(accessItem => hasAccess({ team: activeTeam, user }, accessItem))
 
   return userHasNeededAccess
 }
