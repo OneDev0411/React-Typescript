@@ -40,7 +40,10 @@ function SocialDrawerActions({
         <Grid container spacing={2}>
           <Grid item sm={6}>
             <SocialDrawerInstagramButton
-              disabled={instance.type === 'brand_asset'}
+              disabled={
+                instance.type === 'brand_asset' ||
+                instance.template.medium !== 'Social'
+              }
               onClick={gotoScheduleStep}
             />
           </Grid>
