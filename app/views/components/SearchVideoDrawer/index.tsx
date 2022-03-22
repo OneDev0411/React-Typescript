@@ -10,12 +10,13 @@ import OverlayDrawer from 'components/OverlayDrawer'
 import { SearchInput } from '../GlobalHeaderWithSearch/SearchInput'
 import LoadingContainer from '../LoadingContainer'
 
-import { calcThumbnailAspectRatio, makeVimeoDateStandard } from './helpers'
+import { makeVimeoDateStandard } from './helpers'
 import SearchVideoEmptyState from './SearchVideoEmptyState'
 import SearchVideoResults from './SearchVideoResults'
 import { SearchVideoResult, Video } from './types'
 import { useSearchVimeo } from './use-search-vimeo'
 import { useSearchYouTube } from './use-search-youtube'
+import { useWatermarkPlayIcon } from './use-watermark-play-icon'
 
 const useStyles = makeStyles(
   theme => ({
@@ -43,6 +44,7 @@ interface SearchVideoDrawerProps {
   model: Nullable<Model>
   onClose: () => void
   onSelect: (video: Video) => void
+  uploadThumbnail: (file: File) => Promise<string>
 }
 
 const INITIAL_SEARCH_TERM = 'architectural digest'
@@ -52,7 +54,8 @@ function SearchVideoDrawer({
   isOpen,
   model,
   onClose,
-  onSelect
+  onSelect,
+  uploadThumbnail
 }: SearchVideoDrawerProps) {
   const classes = useStyles()
   const {
@@ -63,6 +66,7 @@ function SearchVideoDrawer({
   const [video, setVideo] = useState<Nullable<SearchVideoResult>>(null)
   const { isYouTubeReady, safeSearchYouTube } = useSearchYouTube()
   const { safeSearchVimeo } = useSearchVimeo()
+  const { isWatermarking, watermarkPlayIcon } = useWatermarkPlayIcon()
 
   const searchVideos = useCallback(
     (value: string) => {
@@ -82,10 +86,6 @@ function SearchVideoDrawer({
         const results = [
           ...vimeoVideos.map<SearchVideoResult>(video => ({
             thumbnail: video.thumbnail_url,
-            thumbnailAspectRatio: calcThumbnailAspectRatio(
-              video.width,
-              video.height
-            ),
             title: unescape(video.title),
             url: `https://vimeo.com/${video.video_id}`,
             publisher: video.author_name,
@@ -94,10 +94,6 @@ function SearchVideoDrawer({
           })),
           ...youtubeVideos.map<SearchVideoResult>(video => ({
             thumbnail: video.snippet?.thumbnails?.high?.url ?? '',
-            thumbnailAspectRatio: calcThumbnailAspectRatio(
-              video.snippet?.thumbnails?.high?.width,
-              video.snippet?.thumbnails?.high?.height
-            ),
             title: unescape(video.snippet?.title ?? ''),
             url: `https://www.youtube.com/watch?v=${video.id?.videoId}`,
             publisher: video.snippet?.channelTitle ?? '',
@@ -131,15 +127,20 @@ function SearchVideoDrawer({
     target
   }: React.ChangeEvent<HTMLInputElement>) => searchVideos(target.value)
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!video) {
       return
     }
 
+    const videoThumbnailWithPlayIcon = await watermarkPlayIcon(
+      video.thumbnail,
+      uploadThumbnail
+    )
+
     const videoInfo: Video = {
       url: video.url,
       thumbnail: video.thumbnail,
-      thumbnailAspectRatio: video.thumbnailAspectRatio
+      thumbnailWithPlayIcon: videoThumbnailWithPlayIcon
     }
 
     onSelect(videoInfo)
@@ -191,7 +192,7 @@ function SearchVideoDrawer({
       </OverlayDrawer.Body>
       <OverlayDrawer.Footer rowReverse>
         <Button
-          disabled={!video}
+          disabled={!video || isWatermarking}
           color="primary"
           variant="contained"
           onClick={handleConfirm}

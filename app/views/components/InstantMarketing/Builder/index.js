@@ -1505,6 +1505,12 @@ class Builder extends React.Component {
               this.blocks.video.selectHandler(video)
               this.setState({ videoToEdit: null })
             }}
+            uploadThumbnail={async file => {
+              const templateId = this.selectedTemplate.id
+              const uploadedAsset = await uploadAsset(templateId, file)
+
+              return uploadedAsset.file.url
+            }}
           />
           <SearchArticleDrawer
             isOpen={this.state.isArticleDrawerOpen}
