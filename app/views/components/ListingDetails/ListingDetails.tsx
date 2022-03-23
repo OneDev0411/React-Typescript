@@ -49,12 +49,12 @@ const useStyles = makeStyles(
       }
     },
     heroWrapper: {
-      marginBottom: theme.spacing(7),
+      marginBottom: theme.spacing(4),
       [theme.breakpoints.up('sm')]: {
-        marginBottom: theme.spacing(10)
+        marginBottom: theme.spacing(5)
       },
       [theme.breakpoints.up('md')]: {
-        marginBottom: theme.spacing(25),
+        marginBottom: theme.spacing(6),
         paddingLeft: theme.spacing(6),
         paddingRight: theme.spacing(6)
       }
@@ -91,7 +91,7 @@ const useStyles = makeStyles(
     statusWrapper: {
       marginBottom: theme.spacing(2),
       [theme.breakpoints.up('sm')]: {
-        marginBottom: theme.spacing(5)
+        marginBottom: theme.spacing(4)
       }
     },
     showOnMapButton: {
@@ -101,38 +101,41 @@ const useStyles = makeStyles(
       }
     },
     featuredImageWrapper: {
-      marginBottom: theme.spacing(7),
+      marginBottom: theme.spacing(4),
       [theme.breakpoints.up('sm')]: {
-        marginBottom: theme.spacing(11)
+        marginBottom: theme.spacing(6)
       },
       [theme.breakpoints.up('md')]: {
         marginBottom: 0
       }
     },
     agentAreaWrapper: {
-      padding: theme.spacing(0, 3),
-      marginBottom: theme.spacing(7),
+      overflow: 'hidden', // because of MUI nested grid limitation https://v4.mui.com/components/grid/#limitations
+      marginBottom: theme.spacing(4),
 
       [theme.breakpoints.up('md')]: {
-        padding: theme.spacing(0, 6),
-        marginBottom: theme.spacing(11)
+        padding: theme.spacing(0, 4),
+        marginBottom: theme.spacing(6)
+      }
+    },
+    agentWrapper: {
+      width: '100%',
+      padding: theme.spacing(0, 3),
+      [theme.breakpoints.up('md')]: {
+        padding: theme.spacing(0)
       }
     },
     descriptionAreaWrapper: {
-      padding: theme.spacing(0, 3),
-      marginBottom: theme.spacing(7),
-
-      [theme.breakpoints.up('sm')]: {
-        marginBottom: theme.spacing(11)
-      },
-
+      overflow: 'hidden', // because of MUI nested grid limitation https://v4.mui.com/components/grid/#limitations
       [theme.breakpoints.up('md')]: {
-        padding: theme.spacing(0, 6)
+        padding: theme.spacing(0, 4)
       }
     },
     descriptionWrapper: {
       marginBottom: theme.spacing(3),
-      [theme.breakpoints.up('sm')]: {
+      padding: theme.spacing(0, 3),
+      [theme.breakpoints.up('md')]: {
+        padding: theme.spacing(0),
         marginBottom: theme.spacing(6)
       }
     }
@@ -182,7 +185,7 @@ function ListingDetails({
   */
   useEffect(() => {
     const logUserViewListingActivity = async (
-      listing: IListing<'proposed_agent'>
+      listing: IListing<'proposed_agent' | 'mls_info'>
     ) => {
       try {
         await logUserActivity(
@@ -284,54 +287,69 @@ function ListingDetails({
           </Grid>
         </Grid>
       </Box>
-      <Grid container className={classes.agentAreaWrapper}>
+      <div className={classes.agentAreaWrapper}>
         <Grid
-          item
-          xs={12}
-          md={agent ? 8 : 12}
-          className={classes.featuredImageWrapper}
+          container
+          spacing={2}
+          justifyContent={agent ? undefined : 'center'}
         >
-          <FeaturedImages images={images} serie={1} />
-        </Grid>
-        {agent && (
-          <Grid item xs={12} md={4}>
-            <Container maxWidth="xs" disableGutters>
-              <AgentInfo
-                name={agent.name}
-                email={agent.email}
-                image={agent.image}
-                tel={agent.tel}
-                company={agent.brokrageName}
-              />
-            </Container>
-          </Grid>
-        )}
-      </Grid>
-      {isDesktop && (
-        <Box px={6} mb={20}>
-          <FeatureList listing={listing} />
-        </Box>
-      )}
-      <Grid container className={classes.descriptionAreaWrapper}>
-        <Grid item xs={12} md={4}>
-          <Box className={classes.descriptionWrapper}>
-            <Description
-              address={subtitle1}
-              description={listing.property.description}
-              officeName={listing.list_office_name}
+          <Grid
+            item
+            xs={12}
+            md={agent ? 7 : 10}
+            className={classes.featuredImageWrapper}
+          >
+            <FeaturedImages
+              isAgent={!!agent}
+              direction="row-reverse"
+              images={images}
+              serie={1}
             />
-          </Box>
+          </Grid>
+          {agent && (
+            <Grid item xs={12} md={5}>
+              <div className={classes.agentWrapper}>
+                <AgentInfo
+                  name={agent.name}
+                  email={agent.email}
+                  image={agent.image}
+                  tel={agent.tel}
+                  company={agent.brokrageName}
+                />
+              </div>
+            </Grid>
+          )}
         </Grid>
-        <Grid item xs={12} md={8}>
-          <FeaturedImages images={images} serie={2} />
-        </Grid>
-      </Grid>
-      {!isDesktop && (
-        <Box mb={9} px={3}>
+      </div>
+      {isDesktop && (
+        <Box px={6} mb={6}>
           <FeatureList listing={listing} />
         </Box>
       )}
-      <Box px={3} mb={5}>
+      <div className={classes.descriptionAreaWrapper}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={5}>
+            <Box className={classes.descriptionWrapper}>
+              <Description
+                address={subtitle1}
+                description={listing.property.description}
+                officeName={listing.list_office_name}
+                agentFullName={listing.list_agent?.full_name}
+                agentPhoneNumber={listing.list_agent?.phone_number}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={7}>
+            <FeaturedImages isAgent={!!agent} images={images} serie={2} />
+          </Grid>
+        </Grid>
+      </div>
+      {!isDesktop && (
+        <Box mb={6} px={3}>
+          <FeatureList listing={listing} />
+        </Box>
+      )}
+      <Box px={3} mb={4}>
         <RootRef rootRef={mapSection}>
           <Map location={listing.property.address.location} />
         </RootRef>

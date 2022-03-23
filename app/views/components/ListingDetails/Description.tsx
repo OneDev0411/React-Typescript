@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { makeStyles, Theme, useMediaQuery, useTheme } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
@@ -9,11 +9,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     title: {
       color: theme.palette.tertiary.light,
-      marginBottom: theme.spacing(2),
-      ...theme.typography.subtitle3,
-      [theme.breakpoints.up('sm')]: {
-        ...theme.typography.h5
-      }
+      marginBottom: theme.spacing(2)
     },
     description: {
       color: theme.palette.tertiary.light,
@@ -29,9 +25,17 @@ interface Props {
   address: string
   description: string
   officeName: string
+  agentFullName?: string
+  agentPhoneNumber?: string
 }
 
-function Description({ address, description, officeName }: Props) {
+function Description({
+  address,
+  description,
+  officeName,
+  agentFullName = '',
+  agentPhoneNumber = ''
+}: Props) {
   const classes = useStyles()
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
@@ -43,7 +47,9 @@ function Description({ address, description, officeName }: Props) {
 
   return (
     <>
-      <h5 className={classes.title}>{address}</h5>
+      <Typography variant="h6" className={classes.title}>
+        {address}
+      </Typography>
       <Typography variant="body2" className={classes.description}>
         {isTooLong ? (
           <>
@@ -66,8 +72,13 @@ function Description({ address, description, officeName }: Props) {
         </Box>
       )}
       <Box pt={2}>
-        <Typography variant="body1">
-          Listing Courtesy of {officeName}
+        <Typography variant="subtitle2">
+          <strong>
+            Listing Courtesy {agentFullName ? `of ${agentFullName}` : ''} of{' '}
+            {officeName}
+            <br />
+            {agentPhoneNumber}
+          </strong>
         </Typography>
       </Box>
     </>
