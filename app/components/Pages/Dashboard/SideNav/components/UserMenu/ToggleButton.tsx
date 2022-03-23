@@ -8,9 +8,6 @@ import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {
-      padding: theme.spacing(1.5, 2, 1.5, 3)
-    },
     dropdownToggleButton: {
       justifyContent: 'space-between',
       maxWidth: '100%',
@@ -74,32 +71,30 @@ export default function ToggleButton(props: Props) {
   }`
 
   return (
-    <div className={classes.container}>
-      <Tooltip placement="right" title={tooltipTitle}>
-        <DropdownToggleButton
-          id={props.id}
-          onClick={props.onClick}
-          isActive={props.isOpen}
-          classes={{
-            arrowIcon: classes.arrowIcon,
-            root: classes.dropdownToggleButton,
-            rotated: classes.arrowIconRotated
-          }}
-          iconPath={mdiDotsVertical}
-        >
-          <div className={classes.wrapper}>
-            <div className={classes.userDetails}>
-              <Typography
-                noWrap
-                variant="body1"
-                className={classes.userDisplayName}
-              >
-                {userName ?? activeBrand?.name ?? '[No Active Brand]'}
-              </Typography>
-            </div>
+    <Tooltip placement="right" title={tooltipTitle}>
+      <DropdownToggleButton
+        id={props.id}
+        onClick={props.onClick}
+        isActive={props.isOpen}
+        classes={{
+          arrowIcon: classes.arrowIcon,
+          root: classes.dropdownToggleButton,
+          rotated: classes.arrowIconRotated
+        }}
+        iconPath={mdiDotsVertical}
+      >
+        <div className={classes.wrapper}>
+          <div className={classes.userDetails}>
+            <Typography
+              noWrap
+              variant="body1"
+              className={classes.userDisplayName}
+            >
+              {activeBrand?.name ?? '[No Active Brand]'}
+            </Typography>
           </div>
-        </DropdownToggleButton>
-      </Tooltip>
-    </div>
+        </div>
+      </DropdownToggleButton>
+    </Tooltip>
   )
 }
