@@ -224,7 +224,12 @@ interface ProposedAgent extends IModel<'user'> {
   agents: Nullable<ListingAgent[]>
 }
 
-declare type IListingAssociation = 'agent' | 'proposed_agent'
+declare type IListingAssociation = 'agent' | 'proposed_agent' | 'mls_info'
+interface MlsInfo extends IModel<'mls_info'> {
+  mls: string
+  disclaimer: string
+  logo: string
+}
 
 declare type IListing<Associations extends IListingAssociation = ''> = {
   type: 'listing'
@@ -323,4 +328,5 @@ declare type IListing<Associations extends IListingAssociation = ''> = {
   open_houses: boolean | null
   property: Property
   user_listing_notification_setting: null
-} & Association<'proposed_agent', ProposedAgent, Associations>
+} & Association<'proposed_agent', ProposedAgent, Associations> &
+  Association<'mls_info', Nullable<MlsInfo>, Associations>

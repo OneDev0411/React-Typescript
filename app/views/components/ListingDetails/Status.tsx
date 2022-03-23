@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { makeStyles, Theme } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 
@@ -15,6 +13,9 @@ const useStyles = makeStyles(
       color: theme.palette.tertiary.light,
       backgroundColor: theme.palette.grey['100'],
       [theme.breakpoints.up('sm')]: {
+        padding: theme.spacing(1, 2)
+      },
+      [theme.breakpoints.up('lg')]: {
         borderRadius: '30px',
         padding: theme.spacing(1.5, 2.5)
       }
@@ -27,12 +28,19 @@ const useStyles = makeStyles(
       backgroundColor: (props: Props) =>
         `#${listingUtils.getStatusColor(props.status)}`,
       [theme.breakpoints.up('sm')]: {
+        width: 12,
+        height: 12
+      },
+      [theme.breakpoints.up('lg')]: {
         width: 16,
         height: 16
       }
     },
     text: {
       [theme.breakpoints.up('sm')]: {
+        ...theme.typography.subtitle1
+      },
+      [theme.breakpoints.up('lg')]: {
         ...theme.typography.h6
       }
     }

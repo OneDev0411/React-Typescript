@@ -23,6 +23,7 @@ function ListingDetailsModal({
       {listingId && (
         <>
           <ListingDetails
+            isModal
             isWidget={isWidget}
             id={listingId}
             onClose={closeHandler}
