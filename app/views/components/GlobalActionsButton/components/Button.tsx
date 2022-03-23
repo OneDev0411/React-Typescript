@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react'
+import { MouseEvent } from 'react'
 
 import { Button, makeStyles, createStyles, Theme } from '@material-ui/core'
 import { mdiPlus } from '@mdi/js'
@@ -20,9 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     root: {
       borderRadius: theme.spacing(8),
-      fontSize: theme.typography.body2.fontSize,
-      height: theme.spacing(4.25),
-      width: theme.spacing(14)
+      fontSize: theme.typography.body2.fontSize
     }
   })
 )
@@ -35,8 +33,6 @@ export default function GlobalActionsMenu({ onClick }: Props) {
       <Button
         variant="contained"
         color="primary"
-        size="small"
-        fullWidth
         onClick={onClick}
         startIcon={<SvgIcon path={mdiPlus} />}
         classes={{
