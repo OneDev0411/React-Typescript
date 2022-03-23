@@ -173,10 +173,6 @@ export function ChipsInput<T>({
     )
   })
 
-  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value)
-  }
-
   useEffect(() => {
     if (popperRef.current) {
       popperRef.current.update()
@@ -205,6 +201,36 @@ export function ChipsInput<T>({
       onChange([...items, newItem])
       setInputValue('')
     }
+  }
+
+  function createFromCommaSeperatedString(string: string) {
+    const newItems: T[] = string.split(',').reduce((acc: T[], item: string) => {
+      if (item) {
+        acc.push(createFromString(item) as T)
+      }
+
+      return acc
+    }, [])
+
+    onChange([...items, ...newItems])
+
+    if (inputValue) {
+      setInputValue('')
+    }
+  }
+
+  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value as string
+
+    if (
+      allowAddOnComma &&
+      value.length > 1 &&
+      value.substring(1).includes(',')
+    ) {
+      return createFromCommaSeperatedString(value)
+    }
+
+    setInputValue(value)
   }
 
   const renderAvatar = suggestion => {
