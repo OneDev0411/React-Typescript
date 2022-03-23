@@ -319,6 +319,8 @@ function ListingDetails({
               address={subtitle1}
               description={listing.property.description}
               officeName={listing.list_office_name}
+              agentFullName={listing.list_agent?.full_name}
+              agentPhoneNumber={listing.list_agent?.phone_number}
             />
           </Box>
         </Grid>
