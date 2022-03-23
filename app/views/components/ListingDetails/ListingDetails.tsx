@@ -332,7 +332,12 @@ function ListingDetails({
         </RootRef>
       </Box>
       <Box p={3}>
-        <MLSNote mls={listing.mls} mlsName={listing.mls_name} />
+        <MLSNote
+          mls={listing.mls}
+          mlsName={listing.mls_name}
+          logo={listing.mls_info?.logo}
+          disclaimer={listing.mls_info?.disclaimer}
+        />
       </Box>
 
       <ShareModal
