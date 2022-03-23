@@ -204,10 +204,13 @@ export function ChipsInput<T>({
   }
 
   function createFromCommaSeperatedString(string: string) {
-    const newItems = string
-      .split(',')
-      .filter(item => !!item)
-      .map(item => createFromString(item) as T)
+    const newItems: T[] = string.split(',').reduce((acc: T[], item: string) => {
+      if (item) {
+        acc.push(createFromString(item) as T)
+      }
+
+      return acc
+    }, [])
 
     onChange([...items, ...newItems])
 
