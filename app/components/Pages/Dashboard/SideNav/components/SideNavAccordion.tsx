@@ -2,33 +2,20 @@ import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 
 import {
   Accordion,
-  AccordionSummary,
-  AccordionDetails,
   makeStyles,
   Divider,
   Popper,
   Fade,
   Paper
 } from '@material-ui/core'
-import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
 
 import Acl from '@app/views/components/Acl'
-import { MenuBadge } from '@app/views/components/MenuBadge'
-import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
-import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import {
-  AccordionSummaryDiv,
-  AccordionSummaryDot,
-  AccordionSummaryLabel,
-  SideNavItemLabel,
-  SidenavListGroup,
-  IconWrapper,
-  AccordionSummaryIconWrapper
-} from '../styled'
+import { SidenavListGroup } from '../styled'
 import { AccordionMenu, ExpandedMenu } from '../types'
 
-import SideNavLinkItem from './SideNavLinkItem'
+import { SideNavAccordionDetails } from './SideNavAccordionDetails'
+import { SideNavAccordionSummary } from './SideNavAccordionSummary'
 
 const useStyles = makeStyles(
   theme => ({
@@ -46,28 +33,6 @@ const useStyles = makeStyles(
     accordionExpanded: {
       // I had to add !important to force accordion styles to change
       margin: '0 !important'
-    },
-    accordionSummaryRoot: {
-      padding: 0,
-      // I had to add !important to force accordionSummary styles to change
-      minHeight: `${theme.spacing(5.5)}px !important`
-    },
-    accordionSummaryRootExpanded: {
-      // Added primary color to the root menu's svg-icon, when it is expanded
-      '& svg:first-child': {
-        color: theme.palette.primary.main
-      }
-    },
-    accordionSummaryContent: {
-      display: 'flex',
-      justifyContent: 'flex-start',
-      // I had to add !important to force accordionSummary styles to change
-      margin: '0 !important'
-    },
-    AccordionDetailsRoot: {
-      margin: theme.spacing(0, 1, 0, 0),
-      padding: 0,
-      flexDirection: 'column'
     },
     popper: {
       zIndex: 101,
@@ -113,36 +78,19 @@ export default function SideNavAccordion({
 }: SideNavAccordionProps) {
   const classes = useStyles()
   const {
-    action,
     testId = '',
     id,
-    label,
     access,
-    icon = '',
-    hasChildrenNotification,
-    notificationCount,
-    to = '',
     hasDivider,
     subMenu,
     isHidden = false
   } = data
 
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null)
-
   const menuId = 'nav-'.concat(id) as ExpandedMenu
 
-  const menuIconWrapper = (
-    <>
-      {(hoveredItem !== menuId || !subMenu) && (
-        <IconWrapper>
-          <SvgIcon path={icon} size={muiIconSizes.small} rightMargined />
-        </IconWrapper>
-      )}
-      <AccordionSummaryLabel>{label}</AccordionSummaryLabel>
-    </>
-  )
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null)
 
   const handleShowPopper = (event: React.MouseEvent<HTMLElement>, menuId) => {
     setAnchorEl(event.currentTarget)
@@ -154,8 +102,8 @@ export default function SideNavAccordion({
     setHoveredItem(null)
   }
 
-  const open = Boolean(anchorEl)
-  const popperId = open ? id : undefined
+  const isOpen = Boolean(anchorEl)
+  const popperId = isOpen ? id : undefined
 
   return !isHidden ? (
     <Acl access={access}>
@@ -175,54 +123,21 @@ export default function SideNavAccordion({
           onMouseLeave={() => subMenu && handleHidePopper()}
           onClick={() => subMenu && handleHidePopper()}
         >
-          <AccordionSummary
-            aria-controls={`${menuId}-content`}
-            aria-describedby={popperId}
-            id={`${menuId}-header`}
-            classes={{
-              root: classes.accordionSummaryRoot,
-              expanded: classes.accordionSummaryRootExpanded,
-              content: classes.accordionSummaryContent
-            }}
-          >
-            <SideNavLinkItem
-              onTriggerAction={action}
-              to={to || subMenu?.[0]?.to}
-              tourId={menuId}
-              onExpandedMenu={setExpandedMenu}
-              subMenu={subMenu}
-            >
-              <AccordionSummaryDiv>
-                {subMenu && hoveredItem === menuId ? (
-                  <AccordionSummaryIconWrapper>
-                    {expandedMenu === menuId ? (
-                      <SvgIcon path={mdiChevronUp} />
-                    ) : (
-                      <SvgIcon path={mdiChevronDown} />
-                    )}
-                  </AccordionSummaryIconWrapper>
-                ) : null}
-
-                {notificationCount ? (
-                  <MenuBadge badgeContent={notificationCount} max={9}>
-                    {menuIconWrapper}
-                  </MenuBadge>
-                ) : (
-                  <>
-                    {menuIconWrapper}
-                    {hasChildrenNotification ? <AccordionSummaryDot /> : null}
-                  </>
-                )}
-              </AccordionSummaryDiv>
-            </SideNavLinkItem>
-          </AccordionSummary>
+          <SideNavAccordionSummary
+            data={data}
+            expandedMenu={expandedMenu}
+            hoveredItem={hoveredItem}
+            menuId={menuId}
+            popperId={popperId}
+            onExpandedMenu={setExpandedMenu}
+          />
 
           {subMenu &&
-            (open ? (
+            (isOpen ? (
               <Popper
                 className={classes.popper}
                 id={popperId}
-                open={open}
+                open={isOpen}
                 anchorEl={anchorEl}
                 placement="right-start"
                 transition
@@ -231,74 +146,17 @@ export default function SideNavAccordion({
                   <Fade {...TransitionProps} timeout={0}>
                     <Paper>
                       <div className={classes.paper}>
-                        <AccordionDetails
-                          classes={{
-                            root: classes.AccordionDetailsRoot
-                          }}
-                        >
-                          {subMenu.map(
-                            (item, index) =>
-                              !item.isHidden && (
-                                <Acl access={item.access} key={index}>
-                                  <SideNavLinkItem
-                                    onTriggerAction={item.action}
-                                    to={item.to}
-                                    tourId={`nav-${item.id}` as ExpandedMenu}
-                                    isSubmenu
-                                  >
-                                    {item.notificationCount ? (
-                                      <MenuBadge
-                                        badgeContent={item.notificationCount}
-                                        color="primary"
-                                        max={9}
-                                      >
-                                        {item.label}
-                                      </MenuBadge>
-                                    ) : (
-                                      item.label
-                                    )}
-                                  </SideNavLinkItem>
-                                </Acl>
-                              )
-                          )}
-                        </AccordionDetails>
+                        <SideNavAccordionDetails
+                          isOpen={isOpen}
+                          subMenu={subMenu}
+                        />
                       </div>
                     </Paper>
                   </Fade>
                 )}
               </Popper>
             ) : (
-              <AccordionDetails
-                classes={{
-                  root: classes.AccordionDetailsRoot
-                }}
-              >
-                {subMenu.map(
-                  (item, index) =>
-                    !item.isHidden && (
-                      <Acl access={item.access} key={index}>
-                        <SideNavLinkItem
-                          onTriggerAction={item.action}
-                          to={item.to}
-                          tourId={`nav-${item.id}` as ExpandedMenu}
-                          isSubmenu
-                        >
-                          {item.notificationCount ? (
-                            <MenuBadge
-                              badgeContent={item.notificationCount}
-                              color="primary"
-                              max={9}
-                            >
-                              <SideNavItemLabel>{item.label}</SideNavItemLabel>
-                            </MenuBadge>
-                          ) : (
-                            <SideNavItemLabel>{item.label}</SideNavItemLabel>
-                          )}
-                        </SideNavLinkItem>
-                      </Acl>
-                    )
-                )}
-              </AccordionDetails>
+              <SideNavAccordionDetails isOpen={isOpen} subMenu={subMenu} />
             ))}
         </Accordion>
 
