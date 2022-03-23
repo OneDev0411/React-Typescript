@@ -47,6 +47,7 @@ const useStyles = makeStyles(
       paddingTop: theme.spacing(1),
       paddingBottom: theme.spacing(0.5),
 
+      // I had to add element name to change accordionSummary styles because couldn't find proper class-name
       '& a': {
         color: theme.palette.common.white,
         minWidth: `${theme.spacing(18)}px`,

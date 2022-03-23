@@ -206,7 +206,7 @@ class Rooms extends React.Component {
                       {room.new_notifications > 0 && (
                         <MenuBadge>
                           {room.new_notifications > 99
-                            ? '+99'
+                            ? '99+'
                             : room.new_notifications}
                         </MenuBadge>
                       )}

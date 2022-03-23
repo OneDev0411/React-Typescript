@@ -18,23 +18,13 @@ export function SideNavAccordionDetailsItem({ isOpen, item }: Props) {
       tourId={`nav-${item.id}` as ExpandedMenu}
       isSubmenu
     >
-      {item.notificationCount ? (
-        <MenuBadge
-          badgeContent={item.notificationCount}
-          color="primary"
-          max={9}
-        >
-          {isOpen ? (
-            item.label
-          ) : (
-            <SideNavItemLabel>{item.label}</SideNavItemLabel>
-          )}
-        </MenuBadge>
-      ) : isOpen ? (
-        item.label
-      ) : (
-        <SideNavItemLabel>{item.label}</SideNavItemLabel>
-      )}
+      <MenuBadge badgeContent={item.notificationCount} color="primary" max={9}>
+        {isOpen ? (
+          item.label
+        ) : (
+          <SideNavItemLabel>{item.label}</SideNavItemLabel>
+        )}
+      </MenuBadge>
     </SideNavLinkItem>
   )
 }
