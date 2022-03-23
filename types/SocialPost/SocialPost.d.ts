@@ -2,10 +2,16 @@ declare type ISocialPostAssociations = 'template_instance'
 
 declare interface ISocialPost<A extends ISocialPostAssociations = ''>
   extends IModel<'social_post'> {
-  facebookPage: UUID
-  templateInstance: 'template_instance' extends A
+  facebook_page: UUID
+  template_instance: 'template_instance' extends A
     ? IMarketingTemplateInstance
     : UUID
-  due_at: Date
+  due_at: number
   caption: string
+  brand: UUID
+  executed_at: number
+  failed_at: Nullable<number>
+  failure: null // TODO: Fix the type error
+  post_link: string
+  user: UUID
 }
