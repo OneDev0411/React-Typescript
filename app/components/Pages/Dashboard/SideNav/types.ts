@@ -2,37 +2,37 @@ import { Access } from 'components/Acl/types'
 
 export type ExpandedMenu =
   | null
+  | 'nav-chat'
   | 'nav-dashboard'
+  | 'nav-help-center'
   | 'nav-marketing'
+  | 'nav-notifications'
   | 'nav-properties'
   | 'nav-people'
-  | 'nav-chat'
-  | 'nav-transaction'
-  | 'nav-notifications'
-  | 'nav-help-center'
   | 'nav-support'
+  | 'nav-transaction'
 
 export interface AccordionMenu {
+  access?: Access | Access[]
   action?: () => void
-  testId?: string
-  id: string
-  label: string
-  access: Access | Access[]
-  icon?: string
   hasChildrenNotification?: boolean
-  notificationCount?: number | null
-  to?: string
   hasDivider?: boolean
-  subMenu?: AccordionSubMenu[]
+  icon?: string
+  id: string
   isHidden?: boolean
+  label: string
+  notificationCount?: number | null
+  subMenu?: AccordionSubMenu[]
+  testId?: string
+  to?: string
 }
 
 export interface AccordionSubMenu {
-  access: Access | Access[]
+  access?: Access | Access[]
   action?: () => void
   id: string
-  label: string
   isHidden?: boolean
+  label: string
   notificationCount?: number | null
   to?: string
 }

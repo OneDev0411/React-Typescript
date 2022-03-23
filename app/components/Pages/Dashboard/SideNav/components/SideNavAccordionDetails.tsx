@@ -1,12 +1,10 @@
 import { AccordionDetails, makeStyles } from '@material-ui/core'
 
 import Acl from '@app/views/components/Acl'
-import { MenuBadge } from '@app/views/components/MenuBadge'
 
-import { SideNavItemLabel } from '../styled'
-import { AccordionSubMenu, ExpandedMenu } from '../types'
+import { AccordionSubMenu } from '../types'
 
-import SideNavLinkItem from './SideNavLinkItem'
+import { SideNavAccordionDetailsItem } from './SideNavAccordionDetailsItem'
 
 const useStyles = makeStyles(
   theme => ({
@@ -35,37 +33,25 @@ export function SideNavAccordionDetails({ isOpen, subMenu }: Props) {
         root: classes.AccordionDetailsRoot
       }}
     >
-      {subMenu.map(
-        (item, index) =>
-          !item.isHidden && (
-            <Acl access={item.access} key={index}>
-              <SideNavLinkItem
-                onTriggerAction={item.action}
-                to={item.to}
-                tourId={`nav-${item.id}` as ExpandedMenu}
-                isSubmenu
-              >
-                {item.notificationCount ? (
-                  <MenuBadge
-                    badgeContent={item.notificationCount}
-                    color="primary"
-                    max={9}
-                  >
-                    {isOpen ? (
-                      item.label
-                    ) : (
-                      <SideNavItemLabel>{item.label}</SideNavItemLabel>
-                    )}
-                  </MenuBadge>
-                ) : isOpen ? (
-                  item.label
-                ) : (
-                  <SideNavItemLabel>{item.label}</SideNavItemLabel>
-                )}
-              </SideNavLinkItem>
-            </Acl>
-          )
-      )}
+      {subMenu.map((item, index) => {
+        const { access, isHidden } = item
+
+        if (isHidden) {
+          return
+        }
+
+        return access ? (
+          <Acl access={access} key={index}>
+            <SideNavAccordionDetailsItem item={item} isOpen={isOpen} />
+          </Acl>
+        ) : (
+          <SideNavAccordionDetailsItem
+            item={item}
+            isOpen={isOpen}
+            key={index}
+          />
+        )
+      })}
     </AccordionDetails>
   )
 }

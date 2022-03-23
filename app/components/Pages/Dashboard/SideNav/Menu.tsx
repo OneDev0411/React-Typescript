@@ -45,16 +45,6 @@ const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
 const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
 const marketingAccess = { oneOf: [ACL.MARKETING, ACL.AGENT_NETWORK] }
 const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
-const allAccess = {
-  oneOf: [
-    ACL.DEALS,
-    ACL.BACK_OFFICE,
-    ACL.MARKETING,
-    ACL.CRM,
-    ACL.MARKETING,
-    ACL.AGENT_NETWORK
-  ]
-}
 
 function Menu(props: WithRouterProps) {
   const user = useSelector(selectUserUnsafe)
@@ -262,20 +252,17 @@ function Menu(props: WithRouterProps) {
       to: '/dashboard/notifications'
     },
     {
-      access: allAccess,
       hasDivider: false,
       icon: mdiHeadphones,
       id: 'support',
       label: 'Support',
       subMenu: [
         {
-          access: allAccess,
           id: 'help-center',
           label: 'Help Center',
           action: () => handleOpenExternalLink(brandHelpCenterURL)
         },
         {
-          access: allAccess,
           id: 'customer-support',
           label: 'Customer Support',
           action: handleOpenSupportDialogueBox
@@ -294,15 +281,23 @@ function Menu(props: WithRouterProps) {
         style={{ flex: '1 1' }}
         hasThinnerScrollbar
       >
-        {MenuItems.map((menu: AccordionSubMenu, index) => (
-          <SideNavAccordion
-            key={index}
-            data={menu}
-            onChange={handleChange}
-            expandedMenu={expandedMenu}
-            setExpandedMenu={setExpandedMenu}
-          />
-        ))}
+        {MenuItems.map((menu: AccordionSubMenu, index) => {
+          const { isHidden } = menu
+
+          if (isHidden) {
+            return
+          }
+
+          return (
+            <SideNavAccordion
+              key={index}
+              data={menu}
+              onChange={handleChange}
+              expandedMenu={expandedMenu}
+              setExpandedMenu={setExpandedMenu}
+            />
+          )
+        })}
       </ScrollableArea>
 
       <UserMenu user={user} />
