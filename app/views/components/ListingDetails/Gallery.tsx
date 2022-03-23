@@ -1,11 +1,18 @@
 import React, { MouseEvent, useState } from 'react'
 
-import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
+import {
+  makeStyles,
+  Theme,
+  useTheme,
+  useMediaQuery,
+  alpha
+} from '@material-ui/core'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { mdiFullscreen } from '@mdi/js'
 import cn from 'classnames'
+import pluralize from 'pluralize'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -23,21 +30,15 @@ const THUMBNAIL_IMAGES_PLACEHOLDER = Array.from({ length: 4 }, (x, i) => i).map(
 const useStyles = makeStyles(
   (theme: Theme) => ({
     mainImageWrapper: {
-      marginBottom: theme.spacing(2),
-      position: 'relative'
+      marginBottom: theme.spacing(1),
+      position: 'relative',
+      [theme.breakpoints.up('lg')]: {
+        marginBottom: theme.spacing(2)
+      }
     },
     mainImage: {
       width: '100%',
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center center',
-      height: 224,
-      [theme.breakpoints.up('sm')]: {
-        height: 356
-      },
-      [theme.breakpoints.up('lg')]: {
-        height: 520
-      }
+      height: 'auto'
     },
     button: {
       backgroundColor: 'transparent',
@@ -46,22 +47,28 @@ const useStyles = makeStyles(
       width: '100%',
       position: 'relative'
     },
+    thumbnailsWrapper: {
+      display: 'flex',
+      justifyContent: 'center',
+      overflow: 'hidden'
+    },
     thumbnailBtn: {
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center center',
-      backgroundSize: 'cover',
-      height: 56,
-      [theme.breakpoints.up('sm')]: {
-        height: 72
-      },
-      [theme.breakpoints.up('md')]: {
-        height: 96
-      }
+      height: '100%'
+    },
+    thumbnailImage: {
+      width: '100%',
+      height: '100%',
+      objectPosition: 'center',
+      objectFit: 'cover'
     },
     fullscreenIcon: {
       position: 'absolute',
-      left: theme.spacing(4),
-      bottom: theme.spacing(2)
+      left: theme.spacing(2),
+      bottom: theme.spacing(2),
+      padding: theme.spacing(0.5),
+      borderRadius: '50%',
+      background: alpha(theme.palette.common.black, 0.5),
+      backdropFilter: 'blur(20px)'
     },
     photoNumbers: {
       position: 'absolute',
@@ -106,7 +113,6 @@ function Gallery({ images }: Props) {
   const classes = useStyles()
   const imagesLength = images.length
   const isUpSmallBreakPoint = useMediaQuery(theme.breakpoints.up('sm'))
-  const isUpLargeBreakPoint = useMediaQuery(theme.breakpoints.up('lg'))
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
 
@@ -156,25 +162,23 @@ function Gallery({ images }: Props) {
         <button
           type="button"
           data-image-index={0}
-          className={cn(classes.button, classes.mainImage)}
+          className={classes.button}
           onClick={openLightbox}
-          style={{
-            backgroundImage: `url(${images[0] || MAIN_IMAGE_PLACEHOLDER_SRC})`
-          }}
         >
+          <img
+            className={classes.mainImage}
+            src={images[0] || MAIN_IMAGE_PLACEHOLDER_SRC}
+            alt="listing"
+          />
           <SvgIcon
             path={mdiFullscreen}
-            size={muiIconSizes.large}
+            size={muiIconSizes.xlarge}
             className={classes.fullscreenIcon}
             color={theme.palette.common.white}
           />
         </button>
       </Box>
-      <Box
-        display="flex"
-        justifyContent="center"
-        px={isUpLargeBreakPoint ? 0 : 2}
-      >
+      <div className={classes.thumbnailsWrapper}>
         <Grid container spacing={isUpSmallBreakPoint ? 2 : 1}>
           {thumbnails.map((item, index) => (
             <Grid item xs={3} key={index}>
@@ -184,14 +188,19 @@ function Gallery({ images }: Props) {
                 data-image-index={index + 1}
                 className={cn(classes.button, classes.thumbnailBtn)}
                 onClick={item.isFake ? () => false : openLightbox}
-                style={{
-                  backgroundImage: `url(${item.src})`
-                }}
               >
+                <img
+                  className={classes.thumbnailImage}
+                  src={item.src}
+                  alt="listing"
+                />
                 {index === 3 && imagesLength > 5 && (
                   <Box className={classes.photoNumbers}>
                     <Typography variant="caption">
-                      {`+ ${images.length - 5} Photos`}
+                      {`+ ${images.length - 5} ${pluralize(
+                        'Photos',
+                        images.length - 5
+                      )}`}
                     </Typography>
                   </Box>
                 )}
@@ -199,7 +208,7 @@ function Gallery({ images }: Props) {
             </Grid>
           ))}
         </Grid>
-      </Box>
+      </div>
       {imagesLength > 0 && (
         <Lightbox
           images={images}
