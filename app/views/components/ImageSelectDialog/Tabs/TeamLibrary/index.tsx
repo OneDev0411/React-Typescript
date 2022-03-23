@@ -15,10 +15,10 @@ import {
 import { useDropzone } from 'dropzone'
 import { useSelector, useDispatch } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { confirmation } from 'actions/confirmation'
 import Masonry from 'components/Masonry'
 import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { isGifImage } from '../../helpers'
 import ImageThumbnail from '../../ImageThumbnail'
@@ -65,7 +65,7 @@ function TeamLibrary({
   const classes = useStyles()
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
-  const activeBrandId = getActiveTeamId(user) as UUID
+  const activeBrandId = useActiveBrandId()
   const {
     results,
     labels,

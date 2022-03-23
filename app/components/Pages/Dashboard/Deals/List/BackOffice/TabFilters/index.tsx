@@ -1,14 +1,12 @@
 import { MenuItem } from '@material-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { getUserTeams } from 'actions/user/teams'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
 import { getActiveSort, getGridSortLabel } from 'deals/List/helpers/sorting'
-import { putUserSetting } from 'models/user/put-user-setting'
-import { selectUser } from 'selectors/user'
-import { getActiveBrand } from 'utils/user-teams'
 
 import AnalyticsDropdownTab from '../../../Analytics/DropdownTab'
 import {
@@ -27,9 +25,13 @@ interface Props {
 
 const TabFilters = withRouter((props: Props & WithRouterProps) => {
   const dispatch = useDispatch()
-  const user = useSelector(selectUser)
+  const activeTeam = useUnsafeActiveTeam()
 
-  const activeSort = getActiveSort(user, props.location, SORT_FIELD_SETTING_KEY)
+  const activeSort = getActiveSort(
+    activeTeam,
+    props.location,
+    SORT_FIELD_SETTING_KEY
+  )
 
   const inboxTabs = useInboxTabs()
 
@@ -50,12 +52,8 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
 
     const fieldValue = column.ascending ? column.value : `-${column.value}`
 
-    await putUserSetting(SORT_FIELD_SETTING_KEY, fieldValue)
-
-    dispatch(getUserTeams(user))
+    dispatch(setActiveTeamSetting(SORT_FIELD_SETTING_KEY, fieldValue))
   }
-
-  const activeBrand = getActiveBrand(user)
 
   return (
     <PageTabs
@@ -86,14 +84,17 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
         />
       ]}
       actions={[
-        <AnalyticsDropdownTab key={0} brandType={activeBrand?.brand_type!} />,
+        <AnalyticsDropdownTab
+          key={0}
+          brandType={activeTeam?.brand.brand_type}
+        />,
         <Tab
           key={1}
           label={
             <DropdownTab
               component="div"
               title={getGridSortLabel(
-                user,
+                activeTeam,
                 SORTABLE_COLUMNS,
                 props.location,
                 SORT_FIELD_SETTING_KEY

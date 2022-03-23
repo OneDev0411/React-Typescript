@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import * as Sentry from '@sentry/react'
 import { Location } from 'history'
 import { useSelector, useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 
-import * as actionsType from '../../../../constants/auth/signin'
-import signin from '../../../../models/auth/signin'
-import signup from '../../../../models/auth/signup'
-import { getTeams } from '../../../../models/user/get-teams'
-import { lookUpUserByEmail } from '../../../../models/user/lookup-user-by-email'
+import signin from '@app/models/auth/signin'
+import signup from '@app/models/auth/signup'
+import { getActiveTeam } from '@app/models/user/get-active-team'
+import { logUserActivity } from '@app/models/user/log-activity'
+import { lookUpUserByEmail } from '@app/models/user/lookup-user-by-email'
+import { setUserAndActiveTeam } from '@app/store_actions/active-team'
+
 import { IAppState } from '../../../../reducers'
 import { getUserDefaultHomepage } from '../../../../utils/get-default-home-page'
 
@@ -80,26 +82,33 @@ export default function Signin(props: Props) {
     }
   }
 
+  const logUserLoginActivity = async () => {
+    // Log user login activity
+    try {
+      await logUserActivity(
+        {
+          action: 'UserLoggedIn',
+          object_class: 'UserActivityLogin',
+          object: {
+            type: 'user_activity_user_login'
+          }
+        },
+        true
+      )
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const handleSignin = async values => {
     try {
       setIsLogging(true)
       setSignInFormSubmitMsg(null)
 
-      let user: IUser = await signin({ ...values, username })
+      const user: IUser = await signin({ ...values, username })
+      const activeTeam: Nullable<IUserTeam> = await getActiveTeam(user)
 
-      if (!user.teams) {
-        const teams = await getTeams(user)
-
-        user = {
-          ...user,
-          teams
-        }
-      }
-
-      dispatch({
-        user,
-        type: actionsType.SIGNIN_SUCCESS
-      })
+      dispatch(setUserAndActiveTeam(user, activeTeam))
 
       Sentry.configureScope(scope => {
         scope.setUser({
@@ -112,16 +121,18 @@ export default function Signin(props: Props) {
         })
       })
 
-      const defaultHomePage = getUserDefaultHomepage(user)
+      await logUserLoginActivity()
+
+      const defaultHomePage = getUserDefaultHomepage(activeTeam)
 
       if (redirectTo && redirectTo.includes('http')) {
-        browserHistory.push('/branch?waitingForRedirect')
+        browserHistory.replace('/branch?waitingForRedirect')
         window.location.href = redirectTo
 
         return
       }
 
-      browserHistory.push(redirectTo || defaultHomePage)
+      browserHistory.replace(redirectTo || defaultHomePage)
     } catch (errorCode) {
       if (errorCode === 403) {
         setSignInFormSubmitMsg({

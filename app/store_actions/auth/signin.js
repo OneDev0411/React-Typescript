@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router'
 import * as actionsType from '../../constants/auth/signin'
 import signin from '../../models/auth/signin'
 import getUser from '../../models/user/get-user'
-import { getUserTeams } from '../user/teams'
 
 const submitSigninForm =
   (loginData, redirectTo, userId) => (dispatch, getState) => {
@@ -28,10 +27,6 @@ const submitSigninForm =
             user,
             type: actionsType.SIGNIN_SUCCESS
           })
-
-          if (!user.teams) {
-            await dispatch(getUserTeams(user))
-          }
 
           const { brand } = getState()
 

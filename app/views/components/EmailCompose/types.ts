@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 
 import { SuperAgentRequest } from 'superagent'
 
+import { IImpersonateUser } from '@app/reducers/user/impersonate-user'
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
 export interface IUploadingAttachment {
@@ -16,7 +17,7 @@ export interface EmailFormValues {
   cc?: IDenormalizedEmailRecipientInput[] | undefined
   bcc?: IDenormalizedEmailRecipientInput[] | undefined
   subject: string
-  from: IUser | IOAuthAccount
+  from: IUser | IImpersonateUser | IOAuthAccount
   due_at: Date | null
   body: string | undefined
   templateInstance?: IMarketingTemplateInstance

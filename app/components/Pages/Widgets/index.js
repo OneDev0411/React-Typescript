@@ -5,7 +5,6 @@ import idx from 'idx'
 import { connect } from 'react-redux'
 
 import getBrand from '../../../store_actions/brand'
-import getFavorites from '../../../store_actions/listings/favorites/get-favorites'
 
 class App extends Component {
   componentDidMount() {
@@ -20,9 +19,6 @@ class App extends Component {
     }
 
     if (user) {
-      // load saved listings
-      this.props.getFavorites(user)
-
       // set user for full story
       this.setFullStoryUser(user)
 
@@ -69,5 +65,5 @@ export default connect(
     brand,
     user
   }),
-  { getFavorites, getBrand }
+  { getBrand }
 )(App)

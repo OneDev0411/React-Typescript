@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
 
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { confirmation } from 'actions/confirmation'
 import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
@@ -13,8 +14,6 @@ import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-te
 import { updateFilterSegment } from 'actions/filter-segments'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
-import { setUserSetting } from 'actions/user/set-setting'
-import { getUserTeams } from 'actions/user/teams'
 import { Callout } from 'components/Callout'
 import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
@@ -42,7 +41,7 @@ import {
   clearImportingGoogleContacts,
   getNewConnectedGoogleAccount
 } from 'utils/oauth-provider'
-import { viewAs, getUserSettingsInActiveTeam } from 'utils/user-teams'
+import { viewAs, getTeamSetting } from 'utils/user-teams'
 
 import { Board } from '../Board'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
@@ -94,12 +93,9 @@ class ContactsList extends React.Component {
   componentDidMount() {
     const globalButtonDispatch = this.context
 
+    const { getSetting, fetchTags, getContactsTags } = this.props
     const { parkedContactsCount, searchInputValue } = this.state
-    const { user, fetchTags, getContactsTags } = this.props
-    const sortFieldSetting = getUserSettingsInActiveTeam(
-      user,
-      SORT_FIELD_SETTING_KEY
-    )
+    const sortFieldSetting = getSetting(SORT_FIELD_SETTING_KEY)
     const relevanceSortKey = '-last_touch_rank'
 
     const order = searchInputValue
@@ -109,12 +105,13 @@ class ContactsList extends React.Component {
       : '-last_touch'
 
     this.getDuplicateClusterCount()
+    this.setSelectedShortcutFilter()
+
+    const viewMode = getSetting(VIEW_MODE_FIELD_SETTING_KEY, 'table')
 
     this.setState(
       {
-        viewMode:
-          getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) ||
-          'table',
+        viewMode,
         sortOrder: order
       },
       () => this.fetchContactsAndJumpToSelected()
@@ -442,15 +439,14 @@ class ContactsList extends React.Component {
 
   handleSearch = value => {
     const { sortOrder } = this.state
+    const { getSetting } = this.props
     const relevanceSortKey = '-last_touch_rank'
     let order = sortOrder
 
     if (value) {
       order = relevanceSortKey
     } else if (order === relevanceSortKey) {
-      order =
-        getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ??
-        '-last_touch'
+      order = getSetting(SORT_FIELD_SETTING_KEY, '-last_touch')
     }
 
     this.setState(
@@ -475,7 +471,7 @@ class ContactsList extends React.Component {
       return
     }
 
-    const { user, getUserTeams, setUserSetting } = this.props
+    const { setActiveTeamSetting } = this.props
 
     this.setState(
       {
@@ -483,8 +479,7 @@ class ContactsList extends React.Component {
       },
       () => this.handleFilterChange({}, true)
     )
-    setUserSetting(SORT_FIELD_SETTING_KEY, order)
-    getUserTeams(user)
+    setActiveTeamSetting(SORT_FIELD_SETTING_KEY, order)
   }
 
   handleLoadMore = async () => {
@@ -786,7 +781,7 @@ class ContactsList extends React.Component {
       viewMode
     })
 
-    this.props.setUserSetting(VIEW_MODE_FIELD_SETTING_KEY, viewMode)
+    this.props.setActiveTeamSetting(VIEW_MODE_FIELD_SETTING_KEY, viewMode)
 
     this.reloadContacts()
   }
@@ -970,7 +965,8 @@ class ContactsList extends React.Component {
                         filters: props.filters,
                         flows: props.flows,
                         crmTasks: props.crmTasks,
-                        conditionOperator: props.conditionOperator
+                        conditionOperator: props.conditionOperator,
+                        sortOrder: state.sortOrder
                       }}
                     />
                   )}
@@ -1038,7 +1034,8 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
   const openHouseFilters = activeFilters.filter(
     filter => filter.id === OPEN_HOUSE_FILTER_ID
   )
-  const viewAsUsers = viewAs(user)
+  const viewAsUsers = viewAs(restOfState.activeTeam ?? null)
+  const getSetting = getTeamSetting(restOfState.activeTeam ?? null)
 
   return {
     tags: tags.byId,
@@ -1054,6 +1051,7 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
     list: contacts.list,
     listInfo,
     user,
+    getSetting,
     viewAsUsers,
     activeSegment: selectActiveSavedSegment(
       filterSegments,
@@ -1073,10 +1071,9 @@ export default withRouter(
     confirmation,
     setContactsListTextFilter,
     getContactsTags,
-    getUserTeams,
     resetActiveFilters,
     changeActiveFilterSegment,
-    setUserSetting,
+    setActiveTeamSetting,
     updateSegment: updateFilterSegment
   })(ContactsList)
 )

@@ -1,10 +1,3 @@
-import { IUserState } from 'reducers/user'
-
-export interface StateProps {
-  viewAsUsers: UUID[]
-  user: IUserState
-}
-
 export interface SocketUpdate {
   upserted: ICalendarEvent[]
   deleted: UUID[]

@@ -4,6 +4,7 @@ exports[`ConfirmationModal component should render modal properly 1`] = `
 <div>
   <button
     data-test="test-button"
+    type="button"
   >
     Open Modal
   </button>

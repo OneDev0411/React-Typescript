@@ -1,8 +1,11 @@
+import { IUserState } from '@app/reducers/user'
+
+export type AccountInfo = {
+  team: IUserTeam
+  user: IUserState
+}
+
 export type Access =
   | IPermission
-  | ((user: IUser) => boolean)
+  | ((accountInfo: AccountInfo) => boolean)
   | { oneOf: Access[] }
-
-export interface UseAclOptions {
-  accessControlPolicy?: IAccessControlPolicy
-}

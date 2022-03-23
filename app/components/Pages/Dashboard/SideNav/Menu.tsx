@@ -58,6 +58,7 @@ const allAccess = {
 
 function Menu(props: WithRouterProps) {
   const user = useSelector(selectUserUnsafe)
+
   const brand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
   )
@@ -287,6 +288,7 @@ function Menu(props: WithRouterProps) {
     <Sidenav>
       <Logo />
       <GlobalActionsButton />
+
       <ScrollableArea
         shadowColor={scrollableAreaShadowColor}
         style={{ flex: '1 1' }}

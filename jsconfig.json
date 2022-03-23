@@ -70,6 +70,9 @@
       ],
       "fixtures/*": [
         "tests/unit/fixtures/*"
+      ],
+      "tests/*": [
+        "tests/*"
       ]
     }
   },

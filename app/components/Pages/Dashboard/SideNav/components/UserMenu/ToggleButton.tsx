@@ -1,16 +1,21 @@
-import { Box, Typography, Tooltip } from '@material-ui/core'
+import { Typography, Tooltip } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { mdiDotsVertical } from '@mdi/js'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
+import { useImpersonateUser } from '@app/hooks/use-impersonate-user'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
-import { getActiveBrand } from 'utils/user-teams'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
+    container: {
+      padding: theme.spacing(1.5, 2, 1.5, 3)
+    },
     dropdownToggleButton: {
+      justifyContent: 'space-between',
       maxWidth: '100%',
       padding: theme.spacing(2, 2.5, 2, 3),
-      justifyContent: 'space-between'
+      width: '100%'
     },
     wrapper: {
       display: 'flex',
@@ -39,9 +44,6 @@ const useStyles = makeStyles(
       marginLeft: theme.spacing(0.5),
       alignSelf: 'center'
     },
-    tooltipArrow: {
-      marginLeft: `${theme.spacing(-1.25)}px !important`
-    },
     arrowIconRotated: {
       transform: 'rotateX(0)'
     }
@@ -60,41 +62,44 @@ interface Props {
 
 export default function ToggleButton(props: Props) {
   const classes = useStyles()
+  const activeBrand = useUnsafeActiveBrand()
+  const impersonateUser = useImpersonateUser()
+
   const { display_name } = props.user
 
-  const brandName = getActiveBrand(props.user)?.name ?? ''
-  const tooltipTitle = `${display_name} ${brandName ? `(${brandName})` : ''}`
+  const userName = impersonateUser?.display_name ?? display_name
+
+  const tooltipTitle = `${userName} ${
+    activeBrand?.name ? `(${activeBrand?.name})` : ''
+  }`
 
   return (
-    <Tooltip
-      placement="right"
-      title={tooltipTitle}
-      classes={{ arrow: classes.tooltipArrow }}
-    >
-      <DropdownToggleButton
-        id={props.id}
-        onClick={props.onClick}
-        isActive={props.isOpen}
-        classes={{
-          arrowIcon: classes.arrowIcon,
-          root: classes.dropdownToggleButton,
-          rotated: classes.arrowIconRotated
-        }}
-        iconPath={mdiDotsVertical}
-      >
-        <Box className={classes.wrapper}>
-          {/* <Avatar user={props.user} className={classes.avatar} /> */}
-          <div className={classes.userDetails}>
-            <Typography
-              noWrap
-              variant="body1"
-              className={classes.userDisplayName}
-            >
-              {brandName}
-            </Typography>
+    <div className={classes.container}>
+      <Tooltip placement="right" title={tooltipTitle}>
+        <DropdownToggleButton
+          id={props.id}
+          onClick={props.onClick}
+          isActive={props.isOpen}
+          classes={{
+            arrowIcon: classes.arrowIcon,
+            root: classes.dropdownToggleButton,
+            rotated: classes.arrowIconRotated
+          }}
+          iconPath={mdiDotsVertical}
+        >
+          <div className={classes.wrapper}>
+            <div className={classes.userDetails}>
+              <Typography
+                noWrap
+                variant="body1"
+                className={classes.userDisplayName}
+              >
+                {userName ?? activeBrand?.name ?? '[No Active Brand]'}
+              </Typography>
+            </div>
           </div>
-        </Box>
-      </DropdownToggleButton>
-    </Tooltip>
+        </DropdownToggleButton>
+      </Tooltip>
+    </div>
   )
 }

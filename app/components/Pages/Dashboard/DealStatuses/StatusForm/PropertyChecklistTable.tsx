@@ -9,9 +9,8 @@ import {
 } from '@material-ui/core'
 import cn from 'classnames'
 import { Controller, Control, FieldValues } from 'react-hook-form'
-import { useSelector } from 'react-redux'
 
-import { selectActiveTeamId } from '@app/selectors/team'
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 
 const useStyles = makeStyles(
@@ -37,8 +36,8 @@ interface Props {
 export function PropertyChecklistTable({ status, formControl }: Props) {
   const classes = useStyles()
 
-  const teamId = useSelector(selectActiveTeamId)
-  const { propertyTypes } = useBrandPropertyTypes(teamId)
+  const activeBrandId = useActiveBrandId()
+  const { propertyTypes } = useBrandPropertyTypes(activeBrandId)
 
   if (propertyTypes.length === 0) {
     return (
@@ -89,7 +88,7 @@ export function PropertyChecklistTable({ status, formControl }: Props) {
             </Grid>
 
             {(propertyType.checklists || [])
-              .filter(checklist => checklist.brand === teamId)
+              .filter(checklist => checklist.brand === activeBrandId)
               .sort((a, b) => {
                 const checklistsTypes = ['Selling', 'Buying', 'Offer']
 

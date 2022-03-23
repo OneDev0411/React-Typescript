@@ -17,10 +17,10 @@ export function createValertQueryString(
   if (brand != null && zoom && zoom >= proposedAgentZoomLevel) {
     const office = brand.offices && brand.offices[0] ? brand.offices[0] : null
 
-    query = '?associations=compact_listing.proposed_agent'
+    query = 'associations=compact_listing.proposed_agent&'
 
     if (office) {
-      query += `&order_by[]=office&order_by[]=status&office=${office}`
+      query += `order_by[]=office&order_by[]=status&office=${office}&`
     }
   }
 
@@ -28,7 +28,7 @@ export function createValertQueryString(
     const orderByQuery = parseToValertSort(sort.index)
     const sortDirQuery = sort.ascending ? '+' : '-'
 
-    query += `&order_by[]=${encodeURIComponent(sortDirQuery + orderByQuery)}`
+    query += `order_by[]=${encodeURIComponent(sortDirQuery + orderByQuery)}`
   }
 
   return query
@@ -52,4 +52,10 @@ export function createValertOptions(
     ...(search.office ? { offices: [search.office] } : {}),
     limit
   }
+}
+
+export const getPropertyTypeFirstElement = (
+  filters: AlertFilters
+): Optional<IPropertyType> => {
+  return filters.property_types ? filters.property_types[0] : undefined
 }

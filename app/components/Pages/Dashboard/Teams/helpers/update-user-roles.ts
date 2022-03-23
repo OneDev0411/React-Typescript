@@ -3,11 +3,11 @@ import Members from 'models/BrandConsole/Members'
 import { getUserRoles } from 'utils/user-teams'
 
 export async function updateUserRoles(
-  team: IBrand,
+  brand: IBrand,
   userId: string,
   newRoles: IBrandRole[]
 ): Promise<IBrand> {
-  const roles = getUserRoles(team, userId)
+  const roles = getUserRoles(brand, userId)
   const rolesToRemove = roles.filter(
     role => !newRoles.find(newRole => newRole.id === role.id)
   )
@@ -38,11 +38,11 @@ export async function updateUserRoles(
   await Promise.all(allPromises)
 
   if (!allPromises.length) {
-    return team
+    return brand
   }
 
   return {
-    ...(await getBrands(team.id, false)).data,
-    children: team.children
+    ...(await getBrands(brand.id, false)).data,
+    children: brand.children
   }
 }

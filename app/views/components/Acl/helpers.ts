@@ -1,23 +1,19 @@
-import { hasUserAccess } from 'utils/user-teams'
+import { hasUserAccess } from 'utils/acl'
 
-import { Access } from './types'
+import { Access, AccountInfo } from './types'
 
-export function hasAccess(
-  user: IUser,
-  requiredAccess: Access,
-  accessControlPolicy?: IAccessControlPolicy
-) {
+export function hasAccess(accountInfo: AccountInfo, requiredAccess: Access) {
   if (typeof requiredAccess === 'function') {
-    return requiredAccess(user)
+    return requiredAccess(accountInfo)
   }
 
   if (typeof requiredAccess === 'string') {
-    return hasUserAccess(user, requiredAccess, accessControlPolicy)
+    return hasUserAccess(accountInfo.team, requiredAccess)
   }
 
   if (requiredAccess.oneOf) {
     return ([] as Access[])
       .concat(requiredAccess.oneOf)
-      .some(accessItem => hasAccess(user, accessItem, accessControlPolicy))
+      .some(accessItem => hasAccess(accountInfo, accessItem))
   }
 }

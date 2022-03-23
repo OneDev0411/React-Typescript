@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
 import { GetBrandListingsOptions } from '@app/models/listings/search/get-brand-listings'
-import { selectActiveBrandId } from '@app/selectors/brand'
 import { selectUserAgents } from '@app/selectors/user'
 import { isUserCoAgent } from '@app/utils/listing'
 import { Table } from '@app/views/components/Grid/Table'
@@ -46,15 +45,11 @@ interface Props {
 function ListingsList({ searchTerm }: Props) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
-  const activeTeamBrandId = useSelector(selectActiveBrandId)
 
   const isSearching = searchTerm.trim().length > 0
   const userAgents = useSelector(selectUserAgents)
 
-  const { listings: rows, isLoading } = useBrandAndDealsListings(
-    activeTeamBrandId,
-    OPTIONS
-  )
+  const { listings: rows, isLoading } = useBrandAndDealsListings(OPTIONS)
 
   const resultRows = useListingsSearchRows(rows, searchTerm)
   const sortedRows = useListingsListSort(resultRows)
@@ -144,7 +139,8 @@ function ListingsList({ searchTerm }: Props) {
         <LoadingContainer style={{ padding: '10% 0' }} />
       )}
       getTrProps={() => ({
-        className: classNames(classes.row, gridClasses.row)
+        className: classNames(classes.row, gridClasses.row),
+        'data-test': 'table-row'
       })}
       EmptyStateComponent={() => (
         <ListingsListEmptyState

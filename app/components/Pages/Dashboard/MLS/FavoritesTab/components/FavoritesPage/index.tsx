@@ -7,7 +7,7 @@ import { useEffectOnce } from 'react-use'
 
 import { appSidenavWidth } from '@app/components/Pages/Dashboard/SideNav/variables'
 import { useQueryParam } from '@app/hooks/use-query-param'
-import { setUserSetting } from '@app/store_actions/user/set-setting'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { changeUrl } from '@app/utils/change-url'
 import {
   GoogleMapLibrary,
@@ -31,10 +31,7 @@ import {
   SORT_FIELD_SETTING_KEY
 } from '../../../helpers/sort-utils'
 import { SortString, ViewType } from '../../../types'
-import {
-  setMapLocation,
-  toggleListingFavoriteState
-} from '../../context/actions'
+import { setMapLocation, removeListing } from '../../context/actions'
 import useFavoritesContext from '../../hooks/useFavoritesContext'
 import { Results } from '../Results'
 
@@ -127,7 +124,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
 
   const onChangeSort = (sort: SortString) => {
     setSort(parseSortIndex(sort))
-    reduxDispatch(setUserSetting(SORT_FIELD_SETTING_KEY, sort))
+    reduxDispatch(setActiveTeamSetting(SORT_FIELD_SETTING_KEY, sort))
   }
 
   const onToggleView = (to: ViewType) => {
@@ -161,7 +158,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
   }
 
   const onMapChange = useCallback(
-    (center: ICoord, zoom: number, bounds: IBounds) => {
+    (center: ICoord, zoom: number) => {
       dispatch(setMapLocation(center, zoom))
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -174,7 +171,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
   }, [])
 
   const onToggleFavorite = useCallback((id: UUID) => {
-    dispatch(toggleListingFavoriteState(id))
+    dispatch(removeListing(id))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

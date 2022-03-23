@@ -3,28 +3,34 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-use'
 
-import { IAppState } from 'reducers'
-import { selectUserHasAccess } from 'selectors/acl'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { useUnsafeUser } from '@app/hooks/use-unsafe-user'
 import { selectUserIsSignedIn } from 'selectors/user'
 import { goTo } from 'utils/go-to'
 
-import { Access, UseAclOptions } from './types'
+import { hasAccess } from './helpers'
+import { Access } from './types'
 
-export function useAcl(
-  access: Access | Access[],
-  options?: UseAclOptions
-): boolean {
-  return useSelector((state: IAppState) =>
-    selectUserHasAccess(state, access, options?.accessControlPolicy)
-  )
+export function useAcl(access: Access | Access[]): boolean {
+  const user = useUnsafeUser()
+  const activeTeam = useUnsafeActiveTeam()
+
+  if (!activeTeam) {
+    return false
+  }
+
+  const userHasNeededAccess = ([] as Access[])
+    .concat(access)
+    .every(accessItem => hasAccess({ team: activeTeam, user }, accessItem))
+
+  return userHasNeededAccess
 }
 
 export function useAclRedirect(
   access: Access | Access[],
-  fallbackUrl: string = '/dashboard/mls',
-  options?: UseAclOptions
+  fallbackUrl: string = '/dashboard/mls'
 ): boolean {
-  const hasAccess = useAcl(access, options)
+  const hasAccess = useAcl(access)
   const isSignedIn = useSelector(selectUserIsSignedIn)
   const location = useLocation()
 

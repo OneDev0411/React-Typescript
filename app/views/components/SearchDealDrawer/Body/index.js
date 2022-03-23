@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 import Downshift from 'downshift'
 import PropTypes from 'prop-types'
@@ -54,7 +54,7 @@ class Body extends Component {
     try {
       this.setState({ isSearching: true, error: false })
 
-      const items = await searchDeals(this.props.user, value)
+      const items = await searchDeals(this.props.team, value)
 
       if (Array.isArray(items)) {
         this.setState({ items })

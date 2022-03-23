@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { IndexRoute, Route } from 'react-router'
 
 import withAcl from 'components/Acl/with-acl'
@@ -55,6 +54,11 @@ const AsyncSignIn = withGuest(
       import('../components/Pages/Auth/SignIn' /* webpackChunkName: "signin" */)
   })
 )
+
+const AsyncSignOut = Load({
+  loader: () =>
+    import('../components/Pages/Auth/SignOut' /* webpackChunkName: "signout" */)
+})
 
 const AsyncVerifyRequest = Load({
   loader: () =>
@@ -538,7 +542,11 @@ const AsyncSuperCampaign = withAcl(
         '../components/Pages/Dashboard/MarketingInsights/SuperCampaign' /* webpackChunkName: "email_insight_super_campaign" */
       )
   }),
-  [{ oneOf: [ACL.MARKETING, ACL.CRM] }, ACL.BETA]
+  [
+    { oneOf: [ACL.MARKETING, ACL.CRM] },
+    { oneOf: [ACL.ADMIN, ({ user }) => user.user_type === 'Agent'] },
+    ACL.BETA
+  ]
 )
 /* ==================================== */
 //  Chatroom
@@ -868,6 +876,7 @@ export default (
       <Route path="register" component={AsyncRegister} />
 
       <Route path="signin" component={AsyncSignIn} />
+      <Route path="signout" component={AsyncSignOut} />
       <Route path="signup" component={AsyncSignUp} />
 
       <Route path="verify/confirm/:verifyType" component={AsyncVerifyConfirm} />

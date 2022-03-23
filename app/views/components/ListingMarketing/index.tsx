@@ -2,19 +2,19 @@ import { useState, useEffect, useCallback } from 'react'
 
 import { Grid, Box, Divider, Typography, useTheme } from '@material-ui/core'
 import { mdiAccountGroupOutline, mdiWeb } from '@mdi/js'
-import { useSelector } from 'react-redux'
 
 import { useTemplates } from '@app/components/Pages/Dashboard/Marketing/hooks/use-templates'
 import {
   ALL_MEDIUMS,
   LISTING_TEMPLATE_TYPES
 } from '@app/components/Pages/Dashboard/Marketing/Wizard/constants'
+import { ACL } from '@app/constants/acl'
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useLoadingEntities } from '@app/hooks/use-loading'
 import useNotify from '@app/hooks/use-notify'
 import { useUniqueMediums } from '@app/hooks/use-unique-mediums'
 import { useUniqueTemplateTypes } from '@app/hooks/use-unique-template-types'
 import getListing from '@app/models/listings/listing/get-listing'
-import { selectActiveTeamId } from '@app/selectors/team'
 import { getArrayWithFallbackAccessor } from '@app/utils/get-array-with-fallback-accessor'
 import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
 import { useAcl } from '@app/views/components/Acl/use-acl'
@@ -56,13 +56,13 @@ export default function ListingMarketing({
   onChangeMedium
 }: Props) {
   const theme = useTheme()
-  const activeTeamId = useSelector(selectActiveTeamId)
+  const activeBrandId = useActiveBrandId()
   const notify = useNotify()
 
-  const shouldShowAgentNetworkButton = useAcl('AgentNetwork')
-  const hasMarketingAccess = useAcl('Marketing')
-  const shouldShowOpenHouseButton = useAcl('CRM') && hasMarketingAccess
-  const shouldShowWebsitesButton = useAcl('Websites')
+  const shouldShowAgentNetworkButton = useAcl(ACL.AGENT_NETWORK)
+  const hasMarketingAccess = useAcl(ACL.MARKETING)
+  const shouldShowOpenHouseButton = useAcl(ACL.CRM) && hasMarketingAccess
+  const shouldShowWebsitesButton = useAcl(ACL.WEBSITES)
   const shouldShowMarketingButtons =
     shouldShowAgentNetworkButton ||
     shouldShowOpenHouseButton ||
@@ -78,7 +78,7 @@ export default function ListingMarketing({
   const [isLoadingListing] = useLoadingEntities(listing)
 
   const { templates, isLoading: isLoadingTemplates } = useTemplates(
-    activeTeamId,
+    activeBrandId,
     undefined,
     LISTING_TEMPLATE_TYPES
   )

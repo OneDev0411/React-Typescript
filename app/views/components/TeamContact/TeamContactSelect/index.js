@@ -3,6 +3,7 @@ import React from 'react'
 import { mdiChevronDown } from '@mdi/js'
 import uniqBy from 'lodash/uniqBy'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -30,11 +31,11 @@ const defaultProps = {
   }
 }
 
-export class TeamContactSelect extends React.Component {
+class TeamContactSelectPresentational extends React.Component {
   constructor(props) {
     super(props)
 
-    this.isSolo = isSoloActiveTeam(props.user)
+    this.isSolo = isSoloActiveTeam(props.activeTeam)
 
     this.state = {
       isFetching: false,
@@ -49,10 +50,12 @@ export class TeamContactSelect extends React.Component {
   }
 
   loadMembers = async () => {
+    const { activeTeam } = this.props
+
     try {
       this.setState({ isFetching: true })
 
-      const members = await getMembers(this.props.user)
+      const members = await getMembers(activeTeam?.brand.id)
 
       if (Array.isArray(members)) {
         this.setState({
@@ -149,5 +152,9 @@ export class TeamContactSelect extends React.Component {
   }
 }
 
-TeamContactSelect.propTypes = propTypes
-TeamContactSelect.defaultProps = defaultProps
+TeamContactSelectPresentational.propTypes = propTypes
+TeamContactSelectPresentational.defaultProps = defaultProps
+
+export const TeamContactSelect = connect(({ activeTeam = null }) => ({
+  activeTeam
+}))(TeamContactSelectPresentational)

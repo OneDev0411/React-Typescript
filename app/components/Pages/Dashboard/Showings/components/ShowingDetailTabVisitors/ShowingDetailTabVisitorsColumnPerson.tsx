@@ -1,16 +1,33 @@
-import { Box, Typography } from '@material-ui/core'
+import { Box, makeStyles, Typography } from '@material-ui/core'
 
 import { Avatar } from 'components/Avatar'
 
+import { IContactWithAccess } from './types'
+
+const useStyles = makeStyles(
+  () => ({
+    defaultCursor: {
+      cursor: 'default'
+    }
+  }),
+  { name: 'ShowingDetailTabVisitorsColumnPerson' }
+)
+
 interface ShowingDetailTabVisitorsColumnPersonProps {
-  contact: IContact
+  contact: IContactWithAccess
 }
 
 function ShowingDetailTabVisitorsColumnPerson({
   contact
 }: ShowingDetailTabVisitorsColumnPersonProps) {
+  const classes = useStyles()
+
   return (
-    <Box display="flex" alignItems="center">
+    <Box
+      display="flex"
+      alignItems="center"
+      className={contact?.hasAccessToContact ? '' : classes.defaultCursor}
+    >
       <Box mr={1}>
         <Avatar contact={contact} />
       </Box>

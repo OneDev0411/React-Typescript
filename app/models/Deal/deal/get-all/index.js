@@ -1,15 +1,16 @@
+import { ACL } from '@app/constants/acl'
+import { getTeamACL } from 'utils/acl'
+
 import Fetch from '../../../../services/fetch'
-import { getActiveTeamId, getActiveTeamACL } from '../../../../utils/user-teams'
 
 /**
  * get deals list
  */
-export async function getAll(user) {
-  const { access_token } = user
-  const brandId = getActiveTeamId(user)
-  const acl = getActiveTeamACL(user)
-  const isBackOffice = acl.includes('BackOffice')
-  const isAgent = acl.includes('Deals')
+export async function getAll(team) {
+  const brandId = team?.brand?.id
+  const acl = getTeamACL(team)
+  const isBackOffice = acl.includes(ACL.BACK_OFFICE)
+  const isAgent = acl.includes(ACL.DEALS)
 
   const hasAccess = isAgent || isBackOffice
 
@@ -43,11 +44,6 @@ export async function getAll(user) {
 
   try {
     const fetchDeals = new Fetch().get(`${endpoint}?${params}`)
-
-    // required on ssr
-    if (access_token) {
-      fetchDeals.set({ Authorization: `Bearer ${access_token}` })
-    }
 
     const response = await fetchDeals
 

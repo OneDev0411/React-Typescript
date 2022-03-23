@@ -7,6 +7,10 @@ function script({ heightRatio }) {
   const elementId = element.id
 
   function initCarousel() {
+    if (element.classList.contains('initialized')) {
+      return
+    }
+
     const splide = new Splide(
       element instanceof Element ? element : `#${elementId}`,
       {
@@ -28,6 +32,8 @@ function script({ heightRatio }) {
           'M 11.058594 0.253906 C 10.714844 -0.078125 10.164062 -0.0703125 9.828125 0.277344 C 9.503906 0.613281 9.503906 1.148438 9.828125 1.484375 L 28.339844 19.996094 L 9.828125 38.503906 C 9.480469 38.839844 9.472656 39.390625 9.804688 39.734375 C 10.140625 40.078125 10.691406 40.089844 11.035156 39.757812 C 11.042969 39.75 11.050781 39.742188 11.054688 39.734375 L 30.183594 20.609375 C 30.519531 20.269531 30.519531 19.71875 30.183594 19.378906 Z M 11.058594 0.253906'
       }
     )
+
+    element.classList.add('initialized')
 
     element.dispatchEvent(
       new CustomEvent('splide:init', { detail: { splide } })

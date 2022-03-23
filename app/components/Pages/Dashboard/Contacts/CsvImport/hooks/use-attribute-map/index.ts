@@ -58,11 +58,7 @@ export function useAttributeMap(
               rate: number
             }
 
-            if (rate < 0.25) {
-              return list
-            }
-
-            if (isAttributeDisabled(list, option, option.index)) {
+            if (rate < 0.25 || isAttributeDisabled(list, option)) {
               return list
             }
 

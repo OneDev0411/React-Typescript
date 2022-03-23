@@ -6,10 +6,10 @@ import {
   Theme
 } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
-import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { selectUserSettingsInActiveTeam } from '@app/selectors/user'
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { getSettingFromTeam } from '@app/utils/user-teams'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import OpenHouse from 'deals/components/OpenHouse'
 import YardSign from 'deals/components/YardSign'
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export const Menu = withRouter(
   ({ deal, isBackOffice, router, location }: Props & WithRouterProps) => {
     const classes = useStyles()
-    const userSettings = useSelector(selectUserSettingsInActiveTeam)
+    const activeTeam = useUnsafeActiveTeam()
     const originQueryParam = useGetOriginQueryParam()
 
     const handleClose = () => {
@@ -56,7 +56,7 @@ export const Menu = withRouter(
         return
       }
 
-      const query = userSettings[DEAL_GRID_FILTER_SETTING_KEY]
+      const query = getSettingFromTeam(activeTeam, DEAL_GRID_FILTER_SETTING_KEY)
 
       router.push(`/dashboard/deals?q=${query?.term || ''}`)
     }

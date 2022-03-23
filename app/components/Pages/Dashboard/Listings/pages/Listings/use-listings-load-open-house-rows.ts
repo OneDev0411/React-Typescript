@@ -3,7 +3,6 @@ import { useCallback, useEffect } from 'react'
 import { ACL } from '@app/constants/acl'
 import useAsync from '@app/hooks/use-async'
 import { useAcl } from '@app/views/components/Acl/use-acl'
-import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { getTasks } from 'models/tasks/get-tasks'
 
 import { OpenHouseRow } from './types'
@@ -32,7 +31,11 @@ function useListingLoadOpenHouseRows(): UseListingLoadOpenHouseRowsReturn {
         async () =>
           (
             await getTasks({
-              associations: CRM_TASKS_QUERY.associations,
+              associations: [
+                'crm_task.associations',
+                'crm_association.listing'
+              ],
+              omit: ['crm_task.metadata'],
               ...defaultFilter
             })
           ).data

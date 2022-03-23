@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
+import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { getBrands } from 'models/BrandConsole/Brands'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { getUpdatedRootTeam } from '../helpers/get-updated-root-team'
 import { updateUserRoles } from '../helpers/update-user-roles'
@@ -13,18 +13,17 @@ import { useEditRolesModal } from './use-edit-roles-modal.hook'
 import { useTeamsFilterHook } from './use-teams-filter.hook'
 
 export function useTeamsPage(user: IUser, searchTerm: string) {
+  const activeBrandId = useActiveBrandId()
   const [rootTeam, setRootTeam] = useState<IBrand | null>(null)
   const [error, setError] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [updatingUserIds, setUpdatingUserIds] = useState<string[]>([])
 
   useEffect(() => {
-    setLoading(true)
+    if (activeBrandId) {
+      setLoading(true)
 
-    const activeTeamId = getActiveTeamId(user)
-
-    if (activeTeamId) {
-      getBrands(activeTeamId)
+      getBrands(activeBrandId)
         .then(team => {
           setRootTeam(team.data)
           setLoading(false)
@@ -34,7 +33,7 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
           setLoading(false)
         })
     }
-  }, [user])
+  }, [activeBrandId, user])
 
   const updateRoles = async (
     team: IBrand,

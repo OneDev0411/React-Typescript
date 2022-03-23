@@ -110,8 +110,9 @@ class Section extends Component {
     const { brand } = this.props
     const brandColor = Brand.color('primary', primary, brand)
     let content = this.getContent(brandColor)
+    const isEmpty = !this.props.isFetching && this.props.listings.length === 0
 
-    return content ? (
+    return content && !isEmpty ? (
       <div style={{ overflow: 'auto', padding: '1.5rem' }}>
         <div
           style={{
@@ -133,6 +134,7 @@ class Section extends Component {
           >
             {this.props.title}
           </h2>
+
           <div
             style={{
               width: 80,

@@ -1,6 +1,4 @@
-import { SIGNIN_SUCCESS } from '../../constants/auth/signin'
 import { BRAND_SUCCESS } from '../../constants/brand'
-import { EDIT_USER_SUCCESS } from '../../constants/user'
 import { types } from '../../store_actions/data'
 
 const initialState = {
@@ -21,19 +19,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         brand: action.brand
-      }
-    case SIGNIN_SUCCESS:
-      return {
-        ...state,
-        user: action.user
-      }
-    case EDIT_USER_SUCCESS:
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          ...action.user
-        }
       }
     default:
       return state

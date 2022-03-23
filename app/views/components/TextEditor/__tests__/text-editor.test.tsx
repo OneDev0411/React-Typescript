@@ -1,5 +1,4 @@
 import { ReactNode } from 'react'
-import * as React from 'react'
 
 import { fireEvent, render } from '@testing-library/react'
 
@@ -55,16 +54,19 @@ describe('TextEditor', () => {
 
     const file = new File(
       [
-        '<svg width="48" height="38" viewBox="0 0 48 38" xmlns="http://www.w3.org/2000/svg"><g stroke-width="2" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><path d="M1 15v6M47 1v30" stroke="#2196F3"/><path stroke="#C7C7C7" fill="#C7C7C7" d="M47 35L1 21v-6L47 1z"/><path d="M25 29.223a7 7 0 1 1-14 0V24" stroke="#C7C7C7"/></g></svg>'
+        `<svg width="48" height="38" viewBox="0 0 48 38" xmlns="http://www.w3.org/2000/svg">
+          <g stroke-width="2" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><path d="M1 15v6M47 1v30" stroke="#2196F3"/>
+            <path stroke="#C7C7C7" fill="#C7C7C7" d="M47 35L1 21v-6L47 1z"/><path d="M25 29.223a7 7 0 1 1-14 0V24" stroke="#C7C7C7"/>
+          </g>
+        </svg>`
       ],
       'example.svg',
       {
         type: 'image/svg+xml'
       }
     )
-    const imageInput = container.querySelector<HTMLInputElement>(
-      'input[type=file]'
-    )!
+    const imageInput =
+      container.querySelector<HTMLInputElement>('input[type=file]')!
 
     // https://github.com/testing-library/react-testing-library/issues/93#issuecomment-403887769
     Object.defineProperty(imageInput, 'files', {

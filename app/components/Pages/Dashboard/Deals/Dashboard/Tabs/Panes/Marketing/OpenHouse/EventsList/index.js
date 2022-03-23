@@ -1,17 +1,17 @@
-import React from 'react'
+import { Component } from 'react'
 
 import { mdiDotsVertical } from '@mdi/js'
 import fecha from 'fecha'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
+import { selectActiveBrandId } from '@app/selectors/brand'
 import { BasicDropdown } from 'components/BasicDropdown'
 import LinkButton from 'components/Button/LinkButton'
 import { addNotification as notify } from 'components/notification'
 import Spinner from 'components/Spinner'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import copy from 'utils/copy-text-to-clipboard'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import {
   Container,
@@ -25,7 +25,7 @@ import {
   EventMenu
 } from './styled.js'
 
-class EventsList extends React.Component {
+class EventsList extends Component {
   menuItems = [
     {
       label: 'Edit',
@@ -37,10 +37,10 @@ class EventsList extends React.Component {
     }
   ]
 
-  activeBrand = getActiveTeamId(this.props.user)
+  activeBrandId = this.props.activeBrandId
 
   getRegisterLink = event =>
-    `/openhouse/${event.id}/${this.activeBrand}/register`
+    `/openhouse/${event.id}/${this.activeBrandId}/register`
 
   onEditEvent = event => this.props.onEditEvent(event)
 
@@ -126,4 +126,10 @@ class EventsList extends React.Component {
   }
 }
 
-export default connect(null, { notify })(EventsList)
+function mapStateToProps(state) {
+  return {
+    activeBrandId: selectActiveBrandId(state)
+  }
+}
+
+export default connect(mapStateToProps, { notify })(EventsList)

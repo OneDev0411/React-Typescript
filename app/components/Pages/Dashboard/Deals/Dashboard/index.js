@@ -6,7 +6,7 @@ import { useTitle } from 'react-use'
 import { useLoadFullDeal } from 'hooks/use-load-deal'
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
-import { isBackOffice as isBackOfficeUser } from 'utils/user-teams'
+import { isBackOffice as isBackOfficeUser } from 'utils/acl'
 
 import { TaskActions } from '../components/TaskActions'
 import { ActionContextProvider } from '../contexts/actions-context/provider'
@@ -25,7 +25,7 @@ function DealDetails(props) {
   )
 
   const { user, deal, isBackOffice, selectedTask } = useSelector(
-    ({ deals, user }) => {
+    ({ deals, user, activeTeam = null }) => {
       const { selectedTask } = deals.properties
 
       return {
@@ -35,7 +35,7 @@ function DealDetails(props) {
           deals.tasks,
           selectedTask && selectedTask.id
         ),
-        isBackOffice: isBackOfficeUser(user)
+        isBackOffice: isBackOfficeUser(activeTeam)
       }
     },
     shallowEqual

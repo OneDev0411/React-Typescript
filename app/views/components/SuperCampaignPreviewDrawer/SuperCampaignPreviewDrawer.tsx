@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Button, TextField, makeStyles } from '@material-ui/core'
 
 import SuperCampaignTemplatePreview from '@app/components/Pages/Dashboard/SuperCampaigns/components/SuperCampaignTemplate/SuperCampaignTemplatePreview'
+import { useEnrollMeInSuperCampaign } from '@app/models/super-campaign'
 import OverlayDrawer, { OverlayDrawerProps } from 'components/OverlayDrawer'
 
 import SuperCampaignPreviewDrawerDescription from './SuperCampaignPreviewDrawerDescription'
@@ -13,7 +14,6 @@ import SuperCampaignTagsField from './SuperCampaignTagsField'
 import { useHandleSuperCampaignOptOutAndCopy } from './use-handle-super-campaign-opt-out-and-copy'
 import { useLoadExistingTags } from './use-load-existing-tags'
 import { useMarketingEmailTemplateEditor } from './use-marketing-email-template-editor'
-import { useUpdateMySuperCampaignEnrollment } from './use-update-my-super-campaign-enrollment'
 
 const useStyles = makeStyles(
   theme => ({
@@ -28,8 +28,6 @@ const useStyles = makeStyles(
 
 export interface SuperCampaignPreviewDrawerProps extends OverlayDrawerProps {
   superCampaign: ISuperCampaign<'template_instance' | 'created_by'>
-  onEnroll: (enrollment: ISuperCampaignEnrollment) => void
-  onUnenroll: () => void
   hasUnenroll: boolean
   initialSelectedTags: Optional<string[]>
 }
@@ -40,8 +38,6 @@ function SuperCampaignPreviewDrawer({
   open,
   onClose,
   superCampaign,
-  onEnroll,
-  onUnenroll,
   hasUnenroll,
   initialSelectedTags
 }: SuperCampaignPreviewDrawerProps) {
@@ -61,8 +57,17 @@ function SuperCampaignPreviewDrawer({
   // Load existing tags because it is needed by useGetSuperCampaignInitialEmailTo
   useLoadExistingTags()
 
-  const { isUpdating, updateMySuperCampaignEnrollment } =
-    useUpdateMySuperCampaignEnrollment(superCampaign.id, hasUnenroll, onEnroll)
+  const { isLoading: isEnrolling, mutateAsync: enrollToSuperCampaign } =
+    useEnrollMeInSuperCampaign(
+      hasUnenroll
+        ? {
+            notify: {
+              onSuccess: 'Your enrollment has been updated',
+              onError: 'Something went wrong while updating the enrollment'
+            }
+          }
+        : undefined
+    )
 
   const handleCopy = () => {
     openEmailTemplateEditor()
@@ -73,19 +78,20 @@ function SuperCampaignPreviewDrawer({
   }
 
   const { isDeleting, handleOptOut, handleOptOutAndCopy } =
-    useHandleSuperCampaignOptOutAndCopy(
-      superCampaign.id,
-      onUnenroll,
-      closeDrawer,
-      handleCopy
-    )
+    useHandleSuperCampaignOptOutAndCopy({
+      onOptOut: closeDrawer,
+      onOptOutAndCopy: handleCopy
+    })
 
   const handleSave = async () => {
-    await updateMySuperCampaignEnrollment(selectedTags)
+    await enrollToSuperCampaign({
+      superCampaignId: superCampaign.id,
+      tags: selectedTags
+    })
     closeDrawer()
   }
 
-  const isWorking = isUpdating || isDeleting
+  const isWorking = isEnrolling || isDeleting
 
   const hasError = selectedTags.length === 0
 
@@ -150,8 +156,8 @@ function SuperCampaignPreviewDrawer({
             {hasUnenroll && (
               <SuperCampaignPreviewDrawerOptOutButton
                 disabled={isWorking}
-                onOptOut={handleOptOut}
-                onOptOutAndCopy={handleOptOutAndCopy}
+                onOptOut={() => handleOptOut(superCampaign.id)}
+                onOptOutAndCopy={() => handleOptOutAndCopy(superCampaign.id)}
               />
             )}
           </div>

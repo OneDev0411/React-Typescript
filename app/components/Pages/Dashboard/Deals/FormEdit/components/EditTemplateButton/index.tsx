@@ -19,7 +19,7 @@ export function EditTemplateButton({ style, annotation, type }: Props) {
   const defaultValueContext = useDefaultValueContext()
 
   return (
-    <Acl.BackOffice accessControlPolicy="ActiveTeamAndParents">
+    <Acl.BackOffice>
       <BaseDropdown
         placement="bottom-end"
         renderDropdownButton={renderProps => (

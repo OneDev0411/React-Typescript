@@ -19,7 +19,7 @@ import { changeListingHoverState } from '../../../context/actions'
 import useUiListingsContext from '../../../context/useUiListingsContext'
 import { getListingsPage } from '../../../helpers/pagination-utils'
 import { SortIndex, SortString, ViewType } from '../../../types'
-import { toggleListingFavoriteState } from '../../context/actions'
+import { removeListing } from '../../context/actions'
 import useFavoritesContext from '../../hooks/useFavoritesContext'
 
 const useStyles = makeStyles(
@@ -70,7 +70,7 @@ const useStyles = makeStyles(
       padding: 30
     }
   }),
-  { name: 'PropertiesResults' }
+  { name: 'PropertiesResultsFavoritesTab' }
 )
 
 interface Props {
@@ -180,7 +180,7 @@ export const Results = ({
     // Close listing modal after toggle like to prevent multiple toggling issue
     // https://gitlab.com/rechat/web/-/issues/5708#note_709319289
     onToggleListingModal('', false)
-    dispatch(toggleListingFavoriteState(listingId))
+    dispatch(removeListing(listingId))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

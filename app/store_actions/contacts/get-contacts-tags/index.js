@@ -8,7 +8,7 @@ import { viewAs } from '../../../utils/user-teams'
 export function getContactsTags(user_filter) {
   return async (dispatch, getState) => {
     if (!user_filter) {
-      user_filter = viewAs(getState().user)
+      user_filter = viewAs(getState().activeTeam)
     }
 
     try {

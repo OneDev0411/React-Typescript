@@ -5,6 +5,7 @@ import { Autocomplete, createFilterOptions } from '@material-ui/lab'
 import { mdiCurrencyUsd } from '@mdi/js'
 import { useDebounce } from 'react-use'
 
+import { getPropertyTypeFirstElement } from '@app/components/Pages/Dashboard/MLS/helpers/get-listings-helpers'
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -77,7 +78,7 @@ export const PriceEditor = ({
             value={filters.minimum_price}
             classes={{ popper: 'u-scrollbar--thinner' }}
             options={createPriceArray({
-              propertyType: filters.property_types[0],
+              propertyType: getPropertyTypeFirstElement(filters),
               max: filters.maximum_price
             })}
             filterOptions={(options, params) => {
@@ -133,7 +134,7 @@ export const PriceEditor = ({
               return filtered
             }}
             options={createPriceArray({
-              propertyType: filters.property_types[0],
+              propertyType: getPropertyTypeFirstElement(filters),
               min: filters.minimum_price
             })}
             onChange={(e: any, newValue: Nullable<number>) =>

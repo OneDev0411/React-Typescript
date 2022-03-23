@@ -1,9 +1,11 @@
-
 import { renderHook } from '@testing-library/react-hooks'
+
 import { ReactQueryTestBed, queryClient } from 'tests/unit/ReactQueryTestBed'
-import { useOptions } from '.'
-import { MappedField } from '../../../types'
+
 import { mockAttributeDefs } from '../../../tests/helpers/mock-get-attribute-def'
+import { MappedField } from '../../../types'
+
+import { useOptions } from '.'
 
 jest.mock('@app/models/contacts/get-attribute-defs', () => {
   const originalModule = jest.requireActual(
@@ -23,8 +25,7 @@ describe('test Csv Import attribute options', () => {
   })
 
   it('should create options when mapping is empty', async () => {
-    const { result, waitForNextUpdate } = renderHook(
-      () => useOptions({}, ''), {
+    const { result, waitForNextUpdate } = renderHook(() => useOptions({}, ''), {
       wrapper: ReactQueryTestBed
     })
 
@@ -33,8 +34,7 @@ describe('test Csv Import attribute options', () => {
   })
 
   it('should create spouse/partner options', async () => {
-    const { result, waitForNextUpdate } = renderHook(
-      () => useOptions({}, ''), {
+    const { result, waitForNextUpdate } = renderHook(() => useOptions({}, ''), {
       wrapper: ReactQueryTestBed
     })
 
@@ -55,7 +55,7 @@ describe('test Csv Import attribute options', () => {
 
   it('should create new address indexes when there is one mapped address', async () => {
     const fields = {
-      'Foo': {
+      Foo: {
         type: 'attribute_def',
         attribute_def: '348e18e8-31f3-423f-b501-8a24a606d83b',
         index: 0,
@@ -64,29 +64,35 @@ describe('test Csv Import attribute options', () => {
       }
     } as Record<string, MappedField>
 
-    const { result, waitForNextUpdate } = renderHook(() => useOptions(fields, ''), {
-      wrapper: ReactQueryTestBed
-    })
+    const { result, waitForNextUpdate } = renderHook(
+      () => useOptions(fields, ''),
+      {
+        wrapper: ReactQueryTestBed
+      }
+    )
 
     await waitForNextUpdate()
 
     const list = result.current
+
     expect(list.length).toBe(55)
     expect(list.filter(item => item.index === 1).length).toBe(11)
 
-    expect(list.filter(item => item.label.includes('Full Address')).length).toBe(2)
+    expect(
+      list.filter(item => item.label.includes('Full Address')).length
+    ).toBe(2)
   })
 
   it('should create new address indexes when there is two mapped address', async () => {
     const fields = {
-      'Foo': {
+      Foo: {
         type: 'attribute_def',
         attribute_def: '348e18e8-31f3-423f-b501-8a24a606d83b',
         index: 0,
         multiValued: false,
         isPartner: false
       },
-      'Bar': {
+      Bar: {
         type: 'attribute_def',
         attribute_def: '348e18e8-31f3-423f-b501-8a24a606d83b',
         index: 1,
@@ -95,33 +101,43 @@ describe('test Csv Import attribute options', () => {
       }
     } as Record<string, MappedField>
 
-    const { result, waitForNextUpdate } = renderHook(() => useOptions(fields, ''), {
-      wrapper: ReactQueryTestBed
-    })
+    const { result, waitForNextUpdate } = renderHook(
+      () => useOptions(fields, ''),
+      {
+        wrapper: ReactQueryTestBed
+      }
+    )
 
     await waitForNextUpdate()
 
     const list = result.current
+
     expect(list.length).toBe(66)
     expect(list.filter(item => item.index === 1).length).toBe(11)
     expect(list.filter(item => item.index === 2).length).toBe(11)
 
-    expect(list.filter(item => item.label.includes('Full Address')).length).toBe(3)
+    expect(
+      list.filter(item => item.label.includes('Full Address')).length
+    ).toBe(3)
   })
 
   it('should search attribute options', async () => {
     const searchTerm = 'spouse'
-    const { result, waitForNextUpdate } = renderHook(() => useOptions({}, searchTerm), {
-      wrapper: ReactQueryTestBed
-    })
+    const { result, waitForNextUpdate } = renderHook(
+      () => useOptions({}, searchTerm),
+      {
+        wrapper: ReactQueryTestBed
+      }
+    )
 
     await waitForNextUpdate()
 
     const list = result.current
+
     expect(list.length).toBe(5)
 
-    for (let item of list) {
+    list.forEach(item => {
       expect(item.label.toLowerCase()).toContain(searchTerm)
-    }
+    })
   })
 })

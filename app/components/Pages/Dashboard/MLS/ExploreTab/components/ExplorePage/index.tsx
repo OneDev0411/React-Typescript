@@ -5,10 +5,11 @@ import cn from 'classnames'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
+import { createValertOptions } from '@app/components/Pages/Dashboard/MLS/helpers/get-listings-helpers'
 import { appSidenavWidth } from '@app/components/Pages/Dashboard/SideNav/variables'
 import { useQueryParam } from '@app/hooks/use-query-param'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { confirmation } from '@app/store_actions/confirmation'
-import { setUserSetting } from '@app/store_actions/user/set-setting'
 import { changeUrl } from '@app/utils/change-url'
 import {
   GoogleMapLibrary,
@@ -28,7 +29,7 @@ import {
   clearListingUiStates
 } from '../../../context/actions'
 import useUiListingsContext from '../../../context/useUiListingsContext'
-import { createValertOptions } from '../../../helpers/get-listings-helpers'
+import { logSearchListings } from '../../../helpers/log-search-listings'
 import {
   coordToPoint,
   estimateMapZoom,
@@ -159,7 +160,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   const onChangeSort = (sort: SortString) => {
     dispatch(changeSort(parseSortIndex(sort)))
-    reduxDispatch(setUserSetting(SORT_FIELD_SETTING_KEY, sort))
+    reduxDispatch(setActiveTeamSetting(SORT_FIELD_SETTING_KEY, sort))
   }
 
   const onToggleView = (to: ViewType) => {
@@ -185,8 +186,12 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const onSelectPlace = (
     center: ICoord,
     bounds: ICompactBounds,
-    types: string[]
+    types: string[],
+    description: string
   ) => {
+    // Log user searching for listings activity when search url param is set
+    logSearchListings(description)
+
     const mapWidth = mapRef.current
       ? mapRef.current.getDiv().clientWidth
       : undefined
@@ -240,12 +245,19 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   const onMapChange = useCallback(
     (center: ICoord, zoom: number, bounds: IBounds) => {
-      dispatch(setMapBounds(center, zoom, bounds))
+      const compactBounds: ICompactBounds = {
+        ne: { lat: bounds.ne.lat, lng: bounds.ne.lng },
+        sw: { lat: bounds.sw.lat, lng: bounds.sw.lng }
+      }
+
+      dispatch(setMapBounds(center, zoom, compactBounds))
 
       // Anonymous user's can also see /mls and explore the map
       // So updatingLastBrowsing location should not be run for them
       if (user) {
-        reduxDispatch(setUserSetting(LAST_BROWSING_LOCATION, { center, zoom }))
+        reduxDispatch(
+          setActiveTeamSetting(LAST_BROWSING_LOCATION, { center, zoom })
+        )
       }
     },
     [dispatch, user, reduxDispatch]

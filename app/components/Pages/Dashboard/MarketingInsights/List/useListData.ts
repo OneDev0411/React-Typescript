@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useReducer } from 'react'
 
+import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 
@@ -7,12 +8,12 @@ import { InsightActionType, InsightFilterType, InsightState } from './types'
 import { useInsightStateReducer, initialState } from './useInsightStateReducer'
 
 export default function useListData(
-  user: IUser,
   filterType: InsightFilterType
 ): InsightState & {
   reloadList: () => Promise<void>
   reloadItem: (emailCampaignId: UUID) => Promise<void>
 } {
+  const activeBrandId = useUnsafeActiveBrandId()
   const [state, dispatch] = useReducer(useInsightStateReducer, initialState)
 
   const reloadList = useCallback<
@@ -23,7 +24,7 @@ export default function useListData(
     })
 
     try {
-      const allEmailCampaigns = await getEmailCampaigns(user, {
+      const allEmailCampaigns = await getEmailCampaigns(activeBrandId, {
         emailCampaignAssociations: ['recipients', 'template'],
         emailRecipientsAssociations: ['list'],
         emailCampaignEmailsAssociation: []
@@ -40,7 +41,7 @@ export default function useListData(
         type: InsightActionType.FetchListFailure
       })
     }
-  }, [user, filterType])
+  }, [activeBrandId, filterType])
 
   const reloadItem = useCallback<ReturnType<typeof useListData>['reloadItem']>(
     async emailCampaignId => {
@@ -72,7 +73,7 @@ export default function useListData(
 
   useEffect(() => {
     reloadList()
-  }, [user, filterType, reloadList])
+  }, [activeBrandId, filterType, reloadList])
 
   return {
     ...state,

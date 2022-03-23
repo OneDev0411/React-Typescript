@@ -3,6 +3,7 @@ import React, { useMemo } from 'react'
 import { makeStyles, Theme } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand'
 import { IAppState } from 'reducers'
 
 import { getBrandLogo } from '../../../../../utils/get-brand-logo'
@@ -19,12 +20,15 @@ const useStyles = makeStyles(
 
 export default function Logo() {
   const classes = useStyles()
-  const brand = useSelector<IAppState, IBrand>(
+  // Custom hostname brand
+  const hostBrand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
   )
+  const brand = useUnsafeActiveBrand()
   const logo = useMemo(
-    () => getBrandLogo(brand, '/static/images/logo--white--padded.svg'),
-    [brand]
+    () =>
+      getBrandLogo(brand, hostBrand, '/static/images/logo--white--padded.svg'),
+    [brand, hostBrand]
   )
 
   return <img alt="logo" className={classes.logo} src={logo} />

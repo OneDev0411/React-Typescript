@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { useEffectOnce, useLocalStorage } from 'react-use'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { getPlace } from '@app/models/listings/search/get-place'
 import { confirmation } from '@app/store_actions/confirmation'
 import { getLocationErrorMessage } from '@app/utils/map'
@@ -20,6 +21,7 @@ import {
 } from '../constants'
 import { ListingsUiContext } from '../context'
 import { reducer as uiReducer } from '../context/reducers'
+import { logSearchListings } from '../helpers/log-search-listings'
 import { estimateMapZoom, getPlaceZoomOffset } from '../helpers/map-helpers'
 import {
   getDefaultSort,
@@ -53,6 +55,7 @@ interface Props extends WithRouterProps {
 
 function ExploreTab({ isWidget, user, location }: Props) {
   const classes = useStyles()
+  const activeTeam = useUnsafeActiveTeam()
 
   const [filtersStorageValue, setFiltersStorageValue] = useLocalStorage<
     Nullable<string>
@@ -63,8 +66,8 @@ function ExploreTab({ isWidget, user, location }: Props) {
 
   const hasUrlQuery = !!(brokerageQuery || searchQuery)
 
-  const userLastBrowsingLocation = getUserLastBrowsingLocation(user)
-  const userActiveSort = parseSortIndex(getDefaultSort(user))
+  const userLastBrowsingLocation = getUserLastBrowsingLocation(activeTeam)
+  const userActiveSort = parseSortIndex(getDefaultSort(activeTeam))
 
   const mapInitialLocation =
     userLastBrowsingLocation?.center && userLastBrowsingLocation?.zoom
@@ -172,8 +175,12 @@ function ExploreTab({ isWidget, user, location }: Props) {
   const onSelectPlace = (
     center: ICoord,
     bounds: ICompactBounds,
-    types: string[]
+    types: string[],
+    description: string
   ) => {
+    // Log user searching for listings activity when search url param is set
+    logSearchListings(description)
+
     const zoomOffset = getPlaceZoomOffset(types)
     const zoom = estimateMapZoom(bounds, zoomOffset)
 
@@ -191,6 +198,9 @@ function ExploreTab({ isWidget, user, location }: Props) {
         const placeResponse = await getPlace(searchParamQuery, false)
 
         if (placeResponse) {
+          // Log user searching for listings activity when search url param is set
+          logSearchListings(searchParamQuery)
+
           // @types/googlemaps describe the Javascript API not the JSON object on the response
           // there a sublte difference like lat/lng beeing number not functions,
           // So making this `as any as ICoord` cast necessary

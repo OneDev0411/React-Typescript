@@ -1,15 +1,13 @@
 import { Box, Typography, makeStyles } from '@material-ui/core'
-import { mdiOpenInNew } from '@mdi/js'
 
-import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
-import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { Avatar } from 'components/Avatar'
 
-import LinkButton from '../LinkButton'
 import ShowingCloseButton from '../ShowingCloseButton'
 
+import ShowingDetailHeaderAgentInfo from './ShowingDetailHeaderAgentInfo'
 import ShowingDetailHeaderBookingButton from './ShowingDetailHeaderBookingButton'
 import ShowingDetailHeaderCopyButton from './ShowingDetailHeaderCopyButton'
+import ShowingDetailHeaderListing from './ShowingDetailHeaderListing'
 
 const useStyles = makeStyles(
   theme => ({
@@ -36,13 +34,15 @@ interface ShowingDetailHeaderProps {
   image: string
   listing?: IListing
   bookingUrl?: string
+  roles?: IShowingRole[]
 }
 
 function ShowingDetailHeader({
   image,
   address,
   listing,
-  bookingUrl
+  bookingUrl,
+  roles
 }: ShowingDetailHeaderProps) {
   const classes = useStyles()
 
@@ -50,27 +50,19 @@ function ShowingDetailHeader({
     <Box className={classes.root} px={4} pt={4}>
       <Box className={classes.header}>
         <Box display="flex" alignItems="center" mr={1} mb={2}>
-          <Box flexShrink="0" flexGrow="0" mr={2}>
+          <Box flexShrink="0" flexGrow="0" mr={1}>
             <Avatar url={image} variant="circular" size="xlarge" />
           </Box>
           <Box>
-            <Typography noWrap variant="subtitle1">
-              {address}
-            </Typography>
-            {listing && (
-              <LinkButton
-                color="secondary"
-                size="small"
-                variant="text"
-                endIcon={
-                  <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
-                }
-                to={`/dashboard/mls/${listing.id}`}
-                target="_blank"
-              >
-                MLS# {listing.mls_number}
-              </LinkButton>
-            )}
+            <Box ml={1}>
+              <Typography noWrap variant="h6">
+                {address}
+              </Typography>
+            </Box>
+            <Box display="flex">
+              {listing && <ShowingDetailHeaderListing listing={listing} />}
+              {roles && <ShowingDetailHeaderAgentInfo roles={roles} />}
+            </Box>
           </Box>
         </Box>
         <Box

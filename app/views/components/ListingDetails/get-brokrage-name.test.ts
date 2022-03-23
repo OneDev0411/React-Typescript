@@ -188,6 +188,7 @@ describe('sortAgentListToFindBrokerage', () => {
       agentsList[2],
       agentsList[0]
     ]
+
     expect(actual).toStrictEqual(expected)
   })
 
@@ -378,6 +379,7 @@ describe('sortAgentListToFindBrokerage', () => {
       agentsList[2],
       agentsList[0]
     ]
+
     expect(actual).toStrictEqual(expected)
   })
 
@@ -568,6 +570,7 @@ describe('sortAgentListToFindBrokerage', () => {
       agentsList[1],
       agentsList[0]
     ]
+
     expect(actual).toStrictEqual(expected)
   })
 })

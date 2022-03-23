@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Box, Button } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
@@ -53,10 +53,16 @@ export function EditEmailSignatureDrawer({ isOpen, onClose }: Props) {
   }
 
   const uploadImage = async file => {
-    const response = await uploadEmailSignatureAttachment(file)
-    const uploadedFile: IFile = response.body.data
+    try {
+      setIsSaving(true)
 
-    return uploadedFile.url
+      const response = await uploadEmailSignatureAttachment(file)
+      const uploadedFile: IFile = response.body.data
+
+      return uploadedFile.url
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   return (

@@ -4,7 +4,6 @@ import { IAppState } from 'reducers'
 
 import config from '../../../config/public'
 import store from '../../stores'
-import { getActiveTeamId } from '../../utils/user-teams'
 
 import { herokuFix } from './middlewares/heroku-fix'
 import { useReferencedFormat } from './middlewares/x-rechat-format'
@@ -42,16 +41,14 @@ export default class Fetch {
     isUploadMethod: boolean = false
   ): SuperAgent.SuperAgentRequest {
     if (process.env.NODE_ENV === 'test') {
-      return SuperAgent[method](endpoint)
+      throw new Error(
+        `You forgot to mock a model\n method: ${method}\n endpoint: ${endpoint}\n`
+      )
     }
 
-    const { user, brand } = store.getState() as IAppState
+    const { user, brand, activeTeam } = store.getState() as IAppState
 
-    let brandId
-
-    if (user) {
-      brandId = getActiveTeamId(user)
-    }
+    let brandId = activeTeam?.brand?.id
 
     if (!brandId && brand) {
       brandId = brand.id

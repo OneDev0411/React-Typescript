@@ -5,6 +5,7 @@ import classNames from 'classnames'
 
 import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/Table/components/LoadingComponent'
 import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
+import { useGetAllSuperCampaigns } from '@app/models/super-campaign'
 import { goTo } from '@app/utils/go-to'
 import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
@@ -18,7 +19,6 @@ import SuperCampaignAdminListColumnStats from './SuperCampaignAdminListColumnSta
 import SuperCampaignAdminListColumnUserCount from './SuperCampaignAdminListColumnUserCount'
 import SuperCampaignListColumnSubject from './SuperCampaignListColumnSubject'
 import SuperCampaignListColumnTags from './SuperCampaignListColumnTags'
-import { useGetAdminSuperCampaigns } from './use-get-admin-super-campaigns'
 
 const useStyles = makeStyles(
   theme => ({
@@ -37,31 +37,15 @@ const SORT_DESC = ['-due_at', '-updated_at', '-created_at']
 function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
-  const { isLoading, superCampaigns, setSuperCampaigns, loadMore } =
-    useGetAdminSuperCampaigns(sortDir === 'ASC' ? SORT_ASC : SORT_DESC)
 
-  const handleSendNow = (newSuperCampaign: ISuperCampaign) =>
-    setSuperCampaigns(superCampaigns =>
-      superCampaigns.map(superCampaign => {
-        if (newSuperCampaign.id !== superCampaign.id) {
-          return superCampaign
-        }
+  const { data, isFetching, fetchNextPage } = useGetAllSuperCampaigns(
+    sortDir === 'ASC' ? SORT_ASC : SORT_DESC
+  )
 
-        return newSuperCampaign
-      })
-    )
+  const superCampaigns =
+    data?.pages.reduce((items, page) => [...items, ...page], []) || []
 
-  const handleDelete = (superCampaignId: UUID) =>
-    setSuperCampaigns(superCampaigns =>
-      superCampaigns.filter(
-        superCampaign => superCampaign.id !== superCampaignId
-      )
-    )
-
-  const handleDuplicate = (newSuperCampaign: ISuperCampaign) =>
-    setSuperCampaigns(superCampaigns => [newSuperCampaign, ...superCampaigns])
-
-  const columns: TableColumn<ISuperCampaign>[] = [
+  const columns: TableColumn<ISuperCampaign<'template_instance'>>[] = [
     {
       id: 'subject',
       primary: true,
@@ -101,9 +85,6 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
       render: ({ row }) => (
         <SuperCampaignAdminMoreActions
           superCampaign={row}
-          onSendNow={handleSendNow}
-          onDelete={() => handleDelete(row.id)}
-          onDuplicate={handleDuplicate}
           // TODO: The sent item needs to display the real campaign stats when it is executed. This means
           // we need to have a socket or pulling mechanism to get the stats and update the list.
           // I hid the send now option temporarily because of my limited time but I'll enable it soon.
@@ -118,7 +99,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
       rows={superCampaigns}
       totalRows={superCampaigns.length}
       columns={columns}
-      loading={isLoading ? 'middle' : null}
+      loading={isFetching ? 'middle' : null}
       getTrProps={() => ({
         className: classNames(gridClasses.row, classes.row)
       })}
@@ -132,7 +113,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
       LoadingStateComponent={LoadingComponent}
       infiniteScrolling={{
         onReachStart: noop,
-        onReachEnd: loadMore
+        onReachEnd: fetchNextPage
       }}
       EmptyStateComponent={() => (
         <EmailInsightsZeroState

@@ -1,17 +1,18 @@
 import { useSelector } from 'react-redux'
 
-import { selectUser } from 'selectors/user'
+import { ACL } from '@app/constants/acl'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 
 import { IAppState } from '../reducers'
-import { isBackOffice } from '../utils/user-teams'
 
 export function useDealsNotificationsNumber(): number {
-  const user = useSelector((state: IAppState) => selectUser(state))
+  const isBackOffice = useAcl(ACL.BACK_OFFICE)
+
   const deals: IDeal[] = useSelector((state: IAppState) =>
     Object.values(state.deals.list || {})
   )
 
-  if (isBackOffice(user)) {
+  if (isBackOffice) {
     return deals.filter(deal => !deal.is_draft && ~~deal.attention_requests > 0)
       .length
   }

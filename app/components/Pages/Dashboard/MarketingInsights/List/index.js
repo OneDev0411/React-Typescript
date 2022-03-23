@@ -3,7 +3,6 @@ import { useMemo, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 import pluralize from 'pluralize'
-import { connect } from 'react-redux'
 
 import Table from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
@@ -39,7 +38,7 @@ const useCustomGridStyles = makeStyles(
   { name: 'InsightList' }
 )
 
-function List(props) {
+export default function List(props) {
   const customGridClasses = useCustomGridStyles()
   const gridClasses = useGridStyles()
 
@@ -49,7 +48,7 @@ function List(props) {
     : InsightFilterType.SENT
 
   const { isLoading, hasError, list, counts, reloadList, reloadItem } =
-    useListData(props.user, filterType)
+    useListData(filterType)
 
   useEffect(() => {
     function handleEmailCampaignSentEvent(event) {
@@ -230,11 +229,3 @@ function List(props) {
     />
   )
 }
-
-function mapStateToProps(state) {
-  return {
-    user: state.user
-  }
-}
-
-export default connect(mapStateToProps)(List)

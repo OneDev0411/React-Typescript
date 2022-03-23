@@ -174,7 +174,7 @@
     border-bottom: none !important;
   }
 
-  .gjs-sm-title {
+  .gjs-sm-sector-title {
     display: none;
   }
 
@@ -455,6 +455,12 @@
   .cke_dialog_ui_input_select {
     display: block;
     width: 100%;
+  }
+
+  .cke_combopanel__font {
+    min-width: 150px;
+    max-width: 90%;
+    width: auto;
   }
 
   .gjs-block {
