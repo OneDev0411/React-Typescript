@@ -6,6 +6,7 @@ import CalendarEventListItem from 'components/CalendarEvent/ListItem'
 import { InlineBadge } from 'components/InlineBadge'
 
 import { EmptyState } from '../../components/EmptyState'
+import { celebrationsEventTypes } from '../../variables'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -44,15 +45,7 @@ interface Props {
 export function UpcomingCelebrations({ isLoading, events }: Props) {
   const classes = useStyles()
 
-  const celebrationsEventTypes = [
-    'wedding_anniversary',
-    'birthday',
-    'child_birthday',
-    'work_anniversary',
-    'home_anniversary'
-  ]
-
-  // We just need to show events related to above list in this box
+  // We just need to show events related to celebrations-event-types in this box
   const celebrationEvents = events.filter(event =>
     celebrationsEventTypes.includes(event.event_type)
   )
