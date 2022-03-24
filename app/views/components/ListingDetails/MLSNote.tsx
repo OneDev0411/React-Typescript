@@ -6,6 +6,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column-reverse',
     alignItems: 'center',
+    color: theme.palette.tertiary.light,
     [theme.breakpoints.up('md')]: {
       alignItems: 'flex-start',
       flexDirection: 'row'
@@ -92,11 +93,7 @@ export default function MLSNote({ disclaimer, mls, mlsName, logo }: Props) {
           defaultDisclaimer
         )}
 
-        <Typography
-          variant="body1"
-          color="textSecondary"
-          className={classes.closedNote}
-        >
+        <Typography variant="body1" className={classes.closedNote}>
           Some properties which appear for sale on this website may no longer be
           available because they are under contract, have Closed or are no
           longer being offered for sale.
