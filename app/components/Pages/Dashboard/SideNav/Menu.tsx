@@ -183,14 +183,12 @@ function Menu(props: WithRouterProps) {
       ]
     },
     {
-      access: ['Marketing'],
       hasDivider: false,
       icon: mdiHomeCityOutline,
       id: 'search',
       label: 'Search',
       subMenu: [
         {
-          access: ['Marketing'],
           id: 'properties',
           label: 'Properties',
           to: '/dashboard/mls'
