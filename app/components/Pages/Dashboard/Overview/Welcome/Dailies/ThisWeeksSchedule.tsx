@@ -101,14 +101,14 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
           </>
         )}
         {!isLoading &&
-        !isAccountSyncing &&
-        hasAccount &&
-        filteredEvents.length === 0 ? (
-          <EmptyState
-            description="You're all caught up!"
-            iconSrc="/static/icons/empty-states/letter.svg"
-          />
-        ) : null}
+          !isAccountSyncing &&
+          hasAccount &&
+          filteredEvents.length === 0 && (
+            <EmptyState
+              description="You're all caught up!"
+              iconSrc="/static/icons/empty-states/letter.svg"
+            />
+          )}
         {!isLoading &&
           !isAccountSyncing &&
           !hasAccount &&

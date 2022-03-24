@@ -1,8 +1,7 @@
 import { Box, Button } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { useDispatch } from 'react-redux'
 
-import { addNotification as notify } from 'components/notification'
+import useNotify from '@app/hooks/use-notify'
 import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
 import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import OutlookIcon from 'components/SvgIcons/Outlook/IconOutlook'
@@ -19,22 +18,19 @@ const useStyles = makeStyles(
 )
 
 export function ThisWeeksScheduleEmptyState() {
-  const dispatch = useDispatch()
-
   const classes = useStyles()
+  const notify = useNotify()
 
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
 
   const handleGoogleConnect = () => {
     if (google.connecting) {
-      return dispatch(
-        notify({
-          message: `a sync process has already been requested,
+      return notify({
+        message: `a sync process has already been requested,
  please wait till getting finishes.`,
-          status: 'info'
-        })
-      )
+        status: 'info'
+      })
     }
 
     google.connect()
