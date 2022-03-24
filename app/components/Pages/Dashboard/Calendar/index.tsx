@@ -41,8 +41,8 @@ export default function CalendarPage() {
       <GlobalHeader title="Calendar" noPadding>
         <div className={classes.viewAsContainer}>
           <ViewAs />
-          <ImportContactsButton />
         </div>
+        <ImportContactsButton />
       </GlobalHeader>
       <div className={classes.listContainer}>
         <GridCalendar actionRef={actionRef} />
