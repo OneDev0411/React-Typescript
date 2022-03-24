@@ -5,13 +5,13 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 import { mdiArrowRight } from '@mdi/js'
 import { browserHistory } from 'react-router'
 
+import { OAuthProvider } from '@app/constants/contacts'
 import { getOAuthAccounts } from '@app/models/o-auth-accounts/get-o-auth-accounts'
+import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
+import CalendarEventListItem from '@app/views/components/CalendarEvent/ListItem'
+import { InlineBadge } from '@app/views/components/InlineBadge'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-import { AnimatedLoader } from 'components/AnimatedLoader'
-import CalendarEventListItem from 'components/CalendarEvent/ListItem'
-import { InlineBadge } from 'components/InlineBadge'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { OAuthProvider } from 'constants/contacts'
 
 import { EmptyState } from '../../components/EmptyState'
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles(
     boxHeader: {
       alignItems: 'center',
       display: 'flex',
-      height: theme.spacing(6),
+      height: '48px',
       justifyContent: 'space-between'
     },
     boxWrapper: {
@@ -53,17 +53,17 @@ interface Props {
 }
 
 export function ThisWeeksSchedule({ isLoading, events }: Props) {
-  const [gmailOrOutlookLoading, setGmailOrOutlookLoading] = useState(true)
-  const [gmailOrOutlookSynced, setGmailOrOutlookSynced] = useState(false)
+  const [isAccountSyncing, setIsAccountSyncing] = useState(true)
+  const [hasAccount, setHasAccount] = useState(false)
 
   useEffect(() => {
     async function checkOAuthAccounts() {
       const google = await getOAuthAccounts(OAuthProvider.Google)
       const outlook = await getOAuthAccounts(OAuthProvider.Outlook)
 
-      setGmailOrOutlookSynced(Boolean(google.length || outlook.length))
+      setHasAccount(Boolean(google.length || outlook.length))
 
-      setGmailOrOutlookLoading(false)
+      setIsAccountSyncing(false)
     }
 
     checkOAuthAccounts()
@@ -102,14 +102,14 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
         </Button>
       </Box>
       <Box className={classes.boxContainer}>
-        {(isLoading || gmailOrOutlookLoading) && (
+        {(isLoading || isAccountSyncing) && (
           <>
             <AnimatedLoader />
           </>
         )}
         {!isLoading &&
-        !gmailOrOutlookLoading &&
-        gmailOrOutlookSynced &&
+        !isAccountSyncing &&
+        hasAccount &&
         filteredEvents.length === 0 ? (
           <EmptyState
             description="You're all caught up!"
@@ -117,8 +117,8 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
           />
         ) : null}
         {!isLoading &&
-          !gmailOrOutlookLoading &&
-          !gmailOrOutlookSynced &&
+          !isAccountSyncing &&
+          !hasAccount &&
           filteredEvents.length === 0 && <ThisWeeksScheduleEmptyState />}
         {!isLoading && (
           <List>
