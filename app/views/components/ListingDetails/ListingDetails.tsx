@@ -45,7 +45,7 @@ const useStyles = makeStyles(
       background: theme.palette.tertiary.main,
       [theme.breakpoints.up('md')]: {
         background: 'transparent',
-        padding: theme.spacing(6)
+        padding: theme.spacing(4)
       }
     },
     heroWrapper: {
@@ -55,8 +55,7 @@ const useStyles = makeStyles(
       },
       [theme.breakpoints.up('md')]: {
         marginBottom: theme.spacing(6),
-        paddingLeft: theme.spacing(6),
-        paddingRight: theme.spacing(6)
+        padding: theme.spacing(0, 4)
       }
     },
     heroContainer: {
@@ -322,7 +321,7 @@ function ListingDetails({
         </Grid>
       </div>
       {isDesktop && (
-        <Box px={6} mb={6}>
+        <Box px={4} mb={6}>
           <FeatureList listing={listing} />
         </Box>
       )}
@@ -345,16 +344,16 @@ function ListingDetails({
         </Grid>
       </div>
       {!isDesktop && (
-        <Box mb={6} px={3}>
+        <Box px={4} mb={6}>
           <FeatureList listing={listing} />
         </Box>
       )}
-      <Box px={3} mb={4}>
+      <Box px={4} mb={4}>
         <RootRef rootRef={mapSection}>
           <Map location={listing.property.address.location} />
         </RootRef>
       </Box>
-      <Box p={3}>
+      <Box p={4}>
         <MLSNote
           mlsName={listing.mls_info.mls}
           logo={listing.mls_info.logo}
