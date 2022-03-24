@@ -1,17 +1,22 @@
 import { Box, Button } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
+import { OAuthProvider } from '@app/constants/contacts'
+import { useConnectOAuthAccount } from '@app/hooks/use-connect-oauth-account'
 import useNotify from '@app/hooks/use-notify'
-import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
-import { iconSizes } from 'components/SvgIcons/icon-sizes'
-import OutlookIcon from 'components/SvgIcons/Outlook/IconOutlook'
-import { OAuthProvider } from 'constants/contacts'
-import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
+import GoogleIcon from '@app/views/components/SvgIcons/Google/IconGoogle'
+import { iconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import OutlookIcon from '@app/views/components/SvgIcons/Outlook/IconOutlook'
 
 import { EmptyState } from '../../components/EmptyState'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      paddingTop: theme.spacing(3)
+    },
     listIcon: { marginRight: theme.spacing(2) }
   }),
   { name: 'ThisWeeksScheduleEmptyState' }
@@ -44,7 +49,7 @@ export function ThisWeeksScheduleEmptyState() {
       moreLinkUrl="https://help.rechat.com/guides/crm/connect-to-outlook-google"
       title="Connect Your Google / Outlook"
     >
-      <Box pt={3} display="flex" flexWrap="wrap">
+      <Box className={classes.container}>
         <Box mr={1} mb={1}>
           <Button
             variant="outlined"

@@ -1,9 +1,9 @@
 import { Box, List, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
-import { AnimatedLoader } from 'components/AnimatedLoader'
-import CalendarEventListItem from 'components/CalendarEvent/ListItem'
-import { InlineBadge } from 'components/InlineBadge'
+import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
+import CalendarEventListItem from '@app/views/components/CalendarEvent/ListItem'
+import { InlineBadge } from '@app/views/components/InlineBadge'
 
 import { EmptyState } from '../../components/EmptyState'
 import { celebrationsEventTypes } from '../../variables'
@@ -13,7 +13,7 @@ const useStyles = makeStyles(
     boxHeader: {
       alignItems: 'center',
       display: 'flex',
-      height: theme.spacing(6),
+      height: '48px',
       justifyContent: 'space-between'
     },
     boxWrapper: {

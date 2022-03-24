@@ -4,9 +4,9 @@ import { browserHistory } from 'react-router'
 
 import { EmptyState } from '@app/components/Pages/Dashboard/Overview/components/EmptyState'
 import { ACL } from '@app/constants/acl'
+import Acl from '@app/views/components/Acl'
 import { useAcl } from '@app/views/components/Acl/use-acl'
-import MetabaseDashboard from 'components/MetabaseIFrame'
-import Acl from 'views/components/Acl'
+import MetabaseDashboard from '@app/views/components/MetabaseIFrame'
 
 import { useDealsList } from '../../Deals/List/Agent/hooks/use-deals-list'
 import { AccessButtons } from '../components/AccessButtons'
@@ -44,6 +44,10 @@ const useStyles = makeStyles(
       borderRadius: theme.shape.borderRadius,
       display: 'flex',
       flexDirection: 'column'
+    },
+    title: {
+      paddingBottom: theme.spacing(1.5),
+      paddingTop: theme.spacing(3)
     }
   }),
   { name: 'WelcomeBox' }
@@ -73,7 +77,7 @@ function OverviewDashboard() {
       </Acl.Marketing>
       <Acl.Deals>
         <Box className={classes.container} flexDirection="column">
-          <Box pb={1.5} pt={3}>
+          <Box className={classes.title}>
             <Typography variant="h6">To Track</Typography>
           </Box>
           {isAdmin || deals?.length > 0 ? (
