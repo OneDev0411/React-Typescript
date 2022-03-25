@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   mlsName: string
   disclaimer: string
-  logo?: string
+  logo: Nullable<string>
 }
 
 export default function MLSNote({ disclaimer, mlsName, logo }: Props) {

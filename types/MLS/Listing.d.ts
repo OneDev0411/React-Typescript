@@ -228,7 +228,7 @@ declare type IListingAssociation = 'agent' | 'proposed_agent' | 'mls_info'
 interface MlsInfo extends IModel<'mls_info'> {
   mls: string
   disclaimer: string
-  logo?: string
+  logo: Nullable<string>
 }
 
 declare type IListing<Associations extends IListingAssociation = ''> = {
