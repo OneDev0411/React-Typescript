@@ -15,6 +15,12 @@ interface Props {
 
 const styles = makeStyles(
   (theme: Theme) => ({
+    container: {
+      alignItems: 'flex-start',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: theme.spacing(2)
+    },
     description: {
       color: theme.palette.grey[500],
       maxWidth: '520px',
@@ -25,20 +31,18 @@ const styles = makeStyles(
     },
     icon: {
       display: 'inline-block',
-      height: theme.spacing(7),
+      height: '56px',
       marginBottom: theme.spacing(1.5)
     },
     moreLinkLabel: {
       color: theme.palette.grey[500],
-      borderBottom: `${theme.spacing(0.25)}px solid ${theme.palette.grey[400]}`,
+      borderBottom: `2px solid ${theme.palette.grey[400]}`,
       marginLeft: theme.spacing(1),
       paddingBottom: theme.spacing(0.125),
 
       '&:hover, &:focus': {
         color: theme.palette.primary.dark,
-        borderBottom: `${theme.spacing(0.25)}px solid ${
-          theme.palette.primary.dark
-        }`,
+        borderBottom: `2px solid ${theme.palette.primary.dark}`,
         textDecoration: 'none'
       }
     },
@@ -60,12 +64,7 @@ export function EmptyState({
   const classes = styles()
 
   return (
-    <Box
-      alignItems="flex-start"
-      display="flex"
-      flexDirection="column"
-      padding={2}
-    >
+    <Box className={classes.container}>
       <img alt={title || description} className={classes.icon} src={iconSrc} />
       {title && (
         <Typography className={classes.title} variant="subtitle1">

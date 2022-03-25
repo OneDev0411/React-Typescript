@@ -37,17 +37,6 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     listItemWithButton: {
       paddingRight: theme.spacing(12)
-    },
-    itemText: {
-      '& a': {
-        paddingRight: theme.spacing(2),
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        display: '-webkit-box',
-        '-webkit-line-clamp': 2 /* number of lines to show */,
-        'line-clamp': 2,
-        '-webkit-box-orient': 'vertical'
-      }
     }
   }),
   { name: 'CalendarEventListItem' }

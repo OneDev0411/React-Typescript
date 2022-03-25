@@ -15,7 +15,7 @@ const useStyles = makeStyles(
       marginBottom: theme.spacing(3)
     },
     headerContainer: {
-      height: theme.spacing(6),
+      height: '48px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between'

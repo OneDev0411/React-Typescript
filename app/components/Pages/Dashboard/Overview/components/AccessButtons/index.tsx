@@ -1,4 +1,5 @@
 import { Box } from '@material-ui/core'
+import { Theme, makeStyles } from '@material-ui/core/styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
@@ -14,7 +15,17 @@ const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
 const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
 const marketingAccess = { oneOf: [ACL.MARKETING, ACL.AGENT_NETWORK] }
 
+const styles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      margin: theme.spacing(3, 0)
+    }
+  }),
+  { name: 'AccessButtons' }
+)
+
 export function AccessButtons() {
+  const classes = styles()
   const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
 
   const { isActive: isIntercomActive } = useSelector(
@@ -71,7 +82,7 @@ export function AccessButtons() {
   ]
 
   return (
-    <Box mb={3} mt={3}>
+    <Box className={classes.container}>
       {AccessItems.map(item => (
         <AccessButton key={item.id} data={item} />
       ))}

@@ -13,16 +13,13 @@ interface Props {
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    primary: {
-      '& a': {
-        paddingRight: theme.spacing(2),
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        'line-clamp': 2 /* number of lines to show */,
-        display: '-webkit-box',
-        '-webkit-line-clamp': 2,
-        '-webkit-box-orient': 'vertical'
-      }
+    root: {
+      paddingRight: theme.spacing(2),
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      '-webkit-line-clamp': 2,
+      display: '-webkit-box',
+      '-webkit-box-orient': 'vertical'
     }
   }),
   { name: 'CalendarListItemText' }
@@ -36,9 +33,7 @@ export default function CalendarListItemText({ event }: Props) {
   const classes = useStyles()
 
   const contact =
-    event.people &&
-    event.people.length > 0 &&
-    event.people[0].type === 'contact'
+    Number(event.people?.length) > 0 && event.people?.[0]?.type === 'contact'
       ? event.people[0]
       : null
 
@@ -70,7 +65,7 @@ export default function CalendarListItemText({ event }: Props) {
 
   return (
     <ListItemText
-      className={classes.primary}
+      classes={{ root: classes.root }}
       primary={eventTitleLink || eventTitle}
       secondary={eventSubTitle}
     />
