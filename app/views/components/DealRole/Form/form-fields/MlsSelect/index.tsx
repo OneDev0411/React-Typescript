@@ -1,6 +1,9 @@
+import { useState } from 'react'
+
 import { Box, TextField } from '@material-ui/core'
 import { omit } from 'lodash'
 import { FieldInputProps, FieldMetaState } from 'react-final-form'
+import { useEffectOnce } from 'react-use'
 
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import { UserAgentSelect } from '@app/views/components/UserAgentSelect'
@@ -22,9 +25,15 @@ export function MlsSelect({
   agents,
   isRequired
 }: Props) {
-  const selectedAgent = agents.find(
-    agent => input.value === agent[fieldToSelect]
-  )
+  const [selectedAgent, setSelectedAgent] = useState<IAgent | undefined>()
+
+  useEffectOnce(() => {
+    const agent = agents.find(
+      agent => input.value?.[fieldToSelect] === agent[fieldToSelect]
+    )
+
+    setSelectedAgent(agent)
+  })
 
   const handleChange = (agent: IAgent) => {
     mutators.populateRole(agent, 'MlsSelect')
