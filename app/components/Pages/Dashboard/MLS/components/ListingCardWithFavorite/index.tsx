@@ -1,4 +1,4 @@
-import React, { ComponentProps, useCallback, useState, memo } from 'react'
+import { ComponentProps, useCallback, useState, memo } from 'react'
 
 import { noop } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
@@ -76,26 +76,29 @@ const ListingCardWithFavorite = ({
     onToggleSelection(listing)
   }, [onToggleSelection, listing])
 
-  // TODO: After refactoring fav/saved tab, Change it to:
-  const handleLikeClick = useCallback(() => {
-    if (selected && unselectOnToggleFavorite) {
-      onToggleSelection(listing)
-    }
+  // TODO: After refactoring saved tab, Change it to:
+  const handleLikeClick = useCallback(
+    (sendApiRequest = true) => {
+      if (selected && unselectOnToggleFavorite) {
+        onToggleSelection(listing)
+      }
 
-    if (reduxToggleFavorite) {
-      dispatch(toggleFavorite(listing))
-    } else {
-      onToggleLike(listing, true)
-    }
-  }, [
-    selected,
-    unselectOnToggleFavorite,
-    reduxToggleFavorite,
-    onToggleSelection,
-    listing,
-    onToggleLike,
-    dispatch
-  ])
+      if (reduxToggleFavorite) {
+        dispatch(toggleFavorite(listing))
+      } else {
+        onToggleLike(listing, sendApiRequest)
+      }
+    },
+    [
+      selected,
+      unselectOnToggleFavorite,
+      reduxToggleFavorite,
+      onToggleSelection,
+      listing,
+      onToggleLike,
+      dispatch
+    ]
+  )
 
   return (
     <>
@@ -107,7 +110,7 @@ const ListingCardWithFavorite = ({
         liked={liked}
         tags={tags}
         onClick={handleClick}
-        // TODO: After refactoring fav/saved tab, Change it to:
+        // TODO: After refactoring saved tab, Change it to:
         // onLikeClick={onToggleLike}
         onLikeClick={handleLikeClick}
         onToggleSelection={handleToggleSelection}
@@ -120,7 +123,9 @@ const ListingCardWithFavorite = ({
           listingId={listing.id}
           closeHandler={closeListing}
           onToggleFavorite={() => {
-            onToggleLike(listing, false)
+            // TODO: After refactoring saved tab, Change it to:
+            // onToggleLike(listing, false)
+            handleLikeClick(false)
           }}
         />
       )}
