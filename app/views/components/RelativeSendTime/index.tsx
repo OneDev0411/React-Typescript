@@ -11,22 +11,22 @@ const useStyles = makeStyles(
   theme => ({
     red: { color: theme.palette.error.main }
   }),
-  { name: 'SuperCampaignSendTime' }
+  { name: 'RelativeSendTime' }
 )
 
-interface SuperCampaignSendTimeProps {
+interface RelativeSendTimeProps {
   className?: string
   time: number
   hasTooltip?: boolean
   prefix?: ReactNode
 }
 
-function SuperCampaignSendTime({
+function RelativeSendTime({
   className,
   time,
   hasTooltip = false,
   prefix
-}: SuperCampaignSendTimeProps) {
+}: RelativeSendTimeProps) {
   const classes = useStyles()
 
   const daysDiff = differenceInDays(time * 1000, new Date().getTime())
@@ -52,4 +52,4 @@ function SuperCampaignSendTime({
   return <Tooltip title={tooltipTitle}>{relativeTime}</Tooltip>
 }
 
-export default SuperCampaignSendTime
+export default RelativeSendTime
