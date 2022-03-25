@@ -125,7 +125,7 @@ const ListingCardWithFavorite = ({
           onToggleFavorite={() => {
             // TODO: After refactoring saved tab, Change it to:
             // onToggleLike(listing, false)
-            handleLikeClick(false)
+            handleLikeClick(!reduxToggleFavorite)
           }}
         />
       )}
