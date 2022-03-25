@@ -6,7 +6,7 @@ import SuperCampaignGridView from '@app/components/Pages/Dashboard/SuperCampaign
 import { ACL } from '@app/constants/acl'
 import { useAcl } from '@app/views/components/Acl/use-acl'
 
-import Layout from '../List/Layout'
+import Layout from '../../List/Layout'
 
 function SuperCampaignList(props) {
   useTitle('Campaign List | Rechat')
