@@ -11,6 +11,8 @@ import { Field, FieldProps, FieldRenderProps } from 'react-final-form'
 
 import { useGetActiveBrandFacebookPages } from '@app/models/facebook'
 
+import InstagramAccountPaperWithManageAccountLink from './InstagramAccountPaperWithManageAccountLink'
+
 const useStyles = makeStyles(
   theme => ({
     avatar: {
@@ -94,6 +96,7 @@ function InstagramAccountAutocompleteField(
                 error={showError}
               />
             )}
+            PaperComponent={InstagramAccountPaperWithManageAccountLink}
           />
         )
       }}
