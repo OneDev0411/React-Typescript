@@ -111,8 +111,8 @@ const secondaryColumns: TableColumnItem[] = [
     // TODO: add helper to format numbers
     render: listing =>
       listing.compact_property.square_meters
-        ? `${metersToFeet(
-            listing.compact_property.square_meters
+        ? `${Math.round(
+            metersToFeet(listing.compact_property.square_meters)
           ).toLocaleString('en-US', { maximumFractionDigits: 2 })} sqft`
         : CELL_FALLBACK
   },
