@@ -1,6 +1,12 @@
-import { Paper, PaperProps, Divider, makeStyles } from '@material-ui/core'
+import { MouseEvent } from 'react'
 
-import LinkButton from '@app/views/components/LinkButton'
+import {
+  Paper,
+  PaperProps,
+  Divider,
+  Button,
+  makeStyles
+} from '@material-ui/core'
 
 const useStyles = makeStyles(
   theme => ({
@@ -10,10 +16,7 @@ const useStyles = makeStyles(
       alignItems: 'center'
     },
     button: {
-      justifyContent: 'left',
-      // TODO: Remove the below styles when the bootstrap CSS is removed
-      '&:hover': { color: theme.palette.primary.main },
-      '&:focus': { outline: 0 }
+      justifyContent: 'left'
     }
   }),
   { name: 'InstagramAccountPaperWithManageAccountLink' }
@@ -27,27 +30,32 @@ function InstagramAccountPaperWithManageAccountLink({
 }: InstagramAccountPaperWithManageAccountLinkProps) {
   const classes = useStyles()
 
+  const stopEvent = (event: MouseEvent) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+
+  const handleClick = (event: MouseEvent) => {
+    stopEvent(event)
+
+    window.open('/dashboard/account/connected-accounts', '_blank')
+  }
+
   return (
     <Paper {...paperProps}>
       {children}
       <Divider />
-      <div
-        className={classes.wrapper}
-        onClick={event => {
-          event.preventDefault()
-          event.stopPropagation()
-        }}
-      >
-        <LinkButton
+      <div className={classes.wrapper}>
+        <Button
           className={classes.button}
-          to="/dashboard/account/connected-accounts"
-          target="_blank"
           color="primary"
           fullWidth
           size="large"
+          onClick={handleClick}
+          onMouseDown={stopEvent}
         >
           Manage Instagram Account...
-        </LinkButton>
+        </Button>
       </div>
     </Paper>
   )
