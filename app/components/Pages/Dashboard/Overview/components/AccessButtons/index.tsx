@@ -58,7 +58,7 @@ export function AccessButtons() {
       to: '/dashboard/contacts'
     },
     {
-      access: marketingAccess,
+      access: ['AgentNetwork'],
       id: 'agent-network',
       label: 'Agent Network',
       to: '/dashboard/agent-network'
