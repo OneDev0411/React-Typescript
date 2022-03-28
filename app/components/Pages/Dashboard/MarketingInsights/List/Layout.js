@@ -66,6 +66,11 @@ function InsightsLayout({
     })
   }
 
+  items.push({
+    label: 'Instagram',
+    to: urlGenerator('/social-post')
+  })
+
   useEffectOnce(() => {
     const savedSortField = getSettingFromTeam(
       activeTeam,
