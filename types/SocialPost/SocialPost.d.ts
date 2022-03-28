@@ -1,4 +1,4 @@
-declare type ISocialPostAssociations = 'template_instance'
+declare type ISocialPostAssociations = 'template_instance' | 'owner'
 
 declare interface ISocialPost<A extends ISocialPostAssociations = ''>
   extends IModel<'social_post'> {
@@ -14,4 +14,5 @@ declare interface ISocialPost<A extends ISocialPostAssociations = ''>
   failure: null // TODO: Fix the type error
   post_link: string
   user: UUID
+  owner: 'owner' extends A ? IUser : never
 }

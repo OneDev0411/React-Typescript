@@ -16,7 +16,7 @@ const initialRange: GetSocialPostFilter = {
 export function useGetSocialPosts(
   brandId: UUID,
   filter: UseGetSocialPostsFilter = { executed: 'true' }
-): UseInfiniteQueryResult<ISocialPost[]> {
+): UseInfiniteQueryResult<ISocialPost<'template_instance' | 'owner'>[]> {
   return useInfiniteQuery(
     filteredList(brandId, filter),
     async ({ pageParam }: { pageParam?: GetSocialPostFilter }) => {
