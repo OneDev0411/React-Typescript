@@ -9,10 +9,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     title: {
       color: theme.palette.tertiary.light,
-      marginBottom: theme.spacing(2),
-      [theme.breakpoints.down('sm')]: {
-        ...theme.typography.subtitle3
-      }
+      marginBottom: theme.spacing(2)
     },
     description: {
       color: theme.palette.tertiary.light,
@@ -27,7 +24,7 @@ const useStyles = makeStyles(
 interface Props {
   address: string
   description: string
-  officeName: string
+  officeName: Nullable<string>
   agentFullName?: string
   agentPhoneNumber?: string
 }
@@ -74,16 +71,18 @@ function Description({
           </Button>
         </Box>
       )}
-      <Box pt={2}>
-        <Typography variant="subtitle2">
-          <strong>
-            Listing Courtesy {agentFullName ? `of ${agentFullName}` : ''} of{' '}
-            {officeName}
-            <br />
-            {agentPhoneNumber}
-          </strong>
-        </Typography>
-      </Box>
+      {officeName && (
+        <Box pt={2}>
+          <Typography variant="subtitle2">
+            <strong>
+              Listing Courtesy {agentFullName ? `of ${agentFullName}` : ''} of{' '}
+              {officeName}
+              <br />
+              {agentPhoneNumber}
+            </strong>
+          </Typography>
+        </Box>
+      )}
     </>
   )
 }

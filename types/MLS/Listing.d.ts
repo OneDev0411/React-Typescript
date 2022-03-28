@@ -228,7 +228,7 @@ declare type IListingAssociation = 'agent' | 'proposed_agent' | 'mls_info'
 interface MlsInfo extends IModel<'mls_info'> {
   mls: string
   disclaimer: string
-  logo: string
+  logo: Nullable<string>
 }
 
 declare type IListing<Associations extends IListingAssociation = ''> = {
@@ -329,4 +329,4 @@ declare type IListing<Associations extends IListingAssociation = ''> = {
   property: Property
   user_listing_notification_setting: null
 } & Association<'proposed_agent', ProposedAgent, Associations> &
-  Association<'mls_info', Nullable<MlsInfo>, Associations>
+  Association<'mls_info', MlsInfo, Associations>
