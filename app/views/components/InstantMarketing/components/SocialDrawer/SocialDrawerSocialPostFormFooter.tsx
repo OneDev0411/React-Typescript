@@ -9,8 +9,6 @@ import LinkButton from '@app/views/components/LinkButton'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import { useSetSocialDrawerStep } from './use-set-social-drawer-step'
-
 const useStyles = makeStyles(
   theme => ({
     root: { borderTop: `1px solid ${theme.palette.divider}` },
@@ -45,12 +43,9 @@ function SocialDrawerSocialPostFormFooter({
   formId
 }: SocialDrawerSocialPostFormFooterProps) {
   const classes = useStyles()
-  const setStep = useSetSocialDrawerStep()
 
   const { submitting } = useFormState()
   const dueAtField = useField<Date>('dueAt')
-
-  const handleBack = () => setStep('Share')
 
   const hasScheduled = !!dueAtField.input.value
   const selectedDate = dueAtField.input.value || new Date()
@@ -58,9 +53,6 @@ function SocialDrawerSocialPostFormFooter({
   return (
     <div className={classes.root}>
       <div className={classes.actions}>
-        <Button size="small" onClick={handleBack} disabled={submitting}>
-          Back
-        </Button>
         <DateTimePicker
           onClose={dueAtField.input.onChange}
           showTimePicker
