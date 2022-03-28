@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux'
 
+import useNotify from '@app/hooks/use-notify'
 import { useCreateSocialPost } from '@app/models/social-posts'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
@@ -7,21 +8,24 @@ import SocialPostForm, { FormValues } from '../SocialPostForm'
 
 import SocialDrawerSocialPostFormFooter from './SocialDrawerSocialPostFormFooter'
 
-interface SocialDrawerScheduleInstagramPostProps {
+export interface SocialDrawerSocialPostFormProps {
   className?: string
   instance: Optional<IMarketingTemplateInstance | IBrandAsset>
+  onPostScheduled?: () => void
+  onPostSent?: () => void
 }
 
 const formId = 'schedule-instagram-post-form'
 
-function SocialDrawerScheduleInstagramPost({
+function SocialDrawerSocialPostForm({
   className,
-  instance
-}: SocialDrawerScheduleInstagramPostProps) {
-  const { mutateAsync, data } = useCreateSocialPost()
+  instance,
+  onPostScheduled,
+  onPostSent
+}: SocialDrawerSocialPostFormProps) {
+  const { mutateAsync } = useCreateSocialPost()
   const activeBrandId = useSelector(selectActiveBrandId)
-
-  const isCreated = !!data
+  const notify = useNotify()
 
   const handleSubmit = async (values: FormValues) => {
     if (!instance || !values.facebookPage) {
@@ -35,15 +39,21 @@ function SocialDrawerScheduleInstagramPost({
       templateInstance: instance.id,
       brand: activeBrandId
     })
-  }
 
-  if (isCreated) {
-    return (
-      <div>
-        In this case, the insights button will be rendered next to a success
-        message
-      </div>
-    )
+    const isScheduled = !!values.dueAt
+
+    notify({
+      status: 'success',
+      message: `The Instagram post has been ${
+        isScheduled ? 'scheduled' : 'sent'
+      }`
+    })
+
+    if (isScheduled) {
+      onPostScheduled?.()
+    } else {
+      onPostSent?.()
+    }
   }
 
   return (
@@ -57,4 +67,4 @@ function SocialDrawerScheduleInstagramPost({
   )
 }
 
-export default SocialDrawerScheduleInstagramPost
+export default SocialDrawerSocialPostForm
