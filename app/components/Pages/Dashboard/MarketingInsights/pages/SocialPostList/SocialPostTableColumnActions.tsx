@@ -15,6 +15,8 @@ import LinkButton from '@app/views/components/LinkButton'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
+import { isSocialPostExecuted } from './helpers'
+
 const useStyles = makeStyles(
   theme => ({
     root: {
@@ -71,7 +73,7 @@ function SocialPostTableColumnActions({
     )
   }
 
-  if (!socialPost.executed_at) {
+  if (!isSocialPostExecuted(socialPost)) {
     const selectedDate = convertTimestampToDate(socialPost.due_at)
 
     return (
