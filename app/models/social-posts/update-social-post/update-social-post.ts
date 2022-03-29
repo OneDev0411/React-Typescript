@@ -14,7 +14,7 @@ export async function updateSocialPost(
         // TODO: Ask API guys to:
         // 1. Use the same patterns as create social record -> Needs to change dueAt to due_at
         // 2. Have consistant types on get and post methods. -> Seems like the get is in seconds and the put is in milliseconds
-        .send({ dueAt: data.due_at })
+        .send({ dueAt: data.due_at * 1000 })
     ).body.data
   )
 }
