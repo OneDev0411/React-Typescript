@@ -12,11 +12,11 @@ import { useBreakpoint } from '@app/hooks/use-breakpoint'
 import { getAttributeFromSummary } from '@app/models/contacts/helpers'
 import ALink from '@app/views/components/ALink'
 import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderColumn'
+import { SelectionCount } from '@app/views/components/Grid/Table/features/Selection/SelectionCount'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
 import { TagsInlineEdit } from './columns-inline-edit/Tags'
 import LastTouched from './columns/LastTouched'
-import { SelectedRowsCount } from './columns/SelectedRowsCount'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -43,7 +43,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
   return [
     {
       id: 'name',
-      header: () => <SelectedRowsCount totalRows={totalRows} />,
+      header: () => <SelectionCount totalRows={totalRows} />,
       render: ({ row: contact }) => (
         <ALink to={`/dashboard/contacts/${contact.id}`}>
           {getAttributeFromSummary(contact, 'display_name')}
