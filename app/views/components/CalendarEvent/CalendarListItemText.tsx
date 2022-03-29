@@ -32,10 +32,7 @@ export default function CalendarListItemText({ event }: Props) {
 
   const classes = useStyles()
 
-  const contact =
-    Number(event.people?.length) > 0 && event.people?.[0]?.type === 'contact'
-      ? event.people[0]
-      : null
+  const contact = event.people?.[0]?.type === 'contact' ? event.people[0] : null
 
   const humanizedEventTime = useMemo(() => {
     const eventTime = new Date(event.next_occurence)

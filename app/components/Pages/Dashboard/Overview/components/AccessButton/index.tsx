@@ -38,9 +38,7 @@ const styles = makeStyles(
         textDecoration: 'none'
       }
     },
-    label: {
-      fontSize: theme.typography.subtitle2.fontSize
-    }
+    label: theme.typography.body2
   }),
   { name: 'AccessButton' }
 )
