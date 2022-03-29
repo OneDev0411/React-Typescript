@@ -21,7 +21,10 @@ import { SelectedRowsCount } from './columns/SelectedRowsCount'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     cell: {
-      paddingLeft: theme.spacing(2)
+      paddingLeft: theme.spacing(2),
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
     }
   }),
   {
@@ -52,9 +55,9 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       hidden: ['xs', 'sm'].includes(breakpoint),
       header: () => <HeaderColumn text="Tags" iconPath={mdiTag} />,
       render: ({ row: contact }) => (
-        <span className={classes.cell}>
+        <div className={classes.cell}>
           {contact.tags?.slice(0, 2).join(', ')}
-        </span>
+        </div>
       ),
       renderInlineEdit: ({ row: contact }) => (
         <TagsInlineEdit contact={contact} />
@@ -64,7 +67,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       id: 'phone',
       header: () => <HeaderColumn text="Phone" iconPath={mdiPhone} />,
       render: ({ row: contact }) => (
-        <span className={classes.cell}>{contact.phone_number}</span>
+        <div className={classes.cell}>{contact.phone_number}</div>
       ),
       renderInlineEdit: ({ row: contact }) => <div>11</div>
     },
@@ -73,7 +76,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       hidden: ['xs'].includes(breakpoint),
       header: () => <HeaderColumn text="Email" iconPath={mdiEmail} />,
       render: ({ row: contact }) => (
-        <span className={classes.cell}>{contact.email}</span>
+        <div className={classes.cell}>{contact.email}</div>
       ),
       renderInlineEdit: ({ row: contact }) => <div>22</div>
     },
@@ -82,22 +85,22 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       hidden: ['xs'].includes(breakpoint),
       header: () => <HeaderColumn text="Last Touch" iconPath={mdiCalendar} />,
       render: ({ row: contact }) => (
-        <span className={classes.cell}>
+        <div className={classes.cell}>
           <LastTouched contact={contact} title="" />
-        </span>
+        </div>
       )
     },
     {
       id: 'flows',
       hidden: breakpoint !== 'xl',
       header: () => <HeaderColumn text="Flows" iconPath={mdiFlash} />,
-      render: ({ row: contact }) => <span>-</span>
+      render: ({ row: contact }) => <div>-</div>
     },
     {
       id: 'birthday',
       hidden: breakpoint !== 'xl',
       header: () => <HeaderColumn text="Birthday" iconPath={mdiCake} />,
-      render: ({ row: contact }) => <span>-</span>
+      render: ({ row: contact }) => <div>-</div>
     }
   ]
 }
