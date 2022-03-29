@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux'
 
 import { useCreateSocialPost } from '@app/models/social-posts'
 import { selectActiveBrandId } from '@app/selectors/brand'
+import { convertDateToTimestamp } from '@app/utils/date-utils'
 
 import SocialPostForm, { FormValues } from '../SocialPostForm'
 
@@ -31,7 +32,7 @@ function SocialDrawerScheduleInstagramPost({
     await mutateAsync({
       ...values,
       facebookPage: values.facebookPage.id,
-      due_at: values.dueAt ?? new Date(),
+      due_at: convertDateToTimestamp(values.dueAt ?? new Date()),
       templateInstance: instance.id,
       brand: activeBrandId
     })
