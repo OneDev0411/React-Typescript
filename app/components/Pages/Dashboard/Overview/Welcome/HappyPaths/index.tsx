@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core/styles'
 import { mdiCheckboxMarkedCircle } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 // TODO: Replace this new module with the already exisitng one in global components
 import { ProgressBar } from '../../components/ProgressBar'

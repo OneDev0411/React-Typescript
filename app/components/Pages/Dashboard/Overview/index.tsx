@@ -1,22 +1,27 @@
-import React from 'react'
+import { makeStyles, Theme } from '@material-ui/core/styles'
+import { useTitle } from 'react-use'
 
 import PageLayout from 'components/GlobalPageLayout'
 
 import Welcome from './Welcome'
-// import Stats from './Stats'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    layout: { backgroundColor: theme.palette.background.default }
+  }),
+  { name: 'ThisWeeksSchedule' }
+)
 
 function OverviewDashboard() {
+  useTitle('Rechat | Today')
+
+  const classes = useStyles()
+
   return (
-    <PageLayout>
-      <PageLayout.Header title="Dashboard" />
-      <PageLayout.Main>
+    <PageLayout className={classes.layout}>
+      <PageLayout.Header title="Today" />
+      <PageLayout.Main mt={0}>
         <Welcome />
-        {/* <Box display="flex" mt={5} mb={5}>
-          <Stats title="Production" value="$7,000,250" change={15} />
-          <Stats title="Active Deals" value="8" change={20} />
-          <Stats title="Pending Deals" value="2" change={-4} />
-          <Stats title="Closed Deals" value="12" change={12} />
-        </Box> */}
       </PageLayout.Main>
     </PageLayout>
   )
