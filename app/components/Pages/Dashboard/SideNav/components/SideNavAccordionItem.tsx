@@ -1,4 +1,10 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import {
+  ChangeEvent,
+  Dispatch,
+  MouseEvent,
+  SetStateAction,
+  useState
+} from 'react'
 
 import {
   Accordion,
@@ -87,7 +93,7 @@ export default function SideNavAccordionItem({
   const isOpen = Boolean(anchorEl)
   const popperId = isOpen ? id : undefined
 
-  const handleShowPopper = (event: React.MouseEvent<HTMLElement>, menuId) => {
+  const handleShowPopper = (event: MouseEvent<HTMLElement>, menuId) => {
     setAnchorEl(event.currentTarget)
     setHoveredItem(menuId)
   }
@@ -118,7 +124,7 @@ export default function SideNavAccordionItem({
           hoveredItem={hoveredItem}
           menuId={menuId}
           popperId={popperId}
-          onExpandedMenu={setExpandedMenu}
+          onExpandMenu={setExpandedMenu}
         />
 
         {subMenu &&

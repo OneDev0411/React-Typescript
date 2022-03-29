@@ -37,7 +37,7 @@ export function SideNavAccordionDetails({ isOpen, subMenu }: Props) {
         const { access, isHidden } = item
 
         if (isHidden) {
-          return
+          return null
         }
 
         return access ? (

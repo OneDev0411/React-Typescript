@@ -49,7 +49,7 @@ interface Props {
   hoveredItem: string | null
   menuId: ExpandedMenu
   popperId: string | undefined
-  onExpandedMenu: Dispatch<SetStateAction<ExpandedMenu>>
+  onExpandMenu: Dispatch<SetStateAction<ExpandedMenu>>
 }
 
 export function SideNavAccordionSummary({
@@ -58,7 +58,7 @@ export function SideNavAccordionSummary({
   hoveredItem,
   menuId,
   popperId,
-  onExpandedMenu
+  onExpandMenu
 }: Props) {
   const classes = useStyles()
   const {
@@ -97,7 +97,7 @@ export function SideNavAccordionSummary({
         onTriggerAction={action}
         to={to || subMenu?.[0]?.to}
         tourId={menuId}
-        onExpandedMenu={onExpandedMenu}
+        onExpandMenu={onExpandMenu}
         subMenu={subMenu}
       >
         <AccordionSummaryDiv>

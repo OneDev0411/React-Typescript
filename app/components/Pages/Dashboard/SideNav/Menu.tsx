@@ -283,7 +283,7 @@ function Menu(props: WithRouterProps) {
           const { isHidden } = menu
 
           if (isHidden) {
-            return
+            return null
           }
 
           return (

@@ -8,7 +8,7 @@ import { AccordionSubMenu, ExpandedMenu } from '../types'
 interface Props {
   children: ReactNode
   isSubmenu?: boolean
-  onExpandedMenu?: (panel: ExpandedMenu) => void
+  onExpandMenu?: (panel: ExpandedMenu) => void
   onTriggerAction?: () => void
   subMenu?: AccordionSubMenu[]
   to?: string
@@ -20,7 +20,7 @@ function SideNavLinkItem(props: Props & WithRouterProps) {
     children,
     isSubmenu = false,
     location,
-    onExpandedMenu,
+    onExpandMenu,
     onTriggerAction,
     subMenu,
     to = '',
@@ -34,8 +34,12 @@ function SideNavLinkItem(props: Props & WithRouterProps) {
     : !onTriggerAction && location.pathname.startsWith(to)
 
   useEffect(() => {
-    active && onExpandedMenu && onExpandedMenu(tourId)
-  }, [active, onExpandedMenu, tourId])
+    if (!active || !onExpandMenu) {
+      return
+    }
+
+    onExpandMenu(tourId)
+  }, [active, onExpandMenu, tourId])
 
   return isSubmenu ? (
     <SidenavLink
