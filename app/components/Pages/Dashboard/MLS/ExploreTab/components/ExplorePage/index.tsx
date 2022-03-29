@@ -47,7 +47,8 @@ import {
   setMapBounds,
   setMapLocation,
   changeSort,
-  removePinMarker
+  removePinMarker,
+  toggleListingFavoriteState
 } from '../../context/actions'
 import useListingsContext from '../../hooks/useListingsContext'
 import Autocomplete from '../Autocomplete'
@@ -331,6 +332,13 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     dispatch(removePinMarker())
   }
 
+  const handleToggleLike = useCallback(
+    (listingId: UUID) => {
+      dispatch(toggleListingFavoriteState(listingId))
+    },
+    [dispatch]
+  )
+
   const onMapLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map
   }, [])
@@ -387,6 +395,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                   onToggleListingModal={onToggleListingModal}
                   onMarkerClick={onMarkerClick}
                   onMapClick={handleHidingMapMarkerPopup}
+                  onToggleFavorite={handleToggleLike}
                   onMapDrag={handleHidingMapMarkerPopup}
                   mapPosition={state.map}
                   listings={state.result.listings}

@@ -52,8 +52,9 @@ const useStyles = makeStyles(
 
 export const Actions = ({
   contact,
-  handleCreateNote
-}: Omit<Props, 'onTagChange'>) => {
+  onCreateNote,
+  onCreateEvent
+}: Omit<Props, 'contactChangeCallback'>) => {
   const classes = useStyles()
 
   return (
@@ -93,8 +94,8 @@ export const Actions = ({
         />
       </div>
       <div className={classes.actionContainer}>
-        <AddNote contactId={contact.id} onCreateNote={handleCreateNote} />
-        <AddEvent contact={contact} />
+        <AddNote contactId={contact.id} onCreateNote={onCreateNote} />
+        <AddEvent contact={contact} callback={onCreateEvent} />
       </div>
     </div>
   )

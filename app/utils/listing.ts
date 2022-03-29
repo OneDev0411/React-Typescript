@@ -209,7 +209,7 @@ export const getListingFeatures = (
   return {
     bedroomCount: property.bedroom_count,
     bathroomCount: property.bathroom_count,
-    areaSqft: Math.floor(metersToFeet(property.square_meters)),
+    areaSqft: Math.round(metersToFeet(property.square_meters)),
     lotSizeAreaAcre: property.lot_size_area
   }
 }
