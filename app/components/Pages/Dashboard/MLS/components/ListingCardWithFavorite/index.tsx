@@ -22,7 +22,7 @@ interface Props
   onToggleListingModal?: (id: UUID, isOpen: boolean) => void
   onToggleLike?: (
     listing: IListing | ICompactListing,
-    sendApiRequest?: boolean
+    shouldSendApiRequest?: boolean
   ) => void
 }
 
@@ -78,7 +78,7 @@ const ListingCardWithFavorite = ({
 
   // TODO: After refactoring saved tab, Change it to:
   const handleLikeClick = useCallback(
-    (sendApiRequest = true) => {
+    (shouldSendApiRequest = true) => {
       if (selected && unselectOnToggleFavorite) {
         onToggleSelection(listing)
       }
@@ -86,7 +86,7 @@ const ListingCardWithFavorite = ({
       if (reduxToggleFavorite) {
         dispatch(toggleFavorite(listing))
       } else {
-        onToggleLike(listing, sendApiRequest)
+        onToggleLike(listing, shouldSendApiRequest)
       }
     },
     [
