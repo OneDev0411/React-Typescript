@@ -23,7 +23,7 @@ export default function ListingMarker({ user, brand, listing, popupIsActive }) {
 
   const price_small = numeral(price).format('0.[00]a')
 
-  const square_feet = Math.floor(
+  const square_feet = Math.round(
     listing_util.metersToFeet(property.square_meters)
   ).toLocaleString()
 
