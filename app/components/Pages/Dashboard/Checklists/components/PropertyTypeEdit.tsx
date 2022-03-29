@@ -45,7 +45,8 @@ export function PropertyTypeEdit({ propertyType, onUpdate }: Props) {
       {showEditForm && (
         <PropertyTypeForm
           isOpen
-          onCreate={propertyType => {
+          propertyType={propertyType}
+          onSave={propertyType => {
             closeModal()
             onUpdate(propertyType)
           }}
