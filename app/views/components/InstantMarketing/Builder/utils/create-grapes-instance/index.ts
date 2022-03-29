@@ -13,7 +13,9 @@ const STYLE_MANAGER_BG_COLORABLE_TAGS = [
   'mj-column',
   'mj-section',
   'mj-wrapper',
-  'mj-image'
+  'mj-image',
+  'div',
+  'section'
 ]
 const STYLE_MANAGER_BG_COLORABLE_TYPES = ['button', 'grid-column', 'grid-row']
 
