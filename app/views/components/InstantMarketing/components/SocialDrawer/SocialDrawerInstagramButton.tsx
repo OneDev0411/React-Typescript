@@ -3,7 +3,9 @@ import { useState } from 'react'
 import { Button } from '@material-ui/core'
 import { mdiInstagram } from '@mdi/js'
 
+import { ACL } from '@app/constants/acl'
 import { useGetActiveBrandFacebookPages } from '@app/models/facebook'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
@@ -19,6 +21,7 @@ function SocialDrawerInstagramButton({
   onClick
 }: SocialDrawerInstagramButtonProps) {
   const [isDialogOpen, stIsDialogOpen] = useState<boolean>(false)
+  const hasAccess = useAcl(ACL.SHARE_TO_INSTAGRAM)
 
   const { data: facebookPages, isLoading } = useGetActiveBrandFacebookPages()
   const hasAnyAccounts = !!facebookPages?.length
@@ -50,7 +53,7 @@ function SocialDrawerInstagramButton({
         color="primary"
         fullWidth
         onClick={handleClick}
-        disabled={isLoading || disabled}
+        disabled={isLoading || !hasAccess || disabled}
       >
         Instagram ...
       </Button>

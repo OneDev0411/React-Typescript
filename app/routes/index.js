@@ -555,7 +555,7 @@ const AsyncSocialPostList = withAcl(
         '../components/Pages/Dashboard/MarketingInsights/pages/SocialPostList' /* webpackChunkName: "email_insight_social_post" */
       )
   }),
-  [ACL.MARKETING]
+  [ACL.MARKETING, ACL.SHARE_TO_INSTAGRAM]
 )
 /* ==================================== */
 //  Chatroom
