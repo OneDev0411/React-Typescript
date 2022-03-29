@@ -1,8 +1,14 @@
 import { Button, IconButton, makeStyles } from '@material-ui/core'
 import { mdiTrashCanOutline, mdiOpenInNew } from '@mdi/js'
 
-import { useDeleteSocialPost } from '@app/models/social-posts'
-import { convertTimestampToDate } from '@app/utils/date-utils'
+import {
+  useDeleteSocialPost,
+  useUpdateSocialPost
+} from '@app/models/social-posts'
+import {
+  convertDateToTimestamp,
+  convertTimestampToDate
+} from '@app/utils/date-utils'
 import { futureTimeValidator } from '@app/utils/validations/future-time'
 import { DateTimePicker } from '@app/views/components/DateTimePicker'
 import LinkButton from '@app/views/components/LinkButton'
@@ -35,11 +41,20 @@ function SocialPostTableColumnActions({
 }: SocialPostTableColumnActionsProps) {
   const classes = useStyles()
 
-  const { mutate, isLoading: isDeleting } = useDeleteSocialPost()
+  const { mutate: deleteSocialPost, isLoading: isDeleting } =
+    useDeleteSocialPost()
+  const { mutate: updateSocialPost, isLoading: isUpdating } =
+    useUpdateSocialPost()
 
-  const handleDelete = () => mutate(socialPost)
+  const handleDelete = () => deleteSocialPost(socialPost)
 
-  const isWorking = isDeleting
+  const handleDueAtChange = (date: Date) =>
+    updateSocialPost({
+      socialPost,
+      inputData: { due_at: convertDateToTimestamp(date) }
+    })
+
+  const isWorking = isDeleting || isUpdating
 
   if (socialPost.post_link) {
     return (
@@ -62,7 +77,7 @@ function SocialPostTableColumnActions({
     return (
       <div className={classes.root}>
         <DateTimePicker
-          onClose={date => console.log('date', date)}
+          onClose={handleDueAtChange}
           showTimePicker
           selectedDate={selectedDate}
           defaultSelectedDate={selectedDate}
