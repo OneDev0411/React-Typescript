@@ -12,7 +12,10 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     logo: {
       width: '100%',
-      padding: theme.spacing(5, 2, 3.5)
+      padding: theme.spacing(1, 2, 3.5),
+      [theme.breakpoints.up('md')]: {
+        padding: theme.spacing(5, 2, 3.5)
+      }
     }
   }),
   { name: 'Logo' }

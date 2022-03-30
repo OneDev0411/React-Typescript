@@ -34,6 +34,7 @@ import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 import Logo from './components/Logo'
 import PoweredBy from './components/PoweredBy'
 import SideNavAccordion from './components/SideNavAccordion'
+import { SideNavHamburgerButton } from './components/SideNavHamburgerButton'
 import { UserMenu } from './components/UserMenu'
 import { Sidenav } from './styled'
 import { ExpandedMenu, AccordionMenu, AccordionSubMenu } from './types'
@@ -271,6 +272,7 @@ function Menu(props: WithRouterProps) {
 
   return (
     <Sidenav>
+      <SideNavHamburgerButton />
       <Logo />
       <GlobalActionsButton />
 

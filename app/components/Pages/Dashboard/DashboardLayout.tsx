@@ -1,8 +1,9 @@
 import React, { createContext, useState } from 'react'
 
-import { Box, Theme, makeStyles } from '@material-ui/core'
+import { Box, Hidden, makeStyles, Theme } from '@material-ui/core'
 
 import SideNav from './SideNav'
+import { SideNavHamburgerButton } from './SideNav/components/SideNavHamburgerButton'
 import { appSidenavWidth } from './SideNav/variables'
 
 interface Props {
@@ -27,24 +28,31 @@ const useStyles = makeStyles(
 )
 
 export const SideNavContext = createContext({
-  toggle: () => {}
+  isDrawerOpen: false,
+  onDrawerToggle: () => {}
 })
 
 export function DashboardLayout({ children }: Props) {
   const classes = useStyles()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  const handleToggle = () => setIsMenuOpen(state => !state)
+  const handleDrawerToggle = () => setIsDrawerOpen(state => !state)
 
   return (
     <SideNavContext.Provider
       value={{
-        toggle: handleToggle
+        isDrawerOpen,
+        onDrawerToggle: handleDrawerToggle
       }}
     >
-      <Box display="flex">
-        <SideNav isMenuOpen={isMenuOpen} onDrawerToggle={handleToggle} />
-        <main className={classes.main}>{children}</main>
+      <Box>
+        <SideNavHamburgerButton />
+        <Box display="flex">
+          <Hidden smDown={!isDrawerOpen}>
+            <SideNav />
+          </Hidden>
+          <main className={classes.main}>{children}</main>
+        </Box>
       </Box>
     </SideNavContext.Provider>
   )

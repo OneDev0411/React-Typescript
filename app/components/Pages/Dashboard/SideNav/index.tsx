@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { makeStyles, Theme, Hidden } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import Menu from './Menu'
 import { appSidenavWidth } from './variables'
@@ -19,19 +17,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-interface Props {
-  isMenuOpen: boolean
-  onDrawerToggle: () => void
-}
-
-export default function AppSideNav({ isMenuOpen, onDrawerToggle }: Props) {
+export default function AppSideNav() {
   const classes = useStyles()
 
   return (
-    <Hidden smDown>
-      <nav className={classes.drawer} aria-label="menu">
-        <Menu />
-      </nav>
-    </Hidden>
+    <nav className={classes.drawer} aria-label="menu">
+      <Menu />
+    </nav>
   )
 }
