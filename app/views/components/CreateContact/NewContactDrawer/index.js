@@ -7,6 +7,7 @@ import { Form } from 'react-final-form'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 
+import { getContactsTags } from '@app/store_actions/contacts'
 import { TextField } from 'components/final-form-fields'
 import { addNotification as notify } from 'components/notification'
 import Drawer from 'components/OverlayDrawer'
@@ -81,6 +82,8 @@ class NewContactDrawer extends React.Component {
         [{ attributes, user: values.owner.id }],
         query
       )
+
+      this.props.dispatch(getContactsTags())
 
       const contact = response.data[0]
 

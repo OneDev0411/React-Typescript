@@ -65,7 +65,7 @@ interface DashboardProps
 }
 
 export function Dashboard({ params, children, location }: DashboardProps) {
-  useTitle('Rechat | Dashboard')
+  useTitle('Rechat | Today')
 
   const { user, activeTeam } = useLoadUserAndActiveTeam()
 

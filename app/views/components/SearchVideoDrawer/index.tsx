@@ -16,6 +16,7 @@ import SearchVideoResults from './SearchVideoResults'
 import { SearchVideoResult, Video } from './types'
 import { useSearchVimeo } from './use-search-vimeo'
 import { useSearchYouTube } from './use-search-youtube'
+import { useWatermarkPlayIcon } from './use-watermark-play-icon'
 
 const useStyles = makeStyles(
   theme => ({
@@ -43,6 +44,7 @@ interface SearchVideoDrawerProps {
   model: Nullable<Model>
   onClose: () => void
   onSelect: (video: Video) => void
+  uploadThumbnail: (file: File) => Promise<string>
 }
 
 const INITIAL_SEARCH_TERM = 'architectural digest'
@@ -52,7 +54,8 @@ function SearchVideoDrawer({
   isOpen,
   model,
   onClose,
-  onSelect
+  onSelect,
+  uploadThumbnail
 }: SearchVideoDrawerProps) {
   const classes = useStyles()
   const {
@@ -65,6 +68,7 @@ function SearchVideoDrawer({
   const { safeSearchVimeo } = useSearchVimeo()
   const [isGeneratingThumbnail, setIsGeneratingThumbnail] =
     useState<boolean>(false)
+  const { isWatermarking, watermarkPlayIcon } = useWatermarkPlayIcon()
 
   const searchVideos = useCallback(
     (value: string) => {
@@ -146,9 +150,15 @@ function SearchVideoDrawer({
       }
     }
 
+    const videoThumbnailWithPlayIcon = await watermarkPlayIcon(
+      video.thumbnail,
+      uploadThumbnail
+    )
+
     const videoInfo: Video = {
       url: video.url,
-      thumbnail: video.thumbnail
+      thumbnail: video.thumbnail,
+      thumbnailWithPlayIcon: videoThumbnailWithPlayIcon
     }
 
     onSelect(videoInfo)
@@ -225,7 +235,7 @@ function SearchVideoDrawer({
       </OverlayDrawer.Body>
       <OverlayDrawer.Footer rowReverse>
         <Button
-          disabled={!video || isGeneratingThumbnail}
+          disabled={!video || isGeneratingThumbnail || isWatermarking}
           color="primary"
           variant="contained"
           onClick={handleConfirm}

@@ -397,8 +397,9 @@ const ContactProfile = props => {
         <div className={classes.header}>
           <Header
             contact={contact}
-            onTagChange={fetchContact}
-            handleCreateNote={handleCreateNote}
+            contactChangeCallback={fetchContact}
+            onCreateNote={handleCreateNote}
+            onCreateEvent={fetchTimeline}
           />
           <Tabs
             contact={contact}
