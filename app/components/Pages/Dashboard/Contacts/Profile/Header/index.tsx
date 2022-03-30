@@ -27,20 +27,33 @@ const useStyles = makeStyles(
 
 export interface Props {
   contact: INormalizedContact
-  onTagChange: () => void
-  handleCreateNote: (contact: INormalizedContact) => void
+  contactChangeCallback: () => void
+  onCreateEvent: () => void
+  onCreateNote: (contact: INormalizedContact) => void
 }
 
-export const Header = ({ contact, onTagChange, handleCreateNote }: Props) => {
+export const Header = ({
+  contact,
+  onCreateNote,
+  onCreateEvent,
+  contactChangeCallback
+}: Props) => {
   const classes = useStyles()
 
   return (
     <div className={classes.container}>
       <div className={classes.catalogContainer}>
-        <Catalog contact={contact} onTagChange={onTagChange} />
+        <Catalog
+          contact={contact}
+          contactChangeCallback={contactChangeCallback}
+        />
       </div>
       <div className={classes.actionsContainer}>
-        <Actions contact={contact} handleCreateNote={handleCreateNote} />
+        <Actions
+          contact={contact}
+          onCreateNote={onCreateNote}
+          onCreateEvent={onCreateEvent}
+        />
       </div>
     </div>
   )

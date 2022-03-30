@@ -53,14 +53,14 @@ export const CardsView = ({
   const notify = useNotify()
 
   const handleToggleLike = useCallback(
-    async (listing: ICompactListing, sendApiRequest = true) => {
+    async (listing: ICompactListing, shouldSendApiRequest = true) => {
       if (!user) {
         return
       }
 
       onToggleLike(listing.id)
 
-      if (sendApiRequest) {
+      if (shouldSendApiRequest) {
         try {
           await api.toggleFavorites({
             recId: null,
