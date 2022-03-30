@@ -26,7 +26,10 @@ export function SideNavToggleButton() {
   const sidenavContext = useSideNavContext()
 
   return (
-    <IconButton className={classes.root} onClick={sidenavContext.toggle}>
+    <IconButton
+      className={classes.root}
+      onClick={sidenavContext.onDrawerToggle}
+    >
       <SvgIcon path={mdiMenu} size={muiIconSizes.large} />
     </IconButton>
   )
