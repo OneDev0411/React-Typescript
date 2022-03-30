@@ -16,6 +16,7 @@ import SearchVideoResults from './SearchVideoResults'
 import { SearchVideoResult, Video } from './types'
 import { useSearchVimeo } from './use-search-vimeo'
 import { useSearchYouTube } from './use-search-youtube'
+import { useWatermarkPlayIcon } from './use-watermark-play-icon'
 
 const useStyles = makeStyles(
   theme => ({
@@ -43,6 +44,7 @@ interface SearchVideoDrawerProps {
   model: Nullable<Model>
   onClose: () => void
   onSelect: (video: Video) => void
+  uploadThumbnail: (file: File) => Promise<string>
 }
 
 const INITIAL_SEARCH_TERM = 'architectural digest'
@@ -52,7 +54,8 @@ function SearchVideoDrawer({
   isOpen,
   model,
   onClose,
-  onSelect
+  onSelect,
+  uploadThumbnail
 }: SearchVideoDrawerProps) {
   const classes = useStyles()
   const {
@@ -63,6 +66,7 @@ function SearchVideoDrawer({
   const [video, setVideo] = useState<Nullable<SearchVideoResult>>(null)
   const { isYouTubeReady, safeSearchYouTube } = useSearchYouTube()
   const { safeSearchVimeo } = useSearchVimeo()
+  const { isWatermarking, watermarkPlayIcon } = useWatermarkPlayIcon()
 
   const searchVideos = useCallback(
     (value: string) => {
@@ -123,14 +127,20 @@ function SearchVideoDrawer({
     target
   }: React.ChangeEvent<HTMLInputElement>) => searchVideos(target.value)
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!video) {
       return
     }
 
+    const videoThumbnailWithPlayIcon = await watermarkPlayIcon(
+      video.thumbnail,
+      uploadThumbnail
+    )
+
     const videoInfo: Video = {
       url: video.url,
-      thumbnail: video.thumbnail
+      thumbnail: video.thumbnail,
+      thumbnailWithPlayIcon: videoThumbnailWithPlayIcon
     }
 
     onSelect(videoInfo)
@@ -182,7 +192,7 @@ function SearchVideoDrawer({
       </OverlayDrawer.Body>
       <OverlayDrawer.Footer rowReverse>
         <Button
-          disabled={!video}
+          disabled={!video || isWatermarking}
           color="primary"
           variant="contained"
           onClick={handleConfirm}
