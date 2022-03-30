@@ -44,7 +44,7 @@ function MainFeatures({ listing }: Props) {
 
   const bedroom = property.bedroom_count
   const bathrooms = property.bathroom_count
-  const squareFeet = Math.floor(
+  const squareFeet = Math.round(
     listingUtils.metersToFeet(property.square_meters)
   )
   const priceSqft = squareFeet > 0 ? Math.round(listing.price / squareFeet) : 0

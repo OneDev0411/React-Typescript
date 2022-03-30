@@ -8,8 +8,7 @@ import { getIsFavorite } from '../../../reducers/listings/favorites'
 import { normalizeListingsForMarkers } from '../../../utils/map'
 
 const toggleFavorite = listing => (dispatch, getState) => {
-  const { data, favorites } = getState()
-  const { user } = data
+  const { user, favorites } = getState()
 
   if (!user) {
     return Promise.resolve()
