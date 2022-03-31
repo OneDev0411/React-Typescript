@@ -3,6 +3,7 @@ import { useState, ReactElement } from 'react'
 import { Snackbar, Link, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Alert } from '@material-ui/lab'
+import bowser from 'bowser'
 
 import {
   browserStatus,
@@ -27,14 +28,39 @@ interface CheckBrowserPropsType {
 
 function CheckBrowser(props: CheckBrowserPropsType) {
   const classes = useStyles()
+
   const status = browserStatus()
-  const message = getMessage(status)
+
+  const { name: operatingSystem } = bowser
+    .getParser(window.navigator.userAgent)
+    .getOS()
+
   const [isShowSnackbar, setShowSnackbar] = useState(
-    !status.isSupported || status.isOutdated
+    !status.isSupported ||
+      status.isOutdated ||
+      operatingSystem === 'Android' ||
+      operatingSystem === 'iOS'
   )
 
   if (process.env.NODE_ENV === 'development' || isListingPage(props.id)) {
     return props.children
+  }
+
+  let message = getMessage(status)
+
+  if (operatingSystem === 'Android') {
+    message = {
+      text: 'Android',
+      actionText: 'Action Text',
+      actionLink:
+        'https://play.google.com/store/apps/details?id=com.rechat.mobile'
+    }
+  } else if (operatingSystem === 'iOS') {
+    message = {
+      text: 'iOS',
+      actionText: 'Action Text',
+      actionLink: 'https://apps.apple.com/us/app/rechat/id974093560'
+    }
   }
 
   return (
