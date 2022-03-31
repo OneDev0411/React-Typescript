@@ -1,7 +1,11 @@
 import React from 'react'
 
+import { Box } from '@material-ui/core'
+import { Alert, AlertTitle } from '@material-ui/lab'
+import { mdiLockOutline } from '@mdi/js'
 import { connect } from 'react-redux'
 
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { confirmation } from 'actions/confirmation'
 import { changeTaskStatus, changeNeedsAttention } from 'actions/deals'
 import { addNotification as notify } from 'components/notification'
@@ -88,9 +92,22 @@ class CommentInput extends React.Component {
 
   render() {
     const hasComment = this.state.comment.length > 0
+    const isPrivateRoom = this.props.task.acl.includes('Agents') === false
 
     return (
       <Container>
+        {isPrivateRoom && (
+          <Box mb={1}>
+            <Alert severity="info" icon={<SvgIcon path={mdiLockOutline} />}>
+              <AlertTitle>Private document</AlertTitle>
+              This document is set to private and only admins will see your
+              comments.
+            </Alert>
+          </Box>
+        )}
+
+        <Divider />
+
         <Textarea
           autoFocus={this.props.autoFocus}
           dir="auto"
@@ -108,8 +125,6 @@ class CommentInput extends React.Component {
           onChange={e => this.setState({ comment: e.target.value })}
           onHeightChange={height => this.onHeightChangeHandler(height)}
         />
-
-        <Divider />
 
         <Actions>
           <CommentActions

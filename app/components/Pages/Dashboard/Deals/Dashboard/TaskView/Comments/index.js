@@ -47,7 +47,10 @@ class Comment extends React.Component {
     }
 
     return (
-      <Container className="chatroom">
+      <Container
+        className="chatroom"
+        isPrivateRoom={task.acl.includes('Agents') === false}
+      >
         <Comments
           user={this.props.user}
           roomId={task.room.id}
