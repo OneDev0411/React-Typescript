@@ -4,6 +4,8 @@ import { Snackbar, Link, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Alert } from '@material-ui/lab'
 import bowser from 'bowser'
+import SmartBanner from 'react-smartbanner'
+import 'react-smartbanner/dist/main.css'
 
 import {
   browserStatus,
@@ -36,10 +38,7 @@ function CheckBrowser(props: CheckBrowserPropsType) {
     .getOS()
 
   const [isShowSnackbar, setShowSnackbar] = useState(
-    !status.isSupported ||
-      status.isOutdated ||
-      operatingSystem === 'Android' ||
-      operatingSystem === 'iOS'
+    !status.isSupported || status.isOutdated
   )
 
   if (process.env.NODE_ENV === 'development' || isListingPage(props.id)) {
@@ -65,6 +64,7 @@ function CheckBrowser(props: CheckBrowserPropsType) {
 
   return (
     <>
+      <SmartBanner title="Facebook" />
       {isShowSnackbar && (
         <Snackbar
           open
