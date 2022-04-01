@@ -17,28 +17,16 @@ function SearchArticleSearchError({
       justifyContent="center"
     >
       {errorCode === 'CloudflareProtected' && (
-        <Box pr={4}>
-          <ul>
-            <li>
-              We are unable to load this article due to the copyright rules or
-              the publisher's website's settings :(
-            </li>
-            <li>
-              We couldn't find the article you were looking for. Please try
-              searching again or inserting the correct URL link to the article.
-            </li>
-          </ul>
-        </Box>
+        <>
+          We are unable to load this article due to the copyright rules or the
+          publisher's website's settings :(
+        </>
       )}
       {errorCode === 'MetadataNotFound' && (
-        <div>
-          Unable to load article due to one of these reasons:
-          <ul>
-            <li>Copyright rules</li>
-            <li>Publisher website setting</li>
-            <li>Wrong URL</li>
-          </ul>
-        </div>
+        <>
+          We couldn't find the article you were looking for. Please try
+          searching again or inserting the correct URL link to the article.
+        </>
       )}
     </Box>
   )
