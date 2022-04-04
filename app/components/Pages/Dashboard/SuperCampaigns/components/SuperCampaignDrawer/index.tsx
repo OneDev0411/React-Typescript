@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 
 import { Box, Button, makeStyles, TextField } from '@material-ui/core'
 import { mdiCalendarBlank } from '@mdi/js'
+import cn from 'classnames'
 import { Form, Field } from 'react-final-form'
 
 import {
@@ -28,7 +29,8 @@ const useStyles = makeStyles(
   theme => ({
     templateTitle: { marginBottom: theme.spacing(0.5) },
     description: { minHeight: theme.spacing(11) },
-    template: { marginTop: theme.spacing(3) }
+    template: { marginTop: theme.spacing(3) },
+    overlayDrawerBody: { overflowY: 'scroll' }
   }),
   { name: 'SuperCampaignDrawer' }
 )
@@ -101,7 +103,9 @@ function SuperCampaignDrawer({
           title="Enter Campaign Details"
           closeButtonDisabled={actionButtonsDisabled}
         />
-        <OverlayDrawer.Body>
+        <OverlayDrawer.Body
+          className={cn(classes.overlayDrawerBody, 'u-scrollbar--self')}
+        >
           <Box my={3}>
             {isOpen && (
               <Form<SuperCampaignFormInternalValues>
