@@ -1426,7 +1426,11 @@ class Builder extends React.Component {
               }
               multipleSelection
               renderAction={props => (
-                <Button {...props.buttonProps}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  {...props.buttonProps}
+                >
                   Next ({props.selectedItemsCount} Listings Selected)
                 </Button>
               )}
