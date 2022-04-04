@@ -5,6 +5,8 @@ async function updateShowingRole(
   showingRoleId: UUID,
   data: IShowingRoleInput
 ) {
+  const params = data.agent?.id ? { ...data, agent: data?.agent?.id } : data
+
   return (
     await new Fetch()
       .put(`/showings/${showingId}/roles/${showingRoleId}`)
@@ -25,7 +27,7 @@ async function updateShowingRole(
           'agent.office'
         ]
       })
-      .send(data)
+      .send(params)
   ).body.data as IShowing
 }
 
