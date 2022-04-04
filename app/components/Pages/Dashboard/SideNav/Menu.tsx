@@ -83,7 +83,7 @@ export function Menu() {
         <SidenavListGroup data-test="side-nav-list">
           <Acl access={dashboardAccess}>
             <SideNavLinkItem to="/dashboard/overview" tourId="nav-dashboard">
-              Dashboard
+              Today
             </SideNavLinkItem>
           </Acl>
           <Acl.Crm>
