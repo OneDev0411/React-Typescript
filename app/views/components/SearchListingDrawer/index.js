@@ -223,7 +223,7 @@ class SearchListingDrawer extends React.Component {
                         }}
                         onClick={this.openHipPocketListingDrawer}
                       >
-                        Input Manually
+                        Off Market (Input Manually)
                       </Button>
                     </Tooltip>
                     {this.props.renderAction && this.props.renderAction(props)}
