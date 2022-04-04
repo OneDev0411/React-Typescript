@@ -121,6 +121,7 @@ function ConnectToInstagramDialog({
         <Button
           onClick={handleCancel}
           variant="outlined"
+          size="small"
           disabled={isAuthWindowOpen}
         >
           Cancel
