@@ -136,6 +136,8 @@ function SearchVideoDrawer({
       return
     }
 
+    let shouldAddPlayIconWatermark = true
+
     if (video.source === 'youtube') {
       try {
         setIsGeneratingThumbnail(true)
@@ -143,6 +145,7 @@ function SearchVideoDrawer({
         const result = await getYouTubeVideoGif(video.url)
 
         video.thumbnail = result.url
+        shouldAddPlayIconWatermark = false
       } catch (err) {
         console.error(err)
       } finally {
@@ -150,15 +153,12 @@ function SearchVideoDrawer({
       }
     }
 
-    const videoThumbnailWithPlayIcon = await watermarkPlayIcon(
-      video.thumbnail,
-      uploadThumbnail
-    )
-
     const videoInfo: Video = {
       url: video.url,
       thumbnail: video.thumbnail,
-      thumbnailWithPlayIcon: videoThumbnailWithPlayIcon
+      thumbnailWithPlayIcon: shouldAddPlayIconWatermark
+        ? await watermarkPlayIcon(video.thumbnail, uploadThumbnail)
+        : video.thumbnail
     }
 
     onSelect(videoInfo)
@@ -175,7 +175,12 @@ function SearchVideoDrawer({
   const renderGeneratingThumbnail = () => {
     return (
       <Box mt="30%">
-        <Grid direction="column" alignItems="center" justifyContent="center">
+        <Grid
+          container
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+        >
           <Grid item>
             <LoadingContainer noPaddings />
           </Grid>

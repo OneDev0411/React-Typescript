@@ -99,7 +99,13 @@ export async function createTranscodeJob(
       Outputs: [
         {
           Key: `${key}.gif`,
-          PresetId: presetId
+          PresetId: presetId,
+          Watermarks: [
+            {
+              InputKey: 'play-icon.png',
+              PresetWatermarkId: 'Center'
+            }
+          ]
         }
       ]
     }).promise()
