@@ -1,5 +1,14 @@
 import { Request, Response } from 'express'
+import omit from 'lodash/omit'
 import Parser from 'rss-parser'
+
+interface ContentMedia {
+  $: {
+    url: string
+    medium?: string
+    type?: string
+  }
+}
 
 const parser: Parser = new Parser({
   headers: {
@@ -8,7 +17,7 @@ const parser: Parser = new Parser({
   },
   timeout: 25000,
   customFields: {
-    item: ['createdDate']
+    item: ['createdDate', 'media:content']
   }
 })
 
@@ -26,15 +35,21 @@ export default async (req: Request, res: Response) => {
             resolve({
               ...result,
               items: result.items.map(item => ({
-                ...item,
+                ...omit(item, [
+                  'media:content',
+                  'content:encoded',
+                  'content:encodedSnippet',
+                  'contentSnippet'
+                ]),
                 content: removeHTMLTags(item.content ?? ''),
-                sourceIndex
+                sourceIndex,
+                image:
+                  getImageUrlFromContentMedia(item['media:content']) ||
+                  extractImageUrlFromContent(item.content ?? '')
               }))
             })
           })
-          .catch(error => {
-            resolve(null)
-          })
+          .catch(() => resolve(null))
       )
   )
 
@@ -47,4 +62,26 @@ export default async (req: Request, res: Response) => {
 
 function removeHTMLTags(input: string): string {
   return input.replace(/(<([^>]+)>)/gi, '')
+}
+
+const imageSrcRegex = /<img[^>]+src="([^"]+)"/
+
+function extractImageUrlFromContent(content: string): string | undefined {
+  return content.match(imageSrcRegex)?.[1]
+}
+
+function getImageUrlFromContentMedia(
+  contentMedia: ContentMedia | undefined
+): string | undefined {
+  if (!contentMedia) {
+    return
+  }
+
+  const type = contentMedia.$?.type || contentMedia.$?.medium
+
+  if (type?.indexOf('image') !== 0) {
+    return
+  }
+
+  return contentMedia.$?.url
 }

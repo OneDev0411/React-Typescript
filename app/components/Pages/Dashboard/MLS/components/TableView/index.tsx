@@ -203,7 +203,7 @@ export const TableView = ({
         <Table stickyHeader aria-label="listings">
           <TableHead>
             <TableRow>
-              <TableCell />
+              {!!user && <TableCell />}
               {columns.map(column => (
                 <TableCell variant="head" key={column.id}>
                   {column.header}
@@ -224,15 +224,17 @@ export const TableView = ({
                   [classes.isScroling]: isScroling
                 })}
               >
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selections.some(
-                      (item: ICompactListing) => item.id === listing.id
-                    )}
-                    onChange={() => handleToggleSelection(listing)}
-                    inputProps={{ 'aria-labelledby': listing.id }}
-                  />
-                </TableCell>
+                {!!user && (
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      checked={selections.some(
+                        (item: ICompactListing) => item.id === listing.id
+                      )}
+                      onChange={() => handleToggleSelection(listing)}
+                      inputProps={{ 'aria-labelledby': listing.id }}
+                    />
+                  </TableCell>
+                )}
                 {columns.map(column => (
                   <TableCell
                     onClick={() => openListingDetailsModal(listing.id)}

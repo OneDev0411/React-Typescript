@@ -149,7 +149,8 @@ function SearchArticleDrawer({
     article: RSSArticleMetadata
   ): RSSArticleMetadata => ({
     ...article,
-    image: imageCache.getItem(article.url) || PLACEHOLDER_IMAGE_URL
+    image:
+      article.image || imageCache.getItem(article.url) || PLACEHOLDER_IMAGE_URL
   })
 
   const handleConfirm = () => {

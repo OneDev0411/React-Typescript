@@ -78,10 +78,14 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
   const getDealsList = useDealsList()
 
   const handleChangeSort = async (column: SortableColumn) => {
+    const newQuery = {
+      ...props.location.query,
+      sortBy: column.value,
+      sortType: column.ascending ? 'asc' : 'desc'
+    }
+
     props.router.push(
-      `${props.location.pathname}?sortBy=${column.value}&sortType=${
-        column.ascending ? 'asc' : 'desc'
-      }`
+      `${props.location.pathname}?${new URLSearchParams(newQuery).toString()}`
     )
 
     const fieldValue = column.ascending ? column.value : `-${column.value}`

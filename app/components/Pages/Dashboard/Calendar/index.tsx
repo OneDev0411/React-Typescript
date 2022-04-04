@@ -1,18 +1,20 @@
 import { useRef } from 'react'
 
-import { useEffectOnce } from 'react-use'
+import { useEffectOnce, useTitle } from 'react-use'
 
-import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
-import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
-import GlobalHeader from 'components/GlobalHeader'
-import { GridCalendar } from 'components/GridCalendar'
-import { ActionRef } from 'components/GridCalendar/types'
-import ImportContactsButton from 'components/ImportContactsButton'
-import { ViewAs } from 'components/ViewAs'
+import { SET_CREATE_CALLBACK_HANDLER } from '@app/views/components/GlobalActionsButton/context/constants'
+import { useGlobalActionContext } from '@app/views/components/GlobalActionsButton/hooks/use-global-action-context'
+import GlobalHeader from '@app/views/components/GlobalHeader'
+import { GridCalendar } from '@app/views/components/GridCalendar'
+import { ActionRef } from '@app/views/components/GridCalendar/types'
+import ImportContactsButton from '@app/views/components/ImportContactsButton'
+import { ViewAs } from '@app/views/components/ViewAs'
 
 import { useStyles as useCommonStyles } from './use-styles'
 
 export default function CalendarPage() {
+  useTitle('Calendar | Rechat')
+
   const classes = useCommonStyles()
   const actionRef = useRef<ActionRef>(null)
   const [, dispatch] = useGlobalActionContext()
