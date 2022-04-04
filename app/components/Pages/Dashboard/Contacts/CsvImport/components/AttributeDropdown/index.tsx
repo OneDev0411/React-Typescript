@@ -1,18 +1,9 @@
 import { useState } from 'react'
 
-import {
-  Box,
-  Button,
-  ListItem,
-  makeStyles,
-  TextField,
-  Theme
-} from '@material-ui/core'
+import { Box, ListItem, makeStyles, TextField, Theme } from '@material-ui/core'
 
-import { useUpdateAttributeDefs } from '@app/models/contacts/get-attribute-defs/use-update-attribute-defs'
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 
-import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
 import { useOptions } from '../../hooks/attribute-options/use-attribute-options'
 import { useAttributeLabel } from '../../hooks/use-attribute-label'
 import type { AttributeOption, MappedField } from '../../types'
@@ -56,34 +47,13 @@ export function AttributeDropdown({
   onRemove
 }: Props) {
   const classes = useStyles()
-  const [isCustomAttributeDrawerOpen, setIsCustomAttributeDrawerOpen] =
-    useState(false)
 
   const getAttributeLabel = useAttributeLabel()
 
   const [searchTerm, setSearchTerm] = useState('')
   const options: AttributeOption[] = useOptions(fields, searchTerm)
 
-  /**
-   * basically we should move this hook to CustomAttributeDrawer component but
-   * because the entire crm is still based on redux, moving there might
-   * introcude some conflicts
-   */
-  const updateAttributeDefs = useUpdateAttributeDefs()
-
   const field = fields[column]
-
-  const handleCreateCustomAttribute = (attribute: IContactAttributeDef) => {
-    updateAttributeDefs.mutate(attribute)
-
-    onSelect({
-      type: 'attribute_def',
-      attribute_def: attribute.id,
-      disabled: false,
-      label: attribute.label,
-      index: 0
-    })
-  }
 
   return (
     <>
@@ -130,30 +100,8 @@ export function AttributeDropdown({
                 </ListItem>
               ))}
             </Box>
-
-            <Box
-              className={classes.footer}
-              display="flex"
-              alignItems="center"
-              justifyContent="flex-end"
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                onClick={() => setIsCustomAttributeDrawerOpen(true)}
-              >
-                Add custom field
-              </Button>
-            </Box>
           </Box>
         )}
-      />
-
-      <CustomAttributeDrawer
-        isOpen={isCustomAttributeDrawerOpen}
-        onClose={() => setIsCustomAttributeDrawerOpen(false)}
-        submitCallback={handleCreateCustomAttribute}
       />
     </>
   )
