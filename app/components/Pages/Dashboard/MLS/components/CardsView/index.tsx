@@ -78,8 +78,7 @@ export const CardsView = ({
         }
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [user]
+    [notify, onToggleLike, user]
   )
 
   const handleToggleSelection = useCallback(toggleItem, [toggleItem])

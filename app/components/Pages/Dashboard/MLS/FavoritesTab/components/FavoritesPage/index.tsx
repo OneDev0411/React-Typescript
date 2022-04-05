@@ -22,7 +22,8 @@ import Tabs from '../../../components/Tabs'
 import { bootstrapURLKeys, DEFAULT_VIEW } from '../../../constants'
 import {
   changeListingHoverState,
-  changeListingClickedState
+  changeListingClickedState,
+  clearListingUiStates
 } from '../../../context/actions'
 import useUiListingsContext from '../../../context/useUiListingsContext'
 import {
@@ -134,8 +135,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
   const toggleMapShown = useCallback(() => {
     setMapIsShown(mapIsShown => !mapIsShown)
     uiDispatch(changeListingClickedState(null))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [uiDispatch])
 
   useEffectOnce(() => {
     window.initialize = initialize
@@ -161,22 +161,27 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
     (center: ICoord, zoom: number) => {
       dispatch(setMapLocation(center, zoom))
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [dispatch]
   )
 
-  const changeHoverState = useCallback((id: UUID, hover: boolean) => {
-    uiDispatch(changeListingHoverState(hover ? id : null))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const changeHoverState = useCallback(
+    (id: UUID, hover: boolean) => {
+      uiDispatch(changeListingHoverState(hover ? id : null))
+    },
+    [uiDispatch]
+  )
 
-  const onToggleFavorite = useCallback((id: UUID) => {
-    dispatch(removeListing(id))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const onToggleFavorite = useCallback(
+    (id: UUID) => {
+      dispatch(removeListing(id))
+    },
+    [dispatch]
+  )
 
   const onToggleListingModal = useCallback(
     (id: UUID, isOpen: boolean) => {
+      uiDispatch(clearListingUiStates())
+
       if (!isWidget) {
         if (isOpen) {
           changeUrl(`/dashboard/mls/${id}`)
@@ -189,25 +194,26 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
         }
       }
     },
-    [isWidget, viewType]
+    [isWidget, uiDispatch, viewType]
   )
 
-  const onMarkerClick = useCallback((key: UUID) => {
-    const resultElement = document.getElementById(key)
+  const onMarkerClick = useCallback(
+    (key: UUID) => {
+      const resultElement = document.getElementById(key)
 
-    if (resultElement) {
-      // Smooth scrolling doesn't work on Chrome for some reason
-      resultElement.scrollIntoView({ behavior: 'smooth' })
-    }
+      if (resultElement) {
+        // Smooth scrolling doesn't work on Chrome for some reason
+        resultElement.scrollIntoView({ behavior: 'smooth' })
+      }
 
-    uiDispatch(changeListingClickedState(key))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+      uiDispatch(changeListingClickedState(key))
+    },
+    [uiDispatch]
+  )
 
   const handleHidingMapMarkerPopup = useCallback(() => {
     uiDispatch(changeListingClickedState(null))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [uiDispatch])
 
   const onMapLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map
