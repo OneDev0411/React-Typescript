@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 
 import { Button, TextField, makeStyles } from '@material-ui/core'
-import cn from 'classnames'
 
 import SuperCampaignTemplatePreview from '@app/components/Pages/Dashboard/SuperCampaigns/components/SuperCampaignTemplate/SuperCampaignTemplatePreview'
 import { useEnrollMeInSuperCampaign } from '@app/models/super-campaign'
@@ -114,9 +113,7 @@ function SuperCampaignPreviewDrawer({
           title="Campaign Preview"
           closeButtonDisabled={isWorking}
         />
-        <OverlayDrawer.Body
-          className={cn(classes.overlayDrawerBody, 'u-scrollbar--self')}
-        >
+        <OverlayDrawer.Body className={classes.overlayDrawerBody}>
           <div className={classes.wrapper}>
             {superCampaign.description && (
               <SuperCampaignPreviewDrawerDescription

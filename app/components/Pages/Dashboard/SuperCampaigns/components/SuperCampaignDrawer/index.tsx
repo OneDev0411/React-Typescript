@@ -2,7 +2,6 @@ import { useMemo, useRef, useState } from 'react'
 
 import { Box, Button, makeStyles, TextField } from '@material-ui/core'
 import { mdiCalendarBlank } from '@mdi/js'
-import cn from 'classnames'
 import { Form, Field } from 'react-final-form'
 
 import {
@@ -103,9 +102,7 @@ function SuperCampaignDrawer({
           title="Enter Campaign Details"
           closeButtonDisabled={actionButtonsDisabled}
         />
-        <OverlayDrawer.Body
-          className={cn(classes.overlayDrawerBody, 'u-scrollbar--self')}
-        >
+        <OverlayDrawer.Body className={classes.overlayDrawerBody}>
           <Box my={3}>
             {isOpen && (
               <Form<SuperCampaignFormInternalValues>
