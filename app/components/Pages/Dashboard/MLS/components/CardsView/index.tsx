@@ -93,17 +93,14 @@ export const CardsView = ({
           md={mapIsShown ? 12 : 6}
           lg={mapIsShown ? 6 : 3}
         >
-          <Grid
-            className={classes.listingContainer}
-            id={listing.id}
-            onMouseEnter={() => {
-              onChangeHoverState(listing.id, true)
-            }}
-            onMouseLeave={() => {
-              onChangeHoverState(listing.id, false)
-            }}
-          >
+          <Grid className={classes.listingContainer} id={listing.id}>
             <ListingCard
+              onMouseEnter={() => {
+                onChangeHoverState(listing.id, true)
+              }}
+              onMouseLeave={() => {
+                onChangeHoverState(listing.id, false)
+              }}
               isWidget={isWidget}
               listing={listing}
               hover={listingStates.hover === listing.id}
