@@ -1,5 +1,6 @@
-import React from 'react'
+import { useEffect, useRef, useState } from 'react'
 
+import { Box, makeStyles } from '@material-ui/core'
 import { connect } from 'react-redux'
 
 import { setSelectedTask } from 'actions/deals'
@@ -9,16 +10,56 @@ import Drawer from 'components/OverlayDrawer'
 import Comments from './Comments'
 import Header from './Header'
 
+const useStyles = makeStyles(
+  theme => ({
+    drawerBody: {
+      padding: 0,
+      overflow: 'hidden'
+    },
+    bodyContainer: {
+      padding: theme.spacing(4, 3),
+      height: '100%',
+      overflow: 'auto'
+    }
+  }),
+  {
+    name: 'Deals-TaskView'
+  }
+)
+
 function TaskView(props) {
   const { task } = props
+  const taskId = task?.id
+
+  const classes = useStyles()
+  const bodyContainerRef = useRef()
+
+  const [isCommentsLoaded, setIsCommentsLoaded] = useState(false)
 
   const onClose = () => {
+    setIsCommentsLoaded(false)
+
     if (props.onClose) {
       return props.onClose()
     }
 
     props.setSelectedTask(null)
   }
+
+  useEffect(() => {
+    if (!taskId || !isCommentsLoaded) {
+      return
+    }
+
+    const element = bodyContainerRef.current
+
+    if (element) {
+      element.scroll({
+        top: element.scrollHeight,
+        behavior: 'smooth'
+      })
+    }
+  }, [taskId, isCommentsLoaded])
 
   return (
     <Drawer open={props.isOpen} onClose={onClose} noFooter>
@@ -36,29 +77,28 @@ function TaskView(props) {
         />
       </Drawer.Header>
 
-      <Drawer.Body
-        style={{
-          padding: '2rem 1.5rem'
-        }}
-      >
-        {props.deal.is_draft && (
-          <Callout type="warn" style={{ margin: '1rem 0' }}>
-            Once your deal goes live, admin can read the messages.
-          </Callout>
-        )}
+      <Drawer.Body className={classes.drawerBody}>
+        <Box className={classes.bodyContainer} ref={bodyContainerRef}>
+          {props.deal.is_draft && (
+            <Callout type="warn" style={{ margin: '1rem 0' }}>
+              Once your deal goes live, admin can read the messages.
+            </Callout>
+          )}
 
-        {task && task.task_type === 'YardSign' && (
-          <Callout type="info" style={{ margin: '1rem 0' }}>
-            Please add any special instructions for the yard sign in the
-            comments.
-          </Callout>
-        )}
+          {task && task.task_type === 'YardSign' && (
+            <Callout type="info" style={{ margin: '1rem 0' }}>
+              Please add any special instructions for the yard sign in the
+              comments.
+            </Callout>
+          )}
 
-        <Comments
-          deal={props.deal}
-          task={task}
-          isBackOffice={props.isBackOffice}
-        />
+          <Comments
+            deal={props.deal}
+            task={task}
+            isBackOffice={props.isBackOffice}
+            onLoadComments={() => setIsCommentsLoaded(true)}
+          />
+        </Box>
       </Drawer.Body>
     </Drawer>
   )

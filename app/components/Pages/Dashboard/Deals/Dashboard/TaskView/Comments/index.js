@@ -57,6 +57,7 @@ class Comment extends React.Component {
           deliveryReportPlacement="bottom"
           openFilesInNewTab={!this.props.isBackOffice}
           emptyStateRenderer={() => <EmptyState />}
+          onLoad={this.props.onLoadComments}
         />
 
         <MessageInput
