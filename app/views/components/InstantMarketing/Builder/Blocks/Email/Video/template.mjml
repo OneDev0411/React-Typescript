@@ -1,3 +1,1 @@
-<mj-hero rechat-editable="tree" mode="fixed-height" background-url="{{image}}" background-color="#262626" padding="200px 0px" background-width="600px" background-height="400px" height="400px">
-  <mj-image width="128px" height="128px" padding="0" src="https://i.ibb.co/mbM3Sxn/play.png" href="{{url}}"></mj-image>
-</mj-hero>
+<mj-image src="{{image}}" href="{{url}}"></mj-image>
