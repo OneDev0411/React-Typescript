@@ -126,8 +126,10 @@ const useStyles = makeStyles(
     },
     descriptionAreaWrapper: {
       overflow: 'hidden', // because of MUI nested grid limitation https://v4.mui.com/components/grid/#limitations
+      marginBottom: theme.spacing(4),
       [theme.breakpoints.up('md')]: {
-        padding: theme.spacing(0, 4)
+        padding: theme.spacing(0, 4),
+        marginBottom: theme.spacing(6)
       }
     },
     descriptionWrapper: {
