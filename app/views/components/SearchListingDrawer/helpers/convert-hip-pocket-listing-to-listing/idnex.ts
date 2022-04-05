@@ -66,6 +66,7 @@ export function convertHipPokcetListingToListing(
       full_bathroom_count: hipPocketListing.full_baths || 0,
       half_bathroom_count: hipPocketListing.half_baths || 0,
       square_meters: feetToMeters(hipPocketListing.sqft || 0),
+      lot_size_area: hipPocketListing.lot_size_area || 0,
       description: hipPocketListing.description || '',
       address: getPropertyAddress(hipPocketListing.address)
     }

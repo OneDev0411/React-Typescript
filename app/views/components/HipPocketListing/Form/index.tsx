@@ -58,6 +58,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
         images: [],
         address: '',
         price: undefined,
+        lot_size_area: undefined,
         sqft: undefined,
         bedrooms: undefined,
         full_baths: undefined,
@@ -176,7 +177,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
         )}
         <Grid container item direction="row" spacing={2}>
           {isFieldEnabled('price') && (
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <Controller
                 control={control}
                 name="price"
@@ -192,6 +193,29 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
                 type="number"
                 size="small"
                 label="Listing Price"
+                as={<TextField />}
+              />
+            </Grid>
+          )}
+        </Grid>
+        <Grid container item direction="row" spacing={2}>
+          {isFieldEnabled('lot_size_area') && (
+            <Grid item xs={6}>
+              <Controller
+                control={control}
+                name="lot_size_area"
+                rules={{
+                  valueAsNumber: true,
+                  min: 0,
+                  max: Number.MAX_SAFE_INTEGER
+                }}
+                fullWidth
+                error={!!errors.lot_size_area}
+                helperText={errors.lot_size_area?.message}
+                variant="outlined"
+                type="number"
+                size="small"
+                label="Lot Size Area"
                 as={<TextField />}
               />
             </Grid>
