@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "88.1.5",
+  "version": "88.2.6",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -268,6 +268,7 @@
     "use-places-autocomplete": "^1.9.1",
     "uuid": "^8.3.2",
     "validator": "^13.5.2",
+    "watermarkjs": "^2.1.1",
     "webpack": "^5.40.0",
     "webpack-bundle-analyzer": "^4.4.0",
     "webpack-dev-middleware": "^4.1.0",
@@ -420,6 +421,6 @@
   },
   "engines": {
     "node": "14.x",
-    "npm": "8.x"
+    "npm": "8.1.3"
   }
 }

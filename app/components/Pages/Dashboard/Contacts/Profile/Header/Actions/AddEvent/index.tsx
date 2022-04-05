@@ -12,12 +12,20 @@ interface StateProps {
 
 interface Props {
   contact: IContact
+  callback?: () => void
 }
 
-function AddEvent({ contact, user }: Props & StateProps) {
+function AddEvent({ contact, user, callback }: Props & StateProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
 
   const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen)
+  const submitCallback = () => {
+    if (callback) {
+      callback()
+    }
+
+    toggleDrawer()
+  }
 
   return (
     <>
@@ -37,7 +45,7 @@ function AddEvent({ contact, user }: Props & StateProps) {
           contact: normalizeContact(contact)
         }}
         user={user}
-        submitCallback={toggleDrawer}
+        submitCallback={submitCallback}
         onClose={toggleDrawer}
       />
     </>

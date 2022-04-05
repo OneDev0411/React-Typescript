@@ -59,7 +59,7 @@ export default function registerVideoBlock(
     selectedVideo => ({
       ...renderData,
       url: selectedVideo.url,
-      image: selectedVideo.thumbnail
+      image: selectedVideo.thumbnailWithPlayIcon
     }),
     onDrop
   )
