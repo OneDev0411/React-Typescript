@@ -121,7 +121,8 @@ const useStyles = makeStyles(
       width: '100%',
       padding: theme.spacing(0, 3),
       [theme.breakpoints.up('md')]: {
-        padding: theme.spacing(0)
+        padding: theme.spacing(0),
+        marginLeft: theme.spacing(2)
       }
     },
     descriptionAreaWrapper: {
