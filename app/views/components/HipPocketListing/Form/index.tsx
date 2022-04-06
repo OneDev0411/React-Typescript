@@ -215,7 +215,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
                 variant="outlined"
                 type="number"
                 size="small"
-                label="Lot Size Area"
+                label="Lot Area Size"
                 as={<TextField />}
               />
             </Grid>
