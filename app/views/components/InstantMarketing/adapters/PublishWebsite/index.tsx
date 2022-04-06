@@ -202,7 +202,11 @@ function PublishWebsite({
           onSelectListingsCallback={handleSelectListings}
           multipleSelection={isMultiListing}
           renderAction={props => (
-            <Button {...props.buttonProps}>
+            <Button
+              variant="contained"
+              color="secondary"
+              {...props.buttonProps}
+            >
               {`Next (${props.selectedItemsCount} Listings Selected)`}
             </Button>
           )}
