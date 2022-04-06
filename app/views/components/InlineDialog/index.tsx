@@ -13,13 +13,19 @@ const EmptyBackdropComponent = () => {
   return <></>
 }
 
+interface Props
+  extends Exclude<
+    DialogProps,
+    'fullScreen' | 'style' | 'BackdropComponent' | 'scroll'
+  > {
+  leftOffset?: number
+}
+
 export default function InlineDialog({
+  leftOffset = appSidenavWidth,
   children,
   ...props
-}: Exclude<
-  DialogProps,
-  'fullScreen' | 'style' | 'BackdropComponent' | 'scroll'
->) {
+}: Props) {
   const theme: Theme = useTheme()
   const hasSideNav = useMediaQuery(theme.breakpoints.up('md'))
 
@@ -35,7 +41,7 @@ export default function InlineDialog({
       {...props}
       style={{
         zIndex: theme.zIndex.modal - 1,
-        left: hasSideNav ? appSidenavWidth : 0
+        left: hasSideNav ? leftOffset : 0
       }}
     >
       {children}

@@ -19,7 +19,13 @@ function ListingDetailsModal({
   onToggleFavorite = noop
 }: Props) {
   return (
-    <InlineDialog open={isOpen} data-test="listing-details-modal">
+    <InlineDialog
+      open={isOpen}
+      // in widget mode we don't have app sidebar
+      // in all dashboard pages leftOffset === appSidenavWidth
+      leftOffset={isWidget ? 0 : undefined}
+      data-test="listing-details-modal"
+    >
       {listingId && (
         <>
           <ListingDetails
