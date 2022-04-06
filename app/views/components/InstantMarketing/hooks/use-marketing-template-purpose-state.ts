@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { getRecipientPlaceholders } from '@app/utils/marketing-center/get-recipient-placeholders'
 import { getUserWithOnBehalfVariable } from '@app/utils/marketing-center/get-user-with-on-behalf-variable'
 import { TemplateData } from '@app/utils/marketing-center/render-branded-template'
 
@@ -64,10 +65,18 @@ export function useMarketingTemplatePurposeState(
         }
       : templateData
 
+  const correctedTemplateDataWithPlaceholders = {
+    ...correctedTemplateData,
+    // The sender object includes the sender placeholders if the templatePurpose is ForOtherAgents or ForCampaigns
+    // Otherwise, it should be equal to the current user
+    sender: correctedTemplateData.user,
+    recipient: getRecipientPlaceholders()
+  }
+
   return {
     isPurposeDrawerOpen,
     templatePurpose,
     handleTemplatePurposeSelect,
-    correctedTemplateData
+    correctedTemplateData: correctedTemplateDataWithPlaceholders
   }
 }
