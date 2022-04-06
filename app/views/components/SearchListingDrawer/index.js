@@ -19,7 +19,7 @@ import { getMediaGallery } from 'models/Deal/media-manager'
 import Listing from '../../../models/listings/listing'
 import SearchDrawer from '../SearchDrawer'
 
-import { convertHipPokcetListingToListing } from './helpers/convert-hip-pocket-listing-to-listing/idnex'
+import { convertHipPokcetListingToListing } from './helpers/convert-hip-pocket-listing-to-listing'
 import ListingItem from './ListingItem'
 
 const styles = theme => ({
