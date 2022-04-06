@@ -28,8 +28,7 @@ const useStyles = makeStyles(
   theme => ({
     templateTitle: { marginBottom: theme.spacing(0.5) },
     description: { minHeight: theme.spacing(11) },
-    template: { marginTop: theme.spacing(3) },
-    overlayDrawerBody: { overflowY: 'scroll' }
+    template: { marginTop: theme.spacing(3) }
   }),
   { name: 'SuperCampaignDrawer' }
 )
@@ -102,7 +101,7 @@ function SuperCampaignDrawer({
           title="Enter Campaign Details"
           closeButtonDisabled={actionButtonsDisabled}
         />
-        <OverlayDrawer.Body className={classes.overlayDrawerBody}>
+        <OverlayDrawer.Body>
           <Box my={3}>
             {isOpen && (
               <Form<SuperCampaignFormInternalValues>
