@@ -75,6 +75,7 @@ export function AccessButtons() {
       action: () => handleOpenExternalLink('https://rechat.com/blog/')
     },
     {
+      access: ({ user }) => !!user,
       id: 'support',
       label: 'Support',
       action: handleOpenSupportDialogueBox
