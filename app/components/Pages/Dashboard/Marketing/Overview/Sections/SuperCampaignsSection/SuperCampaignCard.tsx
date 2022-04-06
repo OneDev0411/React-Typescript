@@ -15,10 +15,10 @@ const useStyles = makeStyles(
   theme => ({
     '@keyframes scrollPositionAnimation': {
       from: {
-        objectPosition: '0 0%'
+        objectPosition: 'center 0%'
       },
       to: {
-        objectPosition: '0 100%'
+        objectPosition: 'center 100%'
       }
     },
     media: {
@@ -28,7 +28,7 @@ const useStyles = makeStyles(
       width: '100%',
       height: '100%',
       objectFit: 'cover',
-      objectPosition: '0 0',
+      objectPosition: 'center 0',
       background: theme.palette.grey[100],
       '&:hover': {
         animation: '8s linear infinite alternate $scrollPositionAnimation'
