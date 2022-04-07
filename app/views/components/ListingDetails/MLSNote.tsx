@@ -1,4 +1,5 @@
 import { Grid, makeStyles, Theme, Typography } from '@material-ui/core'
+import fecha from 'fecha'
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -39,6 +40,7 @@ interface Props {
 
 export default function MLSNote({ disclaimer, mlsName, logo }: Props) {
   const classes = useStyles()
+  const lastUpdateDate = getLastUpdateDate()
 
   return (
     <div className={classes.container}>
@@ -57,8 +59,24 @@ export default function MLSNote({ disclaimer, mlsName, logo }: Props) {
           Some properties which appear for sale on this website may no longer be
           available because they are under contract, have Closed or are no
           longer being offered for sale.
+          <br />
+          {`Copyright © ${mlsName} ${lastUpdateDate.getFullYear()}. All rights reserved. Last updated at ${fecha.format(
+            lastUpdateDate,
+            'MMM DD, YYYY hh:mm A'
+          )}.`}
         </Typography>
       </Grid>
     </div>
   )
+}
+
+// Rounds the timestamp to the nearest 15 minute.
+// For example we show 7:15 if it's 7:19, and 7:45 if it's 7:58
+function getLastUpdateDate() {
+  const date = new Date()
+  const minutes = date.getMinutes()
+
+  date.setMinutes(minutes - (minutes % 15))
+
+  return date
 }
