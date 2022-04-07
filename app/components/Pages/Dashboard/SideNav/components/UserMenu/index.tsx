@@ -4,8 +4,8 @@ import { Popover, Theme, makeStyles } from '@material-ui/core'
 import usePromise from 'react-use-promise'
 
 import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
+import { useUnsafeUser } from '@app/hooks/use-unsafe-user'
 import { getBrandChecklists } from '@app/models/BrandConsole/Checklists'
-import { IUserState } from 'reducers/user'
 
 import ToggleButton from './ToggleButton'
 import { UserMenuContent } from './UserMenuContent'
@@ -20,7 +20,7 @@ const useStyles = makeStyles(
   { name: 'UserMenu' }
 )
 
-export function UserMenu({ user }: { user: IUserState }) {
+export function UserMenu() {
   /**
    * We need to show checklists link only if users has access to it.
    * Right now, the logic for access is like this:
@@ -38,6 +38,7 @@ export function UserMenu({ user }: { user: IUserState }) {
    * the link which may be seen as a UX problem.
    */
   const classes = useStyles()
+  const user = useUnsafeUser()
   const activeBrandId = useUnsafeActiveBrandId()
 
   const [checklists] = usePromise(() => {
