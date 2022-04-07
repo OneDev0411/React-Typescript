@@ -27,6 +27,7 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { useTeamSetting } from '@app/hooks/team/use-team-setting'
 import { useViewAs } from '@app/hooks/team/use-view-as'
+import useNotify from '@app/hooks/use-notify'
 import { selectUser } from '@app/selectors/user'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import {
@@ -87,6 +88,7 @@ export const GridCalendarPresentation = ({
 }: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const notify = useNotify()
   const user = useSelector(selectUser)
   const viewAsUsers = useViewAs()
   // list of server events
@@ -320,6 +322,10 @@ export const GridCalendarPresentation = ({
       throw e
     } finally {
       setIsLoading(false)
+      notify({
+        status: 'success',
+        message: 'Event updated!'
+      })
     }
   }
 
@@ -421,7 +427,13 @@ export const GridCalendarPresentation = ({
           height="100%"
           initialView="dayGridMonth"
           dayMaxEventRows={3}
-          editable
+          editable={!isLoading}
+          events={events}
+          datesSet={handleDatesRender}
+          dateClick={handleDayClick}
+          eventDrop={handleEditEvent}
+          eventResize={handleEditEvent}
+          moreLinkClick="day"
           customButtons={{
             filterButton: {
               text: 'Filter',
@@ -448,12 +460,6 @@ export const GridCalendarPresentation = ({
             timeGridPlugin,
             interactionPlugin
           ]}
-          events={events}
-          datesSet={handleDatesRender}
-          dateClick={handleDayClick}
-          eventDrop={handleEditEvent}
-          eventResize={handleEditEvent}
-          moreLinkClick="day"
           views={{
             timeGrid: {
               dayMaxEventRows: false
