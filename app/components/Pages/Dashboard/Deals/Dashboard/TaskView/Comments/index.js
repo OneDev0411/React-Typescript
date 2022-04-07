@@ -64,6 +64,7 @@ class Comment extends React.Component {
           deal={this.props.deal}
           task={task}
           isBackOffice={this.props.isBackOffice}
+          onSendMessage={this.props.onSendMessage}
           autoFocus
         />
       </Container>

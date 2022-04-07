@@ -88,6 +88,8 @@ class CommentInput extends React.Component {
     this.setState({
       isSaving: false
     })
+
+    this.props?.onSendMessage()
   }
 
   render() {

@@ -46,19 +46,22 @@ function TaskView(props) {
     props.setSelectedTask(null)
   }
 
+  const scrollToEnd = () => {
+    const element = bodyContainerRef.current
+
+    if (element) {
+      element.scroll({
+        top: element.scrollHeight
+      })
+    }
+  }
+
   useEffect(() => {
     if (!taskId || !isCommentsLoaded) {
       return
     }
 
-    const element = bodyContainerRef.current
-
-    if (element) {
-      element.scroll({
-        top: element.scrollHeight,
-        behavior: 'smooth'
-      })
-    }
+    scrollToEnd()
   }, [taskId, isCommentsLoaded])
 
   return (
@@ -97,6 +100,7 @@ function TaskView(props) {
             task={task}
             isBackOffice={props.isBackOffice}
             onLoadComments={() => setIsCommentsLoaded(true)}
+            onSendMessage={scrollToEnd}
           />
         </Box>
       </Drawer.Body>
