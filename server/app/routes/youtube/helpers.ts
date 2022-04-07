@@ -26,9 +26,11 @@ export function getUrlMetadata(url: string): Promise<videoInfo> {
 }
 
 function selectYouTubeVideoStreamForDownload(info: videoInfo): videoFormat {
+  const mp4Formats = info.formats.filter(
+    format => format.hasVideo && format.hasAudio && format.container === 'mp4'
+  )
   const video =
-    info.formats.find(format => format.qualityLabel === '720p') ??
-    info.formats[0]
+    mp4Formats.find(format => format.qualityLabel === '720p') ?? mp4Formats[0]
 
   return video
 }
@@ -43,6 +45,7 @@ export async function downloadFirstFewSecondsOfYouTubeVideo(
 ): Promise<superagent.Response | undefined> {
   try {
     const selectedStream = selectYouTubeVideoStreamForDownload(info)
+
     const byteSizeOfEachSecond =
       getApproximateByteSizeOfEachSecond(selectedStream)
     const bytesToDownload = byteSizeOfEachSecond
