@@ -153,7 +153,7 @@ function SearchVideoDrawer({
         notify({
           status: 'warning',
           message:
-            'Failed to generated GIF thumbnail. Falling back to a static thumbnail.'
+            'Failed to generate GIF thumbnail. Falling back to the static thumbnail.'
         })
       } finally {
         setIsGeneratingThumbnail(false)
