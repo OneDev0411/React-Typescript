@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { ThunkDispatch } from 'redux-thunk'
 
+import { selectIntercom } from '@app/selectors/intercom'
 import { toggleChatbar } from '@app/store_actions/chatroom'
 import { activateIntercom } from '@app/store_actions/intercom'
 import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
@@ -61,9 +62,7 @@ function Menu(props: WithRouterProps) {
   const showingsTotalNotificationCount = useSelector(
     selectShowingsTotalNotificationCount
   )
-  const { isActive: isIntercomActive } = useSelector(
-    (state: IAppState) => state.intercom
-  )
+  const { isActive: isIntercomActive } = useSelector(selectIntercom)
   const dealsNotificationsNumber = useDealsNotificationsNumber()
   const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
   const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
