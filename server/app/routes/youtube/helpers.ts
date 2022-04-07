@@ -30,7 +30,7 @@ function selectYouTubeVideoStreamForDownload(info: videoInfo): videoFormat {
     format => format.hasVideo && format.hasAudio && format.container === 'mp4'
   )
   const video =
-    mp4Formats.find(format => format.qualityLabel === '720p') ?? mp4Formats[0]
+    mp4Formats.find(format => format.qualityLabel === '480p') ?? mp4Formats[0]
 
   return video
 }
