@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useIntercom } from 'react-use-intercom'
 
-import { selectUser } from 'selectors/user'
+import { useUnsafeUser } from '@app/hooks/use-unsafe-user'
 
 import { IAppState } from '../../../reducers'
 import { deactivateIntercom } from '../../../store_actions/intercom'
@@ -13,7 +13,7 @@ import { Button, GlobalIntercomStyles } from './styled'
 
 export default function Intercom() {
   const dispatch = useDispatch()
-  const user = useSelector((state: IAppState) => selectUser(state))
+  const user = useUnsafeUser()
   const { isActive: isIntercomActive } = useSelector(
     (state: IAppState) => state.intercom
   )

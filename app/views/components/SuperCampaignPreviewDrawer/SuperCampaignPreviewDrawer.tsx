@@ -21,7 +21,8 @@ const useStyles = makeStyles(
     description: { marginBottom: theme.spacing(4) },
     tags: { margin: theme.spacing(1, 0) },
     optOutButton: { margin: theme.spacing(0, 1) },
-    templatePreview: { margin: theme.spacing(2, 0) }
+    templatePreview: { margin: theme.spacing(2, 0) },
+    overlayDrawerBody: { overflowY: 'scroll' }
   }),
   { name: 'SuperCampaignPreviewDrawer' }
 )
@@ -112,7 +113,7 @@ function SuperCampaignPreviewDrawer({
           title="Campaign Preview"
           closeButtonDisabled={isWorking}
         />
-        <OverlayDrawer.Body>
+        <OverlayDrawer.Body className={classes.overlayDrawerBody}>
           <div className={classes.wrapper}>
             {superCampaign.description && (
               <SuperCampaignPreviewDrawerDescription
