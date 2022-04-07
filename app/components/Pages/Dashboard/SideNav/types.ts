@@ -12,27 +12,20 @@ export type ExpandedMenu =
   | 'nav-support'
   | 'nav-transaction'
 
-export interface AccordionMenu {
+export interface BaseAccordionMenu {
   access?: Access | Access[]
   action?: () => void
-  hasChildrenNotification?: boolean
-  hasDivider?: boolean
-  icon?: string
   id: string
   isHidden?: boolean
   label: string
-  notificationCount?: number | null
-  subMenu?: AccordionSubMenu[]
-  testId?: string
+  notificationCount?: Nullable<number>
   to?: string
 }
 
-export interface AccordionSubMenu {
-  access?: Access | Access[]
-  action?: () => void
-  id: string
-  isHidden?: boolean
-  label: string
-  notificationCount?: number | null
-  to?: string
+export interface AccordionMenu extends BaseAccordionMenu {
+  hasChildrenNotification?: boolean
+  hasDivider?: boolean
+  icon?: string
+  subMenu?: BaseAccordionMenu[]
+  testId?: string
 }

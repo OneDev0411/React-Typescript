@@ -36,7 +36,7 @@ import PoweredBy from './components/PoweredBy'
 import SideNavAccordion from './components/SideNavAccordion'
 import { UserMenu } from './components/UserMenu'
 import { Sidenav } from './styled'
-import { ExpandedMenu, AccordionMenu, AccordionSubMenu } from './types'
+import { AccordionMenu, BaseAccordionMenu, ExpandedMenu } from './types'
 import { scrollableAreaShadowColor } from './variables'
 
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
@@ -94,7 +94,7 @@ function Menu(props: WithRouterProps) {
   const handleOpenExternalLink = link =>
     window.open(link, '_blank', 'noopener noreferrer')
 
-  const MenuItems: AccordionMenu[] = [
+  const menuItems: AccordionMenu[] = [
     {
       access: dashboardAccess,
       hasDivider: false,
@@ -279,7 +279,7 @@ function Menu(props: WithRouterProps) {
         style={{ flex: '1 1' }}
         hasThinnerScrollbar
       >
-        {MenuItems.map((menu: AccordionSubMenu, index) => {
+        {menuItems.map((menu: BaseAccordionMenu, index) => {
           const { isHidden } = menu
 
           if (isHidden) {

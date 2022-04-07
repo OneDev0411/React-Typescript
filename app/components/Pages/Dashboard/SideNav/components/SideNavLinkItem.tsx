@@ -3,14 +3,14 @@ import { ReactNode, useEffect } from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { SidenavLink, SidenavLinkSummary } from '../styled'
-import { AccordionSubMenu, ExpandedMenu } from '../types'
+import { BaseAccordionMenu, ExpandedMenu } from '../types'
 
 interface Props {
   children: ReactNode
   isSubmenu?: boolean
   onExpandMenu?: (panel: ExpandedMenu) => void
   onTriggerAction?: () => void
-  subMenu?: AccordionSubMenu[]
+  subMenu?: BaseAccordionMenu[]
   to?: string
   tourId: ExpandedMenu
 }

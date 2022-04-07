@@ -1,13 +1,13 @@
 import { MenuBadge } from '@app/views/components/MenuBadge'
 
 import { SideNavItemLabel } from '../styled'
-import { AccordionSubMenu, ExpandedMenu } from '../types'
+import { BaseAccordionMenu, ExpandedMenu } from '../types'
 
 import SideNavLinkItem from './SideNavLinkItem'
 
 interface Props {
   isOpen: boolean
-  item: AccordionSubMenu
+  item: BaseAccordionMenu
 }
 
 export function SideNavAccordionDetailsItem({ isOpen, item }: Props) {
