@@ -5,7 +5,8 @@ import type { Model } from 'backbone'
 import unescape from 'lodash/unescape'
 
 import useAsync from '@app/hooks/use-async'
-import OverlayDrawer from 'components/OverlayDrawer'
+import useNotify from '@app/hooks/use-notify'
+import OverlayDrawer from '@app/views/components/OverlayDrawer'
 
 import { SearchInput } from '../GlobalHeaderWithSearch/SearchInput'
 import LoadingContainer from '../LoadingContainer'
@@ -57,6 +58,7 @@ function SearchVideoDrawer({
   onSelect,
   uploadThumbnail
 }: SearchVideoDrawerProps) {
+  const notify = useNotify()
   const classes = useStyles()
   const {
     data: result,
@@ -148,6 +150,11 @@ function SearchVideoDrawer({
         shouldAddPlayIconWatermark = false
       } catch (err) {
         console.error(err)
+        notify({
+          status: 'warning',
+          message:
+            'Failed to generated GIF thumbnail. Falling back to a static thumbnail.'
+        })
       } finally {
         setIsGeneratingThumbnail(false)
       }
