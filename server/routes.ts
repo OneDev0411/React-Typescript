@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser'
+import timeout from 'connect-timeout'
 import express from 'express'
 
 import branchLinkRoute from './app/routes/branch-link'
@@ -107,6 +108,7 @@ router.post('/api/utils/render-mjml', requestLimit, renderMjmlRoute)
 router.post('/api/utils/get-url-metadata', requestLimit, urlMetadataRoute)
 router.post(
   '/api/utils/get-youtube-video-gif',
+  timeout('120s'),
   requestLimit,
   getYoutubeVideoGifRoute
 )
