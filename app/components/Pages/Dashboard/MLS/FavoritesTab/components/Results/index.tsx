@@ -213,8 +213,8 @@ export const Results = ({
           {zeroStateShouldShown ? (
             <ZeroState
               image="/static/images/zero-state/mls-favorites.png"
-              title="You don’t have any Favorites."
-              subtitle="Try for add new Favorites."
+              title="You don’t have any Favorites"
+              subtitle="Try adding a new Favorite"
             />
           ) : (
             <>
