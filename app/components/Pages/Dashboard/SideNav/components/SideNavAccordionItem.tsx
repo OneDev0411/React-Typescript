@@ -94,11 +94,19 @@ export default function SideNavAccordionItem({
   const popperId = isOpen ? id : undefined
 
   const handleShowPopper = (event: MouseEvent<HTMLElement>, menuId) => {
+    if (!subMenu || expandedMenu === menuId) {
+      return
+    }
+
     setAnchorEl(event.currentTarget)
     setHoveredItem(menuId)
   }
 
   const handleHidePopper = () => {
+    if (!subMenu) {
+      return
+    }
+
     setAnchorEl(null)
     setHoveredItem(null)
   }
@@ -112,11 +120,9 @@ export default function SideNavAccordionItem({
           root: classes.accordionRoot,
           expanded: classes.accordionExpanded
         }}
-        onMouseEnter={event =>
-          subMenu && expandedMenu !== menuId && handleShowPopper(event, menuId)
-        }
-        onMouseLeave={() => subMenu && handleHidePopper()}
-        onClick={() => subMenu && handleHidePopper()}
+        onMouseEnter={event => handleShowPopper(event, menuId)}
+        onMouseLeave={() => handleHidePopper()}
+        onClick={() => handleHidePopper()}
       >
         <SideNavAccordionSummary
           data={data}
