@@ -1,11 +1,10 @@
 import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
-import { useSelector } from 'react-redux'
 
 import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/Table/components/LoadingComponent'
+import { useActiveBrandId } from '@app/hooks/brand'
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { useGetSocialPosts } from '@app/models/social-posts'
-import { selectActiveBrandId } from '@app/selectors/brand'
 import { noop } from '@app/utils/helpers'
 import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
@@ -48,7 +47,7 @@ function SocialPostTable() {
   const filter: SocialPostFilter =
     filterRaw === 'posted' ? 'posted' : 'scheduled'
 
-  const activeBrandId = useSelector(selectActiveBrandId)
+  const activeBrandId = useActiveBrandId()
   const { isFetching, data, fetchNextPage } = useGetSocialPosts(activeBrandId, {
     executed: filter === 'posted' ? 'true' : 'false'
   })

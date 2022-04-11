@@ -1,7 +1,5 @@
-import { useSelector } from 'react-redux'
-
+import { useActiveBrandId } from '@app/hooks/brand'
 import { useCreateSocialPost } from '@app/models/social-posts'
-import { selectActiveBrandId } from '@app/selectors/brand'
 import { convertDateToTimestamp } from '@app/utils/date-utils'
 
 import SocialPostForm, { FormValues } from '../SocialPostForm'
@@ -20,7 +18,7 @@ function SocialDrawerScheduleInstagramPost({
   instance
 }: SocialDrawerScheduleInstagramPostProps) {
   const { mutateAsync, data } = useCreateSocialPost()
-  const activeBrandId = useSelector(selectActiveBrandId)
+  const activeBrandId = useActiveBrandId()
 
   const isCreated = !!data
 
