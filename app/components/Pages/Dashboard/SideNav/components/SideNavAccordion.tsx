@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 
 import Acl from '@app/views/components/Acl'
 
@@ -9,17 +9,13 @@ import SideNavAccordionItem from './SideNavAccordionItem'
 interface SideNavAccordionProps {
   data: AccordionMenu
   expandedMenu: ExpandedMenu
-  onChange: (
-    panel: ExpandedMenu
-  ) => (event: ChangeEvent<{}>, isExpanded: boolean) => void
-  setExpandedMenu: Dispatch<SetStateAction<ExpandedMenu>>
+  onExpandMenu: Dispatch<SetStateAction<ExpandedMenu>>
 }
 
 export default function SideNavAccordion({
   data,
   expandedMenu,
-  onChange,
-  setExpandedMenu
+  onExpandMenu
 }: SideNavAccordionProps) {
   const { access } = data
 
@@ -27,17 +23,15 @@ export default function SideNavAccordion({
     <Acl access={access}>
       <SideNavAccordionItem
         data={data}
-        onChange={onChange}
         expandedMenu={expandedMenu}
-        setExpandedMenu={setExpandedMenu}
+        onExpandMenu={onExpandMenu}
       />
     </Acl>
   ) : (
     <SideNavAccordionItem
       data={data}
-      onChange={onChange}
       expandedMenu={expandedMenu}
-      setExpandedMenu={setExpandedMenu}
+      onExpandMenu={onExpandMenu}
     />
   )
 }

@@ -87,6 +87,16 @@ export interface ListingCardProps {
   onClick?: () => void
 
   /**
+   * The mouse enter handler of listing card root
+   */
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>
+
+  /**
+   * The mouse leave handler of listing card root
+   */
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>
+
+  /**
    * The card hover state
    */
   hover?: boolean
@@ -107,7 +117,9 @@ export default function ListingCard({
   onToggleSelection = noop,
   liked = undefined,
   onLikeClick = noop,
-  onClick
+  onClick,
+  onMouseEnter,
+  onMouseLeave
 }: ListingCardProps) {
   const classes = useStyles({ listing })
 
@@ -147,6 +159,8 @@ export default function ListingCard({
 
   return (
     <Card
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       data-test="card"
       variant="outlined"
       className={cn({

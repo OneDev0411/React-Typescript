@@ -2,7 +2,7 @@ import { AccordionDetails, makeStyles } from '@material-ui/core'
 
 import Acl from '@app/views/components/Acl'
 
-import { AccordionSubMenu } from '../types'
+import { BaseAccordionMenu } from '../types'
 
 import { SideNavAccordionDetailsItem } from './SideNavAccordionDetailsItem'
 
@@ -21,7 +21,7 @@ const useStyles = makeStyles(
 
 interface Props {
   isOpen: boolean
-  subMenu: AccordionSubMenu[]
+  subMenu: BaseAccordionMenu[]
 }
 
 export function SideNavAccordionDetails({ isOpen, subMenu }: Props) {

@@ -30,8 +30,8 @@ const useStyles = makeStyles(
         backgroundSize: 'cover'
       },
       [theme.breakpoints.up('sm')]: {
-        width: 150,
-        height: 150
+        width: 152,
+        height: 152
       }
     },
     list: {

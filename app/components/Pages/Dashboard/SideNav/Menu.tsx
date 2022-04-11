@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react'
+import { useState } from 'react'
 
 import {
   mdiGamepadCircleUp,
@@ -13,21 +13,22 @@ import { useDispatch, useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { ThunkDispatch } from 'redux-thunk'
 
+import { ACL } from '@app/constants/acl'
+import { useChatRoomsNotificationsNumber } from '@app/hooks/use-chat-rooms-notifications-number'
+import { useDealsNotificationsNumber } from '@app/hooks/use-deals-notifications-number'
+import { IAppState } from '@app/reducers'
+import { selectUnreadEmailThreadsCount } from '@app/reducers/inbox'
+import { InboxAction } from '@app/reducers/inbox/types'
+import { selectNotificationNewCount } from '@app/reducers/notifications'
+import { selectIntercom } from '@app/selectors/intercom'
+import { selectShowingsTotalNotificationCount } from '@app/selectors/showings'
+import { selectUserUnsafe } from '@app/selectors/user'
 import { toggleChatbar } from '@app/store_actions/chatroom'
+import { fetchUnreadEmailThreadsCount } from '@app/store_actions/inbox'
 import { activateIntercom } from '@app/store_actions/intercom'
-import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
-import { GlobalActionsButton } from 'components/GlobalActionsButton'
-import { ACL } from 'constants/acl'
-import { useChatRoomsNotificationsNumber } from 'hooks/use-chat-rooms-notifications-number'
-import { useDealsNotificationsNumber } from 'hooks/use-deals-notifications-number'
-import { IAppState } from 'reducers'
-import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
-import { InboxAction } from 'reducers/inbox/types'
-import { selectNotificationNewCount } from 'reducers/notifications'
-import { selectShowingsTotalNotificationCount } from 'selectors/showings'
-import { selectUserUnsafe } from 'selectors/user'
-import { getBrandHelpCenterURL } from 'utils/brand'
-import { ScrollableArea } from 'views/components/ScrollableArea'
+import { getBrandHelpCenterURL } from '@app/utils/brand'
+import { GlobalActionsButton } from '@app/views/components/GlobalActionsButton'
+import { ScrollableArea } from '@app/views/components/ScrollableArea'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
@@ -37,7 +38,7 @@ import SideNavAccordion from './components/SideNavAccordion'
 import { SideNavHamburgerButton } from './components/SideNavHamburgerButton'
 import { UserMenu } from './components/UserMenu'
 import { Sidenav } from './styled'
-import { ExpandedMenu, AccordionMenu, AccordionSubMenu } from './types'
+import { AccordionMenu, BaseAccordionMenu, ExpandedMenu } from './types'
 import { scrollableAreaShadowColor } from './variables'
 
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
@@ -49,10 +50,10 @@ const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 function Menu(props: WithRouterProps) {
   const user = useSelector(selectUserUnsafe)
-
   const brand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
   )
+
   const appNotifications = useSelector((state: IAppState) =>
     selectNotificationNewCount(state.globalNotifications)
   )
@@ -62,9 +63,8 @@ function Menu(props: WithRouterProps) {
   const showingsTotalNotificationCount = useSelector(
     selectShowingsTotalNotificationCount
   )
-  const { isActive: isIntercomActive } = useSelector(
-    (state: IAppState) => state.intercom
-  )
+
+  const { isActive: isIntercomActive } = useSelector(selectIntercom)
   const dealsNotificationsNumber = useDealsNotificationsNumber()
   const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
   const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
@@ -81,21 +81,26 @@ function Menu(props: WithRouterProps) {
 
   const [expandedMenu, setExpandedMenu] = useState<ExpandedMenu>(null)
 
-  const handleChange =
-    (panel: ExpandedMenu) => (event: ChangeEvent<{}>, isExpanded: boolean) => {
-      setExpandedMenu(isExpanded ? panel : null)
+  const handleOpenChatbarDrawer = () => {
+    if (window.location.pathname.includes('/recents/')) {
+      return
     }
 
-  const handleOpenChatbarDrawer = () =>
-    !window.location.pathname.includes('/recents/') && dispatch(toggleChatbar())
+    dispatch(toggleChatbar())
+  }
 
-  const handleOpenSupportDialogueBox = () =>
-    !isIntercomActive && dispatch(activateIntercom(isIntercomActive))
+  const handleOpenSupportDialogueBox = () => {
+    if (isIntercomActive) {
+      return
+    }
+
+    dispatch(activateIntercom(isIntercomActive))
+  }
 
   const handleOpenExternalLink = link =>
     window.open(link, '_blank', 'noopener noreferrer')
 
-  const MenuItems: AccordionMenu[] = [
+  const menuItems: AccordionMenu[] = [
     {
       access: dashboardAccess,
       hasDivider: false,
@@ -281,7 +286,7 @@ function Menu(props: WithRouterProps) {
         style={{ flex: '1 1' }}
         hasThinnerScrollbar
       >
-        {MenuItems.map((menu: AccordionSubMenu, index) => {
+        {menuItems.map((menu: BaseAccordionMenu, index) => {
           const { isHidden } = menu
 
           if (isHidden) {
@@ -292,15 +297,14 @@ function Menu(props: WithRouterProps) {
             <SideNavAccordion
               key={index}
               data={menu}
-              onChange={handleChange}
               expandedMenu={expandedMenu}
-              setExpandedMenu={setExpandedMenu}
+              onExpandMenu={setExpandedMenu}
             />
           )
         })}
       </ScrollableArea>
 
-      <UserMenu user={user} />
+      <UserMenu />
       <PoweredBy />
     </Sidenav>
   )

@@ -1,10 +1,4 @@
-import {
-  ChangeEvent,
-  Dispatch,
-  MouseEvent,
-  SetStateAction,
-  useState
-} from 'react'
+import { Dispatch, MouseEvent, SetStateAction, useState } from 'react'
 
 import {
   Accordion,
@@ -69,17 +63,13 @@ const useStyles = makeStyles(
 interface SideNavAccordionItemProps {
   data: AccordionMenu
   expandedMenu: ExpandedMenu
-  onChange: (
-    panel: ExpandedMenu
-  ) => (event: ChangeEvent<{}>, isExpanded: boolean) => void
-  setExpandedMenu: Dispatch<SetStateAction<ExpandedMenu>>
+  onExpandMenu: Dispatch<SetStateAction<ExpandedMenu>>
 }
 
 export default function SideNavAccordionItem({
   data,
   expandedMenu,
-  onChange,
-  setExpandedMenu
+  onExpandMenu
 }: SideNavAccordionItemProps) {
   const classes = useStyles()
   const { testId = '', id, hasDivider, subMenu } = data
@@ -93,30 +83,44 @@ export default function SideNavAccordionItem({
   const isOpen = Boolean(anchorEl)
   const popperId = isOpen ? id : undefined
 
-  const handleShowPopper = (event: MouseEvent<HTMLElement>, menuId) => {
+  const handleShowPopper = (event: MouseEvent<HTMLElement>, id) => {
+    if (!subMenu || expandedMenu === id) {
+      return
+    }
+
     setAnchorEl(event.currentTarget)
-    setHoveredItem(menuId)
+    setHoveredItem(id)
   }
 
   const handleHidePopper = () => {
+    if (!subMenu) {
+      return
+    }
+
     setAnchorEl(null)
     setHoveredItem(null)
+  }
+
+  const handleClick = id => {
+    if (!subMenu || expandedMenu === id) {
+      return
+    }
+
+    handleHidePopper()
+    onExpandMenu(id)
   }
 
   return (
     <SidenavListGroup data-test={testId}>
       <Accordion
         expanded={expandedMenu === menuId}
-        onChange={onChange(menuId)}
         classes={{
           root: classes.accordionRoot,
           expanded: classes.accordionExpanded
         }}
-        onMouseEnter={event =>
-          subMenu && expandedMenu !== menuId && handleShowPopper(event, menuId)
-        }
-        onMouseLeave={() => subMenu && handleHidePopper()}
-        onClick={() => subMenu && handleHidePopper()}
+        onMouseEnter={event => handleShowPopper(event, menuId)}
+        onMouseLeave={() => handleHidePopper()}
+        onClick={() => handleClick(menuId)}
       >
         <SideNavAccordionSummary
           data={data}
@@ -124,7 +128,7 @@ export default function SideNavAccordionItem({
           hoveredItem={hoveredItem}
           menuId={menuId}
           popperId={popperId}
-          onExpandMenu={setExpandedMenu}
+          onExpandMenu={onExpandMenu}
         />
 
         {subMenu &&

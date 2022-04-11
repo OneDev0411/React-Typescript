@@ -5,6 +5,7 @@ export interface SearchVideoResult {
   publisher: string
   publishedAt: string
   sourceIcon: string
+  source: 'youtube' | 'vimeo'
 }
 
 export type YouTubeVideoResource = gapi.client.youtube.SearchResult
@@ -12,6 +13,7 @@ export type YouTubeVideoResource = gapi.client.youtube.SearchResult
 export interface Video {
   url: string
   thumbnail?: string
+  thumbnailWithPlayIcon?: string
 }
 
 // https://developer.vimeo.com/api/oembed/videos#embedding-a-video-with-oembed

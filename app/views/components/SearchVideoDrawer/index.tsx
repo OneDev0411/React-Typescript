@@ -1,21 +1,23 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { Box, Button, makeStyles, Typography } from '@material-ui/core'
+import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import type { Model } from 'backbone'
 import unescape from 'lodash/unescape'
 
 import useAsync from '@app/hooks/use-async'
-import OverlayDrawer from 'components/OverlayDrawer'
+import useNotify from '@app/hooks/use-notify'
+import OverlayDrawer from '@app/views/components/OverlayDrawer'
 
 import { SearchInput } from '../GlobalHeaderWithSearch/SearchInput'
 import LoadingContainer from '../LoadingContainer'
 
-import { makeVimeoDateStandard } from './helpers'
+import { getYouTubeVideoGif, makeVimeoDateStandard } from './helpers'
 import SearchVideoEmptyState from './SearchVideoEmptyState'
 import SearchVideoResults from './SearchVideoResults'
 import { SearchVideoResult, Video } from './types'
 import { useSearchVimeo } from './use-search-vimeo'
 import { useSearchYouTube } from './use-search-youtube'
+import { useWatermarkPlayIcon } from './use-watermark-play-icon'
 
 const useStyles = makeStyles(
   theme => ({
@@ -43,6 +45,7 @@ interface SearchVideoDrawerProps {
   model: Nullable<Model>
   onClose: () => void
   onSelect: (video: Video) => void
+  uploadThumbnail: (file: File) => Promise<string>
 }
 
 const INITIAL_SEARCH_TERM = 'architectural digest'
@@ -52,8 +55,10 @@ function SearchVideoDrawer({
   isOpen,
   model,
   onClose,
-  onSelect
+  onSelect,
+  uploadThumbnail
 }: SearchVideoDrawerProps) {
+  const notify = useNotify()
   const classes = useStyles()
   const {
     data: result,
@@ -63,6 +68,9 @@ function SearchVideoDrawer({
   const [video, setVideo] = useState<Nullable<SearchVideoResult>>(null)
   const { isYouTubeReady, safeSearchYouTube } = useSearchYouTube()
   const { safeSearchVimeo } = useSearchVimeo()
+  const [isGeneratingThumbnail, setIsGeneratingThumbnail] =
+    useState<boolean>(false)
+  const { isWatermarking, watermarkPlayIcon } = useWatermarkPlayIcon()
 
   const searchVideos = useCallback(
     (value: string) => {
@@ -86,7 +94,8 @@ function SearchVideoDrawer({
             url: `https://vimeo.com/${video.video_id}`,
             publisher: video.author_name,
             publishedAt: makeVimeoDateStandard(video.upload_date),
-            sourceIcon: 'https://f.vimeocdn.com/images_v6/favicon.ico'
+            sourceIcon: 'https://f.vimeocdn.com/images_v6/favicon.ico',
+            source: 'vimeo'
           })),
           ...youtubeVideos.map<SearchVideoResult>(video => ({
             thumbnail: video.snippet?.thumbnails?.high?.url ?? '',
@@ -95,7 +104,8 @@ function SearchVideoDrawer({
             publisher: video.snippet?.channelTitle ?? '',
             publishedAt: video.snippet?.publishedAt ?? '',
             sourceIcon:
-              'https://www.youtube.com/s/desktop/8cdd1596/img/favicon_32x32.png'
+              'https://www.youtube.com/s/desktop/8cdd1596/img/favicon_32x32.png',
+            source: 'youtube'
           }))
         ]
 
@@ -123,14 +133,39 @@ function SearchVideoDrawer({
     target
   }: React.ChangeEvent<HTMLInputElement>) => searchVideos(target.value)
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!video) {
       return
     }
 
+    let shouldAddPlayIconWatermark = true
+
+    if (video.source === 'youtube') {
+      try {
+        setIsGeneratingThumbnail(true)
+
+        const result = await getYouTubeVideoGif(video.url)
+
+        video.thumbnail = result.url
+        shouldAddPlayIconWatermark = false
+      } catch (err) {
+        console.error(err)
+        notify({
+          status: 'warning',
+          message:
+            'Failed to generate GIF thumbnail. Falling back to the static thumbnail.'
+        })
+      } finally {
+        setIsGeneratingThumbnail(false)
+      }
+    }
+
     const videoInfo: Video = {
       url: video.url,
-      thumbnail: video.thumbnail
+      thumbnail: video.thumbnail,
+      thumbnailWithPlayIcon: shouldAddPlayIconWatermark
+        ? await watermarkPlayIcon(video.thumbnail, uploadThumbnail)
+        : video.thumbnail
     }
 
     onSelect(videoInfo)
@@ -144,6 +179,30 @@ function SearchVideoDrawer({
     setVideo(null)
   }
 
+  const renderGeneratingThumbnail = () => {
+    return (
+      <Box mt="30%">
+        <Grid
+          container
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Grid item>
+            <LoadingContainer noPaddings />
+          </Grid>
+          <Grid item>
+            <Typography variant="body1" align="center">
+              Generating GIF thumbnail
+              <br />
+              This may take a few seconds.
+            </Typography>
+          </Grid>
+        </Grid>
+      </Box>
+    )
+  }
+
   const isLoadingState = isLoading || !isYouTubeReady
   const isEmptyState = !isLoadingState && result.length === 0
 
@@ -151,38 +210,44 @@ function SearchVideoDrawer({
     <OverlayDrawer open={isOpen} onClose={handleClose} width="690px">
       <OverlayDrawer.Header title="Insert a Youtube/Vimeo video" />
       <OverlayDrawer.Body className={classes.body}>
-        {isYouTubeReady && (
-          <Box flex={0} px={3} py={2}>
-            <SearchInput
-              onChange={handleSearchChange}
-              fullWidth
-              autoFocus
-              isLoading={isLoading}
-              placeholder="Search"
-              debounceTime={500}
-            />
-            <Typography className={classes.helpText} variant="caption">
-              Youtube and Vimeo links supported
-            </Typography>
-          </Box>
+        {isGeneratingThumbnail ? (
+          renderGeneratingThumbnail()
+        ) : (
+          <>
+            {isYouTubeReady && (
+              <Box flex={0} px={3} py={2}>
+                <SearchInput
+                  onChange={handleSearchChange}
+                  fullWidth
+                  autoFocus
+                  isLoading={isLoading}
+                  placeholder="Search"
+                  debounceTime={500}
+                />
+                <Typography className={classes.helpText} variant="caption">
+                  Youtube and Vimeo links supported
+                </Typography>
+              </Box>
+            )}
+            <Box flex={1} className={classes.result} px={3}>
+              {isLoadingState ? (
+                <LoadingContainer />
+              ) : isEmptyState ? (
+                <SearchVideoEmptyState />
+              ) : (
+                <SearchVideoResults
+                  videos={result}
+                  selected={video}
+                  onSelect={setVideo}
+                />
+              )}
+            </Box>
+          </>
         )}
-        <Box flex={1} className={classes.result} px={3}>
-          {isLoadingState ? (
-            <LoadingContainer />
-          ) : isEmptyState ? (
-            <SearchVideoEmptyState />
-          ) : (
-            <SearchVideoResults
-              videos={result}
-              selected={video}
-              onSelect={setVideo}
-            />
-          )}
-        </Box>
       </OverlayDrawer.Body>
       <OverlayDrawer.Footer rowReverse>
         <Button
-          disabled={!video}
+          disabled={!video || isGeneratingThumbnail || isWatermarking}
           color="primary"
           variant="contained"
           onClick={handleConfirm}

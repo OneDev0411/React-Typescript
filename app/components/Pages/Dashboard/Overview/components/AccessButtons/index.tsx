@@ -5,8 +5,8 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { AccessButton } from '@app/components/Pages/Dashboard/Overview/components/AccessButton'
 import { ACL } from '@app/constants/acl'
+import { selectIntercom } from '@app/selectors/intercom'
 import { activateIntercom } from '@app/store_actions/intercom'
-import { IAppState } from 'reducers'
 import { InboxAction } from 'reducers/inbox/types'
 
 import { AccessButtonType } from '../../types.d'
@@ -28,9 +28,7 @@ export function AccessButtons() {
   const classes = styles()
   const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
 
-  const { isActive: isIntercomActive } = useSelector(
-    (state: IAppState) => state.intercom
-  )
+  const { isActive: isIntercomActive } = useSelector(selectIntercom)
 
   const handleOpenSupportDialogueBox = () =>
     !isIntercomActive && dispatch(activateIntercom(isIntercomActive))
@@ -75,6 +73,7 @@ export function AccessButtons() {
       action: () => handleOpenExternalLink('https://rechat.com/blog/')
     },
     {
+      access: ({ user }) => !!user,
       id: 'support',
       label: 'Support',
       action: handleOpenSupportDialogueBox

@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
     itemsWrapper: {
       margin: theme.spacing(1)
     },
-    popoverRoot: { marginTop: `${theme.spacing(0.5)}px` }
+    popoverRoot: { marginTop: theme.spacing(0.5) }
   })
 )
 

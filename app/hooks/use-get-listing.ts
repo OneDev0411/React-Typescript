@@ -8,14 +8,13 @@ type Status = 'error' | 'loading' | 'success' | 'pending'
 
 export interface UseGetListing {
   error: string
-  listing: null | IListing<'proposed_agent'>
+  listing: Nullable<IListing<'proposed_agent' | 'mls_info'>>
   status: Status
 }
 
 export function useGetListing(id: UUID): UseGetListing {
-  const [listing, setListing] = useState<IListing<'proposed_agent'> | null>(
-    null
-  )
+  const [listing, setListing] =
+    useState<Nullable<IListing<'proposed_agent' | 'mls_info'>>>(null)
   const [status, setStatus] = useState<Status>('pending')
   const [error, setError] = useState('')
 

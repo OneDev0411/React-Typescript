@@ -5,14 +5,14 @@ import { withRouter, WithRouterProps } from 'react-router'
 
 import { SideNavContext } from '../../DashboardLayout'
 import { SidenavLink, SidenavLinkSummary } from '../styled'
-import { AccordionSubMenu, ExpandedMenu } from '../types'
+import { BaseAccordionMenu, ExpandedMenu } from '../types'
 
 interface Props {
   children: ReactNode
   isSubmenu?: boolean
   onExpandMenu?: (panel: ExpandedMenu) => void
   onTriggerAction?: () => void
-  subMenu?: AccordionSubMenu[]
+  subMenu?: BaseAccordionMenu[]
   to?: string
   tourId: ExpandedMenu
 }
@@ -39,6 +39,8 @@ function SideNavLinkItem(props: Props & WithRouterProps) {
         .some((route: string) => location.pathname.startsWith(route))
     : !onTriggerAction && location.pathname.startsWith(to)
 
+  // Here we check if the current route is active and there is a
+  // related item in the menu, then expand that menu
   useEffect(() => {
     if (!active || !onExpandMenu) {
       return
