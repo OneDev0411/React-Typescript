@@ -1,14 +1,13 @@
 import { useQueryClient } from 'react-query'
-import { useSelector } from 'react-redux'
 
+import { useActiveBrandId } from '@app/hooks/brand'
 import { list } from '@app/models/facebook/query-keys'
-import { selectActiveBrandId } from '@app/selectors/brand'
 
 type UseInvalidateFacebookPagesListQuery = () => void
 
 export function useInvalidateFacebookPagesListQuery(): UseInvalidateFacebookPagesListQuery {
   const queryClient = useQueryClient()
-  const activeBrandId = useSelector(selectActiveBrandId)
+  const activeBrandId = useActiveBrandId()
 
   return () => queryClient.invalidateQueries(list(activeBrandId))
 }

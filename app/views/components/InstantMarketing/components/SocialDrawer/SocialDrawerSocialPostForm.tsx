@@ -1,9 +1,8 @@
 import { useRef } from 'react'
 
-import { useSelector } from 'react-redux'
-
+import { useActiveBrandId } from '@app/hooks/brand'
 import { useCreateSocialPost } from '@app/models/social-posts'
-import { selectActiveBrandId } from '@app/selectors/brand'
+import { convertDateToTimestamp } from '@app/utils/date-utils'
 
 import SocialPostForm, { FormValues } from '../SocialPostForm'
 
@@ -42,7 +41,7 @@ function SocialDrawerSocialPostForm({
       }
     }
   })
-  const activeBrandId = useSelector(selectActiveBrandId)
+  const activeBrandId = useActiveBrandId()
 
   const handleSubmit = async (values: FormValues) => {
     if (!instance || !values.facebookPage) {
@@ -54,7 +53,7 @@ function SocialDrawerSocialPostForm({
     await mutateAsync({
       ...values,
       facebookPage: values.facebookPage.id,
-      due_at: values.dueAt ?? new Date(),
+      due_at: convertDateToTimestamp(values.dueAt ?? new Date()),
       templateInstance: instance.id,
       brand: activeBrandId
     })

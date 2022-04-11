@@ -172,17 +172,18 @@ export const Results = ({
     (listingId: UUID, hover: boolean) => {
       uiDispatch(changeListingHoverState(hover ? listingId : null))
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [uiDispatch]
   )
 
-  const handleToggleLike = useCallback((listingId: UUID) => {
-    // Close listing modal after toggle like to prevent multiple toggling issue
-    // https://gitlab.com/rechat/web/-/issues/5708#note_709319289
-    onToggleListingModal('', false)
-    dispatch(removeListing(listingId))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const handleToggleLike = useCallback(
+    (listingId: UUID) => {
+      // Close listing modal after toggle like to prevent multiple toggling issue
+      // https://gitlab.com/rechat/web/-/issues/5708#note_709319289
+      onToggleListingModal('', false)
+      dispatch(removeListing(listingId))
+    },
+    [dispatch, onToggleListingModal]
+  )
 
   return (
     <Grid container className={classes.root}>

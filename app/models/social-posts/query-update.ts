@@ -1,6 +1,10 @@
 import { QueryClient } from 'react-query'
 
-import { UpdateCachePromise, updateCacheActions } from '@app/utils/react-query'
+import {
+  UpdateCachePromise,
+  infiniteDataDeleteCacheActions,
+  infiniteDataUpdateCacheActions
+} from '@app/utils/react-query'
 
 import { list } from './query-keys'
 
@@ -9,19 +13,25 @@ export function deleteFromCacheList(
   brandId: UUID,
   socialPostId: UUID
 ): UpdateCachePromise {
-  return updateCacheActions<ISocialPost[]>(
+  return infiniteDataDeleteCacheActions<ISocialPost<'template_instance'>>(
     queryClient,
     list(brandId),
-    socialPosts => {
-      const index = socialPosts.findIndex(
-        socialPost => socialPost.id === socialPostId
-      )
+    socialPost => socialPostId === socialPost.id
+  )
+}
 
-      if (index === -1) {
-        return
-      }
-
-      socialPosts.splice(index, 1)
+export async function updateCacheList(
+  queryClient: QueryClient,
+  brandId: UUID,
+  socialPostId: UUID,
+  update: Partial<ISocialPost>
+): UpdateCachePromise {
+  return infiniteDataUpdateCacheActions<ISocialPost>(
+    queryClient,
+    list(brandId),
+    socialPost => socialPostId === socialPost.id,
+    socialPost => {
+      Object.assign(socialPost, update)
     }
   )
 }

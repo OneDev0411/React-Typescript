@@ -1,7 +1,7 @@
 import { Typography, makeStyles } from '@material-ui/core'
 import isBefore from 'date-fns/isBefore'
 
-import SuperCampaignSendTime from '@app/views/components/SuperCampaignSendTime'
+import RelativeSendTime from '@app/views/components/RelativeSendTime'
 
 const useStyles = makeStyles(
   theme => ({
@@ -35,10 +35,7 @@ function SuperCampaignListColumnSubject({
       </Typography>
       {dueAt && (
         <Typography className={classes.date} variant="body2">
-          <SuperCampaignSendTime
-            prefix={isPast ? 'Sent ' : 'Send '}
-            time={dueAt}
-          />
+          <RelativeSendTime prefix={isPast ? 'Sent ' : 'Send '} time={dueAt} />
         </Typography>
       )}
     </>

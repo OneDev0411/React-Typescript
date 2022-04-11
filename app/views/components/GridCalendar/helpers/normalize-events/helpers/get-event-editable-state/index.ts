@@ -2,7 +2,15 @@
  * check event is daragable
  * @param event
  */
-export const isEditable = (event: ICalendarEvent): boolean => {
+interface EventEditState {
+  editable?: boolean
+  eventStartEditable?: boolean
+  eventDurationEditable?: boolean
+}
+
+export const getEventEditableState = (
+  event: ICalendarEvent
+): EventEditState => {
   const { object_type, event_type } = event
 
   if (
@@ -18,8 +26,13 @@ export const isEditable = (event: ICalendarEvent): boolean => {
       'Tour'
     ].includes(event_type)
   ) {
-    return false
+    return {
+      editable: false
+    }
   }
 
-  return true
+  return {
+    eventStartEditable: true,
+    eventDurationEditable: true
+  }
 }

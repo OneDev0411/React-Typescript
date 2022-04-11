@@ -56,6 +56,12 @@
   "mls_area_major": null,
   "mls_area_minor": null,
   "mls_name": "AGS",
+  "mls_info": {
+    "mls": "NTREIS",
+    "disclaimer": "Listing information provided in part by the NTREIS, for personal, non-commercial use by viewers of this site and may not be reproduced or redistributed. All information is deemed reliable but not guaranteed. Copyright © NTREIS 2022. All rights reserved. Last updated at Mar 23, 2022 11:45 PM.\nThe data relating to real estate for sale on this website appears in part through the NTREIS Internet Data Exchange program, a voluntary cooperative exchange of property listing data between licensed real estate brokerage firms in which participates, and is provided by NTREIS through a licensing agreement.",
+    "logo": null,
+    "type": "mls_info"
+  },
   "matrix_modified_dt": "2021-06-28T08:13:44.000Z",
   "showing_instructions_type": null,
   "tax_legal_description": null,

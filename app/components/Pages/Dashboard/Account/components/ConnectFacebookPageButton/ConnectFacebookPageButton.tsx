@@ -36,8 +36,8 @@ function ConnectFacebookPageButton({
 
     confirmation.setConfirmationModal({
       message: 'Something went wrong!',
-      description: `We’re unable to connect to instagram at this moment. Please try again later.\nerror code: ${errorCode}`,
-      confirmLabel: 'Ok',
+      description: `We’re unable to connect to Instagram at this moment. Please try again later.\nerror code: ${errorCode}`,
+      confirmLabel: 'OK',
       needsCancel: false,
       onConfirm: () => {
         onErrorDialogClose?.()

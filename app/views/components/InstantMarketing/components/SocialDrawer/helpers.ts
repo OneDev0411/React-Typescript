@@ -5,7 +5,7 @@ export function getFilenameFromURL(url: string): string {
 }
 
 export function instagramAccountValidator(
-  instagramAccount: IFacebookPage
+  instagramAccount?: IFacebookPage
 ): Optional<string> {
   if (instagramAccount) {
     return

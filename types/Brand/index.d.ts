@@ -19,6 +19,7 @@ declare type IPermission =
   | 'AgentNetwork'
   | 'Websites'
   | 'Showings'
+  | 'ShareToInstagram'
 
 declare type BrandMarketingPaletteKey =
   | 'body-bg-color'

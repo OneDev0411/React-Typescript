@@ -60,11 +60,13 @@ export function AccessButton({
     [action, classes, icon, label, to]
   )
 
-  return access ? (
+  if (access === undefined) {
+    return <AccessItem />
+  }
+
+  return (
     <Acl access={access}>
       <AccessItem />
     </Acl>
-  ) : (
-    <AccessItem />
   )
 }
