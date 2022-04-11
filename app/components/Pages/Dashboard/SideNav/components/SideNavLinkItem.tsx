@@ -49,6 +49,25 @@ function SideNavLinkItem(props: Props & WithRouterProps) {
     onExpandMenu(tourId)
   }, [active, onExpandMenu, tourId])
 
+  const openSummaryLink = () => {
+    if (isMobile && subMenu) {
+      return ''
+    }
+
+    return to
+  }
+
+  const hideDrawer = () => {
+    // In mobile size if the menu has the default link,
+    // should open the link, and hide the SideNav,
+    // else should expand to show sub-menu items
+    if (!isMobile || subMenu || !to) {
+      return
+    }
+
+    onDrawerToggle()
+  }
+
   return isSubmenu ? (
     <SidenavLink
       active={active}
@@ -68,12 +87,9 @@ function SideNavLinkItem(props: Props & WithRouterProps) {
       data-tour-id={tourId}
       onClick={() => {
         onTriggerAction && onTriggerAction()
-        // In mobile size if the menu has the default link,
-        // should open the link, and hide the SideNav,
-        // else should expand to show sub-menu items
-        isMobile && !subMenu && to && onDrawerToggle()
+        hideDrawer()
       }}
-      to={!isMobile || !subMenu ? to : ''}
+      to={openSummaryLink()}
     >
       {children}
     </SidenavLinkSummary>
