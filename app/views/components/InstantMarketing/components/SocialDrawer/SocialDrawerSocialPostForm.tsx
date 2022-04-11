@@ -1,6 +1,7 @@
+import { useRef } from 'react'
+
 import { useSelector } from 'react-redux'
 
-import useNotify from '@app/hooks/use-notify'
 import { useCreateSocialPost } from '@app/models/social-posts'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
@@ -23,14 +24,32 @@ function SocialDrawerSocialPostForm({
   onPostScheduled,
   onPostSent
 }: SocialDrawerSocialPostFormProps) {
-  const { mutateAsync } = useCreateSocialPost()
+  const isScheduledRef = useRef<boolean>(false)
+
+  const { mutateAsync } = useCreateSocialPost({
+    notify: {
+      onSuccess: () =>
+        `The Instagram post has been ${
+          isScheduledRef.current ? 'scheduled' : 'sent'
+        }`,
+      onError: 'Something went wrong. Please try again.'
+    },
+    onSuccess: () => {
+      if (isScheduledRef.current) {
+        onPostScheduled?.()
+      } else {
+        onPostSent?.()
+      }
+    }
+  })
   const activeBrandId = useSelector(selectActiveBrandId)
-  const notify = useNotify()
 
   const handleSubmit = async (values: FormValues) => {
     if (!instance || !values.facebookPage) {
       return
     }
+
+    isScheduledRef.current = !!values.dueAt
 
     await mutateAsync({
       ...values,
@@ -39,21 +58,6 @@ function SocialDrawerSocialPostForm({
       templateInstance: instance.id,
       brand: activeBrandId
     })
-
-    const isScheduled = !!values.dueAt
-
-    notify({
-      status: 'success',
-      message: `The Instagram post has been ${
-        isScheduled ? 'scheduled' : 'sent'
-      }`
-    })
-
-    if (isScheduled) {
-      onPostScheduled?.()
-    } else {
-      onPostSent?.()
-    }
   }
 
   return (
