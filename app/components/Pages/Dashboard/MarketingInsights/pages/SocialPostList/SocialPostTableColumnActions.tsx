@@ -58,6 +58,7 @@ function SocialPostTableColumnActions({
 
   const isWorking = isDeleting || isUpdating
 
+  // If it is already posted, it can display the post link
   if (socialPost.post_link) {
     return (
       <LinkButton
@@ -73,47 +74,49 @@ function SocialPostTableColumnActions({
     )
   }
 
-  if (!isSocialPostExecuted(socialPost)) {
-    const selectedDate = convertTimestampToDate(socialPost.due_at)
-
-    return (
-      <div className={classes.root}>
-        <DateTimePicker
-          onClose={handleDueAtChange}
-          showTimePicker
-          selectedDate={selectedDate}
-          defaultSelectedDate={selectedDate}
-          datePickerModifiers={{
-            disabled: {
-              before: new Date()
-            }
-          }}
-          validate={futureTimeValidator}
-        >
-          {({ handleOpen }) => (
-            <Button
-              color="primary"
-              size="small"
-              onClick={handleOpen}
-              disabled={isWorking}
-            >
-              Reschedule
-            </Button>
-          )}
-        </DateTimePicker>
-        <IconButton
-          className={classes.deleteButton}
-          size="small"
-          onClick={handleDelete}
-          disabled={isWorking}
-        >
-          <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.medium} />
-        </IconButton>
-      </div>
-    )
+  // If it is executed, display nothing
+  if (isSocialPostExecuted(socialPost)) {
+    return null
   }
 
-  return null
+  const selectedDate = convertTimestampToDate(socialPost.due_at)
+
+  // Otherwise, it is not executed yet and we need to have the reschedule and delete buttons
+  return (
+    <div className={classes.root}>
+      <DateTimePicker
+        onClose={handleDueAtChange}
+        showTimePicker
+        selectedDate={selectedDate}
+        defaultSelectedDate={selectedDate}
+        datePickerModifiers={{
+          disabled: {
+            before: new Date()
+          }
+        }}
+        validate={futureTimeValidator}
+      >
+        {({ handleOpen }) => (
+          <Button
+            color="primary"
+            size="small"
+            onClick={handleOpen}
+            disabled={isWorking}
+          >
+            Reschedule
+          </Button>
+        )}
+      </DateTimePicker>
+      <IconButton
+        className={classes.deleteButton}
+        size="small"
+        onClick={handleDelete}
+        disabled={isWorking}
+      >
+        <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.medium} />
+      </IconButton>
+    </div>
+  )
 }
 
 export default SocialPostTableColumnActions
