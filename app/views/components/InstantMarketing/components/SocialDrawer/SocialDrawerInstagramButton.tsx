@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Button } from '@material-ui/core'
+import { Button, CircularProgress } from '@material-ui/core'
 import { mdiInstagram } from '@mdi/js'
 
 import { ACL } from '@app/constants/acl'
@@ -48,7 +48,13 @@ function SocialDrawerInstagramButton({
   return (
     <>
       <Button
-        startIcon={<SvgIcon path={mdiInstagram} size={muiIconSizes.small} />}
+        startIcon={
+          isLoading ? (
+            <CircularProgress color="inherit" size={20} />
+          ) : (
+            <SvgIcon path={mdiInstagram} size={muiIconSizes.small} />
+          )
+        }
         variant="contained"
         color="primary"
         fullWidth

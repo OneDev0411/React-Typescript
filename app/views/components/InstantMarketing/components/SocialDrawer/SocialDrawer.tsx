@@ -15,7 +15,9 @@ import Drawer from '@app/views/components/OverlayDrawer'
 import SocialDrawerActions from './SocialDrawerActions'
 import SocialDrawerPreviewFile from './SocialDrawerPreviewFile'
 import SocialDrawerProvider from './SocialDrawerProvider'
-import SocialDrawerSocialPostForm from './SocialDrawerSocialPostForm'
+import SocialDrawerSocialPostForm, {
+  SocialDrawerSocialPostFormProps
+} from './SocialDrawerSocialPostForm'
 import { SocialDrawerStep } from './types'
 
 const useStyles = makeStyles(
@@ -34,7 +36,11 @@ const useStyles = makeStyles(
   { name: 'SocialDrawer' }
 )
 
-interface SocialDrawerProps {
+interface SocialDrawerProps
+  extends Pick<
+    SocialDrawerSocialPostFormProps,
+    'onPostScheduled' | 'onPostSent'
+  > {
   template: (IBrandMarketingTemplate | IMarketingTemplate) & { result: string }
   instance?: IMarketingTemplateInstance
   brandAsset?: IBrandAsset
@@ -47,7 +53,9 @@ function SocialDrawer({
   instance: passedInstance,
   brandAsset,
   templateInstanceData = {},
-  onClose
+  onClose,
+  onPostScheduled,
+  onPostSent
 }: SocialDrawerProps) {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -116,6 +124,8 @@ function SocialDrawer({
               <SocialDrawerSocialPostForm
                 className={classes.form}
                 instance={instance}
+                onPostScheduled={onPostScheduled}
+                onPostSent={onPostSent}
               />
             )}
           </>

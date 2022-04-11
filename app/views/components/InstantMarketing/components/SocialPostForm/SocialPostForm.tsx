@@ -2,11 +2,11 @@ import { ReactNode } from 'react'
 
 import { Form } from 'react-final-form'
 
-import { requiredTextValidator } from '@app/utils/validations'
 import { FormTextField } from '@app/views/components/final-form-fields'
 
 import { instagramAccountValidator } from '../SocialDrawer/helpers'
 
+import { captionFieldValidator } from './helpers'
 import InstagramAccountAutocompleteField from './InstagramAccountAutocompleteField'
 
 export interface FormValues {
@@ -50,7 +50,7 @@ function SocialPostForm({
               margin="normal"
               size="small"
               minRows={4}
-              validate={requiredTextValidator}
+              validate={captionFieldValidator}
             />
           </form>
           {children}

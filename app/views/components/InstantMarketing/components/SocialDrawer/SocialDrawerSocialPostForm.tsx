@@ -1,3 +1,5 @@
+import { useRef } from 'react'
+
 import { useActiveBrandId } from '@app/hooks/brand'
 import { useCreateSocialPost } from '@app/models/social-posts'
 import { convertDateToTimestamp } from '@app/utils/date-utils'
@@ -6,26 +8,47 @@ import SocialPostForm, { FormValues } from '../SocialPostForm'
 
 import SocialDrawerSocialPostFormFooter from './SocialDrawerSocialPostFormFooter'
 
-interface SocialDrawerScheduleInstagramPostProps {
+export interface SocialDrawerSocialPostFormProps {
   className?: string
   instance: Optional<IMarketingTemplateInstance | IBrandAsset>
+  onPostScheduled?: () => void
+  onPostSent?: () => void
 }
 
 const formId = 'schedule-instagram-post-form'
 
-function SocialDrawerScheduleInstagramPost({
+function SocialDrawerSocialPostForm({
   className,
-  instance
-}: SocialDrawerScheduleInstagramPostProps) {
-  const { mutateAsync, data } = useCreateSocialPost()
-  const activeBrandId = useActiveBrandId()
+  instance,
+  onPostScheduled,
+  onPostSent
+}: SocialDrawerSocialPostFormProps) {
+  const isScheduledRef = useRef<boolean>(false)
 
-  const isCreated = !!data
+  const { mutateAsync } = useCreateSocialPost({
+    notify: {
+      onSuccess: () =>
+        `The Instagram post has been ${
+          isScheduledRef.current ? 'scheduled' : 'sent'
+        }`,
+      onError: 'Something went wrong. Please try again.'
+    },
+    onSuccess: () => {
+      if (isScheduledRef.current) {
+        onPostScheduled?.()
+      } else {
+        onPostSent?.()
+      }
+    }
+  })
+  const activeBrandId = useActiveBrandId()
 
   const handleSubmit = async (values: FormValues) => {
     if (!instance || !values.facebookPage) {
       return
     }
+
+    isScheduledRef.current = !!values.dueAt
 
     await mutateAsync({
       ...values,
@@ -34,15 +57,6 @@ function SocialDrawerScheduleInstagramPost({
       templateInstance: instance.id,
       brand: activeBrandId
     })
-  }
-
-  if (isCreated) {
-    return (
-      <div>
-        In this case, the insights button will be rendered next to a success
-        message
-      </div>
-    )
   }
 
   return (
@@ -56,4 +70,4 @@ function SocialDrawerScheduleInstagramPost({
   )
 }
 
-export default SocialDrawerScheduleInstagramPost
+export default SocialDrawerSocialPostForm
