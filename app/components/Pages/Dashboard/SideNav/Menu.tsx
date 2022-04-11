@@ -14,7 +14,6 @@ import { withRouter, WithRouterProps } from 'react-router'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { ACL } from '@app/constants/acl'
-import { useActiveBrand } from '@app/hooks/brand/use-active-brand'
 import { useChatRoomsNotificationsNumber } from '@app/hooks/use-chat-rooms-notifications-number'
 import { useDealsNotificationsNumber } from '@app/hooks/use-deals-notifications-number'
 import { IAppState } from '@app/reducers'
@@ -49,8 +48,10 @@ const marketingAccess = { oneOf: [ACL.MARKETING, ACL.AGENT_NETWORK] }
 const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 function Menu(props: WithRouterProps) {
-  const activeBrand = useActiveBrand()
   const user = useSelector(selectUserUnsafe)
+  const brand = useSelector<IAppState, IBrand>(
+    (state: IAppState) => state.brand
+  )
 
   const appNotifications = useSelector((state: IAppState) =>
     selectNotificationNewCount(state.globalNotifications)
@@ -75,7 +76,7 @@ function Menu(props: WithRouterProps) {
 
   // This is initially implemented for DE because they're using a
   // white-labeled version of help.rechat.com
-  const brandHelpCenterURL = getBrandHelpCenterURL(activeBrand)
+  const brandHelpCenterURL = getBrandHelpCenterURL(brand)
 
   const [expandedMenu, setExpandedMenu] = useState<ExpandedMenu>(null)
 
