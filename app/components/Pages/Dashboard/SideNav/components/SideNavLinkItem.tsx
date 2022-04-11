@@ -71,9 +71,9 @@ function SideNavLinkItem(props: Props & WithRouterProps) {
         // In mobile size if the menu has the default link,
         // should open the link, and hide the SideNav,
         // else should expand to show sub-menu items
-        isMobile && to && onDrawerToggle()
+        isMobile && !subMenu && to && onDrawerToggle()
       }}
-      to={to}
+      to={!isMobile || !subMenu ? to : ''}
     >
       {children}
     </SidenavLinkSummary>
