@@ -68,8 +68,6 @@ export default async (req: Request, res: Response) => {
       return
     }
 
-    // await uploadGifOnAPI(req, gifUrl, templateId)
-
     res.json({ url: gifUrl })
   } catch (e) {
     console.error(e)
