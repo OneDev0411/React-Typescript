@@ -9,6 +9,8 @@ import dealEnvelopeEditRoute from './app/routes/deal/envelope-edit'
 import dealEnvelopeSignRoute from './app/routes/deal/envelope-sign'
 import dealExportRoute from './app/routes/deal/export'
 import dealReportRoute from './app/routes/deal/report'
+import facebookAuthResultRoute from './app/routes/facebook-auth-result'
+import facebookLoginRoute from './app/routes/facebook-login'
 import getPdfSizeRoute from './app/routes/get-pdf-size'
 import livebyNeighborhoodsRoute from './app/routes/liveby/neighborhoods'
 import livebyReportRoute from './app/routes/liveby/report'
@@ -95,6 +97,12 @@ router.post(
   }),
   branchLinkRoute
 )
+
+/**
+ * facebook routes.
+ */
+router.get('/api/facebook/auth-result', facebookAuthResultRoute)
+router.get('/api/facebook/login', facebookLoginRoute)
 
 /**
  * utility routes

@@ -60,6 +60,3 @@ export const selectContactMutator: Mutator<ShowingRoleFormValues> = (
   changeValue(state, 'user', () => undefined)
   changeValue(state, 'contact', () => contact)
 }
-
-export const requiredTextValidator = (value: string) =>
-  !value || value.trim() === '' ? 'This field is required' : undefined
