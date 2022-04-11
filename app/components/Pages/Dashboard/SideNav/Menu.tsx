@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react'
+import { useState } from 'react'
 
 import {
   mdiGamepadCircleUp,
@@ -78,11 +78,6 @@ function Menu(props: WithRouterProps) {
   const brandHelpCenterURL = getBrandHelpCenterURL(activeBrand)
 
   const [expandedMenu, setExpandedMenu] = useState<ExpandedMenu>(null)
-
-  const handleChange =
-    (panel: ExpandedMenu) => (event: ChangeEvent<{}>, isExpanded: boolean) => {
-      setExpandedMenu(isExpanded ? panel : null)
-    }
 
   const handleOpenChatbarDrawer = () => {
     if (window.location.pathname.includes('/recents/')) {
@@ -299,9 +294,8 @@ function Menu(props: WithRouterProps) {
             <SideNavAccordion
               key={index}
               data={menu}
-              onChange={handleChange}
               expandedMenu={expandedMenu}
-              setExpandedMenu={setExpandedMenu}
+              onExpandMenu={setExpandedMenu}
             />
           )
         })}
