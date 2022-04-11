@@ -44,7 +44,7 @@ function MainFeatures({ listing }: Props) {
 
   const bedroom = property.bedroom_count
   const bathrooms = property.bathroom_count
-  const squareFeet = Math.floor(
+  const squareFeet = Math.round(
     listingUtils.metersToFeet(property.square_meters)
   )
   const priceSqft = squareFeet > 0 ? Math.round(listing.price / squareFeet) : 0
@@ -71,10 +71,10 @@ function MainFeatures({ listing }: Props) {
         <Box mb={3}>
           <Grid container>
             <Grid item xs={4}>
-              <Box mb={1} display="flex" alignItems="center">
+              <Box display="flex" alignItems="flex-start">
                 <SvgIcon path={mdiBedKingOutline} />
                 <Box ml={1}>
-                  <Typography variant="button" className={classes.value}>
+                  <Typography variant="subtitle1" className={classes.value}>
                     {getFormattedValue(bedroom)}
                   </Typography>
                 </Box>
@@ -90,13 +90,16 @@ function MainFeatures({ listing }: Props) {
               </Box>
             </Grid>
             <Grid item xs={4}>
-              <Box display="flex" justifyContent="center">
+              <Box display="flex" justifyContent="flex-start">
                 <Box display="flex" flexDirection="column">
-                  <Box mb={1} display="flex" alignItems="center">
+                  <Box display="flex" alignItems="center">
                     <SvgIcon path={mdiShower} />
                     <Box ml={1}>
                       <Tooltip title={getBathroomsTooltip(listing)}>
-                        <Typography variant="button" className={classes.value}>
+                        <Typography
+                          variant="subtitle1"
+                          className={classes.value}
+                        >
                           {getFormattedValue(bathrooms)}
                         </Typography>
                       </Tooltip>
@@ -116,12 +119,12 @@ function MainFeatures({ listing }: Props) {
             </Grid>
 
             <Grid item xs={4}>
-              <Box display="flex" justifyContent="flex-end">
+              <Box display="flex" justifyContent="flex-start">
                 <Box display="flex" flexDirection="column">
-                  <Box mb={1} display="flex" alignItems="center">
+                  <Box display="flex" alignItems="center">
                     <SvgIcon path={mdiCalendarMonthOutline} />
                     <Box ml={1}>
-                      <Typography variant="button" className={classes.value}>
+                      <Typography variant="subtitle1" className={classes.value}>
                         {listing.property.year_built || '--'}
                       </Typography>
                     </Box>
@@ -144,10 +147,10 @@ function MainFeatures({ listing }: Props) {
       <Grid item xs={12}>
         <Grid container>
           <Grid item xs={4}>
-            <Box mb={1} display="flex" alignItems="center">
+            <Box display="flex" alignItems="flex-start">
               <SvgIcon path={mdiRelativeScale} />
               <Box ml={1}>
-                <Typography variant="button" className={classes.value}>
+                <Typography variant="subtitle1" className={classes.value}>
                   {getFormattedValue(lotSize)}
                 </Typography>
               </Box>
@@ -163,12 +166,12 @@ function MainFeatures({ listing }: Props) {
             </Box>
           </Grid>
           <Grid item xs={4}>
-            <Box display="flex" justifyContent="center">
+            <Box display="flex" justifyContent="flex-start">
               <Box display="flex" flexDirection="column">
-                <Box mb={1} display="flex" alignItems="center">
+                <Box display="flex" alignItems="center">
                   <SvgIcon path={mdiVectorSquare} />
                   <Box ml={1}>
-                    <Typography variant="button" className={classes.value}>
+                    <Typography variant="subtitle1" className={classes.value}>
                       {getFormattedValue(squareFeet)}
                     </Typography>
                   </Box>
@@ -186,12 +189,12 @@ function MainFeatures({ listing }: Props) {
             </Box>
           </Grid>
           <Grid item xs={4}>
-            <Box display="flex" justifyContent="flex-end">
+            <Box display="flex" justifyContent="flex-start">
               <Box display="flex" flexDirection="column">
-                <Box mb={1} display="flex" alignItems="center">
+                <Box display="flex" alignItems="center">
                   <SvgIcon path={mdiCurrencyUsdCircleOutline} />
                   <Box ml={1}>
-                    <Typography variant="button" className={classes.value}>
+                    <Typography variant="subtitle1" className={classes.value}>
                       {priceSqft > 0 ? numberToUSD(priceSqft) : '--'}
                     </Typography>
                   </Box>

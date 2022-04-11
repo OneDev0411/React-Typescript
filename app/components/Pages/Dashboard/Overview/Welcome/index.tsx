@@ -1,37 +1,53 @@
-import { Box } from '@material-ui/core'
+import { Box, Button, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
+import { browserHistory } from 'react-router'
 
-import MetabaseDashboard from 'components/MetabaseIFrame'
-import Acl from 'views/components/Acl'
+import { EmptyState } from '@app/components/Pages/Dashboard/Overview/components/EmptyState'
+import { ACL } from '@app/constants/acl'
+import Acl from '@app/views/components/Acl'
+import { useAcl } from '@app/views/components/Acl/use-acl'
+import MetabaseDashboard from '@app/views/components/MetabaseIFrame'
+
+import { useDealsList } from '../../Deals/List/Agent/hooks/use-deals-list'
+import { AccessButtons } from '../components/AccessButtons'
+import PromoteListingsSection from '../components/PromoteListingsSection'
 
 import { Dailies } from './Dailies'
-import { Greeting } from './Greetings'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    main: {
-      display: 'flex',
+    boxContainer: {
       border: `1px solid ${theme.palette.grey[300]}`,
       borderRadius: theme.shape.borderRadius,
-      background: 'url(/static/images/overview/dashboard-bg.png) no-repeat 0 0',
-      flexDirection: 'column'
+      backgroundColor: theme.palette.common.white,
+      height: '300px',
+      marginBottom: theme.spacing(3),
+      padding: theme.spacing(1),
+      overflowY: 'scroll',
+      width: '100%'
     },
-    centeredContainer: {
+    container: {
       display: 'flex',
-      justifyContent: 'center',
-      width: '90%',
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: theme.spacing(3, 0)
-    },
-    greeting: {
-      display: 'flex',
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center'
+      maxWidth: '1600px',
+      padding: theme.spacing(0)
     },
     dailies: {
       flex: 1
+    },
+    greeting: {
+      alignItems: 'center',
+      display: 'flex',
+      flex: 1,
+      justifyContent: 'center'
+    },
+    main: {
+      borderRadius: theme.shape.borderRadius,
+      display: 'flex',
+      flexDirection: 'column'
+    },
+    title: {
+      paddingBottom: theme.spacing(1.5),
+      paddingTop: theme.spacing(3)
     }
   }),
   { name: 'WelcomeBox' }
@@ -40,21 +56,52 @@ const useStyles = makeStyles(
 function OverviewDashboard() {
   const classes = useStyles()
 
+  const isAdmin = useAcl(ACL.ADMIN)
+  const getDealsList = useDealsList()
+  const deals = getDealsList()
+
   return (
     <Box className={classes.main}>
-      <Box className={classes.greeting}>
-        <Greeting />
-      </Box>
+      <AccessButtons />
       <Acl.Crm>
         <Box className={classes.dailies}>
-          <Box className={classes.centeredContainer}>
+          <Box className={classes.container}>
             <Dailies />
           </Box>
         </Box>
       </Acl.Crm>
+      <Acl.Marketing>
+        <Box className={classes.container}>
+          <PromoteListingsSection />
+        </Box>
+      </Acl.Marketing>
       <Acl.Deals>
-        <Box className={classes.centeredContainer}>
-          <MetabaseDashboard dashboardId="e044be48-42c7-456f-8077-024c93feb99d" />
+        <Box className={classes.container} flexDirection="column">
+          <Box className={classes.title}>
+            <Typography variant="h6">To Track</Typography>
+          </Box>
+          {isAdmin || deals?.length > 0 ? (
+            <MetabaseDashboard dashboardId="e044be48-42c7-456f-8077-024c93feb99d" />
+          ) : (
+            <Box className={classes.boxContainer}>
+              <EmptyState
+                description="Whether you’re helping a seller, buyer, renter, or landlord, your transactions begin here. Click on Create New Deal to get started."
+                iconSrc="/static/icons/empty-states/statistics.svg"
+                title="Start inputting your transactions and get your analytics here"
+              >
+                <Box pt={3}>
+                  <Button
+                    variant="outlined"
+                    onClick={() =>
+                      browserHistory.push('/dashboard/deals/create')
+                    }
+                  >
+                    Create New Deal
+                  </Button>
+                </Box>
+              </EmptyState>
+            </Box>
+          )}
         </Box>
       </Acl.Deals>
     </Box>

@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
@@ -54,8 +52,8 @@ const useStyles = makeStyles(
 
 export default function Catalog({
   contact,
-  onTagChange
-}: Omit<Props, 'handleCreateNote'>) {
+  contactChangeCallback
+}: Omit<Props, 'onCreateNote' | 'onCreateEvent'>) {
   const classes = useStyles()
 
   return (
@@ -73,7 +71,7 @@ export default function Catalog({
           </div>
         </div>
         <div className={classes.tagsContainer}>
-          <Tags contact={contact} onChange={onTagChange} />
+          <Tags contact={contact} onChange={contactChangeCallback} />
         </div>
       </div>
     </div>

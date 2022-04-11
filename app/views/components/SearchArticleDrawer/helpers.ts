@@ -1,5 +1,20 @@
 import { RSS_SOURCES } from './constants'
-import { RSSArticleMetadata, RSSFeedItem } from './types'
+import { RSSArticleMetadata, RSSFeedItem, RSSSource } from './types'
+
+function getRSSFeedItemImage(
+  rssFeedItem: RSSFeedItem,
+  source: RSSSource
+): Optional<string> {
+  if (!rssFeedItem.image) {
+    return
+  }
+
+  if (source.imageSanitizer) {
+    return source.imageSanitizer(rssFeedItem.image)
+  }
+
+  return rssFeedItem.image
+}
 
 export function convertFeedItemToArticleMetadata(
   rssFeedItem: RSSFeedItem
@@ -13,7 +28,8 @@ export function convertFeedItemToArticleMetadata(
     createdDate: rssFeedItem.createdDate,
     publisher: source.title,
     publisherIcon: source.icon,
-    description: rssFeedItem.content
+    description: rssFeedItem.content,
+    image: getRSSFeedItemImage(rssFeedItem, source)
   }
 }
 

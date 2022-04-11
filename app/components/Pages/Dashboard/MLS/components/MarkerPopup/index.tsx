@@ -154,7 +154,7 @@ const MarkerPopup = (props: Props) => {
   const user = useSelector(selectUserUnsafe)
 
   const listingPrice = getListingFormatedPrice(price, closePrice, user, false)
-  const squareFeet = Math.floor(metersToFeet(squareMeters)).toLocaleString()
+  const squareFeet = Math.round(metersToFeet(squareMeters)).toLocaleString()
   const fullAddress = addressTitle(address)
   const baths = bathroomCount ?? 0
   const bedrooms = bedroomCount ?? 0

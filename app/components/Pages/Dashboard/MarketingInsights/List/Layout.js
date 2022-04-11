@@ -96,10 +96,10 @@ function InsightsLayout({
   return (
     <>
       <Helmet>
-        <title>Email | Rechat</title>
+        <title>Insight | Rechat</title>
       </Helmet>
       <PageLayout>
-        <PageLayout.Header title="Email Insight" onCreateEmail={onCreateEmail}>
+        <PageLayout.Header title="Insight" onCreateEmail={onCreateEmail}>
           <Box textAlign="right">
             <Button
               variant="outlined"

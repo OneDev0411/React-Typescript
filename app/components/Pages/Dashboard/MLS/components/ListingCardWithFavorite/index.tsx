@@ -1,4 +1,4 @@
-import React, { ComponentProps, useCallback, useState, memo } from 'react'
+import { ComponentProps, useCallback, useState, memo } from 'react'
 
 import { noop } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
@@ -22,8 +22,10 @@ interface Props
   onToggleListingModal?: (id: UUID, isOpen: boolean) => void
   onToggleLike?: (
     listing: IListing | ICompactListing,
-    sendApiRequest?: boolean
+    shouldSendApiRequest?: boolean
   ) => void
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>
 }
 
 const ListingCardWithFavorite = ({
@@ -38,7 +40,9 @@ const ListingCardWithFavorite = ({
   unselectOnToggleFavorite = false,
   onToggleLike = noop,
   onClick,
-  onToggleListingModal = noop
+  onToggleListingModal = noop,
+  onMouseEnter,
+  onMouseLeave
 }: Props) => {
   const dispatch = useDispatch()
   const user = useSelector(selectUserUnsafe)
@@ -76,30 +80,35 @@ const ListingCardWithFavorite = ({
     onToggleSelection(listing)
   }, [onToggleSelection, listing])
 
-  // TODO: After refactoring fav/saved tab, Change it to:
-  const handleLikeClick = useCallback(() => {
-    if (selected && unselectOnToggleFavorite) {
-      onToggleSelection(listing)
-    }
+  // TODO: After refactoring saved tab, Change it to:
+  const handleLikeClick = useCallback(
+    (shouldSendApiRequest = true) => {
+      if (selected && unselectOnToggleFavorite) {
+        onToggleSelection(listing)
+      }
 
-    if (reduxToggleFavorite) {
-      dispatch(toggleFavorite(listing))
-    } else {
-      onToggleLike(listing, true)
-    }
-  }, [
-    selected,
-    unselectOnToggleFavorite,
-    reduxToggleFavorite,
-    onToggleSelection,
-    listing,
-    onToggleLike,
-    dispatch
-  ])
+      if (reduxToggleFavorite) {
+        dispatch(toggleFavorite(listing))
+      } else {
+        onToggleLike(listing, shouldSendApiRequest)
+      }
+    },
+    [
+      selected,
+      unselectOnToggleFavorite,
+      reduxToggleFavorite,
+      onToggleSelection,
+      listing,
+      onToggleLike,
+      dispatch
+    ]
+  )
 
   return (
     <>
       <ListingCard
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         listing={listing}
         clicked={clicked}
         hover={hover}
@@ -107,7 +116,7 @@ const ListingCardWithFavorite = ({
         liked={liked}
         tags={tags}
         onClick={handleClick}
-        // TODO: After refactoring fav/saved tab, Change it to:
+        // TODO: After refactoring saved tab, Change it to:
         // onLikeClick={onToggleLike}
         onLikeClick={handleLikeClick}
         onToggleSelection={handleToggleSelection}
@@ -120,7 +129,9 @@ const ListingCardWithFavorite = ({
           listingId={listing.id}
           closeHandler={closeListing}
           onToggleFavorite={() => {
-            onToggleLike(listing, false)
+            // TODO: After refactoring saved tab, Change it to:
+            // onToggleLike(listing, false)
+            handleLikeClick(!reduxToggleFavorite)
           }}
         />
       )}
