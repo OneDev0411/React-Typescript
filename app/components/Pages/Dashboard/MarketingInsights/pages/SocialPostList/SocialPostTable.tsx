@@ -35,6 +35,8 @@ const useStyles = makeStyles(
   }
 )
 
+const defaultSocialPosts: ISocialPost<'template_instance' | 'owner'>[] = []
+
 function SocialPostTable() {
   const gridClasses = useGridStyles()
   const classes = useStyles()
@@ -51,8 +53,10 @@ function SocialPostTable() {
     executed: filter === 'posted' ? 'true' : 'false'
   })
 
-  const socialPosts =
-    data?.pages.reduce((items, page) => [...items, ...page], []) || []
+  const socialPosts = data?.pages.flat() || defaultSocialPosts
+  const filteredSocialPosts = socialPosts.filter(
+    socialPost => !socialPost.failed_at
+  )
 
   const columns: TableColumn<ISocialPost<'template_instance' | 'owner'>>[] = [
     {
@@ -74,12 +78,14 @@ function SocialPostTable() {
     }
   ]
 
+  console.log('filteredSocialPosts', filteredSocialPosts)
+
   return (
     <>
       <SocialPostTableFilter value={filter} onChange={setFilter} />
       <Table
-        rows={socialPosts ?? []}
-        totalRows={socialPosts?.length ?? 0}
+        rows={filteredSocialPosts ?? []}
+        totalRows={filteredSocialPosts?.length ?? 0}
         columns={columns}
         loading={isFetching ? 'middle' : null}
         LoadingStateComponent={LoadingComponent}
