@@ -24,6 +24,8 @@ interface Props
     listing: IListing | ICompactListing,
     shouldSendApiRequest?: boolean
   ) => void
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>
 }
 
 const ListingCardWithFavorite = ({
@@ -38,7 +40,9 @@ const ListingCardWithFavorite = ({
   unselectOnToggleFavorite = false,
   onToggleLike = noop,
   onClick,
-  onToggleListingModal = noop
+  onToggleListingModal = noop,
+  onMouseEnter,
+  onMouseLeave
 }: Props) => {
   const dispatch = useDispatch()
   const user = useSelector(selectUserUnsafe)
@@ -103,6 +107,8 @@ const ListingCardWithFavorite = ({
   return (
     <>
       <ListingCard
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         listing={listing}
         clicked={clicked}
         hover={hover}
