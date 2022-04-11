@@ -33,6 +33,8 @@ function SideNavLinkItem(props: Props & WithRouterProps) {
         .some((route: string) => location.pathname.startsWith(route))
     : !onTriggerAction && location.pathname.startsWith(to)
 
+  // Here we check if the current route is active and there is a
+  // related item in the menu, then expand that menu
   useEffect(() => {
     if (!active || !onExpandMenu) {
       return
