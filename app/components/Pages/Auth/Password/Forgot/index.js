@@ -6,6 +6,7 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import { Field, reduxForm } from 'redux-form'
+import isEmail from 'validator/lib/isEmail'
 
 import resetPassword from '../../../../../models/auth/password/reset'
 import signup from '../../../../../models/auth/signup'
@@ -99,7 +100,7 @@ export const validateEmail = values => {
 
   if (!values.email) {
     errors.email = 'Required'
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+  } else if (!isEmail(values.email)) {
     errors.email = 'Invalid email address'
   }
 

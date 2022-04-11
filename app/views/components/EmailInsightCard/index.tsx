@@ -18,10 +18,10 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     '@keyframes scrollPositionAnimation': {
       from: {
-        objectPosition: '0 0%'
+        objectPosition: 'center 0%'
       },
       to: {
-        objectPosition: '0 100%'
+        objectPosition: 'center 100%'
       }
     },
     card: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles(
       height: 200,
       width: '100%',
       objectFit: 'cover',
-      objectPosition: '0 0',
+      objectPosition: 'center 0',
       background: theme.palette.grey[100],
       '&:hover': {
         animation: '8s linear infinite alternate $scrollPositionAnimation'

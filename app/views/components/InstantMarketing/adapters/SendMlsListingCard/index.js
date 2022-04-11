@@ -417,7 +417,11 @@ class SendMlsListingCard extends Component {
           onSelectListingsCallback={this.handleSelectListings}
           multipleSelection={this.IsMultiListing}
           renderAction={props => (
-            <Button {...props.buttonProps}>
+            <Button
+              variant="contained"
+              color="secondary"
+              {...props.buttonProps}
+            >
               {`Next (${props.selectedItemsCount} Listings Selected)`}
             </Button>
           )}

@@ -11,8 +11,19 @@ import {
 import { FilterShape } from '../../components/FilterEvents/type'
 
 import { getDates } from './helpers/get-dates'
+import { getEventEditableState } from './helpers/get-event-editable-state'
 import { getTitle } from './helpers/get-title'
-import { isEditable } from './helpers/is-editable'
+
+/**
+ * return list of unique events
+ * @param events
+ */
+
+export function uniquifyEvents(events: ICalendarEvent[]): ICalendarEvent[] {
+  return _uniqBy(events, event =>
+    event.object_type === 'crm_association' ? event.crm_task : event.id
+  )
+}
 
 /**
  * return list of events for using in full calendar
@@ -22,9 +33,7 @@ export function normalizeEvents(
   events: ICalendarEvent[],
   filter: FilterShape
 ): EventInput[] {
-  const uniqEvents: ICalendarEvent[] = _uniqBy(events, event =>
-    event.object_type === 'crm_association' ? event.crm_task : event.id
-  )
+  const uniqEvents: ICalendarEvent[] = uniquifyEvents(events)
 
   const filteredEvents: ICalendarEvent[] = uniqEvents.filter(event => {
     const isUserEvent =
@@ -55,8 +64,8 @@ export function normalizeEvents(
       id,
       title: getTitle(event),
       allDay: all_day || false,
-      editable: isEditable(event),
       rowEvent: event,
+      ...getEventEditableState(event),
       ...getDates(event)
     }
   })

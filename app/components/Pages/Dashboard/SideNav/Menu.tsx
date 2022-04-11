@@ -301,7 +301,7 @@ function Menu(props: WithRouterProps) {
         })}
       </ScrollableArea>
 
-      <UserMenu user={user} />
+      <UserMenu />
       <PoweredBy />
     </Sidenav>
   )

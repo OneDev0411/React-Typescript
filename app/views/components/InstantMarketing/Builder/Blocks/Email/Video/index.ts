@@ -41,6 +41,7 @@ export default function registerVideoBlock(
       icon: VideoIcon,
       category: BASICS_BLOCK_CATEGORY,
       blockName,
+      adaptive: true,
       template: videoBlocks[blockName]
     },
     templateBlockOptions
@@ -59,7 +60,7 @@ export default function registerVideoBlock(
     selectedVideo => ({
       ...renderData,
       url: selectedVideo.url,
-      image: selectedVideo.thumbnail
+      image: selectedVideo.thumbnailWithPlayIcon
     }),
     onDrop
   )
