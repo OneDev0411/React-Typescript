@@ -20,15 +20,15 @@ function SocialDrawerInstagramButton({
   disabled = false,
   onClick
 }: SocialDrawerInstagramButtonProps) {
-  const [isDialogOpen, stIsDialogOpen] = useState<boolean>(false)
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
   const hasAccess = useAcl(ACL.SHARE_TO_INSTAGRAM)
 
   const { data: facebookPages, isLoading } = useGetActiveBrandFacebookPages()
   const hasAnyAccounts = !!facebookPages?.length
 
-  const openDialog = () => stIsDialogOpen(true)
+  const openDialog = () => setIsDialogOpen(true)
 
-  const closeDialog = () => stIsDialogOpen(false)
+  const closeDialog = () => setIsDialogOpen(false)
 
   const handleClick = () => {
     if (hasAnyAccounts) {
