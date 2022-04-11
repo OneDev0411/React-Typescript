@@ -44,7 +44,7 @@ exports[`Super Campaign/Overview/Detail When not executed renders empty when dra
 
 exports[`Super Campaign/Overview/Detail When not executed renders template when there is one: details box template preview 1`] = `
 <iframe
-  class="MarketingTemplateThumbnail-iframe-51"
+  class="MarketingTemplateThumbnail-iframe-52"
   frameborder="0"
   scrolling="no"
   srcdoc="<html><body><div>Hello, World!</body></html>"
@@ -55,19 +55,19 @@ exports[`Super Campaign/Overview/Detail When not executed renders template when 
 
 exports[`Super Campaign/Overview/Detail When not executed renders template when there is one: details box without template 1`] = `
 <div
-  class="SuperCampaignOverviewDetail-section-39"
+  class="SuperCampaignOverviewDetail-section-40"
   data-test="super-campaign-details"
 >
   <div
-    class="MuiBox-root MuiBox-root-44 SuperCampaignOverviewDetail-title-37"
+    class="MuiBox-root MuiBox-root-45 SuperCampaignOverviewDetail-title-38"
   >
     <p
-      class="MuiTypography-root SuperCampaignCardHeader-title-42 MuiTypography-body1"
+      class="MuiTypography-root SuperCampaignCardHeader-title-43 MuiTypography-body1"
     >
       Details
     </p>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text SuperCampaignCardHeader-action-43 MuiButton-textPrimary MuiButton-textSizeSmall MuiButton-sizeSmall"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text SuperCampaignCardHeader-action-44 MuiButton-textPrimary MuiButton-textSizeSmall MuiButton-sizeSmall"
       tabindex="0"
       type="button"
     >
@@ -79,15 +79,15 @@ exports[`Super Campaign/Overview/Detail When not executed renders template when 
     </button>
   </div>
   <div
-    class="SuperCampaignOverviewDetail-labelValue-38"
+    class="SuperCampaignOverviewDetail-labelValue-39"
   >
     <span
-      class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-label-45 MuiTypography-caption"
+      class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-label-46 MuiTypography-caption"
     >
       Description
     </span>
     <p
-      class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-value-46 MuiTypography-body2"
+      class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-value-47 MuiTypography-body2"
     >
       This is a monthly newsletter that is sent out to Newsletter tag
     </p>
