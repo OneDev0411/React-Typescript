@@ -11,7 +11,7 @@ declare interface ISocialPost<A extends ISocialPostAssociations = ''>
   brand: UUID
   executed_at: number
   failed_at: Nullable<number>
-  failure: null // TODO: Fix the type error
+  failure: Nullable<string>
   post_link: string
   user: UUID
   owner: 'owner' extends A ? IUser : never
