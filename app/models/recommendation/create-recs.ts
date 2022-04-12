@@ -3,7 +3,7 @@ import Fetch from '../../services/fetch'
 interface CreateRecommendationOptions {
   listing_id: UUID
   room: UUID
-  notification: boolean
+  notification?: boolean
 }
 
 const createRecommendation = async ({
