@@ -97,7 +97,7 @@ function Header({
       try {
         await api.toggleFavorites({
           recId: null,
-          mlsNumber: listing.mls_number,
+          listingId: listing.id,
           isFavorite: listing.favorited,
           roomId: user.personal_room
         })

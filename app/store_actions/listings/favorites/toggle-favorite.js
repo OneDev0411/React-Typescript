@@ -55,7 +55,7 @@ const toggleFavorite = listing => (dispatch, getState) => {
 
   const { personal_room } = user
   let { recId } = listing
-  const { recRoom, mls_number: mlsNumber } = listing
+  const { recRoom, id: listingId } = listing
 
   if (personal_room !== recRoom) {
     recId = ''
@@ -63,7 +63,7 @@ const toggleFavorite = listing => (dispatch, getState) => {
 
   const params = {
     recId,
-    mlsNumber,
+    listingId,
     isFavorite,
     roomId: personal_room
   }
