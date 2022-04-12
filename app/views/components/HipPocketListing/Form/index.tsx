@@ -199,28 +199,6 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
           )}
         </Grid>
         <Grid container item direction="row" spacing={2}>
-          {isFieldEnabled('lot_size_area') && (
-            <Grid item xs={6}>
-              <Controller
-                control={control}
-                name="lot_size_area"
-                rules={{
-                  valueAsNumber: true,
-                  min: 0,
-                  max: Number.MAX_SAFE_INTEGER
-                }}
-                fullWidth
-                error={!!errors.lot_size_area}
-                helperText={errors.lot_size_area?.message}
-                variant="outlined"
-                type="number"
-                size="small"
-                label="Lot Area Size"
-                as={<TextField />}
-              />
-            </Grid>
-          )}
-
           {isFieldEnabled('sqft') && (
             <Grid item xs={6}>
               <Controller
@@ -238,6 +216,27 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
                 type="number"
                 size="small"
                 label="Sqft"
+                as={<TextField />}
+              />
+            </Grid>
+          )}
+          {isFieldEnabled('lot_size_area') && (
+            <Grid item xs={6}>
+              <Controller
+                control={control}
+                name="lot_size_area"
+                rules={{
+                  valueAsNumber: true,
+                  min: 0,
+                  max: Number.MAX_SAFE_INTEGER
+                }}
+                fullWidth
+                error={!!errors.lot_size_area}
+                helperText={errors.lot_size_area?.message}
+                variant="outlined"
+                type="number"
+                size="small"
+                label="Lot size (Acres)"
                 as={<TextField />}
               />
             </Grid>
