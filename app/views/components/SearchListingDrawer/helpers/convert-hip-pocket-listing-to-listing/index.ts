@@ -48,7 +48,7 @@ function getPropertyAddress(address?: string): Partial<Address> {
   }
 }
 
-export function convertHipPokcetListingToListing(
+export function convertHipPocketListingToListing(
   hipPocketListing: Partial<HipPocketListing>
 ): DeepPartial<IListing> & { isMock: true } {
   return {
