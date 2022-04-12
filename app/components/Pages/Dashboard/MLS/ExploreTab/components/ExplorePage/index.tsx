@@ -170,19 +170,19 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   const onRemoveDrawing = useCallback(() => {
     dispatch(removeMapDrawing())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [dispatch])
 
-  const onDrawingComplete = useCallback((points: ICoord[]) => {
-    dispatch(setMapDrawing(points))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const onDrawingComplete = useCallback(
+    (points: ICoord[]) => {
+      dispatch(setMapDrawing(points))
+    },
+    [dispatch]
+  )
 
   const toggleMapShown = useCallback(() => {
     uiDispatch(clearListingUiStates())
     setMapIsShown(mapIsShown => !mapIsShown)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [uiDispatch])
 
   const onSelectPlace = (
     center: ICoord,
@@ -284,18 +284,21 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     setIsShowAlertModal(false)
   }
 
-  const changeHoverState = useCallback((id: UUID, hover: boolean) => {
-    uiDispatch(changeListingHoverState(hover ? id : null))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const changeHoverState = useCallback(
+    (id: UUID, hover: boolean) => {
+      uiDispatch(changeListingHoverState(hover ? id : null))
+    },
+    [uiDispatch]
+  )
 
   const onStartDrawingMode = useCallback(() => {
     uiDispatch(clearListingUiStates())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [uiDispatch])
 
   const onToggleListingModal = useCallback(
     (id: UUID, isOpen: boolean) => {
+      uiDispatch(clearListingUiStates())
+
       if (!isWidget) {
         if (isOpen) {
           changeUrl(`/dashboard/mls/${id}`)
@@ -308,25 +311,26 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
         }
       }
     },
-    [isWidget, viewType]
+    [isWidget, uiDispatch, viewType]
   )
 
-  const onMarkerClick = useCallback((key: UUID) => {
-    const resultElement = document.getElementById(key)
+  const onMarkerClick = useCallback(
+    (key: UUID) => {
+      const resultElement = document.getElementById(key)
 
-    if (resultElement) {
-      // Smooth scrolling doesn't work on Chrome for some reason
-      resultElement.scrollIntoView({ behavior: 'smooth' })
-    }
+      if (resultElement) {
+        // Smooth scrolling doesn't work on Chrome for some reason
+        resultElement.scrollIntoView({ behavior: 'smooth' })
+      }
 
-    uiDispatch(changeListingClickedState(key))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+      uiDispatch(changeListingClickedState(key))
+    },
+    [uiDispatch]
+  )
 
   const handleHidingMapMarkerPopup = useCallback(() => {
     uiDispatch(changeListingClickedState(null))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [uiDispatch])
 
   const onClearSearchbox = () => {
     dispatch(removePinMarker())

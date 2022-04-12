@@ -115,6 +115,26 @@ function ExploreTab({ isWidget, user, location }: Props) {
       Object.keys(userLastBrowsingLocation).length === 0
   })
 
+  // Initialize user location on click Locate
+  const initUserLocation = useCallback(
+    (lat: number, lng: number) => {
+      const zoom = USER_LOCATION_ZOOM_LEVEL
+      const center = { lat, lng }
+
+      dispatch(setMapLocation(center, zoom))
+      setUserLocationState(prev => ({
+        ...prev,
+        firstRun: false,
+        isGettingCurrentPosition: false,
+        userLastBrowsingLocation: {
+          zoom,
+          center
+        }
+      }))
+    },
+    [dispatch]
+  )
+
   const onClickLocate = useCallback(() => {
     if (!window.navigator.geolocation) {
       return reduxDispatch(
@@ -152,25 +172,7 @@ function ExploreTab({ isWidget, user, location }: Props) {
       },
       { timeout: 10000 }
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  // Initialize user location on click Locate
-  const initUserLocation = (lat: number, lng: number) => {
-    const zoom = USER_LOCATION_ZOOM_LEVEL
-    const center = { lat, lng }
-
-    dispatch(setMapLocation(center, zoom))
-    setUserLocationState(prev => ({
-      ...prev,
-      firstRun: false,
-      isGettingCurrentPosition: false,
-      userLastBrowsingLocation: {
-        zoom,
-        center
-      }
-    }))
-  }
+  }, [initUserLocation, reduxDispatch])
 
   const onSelectPlace = (
     center: ICoord,
