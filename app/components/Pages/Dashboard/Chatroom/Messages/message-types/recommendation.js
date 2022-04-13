@@ -24,7 +24,10 @@ const Listing = ({
   return (
     <div className="recommendation">
       <strong style={{ color: '#9b9a9b' }}>Shared a listing:</strong>
-      <div>{comment}</div>
+      <div
+        className="comment inline"
+        dangerouslySetInnerHTML={{ __html: comment }}
+      />
 
       <ListingDetailsModal
         isOpen={showListingModal}
