@@ -267,6 +267,7 @@ function Menu(props: WithRouterProps) {
         },
         {
           id: 'customer-support',
+          isHidden: !user,
           label: 'Customer Support',
           action: handleOpenSupportDialogueBox
         }
