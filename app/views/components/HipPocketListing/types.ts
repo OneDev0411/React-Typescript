@@ -3,6 +3,7 @@ export interface HipPocketListing {
   address: string
   price: number
   sqft: number
+  lot_size_area: number
   bedrooms: number
   full_baths: number
   half_baths: number
