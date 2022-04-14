@@ -105,11 +105,11 @@ const useStyles = makeStyles(
 export interface SearchResultCardProps
   extends SearchResultCardImageProps,
     ClassesProps<typeof useStyles> {
-  isSelected: boolean
+  isSelected?: boolean
   overline?: string
   overlineIcon?: string
   overlineDate?: string
-  title: string
+  title?: string
   link: string
   onSelect: () => void
 }
@@ -120,7 +120,7 @@ function SearchResultCard({
   title,
   overlineDate,
   link,
-  isSelected,
+  isSelected = false,
   onSelect,
   classes: classesProp,
   ...otherProps
@@ -157,17 +157,19 @@ function SearchResultCard({
             )}
           </div>
         )}
-        <Typography
-          className={classNames(
-            classes.title,
-            !hasOverlineDetail && classes.titleMargin
-          )}
-          component="div"
-          variant="body2"
-          noWrap
-        >
-          {title}
-        </Typography>
+        {title ? (
+          <Typography
+            className={classNames(
+              classes.title,
+              !hasOverlineDetail && classes.titleMargin
+            )}
+            component="div"
+            variant="body2"
+            noWrap
+          >
+            {title}
+          </Typography>
+        ) : null}
         <div className={classes.footer}>
           <div className={classes.viewIcon}>
             <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />

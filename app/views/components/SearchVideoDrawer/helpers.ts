@@ -1,6 +1,6 @@
 import superagent from 'superagent'
 
-import { YouTubeVideoResource } from './types'
+import { VideoboltVideo, YouTubeVideoResource } from './types'
 
 // The date format provided by Vimeo is not supported on Safari so we need to
 // replace the space with T character to make it standard
@@ -74,4 +74,22 @@ export async function getYouTubeVideoGif(
     .send({ url })
 
   return response.body
+}
+
+export async function getVideoGif(url: string): Promise<{ url: string }> {
+  const response = await superagent
+    .post('/api/utils/get-video-gif')
+    .send({ url })
+
+  return response.body
+}
+
+export async function getVideoboltVideos(
+  email: string
+): Promise<VideoboltVideo[]> {
+  const response = await superagent
+    .post('/api/utils/get-videobolt-videos')
+    .send({ email: 'joshua.whalley@elliman.com' }) // TODO: Use email
+
+  return response.body.videos
 }

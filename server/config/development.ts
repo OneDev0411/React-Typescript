@@ -16,5 +16,6 @@ export default {
   my_marketing_matters_shared_secret: pv.my_marketing_matters.shared_secret,
   prerender_token: pv.prerender.token,
   aws_access_key_id: pv.aws.access_key_id,
-  aws_secret_access_key: pv.aws.secret_access_key
+  aws_secret_access_key: pv.aws.secret_access_key,
+  videobolt_key: pv.videobolt.key
 }

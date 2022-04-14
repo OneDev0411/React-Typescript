@@ -13,6 +13,13 @@ import {
 
 export default async (req: Request, res: Response) => {
   try {
+    if (!req.session?.user) {
+      res.status(403)
+      res.send('')
+
+      return
+    }
+
     const url: string = req.body.url
 
     if (!isValidYouTubeUrl) {

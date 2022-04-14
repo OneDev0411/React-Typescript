@@ -28,6 +28,8 @@ import resetPasswordRoute from './app/routes/user/reset-password'
 import signoutRoute from './app/routes/user/signout'
 import signupRoute from './app/routes/user/signup'
 import usersLookupRoute from './app/routes/user/user-lookup'
+import getVideoGifRoute from './app/routes/video/get-video-gif'
+import getVideoboltVideosRoute from './app/routes/videobolt/get-videobolt-videos'
 import getYoutubeVideoGifRoute from './app/routes/youtube/get-youtube-video-gif'
 
 const router = express.Router()
@@ -120,6 +122,20 @@ router.post(
   requestLimit,
   getYoutubeVideoGifRoute
 )
+
+router.post(
+  '/api/utils/get-videobolt-videos',
+  requestLimit,
+  getVideoboltVideosRoute
+)
+
+router.post(
+  '/api/utils/get-video-gif',
+  timeout('120s'),
+  requestLimit,
+  getVideoGifRoute
+)
+
 router.post('/api/utils/rss-feeds', requestLimit, rssFeedsRoute)
 
 export default router
