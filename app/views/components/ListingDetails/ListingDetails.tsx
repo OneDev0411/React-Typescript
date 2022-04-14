@@ -156,7 +156,7 @@ interface Props {
 // Hiding agent info temporarily due to agent conflict
 // https://gitlab.com/rechat/server/-/issues/2172
 // TODO: remove this issue and re-enable agent info with better approach
-const IS_SHOW_AGENT_INFO = false
+const SHOULD_SHOW_AGENT_INFO = false
 
 function ListingDetails({
   id,
@@ -231,7 +231,7 @@ function ListingDetails({
     return <LoadingContainer noPaddings style={{ paddingTop: '15%' }} />
   }
 
-  const agent = IS_SHOW_AGENT_INFO ? getAgentInfo(listing) : null
+  const agent = SHOULD_SHOW_AGENT_INFO ? getAgentInfo(listing) : null
   const price = getPrice(listing)
   const subtitle1 = listingUtils.addressTitle(listing.property.address)
   const subtitle2 = [
