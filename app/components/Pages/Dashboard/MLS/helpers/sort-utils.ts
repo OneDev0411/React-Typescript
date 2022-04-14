@@ -83,8 +83,8 @@ export function sortListingsByIndex<T extends ICompactListing | IListing>(
   const injectIndexValues = (listing: T) => {
     const property =
       listing.type === 'compact_listing'
-        ? listing.compact_property
-        : listing.property
+        ? (listing as ICompactListing).compact_property
+        : (listing as IListing).property
     const baths = property.bathroom_count || 0
     const beds = property.bedroom_count || 0
     const builtYear = property.year_built
