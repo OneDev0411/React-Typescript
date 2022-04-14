@@ -231,7 +231,7 @@ function ListingDetails({
     return <LoadingContainer noPaddings style={{ paddingTop: '15%' }} />
   }
 
-  const agent = IS_SHOW_AGENT_INFO && getAgentInfo(listing)
+  const agent = IS_SHOW_AGENT_INFO ? getAgentInfo(listing) : null
   const price = getPrice(listing)
   const subtitle1 = listingUtils.addressTitle(listing.property.address)
   const subtitle2 = [
