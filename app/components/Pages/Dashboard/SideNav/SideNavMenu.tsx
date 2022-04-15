@@ -15,6 +15,7 @@ import { withRouter, WithRouterProps } from 'react-router'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { ACL } from '@app/constants/acl'
+import { useUnsafeActiveBrand } from '@app/hooks/brand'
 import { useChatRoomsNotificationsNumber } from '@app/hooks/use-chat-rooms-notifications-number'
 import { useDealsNotificationsNumber } from '@app/hooks/use-deals-notifications-number'
 import { IAppState } from '@app/reducers'
@@ -69,9 +70,7 @@ const useStyles = makeStyles(
 function SideNavMenu(props: WithRouterProps) {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
-  const brand = useSelector<IAppState, IBrand>(
-    (state: IAppState) => state.brand
-  )
+  const brand = useUnsafeActiveBrand()
 
   const appNotifications = useSelector((state: IAppState) =>
     selectNotificationNewCount(state.globalNotifications)
@@ -96,7 +95,7 @@ function SideNavMenu(props: WithRouterProps) {
 
   // This is initially implemented for DE because they're using a
   // white-labeled version of help.rechat.com
-  const brandHelpCenterURL = getBrandHelpCenterURL(brand)
+  const brandHelpCenterURL = getBrandHelpCenterURL(brand!)
 
   const [expandedMenu, setExpandedMenu] = useState<ExpandedMenu>(null)
 
