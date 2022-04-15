@@ -34,6 +34,7 @@ declare module 'grapesjs' {
     append(model: Model | string, opts?: object): Model[]
     remove(): Model
     clone(): Model
+    initToolbar(): void
 
     // I borrowed the below definitions from the backbone package to be able to
     // define the required overloads for the `get` and `set` methods.
