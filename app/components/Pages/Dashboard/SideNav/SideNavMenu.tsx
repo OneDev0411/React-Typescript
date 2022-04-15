@@ -62,11 +62,11 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'Menu'
+    name: 'SideNavMenu'
   }
 )
 
-function Menu(props: WithRouterProps) {
+function SideNavMenu(props: WithRouterProps) {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
   const brand = useSelector<IAppState, IBrand>(
@@ -329,4 +329,4 @@ function Menu(props: WithRouterProps) {
   )
 }
 
-export default withRouter(Menu)
+export default withRouter(SideNavMenu)
