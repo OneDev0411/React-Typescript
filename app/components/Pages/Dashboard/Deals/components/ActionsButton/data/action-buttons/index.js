@@ -25,3 +25,5 @@ export const APPROVE_TASK = 20
 export const DECLINE_TASK = 21
 export const REQUIRE_TASK = 22
 export const DELETE_TASK = 23
+
+export const TASK_ACL = 24
