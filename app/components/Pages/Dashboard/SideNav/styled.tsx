@@ -2,21 +2,6 @@ import { Theme, alpha } from '@material-ui/core/styles'
 import { Link as RouterLink, LinkProps } from 'react-router'
 import styled, { ThemeProps, css } from 'styled-components'
 
-import { appSidenavWidth } from './variables'
-
-export const Sidenav = styled.aside`
-  width: ${appSidenavWidth}px;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  background-color: ${(props: ThemeProps<Theme>) =>
-    props.theme.palette.navbar.background};
-`
-
 const itemStyle = css`
   display: flex;
   padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 0.5)};

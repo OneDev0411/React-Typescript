@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { makeStyles } from '@material-ui/core'
 import {
   mdiGamepadCircleUp,
   mdiAccountMultipleOutline,
@@ -36,9 +37,8 @@ import Logo from './components/Logo'
 import PoweredBy from './components/PoweredBy'
 import SideNavAccordion from './components/SideNavAccordion'
 import { UserMenu } from './components/UserMenu'
-import { Sidenav } from './styled'
 import { AccordionMenu, BaseAccordionMenu, ExpandedMenu } from './types'
-import { scrollableAreaShadowColor } from './variables'
+import { appSidenavWidth, scrollableAreaShadowColor } from './variables'
 
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
 const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
@@ -47,7 +47,27 @@ const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
 const marketingAccess = { oneOf: [ACL.MARKETING, ACL.AGENT_NETWORK] }
 const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
+const useStyles = makeStyles(
+  theme => ({
+    sidenav: {
+      width: appSidenavWidth,
+      height: '100vh',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      zIndex: 100,
+      display: 'flex',
+      flexDirection: 'column',
+      backgroundColor: theme.palette.navbar.background
+    }
+  }),
+  {
+    name: 'Menu'
+  }
+)
+
 function Menu(props: WithRouterProps) {
+  const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
   const brand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
@@ -276,7 +296,7 @@ function Menu(props: WithRouterProps) {
   ]
 
   return (
-    <Sidenav>
+    <aside className={classes.sidenav}>
       <Logo />
       <GlobalActionsButton />
 
@@ -305,7 +325,7 @@ function Menu(props: WithRouterProps) {
 
       <UserMenu />
       <PoweredBy />
-    </Sidenav>
+    </aside>
   )
 }
 
