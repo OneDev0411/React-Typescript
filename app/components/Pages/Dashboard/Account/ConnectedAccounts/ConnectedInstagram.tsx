@@ -46,7 +46,7 @@ function ConnectedInstagram({ className }: Props) {
           onAuthError={handleAuthError}
           size="small"
         >
-          Connect Instagram Account
+          Connect Instagram account via Facebook
         </ConnectFacebookPageButton>
       }
     >
