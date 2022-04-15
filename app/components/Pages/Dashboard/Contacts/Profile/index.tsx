@@ -11,6 +11,7 @@ import { withRouter } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
 import { useGetGlobalTriggers } from '@app/components/Pages/Dashboard/Account/Triggers/hooks/use-get-global-triggers'
+import useConfirmation from '@app/hooks/use-confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import PageLayout from 'components/GlobalPageLayout'
 import { deleteContacts } from 'models/contacts/delete-contact'
@@ -96,6 +97,7 @@ const ContactProfile = props => {
   useGetGlobalTriggers()
 
   const classes = useStyles()
+  const confirmation = useConfirmation()
   const [contact, setContact] = useState<Nullable<INormalizedContact>>(null)
   const [currentContactId, setCurrentContactId] = useState<string | undefined>(
     props.params?.id
@@ -274,9 +276,17 @@ const ContactProfile = props => {
 
   const handleStopFlow = async id => {
     try {
-      await stopFlow(id)
-      fetchContact()
-      fetchTimeline()
+      confirmation.setConfirmationModal({
+        confirmLabel: 'Stop Flow',
+        message: 'Are you sure you want to stop this flow?',
+        description:
+          'All future events and scheduled emails that created by this flow will be deleted.',
+        onConfirm: async () => {
+          await stopFlow(id)
+          fetchContact()
+          fetchTimeline()
+        }
+      })
     } catch (error) {
       console.log(error)
     }
