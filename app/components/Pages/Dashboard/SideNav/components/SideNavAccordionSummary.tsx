@@ -1,19 +1,12 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import { AccordionSummary, makeStyles } from '@material-ui/core'
+import { AccordionSummary, Box, makeStyles } from '@material-ui/core'
 import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
 
 import { MenuBadge } from '@app/views/components/MenuBadge'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import {
-  AccordionSummaryDiv,
-  AccordionSummaryDot,
-  AccordionSummaryIconWrapper,
-  AccordionSummaryLabel,
-  IconWrapper
-} from '../styled'
 import { AccordionMenu, ExpandedMenu } from '../types'
 
 import SideNavLinkItem from './SideNavLinkItem'
@@ -36,6 +29,34 @@ const useStyles = makeStyles(
       justifyContent: 'flex-start',
       // I had to add !important to force accordionSummary styles to change
       margin: '0 !important'
+    },
+    summaryDiv: {
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center'
+    },
+    summaryDot: {
+      display: 'inline-block',
+      width: '6px',
+      height: '6px',
+      position: 'absolute',
+      right: theme.spacing(2.75),
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: theme.palette.error.dark
+    },
+    summaryLabel: {
+      position: 'relative',
+      textTransform: 'capitalize'
+    },
+    summaryIconWrapper: {
+      marginRight: theme.spacing(0.5),
+      display: 'flex',
+      alignItems: 'center'
+    },
+    iconWrapper: {
+      paddingLeft: theme.spacing(0.5),
+      display: 'flex',
+      alignItems: 'center'
     }
   }),
   {
@@ -74,11 +95,11 @@ export function SideNavAccordionSummary({
   const menuIconWrapper = (
     <>
       {(hoveredItem !== menuId || !subMenu) && (
-        <IconWrapper>
+        <Box className={classes.iconWrapper}>
           <SvgIcon path={icon} size={muiIconSizes.small} rightMargined />
-        </IconWrapper>
+        </Box>
       )}
-      <AccordionSummaryLabel>{label}</AccordionSummaryLabel>
+      <Box className={classes.summaryLabel}>{label}</Box>
     </>
   )
 
@@ -100,15 +121,15 @@ export function SideNavAccordionSummary({
         onExpandMenu={onExpandMenu}
         subMenu={subMenu}
       >
-        <AccordionSummaryDiv>
+        <Box className={classes.summaryDiv}>
           {subMenu && hoveredItem === menuId ? (
-            <AccordionSummaryIconWrapper>
+            <Box className={classes.summaryIconWrapper}>
               {expandedMenu === menuId ? (
                 <SvgIcon path={mdiChevronUp} />
               ) : (
                 <SvgIcon path={mdiChevronDown} />
               )}
-            </AccordionSummaryIconWrapper>
+            </Box>
           ) : null}
 
           {notificationCount ? (
@@ -118,10 +139,12 @@ export function SideNavAccordionSummary({
           ) : (
             <>
               {menuIconWrapper}
-              {hasChildrenNotification ? <AccordionSummaryDot /> : null}
+              {hasChildrenNotification ? (
+                <Box className={classes.summaryDot} />
+              ) : null}
             </>
           )}
-        </AccordionSummaryDiv>
+        </Box>
       </SideNavLinkItem>
     </AccordionSummary>
   )

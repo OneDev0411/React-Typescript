@@ -17,18 +17,6 @@ export const Sidenav = styled.aside`
     props.theme.palette.navbar.background};
 `
 
-export const SidenavListGroup = styled.ul`
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-`
-
-export const SideNavItemLabel = styled.div`
-  padding-left: ${(props: ThemeProps<Theme>) => props.theme.spacing(3)}px;
-`
-
 const itemStyle = css`
   display: flex;
   padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 0.5)};
@@ -105,60 +93,4 @@ export const SidenavLink = styled(WrappedRouterLink)<SidenavLinkPorps>`
   border-radius: ${(props: ThemeProps<Theme>) =>
     props.theme.spacing(0, 0.5, 0.5, 0)};
   margin: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 0, 1, 0)};
-`
-
-export const Avatar = styled.div`
-  display: inline-block;
-  text-align: center;
-  color: ${(props: ThemeProps<Theme>) => props.theme.palette.common.white};
-  border-radius: 100%;
-  background: #000;
-  font-weight: ${(props: ThemeProps<Theme>) =>
-    props.theme.typography.fontWeightBold};
-  img {
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-
-    &[alt] {
-      font-size: 0;
-    }
-  }
-`
-
-export const AccordionSummaryDiv = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-`
-
-export const AccordionSummaryLabel = styled.span`
-  position: relative;
-  text-transform: capitalize;
-`
-
-export const AccordionSummaryDot = styled.span`
-  display: inline-block;
-  width: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.75)}px`};
-  height: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.75)}px`};
-  position: absolute;
-  right: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(2.75)}px`};
-  border-radius: ${(props: ThemeProps<Theme>) =>
-    `${props.theme.shape.borderRadius}px`};
-  background-color: ${(props: ThemeProps<Theme>) =>
-    props.theme.palette.error.dark};
-`
-
-export const IconWrapper = styled.span`
-  padding-left: ${(props: ThemeProps<Theme>) =>
-    `${props.theme.spacing(0.5)}px`};
-  display: flex;
-  align-items: 'center';
-`
-
-export const AccordionSummaryIconWrapper = styled.span`
-  margin-right: ${(props: ThemeProps<Theme>) =>
-    `${props.theme.spacing(0.5)}px`};
-  display: flex;
-  align-items: 'center';
 `

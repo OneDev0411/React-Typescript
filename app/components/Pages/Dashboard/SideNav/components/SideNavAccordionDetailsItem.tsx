@@ -1,9 +1,21 @@
+import { Box, makeStyles } from '@material-ui/core'
+
 import { MenuBadge } from '@app/views/components/MenuBadge'
 
-import { SideNavItemLabel } from '../styled'
 import { BaseAccordionMenu, ExpandedMenu } from '../types'
 
 import SideNavLinkItem from './SideNavLinkItem'
+
+const useStyles = makeStyles(
+  theme => ({
+    label: {
+      paddingLeft: theme.spacing(3)
+    }
+  }),
+  {
+    name: 'SideNavAccordionDetailsItem'
+  }
+)
 
 interface Props {
   isOpen: boolean
@@ -11,6 +23,8 @@ interface Props {
 }
 
 export function SideNavAccordionDetailsItem({ isOpen, item }: Props) {
+  const classes = useStyles()
+
   return (
     <SideNavLinkItem
       onTriggerAction={item.action}
@@ -22,7 +36,7 @@ export function SideNavAccordionDetailsItem({ isOpen, item }: Props) {
         {isOpen ? (
           item.label
         ) : (
-          <SideNavItemLabel>{item.label}</SideNavItemLabel>
+          <Box className={classes.label}>{item.label}</Box>
         )}
       </MenuBadge>
     </SideNavLinkItem>

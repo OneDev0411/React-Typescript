@@ -2,6 +2,7 @@ import { Dispatch, MouseEvent, SetStateAction, useState } from 'react'
 
 import {
   Accordion,
+  Box,
   makeStyles,
   Divider,
   Popper,
@@ -9,7 +10,6 @@ import {
   Paper
 } from '@material-ui/core'
 
-import { SidenavListGroup } from '../styled'
 import { AccordionMenu, ExpandedMenu } from '../types'
 
 import { SideNavAccordionDetails } from './SideNavAccordionDetails'
@@ -25,12 +25,19 @@ const useStyles = makeStyles(
       backgroundColor: 'transparent',
       boxShadow: 'none',
       '&:before': {
-        height: '0'
+        height: 0
       }
     },
     accordionExpanded: {
       // I had to add !important to force accordion styles to change
       margin: '0 !important'
+    },
+    list: {
+      margin: 0,
+      padding: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      flexShrink: 0
     },
     popper: {
       zIndex: 101,
@@ -111,7 +118,7 @@ export default function SideNavAccordionItem({
   }
 
   return (
-    <SidenavListGroup data-test={testId}>
+    <Box className={classes.list} data-test={testId}>
       <Accordion
         expanded={expandedMenu === menuId}
         classes={{
@@ -160,6 +167,6 @@ export default function SideNavAccordionItem({
       </Accordion>
 
       {hasDivider && <Divider className={classes.divider} />}
-    </SidenavListGroup>
+    </Box>
   )
 }
