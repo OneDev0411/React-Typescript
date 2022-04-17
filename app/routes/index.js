@@ -544,8 +544,7 @@ const AsyncSuperCampaign = withAcl(
   }),
   [
     { oneOf: [ACL.MARKETING, ACL.CRM] },
-    { oneOf: [ACL.ADMIN, ({ user }) => user.user_type === 'Agent'] },
-    ACL.BETA
+    { oneOf: [ACL.ADMIN, ({ user }) => user.user_type === 'Agent'] }
   ]
 )
 /* ==================================== */

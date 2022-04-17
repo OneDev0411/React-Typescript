@@ -8,13 +8,6 @@ export function useHasSuperCampaignAccess(): boolean {
   const isAdmin = useAcl(ACL.ADMIN)
   const isAgent = useSelector(selectUserType) === 'Agent'
 
-  const hasBetaAccess = useAcl(ACL.BETA)
-
-  // Put this feature behind Beta flag
-  if (!hasBetaAccess) {
-    return false
-  }
-
   // We should display this feature only for Admins and Agents
   return isAdmin || isAgent
 }
