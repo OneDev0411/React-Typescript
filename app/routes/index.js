@@ -765,7 +765,7 @@ const AsyncSuperCampaignDetail = withAcl(
         '../components/Pages/Dashboard/SuperCampaigns/pages/SuperCampaignDetail' /* webpackChunkName: "super_campaign_detail" */
       )
   }),
-  [ACL.ADMIN, ACL.BETA]
+  [ACL.ADMIN]
 )
 
 /* ==================================== */
