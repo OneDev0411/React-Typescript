@@ -13,7 +13,7 @@ import { UserMenuContent } from './UserMenuContent'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     popover: {
-      marginLeft: theme.spacing(1),
+      marginLeft: theme.spacing(3),
       boxShadow: theme.shadows[2]
     }
   }),

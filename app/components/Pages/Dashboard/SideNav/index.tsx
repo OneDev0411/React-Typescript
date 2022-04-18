@@ -2,7 +2,7 @@ import React from 'react'
 
 import { makeStyles, Theme, Hidden } from '@material-ui/core'
 
-import SideNavMenu from './SideNavMenu'
+import { Menu } from './Menu'
 import { appSidenavWidth } from './variables'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -30,7 +30,7 @@ export default function AppSideNav({ isMenuOpen, onDrawerToggle }: Props) {
   return (
     <Hidden smDown>
       <nav className={classes.drawer} aria-label="menu">
-        <SideNavMenu />
+        <Menu />
       </nav>
     </Hidden>
   )

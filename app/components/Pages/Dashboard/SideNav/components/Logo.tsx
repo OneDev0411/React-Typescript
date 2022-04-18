@@ -12,7 +12,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     logo: {
       width: '100%',
-      padding: theme.spacing(5, 2, 3.5)
+      padding: theme.spacing(5, 2, 2.5)
     }
   }),
   { name: 'Logo' }
