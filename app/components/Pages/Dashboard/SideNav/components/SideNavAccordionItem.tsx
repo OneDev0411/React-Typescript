@@ -124,7 +124,7 @@ export default function SideNavAccordionItem({
           root: classes.accordionRoot,
           expanded: classes.accordionExpanded
         }}
-        onMouseEnter={event => handleShowPopper(event)}
+        onMouseEnter={handleShowPopper}
         onMouseLeave={handleHidePopper}
         onClick={handleClick}
       >
