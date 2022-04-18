@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import { AccordionSummary, Box, makeStyles } from '@material-ui/core'
+import { AccordionSummary, makeStyles } from '@material-ui/core'
 import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
 
 import { MenuBadge } from '@app/views/components/MenuBadge'
@@ -95,11 +95,11 @@ export function SideNavAccordionSummary({
   const menuIconWrapper = (
     <>
       {(hoveredItem !== menuId || !subMenu) && (
-        <Box className={classes.iconWrapper}>
+        <div className={classes.iconWrapper}>
           <SvgIcon path={icon} size={muiIconSizes.small} rightMargined />
-        </Box>
+        </div>
       )}
-      <Box className={classes.summaryLabel}>{label}</Box>
+      <div className={classes.summaryLabel}>{label}</div>
     </>
   )
 
@@ -121,15 +121,15 @@ export function SideNavAccordionSummary({
         onExpandMenu={onExpandMenu}
         subMenu={subMenu}
       >
-        <Box className={classes.summaryDiv}>
+        <div className={classes.summaryDiv}>
           {subMenu && hoveredItem === menuId ? (
-            <Box className={classes.summaryIconWrapper}>
+            <div className={classes.summaryIconWrapper}>
               {expandedMenu === menuId ? (
                 <SvgIcon path={mdiChevronUp} />
               ) : (
                 <SvgIcon path={mdiChevronDown} />
               )}
-            </Box>
+            </div>
           ) : null}
 
           {notificationCount ? (
@@ -140,11 +140,11 @@ export function SideNavAccordionSummary({
             <>
               {menuIconWrapper}
               {hasChildrenNotification ? (
-                <Box className={classes.summaryDot} />
+                <div className={classes.summaryDot} />
               ) : null}
             </>
           )}
-        </Box>
+        </div>
       </SideNavLinkItem>
     </AccordionSummary>
   )

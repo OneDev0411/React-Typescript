@@ -1,4 +1,4 @@
-import { Box, Grid, Divider, Typography, makeStyles } from '@material-ui/core'
+import { Grid, Divider, Typography, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(
   theme => ({
@@ -10,6 +10,9 @@ const useStyles = makeStyles(
     },
     text: {
       color: theme.palette.grey[400]
+    },
+    linkWrapper: {
+      paddingLeft: theme.spacing(0.5)
     },
     logo: {
       opacity: 0.8,
@@ -28,7 +31,7 @@ export default function PoweredBy() {
   const classes = useStyles()
 
   return (
-    <Box>
+    <div>
       <Divider className={classes.divider} />
       <Grid container className={classes.container}>
         <Grid item>
@@ -37,7 +40,7 @@ export default function PoweredBy() {
           </Typography>
         </Grid>
         <Grid item>
-          <Box pl={0.5}>
+          <div className={classes.linkWrapper}>
             <a href="https://rechat.com" target="_blank">
               <img
                 alt="rechat"
@@ -45,9 +48,9 @@ export default function PoweredBy() {
                 className={classes.logo}
               />
             </a>
-          </Box>
+          </div>
         </Grid>
       </Grid>
-    </Box>
+    </div>
   )
 }

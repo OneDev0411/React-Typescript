@@ -2,7 +2,6 @@ import { Dispatch, MouseEvent, SetStateAction, useState } from 'react'
 
 import {
   Accordion,
-  Box,
   makeStyles,
   Divider,
   Popper,
@@ -118,7 +117,7 @@ export default function SideNavAccordionItem({
   }
 
   return (
-    <Box className={classes.list} data-test={testId}>
+    <div className={classes.list} data-test={testId}>
       <Accordion
         expanded={expandedMenu === menuId}
         classes={{
@@ -126,8 +125,8 @@ export default function SideNavAccordionItem({
           expanded: classes.accordionExpanded
         }}
         onMouseEnter={event => handleShowPopper(event)}
-        onMouseLeave={() => handleHidePopper()}
-        onClick={() => handleClick()}
+        onMouseLeave={handleHidePopper}
+        onClick={handleClick}
       >
         <SideNavAccordionSummary
           data={data}
@@ -167,6 +166,6 @@ export default function SideNavAccordionItem({
       </Accordion>
 
       {hasDivider && <Divider className={classes.divider} />}
-    </Box>
+    </div>
   )
 }

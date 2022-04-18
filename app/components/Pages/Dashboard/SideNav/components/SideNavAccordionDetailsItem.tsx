@@ -1,4 +1,4 @@
-import { Box, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 
 import { MenuBadge } from '@app/views/components/MenuBadge'
 
@@ -36,7 +36,7 @@ export function SideNavAccordionDetailsItem({ isOpen, item }: Props) {
         {isOpen ? (
           item.label
         ) : (
-          <Box className={classes.label}>{item.label}</Box>
+          <div className={classes.label}>{item.label}</div>
         )}
       </MenuBadge>
     </SideNavLinkItem>
