@@ -47,19 +47,24 @@ class Comment extends React.Component {
     }
 
     return (
-      <Container className="chatroom">
+      <Container
+        className="chatroom"
+        isPrivateRoom={task.acl.includes('Agents') === false}
+      >
         <Comments
           user={this.props.user}
           roomId={task.room.id}
           deliveryReportPlacement="bottom"
           openFilesInNewTab={!this.props.isBackOffice}
           emptyStateRenderer={() => <EmptyState />}
+          onLoad={this.props.onLoadComments}
         />
 
         <MessageInput
           deal={this.props.deal}
           task={task}
           isBackOffice={this.props.isBackOffice}
+          onSendMessage={this.props.onSendMessage}
           autoFocus
         />
       </Container>
