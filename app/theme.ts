@@ -1,10 +1,13 @@
-import { createTheme, Theme, ThemeOptions } from '@material-ui/core'
+import { createTheme, Theme, ThemeOptions } from '@material-ui/core/styles'
 import merge from 'merge'
 
 const white = '#fff'
 
 const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
   const defaultValue: ThemeOptions = {
+    navbar: {
+      logoUrl: ''
+    },
     breakpoints: {
       values: {
         xs: 320,
@@ -79,6 +82,9 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         A700: '#616161'
       },
       navbar: {
+        main: '#00B286',
+        light: '#33CCAA',
+        dark: '#008060',
         background: '#050E21',
         contrastText: 'rgba(255, 255, 255, 0.7)'
       },
