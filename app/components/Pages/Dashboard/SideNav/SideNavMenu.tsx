@@ -183,8 +183,8 @@ function SideNavMenu(props: WithRouterProps) {
         },
         {
           access: ['Marketing'],
-          id: 'automation',
-          label: 'Automation',
+          id: 'flows',
+          label: 'Flows',
           to: '/dashboard/flows'
         },
         {
