@@ -544,8 +544,7 @@ const AsyncSuperCampaignList = withAcl(
   }),
   [
     { oneOf: [ACL.MARKETING, ACL.CRM] },
-    { oneOf: [ACL.ADMIN, ({ user }) => user.user_type === 'Agent'] },
-    ACL.BETA
+    { oneOf: [ACL.ADMIN, ({ user }) => user.user_type === 'Agent'] }
   ]
 )
 const AsyncSocialPostList = withAcl(
@@ -775,7 +774,7 @@ const AsyncSuperCampaignDetail = withAcl(
         '../components/Pages/Dashboard/SuperCampaigns/pages/SuperCampaignDetail' /* webpackChunkName: "super_campaign_detail" */
       )
   }),
-  [ACL.ADMIN, ACL.BETA]
+  [ACL.ADMIN]
 )
 
 /* ==================================== */

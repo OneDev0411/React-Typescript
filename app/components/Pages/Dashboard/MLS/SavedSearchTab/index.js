@@ -8,12 +8,17 @@ import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 
+import {
+  sortListingsByIndex,
+  parseSortIndex,
+  getDefaultSort,
+  SORT_FIELD_SETTING_KEY
+} from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
 import { getSavedSearchListings } from '@app/models/listings/alerts/get-alert-listings'
 import { selectAlert } from '@app/reducers/listings/alerts/list'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import getAlerts from '@app/store_actions/listings/alerts/get-alerts'
 import { changeUrl } from '@app/utils/change-url'
-import { normalizeListingLocation } from '@app/utils/map'
 import Avatars from '@app/views/components/Avatars'
 import GlobalPageLayout from '@app/views/components/GlobalPageLayout'
 
@@ -22,12 +27,6 @@ import MapView from '../components/MapView'
 import { Header } from '../components/PageHeader'
 import Tabs from '../components/Tabs'
 import { DEFAULT_VIEW } from '../constants'
-import {
-  parseSortIndex,
-  getDefaultSort,
-  sortByIndex,
-  SORT_FIELD_SETTING_KEY
-} from '../helpers/sort-utils'
 
 import Map from './Map'
 
@@ -180,13 +179,7 @@ class SavedSearch extends React.Component {
 
   sortListings = memoize(
     (listings, index, ascending) => {
-      const formattedListings = listings.data.map(listing =>
-        normalizeListingLocation(listing)
-      )
-
-      return formattedListings.sort((a, b) =>
-        sortByIndex(a, b, index, ascending)
-      )
+      return sortListingsByIndex(listings, index, ascending)
     },
     // Since listings are equal during renders and are read from this.state
     // in order to make memoization work properly, we need to build a custom
@@ -201,7 +194,7 @@ class SavedSearch extends React.Component {
     const { listings, isFetching } = this.state
 
     const sortedListings = this.sortListings(
-      listings,
+      listings.data,
       this.state.activeSort.index,
       this.state.activeSort.ascending
     )

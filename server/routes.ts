@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser'
+import timeout from 'connect-timeout'
 import express from 'express'
 
 import branchLinkRoute from './app/routes/branch-link'
@@ -27,6 +28,7 @@ import resetPasswordRoute from './app/routes/user/reset-password'
 import signoutRoute from './app/routes/user/signout'
 import signupRoute from './app/routes/user/signup'
 import usersLookupRoute from './app/routes/user/user-lookup'
+import getYoutubeVideoGifRoute from './app/routes/youtube/get-youtube-video-gif'
 
 const router = express.Router()
 
@@ -112,6 +114,12 @@ router.get('/api/utils/cors/:url', corsRoute)
 router.post('/api/pdf/get-size', requestLimit, getPdfSizeRoute)
 router.post('/api/utils/render-mjml', requestLimit, renderMjmlRoute)
 router.post('/api/utils/get-url-metadata', requestLimit, urlMetadataRoute)
+router.post(
+  '/api/utils/get-youtube-video-gif',
+  timeout('120s'),
+  requestLimit,
+  getYoutubeVideoGifRoute
+)
 router.post('/api/utils/rss-feeds', requestLimit, rssFeedsRoute)
 
 export default router

@@ -94,13 +94,13 @@ export default compose(
         setSuccessModalIsActive
       }) =>
       () => {
-        const { mls_number } = listing
+        const { id: listing_id } = listing
         const notification = true
 
         setIsSharing(true)
 
         createRoom(recipients).then(room => {
-          createRecommendation({ room, mls_number, notification })
+          createRecommendation({ room, listing_id, notification })
             .then(recsId => {
               setIsSharing(false)
 

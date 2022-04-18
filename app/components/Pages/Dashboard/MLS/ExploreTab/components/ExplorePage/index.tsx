@@ -366,10 +366,12 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
           </Grid>
           <Grid className={classes.searchBarFilterItem}>
             <Filters />
-            <SaveSearchButton
-              isLoading={state.isLoading}
-              onClick={handleSaveSearch}
-            />
+            {!isWidget && (
+              <SaveSearchButton
+                isLoading={state.isLoading}
+                onClick={handleSaveSearch}
+              />
+            )}
           </Grid>
         </Grid>
 

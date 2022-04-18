@@ -29,7 +29,7 @@ import LastTouched from '../../../List/Table/columns/LastTouched'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      padding: theme.spacing(0.5),
+      padding: theme.spacing(0.5, 1),
       height: '100%'
     },
     container: {

@@ -17,7 +17,8 @@ import {
   DECLINE_TASK,
   APPROVE_TASK,
   REQUIRE_TASK,
-  DELETE_TASK
+  DELETE_TASK,
+  TASK_ACL
 } from '../../../../../components/ActionsButton/data/action-buttons'
 
 interface Props {
@@ -82,6 +83,8 @@ export function getTaskActions({
   isBackOffice && actions.push(REQUIRE_TASK)
 
   actions.push(DELETE_TASK)
+
+  task && isBackOffice && actions.push(TASK_ACL)
 
   return actions
 }

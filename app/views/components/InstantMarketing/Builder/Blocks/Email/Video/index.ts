@@ -41,6 +41,7 @@ export default function registerVideoBlock(
       icon: VideoIcon,
       category: BASICS_BLOCK_CATEGORY,
       blockName,
+      adaptive: true,
       template: videoBlocks[blockName]
     },
     templateBlockOptions

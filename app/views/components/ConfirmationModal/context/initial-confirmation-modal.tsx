@@ -23,9 +23,12 @@ export interface ConfirmationModalConfig {
   confirmLabel?: string
   needsConfirm?: boolean
 }
-export const initialConfirmationModal: ConfirmationModalConfig & {
+
+export type InitialConfirmationModalType = ConfirmationModalConfig & {
   setConfirmationModal: (config: ConfirmationModalConfig) => any
-} = {
+}
+
+export const initialConfirmationModal: InitialConfirmationModalType = {
   // Visibility
   isShow: false,
   appearance: 'normal', // normal, danger

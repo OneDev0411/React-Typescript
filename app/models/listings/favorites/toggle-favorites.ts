@@ -1,15 +1,27 @@
 import Fetch from '../../../services/fetch'
 import createRecommendation from '../../recommendation/create-recs'
 
-const toggleFavorite = async ({ roomId, recId, mlsNumber, isFavorite }) => {
+interface ToggleFavoriteOptions {
+  roomId: Nullable<UUID>
+  recId: Nullable<UUID>
+  listingId: UUID
+  isFavorite: boolean
+}
+
+const toggleFavorite = async ({
+  roomId,
+  recId,
+  listingId,
+  isFavorite
+}: ToggleFavoriteOptions): Promise<Optional<number>> => {
   if (!roomId) {
-    return
+    return undefined
   }
 
   try {
     if (!recId) {
       recId = await createRecommendation({
-        mls_number: mlsNumber,
+        listing_id: listingId,
         room: roomId
       })
     }
@@ -20,7 +32,7 @@ const toggleFavorite = async ({ roomId, recId, mlsNumber, isFavorite }) => {
         favorite: !isFavorite
       })
 
-    return response.body.code
+    return response.body.code as number
   } catch (error) {
     throw error
   }
