@@ -1,11 +1,12 @@
 import React from 'react'
 
-import { Badge, Grid, Tooltip } from '@material-ui/core'
+import { Tooltip, Grid } from '@material-ui/core'
 import { mdiChevronDoubleLeft, mdiArrowExpand } from '@mdi/js'
 import cn from 'classnames'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import Badge from 'components/Badge'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import UserAvatar from 'components/UserAvatar'
@@ -202,7 +203,13 @@ class Rooms extends React.Component {
                     </Grid>
 
                     <Grid item sm={1} xs={1} className="notifications vcenter">
-                      <Badge badgeContent={room.new_notifications} max={99} />
+                      {room.new_notifications > 0 && (
+                        <Badge>
+                          {room.new_notifications > 99
+                            ? '99+'
+                            : room.new_notifications}
+                        </Badge>
+                      )}
                     </Grid>
                   </Grid>
                 ))

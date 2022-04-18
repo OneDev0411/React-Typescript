@@ -1,8 +1,7 @@
-import { ACTIVATE_INTERCOM, DEACTIVATE_INTERCOM } from '@app/constants/intercom'
-
-export interface IIntercomState {
-  isActive: boolean
-}
+import {
+  ACTIVATE_INTERCOM,
+  DEACTIVATE_INTERCOM
+} from '../../constants/intercom'
 
 export const intercom = (state = { isActive: false }, action) => {
   switch (action.type) {

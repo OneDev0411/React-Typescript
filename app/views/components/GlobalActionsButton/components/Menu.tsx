@@ -16,8 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     itemsWrapper: {
       margin: theme.spacing(1)
-    },
-    popoverRoot: { marginTop: theme.spacing(0.5) }
+    }
   })
 )
 
@@ -50,7 +49,6 @@ export default function Menu({ items, anchorEl, onItemClick, onClose }: Props) {
         horizontal: 'right'
       }}
       transitionDuration={0}
-      classes={{ root: classes.popoverRoot }}
     >
       <List dense>
         <div className={classes.itemsWrapper}>
