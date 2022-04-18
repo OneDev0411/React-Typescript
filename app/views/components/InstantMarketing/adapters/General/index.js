@@ -52,7 +52,8 @@ class General extends Component {
     this.setState(
       {
         isBuilderOpen: false,
-        isComposeEmailOpen: false
+        isComposeEmailOpen: false,
+        isSocialDrawerOpen: false
       },
       this.props.handleTrigger
     )
