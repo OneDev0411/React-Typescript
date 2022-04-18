@@ -1,11 +1,59 @@
 import { useContext, useEffect, ReactNode } from 'react'
 
-import { Theme, useMediaQuery } from '@material-ui/core'
-import { withRouter, WithRouterProps } from 'react-router'
+import { Theme, useMediaQuery, makeStyles } from '@material-ui/core'
+import { alpha } from '@material-ui/core/styles'
+import cn from 'classnames'
+import { Link as RouterLink, withRouter, WithRouterProps } from 'react-router'
 
 import { SideNavContext } from '../../DashboardLayout'
-import { SidenavLink, SidenavLinkSummary } from '../styled'
 import { BaseAccordionMenu, ExpandedMenu } from '../types'
+
+const useStyles = makeStyles(
+  theme => ({
+    activeMenu: {
+      color: `${theme.palette.common.white} !important`,
+      backgroundColor: alpha(theme.palette.navbar.contrastText, 0.24),
+      fontWeight: theme.typography.fontWeightBold,
+
+      '& svg': {
+        color: theme.palette.primary.main
+      }
+    },
+    linkStyle: {
+      alignItems: 'center',
+      borderRadius: theme.spacing(0, 0.5, 0.5, 0),
+      color: theme.palette.grey[400],
+      cursor: 'pointer',
+      display: 'flex',
+      fontSize: theme.typography.body1.fontSize,
+      height: '32px',
+      lineHeight: theme.typography.body1.lineHeight,
+      padding: theme.spacing(0, 0.5),
+      width: '100%',
+
+      '&:focus, &:hover': {
+        color: theme.palette.primary.main,
+        textDecoration: 'none'
+      },
+
+      '& svg': {
+        position: 'relative',
+        top: theme.spacing(-0.125)
+      }
+    },
+    sidenavLink: {
+      margin: theme.spacing(0, 0, 1, 0),
+      padding: theme.spacing(0, 1, 0, 2.5)
+    },
+    sidenavLinkSummary: {
+      margin: theme.spacing(0, 1, 0, 0),
+      padding: theme.spacing(0, 1, 0, 2)
+    }
+  }),
+  {
+    name: 'SideNavLinkItem'
+  }
+)
 
 interface Props {
   children: ReactNode
@@ -17,22 +65,21 @@ interface Props {
   tourId: ExpandedMenu
 }
 
-function SideNavLinkItem(props: Props & WithRouterProps) {
-  const {
-    children,
-    isSubmenu = false,
-    location,
-    onExpandMenu,
-    onTriggerAction,
-    subMenu,
-    to = '',
-    tourId
-  } = props
+function SideNavLinkItem({
+  children,
+  isSubmenu = false,
+  location,
+  onExpandMenu,
+  onTriggerAction,
+  subMenu,
+  to = '',
+  tourId
+}: Props & WithRouterProps) {
+  const classes = useStyles()
 
   const { onDrawerToggle } = useContext(SideNavContext)
 
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
-
   const active = subMenu
     ? subMenu
         .map(item => item.to)
@@ -69,8 +116,12 @@ function SideNavLinkItem(props: Props & WithRouterProps) {
   }
 
   return isSubmenu ? (
-    <SidenavLink
-      active={active}
+    <RouterLink
+      className={cn(
+        classes.linkStyle,
+        classes.sidenavLink,
+        active ? classes.activeMenu : ''
+      )}
       data-tour-id={tourId}
       onClick={() => {
         onTriggerAction && onTriggerAction()
@@ -80,10 +131,14 @@ function SideNavLinkItem(props: Props & WithRouterProps) {
       to={to}
     >
       {children}
-    </SidenavLink>
+    </RouterLink>
   ) : (
-    <SidenavLinkSummary
-      active={active && !subMenu}
+    <RouterLink
+      className={cn(
+        classes.linkStyle,
+        classes.sidenavLinkSummary,
+        active && !subMenu ? classes.activeMenu : ''
+      )}
       data-tour-id={tourId}
       onClick={() => {
         onTriggerAction && onTriggerAction()
@@ -92,7 +147,7 @@ function SideNavLinkItem(props: Props & WithRouterProps) {
       to={openSummaryLink()}
     >
       {children}
-    </SidenavLinkSummary>
+    </RouterLink>
   )
 }
 

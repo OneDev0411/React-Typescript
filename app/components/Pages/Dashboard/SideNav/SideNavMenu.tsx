@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { makeStyles } from '@material-ui/core'
 import {
   mdiGamepadCircleUp,
   mdiAccountMultipleOutline,
@@ -14,6 +15,7 @@ import { withRouter, WithRouterProps } from 'react-router'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { ACL } from '@app/constants/acl'
+import { useUnsafeActiveBrand } from '@app/hooks/brand'
 import { useChatRoomsNotificationsNumber } from '@app/hooks/use-chat-rooms-notifications-number'
 import { useDealsNotificationsNumber } from '@app/hooks/use-deals-notifications-number'
 import { IAppState } from '@app/reducers'
@@ -37,9 +39,8 @@ import PoweredBy from './components/PoweredBy'
 import SideNavAccordion from './components/SideNavAccordion'
 import { SideNavHamburgerButton } from './components/SideNavHamburgerButton'
 import { UserMenu } from './components/UserMenu'
-import { Sidenav } from './styled'
 import { AccordionMenu, BaseAccordionMenu, ExpandedMenu } from './types'
-import { scrollableAreaShadowColor } from './variables'
+import { appSidenavWidth, scrollableAreaShadowColor } from './variables'
 
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
 const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
@@ -48,11 +49,29 @@ const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
 const marketingAccess = { oneOf: [ACL.MARKETING, ACL.AGENT_NETWORK] }
 const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
-function Menu(props: WithRouterProps) {
+const useStyles = makeStyles(
+  theme => ({
+    sidenav: {
+      width: appSidenavWidth,
+      height: '100vh',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      zIndex: 100,
+      display: 'flex',
+      flexDirection: 'column',
+      backgroundColor: theme.palette.navbar.background
+    }
+  }),
+  {
+    name: 'SideNavMenu'
+  }
+)
+
+function SideNavMenu(props: WithRouterProps) {
+  const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
-  const brand = useSelector<IAppState, IBrand>(
-    (state: IAppState) => state.brand
-  )
+  const brand = useUnsafeActiveBrand()
 
   const appNotifications = useSelector((state: IAppState) =>
     selectNotificationNewCount(state.globalNotifications)
@@ -77,7 +96,7 @@ function Menu(props: WithRouterProps) {
 
   // This is initially implemented for DE because they're using a
   // white-labeled version of help.rechat.com
-  const brandHelpCenterURL = getBrandHelpCenterURL(brand)
+  const brandHelpCenterURL = getBrandHelpCenterURL(brand!)
 
   const [expandedMenu, setExpandedMenu] = useState<ExpandedMenu>(null)
 
@@ -268,6 +287,7 @@ function Menu(props: WithRouterProps) {
         },
         {
           id: 'customer-support',
+          isHidden: !user,
           label: 'Customer Support',
           action: handleOpenSupportDialogueBox
         }
@@ -276,7 +296,7 @@ function Menu(props: WithRouterProps) {
   ]
 
   return (
-    <Sidenav>
+    <aside className={classes.sidenav}>
       <SideNavHamburgerButton />
       <Logo />
       <GlobalActionsButton />
@@ -306,8 +326,8 @@ function Menu(props: WithRouterProps) {
 
       <UserMenu />
       <PoweredBy />
-    </Sidenav>
+    </aside>
   )
 }
 
-export default withRouter(Menu)
+export default withRouter(SideNavMenu)

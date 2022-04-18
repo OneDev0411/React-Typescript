@@ -6,11 +6,13 @@ import {
 } from '@material-ui/core'
 import { mdiDotsVertical } from '@mdi/js'
 
+import { ACL } from '@app/constants/acl'
 import {
   useDeleteSuperCampaign,
   useDuplicateSuperCampaign,
   useSendSuperCampaign
 } from '@app/models/super-campaign'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
@@ -50,7 +52,17 @@ function SuperCampaignAdminMoreActions({
 
   const isExecuted = isSuperCampaignReadOnly(superCampaign)
 
+  const hasBetaAccess = useAcl(ACL.BETA)
+
   const isWorking = isDeleting || isDuplicating || isSending
+
+  // TODO: Remove this line and the if statement when the duplicate button is available without beta access
+  const hasItemsToShow =
+    (!isExecuted && displaySendNow) || hasBetaAccess || !isExecuted
+
+  if (!hasItemsToShow) {
+    return null
+  }
 
   return (
     <BaseDropdown
@@ -78,13 +90,15 @@ function SuperCampaignAdminMoreActions({
               <Typography variant="body2">Send Now</Typography>
             </MenuItem>
           )}
-          <MenuItem
-            onClick={() =>
-              duplicateSuperCampaign(toRawSuperCampaign(superCampaign))
-            }
-          >
-            <Typography variant="body2">Duplicate this campaign</Typography>
-          </MenuItem>
+          {hasBetaAccess && (
+            <MenuItem
+              onClick={() =>
+                duplicateSuperCampaign(toRawSuperCampaign(superCampaign))
+              }
+            >
+              <Typography variant="body2">Duplicate this campaign</Typography>
+            </MenuItem>
+          )}
           {!isExecuted && (
             <MenuItem onClick={() => deleteSuperCampaign(superCampaign)}>
               <Typography variant="body2">Delete</Typography>
