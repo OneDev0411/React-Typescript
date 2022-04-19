@@ -7,10 +7,6 @@ import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    title: {
-      color: theme.palette.tertiary.light,
-      marginBottom: theme.spacing(2)
-    },
     description: {
       color: theme.palette.tertiary.light,
       [theme.breakpoints.up('sm')]: {
