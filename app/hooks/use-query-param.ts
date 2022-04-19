@@ -19,14 +19,17 @@ export function useQueryParamValue<T extends ParamInputType = string>(
   const location = window.location
 
   const value = useMemo(() => {
-    return Array.isArray(defaultValue)
-      ? new URLSearchParams(location.search)
-          .getAll(name)
-          .map(decodeURIComponent)
-      : decodeURIComponent(
-          new URLSearchParams(location.search).get(name) ||
-            (defaultValue as string)
-        )
+    if (Array.isArray(defaultValue)) {
+      const searchParamValue = new URLSearchParams(location.search).getAll(name)
+
+      return (searchParamValue.length ? searchParamValue : defaultValue).map(
+        decodeURIComponent
+      )
+    }
+
+    return decodeURIComponent(
+      new URLSearchParams(location.search).get(name) || (defaultValue as string)
+    )
   }, [defaultValue, location.search, name])
 
   return value as T
