@@ -25,7 +25,7 @@ export default function GlobalActionsMenu({ onClick }: Props) {
     <div className={classes.container}>
       <Button
         variant="contained"
-        color="primary"
+        color="navbar"
         size="small"
         fullWidth
         onClick={onClick}

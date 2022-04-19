@@ -5,9 +5,6 @@ const white = '#fff'
 
 const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
   const defaultValue: ThemeOptions = {
-    navbar: {
-      logoUrl: ''
-    },
     breakpoints: {
       values: {
         xs: 320,
@@ -82,11 +79,11 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         A700: '#616161'
       },
       navbar: {
-        main: '#00B286',
-        light: '#33CCAA',
-        dark: '#008060',
+        main: 'red',
+        light: 'red',
+        dark: 'red',
         background: '#050E21',
-        contrastText: 'rgba(255, 255, 255, 0.7)'
+        contrastText: '#fff'
       },
       contrastThreshold: 3,
       tonalOffset: 0.2,
@@ -232,6 +229,11 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
       modal: 1001,
       gridAction: 100,
       sideNavDrawer: 100
+    },
+    navbar: {
+      logo: {
+        url: ''
+      }
     },
     overrides: {
       // Latest version of Safari (Safari 14.1.1 and on iPhone with iOS 14.5.1) has some issues

@@ -47,13 +47,17 @@ declare module '@material-ui/core/styles/createPalette' {
 declare module '@material-ui/core/styles' {
   interface Theme {
     navbar: {
-      logoUrl: string
+      logo: {
+        url: string
+      }
     }
   }
 
   interface ThemeOptions {
     navbar?: {
-      logoUrl?: string
+      logo?: {
+        url?: sring
+      }
     }
   }
 }
