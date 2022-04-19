@@ -36,6 +36,9 @@ export async function attachCKEditor(
   getOpts: (currentOptions: any) => any = () => ({})
 ) {
   const fontNames = [...new Set([...fontFamilies])]
+  const fontSizes = [
+    8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 42, 48, 60, 72
+  ]
 
   let c = opts
 
@@ -51,6 +54,7 @@ export async function attachCKEditor(
       line_height: CK_EDITOR_LINE_HEIGHT_VALUES.join(';'),
       contentsCss: getFontFamiliesCSSFiles(fontFamilies),
       font_names: fontNames.join(';'),
+      fontSize_sizes: fontSizes.join(';'),
       colorButton_enableMore: false,
       qtWidth: '100%',
       linkDefaultProtocol: 'https://',

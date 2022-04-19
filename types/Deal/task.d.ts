@@ -45,6 +45,7 @@ declare interface IDealTask extends IModel<'task'> {
   submission: IDealTaskSubmission | null
   room: IDealTaskRoom
   order: number
+  acl: ('Agents' | 'BackOffice')[]
   review: null | {
     id: UUID
     created_at: number
