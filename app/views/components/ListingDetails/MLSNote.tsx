@@ -50,10 +50,10 @@ export default function MLSNote({ disclaimer, mlsName, logo }: Props) {
         </Grid>
       )}
       <Grid item className={classes.noteWrapper}>
-        <Typography variant="body1" className={classes.title}>
-          RLS Data display by {mlsName}
-        </Typography>
-        <Typography variant="body1">{disclaimer}</Typography>
+        <Typography
+          variant="body1"
+          dangerouslySetInnerHTML={{ __html: disclaimer }}
+        />
 
         <Typography variant="body1" className={classes.closedNote}>
           Some properties which appear for sale on this website may no longer be
