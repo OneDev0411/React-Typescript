@@ -2,6 +2,8 @@ export const SORT_FIELD_SETTING_KEY = 'mls_sort_field'
 export const LAST_BROWSING_LOCATION = 'mls_last_browsing_location'
 export const SORT_FIELD_DEFAULT = '-price'
 
+import omit from 'lodash/omit'
+
 import { getSettingFromTeam } from '@app/utils/user-teams'
 
 import { IMapPosition, Sort, SortIndex, SortPrefix, SortString } from '../types'
@@ -43,12 +45,14 @@ export const getDefaultSort = (team: Nullable<IUserTeam>): SortString => {
   ) as SortString
 }
 
-export const sortByIndex = (
-  a: ICompactListing,
-  b: ICompactListing,
+export function sortByIndex<T extends ICompactListing | IListing>(
+  a: T,
+  b: T,
   index: string,
   ascending: boolean
-) => (ascending ? a[index] - b[index] : b[index] - a[index])
+) {
+  return ascending ? a[index] - b[index] : b[index] - a[index]
+}
 
 export const getUserLastBrowsingLocation = (team: Nullable<IUserTeam>) => {
   return getSettingFromTeam(
@@ -69,4 +73,47 @@ export function parseToValertSort(sort: SortIndex): string {
   }
 
   return sortMap[sort]
+}
+
+export function sortListingsByIndex<T extends ICompactListing | IListing>(
+  listings: T[],
+  index: SortIndex,
+  ascending: boolean
+) {
+  const injectIndexValues = (listing: T) => {
+    const property =
+      listing.type === 'compact_listing'
+        ? (listing as ICompactListing).compact_property
+        : (listing as IListing).property
+    const baths = property.bathroom_count || 0
+    const beds = property.bedroom_count || 0
+    const builtYear = property.year_built
+    const lotSizeArea = property.lot_size_area
+    const sqft = property.square_meters || 0
+
+    return {
+      ...listing,
+      baths,
+      beds,
+      builtYear,
+      lotSizeArea,
+      sqft
+    }
+  }
+
+  const omitIndexValues = (listing: ReturnType<typeof injectIndexValues>) => {
+    return omit(listing, [
+      'baths',
+      'beds',
+      'builtYear',
+      'lotSizeArea',
+      'sqft'
+    ]) as unknown as T // due to lodash typing limitations
+  }
+
+  const formattedListings = listings.map(listing => injectIndexValues(listing))
+
+  return formattedListings
+    .sort((a, b) => sortByIndex(a, b, index, ascending))
+    .map(omitIndexValues)
 }
