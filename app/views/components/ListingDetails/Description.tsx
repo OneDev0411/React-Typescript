@@ -27,6 +27,7 @@ interface Props {
   officeName: Nullable<string>
   agentFullName?: string
   agentPhoneNumber?: string
+  agentEmail?: string
 }
 
 function Description({
@@ -34,7 +35,8 @@ function Description({
   description,
   officeName,
   agentFullName = '',
-  agentPhoneNumber = ''
+  agentPhoneNumber = '',
+  agentEmail = ''
 }: Props) {
   const classes = useStyles()
   const theme = useTheme()
@@ -78,7 +80,7 @@ function Description({
               Listing Courtesy {agentFullName ? `of ${agentFullName}` : ''} of{' '}
               {officeName}
               <br />
-              {agentPhoneNumber}
+              {agentPhoneNumber || agentEmail}
             </strong>
           </Typography>
         </Box>
