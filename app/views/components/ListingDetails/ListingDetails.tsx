@@ -343,6 +343,7 @@ function ListingDetails({
                 officeName={listing.list_office_name}
                 agentFullName={listing.list_agent?.full_name}
                 agentPhoneNumber={listing.list_agent?.phone_number}
+                agentEmail={listing.list_agent?.email}
               />
             </Box>
           </Grid>
