@@ -15,7 +15,7 @@ export const Sidenav = styled.aside`
   display: flex;
   flex-direction: column;
   background-color: ${(props: ThemeProps<Theme>) =>
-    props.theme.palette.navbar.background};
+    props.theme.navbar.background.color};
 `
 
 export const SidenavListGroup = styled.ul`
@@ -37,7 +37,7 @@ const itemStyle = css`
   border-radius: 0;
   border-left: 4px solid transparent;
   color: ${(props: ThemeProps<Theme>) =>
-    alpha(props.theme.palette.navbar.contrastText, 0.7)};
+    alpha(props.theme.navbar.background.contrastText, 0.7)};
   &:hover,
   &:focus {
     text-decoration: none;

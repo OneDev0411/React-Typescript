@@ -18,17 +18,17 @@ const useStyles = makeStyles(
     wrapper: {
       display: 'flex',
       width: `calc(100% - ${theme.spacing(3)}px)`,
-      color: theme.palette.navbar.contrastText
+      color: theme.navbar.background.contrastText
     },
     userDetails: {
       textAlign: 'left',
       width: '100%'
     },
     userDisplayName: {
-      color: theme.palette.navbar.contrastText
+      color: theme.navbar.background.contrastText
     },
     arrowIcon: {
-      color: theme.palette.navbar.contrastText
+      color: theme.navbar.background.contrastText
     },
     arrowIconRotated: {
       transform: 'rotateX(0)'

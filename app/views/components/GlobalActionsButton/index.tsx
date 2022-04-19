@@ -15,9 +15,13 @@ import Button from './components/Button'
 import items from './components/items'
 import Menu from './components/Menu'
 import { useGlobalActionContext } from './hooks/use-global-action-context'
-import { Item, ItemType } from './types'
+import { Item, ItemType, CustomButtonRenderProps } from './types'
 
-export const GlobalActions = () => {
+interface Props {
+  renderButton: (renderProps: CustomButtonRenderProps) => React.ReactNode
+}
+
+export const GlobalActions = ({ renderButton }: Props) => {
   const activeTeam = useUnsafeActiveTeam()
   const user = useSelector(selectUserUnsafe)
   const [state] = useGlobalActionContext()
@@ -165,7 +169,8 @@ export const GlobalActions = () => {
 
   return (
     <>
-      <Button onClick={handleMenuOpen} />
+      <Button renderButton={renderButton} onClick={handleMenuOpen} />
+
       <Menu
         items={availableItems}
         anchorEl={anchorEl}

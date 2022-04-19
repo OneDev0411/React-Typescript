@@ -18,6 +18,7 @@ import { ScrollableArea } from 'views/components/ScrollableArea'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
+import { GlobalActionButtonComponent } from './components/GlobalActionButtonComponent'
 import Logo from './components/Logo'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
 import PoweredBy from './components/PoweredBy'
@@ -70,7 +71,7 @@ export function Menu() {
   return (
     <Sidenav>
       <Logo />
-      <GlobalActionsButton />
+      <GlobalActionsButton renderButton={GlobalActionButtonComponent} />
 
       <ScrollableArea
         shadowColor={scrollableAreaShadowColor}

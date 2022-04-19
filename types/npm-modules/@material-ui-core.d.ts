@@ -17,9 +17,6 @@ declare module '@material-ui/core/styles/createPalette' {
     warning: PaletteColor
     info: PaletteColor
     success: PaletteColor
-    navbar: PaletteColor & {
-      background: CssObject
-    }
   }
 
   interface SimplePaletteColorOptions {
@@ -38,9 +35,6 @@ declare module '@material-ui/core/styles/createPalette' {
     warning?: PaletteColorOptions
     info?: PaletteColorOptions
     success?: PaletteColorOptions
-    navbar?: PaletteColorOptions & {
-      background?: CssObject
-    }
   }
 }
 
@@ -50,13 +44,31 @@ declare module '@material-ui/core/styles' {
       logo: {
         url: string
       }
+      button: {
+        main: string
+        light: string
+        contrastText: string
+      }
+      background: {
+        color: string
+        contrastText: string
+      }
     }
   }
 
   interface ThemeOptions {
     navbar?: {
       logo?: {
-        url?: sring
+        url?: string
+      }
+      button?: {
+        main?: string
+        light?: string
+        contrastText?: string
+      }
+      background?: {
+        color?: string
+        contrastText?: string
       }
     }
   }

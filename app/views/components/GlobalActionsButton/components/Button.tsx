@@ -1,8 +1,11 @@
 import React, { MouseEvent } from 'react'
 
-import { Button, makeStyles, createStyles, Theme } from '@material-ui/core'
+import { makeStyles, createStyles, Theme, Button } from '@material-ui/core'
+
+import { CustomButtonRenderProps } from '../types'
 
 interface Props {
+  renderButton: (renderProps: CustomButtonRenderProps) => React.ReactNode
   onClick: (event: MouseEvent<HTMLElement>) => void
 }
 
@@ -18,23 +21,29 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function GlobalActionsMenu({ onClick }: Props) {
+export default function GlobalActionsMenu({ onClick, renderButton }: Props) {
   const classes = useStyles()
 
   return (
     <div className={classes.container}>
-      <Button
-        variant="contained"
-        color="navbar"
-        size="small"
-        fullWidth
-        onClick={onClick}
-        classes={{
-          root: classes.root
-        }}
-      >
-        Create
-      </Button>
+      {renderButton ? (
+        renderButton({
+          onClick
+        })
+      ) : (
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          fullWidth
+          onClick={onClick}
+          classes={{
+            root: classes.root
+          }}
+        >
+          Create
+        </Button>
+      )}
     </div>
   )
 }

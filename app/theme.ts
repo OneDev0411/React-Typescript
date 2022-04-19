@@ -78,13 +78,6 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         A400: '#303030',
         A700: '#616161'
       },
-      navbar: {
-        main: 'red',
-        light: 'red',
-        dark: 'red',
-        background: '#050E21',
-        contrastText: '#fff'
-      },
       contrastThreshold: 3,
       tonalOffset: 0.2,
       text: {
@@ -233,6 +226,15 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
     navbar: {
       logo: {
         url: ''
+      },
+      button: {
+        main: '#fff',
+        light: '#f5f5f5',
+        contrastText: '#262626'
+      },
+      background: {
+        color: '#050E21',
+        contrastText: white
       }
     },
     overrides: {
