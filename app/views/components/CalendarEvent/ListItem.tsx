@@ -44,6 +44,7 @@ const useStyles = makeStyles(
 
 export default function CalendarEventListItem({ event }: Props) {
   let avatarIcon
+  let contactAvatarIcon
   let Icon
 
   const classes = useStyles()
@@ -69,13 +70,7 @@ export default function CalendarEventListItem({ event }: Props) {
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
 
   // Build avatars
-  if (contact && contact.profile_image_url) {
-    avatarIcon = (
-      <Link to={`/dashboard/contacts/${contact.id}`}>
-        <Avatar disableLazyLoad size="medium" contact={contact} />
-      </Link>
-    )
-  } else if (eventTypesIcons[event.event_type]) {
+  if (eventTypesIcons[event.event_type]) {
     Icon = eventTypesIcons[event.event_type].icon
     avatarIcon = (
       <CustomizedMuiAvatar>
@@ -86,10 +81,25 @@ export default function CalendarEventListItem({ event }: Props) {
     avatarIcon = <CustomizedMuiAvatar />
   }
 
+  if (contact) {
+    contactAvatarIcon = (
+      <Link to={`/dashboard/contacts/${contact.id}`}>
+        <Avatar
+          disableLazyLoad
+          size="medium"
+          contact={contact}
+          statusColor="#ff0"
+        >
+          {avatarIcon}
+        </Avatar>
+      </Link>
+    )
+  }
+
   return (
     <>
       <ListItem classes={{ secondaryAction: classes.listItemWithButton }}>
-        <ListItemAvatar>{avatarIcon}</ListItemAvatar>
+        <ListItemAvatar>{contactAvatarIcon || avatarIcon}</ListItemAvatar>
         <CalendarListItemText event={event} />
         {cardTemplateTypes && (
           <ListItemSecondaryAction>
