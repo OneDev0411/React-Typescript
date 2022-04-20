@@ -8,3 +8,16 @@ export function isSocialPostExecuted(
     !!socialPost.executed_at || isBefore(socialPost.due_at * 1000, new Date())
   )
 }
+
+export function sortSocialPosts(
+  socialPosts: ISocialPost<'template_instance' | 'owner'>[],
+  ascending: boolean
+): ISocialPost<'template_instance' | 'owner'>[] {
+  return [...socialPosts].sort((a, b) => {
+    if (ascending) {
+      return a.due_at - b.due_at
+    }
+
+    return b.due_at - a.due_at
+  })
+}
