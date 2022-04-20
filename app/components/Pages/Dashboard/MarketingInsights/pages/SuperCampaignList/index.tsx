@@ -8,7 +8,7 @@ import { useAcl } from '@app/views/components/Acl/use-acl'
 
 import Layout from '../../List/Layout'
 
-function SuperCampaignList(props) {
+function SuperCampaignList() {
   useTitle('Campaign List | Rechat')
 
   const isAdmin = useAcl(ACL.ADMIN)
