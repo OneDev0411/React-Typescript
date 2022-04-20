@@ -25,6 +25,7 @@ declare module 'grapesjs' {
     append(model: Model | string, opts?: object): Model[]
     remove(): Model
     clone(): Model
+    view: Backbone.View
   }
 
   export interface Editor {
