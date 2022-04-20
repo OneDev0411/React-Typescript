@@ -5,11 +5,10 @@ import {
   convertDateToTimestamp,
   convertTimestampToDate
 } from '@app/utils/date-utils'
+import { futureTimeValidator } from '@app/utils/validations/future-time'
 import { DateTimePicker } from '@app/views/components/DateTimePicker'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-
-import { futureTimeValidator } from '../../helpers'
 
 export interface SuperCampaignDueAtChangeButtonProps {
   dueAt: Nullable<number>

@@ -83,9 +83,7 @@ export const PropertyTypeEditor = ({
 
     onChangePropertyGroup(toggledProperyGroups)
     updateFilters({
-      property_type: toggledProperyTypes.length
-        ? toggledProperyTypes
-        : undefined,
+      property_type: toggledProperyTypes,
       ...newContext
     })
   }
@@ -196,7 +194,6 @@ export const PropertyTypeEditor = ({
           defaultFilters.property_type
         )}
         onClickReset={() => {
-          console.log('reset', defaultFilters.property_type)
           onChangePropertyGroup([])
           updateFilters({
             property_type: defaultFilters.property_type

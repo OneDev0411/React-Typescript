@@ -71,7 +71,7 @@ class ShareInstance extends React.Component {
     template: this.props.instance.id
   })
 
-  onEmailSent = () => {
+  closeDrawerAndBuilder = () => {
     this.setState(
       {
         isComposeDrawerOpen: false
@@ -117,7 +117,7 @@ class ShareInstance extends React.Component {
               body: getTemplateInstancePreviewImage(props.instance)
             }}
             getEmail={this.getEmail}
-            onSent={this.onEmailSent}
+            onSent={this.closeDrawerAndBuilder}
             onClose={this.toggleComposeEmail}
           />
         )}
@@ -126,6 +126,8 @@ class ShareInstance extends React.Component {
           <SocialDrawer
             instance={props.instance}
             onClose={this.closeSocialDrawer}
+            onPostScheduled={this.closeDrawerAndBuilder}
+            onPostSent={this.closeDrawerAndBuilder}
           />
         )}
       </Fragment>

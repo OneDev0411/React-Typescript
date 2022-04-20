@@ -3,7 +3,7 @@ import { WithRouterProps } from 'react-router'
 import { TableColumn, SortableColumn } from 'components/Grid/Table/types'
 import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 
-const DEFAULT_SORT = 'status'
+export const DEFAULT_SORT = 'status'
 
 export function getActiveSort(
   team: Nullable<IUserTeam>,
