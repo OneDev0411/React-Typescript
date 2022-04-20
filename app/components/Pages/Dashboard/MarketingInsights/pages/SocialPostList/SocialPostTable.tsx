@@ -77,8 +77,6 @@ function SocialPostTable() {
     }
   ]
 
-  console.log('filteredSocialPosts', filteredSocialPosts)
-
   return (
     <>
       <SocialPostTableFilter value={filter} onChange={setFilter} />
