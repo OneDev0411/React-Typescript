@@ -101,11 +101,10 @@ function SocialDrawerSocialPostFormFooter({
           >
             {formatDate(selectedDate)}.
           </Typography>
-          {/* TODO: Update the below URL when the list got implemented */}
           <LinkButton
             variant="text"
             color="primary"
-            to="/dashboard/insights/social-post"
+            to="/dashboard/insights/social-post?filter=scheduled"
             target="_blank"
           >
             See Scheduled Items
