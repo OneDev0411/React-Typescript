@@ -1,6 +1,13 @@
-import React, { useEffect, useCallback, Fragment } from 'react'
+import { useEffect, useCallback, useMemo, Fragment } from 'react'
 
-import { Link, MenuItem, Typography, Grid } from '@material-ui/core'
+import {
+  Link,
+  MenuItem,
+  Typography,
+  Grid,
+  useTheme,
+  Theme
+} from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link as RouterLink } from 'react-router'
 import { useEffectOnce } from 'react-use'
@@ -39,6 +46,7 @@ export function ImportContactsButton({
   hasCSVButton = false,
   tooltip = 'Connect to Google or Outlook'
 }: Props) {
+  const theme = useTheme<Theme>()
   const dispatch = useDispatch()
   const activeTeam = useUnsafeActiveTeam()
   const accounts: IOAuthAccount[] = useSelector((state: IAppState) =>
@@ -85,7 +93,7 @@ export function ImportContactsButton({
     fetch()
   })
 
-  const renderButton = React.useMemo(
+  const renderButton = useMemo(
     () => (
       <PopOver
         placement="bottom"
@@ -150,6 +158,9 @@ export function ImportContactsButton({
       buttonClassName={classes.button}
       buttonVariant="outlined"
       title={renderButton}
+      popoverOptions={{
+        style: { zIndex: theme.zIndex.modal }
+      }}
     >
       {({ toggleMenu }) => (
         <>
@@ -166,7 +177,7 @@ export function ImportContactsButton({
                 size={iconSizes.medium}
                 className={classes.listIcon}
               />
-              Connect to Google
+              Connect to Google ddd
             </Grid>
           </MenuItem>
           <MenuItem
