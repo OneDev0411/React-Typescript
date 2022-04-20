@@ -177,7 +177,7 @@ export function ImportContactsButton({
                 size={iconSizes.medium}
                 className={classes.listIcon}
               />
-              Connect to Google ddd
+              Connect to Google
             </Grid>
           </MenuItem>
           <MenuItem
