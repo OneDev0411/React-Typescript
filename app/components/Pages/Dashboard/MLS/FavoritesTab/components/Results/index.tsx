@@ -113,7 +113,8 @@ export const Results = ({
     const sortedListings = sortListingsByIndex(
       state.result.listings,
       activeSort.index,
-      activeSort.ascending
+      activeSort.ascending,
+      user
     )
 
     return getListingsPage(sortedListings, currentPage, PAGE_SIZE)
@@ -121,7 +122,8 @@ export const Results = ({
     state.result.listings,
     activeSort.index,
     activeSort.ascending,
-    currentPage
+    currentPage,
+    user
   ])
 
   const scrollToTop = () => {

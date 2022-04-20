@@ -1,3 +1,5 @@
+import MockedUser from 'tests/unit/fixtures/users/agent.json'
+
 import {
   createSortString,
   parseSortIndex,
@@ -97,6 +99,7 @@ describe('parseToValertSort', () => {
 
 describe('sortListingsByIndex', () => {
   let compactListings: ICompactListing[] = []
+  let user: IUser
 
   beforeEach(() => {
     // fake listings to reduce test time
@@ -105,6 +108,7 @@ describe('sortListingsByIndex', () => {
         id: '1',
         type: 'compact_listing',
         price: 420,
+        close_price: 300,
         compact_property: {
           bedroom_count: 1,
           bathroom_count: 2,
@@ -117,6 +121,7 @@ describe('sortListingsByIndex', () => {
         id: '2',
         type: 'compact_listing',
         price: 200,
+        close_price: 200,
         compact_property: {
           bedroom_count: 5,
           bathroom_count: 1,
@@ -129,6 +134,7 @@ describe('sortListingsByIndex', () => {
         id: '3',
         type: 'compact_listing',
         price: 300,
+        close_price: 500,
         compact_property: {
           bedroom_count: 4,
           bathroom_count: 1,
@@ -138,10 +144,29 @@ describe('sortListingsByIndex', () => {
         }
       }
     ] as unknown as ICompactListing[]
+
+    user = { ...MockedUser, user_type: 'Admin' } as unknown as IUser
+  })
+
+  it('should sort by end price when user is agent', () => {
+    const agentUser = { ...user, user_type: 'Agent' } as IUser
+    const actual = sortListingsByIndex(
+      compactListings,
+      'price',
+      false,
+      agentUser
+    )
+    const expected = [
+      compactListings[2],
+      compactListings[0],
+      compactListings[1]
+    ]
+
+    expect(actual).toEqual(expected)
   })
 
   it('should sort by price on compact listing type', () => {
-    const actual = sortListingsByIndex(compactListings, 'price', true)
+    const actual = sortListingsByIndex(compactListings, 'price', true, user)
     const expected = [
       compactListings[1],
       compactListings[2],
@@ -152,7 +177,12 @@ describe('sortListingsByIndex', () => {
   })
 
   it('should sort by lot size on compact listing type', () => {
-    const actual = sortListingsByIndex(compactListings, 'lotSizeArea', true)
+    const actual = sortListingsByIndex(
+      compactListings,
+      'lotSizeArea',
+      true,
+      user
+    )
     const expected = [
       compactListings[2],
       compactListings[0],
@@ -163,7 +193,7 @@ describe('sortListingsByIndex', () => {
   })
 
   it('should sort by bedrooms on compact listing type', () => {
-    const actual = sortListingsByIndex(compactListings, 'beds', true)
+    const actual = sortListingsByIndex(compactListings, 'beds', true, user)
     const expected = [
       compactListings[0],
       compactListings[2],
@@ -183,14 +213,14 @@ describe('sortListingsByIndex', () => {
         } as unknown as IListing)
     )
 
-    const actual = sortListingsByIndex(listings, 'price', true)
+    const actual = sortListingsByIndex(listings, 'price', true, user)
     const expected = [listings[1], listings[2], listings[0]]
 
     expect(actual).toEqual(expected)
   })
 
   it('should not include unwanted properties', () => {
-    const actual = sortListingsByIndex(compactListings, 'beds', true)
+    const actual = sortListingsByIndex(compactListings, 'beds', true, user)
 
     expect(actual[0].hasOwnProperty('bedroom_count')).toBeFalsy()
     expect(actual[1].hasOwnProperty('bathroom_count')).toBeFalsy()
