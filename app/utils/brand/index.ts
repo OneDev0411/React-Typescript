@@ -33,7 +33,7 @@ export const hasBrandCustomTheme = (brand: IBrand): boolean => {
     return false
   }
 
-  if (theme.navbar.logo.url) {
+  if (theme?.navbar?.logo?.url) {
     return true
   }
 
