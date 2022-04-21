@@ -145,7 +145,7 @@ class Builder extends React.Component {
           options: [
             {
               value: '',
-              name: '-- Select to change --'
+              name: '-- Select icon --'
             },
             {
               value: 'https://i.ibb.co/qr5rZym/facebook.png',
