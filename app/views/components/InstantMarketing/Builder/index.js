@@ -144,6 +144,10 @@ class Builder extends React.Component {
           name: 'src',
           options: [
             {
+              value: '',
+              name: '-- Select icon --'
+            },
+            {
               value: 'https://i.ibb.co/qr5rZym/facebook.png',
               name: 'Facebook'
             },
