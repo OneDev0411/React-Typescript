@@ -89,7 +89,7 @@ export async function getVideoboltVideos(
 ): Promise<VideoboltVideo[]> {
   const response = await superagent
     .post('/api/utils/get-videobolt-videos')
-    .send({ email: 'joshua.whalley@elliman.com' }) // TODO: Use email
+    .send({ email })
 
-  return response.body.videos
+  return response.body.videos ?? []
 }

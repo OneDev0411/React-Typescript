@@ -28,7 +28,7 @@ function SearchVideoResults({ videos, onSelect }: SearchVideoResultsProps) {
         <Grid item key={video.url} xs={4}>
           <SearchResultCard
             title={video.title}
-            link={video.url}
+            link={video.playerUrl ?? video.url}
             imageUrl={video.thumbnail ?? video.url}
             imageAlt={video.publisher}
             imageAspect={0.56} // 9/16 aspect ratio

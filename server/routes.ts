@@ -119,7 +119,6 @@ router.post('/api/utils/get-url-metadata', requestLimit, urlMetadataRoute)
 router.post(
   '/api/utils/get-youtube-video-gif',
   timeout('120s'),
-  requestLimit,
   getYoutubeVideoGifRoute
 )
 
@@ -129,12 +128,7 @@ router.post(
   getVideoboltVideosRoute
 )
 
-router.post(
-  '/api/utils/get-video-gif',
-  timeout('120s'),
-  requestLimit,
-  getVideoGifRoute
-)
+router.post('/api/utils/get-video-gif', timeout('120s'), getVideoGifRoute)
 
 router.post('/api/utils/rss-feeds', requestLimit, rssFeedsRoute)
 

@@ -11,8 +11,13 @@ import LoadingContainer from '../LoadingContainer'
 import { getVideoGif, getYouTubeVideoGif } from './helpers'
 import OnlineVideos from './OnlineVideos'
 import { SearchVideoResult, Video, VideoTab } from './types'
+import useGalleryVideos from './use-gallery-videos'
+import useVideoboltVideos from './use-videobolt-videos'
 import { useWatermarkPlayIcon } from './use-watermark-play-icon'
-import Videobolt from './Videobolt'
+import VideoList from './VideoList'
+
+const STATIC_FALLBACK_THUMBNAIL =
+  'https://images.unsplash.com/photo-1533658280853-e4a10c25a30d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1626&q=80'
 
 const useStyles = makeStyles(
   theme => ({
@@ -57,6 +62,12 @@ function SearchVideoDrawer({
   const [isGeneratingThumbnail, setIsGeneratingThumbnail] =
     useState<boolean>(false)
 
+  const getVideoboltVideos = useVideoboltVideos()
+  const getGalleryVideos = useGalleryVideos()
+
+  const videoboltVideos = getVideoboltVideos()
+  const galleryVideos = getGalleryVideos()
+
   const handleCloseDrawer = () => {
     if (isGeneratingThumbnail || isWatermarking) {
       return
@@ -88,7 +99,7 @@ function SearchVideoDrawer({
       }
     }
 
-    if (video.source === 'videobolt') {
+    if (video.source === 'videobolt' || video.source === 'gallery') {
       try {
         setIsGeneratingThumbnail(true)
 
@@ -99,9 +110,11 @@ function SearchVideoDrawer({
       } catch (err) {
         console.error(err)
         notify({
-          status: 'error',
-          message: 'Failed to generate thumbnail. Please try again.'
+          status: 'warning',
+          message:
+            'Failed to generate GIF thumbnail. Falling back to a static thumbnail.'
         })
+        video.thumbnail = STATIC_FALLBACK_THUMBNAIL
       } finally {
         setIsGeneratingThumbnail(false)
       }
@@ -152,7 +165,14 @@ function SearchVideoDrawer({
       return <OnlineVideos onSelect={handleSelectVideo} />
     }
 
-    return <Videobolt onSelect={handleSelectVideo} />
+    return (
+      <VideoList
+        videos={
+          activeTab === VideoTab.Videobolt ? videoboltVideos : galleryVideos
+        }
+        onSelect={handleSelectVideo}
+      />
+    )
   }
 
   return (
@@ -170,7 +190,12 @@ function SearchVideoDrawer({
               indicatorColor="primary"
             >
               <Tab label="Online Videos" value={VideoTab.Online} />
-              <Tab label="VIDEOBOLT" value={VideoTab.Videobolt} />
+              {galleryVideos.length > 0 && (
+                <Tab label="My Gallery" value={VideoTab.MyGallery} />
+              )}
+              {videoboltVideos.length > 0 && (
+                <Tab label="Videobolt" value={VideoTab.Videobolt} />
+              )}
             </Tabs>
             {renderActiveTab()}
           </>
