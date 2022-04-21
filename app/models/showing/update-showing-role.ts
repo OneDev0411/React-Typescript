@@ -3,10 +3,8 @@ import Fetch from 'services/fetch'
 async function updateShowingRole(
   showingId: UUID,
   showingRoleId: UUID,
-  data: IShowingRoleInput
+  data: IShowingRoleInputAPI
 ) {
-  const params = data.agent?.id ? { ...data, agent: data?.agent?.id } : data
-
   return (
     await new Fetch()
       .put(`/showings/${showingId}/roles/${showingRoleId}`)
@@ -27,7 +25,7 @@ async function updateShowingRole(
           'agent.office'
         ]
       })
-      .send(params)
+      .send(data)
   ).body.data as IShowing
 }
 
