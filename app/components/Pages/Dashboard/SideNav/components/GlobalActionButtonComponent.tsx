@@ -4,7 +4,7 @@ import { CustomButtonRenderProps } from '@app/views/components/GlobalActionsButt
 
 const CustomButton = withStyles((theme: Theme) => ({
   root: {
-    borderRadius: '10px',
+    borderRadius: '50px',
     backgroundColor: theme.navbar.button.main,
     '&:hover': {
       backgroundColor: theme.navbar.button.light
