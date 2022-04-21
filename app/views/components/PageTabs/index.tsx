@@ -30,7 +30,8 @@ const useStyles = makeStyles(
       display: 'flex',
       width: '100%',
       marginBottom: theme.spacing(1),
-      flex: '0 1 auto'
+      flex: '0 1 auto',
+      zIndex: theme.zIndex.modal - 1
     },
     tabContainer: {
       width: '100%',

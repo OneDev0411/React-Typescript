@@ -1,8 +1,9 @@
-import { useMemo, useState, SetStateAction, Dispatch } from 'react'
+import { useMemo, useState, SetStateAction, Dispatch, useEffect } from 'react'
 
 import { useActiveBrandId } from '@app/hooks/brand'
 import { useBrandPropertyTypes } from '@app/hooks/use-get-brand-property-types'
 
+import { getActivePropertyGroups } from '../helpers/get-active-property-groups'
 import { TPropertyGroupType, TPropertyGroup } from '../types'
 
 export const usePropertyTypeFilter = (): [
@@ -27,6 +28,19 @@ export const usePropertyTypeFilter = (): [
   }, [propertyTypes])
 
   const [propertyGroup, setPropertyGroup] = useState<TPropertyGroupType[]>([])
+
+  useEffect(() => {
+    const propertyTypeParamValue = new URLSearchParams(window.location.search)
+      .getAll('propertyType')
+      .map(decodeURIComponent)
+
+    const initialPropertyGroupValue = getActivePropertyGroups(
+      propertyTypeParamValue as UUID[],
+      propertyTypes
+    )
+
+    setPropertyGroup(initialPropertyGroupValue)
+  }, [propertyTypes])
 
   return [propertyGroup, setPropertyGroup, groupedProperties]
 }

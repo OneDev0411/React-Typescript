@@ -58,7 +58,6 @@ function SuperCampaignBaseCard({
   const classes = useStyles()
 
   return (
-    // TODO: Replace the shadow provided by design once they made a decision about it
     <Card variant="elevation" elevation={2}>
       <LinkCardActionArea
         {...otherProps}

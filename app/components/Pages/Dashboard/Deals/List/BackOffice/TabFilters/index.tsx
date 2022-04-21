@@ -3,10 +3,12 @@ import { useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { useReplaceQueryParam } from '@app/hooks/use-query-param'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
+import { parseSortSetting } from '@app/utils/sortings/parse-sort-setting'
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
-import { getActiveSort, getGridSortLabel } from 'deals/List/helpers/sorting'
+import { DEFAULT_SORT, getGridSortLabel } from 'deals/List/helpers/sorting'
 
 import AnalyticsDropdownTab from '../../../Analytics/DropdownTab'
 import {
@@ -27,11 +29,24 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
   const dispatch = useDispatch()
   const activeTeam = useUnsafeActiveTeam()
 
-  const activeSort = getActiveSort(
+  const activeTeamSort = parseSortSetting(
     activeTeam,
-    props.location,
-    SORT_FIELD_SETTING_KEY
+    SORT_FIELD_SETTING_KEY,
+    DEFAULT_SORT
   )
+
+  const [sortBy, setSortByParam] = useReplaceQueryParam('sortBy', '' as string)
+  const [sortType, setSortTypeParam] = useReplaceQueryParam(
+    'sortType',
+    '' as string
+  )
+
+  const activeSort = sortBy
+    ? {
+        id: sortBy,
+        ascending: sortType === 'asc'
+      }
+    : activeTeamSort
 
   const inboxTabs = useInboxTabs()
 
@@ -40,15 +55,9 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
   useDefaultTab(props.params || {}, defaultTab)
 
   const handleChangeSort = async (column: SortableColumn) => {
-    const newQuery = {
-      ...props.location.query,
-      sortBy: column.value,
-      sortType: column.ascending ? 'asc' : 'desc'
-    }
+    setSortByParam(column.value || '')
 
-    props.router.push(
-      `${props.location.pathname}?${new URLSearchParams(newQuery).toString()}`
-    )
+    setSortTypeParam(column.ascending ? 'asc' : 'desc')
 
     const fieldValue = column.ascending ? column.value : `-${column.value}`
 

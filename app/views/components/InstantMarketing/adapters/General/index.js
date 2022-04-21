@@ -52,7 +52,8 @@ class General extends Component {
     this.setState(
       {
         isBuilderOpen: false,
-        isComposeEmailOpen: false
+        isComposeEmailOpen: false,
+        isSocialDrawerOpen: false
       },
       this.props.handleTrigger
     )
@@ -177,6 +178,8 @@ class General extends Component {
             template={this.state.htmlTemplate}
             templateInstanceData={this.TemplateInstanceData}
             onClose={this.closeSocialDrawer}
+            onPostScheduled={this.closeBuilder}
+            onPostSent={this.closeBuilder}
           />
         )}
       </Fragment>

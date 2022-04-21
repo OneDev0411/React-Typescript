@@ -6,8 +6,10 @@ import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
+import { ACL } from '@app/constants/acl'
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 import PageLayout from 'components/GlobalPageLayout'
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import { noop } from 'utils/helpers'
@@ -63,6 +65,15 @@ function InsightsLayout({
     items.push({
       label: 'Campaigns',
       to: urlGenerator('/super-campaign')
+    })
+  }
+
+  const hasShareToInstagramAccess = useAcl(ACL.SHARE_TO_INSTAGRAM)
+
+  if (hasShareToInstagramAccess) {
+    items.push({
+      label: 'Instagram',
+      to: urlGenerator('/social-post')
     })
   }
 
