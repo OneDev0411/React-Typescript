@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from '@material-ui/core'
+import { ButtonBase, makeStyles, Theme } from '@material-ui/core'
 import {
   mdiCake,
   mdiCalendar,
@@ -10,7 +10,7 @@ import {
 
 import { useBreakpoint } from '@app/hooks/use-breakpoint'
 import { getAttributeFromSummary } from '@app/models/contacts/helpers'
-import ALink from '@app/views/components/ALink'
+import { goTo } from '@app/utils/go-to'
 import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderColumn'
 import { SelectionCount } from '@app/views/components/Grid/Table/features/Selection/SelectionCount'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
@@ -25,6 +25,16 @@ const useStyles = makeStyles(
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis'
+    },
+    cellName: {
+      '&:hover': {
+        textDecoration: 'underline'
+      }
+    },
+    nameTitleButton: {
+      width: '100%',
+      height: '100%',
+      justifyContent: 'flex-start'
     }
   }),
   {
@@ -44,10 +54,14 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     {
       id: 'name',
       header: () => <SelectionCount totalRows={totalRows} />,
+      class: classes.cellName,
       render: ({ row: contact }) => (
-        <ALink to={`/dashboard/contacts/${contact.id}`}>
+        <ButtonBase
+          className={classes.nameTitleButton}
+          onClick={() => goTo(`/dashboard/contacts/${contact.id}`)}
+        >
           {getAttributeFromSummary(contact, 'display_name')}
-        </ALink>
+        </ButtonBase>
       )
     },
     {
