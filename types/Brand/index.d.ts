@@ -91,7 +91,11 @@ declare interface IBrand extends IModel<'brand'> {
 }
 
 declare interface IBrandTheme {
-  navbar_logo?: string | null
+  navbar: {
+    logo: {
+      url?: string
+    }
+  }
   palette?: Palette
 }
 

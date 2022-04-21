@@ -228,9 +228,9 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         url: ''
       },
       button: {
-        main: '#fff',
-        light: '#f5f5f5',
-        contrastText: '#262626'
+        main: '#00B286',
+        light: '#33CCAA',
+        contrastText: white
       },
       background: {
         color: '#050E21',
@@ -250,6 +250,7 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
   }
 
   const mergedValue: ThemeOptions = merge.recursive(defaultValue, {
+    ...brandTheme,
     palette: {
       ...brandTheme.palette,
       type: 'light'

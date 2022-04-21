@@ -17,7 +17,11 @@ const MOCK_BRAND_WITH_SIDE_NAV_LOGO: IBrand = {
   settings: {
     theme: {
       // @ts-ignore
-      navbar_logo: 'my-logo.png'
+      navbar: {
+        logo: {
+          url: 'my-logo.png'
+        }
+      }
     }
   }
 } as IBrand
