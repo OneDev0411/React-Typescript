@@ -12,21 +12,21 @@ export function SelectionCount({ totalRows }: Props) {
     const { selection } = state
 
     if (selection.isEntireRowsSelected && selection.excludedRows.length === 0) {
-      return [`${totalRows}/${totalRows}`, 'selected']
+      return [`${totalRows}/${totalRows}`, 'Selected']
     }
 
     if (selection.isEntireRowsSelected && selection.excludedRows.length > 0) {
       return [
         `${totalRows - selection.excludedRows.length}/${totalRows}`,
-        'selected'
+        'Selected'
       ]
     }
 
     if (selection.selectedRowIds.length > 0) {
-      return [`${selection.selectedRowIds.length}/${totalRows}`, 'selected']
+      return [`${selection.selectedRowIds.length}/${totalRows}`, 'Selected']
     }
 
-    return [`${totalRows}`, 'contacts']
+    return [`${totalRows}`, 'Contacts']
   }
 
   const text = getText()
