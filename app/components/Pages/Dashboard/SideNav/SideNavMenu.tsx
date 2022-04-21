@@ -277,6 +277,7 @@ function SideNavMenu(props: WithRouterProps) {
       hasDivider: false,
       icon: mdiHeadphones,
       id: 'support',
+      isHidden: !user,
       label: 'Support',
       subMenu: [
         {
@@ -286,7 +287,6 @@ function SideNavMenu(props: WithRouterProps) {
         },
         {
           id: 'customer-support',
-          isHidden: !user,
           label: 'Customer Support',
           action: handleOpenSupportDialogueBox
         }
