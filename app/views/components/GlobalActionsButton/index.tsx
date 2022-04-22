@@ -18,7 +18,7 @@ import { useGlobalActionContext } from './hooks/use-global-action-context'
 import { Item, ItemType, CustomButtonRenderProps } from './types'
 
 interface Props {
-  renderButton: (renderProps: CustomButtonRenderProps) => React.ReactNode
+  renderButton?: (renderProps: CustomButtonRenderProps) => React.ReactNode
 }
 
 export const GlobalActions = ({ renderButton }: Props) => {

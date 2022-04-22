@@ -5,7 +5,7 @@ import { makeStyles, createStyles, Theme, Button } from '@material-ui/core'
 import { CustomButtonRenderProps } from '../types'
 
 interface Props {
-  renderButton: (renderProps: CustomButtonRenderProps) => React.ReactNode
+  renderButton?: (renderProps: CustomButtonRenderProps) => React.ReactNode
   onClick: (event: MouseEvent<HTMLElement>) => void
 }
 
