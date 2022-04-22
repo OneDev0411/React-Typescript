@@ -42,6 +42,6 @@ export interface VideoboltVideo {
 
 export enum VideoTab {
   Online = 'online',
-  MyGallery = 'gallery',
+  Gallery = 'gallery',
   Videobolt = 'videobolt'
 }

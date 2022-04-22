@@ -191,7 +191,7 @@ function SearchVideoDrawer({
             >
               <Tab label="Online Videos" value={VideoTab.Online} />
               {galleryVideos.length > 0 && (
-                <Tab label="My Gallery" value={VideoTab.MyGallery} />
+                <Tab label="Your Gallery" value={VideoTab.Gallery} />
               )}
               {videoboltVideos.length > 0 && (
                 <Tab label="Videobolt" value={VideoTab.Videobolt} />
