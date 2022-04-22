@@ -8,6 +8,7 @@ export interface FacebookResultMessagePayloadSuccess
 export interface FacebookResultMessagePayloadError
   extends FacebookResultMessagePayloadBase<'error'> {
   errorCode: FacebookAuthErrorCode
+  errorMessage: Optional<string>
 }
 
 export type FacebookResultMessagePayload =

@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 
 import { makeStyles } from '@material-ui/core'
+import { upperFirst } from 'lodash'
 
 import { ACL } from '@app/constants/acl'
 import useNotify from '@app/hooks/use-notify'
@@ -38,10 +39,13 @@ function ConnectedInstagram({ className }: Props) {
       message: 'Your Instagram account has been connected'
     })
 
-  const handleAuthError = (errorCode: FacebookAuthErrorCode) =>
+  const handleAuthError = (
+    _: FacebookAuthErrorCode,
+    errorMessage: Optional<string>
+  ) =>
     notify({
       status: 'error',
-      message: `Something went wrong. errorCode: ${errorCode}`
+      message: errorMessage ? upperFirst(errorMessage) : 'Something went wrong.'
     })
 
   if (!hasAccess) {

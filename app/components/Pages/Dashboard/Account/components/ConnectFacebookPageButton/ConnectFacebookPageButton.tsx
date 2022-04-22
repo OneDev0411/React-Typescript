@@ -34,7 +34,10 @@ function ConnectFacebookPageButton(
   const confirmation = useContext(ConfirmationModalContext)
   const invalidateListQuery = useInvalidateFacebookPagesListQuery()
 
-  const handleAuthError = (errorCode: FacebookAuthErrorCode) => {
+  const handleAuthError = (
+    errorCode: FacebookAuthErrorCode,
+    errorMessage: Optional<string>
+  ) => {
     onErrorDialogOpen?.()
 
     confirmation.setConfirmationModal({
@@ -48,7 +51,7 @@ function ConnectFacebookPageButton(
       }
     })
 
-    onAuthError?.(errorCode)
+    onAuthError?.(errorCode, errorMessage)
   }
 
   const handleAuthSuccess = () => {
