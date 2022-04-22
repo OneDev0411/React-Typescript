@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { useBrandAssets } from '@app/hooks/use-brand-assets'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
+import { getVideoPlayerUrl } from './helpers'
 import { SearchVideoResult } from './types'
 
 export default function useGalleryVideos(): () => SearchVideoResult[] {
@@ -16,7 +17,7 @@ export default function useGalleryVideos(): () => SearchVideoResult[] {
 
     return videoAssets.map<SearchVideoResult>(asset => ({
       source: 'gallery',
-      playerUrl: 'https://rechat.com',
+      playerUrl: getVideoPlayerUrl(asset.file.url),
       url: asset.file.url,
       title: asset.label || 'No Label',
       publishedAt: new Date(asset.created_at * 1000).toISOString(),
