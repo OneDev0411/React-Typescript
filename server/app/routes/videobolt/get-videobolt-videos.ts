@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express'
 
+import { LONG_RESPONSE_TIMEOUT_MS } from '../constants'
+
 import { getVideoboltVideos } from './helpers'
 
 export default async (req: Request, res: Response) => {
@@ -10,6 +12,8 @@ export default async (req: Request, res: Response) => {
 
       return
     }
+
+    req.setTimeout(LONG_RESPONSE_TIMEOUT_MS)
 
     const email: string = req.body.email
 

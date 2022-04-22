@@ -1,0 +1,1 @@
+export const LONG_RESPONSE_TIMEOUT_MS = 120 * 1000

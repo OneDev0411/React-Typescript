@@ -1,6 +1,8 @@
 import type { Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 
+import { LONG_RESPONSE_TIMEOUT_MS } from '../constants'
+
 import { TRANSCODER_GIF_PRESET_ID, TRANSCODER_PIPELINE_ID } from './constants'
 import {
   createTranscodeJob,
@@ -19,6 +21,8 @@ export default async (req: Request, res: Response) => {
 
       return
     }
+
+    req.setTimeout(LONG_RESPONSE_TIMEOUT_MS)
 
     const url: string = req.body.url
 
