@@ -30,7 +30,8 @@ export default async (req: Request, res: Response) => {
     console.error('Error getting videobolt videos', { error })
     res.status(500)
     res.json({
-      error: 'Error getting videos'
+      error: 'Error getting videos',
+      details: error
     })
   }
 }

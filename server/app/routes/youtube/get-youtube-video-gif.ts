@@ -80,11 +80,12 @@ export default async (req: Request, res: Response) => {
     }
 
     res.json({ url: gifUrl })
-  } catch (e) {
-    console.error(e)
+  } catch (error) {
+    console.error(error)
     res.status(500)
     res.json({
-      error: 'Error creating gif'
+      error: 'Error creating gif',
+      details: error
     })
   }
 }
