@@ -9,7 +9,7 @@ import { useQueryParam } from '@app/hooks/use-query-param'
 import { useGetSocialPosts } from '@app/models/social-posts'
 import { noop } from '@app/utils/helpers'
 import Table from '@app/views/components/Grid/Table'
-import { useGridStyles } from '@app/views/components/Grid/Table/styles'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
 import { EmailInsightsZeroState } from '../../List/ZeroState'
