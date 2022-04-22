@@ -21,6 +21,7 @@ import {
 } from '../constants'
 import { ListingsUiContext } from '../context'
 import { reducer as uiReducer } from '../context/reducers'
+import { logSearchListings } from '../helpers/log-search-listings'
 import { estimateMapZoom, getPlaceZoomOffset } from '../helpers/map-helpers'
 import {
   getDefaultSort,
@@ -114,6 +115,26 @@ function ExploreTab({ isWidget, user, location }: Props) {
       Object.keys(userLastBrowsingLocation).length === 0
   })
 
+  // Initialize user location on click Locate
+  const initUserLocation = useCallback(
+    (lat: number, lng: number) => {
+      const zoom = USER_LOCATION_ZOOM_LEVEL
+      const center = { lat, lng }
+
+      dispatch(setMapLocation(center, zoom))
+      setUserLocationState(prev => ({
+        ...prev,
+        firstRun: false,
+        isGettingCurrentPosition: false,
+        userLastBrowsingLocation: {
+          zoom,
+          center
+        }
+      }))
+    },
+    [dispatch]
+  )
+
   const onClickLocate = useCallback(() => {
     if (!window.navigator.geolocation) {
       return reduxDispatch(
@@ -151,31 +172,17 @@ function ExploreTab({ isWidget, user, location }: Props) {
       },
       { timeout: 10000 }
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  // Initialize user location on click Locate
-  const initUserLocation = (lat: number, lng: number) => {
-    const zoom = USER_LOCATION_ZOOM_LEVEL
-    const center = { lat, lng }
-
-    dispatch(setMapLocation(center, zoom))
-    setUserLocationState(prev => ({
-      ...prev,
-      firstRun: false,
-      isGettingCurrentPosition: false,
-      userLastBrowsingLocation: {
-        zoom,
-        center
-      }
-    }))
-  }
+  }, [initUserLocation, reduxDispatch])
 
   const onSelectPlace = (
     center: ICoord,
     bounds: ICompactBounds,
-    types: string[]
+    types: string[],
+    description: string
   ) => {
+    // Log user searching for listings activity when search url param is set
+    logSearchListings(description)
+
     const zoomOffset = getPlaceZoomOffset(types)
     const zoom = estimateMapZoom(bounds, zoomOffset)
 
@@ -193,6 +200,9 @@ function ExploreTab({ isWidget, user, location }: Props) {
         const placeResponse = await getPlace(searchParamQuery, false)
 
         if (placeResponse) {
+          // Log user searching for listings activity when search url param is set
+          logSearchListings(searchParamQuery)
+
           // @types/googlemaps describe the Javascript API not the JSON object on the response
           // there a sublte difference like lat/lng beeing number not functions,
           // So making this `as any as ICoord` cast necessary

@@ -56,7 +56,7 @@ function ShowingRoleListColumnActions({
 
   const { handleSubmit: handleEdit, isSavingContact } =
     useShowingRoleFormSubmit((updatedRole: ShowingRoleFormValues) => {
-      const roleInput: IShowingRoleInput = {
+      const roleInput: IShowingRoleInputAPI = {
         role: updatedRole.role,
         first_name: updatedRole.first_name,
         last_name: updatedRole.last_name,
@@ -66,17 +66,26 @@ function ShowingRoleListColumnActions({
         confirm_notification_type: updatedRole.confirm_notification_type,
         cancel_notification_type: updatedRole.cancel_notification_type,
         user: updatedRole.user?.id,
-        agent: updatedRole.agent,
+        agent: updatedRole.agent?.id,
         brand: role.brand,
         ...(!hasNotificationTypeFields ? goAndShowNotificationTypes : {})
       }
 
       run(async () => {
-        await updateShowingRole(showingId, role.id, roleInput)
+        const updatedShowing: IShowing = await updateShowingRole(
+          showingId,
+          role.id,
+          roleInput
+        )
+
+        const sellerAgent: Optional<IShowingRole> = updatedShowing.roles.find(
+          user => user.role === updatedRole.role
+        )
+
         onEdit({
           ...role,
-          ...updatedRole,
-          user: updatedRole.user ?? role.user
+          ...sellerAgent,
+          user: sellerAgent?.user ?? role.user
         })
         notify({
           status: 'success',

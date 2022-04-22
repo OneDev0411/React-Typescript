@@ -14,6 +14,7 @@ import webpack from 'webpack'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 
 import { checkBrowser } from './app/middlewares/check-browser'
+import { userCookie } from './app/middlewares/user-cookie'
 import appConfig from './config'
 import routes from './routes'
 
@@ -42,6 +43,11 @@ app.use(morgan('combined'))
  * the /unsupported page
  */
 app.use(checkBrowser)
+
+/**
+ * creates user cookie that includes ip address
+ */
+app.use(userCookie)
 
 /**
  * caches properties liting urls in order to provide open graph for social networks

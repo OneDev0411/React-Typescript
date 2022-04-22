@@ -42,10 +42,25 @@ export function TaskBadge({ deal, task, isBackOffice }: Props) {
   }
 
   return (
-    <Box ml={1}>
-      <Tooltip title={tooltip || status} placement="left">
-        <>{getBadge(status, theme)}</>
-      </Tooltip>
+    <Box display="flex" ml={1}>
+      <Box>
+        <Tooltip title={tooltip || status} placement="left">
+          <>{getBadge(status, theme)}</>
+        </Tooltip>
+      </Box>
+
+      {task.acl.includes('Agents') === false && (
+        <Box ml={1}>
+          <Chip
+            size="small"
+            label="Private"
+            style={{
+              backgroundColor: theme.palette.grey[100],
+              color: theme.palette.grey[700]
+            }}
+          />
+        </Box>
+      )}
     </Box>
   )
 }

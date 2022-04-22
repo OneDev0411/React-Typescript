@@ -8,6 +8,8 @@ import {
   convertDateToTimestamp,
   convertTimestampToDate
 } from '@app/utils/date-utils'
+import { requiredTextValidator } from '@app/utils/validations'
+import { futureTimeValidator } from '@app/utils/validations/future-time'
 import {
   DateTimeField,
   FormTextField
@@ -15,10 +17,8 @@ import {
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import OverlayDrawer from 'components/OverlayDrawer'
 
-import { futureTimeValidator } from '../../helpers'
 import SuperCampaignTemplate from '../SuperCampaignTemplate'
 
-import { requiredTextValidator } from './helpers'
 import {
   SuperCampaignFormInternalValues,
   SuperCampaignFormValues
@@ -28,7 +28,8 @@ const useStyles = makeStyles(
   theme => ({
     templateTitle: { marginBottom: theme.spacing(0.5) },
     description: { minHeight: theme.spacing(11) },
-    template: { marginTop: theme.spacing(3) }
+    template: { marginTop: theme.spacing(3) },
+    overlayDrawerBody: { overflowY: 'scroll' }
   }),
   { name: 'SuperCampaignDrawer' }
 )
@@ -101,7 +102,7 @@ function SuperCampaignDrawer({
           title="Enter Campaign Details"
           closeButtonDisabled={actionButtonsDisabled}
         />
-        <OverlayDrawer.Body>
+        <OverlayDrawer.Body className={classes.overlayDrawerBody}>
           <Box my={3}>
             {isOpen && (
               <Form<SuperCampaignFormInternalValues>

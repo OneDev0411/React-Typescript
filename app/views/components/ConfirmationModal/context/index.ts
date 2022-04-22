@@ -1,5 +1,12 @@
-import React from 'react'
+import { createContext } from 'react'
 
-import { initialConfirmationModal } from './initial-confirmation-modal'
+import {
+  initialConfirmationModal,
+  InitialConfirmationModalType
+} from './initial-confirmation-modal'
 
-export default React.createContext(initialConfirmationModal)
+export type { InitialConfirmationModalType } from './initial-confirmation-modal'
+
+export default createContext<InitialConfirmationModalType>(
+  initialConfirmationModal
+)

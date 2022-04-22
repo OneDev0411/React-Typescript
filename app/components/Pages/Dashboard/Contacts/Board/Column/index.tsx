@@ -3,6 +3,7 @@ import React, { memo, useState } from 'react'
 import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
 import { mdiCardsOutline } from '@mdi/js'
+import cn from 'classnames'
 import { dequal as equal } from 'dequal'
 import {
   Droppable,
@@ -72,6 +73,9 @@ const useStyles = makeStyles(
       width: theme.spacing(6),
       height: theme.spacing(3),
       borderRadius: theme.shape.borderRadius
+    },
+    isDraggingOver: {
+      backgroundColor: theme.palette.grey['100']
     }
   }),
   {
@@ -159,6 +163,7 @@ export const BoardColumn = memo(function BoardColumn({
         {
           start: loadingOffset,
           limit: loadingLimit,
+          order: criteria.sortOrder,
           filter_type: criteria.conditionOperator
         },
         viewAs,
@@ -277,9 +282,14 @@ export const BoardColumn = memo(function BoardColumn({
                     onReachEnd={handleReachEnd}
                     isLoading={loadingState !== null}
                     loadingPosition={getLoadingPosition()}
+                    className={cn({
+                      [classes.isDraggingOver]: snapshot.isDraggingOver
+                    })}
                   >
                     {DraggableCardItem}
                   </VirtualList>
+
+                  {provided.placeholder}
                 </div>
               )}
             </Droppable>

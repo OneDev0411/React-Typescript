@@ -1,4 +1,4 @@
-import React, { useCallback, useState, memo, useEffect } from 'react'
+import { useCallback, useState, memo, useEffect } from 'react'
 
 import {
   Grid,
@@ -9,8 +9,16 @@ import {
 } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
 import pluralize from 'pluralize'
+import { useSelector } from 'react-redux'
 
+import { selectUserUnsafe } from '@app/selectors/user'
 import { changeUrl } from '@app/utils/change-url'
+import {
+  addressTitle,
+  getListingFormatedPrice,
+  metersToFeet,
+  getListingPricePerSquareFoot
+} from '@app/utils/listing'
 import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
@@ -24,6 +32,8 @@ import { ShareListings } from '../ShareListings'
 import ZeroState from '../ZeroState'
 
 import { Address } from './columns/Address'
+
+const CELL_FALLBACK = '--'
 
 const useStyles = makeStyles(
   theme => ({
@@ -44,6 +54,7 @@ const ListView = props => {
   const theme = useTheme()
   const classes = useStyles()
 
+  const user = useSelector(selectUserUnsafe)
   const gridClasses = useGridStyles()
   const [currentPage, setCurrentPage] = useState(1)
   const { selections, toggleItem } = useListSelection()
@@ -70,7 +81,7 @@ const ListView = props => {
       width: '20%',
       render: ({ row: listing }) => (
         <Address
-          address={listing.addressTitle}
+          address={`${addressTitle(listing.property.address)}`}
           onClick={() => openListingDetailsModal(listing.id)}
         />
       )
@@ -87,56 +98,77 @@ const ListView = props => {
       sortType: 'number',
       class: 'opaque',
       accessor: listing => listing.price,
-      render: ({ row: listing }) => `$${listing.price.toLocaleString()}`
+      render: ({ row: listing }) =>
+        `$${getListingFormatedPrice(
+          listing.price,
+          listing.close_price,
+          user,
+          false
+        )}`
     },
     {
       header: 'Beds',
       id: 'beds',
       sortType: 'number',
       class: 'opaque',
-      accessor: listing => listing.beds,
-      render: ({ row: listing }) => `${pluralize('bed', listing.beds, true)}`
+      accessor: listing => listing.property.bedroom_count,
+      render: ({ row: listing }) =>
+        `${pluralize('bed', listing.property.bedroom_count ?? 0, true)}`
     },
     {
       header: 'Baths',
       id: 'baths',
       sortType: 'number',
       class: 'opaque',
-      accessor: listing => listing.baths,
-      render: ({ row: listing }) => `${pluralize('bath', listing.baths, true)}`
+      accessor: listing => listing.property.bathroom_count,
+      render: ({ row: listing }) =>
+        `${pluralize('bath', listing.property.bathroom_count ?? 0, true)}`
     },
     {
       header: 'sqft',
       id: 'sqft',
       sortType: 'number',
       class: 'opaque',
-      accessor: listing => listing.sqft,
-      render: ({ row: listing }) => `${listing.sqft.toLocaleString()} sqft`
+      accessor: listing => metersToFeet(listing.property.square_meters),
+      render: ({ row: listing }) =>
+        listing.property.square_meters
+          ? `${Math.round(
+              metersToFeet(listing.property.square_meters)
+            ).toLocaleString('en-US', { maximumFractionDigits: 2 })} sqft`
+          : CELL_FALLBACK
     },
     {
       header: '$/Sqft',
       sortType: 'number',
       id: 'pricePerSquareFoot',
       class: 'opaque',
-      accessor: listing => listing.pricePerSquareFoot,
+      accessor: listing => getListingPricePerSquareFoot(listing, user),
       render: ({ row: listing }) =>
-        `$${listing.pricePerSquareFoot.toLocaleString()}/Sqft`
+        getListingPricePerSquareFoot(listing, user)
+          ? `$${getListingPricePerSquareFoot(listing, user)}/Sqft`
+          : CELL_FALLBACK
     },
     {
       header: 'Built Year',
       id: 'year',
       sortType: 'number',
       class: 'opaque',
-      accessor: listing => listing.builtYear,
-      render: ({ row: listing }) => `Built: ${listing.builtYear}`
+      accessor: listing => listing.property.year_built,
+      render: ({ row: listing }) =>
+        listing.property.year_built
+          ? `Built ${listing.property.year_built}`
+          : CELL_FALLBACK
     },
     {
       header: 'Zip Code',
       id: 'zipcode',
       sortType: 'number',
       class: 'opaque',
-      accessor: listing => listing.zipCode,
-      render: ({ row: listing }) => `Zip: ${listing.zipCode}`
+      accessor: listing => listing.property.address.postal_code,
+      render: ({ row: listing }) =>
+        listing.property.address.postal_code
+          ? `Zip: ${listing.property.address.postal_code}`
+          : CELL_FALLBACK
     }
   ]
 
@@ -172,13 +204,13 @@ const ListView = props => {
           }
           title={
             props.tabName === 'favorites'
-              ? 'You don’t have any Favorites.'
-              : 'You don’t have any Saved Search.'
+              ? 'You don’t have any Favorites'
+              : 'You don’t have any Saved Search'
           }
           subtitle={
             props.tabName === 'favorites'
-              ? 'Try for add new Favorites.'
-              : 'Try for add new Saved Search.'
+              ? 'Try adding a new Favorite'
+              : 'Try adding a new Saved Search'
           }
         />
       )

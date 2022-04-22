@@ -25,6 +25,14 @@ function renderWithTheme(node, container) {
   )
 }
 
+function getPropNameFromOptions(options, model, defaultPropName) {
+  if (!options || !options.getPropName) {
+    return defaultPropName
+  }
+
+  return options.getPropName(model, defaultPropName)
+}
+
 export const load = async colors => {
   const { Grapesjs } = await loadGrapesjs()
 
@@ -116,17 +124,21 @@ export const load = async colors => {
 
     const getStyle = target => getComputedStyle(target.view.el)
 
-    const setStyle = (target, prop, value) => {
+    const setStyle = (target, prop, value, options) => {
+      const finalProp = getPropNameFromOptions(options, target, prop)
+
       const selectedTargetStyles = { ...target.get('style') }
 
-      selectedTargetStyles[prop] = value
+      selectedTargetStyles[finalProp] = value
       target.set('style', selectedTargetStyles)
     }
 
-    const setMjmlAttr = (target, attr, value) => {
+    const setMjmlAttr = (target, attr, value, options) => {
+      const finalAttr = getPropNameFromOptions(options, target, attr)
+
       target.setAttributes({
         ...target.getAttributes(),
-        [attr]: value
+        [finalAttr]: value
       })
     }
 
@@ -263,7 +275,12 @@ export const load = async colors => {
             <FontWeightPicker
               value={getStyle(selected).fontWeight}
               onChange={fontWeight => {
-                setStyle(selected, 'font-weight', fontWeight)
+                setStyle(
+                  selected,
+                  'font-weight',
+                  fontWeight,
+                  fontWeightPickerOptions
+                )
               }}
             />,
             fontWeightPickerContainer
@@ -285,10 +302,15 @@ export const load = async colors => {
               }
               onChange={textAlign => {
                 if (isMjmlElement(selected)) {
-                  setStyle(selected, 'align', textAlign)
+                  setStyle(selected, 'align', textAlign, textAlignPickerOptions)
                 }
 
-                setStyle(selected, 'text-align', textAlign)
+                setStyle(
+                  selected,
+                  'text-align',
+                  textAlign,
+                  textAlignPickerOptions
+                )
               }}
             />,
             textAlignPickerContainer
@@ -316,7 +338,7 @@ export const load = async colors => {
 
                 // in order to sync changed text and keep the changes
                 selected.trigger('sync:content')
-                setStyle(selected, 'font-size', fontSize)
+                setStyle(selected, 'font-size', fontSize, fontSizePickerOptions)
               }}
             />,
             fontSizePickerContainer
@@ -344,9 +366,9 @@ export const load = async colors => {
                 selected.trigger('sync:content')
 
                 if (isMjmlElement(selected)) {
-                  setMjmlAttr(selected, 'width', width)
+                  setMjmlAttr(selected, 'width', width, widthPickerOptions)
                 } else {
-                  setStyle(selected, 'width', width)
+                  setStyle(selected, 'width', width, widthPickerOptions)
                 }
               }}
             />,
@@ -381,11 +403,31 @@ export const load = async colors => {
                 selected.trigger('sync:content')
 
                 if (isMjmlElement(selected)) {
-                  setMjmlAttr(selected, 'padding-top', padding.top)
-                  setMjmlAttr(selected, 'padding-bottom', padding.bottom)
+                  setMjmlAttr(
+                    selected,
+                    'padding-top',
+                    padding.top,
+                    paddingPickerOptions
+                  )
+                  setMjmlAttr(
+                    selected,
+                    'padding-bottom',
+                    padding.bottom,
+                    paddingPickerOptions
+                  )
                 } else {
-                  setStyle(selected, 'padding-top', padding.top)
-                  setStyle(selected, 'padding-bottom', padding.bottom)
+                  setStyle(
+                    selected,
+                    'padding-top',
+                    padding.top,
+                    paddingPickerOptions
+                  )
+                  setStyle(
+                    selected,
+                    'padding-bottom',
+                    padding.bottom,
+                    paddingPickerOptions
+                  )
                 }
               }}
             />,
@@ -403,7 +445,7 @@ export const load = async colors => {
               colors={colors}
               color={getStyle(selected).color}
               onChange={color => {
-                setStyle(selected, 'color', color.hex)
+                setStyle(selected, 'color', color.hex, colorPickerOptions)
               }}
             />,
             colorPickerContainer
@@ -423,7 +465,12 @@ export const load = async colors => {
               colors={colors}
               color={getStyle(selected).backgroundColor}
               onChange={color => {
-                setStyle(selected, 'background-color', color.hex)
+                setStyle(
+                  selected,
+                  'background-color',
+                  color.hex,
+                  backgroundColorPickerOptions
+                )
               }}
             />,
             backgroundColorPickerContainer

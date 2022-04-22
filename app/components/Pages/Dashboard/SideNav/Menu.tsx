@@ -12,7 +12,6 @@ import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
 import { InboxAction } from 'reducers/inbox/types'
 import { selectNotificationNewCount } from 'reducers/notifications'
 import { selectShowingsTotalNotificationCount } from 'selectors/showings'
-import { selectUserUnsafe } from 'selectors/user'
 import { getBrandHelpCenterURL } from 'utils/brand'
 import Acl from 'views/components/Acl'
 import { ScrollableArea } from 'views/components/ScrollableArea'
@@ -40,8 +39,6 @@ const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
 const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 export function Menu() {
-  const user = useSelector(selectUserUnsafe)
-
   const brand = useSelector<IAppState, IBrand>(
     (state: IAppState) => state.brand
   )
@@ -83,7 +80,7 @@ export function Menu() {
         <SidenavListGroup data-test="side-nav-list">
           <Acl access={dashboardAccess}>
             <SideNavLinkItem to="/dashboard/overview" tourId="nav-dashboard">
-              Dashboard
+              Today
             </SideNavLinkItem>
           </Acl>
           <Acl.Crm>
@@ -190,7 +187,7 @@ export function Menu() {
         </SidenavListGroup>
 
         <SidenavListGroup>
-          {user && (
+          <Acl access={({ user }) => !!user}>
             <SideNavItem>
               <InlineBadge
                 badgeContent={chatRoomsNotificationsNumber}
@@ -199,15 +196,15 @@ export function Menu() {
                 <MessagesDrawerTrigger />
               </InlineBadge>
             </SideNavItem>
-          )}
+          </Acl>
 
-          {user && (
+          <Acl access={({ user }) => !!user}>
             <SideNavLinkItem to="/dashboard/notifications">
               <InlineBadge badgeContent={appNotifications} color="primary">
                 Notifications
               </InlineBadge>
             </SideNavLinkItem>
-          )}
+          </Acl>
         </SidenavListGroup>
         <SidenavListGroup>
           <SideNavItem>
@@ -219,12 +216,13 @@ export function Menu() {
               Help Center
             </SidenavBlankLink>
           </SideNavItem>
-
-          <SupportTrigger />
+          <Acl access={({ user }) => !!user}>
+            <SupportTrigger />
+          </Acl>
         </SidenavListGroup>
       </ScrollableArea>
 
-      <UserMenu user={user} />
+      <UserMenu />
       <PoweredBy />
     </Sidenav>
   )

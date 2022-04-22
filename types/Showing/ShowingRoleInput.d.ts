@@ -1,7 +1,7 @@
 declare interface IShowingRoleInput {
   role: IShowingRoleType
   user: Optional<UUID>
-  agent: Optional<UUID> // `user` should be provided in case of passing this
+  agent: Optional<IShowingAgent | IAgent>
   brand: UUID
   first_name: string
   last_name: string
@@ -10,4 +10,9 @@ declare interface IShowingRoleInput {
   can_approve: boolean
   confirm_notification_type: INotificationDeliveryType[]
   cancel_notification_type: INotificationDeliveryType[]
+}
+
+declare interface IShowingRoleInputAPI
+  extends Omit<IShowingRoleInput, 'agent'> {
+  agent: Optional<UUID>
 }

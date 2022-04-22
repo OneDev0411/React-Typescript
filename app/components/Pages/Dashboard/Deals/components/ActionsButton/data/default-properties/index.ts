@@ -33,7 +33,8 @@ import {
   REQUIRE_TASK,
   APPROVE_TASK,
   DECLINE_TASK,
-  SPLIT_PDF
+  SPLIT_PDF,
+  TASK_ACL
 } from '../action-buttons'
 
 type ActionType = 'Form' | 'Envelope' | 'File'
@@ -150,6 +151,10 @@ export const actionsDefaultProperties = {
       task.required ? 'Mark as Optional' : 'Mark as Required',
     type: 'require-task',
     condition: ({ is_backoffice }) => is_backoffice
+  },
+  [TASK_ACL]: {
+    label: 'Manage Access',
+    type: 'task-acl'
   }
 }
 

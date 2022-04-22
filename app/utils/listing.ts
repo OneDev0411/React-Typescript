@@ -209,7 +209,7 @@ export const getListingFeatures = (
   return {
     bedroomCount: property.bedroom_count,
     bathroomCount: property.bathroom_count,
-    areaSqft: Math.floor(metersToFeet(property.square_meters)),
+    areaSqft: Math.round(metersToFeet(property.square_meters)),
     lotSizeAreaAcre: property.lot_size_area
   }
 }
@@ -228,6 +228,12 @@ export const getListingPrice = (
   return price || 0
 }
 
+export const shortFromatPrice = (price: number): string => {
+  return price > 9999
+    ? numeral(Math.round(price / 1000) * 1000).format('0.[00]a')
+    : price
+}
+
 export const getListingFormatedPrice = (
   listingPrice: number,
   listingClosePrice: Nullable<number>,
@@ -237,9 +243,7 @@ export const getListingFormatedPrice = (
   const price = getListingPrice(listingPrice, listingClosePrice, user)
 
   if (isShortFormat) {
-    const roundedPrice = Math.round(price / 1000) * 1000
-
-    return numeral(roundedPrice).format('0.[00]a')
+    return shortFromatPrice(price)
   }
 
   return price.toLocaleString('en-US', { maximumFractionDigits: 1 })

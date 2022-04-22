@@ -1,9 +1,6 @@
-import React from 'react'
-
-import { Dialog, useTheme, Theme } from '@material-ui/core'
-
 import { noop } from '@app/utils/helpers'
 
+import InlineDialog from '../InlineDialog'
 import { ListingDetails } from '../ListingDetails'
 
 interface Props {
@@ -21,22 +18,18 @@ function ListingDetailsModal({
   isWidget = false,
   onToggleFavorite = noop
 }: Props) {
-  const theme: Theme = useTheme()
-
   return (
-    <Dialog
+    <InlineDialog
       open={isOpen}
-      fullScreen
-      scroll="paper"
+      // in widget mode we don't have app sidebar
+      // in all dashboard pages leftOffset === appSidenavWidth
+      leftOffset={isWidget ? 0 : undefined}
       data-test="listing-details-modal"
-      classes={{
-        root: 'u-scrollbar'
-      }}
-      style={{ zIndex: theme.zIndex.modal + 2 }}
     >
       {listingId && (
         <>
           <ListingDetails
+            isModal
             isWidget={isWidget}
             id={listingId}
             onClose={closeHandler}
@@ -44,7 +37,7 @@ function ListingDetailsModal({
           />
         </>
       )}
-    </Dialog>
+    </InlineDialog>
   )
 }
 

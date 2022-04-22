@@ -56,6 +56,17 @@ function FavoritesTab({ isWidget, user }: Props) {
     click: null
   })
 
+  // Initialize user location on click Locate
+  const initUserLocation = useCallback(
+    (lat: number, lng: number) => {
+      const zoom = USER_LOCATION_ZOOM_LEVEL
+      const center = { lat, lng }
+
+      dispatch(setMapLocation(center, zoom))
+    },
+    [dispatch]
+  )
+
   const onClickLocate = useCallback(() => {
     if (!window.navigator.geolocation) {
       return reduxDispatch(
@@ -87,8 +98,7 @@ function FavoritesTab({ isWidget, user }: Props) {
       },
       { timeout: 10000 }
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [initUserLocation, reduxDispatch])
 
   // Redirect to landing page if it's users's first MLS run
   // https://gitlab.com/rechat/web/-/issues/6108
@@ -97,14 +107,6 @@ function FavoritesTab({ isWidget, user }: Props) {
       goTo('/dashboard/mls')
     }
   })
-
-  // Initialize user location on click Locate
-  const initUserLocation = (lat: number, lng: number) => {
-    const zoom = USER_LOCATION_ZOOM_LEVEL
-    const center = { lat, lng }
-
-    dispatch(setMapLocation(center, zoom))
-  }
 
   return (
     <GlobalPageLayout className={classes.exploreContainer}>

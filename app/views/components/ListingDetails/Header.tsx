@@ -1,6 +1,12 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
-import { makeStyles, Theme } from '@material-ui/core'
+import {
+  IconButton,
+  makeStyles,
+  Theme,
+  useMediaQuery,
+  useTheme
+} from '@material-ui/core'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
@@ -9,29 +15,37 @@ import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps, browserHistory } from 'react-router'
 import { notify } from 'reapop'
 
+import { useUnsafeActiveBrand } from '@app/hooks/brand'
+import { IAppState } from '@app/reducers'
+import { getBrandLogo } from '@app/utils/get-brand-logo'
 import { noop } from '@app/utils/helpers'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import api from 'models/listings/favorites'
 import { selectUserUnsafe } from 'selectors/user'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    logo: {
-      height: 40,
-      [theme.breakpoints.up('lg')]: {
-        height: 56
+    root: {
+      flexWrap: 'nowrap',
+      [theme.breakpoints.up('md')]: {
+        flexWrap: 'wrap'
       }
+    },
+    logo: {
+      height: 28 // From figma
     },
     button: {
-      marginRight: theme.spacing(2)
+      marginRight: theme.spacing(1),
+      [theme.breakpoints.up('md')]: {
+        marginRight: theme.spacing(2)
+      }
+    },
+    closeButton: {
+      marginLeft: theme.spacing(2)
     },
     menuContainer: {
-      height: '100%',
-      marginTop: theme.spacing(3),
-      [theme.breakpoints.up('sm')]: {
-        marginTop: 0,
-        justifyContent: 'flex-end'
-      }
+      justifyContent: 'flex-end'
     }
   }),
   { name: 'Header' }
@@ -40,6 +54,7 @@ const useStyles = makeStyles(
 interface Props {
   listing: IListing
   isWidget?: boolean
+  isModal?: boolean
   onToggleFavorite?: () => void
   handleClose?: () => void
   handleShare: () => void
@@ -48,13 +63,25 @@ interface Props {
 function Header({
   listing,
   isWidget = false,
+  isModal = false,
   handleShare,
   location,
   onToggleFavorite = noop,
   handleClose
 }: Props & WithRouterProps) {
   const classes = useStyles()
+  const theme = useTheme()
   const user = useSelector(selectUserUnsafe)
+  const isMobileScreen = useMediaQuery(theme.breakpoints.down('sm'))
+  const hostBrand = useSelector<IAppState, IBrand>(
+    (state: IAppState) => state.brand
+  )
+  const brand = useUnsafeActiveBrand()
+  const logo = useMemo(
+    () =>
+      getBrandLogo(brand, hostBrand, '/static/images/logo--white--padded.svg'),
+    [brand, hostBrand]
+  )
 
   const [isFavorited, setIsFavorited] = useState(listing.favorited)
 
@@ -70,7 +97,7 @@ function Header({
       try {
         await api.toggleFavorites({
           recId: null,
-          mlsNumber: listing.mls_number,
+          listingId: listing.id,
           isFavorite: listing.favorited,
           roomId: user.personal_room
         })
@@ -84,8 +111,7 @@ function Header({
         })
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [user]
+    [onToggleFavorite, user]
   )
 
   const handleLogin = () => {
@@ -103,24 +129,17 @@ function Header({
     browserHistory.push(url)
   }
 
-  const handleFavorite = event => handleToggleFavorite(listing)
+  const handleFavorite = () => handleToggleFavorite(listing)
 
   return (
     <>
-      <Grid container>
-        <Grid item xs={12} sm={3}>
-          {handleClose && (
-            <Button
-              variant="outlined"
-              onClick={handleClose}
-              startIcon={<SvgIcon path={mdiClose} />}
-              className={classes.button}
-            >
-              Close
-            </Button>
+      <Grid container className={classes.root}>
+        <Grid item xs={5} md={3}>
+          {!isWidget && isMobileScreen && logo && (
+            <img alt="logo" className={classes.logo} src={logo} />
           )}
         </Grid>
-        <Grid item xs={12} sm={9}>
+        <Grid item xs={7} md={9}>
           <Box
             display="flex"
             alignItems="center"
@@ -128,32 +147,56 @@ function Header({
           >
             {user && (
               <Button
-                variant="outlined"
+                size="small"
+                variant={isMobileScreen ? 'contained' : 'outlined'}
+                color={isMobileScreen ? 'primary' : 'default'}
                 onClick={handleFavorite}
                 startIcon={
                   <SvgIcon
-                    color={isFavorited ? 'red' : 'black'}
+                    size={muiIconSizes.small}
+                    color={
+                      isFavorited ? 'red' : isMobileScreen ? 'white' : 'black'
+                    }
                     path={isFavorited ? mdiHeart : mdiHeartOutline}
                   />
                 }
                 className={classes.button}
               >
-                Favorite
+                Like
               </Button>
             )}
             {user && (
               <Button
-                variant="outlined"
+                size="small"
+                variant={isMobileScreen ? 'contained' : 'outlined'}
+                color={isMobileScreen ? 'primary' : 'default'}
                 onClick={handleShare}
-                startIcon={<SvgIcon path={mdiExportVariant} />}
+                startIcon={
+                  <SvgIcon size={muiIconSizes.small} path={mdiExportVariant} />
+                }
               >
                 Share
               </Button>
             )}
             {!isWidget && !user && (
-              <Button variant="contained" color="primary" onClick={handleLogin}>
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                onClick={handleLogin}
+              >
                 Login
               </Button>
+            )}
+
+            {isModal && !isMobileScreen && (
+              <IconButton
+                className={classes.closeButton}
+                size="small"
+                onClick={handleClose}
+              >
+                <SvgIcon path={mdiClose} />
+              </IconButton>
             )}
           </Box>
         </Grid>

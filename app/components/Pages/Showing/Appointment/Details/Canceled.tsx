@@ -38,10 +38,10 @@ export default function ShowingAppointmentCanceled({ appointment }: Props) {
         </StepLabel>
         <StepContent>
           <Typography variant="body1" color="textSecondary">
-            {appointment.buyer_message ? (
+            {appointment.role_message || appointment.buyer_message ? (
               <>
                 <strong>Cancellation Message: </strong>
-                {appointment.buyer_message}
+                {appointment.role_message || appointment.buyer_message}
               </>
             ) : (
               'No cancellation message provided.'

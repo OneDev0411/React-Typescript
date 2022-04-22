@@ -19,6 +19,8 @@ class Messages extends React.Component {
     // initialize chatroom with latest room
     if (roomId && !messages[roomId]) {
       this.loadMessages(roomId)
+    } else {
+      this.props.onLoad?.()
     }
   }
 
@@ -26,7 +28,7 @@ class Messages extends React.Component {
     const { roomId, messages } = nextProps
 
     if (roomId && !messages[roomId]) {
-      return this.loadMessages(roomId)
+      this.loadMessages(roomId)
     }
   }
 
@@ -56,6 +58,8 @@ class Messages extends React.Component {
 
     // fetch
     await getMessages(roomId, limit, max_value)
+
+    this.props.onLoad?.()
   }
 
   render() {

@@ -1,3 +1,5 @@
+import superagent from 'superagent'
+
 import { YouTubeVideoResource } from './types'
 
 // The date format provided by Vimeo is not supported on Safari so we need to
@@ -62,4 +64,14 @@ export function youtubeVideos(
         reject
       )
   })
+}
+
+export async function getYouTubeVideoGif(
+  url: string
+): Promise<{ url: string }> {
+  const response = await superagent
+    .post('/api/utils/get-youtube-video-gif')
+    .send({ url })
+
+  return response.body
 }

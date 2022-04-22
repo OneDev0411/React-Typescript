@@ -5,6 +5,7 @@ import cn from 'classnames'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
+import { createValertOptions } from '@app/components/Pages/Dashboard/MLS/helpers/get-listings-helpers'
 import { appSidenavWidth } from '@app/components/Pages/Dashboard/SideNav/variables'
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
@@ -28,7 +29,7 @@ import {
   clearListingUiStates
 } from '../../../context/actions'
 import useUiListingsContext from '../../../context/useUiListingsContext'
-import { createValertOptions } from '../../../helpers/get-listings-helpers'
+import { logSearchListings } from '../../../helpers/log-search-listings'
 import {
   coordToPoint,
   estimateMapZoom,
@@ -46,7 +47,8 @@ import {
   setMapBounds,
   setMapLocation,
   changeSort,
-  removePinMarker
+  removePinMarker,
+  toggleListingFavoriteState
 } from '../../context/actions'
 import useListingsContext from '../../hooks/useListingsContext'
 import Autocomplete from '../Autocomplete'
@@ -168,25 +170,29 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   const onRemoveDrawing = useCallback(() => {
     dispatch(removeMapDrawing())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [dispatch])
 
-  const onDrawingComplete = useCallback((points: ICoord[]) => {
-    dispatch(setMapDrawing(points))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const onDrawingComplete = useCallback(
+    (points: ICoord[]) => {
+      dispatch(setMapDrawing(points))
+    },
+    [dispatch]
+  )
 
   const toggleMapShown = useCallback(() => {
     uiDispatch(clearListingUiStates())
     setMapIsShown(mapIsShown => !mapIsShown)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [uiDispatch])
 
   const onSelectPlace = (
     center: ICoord,
     bounds: ICompactBounds,
-    types: string[]
+    types: string[],
+    description: string
   ) => {
+    // Log user searching for listings activity when search url param is set
+    logSearchListings(description)
+
     const mapWidth = mapRef.current
       ? mapRef.current.getDiv().clientWidth
       : undefined
@@ -278,18 +284,21 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     setIsShowAlertModal(false)
   }
 
-  const changeHoverState = useCallback((id: UUID, hover: boolean) => {
-    uiDispatch(changeListingHoverState(hover ? id : null))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const changeHoverState = useCallback(
+    (id: UUID, hover: boolean) => {
+      uiDispatch(changeListingHoverState(hover ? id : null))
+    },
+    [uiDispatch]
+  )
 
   const onStartDrawingMode = useCallback(() => {
     uiDispatch(clearListingUiStates())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [uiDispatch])
 
   const onToggleListingModal = useCallback(
     (id: UUID, isOpen: boolean) => {
+      uiDispatch(clearListingUiStates())
+
       if (!isWidget) {
         if (isOpen) {
           changeUrl(`/dashboard/mls/${id}`)
@@ -302,29 +311,37 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
         }
       }
     },
-    [isWidget, viewType]
+    [isWidget, uiDispatch, viewType]
   )
 
-  const onMarkerClick = useCallback((key: UUID) => {
-    const resultElement = document.getElementById(key)
+  const onMarkerClick = useCallback(
+    (key: UUID) => {
+      const resultElement = document.getElementById(key)
 
-    if (resultElement) {
-      // Smooth scrolling doesn't work on Chrome for some reason
-      resultElement.scrollIntoView({ behavior: 'smooth' })
-    }
+      if (resultElement) {
+        // Smooth scrolling doesn't work on Chrome for some reason
+        resultElement.scrollIntoView({ behavior: 'smooth' })
+      }
 
-    uiDispatch(changeListingClickedState(key))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+      uiDispatch(changeListingClickedState(key))
+    },
+    [uiDispatch]
+  )
 
   const handleHidingMapMarkerPopup = useCallback(() => {
     uiDispatch(changeListingClickedState(null))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [uiDispatch])
 
   const onClearSearchbox = () => {
     dispatch(removePinMarker())
   }
+
+  const handleToggleLike = useCallback(
+    (listingId: UUID) => {
+      dispatch(toggleListingFavoriteState(listingId))
+    },
+    [dispatch]
+  )
 
   const onMapLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map
@@ -349,10 +366,12 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
           </Grid>
           <Grid className={classes.searchBarFilterItem}>
             <Filters />
-            <SaveSearchButton
-              isLoading={state.isLoading}
-              onClick={handleSaveSearch}
-            />
+            {!isWidget && (
+              <SaveSearchButton
+                isLoading={state.isLoading}
+                onClick={handleSaveSearch}
+              />
+            )}
           </Grid>
         </Grid>
 
@@ -382,6 +401,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                   onToggleListingModal={onToggleListingModal}
                   onMarkerClick={onMarkerClick}
                   onMapClick={handleHidingMapMarkerPopup}
+                  onToggleFavorite={handleToggleLike}
                   onMapDrag={handleHidingMapMarkerPopup}
                   mapPosition={state.map}
                   listings={state.result.listings}

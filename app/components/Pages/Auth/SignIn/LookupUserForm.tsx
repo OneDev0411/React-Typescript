@@ -5,6 +5,7 @@ import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
 import { Form, Field } from 'react-final-form'
 import { Link } from 'react-router'
+import isEmail from 'validator/lib/isEmail'
 
 import { Callout } from '../../../../views/components/Callout'
 import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
@@ -38,9 +39,7 @@ export default function LookUpForm({
 
     if (!values.username) {
       errors.username = 'Required'
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.username)
-    ) {
+    } else if (!isEmail(values.username)) {
       errors.username = 'Invalid email address'
     }
 

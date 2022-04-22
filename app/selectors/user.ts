@@ -173,3 +173,11 @@ export const selectUserAccessList = createSelector(
     return [...new Set(activeRoles.flatMap(role => role.acl))]
   }
 )
+
+/**
+ * Returns the user access token
+ * @param state The app state
+ * @returns The current user access token
+ */
+export const selectUserAccessToken = (state: IAppState) =>
+  selectUser(state).access_token

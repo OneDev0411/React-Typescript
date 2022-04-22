@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { makeStyles, Theme } from '@material-ui/core'
-import Box from '@material-ui/core/Box'
+import { Grid, makeStyles, Theme } from '@material-ui/core'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import cn from 'classnames'
 
@@ -11,13 +10,9 @@ import Lightbox from './Lightbox'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      textAlign: 'center',
-      position: 'relative',
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        maxWidth: 800,
-        margin: '0 auto',
-        padding: theme.spacing(8, 0)
+      flexWrap: 'wrap',
+      [theme.breakpoints.up('md')]: {
+        flexWrap: 'nowrap'
       }
     },
     imageContainer: {
@@ -25,49 +20,17 @@ const useStyles = makeStyles(
       backgroundPosition: 'center center',
       backgroundSize: 'cover'
     },
+    lightboxButton: {
+      height: '100%'
+    },
     mainImageContainer: {
-      height: 240,
       width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        height: 365,
-        maxWidth: 560
-      },
-      [theme.breakpoints.up('lg')]: {
-        height: 440
-      },
-      [theme.breakpoints.up('xl')]: {
-        maxWidth: 600
-      }
+      height: '100%',
+      objectFit: 'contain'
     },
     subImagContainer: {
-      display: 'none',
-      [theme.breakpoints.up('sm')]: {
-        display: 'block',
-        position: 'absolute'
-      }
-    },
-    subImageTop: {
-      width: 200,
-      height: 245,
-      [theme.breakpoints.up('sm')]: {
-        top: 0,
-        left: 0
-      },
-      [theme.breakpoints.up('lg')]: {
-        left: theme.spacing(6)
-      }
-    },
-    subImageBottom: {
-      width: 240,
-      height: 240,
-      [theme.breakpoints.up('sm')]: {
-        bottom: 0,
-        right: 0
-      },
-      [theme.breakpoints.up('lg')]: {
-        width: 280,
-        height: 280
-      }
+      width: '100%',
+      height: 'auto'
     }
   }),
   { name: 'FeaturedImages' }
@@ -77,17 +40,29 @@ type imagesGroupSerie = 1 | 2
 interface Props {
   images: string[]
   serie: imagesGroupSerie
+  direction?: 'row' | 'row-reverse'
+  isAgent: boolean
 }
 
 const SERIE_LENGTH = 3
 const FIRST_SERIE_START_INDEX = 5
 const SECOND_SERIE_START_INDEX = FIRST_SERIE_START_INDEX + SERIE_LENGTH
+const FIRST_SERIE_EXTRA_ITEM_INSTEAD_OF_AGENT = 2
 
-function FeaturedImages({ images, serie }: Props) {
+function FeaturedImages({ images, serie, isAgent, direction = 'row' }: Props) {
   const classes = useStyles()
+
+  const extraItemInsteadOfAgent = isAgent
+    ? 0
+    : FIRST_SERIE_EXTRA_ITEM_INSTEAD_OF_AGENT
   const startIndex =
-    serie === 1 ? FIRST_SERIE_START_INDEX : SECOND_SERIE_START_INDEX
-  const featuredImages = images.slice(startIndex, startIndex + SERIE_LENGTH)
+    serie === 1
+      ? FIRST_SERIE_START_INDEX
+      : SECOND_SERIE_START_INDEX + extraItemInsteadOfAgent
+  const serieLength =
+    serie === 1 ? SERIE_LENGTH + extraItemInsteadOfAgent : SERIE_LENGTH
+
+  const featuredImages = images.slice(startIndex, startIndex + serieLength)
   const [selectedImageIndex, setSelectedImageIndex] = React.useState<
     null | number
   >(null)
@@ -100,56 +75,136 @@ function FeaturedImages({ images, serie }: Props) {
         const imageIndexInOriginalArray =
           serie === 1
             ? index + FIRST_SERIE_START_INDEX
-            : index + SECOND_SERIE_START_INDEX
+            : index + SECOND_SERIE_START_INDEX + extraItemInsteadOfAgent
 
         setSelectedImageIndex(imageIndexInOriginalArray)
       }
     },
-    [serie]
+    [extraItemInsteadOfAgent, serie]
   )
 
   return (
-    <Box className={classes.container}>
+    <Grid
+      spacing={2}
+      container
+      direction={direction}
+      className={classes.container}
+    >
+      {featuredImages.length > 3 && (
+        <Grid
+          item
+          spacing={2}
+          xs={12}
+          md={featuredImages.length > 4 ? 5 : 12}
+          lg={featuredImages.length > 4 ? 4 : 12}
+        >
+          <Grid container spacing={2}>
+            {featuredImages[3] && (
+              <Grid item container xs={6} md={12}>
+                <ButtonBase
+                  className={classes.lightboxButton}
+                  type="button"
+                  onClick={onClick}
+                  data-image-index={3}
+                >
+                  <img
+                    className={classes.subImagContainer}
+                    src={featuredImages[3]}
+                    alt="feature"
+                  />
+                </ButtonBase>
+              </Grid>
+            )}
+            {featuredImages[4] && (
+              <Grid item xs={6} md={12}>
+                <ButtonBase
+                  className={classes.lightboxButton}
+                  type="button"
+                  onClick={onClick}
+                  data-image-index={4}
+                >
+                  <img
+                    className={classes.subImagContainer}
+                    src={featuredImages[4]}
+                    alt="feature"
+                  />
+                </ButtonBase>
+              </Grid>
+            )}
+          </Grid>
+        </Grid>
+      )}
       {featuredImages[0] ? (
-        <ButtonBase
-          type="button"
-          onClick={onClick}
-          data-image-index={0}
-          style={{ backgroundImage: `url(${featuredImages[0]})` }}
-          className={cn(classes.imageContainer, classes.mainImageContainer)}
-        />
+        <Grid
+          item
+          xs={12}
+          md={featuredImages.length > 1 ? 7 : 12}
+          lg={featuredImages.length > 1 ? 8 : 12}
+        >
+          <ButtonBase
+            className={classes.lightboxButton}
+            type="button"
+            onClick={onClick}
+            data-image-index={0}
+          >
+            <img
+              className={classes.mainImageContainer}
+              src={featuredImages[0]}
+              alt="feature"
+            />
+          </ButtonBase>
+        </Grid>
       ) : (
         <div
           style={{ backgroundImage: `url(${MAIN_IMAGE_PLACEHOLDER_SRC})` }}
           className={cn(classes.imageContainer, classes.mainImageContainer)}
         />
       )}
-      {featuredImages[1] && (
-        <ButtonBase
-          type="button"
-          onClick={onClick}
-          data-image-index={1}
-          className={cn(
-            classes.imageContainer,
-            classes.subImagContainer,
-            classes.subImageTop
-          )}
-          style={{ backgroundImage: `url(${featuredImages[1]})` }}
-        />
+      {featuredImages.length > 1 && (
+        <Grid
+          item
+          spacing={2}
+          xs={12}
+          md={featuredImages.length > 2 ? 5 : 12}
+          lg={featuredImages.length > 2 ? 4 : 12}
+        >
+          <Grid container spacing={2}>
+            {featuredImages[1] && (
+              <Grid item container xs={6} md={12}>
+                <ButtonBase
+                  className={classes.lightboxButton}
+                  type="button"
+                  onClick={onClick}
+                  data-image-index={1}
+                >
+                  <img
+                    className={classes.subImagContainer}
+                    src={featuredImages[1]}
+                    alt="feature"
+                  />
+                </ButtonBase>
+              </Grid>
+            )}
+            {featuredImages[2] && (
+              <Grid item xs={6} md={12}>
+                <ButtonBase
+                  className={classes.lightboxButton}
+                  type="button"
+                  onClick={onClick}
+                  data-image-index={2}
+                >
+                  <img
+                    className={classes.subImagContainer}
+                    src={featuredImages[2]}
+                    alt="feature"
+                  />
+                </ButtonBase>
+              </Grid>
+            )}
+          </Grid>
+        </Grid>
       )}
-      {featuredImages[2] && (
-        <ButtonBase
-          type="button"
-          onClick={onClick}
-          data-image-index={2}
-          className={cn(
-            classes.imageContainer,
-            classes.subImagContainer,
-            classes.subImageBottom
-          )}
-          style={{ backgroundImage: `url(${featuredImages[2]})` }}
-        />
-      )}
+
       {featuredImages.length > 0 && selectedImageIndex && (
         <Lightbox
           isOpen
@@ -158,7 +213,7 @@ function FeaturedImages({ images, serie }: Props) {
           handleClose={() => setSelectedImageIndex(null)}
         />
       )}
-    </Box>
+    </Grid>
   )
 }
 

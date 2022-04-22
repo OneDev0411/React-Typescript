@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser'
+import timeout from 'connect-timeout'
 import express from 'express'
 
 import branchLinkRoute from './app/routes/branch-link'
@@ -9,6 +10,8 @@ import dealEnvelopeEditRoute from './app/routes/deal/envelope-edit'
 import dealEnvelopeSignRoute from './app/routes/deal/envelope-sign'
 import dealExportRoute from './app/routes/deal/export'
 import dealReportRoute from './app/routes/deal/report'
+import facebookAuthResultRoute from './app/routes/facebook-auth-result'
+import facebookLoginRoute from './app/routes/facebook-login'
 import getPdfSizeRoute from './app/routes/get-pdf-size'
 import livebyNeighborhoodsRoute from './app/routes/liveby/neighborhoods'
 import livebyReportRoute from './app/routes/liveby/report'
@@ -25,6 +28,7 @@ import resetPasswordRoute from './app/routes/user/reset-password'
 import signoutRoute from './app/routes/user/signout'
 import signupRoute from './app/routes/user/signup'
 import usersLookupRoute from './app/routes/user/user-lookup'
+import getYoutubeVideoGifRoute from './app/routes/youtube/get-youtube-video-gif'
 
 const router = express.Router()
 
@@ -45,7 +49,7 @@ router.post('/api/users/lookup', bodyParser.json(), usersLookupRoute)
 router.post('/api/oauth2/token', bodyParser.json(), usersOAuthTokenRoute)
 router.post('/api/users', bodyParser.json(), signupRoute)
 router.get('/reset_password', bodyParser.json(), resetPasswordRoute)
-router.get('/signout', bodyParser.json(), signoutRoute)
+router.post('/api/users/signout', bodyParser.json(), signoutRoute)
 
 /**
  * deals routes.
@@ -97,6 +101,12 @@ router.post(
 )
 
 /**
+ * facebook routes.
+ */
+router.get('/api/facebook/auth-result', facebookAuthResultRoute)
+router.get('/api/facebook/login', facebookLoginRoute)
+
+/**
  * utility routes
  */
 router.get('/unsupported', unsupportedRoute)
@@ -104,6 +114,12 @@ router.get('/api/utils/cors/:url', corsRoute)
 router.post('/api/pdf/get-size', requestLimit, getPdfSizeRoute)
 router.post('/api/utils/render-mjml', requestLimit, renderMjmlRoute)
 router.post('/api/utils/get-url-metadata', requestLimit, urlMetadataRoute)
+router.post(
+  '/api/utils/get-youtube-video-gif',
+  timeout('120s'),
+  requestLimit,
+  getYoutubeVideoGifRoute
+)
 router.post('/api/utils/rss-feeds', requestLimit, rssFeedsRoute)
 
 export default router

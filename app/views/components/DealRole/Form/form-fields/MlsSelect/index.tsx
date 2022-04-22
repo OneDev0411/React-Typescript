@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { Box, TextField } from '@material-ui/core'
 import { omit } from 'lodash'
 import { FieldInputProps, FieldMetaState } from 'react-final-form'
@@ -22,12 +24,13 @@ export function MlsSelect({
   agents,
   isRequired
 }: Props) {
-  const selectedAgent = agents.find(
-    agent => input.value === agent[fieldToSelect]
+  const [selectedAgent, setSelectedAgent] = useState<IAgent | undefined>(
+    agents?.find(agent => input.value?.[fieldToSelect] === agent[fieldToSelect])
   )
 
   const handleChange = (agent: IAgent) => {
     mutators.populateRole(agent, 'MlsSelect')
+    setSelectedAgent(agent)
   }
 
   return (

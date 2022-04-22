@@ -1,4 +1,5 @@
 declare type IDealRoleType =
+  | 'Admin/Assistant'
   | 'BuyerAgent'
   | 'BuyerReferral'
   | 'CoBuyerAgent'
@@ -20,3 +21,4 @@ declare type IDealRoleType =
   | 'LandlordPowerOfAttorney'
   | 'Landlord'
   | 'TenantPowerOfAttorney'
+  | 'Other'
