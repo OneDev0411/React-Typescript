@@ -85,7 +85,7 @@ export default async (req: Request, res: Response) => {
     res.status(500)
     res.json({
       error: 'Error creating gif',
-      details: error
+      details: error.toString()
     })
   }
 }

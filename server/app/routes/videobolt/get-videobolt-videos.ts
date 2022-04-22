@@ -31,7 +31,7 @@ export default async (req: Request, res: Response) => {
     res.status(500)
     res.json({
       error: 'Error getting videos',
-      details: error
+      details: error.toString()
     })
   }
 }
