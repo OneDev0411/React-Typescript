@@ -220,6 +220,17 @@ const AsyncDashboardOverview = withAcl(
 )
 
 /* ==================================== */
+//  Player
+/* ==================================== */
+
+const AsyncPlayer = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Player' /* webpackChunkName: "player" */
+    )
+})
+
+/* ==================================== */
 //  MLS
 /* ==================================== */
 
@@ -960,6 +971,7 @@ export default (
       <Route path="share" component={AsyncShare} />
 
       <Route path="dashboard" component={Dashboard}>
+        <Route path="player" component={AsyncPlayer} />
         <Route path="overview" component={AsyncDashboardOverview} />
         <Route path="inbox(/:emailThreadId)" component={AsyncInbox} />
 
