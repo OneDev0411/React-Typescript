@@ -9,13 +9,12 @@ type HowToConnectToInstagramButtonProps = Omit<
   'size' | 'startIcon' | 'children'
 >
 
-function HowToConnectToInstagramButton({
-  onClick,
-  ...otherProps
-}: HowToConnectToInstagramButtonProps) {
+function HowToConnectToInstagramButton(
+  props: HowToConnectToInstagramButtonProps
+) {
   return (
     <Button
-      {...otherProps}
+      {...props}
       size="small"
       startIcon={
         <SvgIcon path={mdiHelpCircleOutline} size={muiIconSizes.small} />
