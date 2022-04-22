@@ -82,8 +82,8 @@ function ConnectToInstagramDialog({
         </div>
         <DialogContent>
           <Typography variant="body2">
-            We’re not gonna send anything without your permission. you can
-            manage your connected account later in account settings
+            We will not send anything without your permission. Easily manage
+            your connected account later in Account Settings.
           </Typography>
         </DialogContent>
       </ModernDialog.Body>
