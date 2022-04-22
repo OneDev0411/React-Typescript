@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, forwardRef, Ref } from 'react'
 
 import { Button, ButtonProps, CircularProgress } from '@material-ui/core'
 
@@ -18,15 +18,18 @@ export interface ConnectFacebookPageButtonProps
   onErrorDialogClose?: () => void
 }
 
-function ConnectFacebookPageButton({
-  onAuthSuccess,
-  onAuthError,
-  onAuthWindowOpen,
-  onAuthWindowClose,
-  onErrorDialogOpen,
-  onErrorDialogClose,
-  ...buttonProps
-}: ConnectFacebookPageButtonProps) {
+function ConnectFacebookPageButton(
+  {
+    onAuthSuccess,
+    onAuthError,
+    onAuthWindowOpen,
+    onAuthWindowClose,
+    onErrorDialogOpen,
+    onErrorDialogClose,
+    ...buttonProps
+  }: ConnectFacebookPageButtonProps,
+  ref: Ref<HTMLButtonElement>
+) {
   const [isWorking, setIsWorking] = useState(false)
   const confirmation = useContext(ConfirmationModalContext)
   const invalidateListQuery = useInvalidateFacebookPagesListQuery()
@@ -68,6 +71,7 @@ function ConnectFacebookPageButton({
   return (
     <Button
       {...buttonProps}
+      ref={ref}
       size="small"
       onClick={openAuthWindow}
       startIcon={
@@ -78,4 +82,4 @@ function ConnectFacebookPageButton({
   )
 }
 
-export default ConnectFacebookPageButton
+export default forwardRef(ConnectFacebookPageButton)
