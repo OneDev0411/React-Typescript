@@ -94,8 +94,6 @@ function SearchVideoDrawer({
           message:
             'Failed to generate GIF thumbnail. Falling back to the static thumbnail.'
         })
-      } finally {
-        setIsGeneratingThumbnail(false)
       }
     }
 
@@ -115,8 +113,6 @@ function SearchVideoDrawer({
             'Failed to generate GIF thumbnail. Falling back to a static thumbnail.'
         })
         video.thumbnail = STATIC_FALLBACK_THUMBNAIL
-      } finally {
-        setIsGeneratingThumbnail(false)
       }
     }
 
@@ -127,6 +123,8 @@ function SearchVideoDrawer({
         ? await watermarkPlayIcon(video.thumbnail!, uploadThumbnail)
         : video.thumbnail
     }
+
+    setIsGeneratingThumbnail(false)
 
     onSelect(videoInfo)
     model?.trigger('change:video:info', videoInfo)
