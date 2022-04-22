@@ -35,7 +35,6 @@ export default function Player() {
 
   return (
     <PageLayout>
-      <PageLayout.Header title="Player" />
       <PageLayout.Main>
         <Grid container>
           <Grid item xs={12}>
