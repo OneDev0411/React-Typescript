@@ -36,7 +36,12 @@ export default {
 
   .gjs-dashed *[data-highlightable] {
     outline: none;
-  }`,
+  }
+  
+  p > *[data-gjs-type="text"][draggable="true"] {
+    -webkit-user-select: text;
+  }
+  `,
   height: '100%',
   parser: {
     optionsHtml: {
