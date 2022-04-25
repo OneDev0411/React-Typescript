@@ -14,5 +14,6 @@ export default {
     process.env.MY_MARKETING_MATTERS_SHARED_SECRET!,
   prerender_token: process.env.PRERENDER_TOKEN!,
   aws_access_key_id: process.env.AWS_ACCESS_KEY_ID!,
-  aws_secret_access_key: process.env.AWS_SECRET_ACCESS_KEY!
+  aws_secret_access_key: process.env.AWS_SECRET_ACCESS_KEY!,
+  videobolt_key: process.env.VIDEOBOLT_KEY!
 }
