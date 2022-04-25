@@ -46,7 +46,7 @@ const useStyles = makeStyles(
 )
 
 /**
- *  @example
+ *  @example 
  * <PageTabs
     tabs={[
       <Tab key={0} label="All" value={0} />,
