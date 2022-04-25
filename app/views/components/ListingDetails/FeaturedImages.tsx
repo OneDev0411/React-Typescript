@@ -75,12 +75,12 @@ function FeaturedImages({ images, serie, isAgent, direction = 'row' }: Props) {
         const imageIndexInOriginalArray =
           serie === 1
             ? index + FIRST_SERIE_START_INDEX
-            : index + SECOND_SERIE_START_INDEX
+            : index + SECOND_SERIE_START_INDEX + extraItemInsteadOfAgent
 
         setSelectedImageIndex(imageIndexInOriginalArray)
       }
     },
-    [serie]
+    [extraItemInsteadOfAgent, serie]
   )
 
   return (

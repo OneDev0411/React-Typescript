@@ -1,5 +1,7 @@
 import { Grid, Divider, makeStyles } from '@material-ui/core'
 
+import { ACL } from '@app/constants/acl'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 import { getFileType } from 'utils/file-utils/get-file-type'
 
 import SocialDrawerCopyLink from './SocialDrawerCopyLink'
@@ -28,6 +30,8 @@ function SocialDrawerActions({
   const classes = useStyles()
   const setStep = useSetSocialDrawerStep()
 
+  const hasAccess = useAcl(ACL.SHARE_TO_INSTAGRAM)
+
   const gotoScheduleStep = () => setStep('Schedule')
 
   const isPDFType =
@@ -38,16 +42,18 @@ function SocialDrawerActions({
     <div className={className}>
       <div className={classes.row}>
         <Grid container spacing={2}>
-          <Grid item sm={6}>
-            <SocialDrawerInstagramButton
-              disabled={
-                instance.type === 'brand_asset' ||
-                instance.template.medium !== 'Social'
-              }
-              onClick={gotoScheduleStep}
-            />
-          </Grid>
-          <Grid item sm={6}>
+          {hasAccess && (
+            <Grid item sm={6}>
+              <SocialDrawerInstagramButton
+                disabled={
+                  instance.type === 'brand_asset' ||
+                  instance.template.medium !== 'Social'
+                }
+                onClick={gotoScheduleStep}
+              />
+            </Grid>
+          )}
+          <Grid item sm={hasAccess ? 6 : 12}>
             <SocialDrawerDownloadButton instance={instance} />
           </Grid>
         </Grid>

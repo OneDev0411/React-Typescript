@@ -31,7 +31,7 @@ const useStyles = makeStyles(
       width: '100%',
       marginBottom: theme.spacing(1),
       flex: '0 1 auto',
-      zIndex: theme.zIndex.modal - 1
+      zIndex: theme.zIndex.gridAction
     },
     tabContainer: {
       width: '100%',

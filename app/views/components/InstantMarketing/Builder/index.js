@@ -144,6 +144,10 @@ class Builder extends React.Component {
           name: 'src',
           options: [
             {
+              value: '',
+              name: '-- Select icon --'
+            },
+            {
               value: 'https://i.ibb.co/qr5rZym/facebook.png',
               name: 'Facebook'
             },
@@ -237,6 +241,9 @@ class Builder extends React.Component {
 
       iframe.removeEventListener('paste', this.iframePasteHandler)
       iframe.removeEventListener('click', this.iframeClickHandler)
+
+      // Make the chance for others to cleanup the memory
+      this.editor.trigger('editor:unload')
     }
 
     unloadJS('ckeditor')
@@ -1081,6 +1088,7 @@ class Builder extends React.Component {
     this.editor.setStyle('')
     this.setEditorTemplateId(getTemplateObject(selectedTemplate).id)
     this.editor.setComponents(html)
+    this.editor.trigger('editor:template:loaded') // Let others know the template is loaded
     this.lockIn()
     this.deselectAll()
     this.resize()

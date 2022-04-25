@@ -1,4 +1,6 @@
+import { ACL } from '@app/constants/acl'
 import useNotify from '@app/hooks/use-notify'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 
 import ConnectFacebookPageButton, {
   FacebookAuthErrorCode
@@ -14,6 +16,8 @@ interface Props {
 function ConnectedInstagram({ className }: Props) {
   const notify = useNotify()
 
+  const hasAccess = useAcl(ACL.SHARE_TO_INSTAGRAM)
+
   const handleAuthSuccess = () =>
     notify({
       status: 'success',
@@ -25,6 +29,10 @@ function ConnectedInstagram({ className }: Props) {
       status: 'error',
       message: `Something went wrong. errorCode: ${errorCode}`
     })
+
+  if (!hasAccess) {
+    return null
+  }
 
   return (
     <ConnectedAccountsLayout
@@ -38,7 +46,7 @@ function ConnectedInstagram({ className }: Props) {
           onAuthError={handleAuthError}
           size="small"
         >
-          Connect Instagram Account
+          Connect Instagram account via Facebook
         </ConnectFacebookPageButton>
       }
     >

@@ -129,8 +129,12 @@ export async function getS3UrlFromTranscodeJob(
   return new Promise((resolve, reject) => {
     const checkIfJobIsFinished = async () => {
       try {
-        const result = await TRANSCODER_CLIENT.readJob({
-          Id: job.Id!
+        const result = await TRANSCODER_CLIENT.waitFor('jobComplete', {
+          Id: job.Id!,
+          $waiter: {
+            delay: 3,
+            maxAttempts: 10
+          }
         }).promise()
 
         if (result.Job?.Status === 'Error') {
@@ -147,7 +151,11 @@ export async function getS3UrlFromTranscodeJob(
           remainingAttempts -= 1
           setTimeout(checkIfJobIsFinished, 1000)
         } else {
-          reject(new Error('Transcoding job timed out'))
+          reject(
+            new Error(
+              `Transcoding job timed out. Job ${result.Job?.Id}, status: ${result.Job?.Status}`
+            )
+          )
         }
       } catch (err) {
         reject(err)
