@@ -25,7 +25,7 @@ interface Props {
   title: React.ReactNode
   buttonClassName?: string
   buttonVariant?: 'text' | 'outlined' | 'contained' | undefined
-  popoverOptions?: PopoverProps
+  popoverOptions?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
   tooltipOptions?: Omit<TooltipProps, 'children'>
   children: (renderProps: RenderProps) => React.ReactNode
   component?: string
@@ -113,7 +113,6 @@ export function DropdownTab({
           vertical: 'top',
           horizontal: 'left'
         }}
-        style={{ zIndex: 10 }}
         {...popoverOptions}
       >
         {children({

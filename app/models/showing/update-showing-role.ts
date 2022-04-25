@@ -3,7 +3,7 @@ import Fetch from 'services/fetch'
 async function updateShowingRole(
   showingId: UUID,
   showingRoleId: UUID,
-  data: IShowingRoleInput
+  data: IShowingRoleInputAPI
 ) {
   return (
     await new Fetch()
