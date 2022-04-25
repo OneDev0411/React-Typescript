@@ -1,10 +1,19 @@
-import React from 'react'
-
-import { Grid } from '@material-ui/core'
+import { Grid, makeStyles, Theme } from '@material-ui/core'
 
 import { Section, SectionItem } from 'components/PageSideNav/types'
 
 import Item from './components/Item'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      [theme.breakpoints.down('md')]: {
+        justifyContent: 'space-between'
+      }
+    }
+  }),
+  { name: 'SectionMegaMenu' }
+)
 
 interface Props {
   data: Section
@@ -13,6 +22,7 @@ interface Props {
 }
 
 export const SectionMegaMenu = ({ data, mediums, onClose }: Props) => {
+  const classes = useStyles()
   const { items } = data
 
   const sanitizeMediums = (item: SectionItem) => {
@@ -26,7 +36,7 @@ export const SectionMegaMenu = ({ data, mediums, onClose }: Props) => {
   }
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} className={classes.container}>
       {items.map((item, i) => {
         const currentSectionMediums = sanitizeMediums(item)
 

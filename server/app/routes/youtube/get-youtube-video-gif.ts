@@ -1,6 +1,8 @@
 import type { Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 
+import { LONG_RESPONSE_TIMEOUT_MS } from '../constants'
+
 import { TRANSCODER_GIF_PRESET_ID, TRANSCODER_PIPELINE_ID } from './constants'
 import {
   createTranscodeJob,
@@ -13,6 +15,15 @@ import {
 
 export default async (req: Request, res: Response) => {
   try {
+    if (!req.session?.user) {
+      res.status(403)
+      res.send('')
+
+      return
+    }
+
+    req.setTimeout(LONG_RESPONSE_TIMEOUT_MS)
+
     const url: string = req.body.url
 
     if (!isValidYouTubeUrl) {
@@ -69,11 +80,12 @@ export default async (req: Request, res: Response) => {
     }
 
     res.json({ url: gifUrl })
-  } catch (e) {
-    console.error(e)
+  } catch (error) {
+    console.error(error)
     res.status(500)
     res.json({
-      error: 'Error creating gif'
+      error: 'Error creating gif',
+      details: error.toString()
     })
   }
 }
