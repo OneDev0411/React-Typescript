@@ -181,7 +181,7 @@ function SideNavMenu(props: WithRouterProps) {
           to: '/dashboard/marketing'
         },
         {
-          access: ['Marketing'],
+          access: ['CRM'],
           id: 'flows',
           label: 'Flows',
           to: '/dashboard/flows'
@@ -218,7 +218,7 @@ function SideNavMenu(props: WithRouterProps) {
           to: '/dashboard/mls'
         },
         {
-          access: openHouseAccess,
+          access: ['CRM'],
           id: 'tours',
           label: 'Tours',
           to: '/dashboard/tours'
@@ -249,7 +249,7 @@ function SideNavMenu(props: WithRouterProps) {
           to: '/dashboard/listings'
         },
         {
-          access: ['CRM'],
+          access: openHouseAccess,
           id: 'open-house',
           label: 'Open House',
           to: '/dashboard/open-house'
