@@ -30,7 +30,8 @@ const useStyles = makeStyles(
       display: 'flex',
       width: '100%',
       marginBottom: theme.spacing(1),
-      flex: '0 1 auto'
+      flex: '0 1 auto',
+      zIndex: theme.zIndex.gridAction
     },
     tabContainer: {
       width: '100%',
@@ -45,7 +46,7 @@ const useStyles = makeStyles(
 )
 
 /**
- *  @example
+ *  @example 
  * <PageTabs
     tabs={[
       <Tab key={0} label="All" value={0} />,
