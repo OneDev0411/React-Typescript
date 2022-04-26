@@ -9,7 +9,7 @@ import { mdiClose } from '@mdi/js'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import { useCloseModernDialog } from './use-close-modern-dialog'
+import { useCloseConfirmationDialog } from './use-close-confirmation-dialog'
 
 const useStyles = makeStyles(
   theme => ({
@@ -23,22 +23,22 @@ const useStyles = makeStyles(
     },
     title: { flex: 1 }
   }),
-  { name: 'ModernDialogHeader' }
+  { name: 'ConfirmationDialogHeader' }
 )
 
-interface ModernDialogHeaderProps {
+interface ConfirmationDialogHeaderProps {
   title: string
   closeProps?: Omit<IconButtonProps, 'onClick'>
   onCloseClick?: () => void
 }
 
-function ModernDialogHeader({
+function ConfirmationDialogHeader({
   title,
   closeProps,
   onCloseClick
-}: ModernDialogHeaderProps) {
+}: ConfirmationDialogHeaderProps) {
   const classes = useStyles()
-  const closeDialog = useCloseModernDialog()
+  const closeDialog = useCloseConfirmationDialog()
 
   const handleClose = () => {
     closeDialog()
@@ -57,4 +57,4 @@ function ModernDialogHeader({
   )
 }
 
-export default ModernDialogHeader
+export default ConfirmationDialogHeader

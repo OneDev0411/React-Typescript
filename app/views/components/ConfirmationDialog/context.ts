@@ -1,4 +1,4 @@
 import { createContext } from 'react'
 
-export const ModernDialogCloseContext =
+export const ConfirmationDialogCloseContext =
   createContext<Optional<() => void>>(undefined)

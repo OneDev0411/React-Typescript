@@ -2,17 +2,17 @@ import { ReactNode } from 'react'
 
 import { DialogActions, ButtonProps, makeStyles } from '@material-ui/core'
 
-import ModernDialogFooterAction from './ModernDialogFooterAction'
-import { useCloseModernDialog } from './use-close-modern-dialog'
+import ConfirmationDialogFooterAction from './ConfirmationDialogFooterAction'
+import { useCloseConfirmationDialog } from './use-close-confirmation-dialog'
 
 const useStyles = makeStyles(
   theme => ({
     root: { padding: theme.spacing(2, 3, 3, 3) }
   }),
-  { name: 'ModernDialogFooter' }
+  { name: 'ConfirmationDialogFooter' }
 )
 
-interface ModernDialogFooterProps {
+interface ConfirmationDialogFooterProps {
   children?: ReactNode
   cancelLabel?: string
   onCancel?: ButtonProps['onClick']
@@ -26,7 +26,7 @@ interface ModernDialogFooterProps {
   renderConfirm?: (props: ButtonProps) => JSX.Element
 }
 
-function ModernDialogFooter({
+function ConfirmationDialogFooter({
   children,
   cancelLabel,
   onCancel,
@@ -38,9 +38,9 @@ function ModernDialogFooter({
   keepDialogOpenOnConfirm,
   confirmProps,
   renderConfirm
-}: ModernDialogFooterProps) {
+}: ConfirmationDialogFooterProps) {
   const classes = useStyles()
-  const closeDialog = useCloseModernDialog()
+  const closeDialog = useCloseConfirmationDialog()
 
   const cancelButtonProps: ButtonProps = {
     size: 'small',
@@ -75,12 +75,12 @@ function ModernDialogFooter({
     <DialogActions className={classes.root}>
       {children}
       {cancelLabel && (
-        <ModernDialogFooterAction
+        <ConfirmationDialogFooterAction
           renderButton={renderCancel}
           buttonProps={cancelButtonProps}
         />
       )}
-      <ModernDialogFooterAction
+      <ConfirmationDialogFooterAction
         renderButton={renderConfirm}
         buttonProps={confirmButtonProps}
       />
@@ -88,4 +88,4 @@ function ModernDialogFooter({
   )
 }
 
-export default ModernDialogFooter
+export default ConfirmationDialogFooter

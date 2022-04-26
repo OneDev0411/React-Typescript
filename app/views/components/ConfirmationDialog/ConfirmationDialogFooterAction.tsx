@@ -1,14 +1,14 @@
 import { Button, ButtonProps } from '@material-ui/core'
 
-interface ModernDialogFooterActionProps {
+interface ConfirmationDialogFooterActionProps {
   buttonProps: ButtonProps
   renderButton?: (props: ButtonProps) => JSX.Element
 }
 
-function ModernDialogFooterAction({
+function ConfirmationDialogFooterAction({
   buttonProps,
   renderButton
-}: ModernDialogFooterActionProps) {
+}: ConfirmationDialogFooterActionProps) {
   if (renderButton) {
     return renderButton(buttonProps)
   }
@@ -16,4 +16,4 @@ function ModernDialogFooterAction({
   return <Button {...buttonProps} />
 }
 
-export default ModernDialogFooterAction
+export default ConfirmationDialogFooterAction

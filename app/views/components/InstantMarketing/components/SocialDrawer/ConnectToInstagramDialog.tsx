@@ -8,10 +8,10 @@ import ConnectFacebookPageButton, {
 } from '@app/components/Pages/Dashboard/Account/components/ConnectFacebookPageButton'
 import HowToConnectToInstagramButton from '@app/components/Pages/Dashboard/Account/components/HowToConnectToInstagramButton'
 import HowToConnectToInstagramDialog from '@app/components/Pages/Dashboard/Account/components/HowToConnectToInstagramDialog'
+import ConfirmationDialog, {
+  ConfirmationDialogProps
+} from '@app/views/components/ConfirmationDialog'
 import Logo from '@app/views/components/Logo'
-import ModernDialog, {
-  ModernDialogProps
-} from '@app/views/components/ModernDialog'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
@@ -35,7 +35,7 @@ const useStyles = makeStyles(
   { name: 'ConnectToInstagramDialog' }
 )
 
-type ConnectToInstagramDialogProps = ModernDialogProps &
+type ConnectToInstagramDialogProps = ConfirmationDialogProps &
   Pick<ConnectFacebookPageButtonProps, 'onAuthError' | 'onAuthSuccess'>
 
 function ConnectToInstagramDialog({
@@ -71,16 +71,16 @@ function ConnectToInstagramDialog({
 
   return (
     <>
-      <ModernDialog
+      <ConfirmationDialog
         {...dialogProps}
         open={!isErrorDialogOpen && !isHelpDialogOpen && open}
         onClose={onClose}
       >
-        <ModernDialog.Header
+        <ConfirmationDialog.Header
           title="Do you want to connect Instagram to Rechat?"
           closeProps={{ disabled: isAuthWindowOpen }}
         />
-        <ModernDialog.Body wrapInDialogContent={false}>
+        <ConfirmationDialog.Body wrapInDialogContent={false}>
           <div className={classes.graphic}>
             <Logo
               className={classes.icon}
@@ -103,8 +103,8 @@ function ConnectToInstagramDialog({
               your connected account later in Account Settings.
             </Typography>
           </DialogContent>
-        </ModernDialog.Body>
-        <ModernDialog.Footer
+        </ConfirmationDialog.Body>
+        <ConfirmationDialog.Footer
           cancelLabel="How to connect to Instagram"
           cancelProps={{ disabled: isAuthWindowOpen }}
           onCancel={openHelpDialog}
@@ -125,7 +125,7 @@ function ConnectToInstagramDialog({
             />
           )}
         />
-      </ModernDialog>
+      </ConfirmationDialog>
       <HowToConnectToInstagramDialog
         open={isHelpDialogOpen}
         onConnectClick={handleConnectButton}

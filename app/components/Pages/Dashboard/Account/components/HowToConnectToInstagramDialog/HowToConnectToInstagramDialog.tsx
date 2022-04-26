@@ -1,8 +1,8 @@
 import { makeStyles } from '@material-ui/core'
 
-import ModernDialog, {
-  ModernDialogProps
-} from '@app/views/components/ModernDialog'
+import ConfirmationDialog, {
+  ConfirmationDialogProps
+} from '@app/views/components/ConfirmationDialog'
 
 const useStyles = makeStyles(
   theme => ({
@@ -11,7 +11,7 @@ const useStyles = makeStyles(
   { name: 'HowToConnectToInstagramDialog' }
 )
 
-interface HowToConnectToInstagramDialogProps extends ModernDialogProps {
+interface HowToConnectToInstagramDialogProps extends ConfirmationDialogProps {
   onConnectClick: () => void
 }
 
@@ -26,9 +26,9 @@ function HowToConnectToInstagramDialog({
   }
 
   return (
-    <ModernDialog {...otherDialogProps}>
-      <ModernDialog.Header title="How to Connect to Instagram" />
-      <ModernDialog.Body>
+    <ConfirmationDialog {...otherDialogProps}>
+      <ConfirmationDialog.Header title="How to Connect to Instagram" />
+      <ConfirmationDialog.Body>
         <ol className={classes.list}>
           <li>You need to have a Facebook page.</li>
           <li>
@@ -40,14 +40,14 @@ function HowToConnectToInstagramDialog({
           </li>
           <li>Connect your Instagram business account to Rechat.</li>
         </ol>
-      </ModernDialog.Body>
-      <ModernDialog.Footer
+      </ConfirmationDialog.Body>
+      <ConfirmationDialog.Footer
         confirmLabel="Connect Instagram Account"
         onConfirm={onConnectClick}
         cancelLabel="Learn More"
         onCancel={handleLearnMore}
       />
-    </ModernDialog>
+    </ConfirmationDialog>
   )
 }
 

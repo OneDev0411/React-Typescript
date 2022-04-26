@@ -6,18 +6,18 @@ const useStyles = makeStyles(
   theme => ({
     root: { paddingTop: theme.spacing(3) }
   }),
-  { name: 'ModernDialogBody' }
+  { name: 'ConfirmationDialogBody' }
 )
 
-interface ModernDialogBodyProps {
+interface ConfirmationDialogBodyProps {
   children: ReactNode
   wrapInDialogContent?: boolean
 }
 
-function ModernDialogBody({
+function ConfirmationDialogBody({
   children,
   wrapInDialogContent = true
-}: ModernDialogBodyProps) {
+}: ConfirmationDialogBodyProps) {
   const classes = useStyles()
 
   return wrapInDialogContent ? (
@@ -31,4 +31,4 @@ function ModernDialogBody({
   )
 }
 
-export default ModernDialogBody
+export default ConfirmationDialogBody
