@@ -4,11 +4,15 @@ import { useActiveBrandId } from '@app/hooks/brand'
 import { useCreateSocialPost } from '@app/models/social-posts'
 import { convertDateToTimestamp } from '@app/utils/date-utils'
 
-import SocialPostForm, { FormValues } from '../SocialPostForm'
+import SocialPostForm, {
+  SocialPostFormProps,
+  FormValues
+} from '../SocialPostForm'
 
 import SocialDrawerSocialPostFormFooter from './SocialDrawerSocialPostFormFooter'
 
-export interface SocialDrawerSocialPostFormProps {
+export interface SocialDrawerSocialPostFormProps
+  extends Pick<SocialPostFormProps, 'initialValues'> {
   className?: string
   instance: Optional<IMarketingTemplateInstance | IBrandAsset>
   onPostScheduled?: () => void
@@ -21,7 +25,8 @@ function SocialDrawerSocialPostForm({
   className,
   instance,
   onPostScheduled,
-  onPostSent
+  onPostSent,
+  initialValues
 }: SocialDrawerSocialPostFormProps) {
   const isScheduledRef = useRef<boolean>(false)
 
@@ -64,6 +69,7 @@ function SocialDrawerSocialPostForm({
       className={className}
       onSubmit={handleSubmit}
       formId={formId}
+      initialValues={initialValues}
     >
       <SocialDrawerSocialPostFormFooter formId={formId} />
     </SocialPostForm>

@@ -15,27 +15,29 @@ export interface FormValues {
   dueAt: Nullable<Date>
 }
 
-interface SocialPostFormProps {
+export interface SocialPostFormProps {
   className?: string
   formId: string
   onSubmit: (values: FormValues) => Promise<void>
   children?: ReactNode
+  initialValues?: FormValues
 }
 
 function SocialPostForm({
   className,
   formId,
   onSubmit,
-  children
+  children,
+  initialValues = {
+    facebookPage: null,
+    caption: '',
+    dueAt: null
+  }
 }: SocialPostFormProps) {
   return (
     <Form<FormValues>
       onSubmit={onSubmit}
-      initialValues={{
-        facebookPage: null,
-        caption: '',
-        dueAt: null
-      }}
+      initialValues={initialValues}
       render={({ handleSubmit }) => (
         <>
           <form className={className} onSubmit={handleSubmit} id={formId}>
