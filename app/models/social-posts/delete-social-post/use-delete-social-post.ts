@@ -22,7 +22,7 @@ export type UseDeleteSocialPostOptions = Omit<
     Pick<ISocialPost, 'id' | 'brand'>,
     { cache: UpdateCacheActions }
   >,
-  'notify' | 'invalidates'
+  'invalidates'
 >
 
 export function useDeleteSocialPost(
@@ -35,8 +35,9 @@ export function useDeleteSocialPost(
     {
       ...options,
       notify: {
-        onSuccess: 'The social post was deleted',
+        onSuccess: options?.notify?.onSuccess ?? 'The social post was deleted',
         onError:
+          options?.notify?.onError ??
           'Something went wrong while deleting the social post. Please try again.'
       },
       onMutate: async socialPost => ({
