@@ -283,11 +283,10 @@ function SideNavMenu(props: WithRouterProps) {
       ]
     },
     {
-      access: dealsAccess,
       hasDivider: false,
       icon: mdiBellOutline,
       id: 'notifications',
-      isHidden: !useAcl(dealsAccess),
+      isHidden: !user,
       label: 'Notifications',
       notificationCount: appNotifications,
       to: '/dashboard/notifications'
