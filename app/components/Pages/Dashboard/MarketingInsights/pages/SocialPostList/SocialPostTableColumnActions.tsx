@@ -9,6 +9,7 @@ import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { isSocialPostExecuted, isSocialPostFailed } from './helpers'
+import SocialPostFailedChip from './SocialPostFailedChip'
 import SocialPostPreviewButton from './SocialPostPreviewButton'
 
 const useStyles = makeStyles(
@@ -23,7 +24,7 @@ const useStyles = makeStyles(
         color: theme.palette.primary.main
       }
     },
-    deleteButton: { marginLeft: theme.spacing(1) }
+    actionMargin: { marginLeft: theme.spacing(1) }
   }),
   { name: 'SocialPostTableColumnActions' }
 )
@@ -72,15 +73,19 @@ function SocialPostTableColumnActions({
     return null
   }
 
+  const isFailed = isSocialPostFailed(socialPost)
+
   // If it is executed successfully, display nothing
-  if (isSocialPostExecuted(socialPost) && !isSocialPostFailed(socialPost)) {
+  if (isSocialPostExecuted(socialPost) && !isFailed) {
     return null
   }
 
   // Otherwise, it is not executed yet and we need to have the reschedule/retry and delete buttons
   return (
     <div className={classes.root}>
+      {isFailed && <SocialPostFailedChip />}
       <SocialPostPreviewButton
+        className={classes.actionMargin}
         socialPost={socialPost}
         color="primary"
         size="small"
@@ -88,7 +93,7 @@ function SocialPostTableColumnActions({
         onSocialPostScheduledOrSent={handleSilentDelete}
       />
       <IconButton
-        className={classes.deleteButton}
+        className={classes.actionMargin}
         size="small"
         onClick={handleDelete}
         disabled={isWorking}
