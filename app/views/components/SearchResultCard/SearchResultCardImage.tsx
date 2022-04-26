@@ -1,6 +1,8 @@
 import { makeStyles, CircularProgress, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 
+import { VideoThumbnail } from '../VideoThumbnail'
+
 import { hasImageUrl, isNoImageState } from './helpers'
 
 const useStyles = makeStyles(
@@ -68,6 +70,8 @@ function SearchResultCardImage({
               <div className={classes.alt}>{imageAlt}</div>
               <div>(no image)</div>
             </Typography>
+          ) : imageUrl?.endsWith('mp4') ? (
+            <VideoThumbnail className={classes.item} url={imageUrl} />
           ) : (
             <img
               className={classNames(classes.item, classes.image)}

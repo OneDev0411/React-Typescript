@@ -1,11 +1,12 @@
 export interface SearchVideoResult {
+  playerUrl: string
   url: string
-  title: string
-  thumbnail: string
-  publisher: string
-  publishedAt: string
+  title?: string
+  thumbnail?: string
+  publisher?: string
+  publishedAt?: string
   sourceIcon: string
-  source: 'youtube' | 'vimeo'
+  source: 'youtube' | 'vimeo' | 'videobolt' | 'gallery'
 }
 
 export type YouTubeVideoResource = gapi.client.youtube.SearchResult
@@ -23,4 +24,24 @@ export interface VimeoVideoResource {
   title: string
   upload_date: string
   video_id: number
+}
+
+export interface VideoboltVideo {
+  listing_id: string
+  timestamp: string
+  type: string
+  video_url_branded: string
+  video_url_clean: string
+  video_url_square: string
+  video_landing_page: string
+  edit_video: string
+  region: string
+  qr: string
+  email: string
+}
+
+export enum VideoTab {
+  Online = 'online',
+  Gallery = 'gallery',
+  Videobolt = 'videobolt'
 }

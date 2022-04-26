@@ -96,6 +96,12 @@ export const selectUserEmailSignatureImpersonateFirst = (state: IAppState) => {
   return user?.email_signature
 }
 
+export const selectUserEmailImpersonateFirst = (state: IAppState) => {
+  const user = selectUserImpersonateFirst(state)
+
+  return user?.email
+}
+
 /**
  * Returns true if the user is signed in otherwise returns false
  * @param state The app state
