@@ -80,6 +80,8 @@ export default function SideNavAccordionItem({
   const classes = useStyles()
   const { testId = '', id, hasDivider, subMenu } = data
 
+  const filteredSubMenu = subMenu?.filter(menu => !menu.isHidden)
+
   const menuId = 'nav-'.concat(id) as ExpandedMenu
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -90,7 +92,7 @@ export default function SideNavAccordionItem({
   const popperId = isOpen ? id : undefined
 
   const handleShowPopper = (event: MouseEvent<HTMLElement>) => {
-    if (!subMenu || expandedMenu === menuId) {
+    if (!filteredSubMenu || expandedMenu === menuId) {
       return
     }
 
@@ -99,7 +101,7 @@ export default function SideNavAccordionItem({
   }
 
   const handleHidePopper = () => {
-    if (!subMenu) {
+    if (!filteredSubMenu) {
       return
     }
 
@@ -108,7 +110,7 @@ export default function SideNavAccordionItem({
   }
 
   const handleClick = () => {
-    if (!subMenu || expandedMenu === menuId) {
+    if (!filteredSubMenu || expandedMenu === menuId) {
       return
     }
 
@@ -129,7 +131,7 @@ export default function SideNavAccordionItem({
         onClick={handleClick}
       >
         <SideNavAccordionSummary
-          data={data}
+          data={{ ...data, subMenu: filteredSubMenu }}
           expandedMenu={expandedMenu}
           hoveredItem={hoveredItem}
           menuId={menuId}
@@ -137,7 +139,7 @@ export default function SideNavAccordionItem({
           onExpandMenu={onExpandMenu}
         />
 
-        {subMenu &&
+        {filteredSubMenu &&
           (isOpen ? (
             <Popper
               className={classes.popper}
@@ -153,7 +155,7 @@ export default function SideNavAccordionItem({
                     <div className={classes.paper}>
                       <SideNavAccordionDetails
                         isOpen={isOpen}
-                        subMenu={subMenu}
+                        subMenu={filteredSubMenu}
                       />
                     </div>
                   </Paper>
@@ -161,7 +163,10 @@ export default function SideNavAccordionItem({
               )}
             </Popper>
           ) : (
-            <SideNavAccordionDetails isOpen={isOpen} subMenu={subMenu} />
+            <SideNavAccordionDetails
+              isOpen={isOpen}
+              subMenu={filteredSubMenu}
+            />
           ))}
       </Accordion>
 
