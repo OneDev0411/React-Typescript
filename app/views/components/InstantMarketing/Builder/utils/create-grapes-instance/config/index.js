@@ -38,7 +38,7 @@ export default {
     outline: none;
   }
   
-  p > *[data-gjs-type="text"][draggable="true"] {
+  *[data-gjs-type="text"][draggable="true"] {
     -webkit-user-select: text;
   }
   `,
