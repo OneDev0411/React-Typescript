@@ -4,6 +4,7 @@ import { Button, makeStyles, createStyles, Theme } from '@material-ui/core'
 import { mdiPlus } from '@mdi/js'
 
 import { SvgIcon } from '../../SvgIcons/SvgIcon'
+import type { CustomButtonRenderProps } from '../types'
 
 interface Props {
   renderButton?: (renderProps: CustomButtonRenderProps) => React.ReactNode
@@ -39,15 +40,13 @@ export default function GlobalActionsMenu({ onClick, renderButton }: Props) {
         <Button
           variant="contained"
           color="primary"
-          size="small"
-          fullWidth
           onClick={onClick}
           startIcon={<SvgIcon path={mdiPlus} />}
           classes={{
             root: classes.root
           }}
         >
-          Create
+          <span className={classes.label}>CREATE</span>
         </Button>
       )}
     </div>

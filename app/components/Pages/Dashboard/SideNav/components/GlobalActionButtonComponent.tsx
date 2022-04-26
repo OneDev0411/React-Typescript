@@ -1,6 +1,8 @@
 import { Button, Theme, withStyles } from '@material-ui/core'
+import { mdiPlus } from '@mdi/js'
 
 import { CustomButtonRenderProps } from '@app/views/components/GlobalActionsButton/types'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 const CustomButton = withStyles((theme: Theme) => ({
   root: {
@@ -20,11 +22,10 @@ export function GlobalActionButtonComponent(props: CustomButtonRenderProps) {
     <CustomButton
       variant="contained"
       color="primary"
-      size="small"
-      fullWidth
+      startIcon={<SvgIcon path={mdiPlus} />}
       {...props}
     >
-      Create
+      CREATE
     </CustomButton>
   )
 }

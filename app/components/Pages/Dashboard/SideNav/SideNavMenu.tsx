@@ -35,6 +35,7 @@ import { ScrollableArea } from '@app/views/components/ScrollableArea'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
+import { GlobalActionButtonComponent } from './components/GlobalActionButtonComponent'
 import Logo from './components/Logo'
 import PoweredBy from './components/PoweredBy'
 import SideNavAccordion from './components/SideNavAccordion'
@@ -65,7 +66,7 @@ const useStyles = makeStyles(
       zIndex: 100,
       display: 'flex',
       flexDirection: 'column',
-      backgroundColor: theme.palette.navbar.background
+      backgroundColor: theme.navbar.background.color
     }
   }),
   {
@@ -317,7 +318,7 @@ function SideNavMenu(props: WithRouterProps) {
   return (
     <aside className={classes.sidenav}>
       <Logo />
-      <GlobalActionsButton />
+      <GlobalActionsButton renderButton={GlobalActionButtonComponent} />
 
       <ScrollableArea
         shadowColor={scrollableAreaShadowColor}
