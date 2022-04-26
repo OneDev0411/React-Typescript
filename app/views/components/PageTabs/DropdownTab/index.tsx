@@ -113,7 +113,6 @@ export function DropdownTab({
           vertical: 'top',
           horizontal: 'left'
         }}
-        style={{ zIndex: 10 }}
         {...popoverOptions}
       >
         {children({

@@ -1,8 +1,9 @@
-import React, { MouseEvent } from 'react'
+import { MouseEvent } from 'react'
 
-import { makeStyles, createStyles, Theme, Button } from '@material-ui/core'
+import { Button, makeStyles, createStyles, Theme } from '@material-ui/core'
+import { mdiPlus } from '@mdi/js'
 
-import { CustomButtonRenderProps } from '../types'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 interface Props {
   renderButton?: (renderProps: CustomButtonRenderProps) => React.ReactNode
@@ -12,11 +13,15 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      padding: theme.spacing(0, 2.5),
-      marginBottom: theme.spacing(3)
+      marginBottom: theme.spacing(4),
+      padding: theme.spacing(0, 1, 0, 2)
+    },
+    label: {
+      marginTop: theme.spacing(0.25)
     },
     root: {
-      borderRadius: '50px'
+      borderRadius: theme.spacing(8),
+      fontSize: theme.typography.body2.fontSize
     }
   })
 )
@@ -37,6 +42,7 @@ export default function GlobalActionsMenu({ onClick, renderButton }: Props) {
           size="small"
           fullWidth
           onClick={onClick}
+          startIcon={<SvgIcon path={mdiPlus} />}
           classes={{
             root: classes.root
           }}

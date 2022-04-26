@@ -8,27 +8,38 @@ import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {
-      padding: theme.spacing(1.5, 2, 1.5, 3)
-    },
     dropdownToggleButton: {
-      width: '100%',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      maxWidth: '100%',
+      padding: theme.spacing(2, 2.5, 2, 3),
+      width: '100%'
     },
     wrapper: {
       display: 'flex',
       width: `calc(100% - ${theme.spacing(3)}px)`,
-      color: theme.navbar.background.contrastText
+      color: theme.palette.grey[400],
+      alignItems: 'center'
     },
     userDetails: {
       textAlign: 'left',
       width: '100%'
     },
+    avatar: {
+      width: theme.spacing(4),
+      height: theme.spacing(4),
+      marginRight: theme.spacing(1)
+    },
     userDisplayName: {
-      color: theme.navbar.background.contrastText
+      color: theme.palette.grey[400],
+      lineHeight: 1.3,
+      '&:hover': {
+        color: theme.palette.primary.main
+      }
     },
     arrowIcon: {
-      color: theme.navbar.background.contrastText
+      color: theme.palette.grey[400],
+      marginLeft: theme.spacing(0.5),
+      alignSelf: 'center'
     },
     arrowIconRotated: {
       transform: 'rotateX(0)'
@@ -60,32 +71,30 @@ export default function ToggleButton(props: Props) {
   }`
 
   return (
-    <div className={classes.container}>
-      <Tooltip placement="right" title={tooltipTitle}>
-        <DropdownToggleButton
-          id={props.id}
-          onClick={props.onClick}
-          isActive={props.isOpen}
-          classes={{
-            arrowIcon: classes.arrowIcon,
-            root: classes.dropdownToggleButton,
-            rotated: classes.arrowIconRotated
-          }}
-          iconPath={mdiDotsVertical}
-        >
-          <div className={classes.wrapper}>
-            <div className={classes.userDetails}>
-              <Typography
-                noWrap
-                variant="body1"
-                className={classes.userDisplayName}
-              >
-                {userName ?? activeBrand?.name ?? '[No Active Brand]'}
-              </Typography>
-            </div>
+    <Tooltip placement="right" title={tooltipTitle}>
+      <DropdownToggleButton
+        id={props.id}
+        onClick={props.onClick}
+        isActive={props.isOpen}
+        classes={{
+          arrowIcon: classes.arrowIcon,
+          root: classes.dropdownToggleButton,
+          rotated: classes.arrowIconRotated
+        }}
+        iconPath={mdiDotsVertical}
+      >
+        <div className={classes.wrapper}>
+          <div className={classes.userDetails}>
+            <Typography
+              noWrap
+              variant="body1"
+              className={classes.userDisplayName}
+            >
+              {activeBrand?.name ?? '[No Active Brand]'}
+            </Typography>
           </div>
-        </DropdownToggleButton>
-      </Tooltip>
-    </div>
+        </div>
+      </DropdownToggleButton>
+    </Tooltip>
   )
 }
