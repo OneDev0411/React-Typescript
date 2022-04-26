@@ -1,8 +1,8 @@
 import { Chip } from '@material-ui/core'
 import { mdiAlertOutline } from '@mdi/js'
 
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 function SocialPostFailedChip() {
   return (

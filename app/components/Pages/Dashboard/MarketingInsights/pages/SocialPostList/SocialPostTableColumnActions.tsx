@@ -48,7 +48,8 @@ function SocialPostTableColumnActions({
 
   const handleSilentDelete = () => silentDeleteSocialPost(socialPost)
 
-  const isSocialPostMine = useSelector(selectUserId) === socialPost.owner.id
+  const socialPostBelongsToCurrentUser =
+    useSelector(selectUserId) === socialPost.owner.id
 
   const isWorking = isDeleting || isSilentDeleting
 
@@ -69,7 +70,7 @@ function SocialPostTableColumnActions({
   }
 
   // Do not show the actions if the social post is not mine
-  if (!isSocialPostMine) {
+  if (!socialPostBelongsToCurrentUser) {
     return null
   }
 

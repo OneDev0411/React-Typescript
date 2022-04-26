@@ -19,11 +19,11 @@ function SocialPostPreviewButton({
   onSocialPostScheduledOrSent,
   ...buttonProps
 }: SocialPostPreviewButtonProps) {
-  const [open, setOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
-  const openDialog = () => setOpen(true)
+  const openDialog = () => setIsOpen(true)
 
-  const closeDialog = () => setOpen(false)
+  const closeDialog = () => setIsOpen(false)
 
   const handleSocialPostScheduledOrSent = () => {
     closeDialog()
@@ -36,6 +36,8 @@ function SocialPostPreviewButton({
 
   const isFailed = isSocialPostFailed(socialPost)
 
+  const neededActionName = isFailed ? 'Retry' : 'Reschedule'
+
   return (
     <>
       <Button
@@ -43,11 +45,11 @@ function SocialPostPreviewButton({
         onClick={openDialog}
         disabled={isLoading || disabled}
       >
-        {isFailed ? 'Retry' : 'Reschedule'}
+        {neededActionName}
       </Button>
-      {open && (
+      {isOpen && (
         <SocialDrawer
-          title={`${isFailed ? 'Retry' : 'Reschedule'} Social Post`}
+          title={`${neededActionName} Social Post`}
           instance={socialPost.template_instance}
           initialStep="Schedule"
           onClose={closeDialog}
