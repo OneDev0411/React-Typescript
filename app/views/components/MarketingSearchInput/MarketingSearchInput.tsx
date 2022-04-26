@@ -12,6 +12,7 @@ import { MarketingSearchInputProps, TemplateTypeWithMedium } from './types'
 
 interface TemplateTypeWithMediumAndCategory extends TemplateTypeWithMedium {
   category: string
+  title: string
 }
 
 export default function MarketingSearchInput({
@@ -23,7 +24,10 @@ export default function MarketingSearchInput({
     () =>
       types.map(data => ({
         ...data,
-        category: getSection(data.type).title
+        category: getSection(data.type).title,
+        title: `${getTemplateTypeLabel(data.type)}${
+          data.medium ? ` ${getTemplateMediumLabel(data.medium)}` : ''
+        }`
       })),
     [types, getSection]
   )
@@ -37,19 +41,13 @@ export default function MarketingSearchInput({
     onSelect(option)
   }
 
-  const getOptionLabel = (option: TemplateTypeWithMediumAndCategory) => {
-    return `${getTemplateTypeLabel(option.type)}${
-      option.medium ? ` ${getTemplateMediumLabel(option.medium)}` : ''
-    }`
-  }
-
   return (
     <Autocomplete<TemplateTypeWithMediumAndCategory, false, true, true>
       openOnFocus
       ListboxProps={{ style: { maxHeight: '50vh' } }}
       options={typesWithCategory}
       onChange={(e, option) => handleSelect(option)}
-      getOptionLabel={getOptionLabel}
+      getOptionLabel={option => option.title}
       groupBy={option => option.category}
       noOptionsText="No results"
       filterOptions={(options, state) => {
@@ -58,7 +56,7 @@ export default function MarketingSearchInput({
         }
 
         return new Fuse(options, {
-          keys: ['type', 'medium', 'category'],
+          keys: ['title', 'type', 'medium', 'category'],
           threshold: 0.3
         })
           .search(state.inputValue)
