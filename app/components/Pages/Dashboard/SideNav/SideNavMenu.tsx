@@ -192,7 +192,7 @@ function SideNavMenu(props: WithRouterProps) {
         {
           access: ['CRM'],
           id: 'flows',
-          isHidden: !useAcl(['Marketing']),
+          isHidden: !useAcl(['CRM']),
           label: 'Flows',
           to: '/dashboard/flows'
         },
