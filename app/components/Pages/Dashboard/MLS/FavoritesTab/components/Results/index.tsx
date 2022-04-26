@@ -78,7 +78,6 @@ interface Props {
   isWidget: boolean
   onChangeSort: (sort: SortString) => void
   activeSort: { index: SortIndex; ascending: boolean }
-  user: IUser
   onToggleListingModal?: (id: UUID, isOpen: boolean) => void
 }
 
@@ -90,7 +89,6 @@ export const Results = ({
   activeSort,
   onChangeSort,
   isWidget,
-  user,
   onToggleListingModal = noop
 }: Props) => {
   const classes = useStyles()
@@ -113,8 +111,7 @@ export const Results = ({
     const sortedListings = sortListingsByIndex(
       state.result.listings,
       activeSort.index,
-      activeSort.ascending,
-      user
+      activeSort.ascending
     )
 
     return getListingsPage(sortedListings, currentPage, PAGE_SIZE)
@@ -122,8 +119,7 @@ export const Results = ({
     state.result.listings,
     activeSort.index,
     activeSort.ascending,
-    currentPage,
-    user
+    currentPage
   ])
 
   const scrollToTop = () => {

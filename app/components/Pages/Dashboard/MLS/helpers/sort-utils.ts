@@ -4,7 +4,6 @@ export const SORT_FIELD_DEFAULT = '-price'
 
 import omit from 'lodash/omit'
 
-import { getListingPrice } from '@app/utils/listing'
 import { getSettingFromTeam } from '@app/utils/user-teams'
 
 import { IMapPosition, Sort, SortIndex, SortPrefix, SortString } from '../types'
@@ -79,11 +78,8 @@ export function parseToValertSort(sort: SortIndex): string {
 export function sortListingsByIndex<T extends ICompactListing | IListing>(
   listings: T[],
   index: SortIndex,
-  ascending: boolean,
-  user: IUser
+  ascending: boolean
 ) {
-  console.log(user.user_type)
-
   const injectIndexValues = (listing: T) => {
     const property =
       listing.type === 'compact_listing'
@@ -94,19 +90,9 @@ export function sortListingsByIndex<T extends ICompactListing | IListing>(
     const builtYear = property.year_built
     const lotSizeArea = property.lot_size_area
     const sqft = property.square_meters || 0
-    // replace price property with calculated price to sort
-    // but reserve actual price to bring back at the end
-    const actualPrice = listing.price
-    const calculatedPrice = getListingPrice(
-      listing.price,
-      listing.close_price,
-      user
-    )
 
     return {
       ...listing,
-      actualPrice,
-      price: calculatedPrice,
       baths,
       beds,
       builtYear,
@@ -116,10 +102,8 @@ export function sortListingsByIndex<T extends ICompactListing | IListing>(
   }
 
   const omitIndexValues = (listing: ReturnType<typeof injectIndexValues>) => {
-    // replace price with preserved price (actualPrice)
     // omit the unnecessary actualPrice property
-    return omit({ ...listing, price: listing.actualPrice }, [
-      'actualPrice',
+    return omit(listing, [
       'baths',
       'beds',
       'builtYear',
@@ -128,9 +112,8 @@ export function sortListingsByIndex<T extends ICompactListing | IListing>(
     ]) as unknown as T // due to lodash typing limitations
   }
 
-  const formattedListings = listings.map(listing => injectIndexValues(listing))
-
-  return formattedListings
+  return listings
+    .map(listing => injectIndexValues(listing))
     .sort((a, b) => sortByIndex(a, b, index, ascending))
     .map(omitIndexValues)
 }

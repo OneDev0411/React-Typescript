@@ -178,26 +178,24 @@ class SavedSearch extends React.Component {
   }
 
   sortListings = memoize(
-    (listings, index, ascending, user) => {
-      return sortListingsByIndex(listings, index, ascending, user)
+    (listings, index, ascending) => {
+      return sortListingsByIndex(listings, index, ascending)
     },
     // Since listings are equal during renders and are read from this.state
     // in order to make memoization work properly, we need to build a custom
     // resolver function which makes a unique key for a specific saved search id,
     // index and sort direction and returns the previously calculated items once it's
     // called.
-    (...args) => `${hash(args[0])}_${args[1]}_${args[2]}_${args[3]}`
+    (...args) => `${hash(args[0])}_${args[1]}_${args[2]}`
   )
 
   renderMain() {
-    const { user } = this.props
     const { listings, isFetching } = this.state
 
     const sortedListings = this.sortListings(
       listings.data,
       this.state.activeSort.index,
-      this.state.activeSort.ascending,
-      user
+      this.state.activeSort.ascending
     )
 
     switch (this.state.activeView) {
@@ -228,7 +226,6 @@ class SavedSearch extends React.Component {
             info={this.state.listings.info}
             sortedListings={sortedListings}
             listings={listings}
-            user={user}
             onToggleView={this.onToggleView}
             onChangeSort={this.onChangeSort}
             activeSort={this.state.activeSort}

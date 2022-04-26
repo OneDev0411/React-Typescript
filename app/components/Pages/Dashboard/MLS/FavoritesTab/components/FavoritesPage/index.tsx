@@ -285,7 +285,6 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
               onToggleView={onToggleView}
               isWidget={isWidget}
               onToggleListingModal={onToggleListingModal}
-              user={user}
             />
           </Grid>
         </Grid>
