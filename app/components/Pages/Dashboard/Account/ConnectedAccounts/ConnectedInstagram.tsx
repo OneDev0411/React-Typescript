@@ -32,7 +32,7 @@ function ConnectedInstagram({ className }: Props) {
   const notify = useNotify()
   const connectButtonRef = useRef<HTMLButtonElement>(null)
 
-  const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false)
+  const [isHelpDialogOpen, setIsHelpDialogOpen] = useState<boolean>(false)
 
   const hasAccess = useAcl(ACL.SHARE_TO_INSTAGRAM)
 
