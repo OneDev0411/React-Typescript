@@ -2,9 +2,7 @@ import { memo, useRef } from 'react'
 
 import { makeStyles, Popper } from '@material-ui/core'
 import cn from 'classnames'
-import { useSelector } from 'react-redux'
 
-import { selectUserUnsafe } from '@app/selectors/user'
 import { noop } from '@app/utils/helpers'
 import {
   getListingFormatedPrice,
@@ -92,7 +90,6 @@ interface Props {
   clicked?: boolean
   id: UUID
   price: number
-  closePrice: Nullable<number>
   squareMeters: number
   status: IListingStatus
   address: ICompactAddress
@@ -111,7 +108,6 @@ const Marker = ({
   id,
   status,
   price,
-  closePrice,
   address,
   squareMeters,
   bathroomCount,
@@ -123,7 +119,6 @@ const Marker = ({
   zoom = MINIMAL_MARKER_ZOOM_LEVEL
 }: Props) => {
   const classes = useStyles()
-  const user = useSelector(selectUserUnsafe)
   const markerRef = useRef<Nullable<HTMLDivElement>>(null)
   const [uiState] = useUiListingsContext()
 
@@ -134,7 +129,7 @@ const Marker = ({
     return null
   }
 
-  const formatedPrice = getListingFormatedPrice(price, closePrice, user, true)
+  const formatedPrice = getListingFormatedPrice(price, true)
   const statusColor = getStatusColorClass(status)
 
   const isShowBubble = zoom >= MINIMAL_MARKER_ZOOM_LEVEL
@@ -167,7 +162,6 @@ const Marker = ({
             onClick={() => onClick(id)}
             status={status}
             price={price}
-            closePrice={closePrice}
             address={address}
             squareMeters={squareMeters}
             bathroomCount={bathroomCount}
