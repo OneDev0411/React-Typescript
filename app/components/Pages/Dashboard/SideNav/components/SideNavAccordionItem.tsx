@@ -41,6 +41,7 @@ const useStyles = makeStyles(
     popper: {
       zIndex: 101,
       overflow: 'hidden',
+      boxShadow: theme.shadows[3],
       borderRadius: theme.spacing(
         0,
         `${theme.shape.borderRadius}px`,
@@ -49,15 +50,20 @@ const useStyles = makeStyles(
       )
     },
     paper: {
-      backgroundColor: theme.palette.tertiary.light,
+      backgroundColor: theme.palette.grey[50],
       paddingTop: theme.spacing(1),
       paddingBottom: theme.spacing(0.5),
 
       // I had to add element name to change accordionSummary styles because couldn't find proper class-name
       '& a': {
-        color: theme.palette.common.white,
+        color: theme.palette.common.black,
         minWidth: `${theme.spacing(18)}px`,
-        paddingLeft: theme.spacing(2)
+        paddingLeft: theme.spacing(2),
+
+        '&:hover': {
+          backgroundColor: theme.palette.action.hover,
+          color: theme.palette.common.black
+        }
       }
     }
   }),
