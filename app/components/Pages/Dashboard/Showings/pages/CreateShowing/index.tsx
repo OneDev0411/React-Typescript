@@ -158,10 +158,10 @@ function CreateShowing({ router, route }: CreateShowingProps) {
       return createShowing({
         approval_type: approvalType,
         aired_at: new Date().toISOString(), // TODO: use the real value later
-        roles: roles.map<IShowingRoleInput>(role => ({
+        roles: roles.map<IShowingRoleInputAPI>(role => ({
           role: role.role,
           user: role.user?.id ?? undefined,
-          agent: role.agent ?? undefined,
+          agent: role.agent?.id ?? undefined,
           brand: role.brand || activeBrandId,
           first_name: role.first_name,
           last_name: role.last_name,

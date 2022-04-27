@@ -204,13 +204,13 @@ const ListView = props => {
           }
           title={
             props.tabName === 'favorites'
-              ? 'You don’t have any Favorites.'
-              : 'You don’t have any Saved Search.'
+              ? 'You don’t have any Favorites'
+              : 'You don’t have any Saved Search'
           }
           subtitle={
             props.tabName === 'favorites'
-              ? 'Try for add new Favorites.'
-              : 'Try for add new Saved Search.'
+              ? 'Try adding a new Favorite'
+              : 'Try adding a new Saved Search'
           }
         />
       )

@@ -36,6 +36,10 @@ export const permissions: { value: IPermission; label: string }[] = [
     label: 'Showings'
   },
   {
+    value: 'ShareToInstagram',
+    label: 'Share To Instagram'
+  },
+  {
     value: 'BetaFeatures',
     label: 'Beta Features'
   }

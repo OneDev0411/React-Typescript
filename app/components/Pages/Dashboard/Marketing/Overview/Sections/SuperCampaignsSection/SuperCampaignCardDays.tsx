@@ -1,7 +1,7 @@
 import { makeStyles, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 
-import SuperCampaignSendTime from '@app/views/components/SuperCampaignSendTime'
+import RelativeSendTime from '@app/views/components/RelativeSendTime'
 
 const useStyles = makeStyles(
   theme => ({
@@ -26,7 +26,7 @@ function SuperCampaignCardDays({
       className={classNames(classes.root, className)}
       variant="caption"
     >
-      <SuperCampaignSendTime time={time} hasTooltip />
+      <RelativeSendTime time={time} hasTooltip />
     </Typography>
   )
 }

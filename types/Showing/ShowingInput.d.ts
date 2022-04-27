@@ -18,3 +18,7 @@ declare interface IShowingInput {
   instructions?: string
   brand: UUID
 }
+
+declare interface IShowingInputAPI extends Omit<IShowingInput, 'agent'> {
+  roles: IShowingRoleInputAPI[]
+}

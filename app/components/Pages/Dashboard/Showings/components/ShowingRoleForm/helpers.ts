@@ -23,7 +23,7 @@ export const selectUserAgentMutator: Mutator<ShowingRoleFormValues> = (
   changeValue(state, 'last_name', () => agent.last_name)
   changeValue(state, 'email', () => agent.email)
   changeValue(state, 'phone_number', () => agent.phone_number)
-  changeValue(state, 'agent', () => agent.id)
+  changeValue(state, 'agent', () => agent)
 }
 
 export const selectAgentMutator: Mutator<ShowingRoleFormValues> = (
@@ -60,6 +60,3 @@ export const selectContactMutator: Mutator<ShowingRoleFormValues> = (
   changeValue(state, 'user', () => undefined)
   changeValue(state, 'contact', () => contact)
 }
-
-export const requiredTextValidator = (value: string) =>
-  !value || value.trim() === '' ? 'This field is required' : undefined

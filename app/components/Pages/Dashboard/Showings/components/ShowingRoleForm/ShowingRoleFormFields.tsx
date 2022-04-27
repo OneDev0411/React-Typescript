@@ -1,6 +1,7 @@
 import { Box } from '@material-ui/core'
 import { FormProps, FormRenderProps, Field } from 'react-final-form'
 
+import { requiredTextValidator } from '@app/utils/validations'
 import CustomField from '@app/views/components/DealRole/components/CustomField'
 import { MlsSelect } from '@app/views/components/DealRole/Form/form-fields/MlsSelect'
 import {
@@ -9,7 +10,6 @@ import {
   FormCheckbox
 } from 'components/final-form-fields'
 
-import { requiredTextValidator } from './helpers'
 import ShowingRoleFormCheckboxGroupField from './ShowingRoleFormCheckboxGroupField'
 import ShowingRoleFormNameField from './ShowingRoleFormNameField'
 import ShowingRoleYesNoRadioGroupField from './ShowingRoleYesNoRadioGroupField'

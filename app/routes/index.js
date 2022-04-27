@@ -220,6 +220,17 @@ const AsyncDashboardOverview = withAcl(
 )
 
 /* ==================================== */
+//  Player
+/* ==================================== */
+
+const AsyncPlayer = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Player' /* webpackChunkName: "player" */
+    )
+})
+
+/* ==================================== */
 //  MLS
 /* ==================================== */
 
@@ -535,18 +546,26 @@ const AsyncMarketingInsight = withAcl(
   }),
   { oneOf: [ACL.MARKETING, ACL.CRM] }
 )
-const AsyncSuperCampaign = withAcl(
+const AsyncSuperCampaignList = withAcl(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/MarketingInsights/SuperCampaign' /* webpackChunkName: "email_insight_super_campaign" */
+        '../components/Pages/Dashboard/MarketingInsights/pages/SuperCampaignList' /* webpackChunkName: "email_insight_super_campaign" */
       )
   }),
   [
     { oneOf: [ACL.MARKETING, ACL.CRM] },
-    { oneOf: [ACL.ADMIN, ({ user }) => user.user_type === 'Agent'] },
-    ACL.BETA
+    { oneOf: [ACL.ADMIN, ({ user }) => user.user_type === 'Agent'] }
   ]
+)
+const AsyncSocialPostList = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/MarketingInsights/pages/SocialPostList' /* webpackChunkName: "email_insight_social_post" */
+      )
+  }),
+  [ACL.MARKETING, ACL.SHARE_TO_INSTAGRAM]
 )
 /* ==================================== */
 //  Chatroom
@@ -766,7 +785,7 @@ const AsyncSuperCampaignDetail = withAcl(
         '../components/Pages/Dashboard/SuperCampaigns/pages/SuperCampaignDetail' /* webpackChunkName: "super_campaign_detail" */
       )
   }),
-  [ACL.ADMIN, ACL.BETA]
+  [ACL.ADMIN]
 )
 
 /* ==================================== */
@@ -952,6 +971,7 @@ export default (
       <Route path="share" component={AsyncShare} />
 
       <Route path="dashboard" component={Dashboard}>
+        <Route path="player" component={AsyncPlayer} />
         <Route path="overview" component={AsyncDashboardOverview} />
         <Route path="inbox(/:emailThreadId)" component={AsyncInbox} />
 
@@ -987,7 +1007,8 @@ export default (
             path="super-campaign/:id/detail"
             component={AsyncSuperCampaignDetail}
           />
-          <Route path="super-campaign" component={AsyncSuperCampaign} />
+          <Route path="super-campaign" component={AsyncSuperCampaignList} />
+          <Route path="social-post" component={AsyncSocialPostList} />
           <Route path=":id" component={AsyncMarketingInsight} />
         </Route>
 

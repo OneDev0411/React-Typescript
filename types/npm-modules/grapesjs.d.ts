@@ -54,6 +54,7 @@ declare module 'grapesjs' {
     // The GrapesJS especial overloads for the `get` and `set` methods.
     get(attributeName: 'toolbar'): Optional<ToolbarButton[]>
     set(attributeName: 'toolbar', value?: ToolbarButton[], options?: S): this
+    view: Backbone.View
   }
 
   export interface Editor {

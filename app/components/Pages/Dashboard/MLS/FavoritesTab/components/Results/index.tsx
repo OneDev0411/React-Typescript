@@ -2,12 +2,9 @@ import { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 
 import { Grid, Box, makeStyles, alpha, Typography } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
-import hash from 'object-hash'
-import { memoize } from 'underscore'
 
-import { sortByIndex } from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
+import { sortListingsByIndex } from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
 import { noop } from '@app/utils/helpers'
-import { normalizeListingLocation } from '@app/utils/map'
 import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
 
 import { CardsView } from '../../../components/CardsView'
@@ -85,27 +82,6 @@ interface Props {
   onToggleListingModal?: (id: UUID, isOpen: boolean) => void
 }
 
-const sortListings = memoize(
-  (
-    listings: ICompactListing[],
-    index: SortIndex,
-    ascending: boolean,
-    user: IUser
-  ): ICompactListing[] => {
-    const formattedListings = listings.map(listing =>
-      normalizeListingLocation(listing)
-    )
-
-    return formattedListings.sort((a, b) => sortByIndex(a, b, index, ascending))
-  },
-  // Since listings are equal during renders and are read from this.state
-  // in order to make memoization work properly, we need to build a custom
-  // resolver function which makes a unique key for a specific saved search id,
-  // index and sort direction and returns the previously calculated items once it's
-  // called.
-  (...args) => `${hash(args[0])}_${args[1]}_${args[2]}_${args[3]}`
-)
-
 export const Results = ({
   mapIsShown,
   onMapToggle,
@@ -134,11 +110,10 @@ export const Results = ({
   }, [state.result.listings.length, state.isLoading])
 
   const listingsPage = useMemo(() => {
-    const sortedListings = sortListings(
+    const sortedListings = sortListingsByIndex(
       state.result.listings,
       activeSort.index,
-      activeSort.ascending,
-      user
+      activeSort.ascending
     )
 
     return getListingsPage(sortedListings, currentPage, PAGE_SIZE)
@@ -146,7 +121,6 @@ export const Results = ({
     state.result.listings,
     activeSort.index,
     activeSort.ascending,
-    user,
     currentPage
   ])
 
@@ -213,8 +187,8 @@ export const Results = ({
           {zeroStateShouldShown ? (
             <ZeroState
               image="/static/images/zero-state/mls-favorites.png"
-              title="You don’t have any Favorites."
-              subtitle="Try for add new Favorites."
+              title="You don’t have any Favorites"
+              subtitle="Try adding a new Favorite"
             />
           ) : (
             <>

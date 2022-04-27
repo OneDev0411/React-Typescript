@@ -11,7 +11,8 @@ export const Container = styled.div`
 
     .messages-list {
       margin-top: 10px !important;
-      margin-bottom: 4rem !important;
+      margin-bottom: ${props =>
+        props.isPrivateRoom ? '8rem' : '4rem'} !important;
       min-height: auto !important;
       max-height: none !important;
       width: 100%;

@@ -17,7 +17,7 @@ export const DEALS_STATUSES = {
 
 export const DEALS_LIST_DEFAULT_FILTERS: DealsListFilters = {
   deal_type: ['Buying', 'Selling'],
-  property_type: undefined,
+  property_type: [],
   status: {},
   contexts: {}
 }
