@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { makeStyles, Theme, Hidden } from '@material-ui/core'
 
 import SideNavMenu from './SideNavMenu'

@@ -7,5 +7,5 @@ export const getBrandLogo = (
 ): string => {
   const theme = getBrandTheme(brand, hostBrand)
 
-  return theme.navbar_logo || defaultValue
+  return theme?.navbar?.logo?.url || defaultValue
 }

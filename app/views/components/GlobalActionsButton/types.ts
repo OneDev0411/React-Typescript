@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from 'react'
+import { ComponentProps, MouseEvent, ReactNode } from 'react'
 
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
@@ -64,3 +64,7 @@ export type Item =
   | OpenHouseItem
   | TourItem
   | ShowingItem
+
+export interface CustomButtonRenderProps {
+  onClick: (event: MouseEvent<HTMLElement>) => void
+}
