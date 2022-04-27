@@ -16,9 +16,9 @@ import { SideNavAccordionSummary } from './SideNavAccordionSummary'
 
 const useStyles = makeStyles(
   theme => ({
-    divider: {
-      backgroundColor: theme.palette.grey[800],
-      margin: theme.spacing(0.75, 0)
+    accordionExpanded: {
+      // I had to add !important to force accordion styles to change
+      margin: '0 !important'
     },
     accordionRoot: {
       backgroundColor: 'transparent',
@@ -27,27 +27,16 @@ const useStyles = makeStyles(
         height: 0
       }
     },
-    accordionExpanded: {
-      // I had to add !important to force accordion styles to change
-      margin: '0 !important'
+    divider: {
+      backgroundColor: theme.palette.grey[800],
+      margin: theme.spacing(0.75, 0)
     },
     list: {
-      margin: 0,
-      padding: 0,
       display: 'flex',
       flexDirection: 'column',
-      flexShrink: 0
-    },
-    popper: {
-      zIndex: 101,
-      overflow: 'hidden',
-      boxShadow: theme.shadows[3],
-      borderRadius: theme.spacing(
-        0,
-        `${theme.shape.borderRadius}px`,
-        `${theme.shape.borderRadius}px`,
-        0
-      )
+      flexShrink: 0,
+      margin: 0,
+      padding: 0
     },
     paper: {
       backgroundColor: theme.palette.grey[50],
@@ -65,6 +54,17 @@ const useStyles = makeStyles(
           color: theme.palette.common.black
         }
       }
+    },
+    popper: {
+      borderRadius: theme.spacing(
+        0,
+        `${theme.shape.borderRadius}px`,
+        `${theme.shape.borderRadius}px`,
+        0
+      ),
+      boxShadow: theme.shadows[3],
+      overflow: 'hidden',
+      zIndex: 101
     }
   }),
   {
