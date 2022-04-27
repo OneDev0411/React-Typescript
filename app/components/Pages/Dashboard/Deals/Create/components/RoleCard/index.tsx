@@ -54,6 +54,7 @@ export function RoleCard({
   const classes = useStyles()
   const [isRemoving, setIsRemoving] = useState(false)
 
+  // TODO: fix typescript issue
   const address =
     typeof role.current_address === 'string'
       ? role.current_address

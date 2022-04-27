@@ -48,16 +48,10 @@ export function useEditorSelectionAnchor(
 
             const top = selectionContainerBBox.top + topOffset
 
-            return {
-              x: left,
-              y: top,
-              top,
-              left,
-              bottom: top + visibleSelectionRect.height,
-              right: left + visibleSelectionRect.width,
-              height: visibleSelectionRect.height,
-              width: visibleSelectionRect.width
-            }
+            const width = visibleSelectionRect.height
+            const height = visibleSelectionRect.height
+
+            return new DOMRect(left, top, width, height)
           }
         })
       } else {
@@ -79,21 +73,14 @@ function getEditorStartAnchor(
   return {
     clientHeight: 20,
     clientWidth: 10,
-    getBoundingClientRect(): ClientRect {
+    getBoundingClientRect() {
       const boundingClientRect = editorElement.getBoundingClientRect()
       const left = boundingClientRect.left
       const top = boundingClientRect.top
       const height = 20
       const width = 10
 
-      return {
-        width,
-        height,
-        left,
-        top,
-        right: left + width,
-        bottom: top + height
-      }
+      return new DOMRect(left, top, width, height)
     }
   }
 }
