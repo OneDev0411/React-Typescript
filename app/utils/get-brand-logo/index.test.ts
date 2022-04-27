@@ -3,7 +3,11 @@ import { getBrandLogo } from '.'
 const MOCK_BRAND_WITH_LOGO: IBrand = {
   settings: {
     theme: {
-      navbar_logo: 'my-logo.png'
+      navbar: {
+        logo: {
+          url: 'my-logo.png'
+        }
+      }
     }
   }
 } as IBrand
@@ -44,7 +48,7 @@ describe('utils/get-brand-logo', () => {
 
   it('getBrandLogo should return the logo if the brand tree have the logo', () => {
     expect(getBrandLogo(MOCK_BRAND_WITH_PARENT, null, 'default-logo')).toEqual(
-      MOCK_BRAND_WITH_PARENT.settings?.theme?.navbar_logo
+      MOCK_BRAND_WITH_PARENT.settings?.theme?.navbar?.logo?.url
     )
   })
 
@@ -64,7 +68,7 @@ describe('utils/get-brand-logo', () => {
 
   it('getBrandLogo should return the passed brand logo if no host brand is passed', () => {
     expect(getBrandLogo(MOCK_BRAND_WITH_LOGO as IBrand)).toEqual(
-      MOCK_BRAND_WITH_LOGO.settings?.theme?.navbar_logo
+      MOCK_BRAND_WITH_LOGO.settings?.theme?.navbar?.logo?.url
     )
   })
 
@@ -76,14 +80,14 @@ describe('utils/get-brand-logo', () => {
 
   it('getBrandLogo should return the passed host brand logo if the active brand is null', () => {
     expect(getBrandLogo(null, MOCK_BRAND_WITH_LOGO as IBrand)).toEqual(
-      MOCK_BRAND_WITH_LOGO.settings?.theme?.navbar_logo
+      MOCK_BRAND_WITH_LOGO.settings?.theme?.navbar?.logo?.url
     )
   })
 
   it('getBrandLogo should return the passed brand logo, if the passed brand is a descendant of the host brand', () => {
     expect(
       getBrandLogo(MOCK_BRAND_WITH_PARENT as IBrand, MOCK_PARENT_BRAND)
-    ).toEqual(MOCK_BRAND_WITH_LOGO.settings?.theme?.navbar_logo)
+    ).toEqual(MOCK_BRAND_WITH_LOGO.settings?.theme?.navbar?.logo?.url)
   })
 
   it('getBrandLogo should return the host brand logo, if the passed brand is not a descendant of the host brand', () => {
@@ -92,7 +96,7 @@ describe('utils/get-brand-logo', () => {
         ...MOCK_PARENT_BRAND,
         id: 'wrong'
       })
-    ).toEqual(MOCK_PARENT_BRAND.settings?.theme?.navbar_logo)
+    ).toEqual(MOCK_PARENT_BRAND.settings?.theme?.navbar?.logo?.url)
   })
 
   it('getBrandLogo should return the passed brand logo, if the passed brand is equal to the host brand', () => {
@@ -101,6 +105,6 @@ describe('utils/get-brand-logo', () => {
         MOCK_BRAND_WITH_LOGO as IBrand,
         MOCK_BRAND_WITH_LOGO as IBrand
       )
-    ).toEqual(MOCK_BRAND_WITH_LOGO.settings?.theme?.navbar_logo)
+    ).toEqual(MOCK_BRAND_WITH_LOGO.settings?.theme?.navbar?.logo?.url)
   })
 })
