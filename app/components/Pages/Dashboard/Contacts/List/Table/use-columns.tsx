@@ -15,6 +15,7 @@ import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderCo
 import { SelectionCount } from '@app/views/components/Grid/Table/features/Selection/SelectionCount'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
+import { AttributeCell } from './columns-inline-edit/AttributeCell'
 import { TagsInlineEdit } from './columns-inline-edit/Tags'
 import LastTouched from './columns/LastTouched'
 
@@ -92,7 +93,9 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       render: ({ row: contact }) => (
         <div className={classes.cell}>{contact.email}</div>
       ),
-      renderInlineEdit: ({ row: contact }) => <div>22</div>
+      renderInlineEdit: ({ row: contact }) => (
+        <AttributeCell contact={contact} />
+      )
     },
     {
       id: 'last-touch',

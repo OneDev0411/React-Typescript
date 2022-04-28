@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { makeStyles, createStyles, Theme, Tooltip } from '@material-ui/core'
+import { makeStyles, Theme, Tooltip } from '@material-ui/core'
 import timeago from 'timeago.js'
 
 interface Props {
@@ -8,8 +6,8 @@ interface Props {
   contact: IContact
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     notouch: {
       fontSize: theme.typography.caption.fontSize
     },
@@ -19,7 +17,8 @@ const useStyles = makeStyles((theme: Theme) =>
     lastTouchValue: {
       fontSize: theme.typography.subtitle2.fontSize
     }
-  })
+  }),
+  { name: 'LastTouchedCell' }
 )
 
 export default function LastTouched({
