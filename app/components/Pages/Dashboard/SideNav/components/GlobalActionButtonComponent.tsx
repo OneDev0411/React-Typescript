@@ -1,13 +1,16 @@
 import { Button, Theme, withStyles } from '@material-ui/core'
-import { mdiPlus } from '@mdi/js'
+import { mdiChevronDown, mdiPlus } from '@mdi/js'
 
 import { CustomButtonRenderProps } from '@app/views/components/GlobalActionsButton/types'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 const CustomButton = withStyles((theme: Theme) => ({
   root: {
-    borderRadius: '50px',
     backgroundColor: theme.navbar.button.main,
+    height: '40px',
+    width: '100%',
+
     '&:hover': {
       backgroundColor: theme.navbar.button.light
     }
@@ -22,10 +25,11 @@ export function GlobalActionButtonComponent(props: CustomButtonRenderProps) {
     <CustomButton
       variant="contained"
       color="primary"
-      startIcon={<SvgIcon path={mdiPlus} />}
+      startIcon={<SvgIcon path={mdiPlus} size={muiIconSizes.small} />}
+      endIcon={<SvgIcon path={mdiChevronDown} size={muiIconSizes.small} />}
       {...props}
     >
-      CREATE
+      Create
     </CustomButton>
   )
 }
