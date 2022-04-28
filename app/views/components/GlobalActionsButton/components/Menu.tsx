@@ -15,7 +15,8 @@ import MenuItem from './MenuItem'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     itemsWrapper: {
-      margin: theme.spacing(1)
+      margin: theme.spacing(1),
+      minWidth: '152px'
     },
     popoverRoot: { marginTop: theme.spacing(0.5) }
   })
@@ -43,11 +44,11 @@ export default function Menu({ items, anchorEl, onItemClick, onClose }: Props) {
       onClose={onClose}
       anchorOrigin={{
         vertical: 'bottom',
-        horizontal: 'right'
+        horizontal: 'left'
       }}
       transformOrigin={{
         vertical: 'top',
-        horizontal: 'right'
+        horizontal: 'left'
       }}
       transitionDuration={0}
       classes={{ root: classes.popoverRoot }}

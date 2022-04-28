@@ -7,7 +7,6 @@ const useStyles = makeStyles(
     logo: {
       width: '100%',
       maxWidth: '140px',
-      maxHeight: '40px',
       margin: theme.spacing(5, 2, 3.5)
     }
   }),
