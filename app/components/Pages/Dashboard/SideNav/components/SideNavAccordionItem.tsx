@@ -39,7 +39,7 @@ const useStyles = makeStyles(
       padding: 0
     },
     paper: {
-      backgroundColor: theme.palette.grey[50],
+      backgroundColor: theme.palette.background.default,
       paddingTop: theme.spacing(1),
       paddingBottom: theme.spacing(0.5),
 

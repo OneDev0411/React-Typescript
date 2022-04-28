@@ -12,7 +12,7 @@ const useStyles = makeStyles(
     activeMenu: {
       color: `${theme.palette.common.white} !important`,
       backgroundColor: alpha(theme.navbar.background.contrastText, 0.24),
-      fontWeight: theme.typography.fontWeightBold,
+      ...theme.typography.subtitle1,
 
       '& svg': {
         color: theme.palette.primary.main
