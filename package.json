@@ -151,7 +151,7 @@
     "juice": "^5.2.0",
     "linkifyjs": "^2.1.8",
     "lodash": "^4.17.21",
-    "mapbox-gl": "^2.1.1", 
+    "mapbox-gl": "^2.1.1",
     "match-sorter": "^2.3.0",
     "material-ui-color-picker": "^3.5.0",
     "merge": "^2.1.1",
