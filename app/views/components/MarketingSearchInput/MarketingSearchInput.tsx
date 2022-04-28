@@ -10,7 +10,7 @@ import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch/Search
 
 import { MarketingSearchInputProps, TemplateTypeWithMedium } from './types'
 
-interface TemplateTypeWithMediumAndCategory extends TemplateTypeWithMedium {
+interface MarketingSearchResult extends TemplateTypeWithMedium {
   category: string
   title: string
 }
@@ -20,7 +20,7 @@ export default function MarketingSearchInput({
   onSelect
 }: MarketingSearchInputProps) {
   const { getSection } = useTemplateTypeSections()
-  const typesWithCategory: TemplateTypeWithMediumAndCategory[] = useMemo(
+  const typesWithCategory: MarketingSearchResult[] = useMemo(
     () =>
       types.map(data => ({
         ...data,
@@ -31,9 +31,7 @@ export default function MarketingSearchInput({
       })),
     [types, getSection]
   )
-  const handleSelect = (
-    option: Nullable<TemplateTypeWithMediumAndCategory | string>
-  ) => {
+  const handleSelect = (option: Nullable<MarketingSearchResult | string>) => {
     if (!option || typeof option === 'string') {
       return
     }
@@ -42,7 +40,7 @@ export default function MarketingSearchInput({
   }
 
   return (
-    <Autocomplete<TemplateTypeWithMediumAndCategory, false, true, true>
+    <Autocomplete<MarketingSearchResult, false, true, true>
       openOnFocus
       ListboxProps={{ style: { maxHeight: '50vh' } }}
       options={typesWithCategory}
