@@ -56,13 +56,10 @@ const useStyles = makeStyles(
       }
     },
     popper: {
-      borderRadius: theme.spacing(
-        0,
-        `${theme.shape.borderRadius}px`,
-        `${theme.shape.borderRadius}px`,
-        0
-      ),
+      borderRadius: theme.shape.borderRadius,
       boxShadow: theme.shadows[3],
+      border: `1px solid ${theme.palette.grey[200]}`,
+      marginLeft: theme.spacing(-0.5),
       overflow: 'hidden',
       zIndex: 101
     }
