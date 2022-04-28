@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, forwardRef, Ref } from 'react'
 
 import { Button, ButtonProps, CircularProgress } from '@material-ui/core'
 
@@ -18,25 +18,32 @@ export interface ConnectFacebookPageButtonProps
   onErrorDialogClose?: () => void
 }
 
-function ConnectFacebookPageButton({
-  onAuthSuccess,
-  onAuthError,
-  onAuthWindowOpen,
-  onAuthWindowClose,
-  onErrorDialogOpen,
-  onErrorDialogClose,
-  ...buttonProps
-}: ConnectFacebookPageButtonProps) {
+function ConnectFacebookPageButton(
+  {
+    onAuthSuccess,
+    onAuthError,
+    onAuthWindowOpen,
+    onAuthWindowClose,
+    onErrorDialogOpen,
+    onErrorDialogClose,
+    ...buttonProps
+  }: ConnectFacebookPageButtonProps,
+  ref: Ref<HTMLButtonElement>
+) {
   const [isWorking, setIsWorking] = useState(false)
   const confirmation = useContext(ConfirmationModalContext)
   const invalidateListQuery = useInvalidateFacebookPagesListQuery()
 
-  const handleAuthError = (errorCode: FacebookAuthErrorCode) => {
+  const handleAuthError = (
+    errorCode: FacebookAuthErrorCode,
+    errorMessage: Optional<string>
+  ) => {
     onErrorDialogOpen?.()
 
     confirmation.setConfirmationModal({
       message: 'Something went wrong!',
-      description: `We’re unable to connect to Instagram at this moment. Please try again later.\nerror code: ${errorCode}`,
+      description:
+        'We are unable to connect to Instagram at the moment. Please try again soon and you’ll be up and running shortly!',
       confirmLabel: 'OK',
       needsCancel: false,
       onConfirm: () => {
@@ -44,7 +51,7 @@ function ConnectFacebookPageButton({
       }
     })
 
-    onAuthError?.(errorCode)
+    onAuthError?.(errorCode, errorMessage)
   }
 
   const handleAuthSuccess = () => {
@@ -68,6 +75,7 @@ function ConnectFacebookPageButton({
   return (
     <Button
       {...buttonProps}
+      ref={ref}
       size="small"
       onClick={openAuthWindow}
       startIcon={
@@ -78,4 +86,4 @@ function ConnectFacebookPageButton({
   )
 }
 
-export default ConnectFacebookPageButton
+export default forwardRef(ConnectFacebookPageButton)

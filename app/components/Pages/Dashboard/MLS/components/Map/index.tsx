@@ -295,7 +295,6 @@ export const Map = memo(
                     id={listing.id}
                     status={listing.status}
                     price={listing.price}
-                    closePrice={listing.close_price}
                     address={listing.address}
                     squareMeters={listing.compact_property.square_meters}
                     bathroomCount={listing.compact_property.bathroom_count}

@@ -390,7 +390,11 @@
                     },
                     "background": {}
                 },
-                "navbar_logo": "https://d2dzyv4cb7po1i.cloudfront.net/brands/8cb4a358-8973-11e7-9089-0242ac110003/assets/8bb4d1a0-85da-11eb-b12f-e3c7c9b8de16.jpg"
+                "navbar": {
+                  "logo": {
+                    "url": "https://d2dzyv4cb7po1i.cloudfront.net/brands/8cb4a358-8973-11e7-9089-0242ac110003/assets/8bb4d1a0-85da-11eb-b12f-e3c7c9b8de16.jpg"
+                  }
+                }
             },
             "websites_root_domain": null,
             "help_center": null,
