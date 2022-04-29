@@ -3,17 +3,18 @@ import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand'
+import DefaultLogo from '@app/static/images/logo--white.svg'
 import { getBrandLogo } from '@app/utils/get-brand-logo'
 import { IAppState } from 'reducers'
 
 interface LogoProps {
   className?: string
-  fallbackUrl?: string
+  fallbackLogo?: string
 }
 
 export default function MainLogo({
   className,
-  fallbackUrl = '/static/images/logo--white.svg'
+  fallbackLogo = DefaultLogo
 }: LogoProps) {
   // Custom hostname brand
   const hostBrand = useSelector<IAppState, IBrand>(
@@ -21,8 +22,8 @@ export default function MainLogo({
   )
   const brand = useUnsafeActiveBrand()
   const logo = useMemo(
-    () => getBrandLogo(brand, hostBrand, fallbackUrl),
-    [brand, hostBrand, fallbackUrl]
+    () => getBrandLogo(brand, hostBrand, fallbackLogo),
+    [brand, hostBrand, fallbackLogo]
   )
 
   return <img alt="logo" className={className} src={logo} />
