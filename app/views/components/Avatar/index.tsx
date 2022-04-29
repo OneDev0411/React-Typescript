@@ -16,8 +16,8 @@ const BaseAvatar = withStyles((theme: Theme) => ({
       backgroundColor: theme.palette.grey['200'],
       color: theme.palette.text.primary,
       '& svg': {
-        fill: theme.palette.common.black,
-        color: theme.palette.common.black
+        fill: theme.palette.grey['500'],
+        color: theme.palette.grey['500']
       }
     }
   }

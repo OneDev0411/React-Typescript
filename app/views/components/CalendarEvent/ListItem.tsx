@@ -5,10 +5,9 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemSecondaryAction,
-  Avatar as MuiAvatar,
-  withStyles,
   makeStyles,
-  Theme
+  Theme,
+  useTheme
 } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
@@ -26,17 +25,18 @@ interface Props {
   event: ICalendarEvent
 }
 
-// Customizing MUI Avatar backgroundColor
-const CustomizedMuiAvatar = withStyles((theme: Theme) => ({
-  colorDefault: {
-    backgroundColor: theme.palette.grey['200']
-  }
-}))(MuiAvatar)
-
 const useStyles = makeStyles(
   (theme: Theme) => ({
     listItemWithButton: {
       paddingRight: theme.spacing(12)
+    },
+    customizedAvatar: {
+      backgroundColor: theme.palette.grey['200'],
+
+      '& svg': {
+        fill: theme.palette.common.black,
+        color: theme.palette.common.black
+      }
     }
   }),
   { name: 'CalendarEventListItem' }
@@ -44,6 +44,7 @@ const useStyles = makeStyles(
 
 export default function CalendarEventListItem({ event }: Props) {
   const classes = useStyles()
+  const theme = useTheme()
 
   const user = useSelector(selectUser)
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
@@ -68,36 +69,29 @@ export default function CalendarEventListItem({ event }: Props) {
   const avatarIcon = useMemo(() => {
     const Icon = eventTypesIcons[event.event_type]?.icon
 
-    return Icon ? (
-      <CustomizedMuiAvatar>
-        <Icon />
-      </CustomizedMuiAvatar>
-    ) : (
-      <CustomizedMuiAvatar />
+    const eventIcon = (
+      <Avatar
+        className={classes.customizedAvatar}
+        disableLazyLoad
+        size="medium"
+        contact={contact!}
+        statusColor={theme.palette.grey[50]}
+      >
+        {Icon && <Icon />}
+      </Avatar>
     )
-  }, [event.event_type])
 
-  const contactAvatarIcon = useMemo(
-    () =>
-      contact && (
-        <Link to={`/dashboard/contacts/${contact.id}`}>
-          <Avatar
-            disableLazyLoad
-            size="medium"
-            contact={contact}
-            statusColor={`${(theme: Theme) => theme.palette.grey[50]}`}
-          >
-            {avatarIcon}
-          </Avatar>
-        </Link>
-      ),
-    [avatarIcon, contact]
-  )
+    if (contact) {
+      return <Link to={`/dashboard/contacts/${contact.id}`}>{eventIcon}</Link>
+    }
+
+    return eventIcon
+  }, [classes, contact, event.event_type, theme])
 
   return (
     <>
       <ListItem classes={{ secondaryAction: classes.listItemWithButton }}>
-        <ListItemAvatar>{contactAvatarIcon || avatarIcon}</ListItemAvatar>
+        <ListItemAvatar>{avatarIcon}</ListItemAvatar>
         <CalendarListItemText event={event} />
         {cardTemplateTypes && (
           <ListItemSecondaryAction>
