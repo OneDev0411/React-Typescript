@@ -1,4 +1,4 @@
-import { createTheme, Theme, ThemeOptions } from '@material-ui/core'
+import { createTheme, Theme, ThemeOptions } from '@material-ui/core/styles'
 import merge from 'merge'
 
 const white = '#fff'
@@ -77,10 +77,6 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         A200: '#aaaaaa',
         A400: '#303030',
         A700: '#616161'
-      },
-      navbar: {
-        background: '#050E21',
-        contrastText: 'rgba(255, 255, 255, 0.7)'
       },
       contrastThreshold: 3,
       tonalOffset: 0.2,
@@ -227,6 +223,20 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
       gridAction: 100,
       sideNavDrawer: 100
     },
+    navbar: {
+      logo: {
+        url: ''
+      },
+      button: {
+        main: '#00B286',
+        light: '#33CCAA',
+        contrastText: white
+      },
+      background: {
+        color: '#050E21',
+        contrastText: white
+      }
+    },
     overrides: {
       // Latest version of Safari (Safari 14.1.1 and on iPhone with iOS 14.5.1) has some issues
       // with color and it doesn't update the text color correctly.
@@ -240,6 +250,7 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
   }
 
   const mergedValue: ThemeOptions = merge.recursive(defaultValue, {
+    ...brandTheme,
     palette: {
       ...brandTheme.palette,
       type: 'light'
