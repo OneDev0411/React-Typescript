@@ -26,7 +26,7 @@ export function SideNavHamburgerButton() {
     <Hidden mdUp>
       <Button
         className={classes.toggleSideBar}
-        onClick={() => onDrawerToggle()}
+        onClick={onDrawerToggle}
         size="small"
         variant="text"
       >

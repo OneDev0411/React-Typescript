@@ -104,7 +104,9 @@ function SideNavLinkItem({
     return to
   }
 
-  const hideDrawer = () => {
+  const handleClick = () => {
+    onTriggerAction && onTriggerAction()
+
     // In mobile size if the menu has the default link,
     // should open the link, and hide the SideNav,
     // else should expand to show sub-menu items
@@ -123,11 +125,7 @@ function SideNavLinkItem({
         active ? classes.activeMenu : ''
       )}
       data-tour-id={tourId}
-      onClick={() => {
-        onTriggerAction && onTriggerAction()
-        // In mobile size if the menu should open the link, and hide the SideNav
-        isMobile && onDrawerToggle()
-      }}
+      onClick={handleClick}
       to={to}
     >
       {children}
@@ -140,10 +138,7 @@ function SideNavLinkItem({
         active && !subMenu ? classes.activeMenu : ''
       )}
       data-tour-id={tourId}
-      onClick={() => {
-        onTriggerAction && onTriggerAction()
-        hideDrawer()
-      }}
+      onClick={handleClick}
       to={openSummaryLink()}
     >
       {children}
