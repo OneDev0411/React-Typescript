@@ -8,7 +8,7 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 const CustomButton = withStyles((theme: Theme) => ({
   root: {
     backgroundColor: theme.navbar.button.main,
-    height: '32px',
+    height: theme.spacing(4),
     width: '100%',
 
     '&:hover': {

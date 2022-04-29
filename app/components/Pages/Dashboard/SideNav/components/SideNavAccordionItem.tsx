@@ -61,7 +61,7 @@ const useStyles = makeStyles(
       border: `1px solid ${theme.palette.grey[200]}`,
       marginLeft: theme.spacing(-0.5),
       overflow: 'hidden',
-      zIndex: 101
+      zIndex: theme.zIndex.sideNavDrawer
     }
   }),
   {

@@ -6,7 +6,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     logo: {
       width: '100%',
-      maxWidth: '150px',
+      maxWidth: theme.spacing(19),
       margin: theme.spacing(5, 2, 3.5)
     }
   }),
