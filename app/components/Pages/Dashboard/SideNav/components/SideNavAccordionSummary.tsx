@@ -122,15 +122,13 @@ export function SideNavAccordionSummary({
         subMenu={subMenu}
       >
         <div className={classes.summaryDiv}>
-          {subMenu && hoveredItem === menuId ? (
+          {subMenu && hoveredItem === menuId && (
             <div className={classes.summaryIconWrapper}>
-              {expandedMenu === menuId ? (
-                <SvgIcon path={mdiChevronUp} />
-              ) : (
-                <SvgIcon path={mdiChevronDown} />
-              )}
+              <SvgIcon
+                path={expandedMenu === menuId ? mdiChevronUp : mdiChevronDown}
+              />
             </div>
-          ) : null}
+          )}
 
           {notificationCount ? (
             <MenuBadge badgeContent={notificationCount} max={9}>
@@ -139,9 +137,9 @@ export function SideNavAccordionSummary({
           ) : (
             <>
               {menuIconWrapper}
-              {hasChildrenNotification ? (
+              {hasChildrenNotification && (
                 <div className={classes.summaryDot} />
-              ) : null}
+              )}
             </>
           )}
         </div>
