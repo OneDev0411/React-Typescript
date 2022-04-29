@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   Button,
@@ -43,10 +43,6 @@ const useStyles = makeStyles(
 )
 
 export default function CalendarEventListItem({ event }: Props) {
-  let avatarIcon
-  let contactAvatarIcon
-  let Icon
-
   const classes = useStyles()
 
   const user = useSelector(selectUser)
@@ -69,32 +65,34 @@ export default function CalendarEventListItem({ event }: Props) {
 
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
 
-  // Build avatars
-  if (eventTypesIcons[event.event_type]) {
-    Icon = eventTypesIcons[event.event_type].icon
-    avatarIcon = (
+  const avatarIcon = useMemo(() => {
+    const Icon = eventTypesIcons[event.event_type]?.icon
+
+    return Icon ? (
       <CustomizedMuiAvatar>
         <Icon />
       </CustomizedMuiAvatar>
+    ) : (
+      <CustomizedMuiAvatar />
     )
-  } else {
-    avatarIcon = <CustomizedMuiAvatar />
-  }
+  }, [event.event_type])
 
-  if (contact) {
-    contactAvatarIcon = (
-      <Link to={`/dashboard/contacts/${contact.id}`}>
-        <Avatar
-          disableLazyLoad
-          size="medium"
-          contact={contact}
-          statusColor="#ff0"
-        >
-          {avatarIcon}
-        </Avatar>
-      </Link>
-    )
-  }
+  const contactAvatarIcon = useMemo(
+    () =>
+      contact && (
+        <Link to={`/dashboard/contacts/${contact.id}`}>
+          <Avatar
+            disableLazyLoad
+            size="medium"
+            contact={contact}
+            statusColor={`${(theme: Theme) => theme.palette.grey[50]}`}
+          >
+            {avatarIcon}
+          </Avatar>
+        </Link>
+      ),
+    [avatarIcon, contact]
+  )
 
   return (
     <>
