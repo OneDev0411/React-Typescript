@@ -39,7 +39,7 @@ export async function attachCKEditor(
   const fontNames = [...new Set([...fontFamilies])]
   const fontSizes = [
     8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 42, 48, 60, 72
-  ]
+  ].map(fontSize => `${fontSize}/${fontSize}px`)
 
   let c = opts
 
