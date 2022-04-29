@@ -31,7 +31,8 @@ const useStyles = makeStyles(
       width: '100%',
 
       '&:focus, &:hover': {
-        color: theme.palette.primary.main,
+        color:
+          theme.navbar.background.contrastText ?? theme.palette.primary.main,
         textDecoration: 'none'
       },
 
