@@ -7,7 +7,8 @@ import {
   ListItemSecondaryAction,
   makeStyles,
   Theme,
-  useTheme
+  useTheme,
+  withStyles
 } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
@@ -25,18 +26,21 @@ interface Props {
   event: ICalendarEvent
 }
 
+const CustomizedAvatar = withStyles((theme: Theme) => ({
+  root: {
+    backgroundColor: theme.palette.grey['200'],
+
+    '& svg': {
+      fill: theme.palette.common.black,
+      color: theme.palette.common.black
+    }
+  }
+}))(Avatar)
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     listItemWithButton: {
       paddingRight: theme.spacing(12)
-    },
-    customizedAvatar: {
-      backgroundColor: theme.palette.grey['200'],
-
-      '& svg': {
-        fill: theme.palette.common.black,
-        color: theme.palette.common.black
-      }
     }
   }),
   { name: 'CalendarEventListItem' }
@@ -70,15 +74,14 @@ export default function CalendarEventListItem({ event }: Props) {
     const Icon = eventTypesIcons[event.event_type]?.icon
 
     const eventIcon = (
-      <Avatar
-        className={classes.customizedAvatar}
+      <CustomizedAvatar
         disableLazyLoad
         size="medium"
         contact={contact!}
         statusColor={theme.palette.grey[50]}
       >
         {Icon && <Icon />}
-      </Avatar>
+      </CustomizedAvatar>
     )
 
     if (contact) {
@@ -86,7 +89,7 @@ export default function CalendarEventListItem({ event }: Props) {
     }
 
     return eventIcon
-  }, [classes, contact, event.event_type, theme])
+  }, [contact, event.event_type, theme])
 
   return (
     <>
