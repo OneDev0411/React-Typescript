@@ -21,7 +21,8 @@ const useStyles = makeStyles(
     accordionSummaryRootExpanded: {
       // Added primary color to the root menu's svg-icon, when it is expanded
       '& svg:first-child': {
-        color: theme.palette.primary.main
+        color:
+          theme.navbar.background.contrastText ?? theme.palette.primary.main
       }
     },
     accordionSummaryContent: {
