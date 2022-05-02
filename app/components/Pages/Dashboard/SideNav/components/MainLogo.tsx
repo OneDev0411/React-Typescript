@@ -3,7 +3,6 @@ import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand'
-import DefaultLogo from '@app/static/images/logo--white.svg'
 import { getBrandLogo } from '@app/utils/get-brand-logo'
 import { IAppState } from 'reducers'
 
@@ -14,7 +13,7 @@ interface LogoProps {
 
 export default function MainLogo({
   className,
-  fallbackLogo = DefaultLogo
+  fallbackLogo = '/static/images/logo--white.svg'
 }: LogoProps) {
   // Custom hostname brand
   const hostBrand = useSelector<IAppState, IBrand>(
