@@ -12,7 +12,7 @@ const useStyles = makeStyles(
     toggleSideBar: {
       color: theme.palette.grey[500],
       marginTop: theme.spacing(1),
-      width: '64px'
+      width: theme.spacing(8)
     }
   }),
   { name: 'SideNavHamburgerButton' }

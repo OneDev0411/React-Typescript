@@ -96,7 +96,7 @@ function SideNavLinkItem({
     onExpandMenu(tourId)
   }, [active, onExpandMenu, tourId])
 
-  const openSummaryLink = () => {
+  const generateLink = () => {
     if (isMobile && subMenu) {
       return ''
     }
@@ -139,7 +139,7 @@ function SideNavLinkItem({
       )}
       data-tour-id={tourId}
       onClick={handleClick}
-      to={openSummaryLink()}
+      to={generateLink()}
     >
       {children}
     </RouterLink>

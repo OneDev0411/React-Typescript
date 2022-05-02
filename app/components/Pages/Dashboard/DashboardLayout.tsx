@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react'
 
-import { Box, Hidden, makeStyles, Theme } from '@material-ui/core'
+import { Hidden, makeStyles } from '@material-ui/core'
 
 import SideNav from './SideNav'
 import { SideNavHamburgerButton } from './SideNav/components/SideNavHamburgerButton'
@@ -11,20 +11,19 @@ interface Props {
 }
 
 const useStyles = makeStyles(
-  (theme: Theme) => ({
+  () => ({
+    drawerWrapper: {
+      display: 'flex'
+    },
     main: {
-      minHeight: '100vh',
-      flexGrow: 1,
       display: 'flex',
       flexDirection: 'column',
-      // I hate using calc and it's totally wrong.
-      // I'm currently a release blocker and don't have time to
-      // properly fix it.
-      // TODO
+      flexGrow: 1,
+      minHeight: '100vh',
       width: `calc(100% - ${appSidenavWidth}px)`
     }
   }),
-  { name: 'MainWrapper' }
+  { name: 'DashboardLayout' }
 )
 
 export const SideNavContext = createContext({
@@ -45,15 +44,15 @@ export function DashboardLayout({ children }: Props) {
         onDrawerToggle: handleDrawerToggle
       }}
     >
-      <Box>
+      <div>
         <SideNavHamburgerButton />
-        <Box display="flex">
+        <div className={classes.drawerWrapper}>
           <Hidden smDown={!isDrawerOpen}>
             <SideNav />
           </Hidden>
           <main className={classes.main}>{children}</main>
-        </Box>
-      </Box>
+        </div>
+      </div>
     </SideNavContext.Provider>
   )
 }
