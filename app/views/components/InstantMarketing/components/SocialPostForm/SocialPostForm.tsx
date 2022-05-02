@@ -18,7 +18,7 @@ export interface FormValues {
 export interface SocialPostFormProps {
   className?: string
   formId: string
-  onSubmit: (values: FormValues) => Promise<void>
+  onSubmit: (values: FormValues) => Promise<void | Record<string, string>>
   children?: ReactNode
   initialValues?: FormValues
 }

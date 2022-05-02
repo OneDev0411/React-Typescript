@@ -29,7 +29,7 @@ export function useCreateSocialPost(
     async ({ brand, ...values }) => createSocialPost(brand, values),
     {
       ...options,
-      // Just invalidate the lists of campaigns because we dont know the list sort logic
+      // Just invalidate the lists of social-posts because we dont know the list sort logic
       // at this stage so having an optimistic update is not easy
       invalidates: (_, values) => [list(values.brand)]
     }

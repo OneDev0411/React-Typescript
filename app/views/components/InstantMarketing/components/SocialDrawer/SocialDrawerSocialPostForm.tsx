@@ -55,13 +55,21 @@ function SocialDrawerSocialPostForm({
 
     isScheduledRef.current = !!values.dueAt
 
-    await mutateAsync({
-      ...values,
-      facebookPage: values.facebookPage.id,
-      due_at: convertDateToTimestamp(values.dueAt ?? new Date()),
-      templateInstance: instance.id,
-      brand: activeBrandId
-    })
+    try {
+      await mutateAsync({
+        ...values,
+        facebookPage: values.facebookPage.id,
+        due_at: convertDateToTimestamp(values.dueAt ?? new Date()),
+        templateInstance: instance.id,
+        brand: activeBrandId
+      })
+    } catch (error) {
+      if (error?.response.body.code === 'ResourceNotFound') {
+        return {
+          facebookPage: 'There is something wrong with this account'
+        }
+      }
+    }
   }
 
   return (
