@@ -49,7 +49,7 @@ function SocialDrawerActions({
               <SocialDrawerInstagramButton onClick={gotoScheduleStep} />
             </Grid>
           )}
-          <Grid item sm={hasAccess ? 6 : 12}>
+          <Grid item sm={hasAccess && hasInstagramButton ? 6 : 12}>
             <SocialDrawerDownloadButton instance={instance} />
           </Grid>
         </Grid>
