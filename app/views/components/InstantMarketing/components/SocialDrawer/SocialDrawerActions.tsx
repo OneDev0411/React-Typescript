@@ -31,6 +31,8 @@ function SocialDrawerActions({
   const setStep = useSetSocialDrawerStep()
 
   const hasAccess = useAcl(ACL.SHARE_TO_INSTAGRAM)
+  const hasInstagramButton =
+    instance.type === 'brand_asset' || instance.template.medium !== 'Social'
 
   const gotoScheduleStep = () => setStep('Schedule')
 
@@ -42,15 +44,9 @@ function SocialDrawerActions({
     <div className={className}>
       <div className={classes.row}>
         <Grid container spacing={2}>
-          {hasAccess && (
+          {hasAccess && hasInstagramButton && (
             <Grid item sm={6}>
-              <SocialDrawerInstagramButton
-                disabled={
-                  instance.type === 'brand_asset' ||
-                  instance.template.medium !== 'Social'
-                }
-                onClick={gotoScheduleStep}
-              />
+              <SocialDrawerInstagramButton onClick={gotoScheduleStep} />
             </Grid>
           )}
           <Grid item sm={hasAccess ? 6 : 12}>
