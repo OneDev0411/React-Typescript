@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       marginBottom: theme.spacing(4),
-      padding: theme.spacing(0, 1, 0, 2)
+      padding: theme.spacing(0, 2)
     },
     label: {
       marginTop: theme.spacing(0.25)
@@ -46,7 +46,7 @@ export default function GlobalActionsMenu({ onClick, renderButton }: Props) {
             root: classes.root
           }}
         >
-          <span className={classes.label}>CREATE</span>
+          <span className={classes.label}>Create</span>
         </Button>
       )}
     </div>
