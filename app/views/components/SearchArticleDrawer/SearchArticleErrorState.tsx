@@ -1,15 +1,13 @@
 import { Box } from '@material-ui/core'
 
-import SearchArticleSearchErrorMessage from './SearchArticleSearchErrorMessage'
+import SearchArticleErrorStateMessage from './SearchArticleErrorStateMessage'
 import { RSSSearchErrorCode } from './types'
 
-interface SearchArticleSearchErrorProps {
+interface SearchArticleErrorStateProps {
   errorCode: RSSSearchErrorCode
 }
 
-function SearchArticleSearchError({
-  errorCode
-}: SearchArticleSearchErrorProps) {
+function SearchArticleErrorState({ errorCode }: SearchArticleErrorStateProps) {
   return (
     <Box
       minHeight="100%"
@@ -18,13 +16,13 @@ function SearchArticleSearchError({
       justifyContent="center"
     >
       {errorCode === 'CloudflareProtected' && (
-        <SearchArticleSearchErrorMessage
+        <SearchArticleErrorStateMessage
           image="/static/icons/paper-unlink.svg"
           message="We are unable to load this article due to the copyright rules or the publisher's website's settings :("
         />
       )}
       {errorCode === 'MetadataNotFound' && (
-        <SearchArticleSearchErrorMessage
+        <SearchArticleErrorStateMessage
           image="/static/icons/paper-remove.svg"
           message="We couldn't find the article you were looking for. Please try searching again or inserting the correct URL link to the article."
         />
@@ -33,4 +31,4 @@ function SearchArticleSearchError({
   )
 }
 
-export default SearchArticleSearchError
+export default SearchArticleErrorState

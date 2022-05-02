@@ -16,9 +16,9 @@ import { RSS_SOURCES } from './constants'
 import { isRSSSearchErrorCode } from './helpers'
 import { getUrlMetadataRequest } from './models'
 import SearchArticleEmptyState from './SearchArticleEmptyState'
+import SearchArticleErrorState from './SearchArticleErrorState'
 import SearchArticleImageCacheProvider from './SearchArticleImageCacheProvider'
 import SearchArticleResults from './SearchArticleResults'
-import SearchArticleSearchError from './SearchArticleSearchError'
 import {
   ArticleMetadata,
   RSSArticleMetadata,
@@ -243,7 +243,7 @@ function SearchArticleDrawer({
             {isLoadingState ? (
               <LoadingContainer />
             ) : searchErrorCode ? (
-              <SearchArticleSearchError errorCode={searchErrorCode} />
+              <SearchArticleErrorState errorCode={searchErrorCode} />
             ) : isEmptyState ? (
               <SearchArticleEmptyState />
             ) : (

@@ -8,18 +8,18 @@ const useStyles = makeStyles(
       marginBottom: theme.spacing(2)
     }
   }),
-  { name: 'SearchArticleSearchErrorMessage' }
+  { name: 'SearchArticleErrorStateMessage' }
 )
 
-interface SearchArticleSearchErrorMessageProps {
+interface SearchArticleErrorStateMessageProps {
   image: string
   message: string
 }
 
-function SearchArticleSearchErrorMessage({
+function SearchArticleErrorStateMessage({
   image,
   message
-}: SearchArticleSearchErrorMessageProps) {
+}: SearchArticleErrorStateMessageProps) {
   const classes = useStyles()
 
   return (
@@ -30,4 +30,4 @@ function SearchArticleSearchErrorMessage({
   )
 }
 
-export default SearchArticleSearchErrorMessage
+export default SearchArticleErrorStateMessage
