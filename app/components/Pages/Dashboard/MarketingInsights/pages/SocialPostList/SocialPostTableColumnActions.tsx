@@ -69,11 +69,6 @@ function SocialPostTableColumnActions({
     )
   }
 
-  // Do not show the actions if the social post is not mine
-  if (!socialPostBelongsToCurrentUser) {
-    return null
-  }
-
   const isFailed = isSocialPostFailed(socialPost)
 
   // If it is executed successfully, display nothing
@@ -85,22 +80,26 @@ function SocialPostTableColumnActions({
   return (
     <div className={classes.root}>
       {isFailed && <SocialPostFailedChip />}
-      <SocialPostPreviewButton
-        className={classes.actionMargin}
-        socialPost={socialPost}
-        color="primary"
-        size="small"
-        disabled={isWorking}
-        onSocialPostScheduledOrSent={handleSilentDelete}
-      />
-      <IconButton
-        className={classes.actionMargin}
-        size="small"
-        onClick={handleDelete}
-        disabled={isWorking}
-      >
-        <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.medium} />
-      </IconButton>
+      {socialPostBelongsToCurrentUser && (
+        <>
+          <SocialPostPreviewButton
+            className={classes.actionMargin}
+            socialPost={socialPost}
+            color="primary"
+            size="small"
+            disabled={isWorking}
+            onSocialPostScheduledOrSent={handleSilentDelete}
+          />
+          <IconButton
+            className={classes.actionMargin}
+            size="small"
+            onClick={handleDelete}
+            disabled={isWorking}
+          >
+            <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.medium} />
+          </IconButton>
+        </>
+      )}
     </div>
   )
 }
