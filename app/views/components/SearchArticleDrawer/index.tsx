@@ -149,6 +149,8 @@ function SearchArticleDrawer({
 
           if (isRSSSearchErrorCode(errorCode)) {
             setSearchErrorCode(errorCode)
+          } else {
+            setSearchErrorCode('MetadataNotFound')
           }
 
           return []
