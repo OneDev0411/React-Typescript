@@ -342,6 +342,8 @@ class SendContactCard extends Component {
             template={this.state.htmlTemplate}
             templateInstanceData={this.TemplateInstanceData}
             onClose={this.closeSocialDrawer}
+            onPostScheduled={this.closeBuilder}
+            onPostSent={this.closeBuilder}
           />
         )}
       </>

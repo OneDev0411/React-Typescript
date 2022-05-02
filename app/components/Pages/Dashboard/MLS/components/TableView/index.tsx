@@ -65,7 +65,7 @@ const CELL_FALLBACK = '--'
 interface TableColumnItem {
   header: string
   id: string
-  render: (listing: ICompactListing, user: Nullable<IUser>) => React.ReactNode
+  render: (listing: ICompactListing) => React.ReactNode
 }
 
 const primaryColumns: TableColumnItem[] = [
@@ -82,13 +82,7 @@ const primaryColumns: TableColumnItem[] = [
   {
     header: 'Price',
     id: 'price',
-    render: (listing, user) =>
-      `$${getListingFormatedPrice(
-        listing.price,
-        listing.close_price,
-        user,
-        false
-      )}`
+    render: listing => `$${getListingFormatedPrice(listing.price, false)}`
   },
   {
     header: 'Beds',
@@ -111,17 +105,17 @@ const secondaryColumns: TableColumnItem[] = [
     // TODO: add helper to format numbers
     render: listing =>
       listing.compact_property.square_meters
-        ? `${metersToFeet(
-            listing.compact_property.square_meters
+        ? `${Math.round(
+            metersToFeet(listing.compact_property.square_meters)
           ).toLocaleString('en-US', { maximumFractionDigits: 2 })} sqft`
         : CELL_FALLBACK
   },
   {
     header: '$/Sqft',
     id: 'pricePerSquareFoot',
-    render: (listing, user) =>
-      getListingPricePerSquareFoot(listing, user)
-        ? `$${getListingPricePerSquareFoot(listing, user)}/Sqft`
+    render: listing =>
+      getListingPricePerSquareFoot(listing)
+        ? `$${getListingPricePerSquareFoot(listing)}/Sqft`
         : CELL_FALLBACK
   },
   {
@@ -203,7 +197,7 @@ export const TableView = ({
         <Table stickyHeader aria-label="listings">
           <TableHead>
             <TableRow>
-              <TableCell />
+              {!!user && <TableCell />}
               {columns.map(column => (
                 <TableCell variant="head" key={column.id}>
                   {column.header}
@@ -224,21 +218,23 @@ export const TableView = ({
                   [classes.isScroling]: isScroling
                 })}
               >
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selections.some(
-                      (item: ICompactListing) => item.id === listing.id
-                    )}
-                    onChange={() => handleToggleSelection(listing)}
-                    inputProps={{ 'aria-labelledby': listing.id }}
-                  />
-                </TableCell>
+                {!!user && (
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      checked={selections.some(
+                        (item: ICompactListing) => item.id === listing.id
+                      )}
+                      onChange={() => handleToggleSelection(listing)}
+                      inputProps={{ 'aria-labelledby': listing.id }}
+                    />
+                  </TableCell>
+                )}
                 {columns.map(column => (
                   <TableCell
                     onClick={() => openListingDetailsModal(listing.id)}
                     key={column.id}
                   >
-                    {column.render(listing, user)}
+                    {column.render(listing)}
                   </TableCell>
                 ))}
               </TableRow>

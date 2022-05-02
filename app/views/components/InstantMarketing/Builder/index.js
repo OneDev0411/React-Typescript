@@ -19,6 +19,7 @@ import { EditorDialog } from 'components/ImageEditor'
 import ImageSelectDialog from 'components/ImageSelectDialog'
 import { PLACEHOLDER_IMAGE_URL } from 'components/InstantMarketing/constants'
 import { getHipPocketTemplateImagesUploader } from 'components/InstantMarketing/helpers/get-hip-pocket-template-image-uploader'
+import { getMlsDrawerInitialDeals } from 'components/InstantMarketing/helpers/get-mls-drawer-initial-deals'
 import MapDrawer from 'components/MapDrawer'
 import MatterportDrawer from 'components/MatterportDrawer'
 import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
@@ -28,6 +29,7 @@ import SearchListingDrawer from 'components/SearchListingDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
 import { uploadAsset } from 'models/instant-marketing/upload-asset'
+import { getBrandListings } from 'models/listings/search/get-brand-listings'
 import { isAdmin } from 'utils/acl'
 import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
 import { getBrandColors } from 'utils/get-brand-colors'
@@ -57,6 +59,7 @@ import CreateSuperCampaignButton from './CreateSuperCampaignButton'
 import DeviceManager from './DeviceManager'
 import { addFallbackSrcToImage } from './extensions/add-fallback-src-to-image'
 import { addFallbackSrcToMjImage } from './extensions/add-fallback-src-to-mj-image'
+import { patchConditionalToolbarButtonsIssue } from './extensions/patch-conditional-toolbar-buttons-issue'
 import {
   Container,
   Actions,
@@ -89,6 +92,7 @@ class Builder extends React.Component {
       isEditorLoaded: false,
       isTemplatesColumnHidden: props.isTemplatesColumnHiddenDefault,
       loadedListingsAssets: [],
+      listingDrawerListings: [],
       isListingDrawerOpen: false,
       isAgentDrawerOpen: false,
       isImageSelectDialogOpen: false,
@@ -140,6 +144,10 @@ class Builder extends React.Component {
           label: 'Icon',
           name: 'src',
           options: [
+            {
+              value: '',
+              name: '-- Select icon --'
+            },
             {
               value: 'https://i.ibb.co/qr5rZym/facebook.png',
               name: 'Facebook'
@@ -214,6 +222,19 @@ class Builder extends React.Component {
 
     this.editor.on('load', this.setupGrapesJs)
     this.editor.on('rte:enable', this.evaluateRte)
+    this.editor.on('frame:load:before', this.setCanvasModeToStandardHTML5)
+
+    try {
+      const listingDrawerListings = await getBrandListings(
+        this.props.activeBrand.id
+      )
+
+      this.setState({ listingDrawerListings })
+    } catch (e) {
+      console.error(e)
+
+      this.setState({ listingDrawerListings: [] })
+    }
   }
 
   componentWillUnmount() {
@@ -222,6 +243,9 @@ class Builder extends React.Component {
 
       iframe.removeEventListener('paste', this.iframePasteHandler)
       iframe.removeEventListener('click', this.iframeClickHandler)
+
+      // Make the chance for others to cleanup the memory
+      this.editor.trigger('editor:unload')
     }
 
     unloadJS('ckeditor')
@@ -267,6 +291,22 @@ class Builder extends React.Component {
       }
       // eslint-disable-next-line no-cond-assign
     } while ((model = model.parent()))
+  }
+
+  setCanvasModeToStandardHTML5 = ({ el }) => {
+    /**
+     * The grapes canvas ignores the <!DOCTYPE html> tag when it loads a template.
+     * This behaviour leads to render the code in HTML quirks mode which has different
+     * output than the standard HTML5 mode.
+     *
+     * The Grapesjs maintainer suggested the following solution to resolve the issue:
+     * https://github.com/artf/grapesjs/issues/3285#issuecomment-865389716
+     */
+    const doc = el.contentDocument
+
+    doc.open()
+    doc.write('<!DOCTYPE html>')
+    doc.close()
   }
 
   loadTemplateOptions = async () => {
@@ -461,6 +501,7 @@ class Builder extends React.Component {
 
   setupGrapesJs = async () => {
     registerCommands(this.editor)
+    patchConditionalToolbarButtonsIssue(this.editor)
     registerToolbarButtons(this.editor, {
       onChangeImageClick: () => {
         this.setState({ isImageSelectDialogOpen: true })
@@ -1066,6 +1107,7 @@ class Builder extends React.Component {
     this.editor.setStyle('')
     this.setEditorTemplateId(getTemplateObject(selectedTemplate).id)
     this.editor.setComponents(html)
+    this.editor.trigger('editor:template:loaded') // Let others know the template is loaded
     this.lockIn()
     this.deselectAll()
     this.resize()
@@ -1288,6 +1330,10 @@ class Builder extends React.Component {
     }))
   }
 
+  get DealsDefaultList() {
+    return getMlsDrawerInitialDeals(this.props.deals)
+  }
+
   get isTemplateForOtherAgents() {
     return this.props.templatePurpose === 'ForOtherAgents'
   }
@@ -1407,13 +1453,27 @@ class Builder extends React.Component {
               }
               multipleSelection
               renderAction={props => (
-                <Button {...props.buttonProps}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  {...props.buttonProps}
+                >
                   Next ({props.selectedItemsCount} Listings Selected)
                 </Button>
               )}
               withMlsDisclaimer
               isOpen
               title="Select Listing"
+              defaultLists={[
+                {
+                  title: 'Add from your MLS listings',
+                  items: this.state.listingDrawerListings
+                },
+                {
+                  title: 'Add from your deals',
+                  items: this.DealsDefaultList
+                }
+              ]}
               onClose={() => {
                 this.blocks.listing.selectHandler()
                 this.setState({ isListingDrawerOpen: false })
@@ -1504,6 +1564,12 @@ class Builder extends React.Component {
             onSelect={video => {
               this.blocks.video.selectHandler(video)
               this.setState({ videoToEdit: null })
+            }}
+            uploadThumbnail={async file => {
+              const templateId = this.selectedTemplate.id
+              const uploadedAsset = await uploadAsset(templateId, file)
+
+              return uploadedAsset.file.url
             }}
           />
           <SearchArticleDrawer
@@ -1615,7 +1681,7 @@ class Builder extends React.Component {
               </>
             )}
 
-            {this.editor && this.isEmailTemplate && (
+            {this.editor && (this.isEmailTemplate || this.isWebsiteTemplate) && (
               <>
                 <DeviceManager editor={this.editor} />
                 <Divider orientation="vertical" />
@@ -1739,9 +1805,10 @@ Builder.defaultProps = {
   onBuilderLoad: () => null
 }
 
-function mapStateToProps({ user, ...state }) {
+function mapStateToProps({ user, deals, ...state }) {
   return {
     user,
+    deals: deals.list,
     isAdminUser: isAdmin(selectActiveTeamUnsafe(state)),
     activeBrand: selectActiveBrand(state),
     activeBrandSetting: selectActiveBrandSettings(state, true)

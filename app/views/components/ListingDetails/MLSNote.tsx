@@ -1,59 +1,71 @@
-import React from 'react'
-
-import { makeStyles, Theme } from '@material-ui/core'
+import { Grid, makeStyles, Theme, Typography } from '@material-ui/core'
 import fecha from 'fecha'
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
-    color: theme.palette.text.secondary,
-    ...theme.typography.caption
-  }
+    display: 'flex',
+    flexDirection: 'column-reverse',
+    alignItems: 'center',
+    color: theme.palette.tertiary.light,
+    [theme.breakpoints.up('md')]: {
+      alignItems: 'flex-start',
+      flexDirection: 'row'
+    }
+  },
+  imageWrapper: {
+    width: 56, // From figma design
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      marginRight: 0,
+      marginTop: theme.spacing(4),
+      marginBottom: theme.spacing(2)
+    }
+  },
+  noteWrapper: {
+    flex: 1,
+    [theme.breakpoints.up('md')]: {}
+  },
+  title: { marginBottom: theme.spacing(2) },
+  logo: {
+    maxWidth: '100%'
+  },
+  closedNote: { marginTop: theme.spacing(2) }
 }))
 
 interface Props {
-  mls?: string
-  mlsName?: string
+  mlsName: string
+  disclaimer: string
+  logo: Nullable<string>
 }
 
-export default function MLSNote({ mls, mlsName }: Props) {
+export default function MLSNote({ disclaimer, mlsName, logo }: Props) {
   const classes = useStyles()
-
-  if (!mlsName && !mls) {
-    return null
-  }
-
   const lastUpdateDate = getLastUpdateDate()
 
   return (
     <div className={classes.container}>
-      <div>
-        {mlsName && (
-          // eslint-disable-next-line max-len
-          <span>{`Listing information provided in part by the ${mlsName}, for personal, non-commercial use by viewers of
-        this site and may not be reproduced or redistributed. All information is
-        deemed reliable but not guaranteed.`}</span>
-        )}
-        {mls && (
-          <span>
-            {/* eslint-disable-next-line max-len */}
-            {` Copyright © ${mls} ${lastUpdateDate.getFullYear()}. All rights reserved. Last updated at ${fecha.format(
-              lastUpdateDate,
-              'MMM DD, YYYY hh:mm A'
-            )}.`}
-          </span>
-        )}
-      </div>
-
-      {mlsName && (
-        // eslint-disable-next-line max-len
-        <div>{`The data relating to real estate for sale on this website appears in part through the ${mlsName} Internet Data Exchange program, a voluntary cooperative exchange of property listing data between licensed real estate brokerage firms in which participates, and is provided by ${mlsName} through a licensing agreement.`}</div>
+      {logo && (
+        <Grid item className={classes.imageWrapper}>
+          <img className={classes.logo} src={logo} alt={mlsName} />
+        </Grid>
       )}
+      <Grid item className={classes.noteWrapper}>
+        <Typography
+          variant="body1"
+          dangerouslySetInnerHTML={{ __html: disclaimer }}
+        />
 
-      <div>
-        Some properties which appear for sale on this website may no longer be
-        available because they are under contract, have Closed or are no longer
-        being offered for sale.
-      </div>
+        <Typography variant="body1" className={classes.closedNote}>
+          Some properties which appear for sale on this website may no longer be
+          available because they are under contract, have Closed or are no
+          longer being offered for sale.
+          <br />
+          {`Copyright © ${mlsName} ${lastUpdateDate.getFullYear()}. All rights reserved. Last updated at ${fecha.format(
+            lastUpdateDate,
+            'MMM DD, YYYY hh:mm A'
+          )}.`}
+        </Typography>
+      </Grid>
     </div>
   )
 }

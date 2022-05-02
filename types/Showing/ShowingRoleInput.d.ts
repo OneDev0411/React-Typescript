@@ -11,3 +11,8 @@ declare interface IShowingRoleInput {
   confirm_notification_type: INotificationDeliveryType[]
   cancel_notification_type: INotificationDeliveryType[]
 }
+
+declare interface IShowingRoleInputAPI
+  extends Omit<IShowingRoleInput, 'agent'> {
+  agent: Optional<UUID>
+}

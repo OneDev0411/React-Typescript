@@ -1,7 +1,8 @@
 import {
   createSortString,
   parseSortIndex,
-  parseToValertSort
+  parseToValertSort,
+  sortListingsByIndex
 } from './sort-utils'
 
 describe('createSortString', () => {
@@ -91,5 +92,114 @@ describe('parseToValertSort', () => {
     const expected = 'lot_size'
 
     expect(actual).toBe(expected)
+  })
+})
+
+describe('sortListingsByIndex', () => {
+  let compactListings: ICompactListing[] = []
+
+  beforeEach(() => {
+    // fake listings to reduce test time
+    compactListings = [
+      {
+        id: '1',
+        type: 'compact_listing',
+        price: 420,
+        close_price: 300,
+        compact_property: {
+          bedroom_count: 1,
+          bathroom_count: 2,
+          year_built: 1990,
+          lot_size_area: 100,
+          sqft: 5000
+        }
+      },
+      {
+        id: '2',
+        type: 'compact_listing',
+        price: 200,
+        close_price: 200,
+        compact_property: {
+          bedroom_count: 5,
+          bathroom_count: 1,
+          year_built: 1998,
+          lot_size_area: 120,
+          sqft: 5050
+        }
+      },
+      {
+        id: '3',
+        type: 'compact_listing',
+        price: 300,
+        close_price: 500,
+        compact_property: {
+          bedroom_count: 4,
+          bathroom_count: 1,
+          year_built: 2010,
+          lot_size_area: 90,
+          sqft: 1000
+        }
+      }
+    ] as unknown as ICompactListing[]
+  })
+
+  it('should sort by price on compact listing type', () => {
+    const actual = sortListingsByIndex(compactListings, 'price', true)
+    const expected = [
+      compactListings[1],
+      compactListings[2],
+      compactListings[0]
+    ]
+
+    expect(actual).toEqual(expected)
+  })
+
+  it('should sort by lot size on compact listing type', () => {
+    const actual = sortListingsByIndex(compactListings, 'lotSizeArea', true)
+    const expected = [
+      compactListings[2],
+      compactListings[0],
+      compactListings[1]
+    ]
+
+    expect(actual).toEqual(expected)
+  })
+
+  it('should sort by bedrooms on compact listing type', () => {
+    const actual = sortListingsByIndex(compactListings, 'beds', true)
+    const expected = [
+      compactListings[0],
+      compactListings[2],
+      compactListings[1]
+    ]
+
+    expect(actual).toEqual(expected)
+  })
+
+  it('should sort by price on compact listing type', () => {
+    const listings = compactListings.map(
+      listing =>
+        ({
+          ...listing,
+          type: 'listing',
+          property: listing.compact_property
+        } as unknown as IListing)
+    )
+
+    const actual = sortListingsByIndex(listings, 'price', true)
+    const expected = [listings[1], listings[2], listings[0]]
+
+    expect(actual).toEqual(expected)
+  })
+
+  it('should not include unwanted properties', () => {
+    const actual = sortListingsByIndex(compactListings, 'beds', true)
+
+    expect(actual[0].hasOwnProperty('bedroom_count')).toBeFalsy()
+    expect(actual[1].hasOwnProperty('bathroom_count')).toBeFalsy()
+    expect(actual[2].hasOwnProperty('year_built')).toBeFalsy()
+    expect(actual[0].hasOwnProperty('year_built')).toBeFalsy()
+    expect(actual[1].hasOwnProperty('lot_size_area')).toBeFalsy()
+    expect(actual[2].hasOwnProperty('sqft')).toBeFalsy()
   })
 })

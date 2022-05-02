@@ -97,13 +97,13 @@ const MapView = props => {
           }
           title={
             props.tabName === 'favorites'
-              ? 'You don’t have any Favorites.'
-              : 'The search you saved has no results.'
+              ? 'You don’t have any Favorites'
+              : 'The search you saved has no results'
           }
           subtitle={
             props.tabName === 'favorites'
-              ? 'Try for add new Favorites.'
-              : 'Try for add new Saved Search.'
+              ? 'Try adding a new Favorite'
+              : 'Try adding a new Saved Search'
           }
         />
       )

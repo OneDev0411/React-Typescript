@@ -19,7 +19,7 @@ import { getMediaGallery } from 'models/Deal/media-manager'
 import Listing from '../../../models/listings/listing'
 import SearchDrawer from '../SearchDrawer'
 
-import { convertHipPokcetListingToListing } from './helpers/convert-hip-pocket-listing-to-listing/idnex'
+import { convertHipPocketListingToListing } from './helpers/convert-hip-pocket-listing-to-listing'
 import ListingItem from './ListingItem'
 
 const styles = theme => ({
@@ -140,7 +140,7 @@ class SearchListingDrawer extends React.Component {
   }
 
   handleSaveHipPocketListing = async data => {
-    const listingData = convertHipPokcetListingToListing(data)
+    const listingData = convertHipPocketListingToListing(data)
 
     this.closeHipPocketListingDrawer()
     this.handleSelectListings([listingData])
@@ -223,7 +223,7 @@ class SearchListingDrawer extends React.Component {
                         }}
                         onClick={this.openHipPocketListingDrawer}
                       >
-                        Input Manually
+                        Off Market (Input Manually)
                       </Button>
                     </Tooltip>
                     {this.props.renderAction && this.props.renderAction(props)}

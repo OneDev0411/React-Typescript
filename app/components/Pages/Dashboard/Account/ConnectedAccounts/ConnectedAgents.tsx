@@ -15,9 +15,11 @@ import cn from 'classnames'
 import { useReplaceQueryParam } from '@app/hooks/use-query-param'
 import { AddMlsAgent } from 'components/AddMlsAgent'
 
+import ConnectedAccountsLayout from './ConnectedAccountsLayout'
+
 interface Props {
+  className?: string
   user: IUser
-  onDelete: () => void
 }
 
 const useStyles = makeStyles(
@@ -40,7 +42,7 @@ const useStyles = makeStyles(
   { name: 'ConnectedAgentsListItem' }
 )
 
-export default function ConnectedAgents({ user, onDelete }: Props) {
+export default function ConnectedAgents({ className, user }: Props) {
   const classes = useStyles()
   const [actionQueryParam, , removeActionQueryParam] =
     useReplaceQueryParam('action')
@@ -56,16 +58,11 @@ export default function ConnectedAgents({ user, onDelete }: Props) {
   }
 
   return (
-    <>
-      <Box mb={1} mt={6}>
-        <Typography variant="subtitle1">MLS</Typography>
-
-        <Typography variant="body2" color="textSecondary">
-          Enter your agent license # to unlock MLS features.
-        </Typography>
-      </Box>
-
-      <Box my={2}>
+    <ConnectedAccountsLayout
+      className={className}
+      title="MLS"
+      description="Enter your agent license # to unlock MLS features."
+      action={
         <Button
           href=""
           variant="outlined"
@@ -74,8 +71,8 @@ export default function ConnectedAgents({ user, onDelete }: Props) {
         >
           Add MLS Account
         </Button>
-      </Box>
-
+      }
+    >
       {user.agents?.map((agent, key) => (
         <ListItem key={`${agent.id}-${key}`} className={classes.bordered}>
           <Grid container>
@@ -132,6 +129,6 @@ export default function ConnectedAgents({ user, onDelete }: Props) {
       ))}
 
       <AddMlsAgent isOpen={isDialogOpen} user={user} onClose={oncloseDialog} />
-    </>
+    </ConnectedAccountsLayout>
   )
 }

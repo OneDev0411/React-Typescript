@@ -133,14 +133,15 @@ export const Results = ({
     (listingId: UUID, hover: boolean) => {
       uiDispatch(changeListingHoverState(hover ? listingId : null))
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [uiDispatch]
   )
 
-  const handleToggleLike = useCallback((listingId: UUID) => {
-    dispatch(toggleListingFavoriteState(listingId))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const handleToggleLike = useCallback(
+    (listingId: UUID) => {
+      dispatch(toggleListingFavoriteState(listingId))
+    },
+    [dispatch]
+  )
 
   return (
     <Grid container className={classes.root}>

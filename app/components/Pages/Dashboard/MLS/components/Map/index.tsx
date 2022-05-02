@@ -98,11 +98,13 @@ export const Map = memo(
       onToggleListingModal('', false)
     }, [onToggleListingModal])
 
-    const openListingModal = useCallback((id: UUID) => {
-      setListingModalState({ id, isOpen: true })
-      onToggleListingModal(id, true)
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    const openListingModal = useCallback(
+      (id: UUID) => {
+        setListingModalState({ id, isOpen: true })
+        onToggleListingModal(id, true)
+      },
+      [onToggleListingModal]
+    )
 
     const handleChange = ({ center, zoom, bounds }: ChangeEventValue) => {
       onChange(center, zoom, bounds)
@@ -129,32 +131,28 @@ export const Map = memo(
 
     // TODO: implement freehand drawing:
     // https://stackoverflow.com/questions/22758950
-    const activateDrawingMode = useCallback(
-      callback => {
-        drawingManagerRef.current.setMap(mapRef.current)
-        drawingManagerRef.current.setDrawingMode(
-          mapsRef.current.drawing.OverlayType.POLYGON
-        )
+    const activateDrawingMode = useCallback(callback => {
+      drawingManagerRef.current.setMap(mapRef.current)
+      drawingManagerRef.current.setDrawingMode(
+        mapsRef.current.drawing.OverlayType.POLYGON
+      )
 
-        mapsRef.current.event.addListener(
-          drawingManagerRef.current,
-          'polygoncomplete',
-          drawing => {
-            drawingRef.current = drawing
+      mapsRef.current.event.addListener(
+        drawingManagerRef.current,
+        'polygoncomplete',
+        drawing => {
+          drawingRef.current = drawing
 
-            if (typeof callback === 'function') {
-              const drawingPoints = pointsFromPolygon(drawing)
+          if (typeof callback === 'function') {
+            const drawingPoints = pointsFromPolygon(drawing)
 
-              callback(drawingPoints)
-              setDrawingMode(false)
-              drawingManagerRef?.current?.setDrawingMode(null)
-            }
+            callback(drawingPoints)
+            setDrawingMode(false)
+            drawingManagerRef?.current?.setDrawingMode(null)
           }
-        )
-      },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      []
-    )
+        }
+      )
+    }, [])
 
     const handleRemoveDrawing = () => {
       onRemoveDrawing()
@@ -297,7 +295,6 @@ export const Map = memo(
                     id={listing.id}
                     status={listing.status}
                     price={listing.price}
-                    closePrice={listing.close_price}
                     address={listing.address}
                     squareMeters={listing.compact_property.square_meters}
                     bathroomCount={listing.compact_property.bathroom_count}

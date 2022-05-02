@@ -1,4 +1,3 @@
-import zIndex from '@material-ui/core/styles/zIndex'
 import styled from 'styled-components'
 
 import Card from '../../../../../../../views/components/Card'
@@ -14,7 +13,7 @@ export const ListContainer = styled(Card)`
   position: absolute;
   top: calc(100% + 0.5rem);
   left: 0;
-  z-index: ${zIndex.modal - 1};
+  z-index: ${props => props.theme.zIndex.modal - 1};
 `
 
 export const ListTitle = styled.div`

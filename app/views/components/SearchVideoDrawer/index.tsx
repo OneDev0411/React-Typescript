@@ -1,21 +1,23 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 
-import { Box, Button, makeStyles, Typography } from '@material-ui/core'
+import { Box, Grid, Typography, Tabs, Tab, makeStyles } from '@material-ui/core'
 import type { Model } from 'backbone'
-import unescape from 'lodash/unescape'
 
-import useAsync from '@app/hooks/use-async'
-import OverlayDrawer from 'components/OverlayDrawer'
+import useNotify from '@app/hooks/use-notify'
+import OverlayDrawer from '@app/views/components/OverlayDrawer'
 
-import { SearchInput } from '../GlobalHeaderWithSearch/SearchInput'
 import LoadingContainer from '../LoadingContainer'
 
-import { makeVimeoDateStandard } from './helpers'
-import SearchVideoEmptyState from './SearchVideoEmptyState'
-import SearchVideoResults from './SearchVideoResults'
-import { SearchVideoResult, Video } from './types'
-import { useSearchVimeo } from './use-search-vimeo'
-import { useSearchYouTube } from './use-search-youtube'
+import { getVideoGif, getYouTubeVideoGif } from './helpers'
+import OnlineVideos from './OnlineVideos'
+import { SearchVideoResult, Video, VideoTab } from './types'
+import useGalleryVideos from './use-gallery-videos'
+import useVideoboltVideos from './use-videobolt-videos'
+import { useWatermarkPlayIcon } from './use-watermark-play-icon'
+import VideoList from './VideoList'
+
+const STATIC_FALLBACK_THUMBNAIL =
+  'https://images.unsplash.com/photo-1533658280853-e4a10c25a30d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1626&q=80'
 
 const useStyles = makeStyles(
   theme => ({
@@ -43,153 +45,160 @@ interface SearchVideoDrawerProps {
   model: Nullable<Model>
   onClose: () => void
   onSelect: (video: Video) => void
+  uploadThumbnail: (file: File) => Promise<string>
 }
-
-const INITIAL_SEARCH_TERM = 'architectural digest'
-const SEARCH_TERM_STORAGE_KEY = 'searchVideoDrawer_initialSearchTerm'
 
 function SearchVideoDrawer({
   isOpen,
   model,
   onClose,
-  onSelect
+  onSelect,
+  uploadThumbnail
 }: SearchVideoDrawerProps) {
+  const notify = useNotify()
   const classes = useStyles()
-  const {
-    data: result,
-    isLoading,
-    run
-  } = useAsync<SearchVideoResult[]>({ data: [] })
-  const [video, setVideo] = useState<Nullable<SearchVideoResult>>(null)
-  const { isYouTubeReady, safeSearchYouTube } = useSearchYouTube()
-  const { safeSearchVimeo } = useSearchVimeo()
+  const { isWatermarking, watermarkPlayIcon } = useWatermarkPlayIcon()
+  const [activeTab, setActiveTab] = useState<VideoTab>(VideoTab.Online)
+  const [isGeneratingThumbnail, setIsGeneratingThumbnail] =
+    useState<boolean>(false)
 
-  const searchVideos = useCallback(
-    (value: string) => {
-      const searchTerm = value.trim()
+  const getVideoboltVideos = useVideoboltVideos()
+  const getGalleryVideos = useGalleryVideos()
 
-      if (!searchTerm) {
-        return
-      }
+  const videoboltVideos = getVideoboltVideos()
+  const galleryVideos = getGalleryVideos()
 
-      run(async () => {
-        // Send both request at the same time and wait for the results
-        const [youtubeVideos, vimeoVideos] = await Promise.all([
-          safeSearchYouTube(searchTerm),
-          safeSearchVimeo(searchTerm)
-        ])
-
-        const results = [
-          ...vimeoVideos.map<SearchVideoResult>(video => ({
-            thumbnail: video.thumbnail_url,
-            title: unescape(video.title),
-            url: `https://vimeo.com/${video.video_id}`,
-            publisher: video.author_name,
-            publishedAt: makeVimeoDateStandard(video.upload_date),
-            sourceIcon: 'https://f.vimeocdn.com/images_v6/favicon.ico'
-          })),
-          ...youtubeVideos.map<SearchVideoResult>(video => ({
-            thumbnail: video.snippet?.thumbnails?.high?.url ?? '',
-            title: unescape(video.snippet?.title ?? ''),
-            url: `https://www.youtube.com/watch?v=${video.id?.videoId}`,
-            publisher: video.snippet?.channelTitle ?? '',
-            publishedAt: video.snippet?.publishedAt ?? '',
-            sourceIcon:
-              'https://www.youtube.com/s/desktop/8cdd1596/img/favicon_32x32.png'
-          }))
-        ]
-
-        // Update the search term if there is any result
-        if (results.length > 0) {
-          localStorage.setItem(SEARCH_TERM_STORAGE_KEY, searchTerm)
-        }
-
-        return results
-      })
-    },
-    [run, safeSearchYouTube, safeSearchVimeo]
-  )
-
-  // Load initial videos using the initial term
-  useEffect(() => {
-    if (isYouTubeReady && isOpen) {
-      searchVideos(
-        localStorage.getItem(SEARCH_TERM_STORAGE_KEY) || INITIAL_SEARCH_TERM
-      )
-    }
-  }, [isYouTubeReady, searchVideos, isOpen])
-
-  const handleSearchChange = ({
-    target
-  }: React.ChangeEvent<HTMLInputElement>) => searchVideos(target.value)
-
-  const handleConfirm = () => {
-    if (!video) {
+  const handleCloseDrawer = () => {
+    if (isGeneratingThumbnail || isWatermarking) {
       return
     }
 
-    const videoInfo: Video = {
-      url: video.url,
-      thumbnail: video.thumbnail
+    onClose()
+  }
+
+  const handleSelectVideo = async (video: SearchVideoResult) => {
+    let shouldAddPlayIconWatermark = true
+
+    if (video.source === 'youtube') {
+      try {
+        setIsGeneratingThumbnail(true)
+
+        const result = await getYouTubeVideoGif(video.url)
+
+        video.thumbnail = result.url
+        shouldAddPlayIconWatermark = false
+      } catch (err) {
+        console.error(err)
+        notify({
+          status: 'warning',
+          message:
+            'Failed to generate GIF thumbnail. Falling back to the static thumbnail.'
+        })
+      }
     }
+
+    if (video.source === 'videobolt' || video.source === 'gallery') {
+      try {
+        setIsGeneratingThumbnail(true)
+
+        const result = await getVideoGif(video.url)
+
+        video.thumbnail = result.url
+        shouldAddPlayIconWatermark = false
+      } catch (err) {
+        console.error(err)
+        notify({
+          status: 'warning',
+          message:
+            'Failed to generate GIF thumbnail. Falling back to a static thumbnail.'
+        })
+        video.thumbnail = STATIC_FALLBACK_THUMBNAIL
+      }
+    }
+
+    const videoInfo: Video = {
+      url: video.playerUrl,
+      thumbnail: video.thumbnail,
+      thumbnailWithPlayIcon: shouldAddPlayIconWatermark
+        ? await watermarkPlayIcon(video.thumbnail!, uploadThumbnail)
+        : video.thumbnail
+    }
+
+    setIsGeneratingThumbnail(false)
 
     onSelect(videoInfo)
     model?.trigger('change:video:info', videoInfo)
-
-    setVideo(null)
   }
 
-  const handleClose = () => {
-    onClose?.()
-    setVideo(null)
+  const handleChangeTab = (_event: unknown, newValue: VideoTab) => {
+    setActiveTab(newValue)
   }
 
-  const isLoadingState = isLoading || !isYouTubeReady
-  const isEmptyState = !isLoadingState && result.length === 0
+  const renderGeneratingThumbnail = () => {
+    return (
+      <Box mt="30%">
+        <Grid
+          container
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Grid item>
+            <LoadingContainer noPaddings />
+          </Grid>
+          <Grid item>
+            <Typography variant="body1" align="center">
+              Generating GIF thumbnail
+              <br />
+              This may take a few seconds.
+            </Typography>
+          </Grid>
+        </Grid>
+      </Box>
+    )
+  }
+
+  const renderActiveTab = () => {
+    if (activeTab === VideoTab.Online) {
+      return <OnlineVideos onSelect={handleSelectVideo} />
+    }
+
+    return (
+      <VideoList
+        videos={
+          activeTab === VideoTab.Videobolt ? videoboltVideos : galleryVideos
+        }
+        onSelect={handleSelectVideo}
+      />
+    )
+  }
 
   return (
-    <OverlayDrawer open={isOpen} onClose={handleClose} width="690px">
-      <OverlayDrawer.Header title="Insert a Youtube/Vimeo video" />
+    <OverlayDrawer open={isOpen} onClose={handleCloseDrawer} width="690px">
+      <OverlayDrawer.Header title="Insert a video" />
       <OverlayDrawer.Body className={classes.body}>
-        {isYouTubeReady && (
-          <Box flex={0} px={3} py={2}>
-            <SearchInput
-              onChange={handleSearchChange}
-              fullWidth
-              autoFocus
-              isLoading={isLoading}
-              placeholder="Search"
-              debounceTime={500}
-            />
-            <Typography className={classes.helpText} variant="caption">
-              Youtube and Vimeo links supported
-            </Typography>
-          </Box>
+        {isGeneratingThumbnail ? (
+          renderGeneratingThumbnail()
+        ) : (
+          <>
+            <Tabs
+              value={activeTab}
+              onChange={handleChangeTab}
+              variant="fullWidth"
+              indicatorColor="primary"
+            >
+              <Tab label="Online Videos" value={VideoTab.Online} />
+              {galleryVideos.length > 0 && (
+                <Tab label="Your Gallery" value={VideoTab.Gallery} />
+              )}
+              {videoboltVideos.length > 0 && (
+                <Tab label="Videobolt" value={VideoTab.Videobolt} />
+              )}
+            </Tabs>
+            {renderActiveTab()}
+          </>
         )}
-        <Box flex={1} className={classes.result} px={3}>
-          {isLoadingState ? (
-            <LoadingContainer />
-          ) : isEmptyState ? (
-            <SearchVideoEmptyState />
-          ) : (
-            <SearchVideoResults
-              videos={result}
-              selected={video}
-              onSelect={setVideo}
-            />
-          )}
-        </Box>
       </OverlayDrawer.Body>
-      <OverlayDrawer.Footer rowReverse>
-        <Button
-          disabled={!video}
-          color="primary"
-          variant="contained"
-          onClick={handleConfirm}
-        >
-          Done
-        </Button>
-      </OverlayDrawer.Footer>
     </OverlayDrawer>
   )
 }

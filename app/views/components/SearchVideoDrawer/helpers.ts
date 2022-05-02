@@ -1,4 +1,8 @@
-import { YouTubeVideoResource } from './types'
+import superagent from 'superagent'
+
+import { VideoboltVideo, YouTubeVideoResource } from './types'
+
+const REQUEST_TIMEOUT_MS = 120 * 1000
 
 // The date format provided by Vimeo is not supported on Safari so we need to
 // replace the space with T character to make it standard
@@ -62,4 +66,43 @@ export function youtubeVideos(
         reject
       )
   })
+}
+
+export async function getYouTubeVideoGif(
+  url: string
+): Promise<{ url: string }> {
+  const response = await superagent
+    .post('/api/utils/get-youtube-video-gif')
+    .timeout(REQUEST_TIMEOUT_MS)
+    .retry(2)
+    .send({ url })
+
+  return response.body
+}
+
+export async function getVideoGif(url: string): Promise<{ url: string }> {
+  const response = await superagent
+    .post('/api/utils/get-video-gif')
+    .timeout(REQUEST_TIMEOUT_MS)
+    .retry(2)
+    .send({ url })
+
+  return response.body
+}
+
+export async function getVideoboltVideos(
+  email: string
+): Promise<VideoboltVideo[]> {
+  const response = await superagent
+    .post('/api/utils/get-videobolt-videos')
+    .retry(2)
+    .send({ email })
+
+  return response.body.videos ?? []
+}
+
+export function getVideoPlayerUrl(url: string): string {
+  return `${window.location.origin}/dashboard/player?video=${encodeURIComponent(
+    url
+  )}`
 }

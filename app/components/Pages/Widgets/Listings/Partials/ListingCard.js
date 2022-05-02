@@ -36,6 +36,11 @@ const Container = styled.div`
   }
 `
 
+// Hiding agent avatar temporarily due to agent conflict
+// https://gitlab.com/rechat/web/-/issues/6419
+// TODO: remove this issue and re-enable agent info with better approach
+const SHOULD_SHOW_AGENT_AVATAR = false
+
 export default class ListingCard extends Component {
   side(listing) {
     if (!listing.proposed_agent) {
@@ -197,10 +202,12 @@ export default class ListingCard extends Component {
           className="c-listing-card__link"
           to={`/dashboard/mls/${listing.id}`}
         />
-        <AgentImage
-          listing={listing}
-          defaultAvatar={this.props.defaultAvatar}
-        />
+        {SHOULD_SHOW_AGENT_AVATAR ? (
+          <AgentImage
+            listing={listing}
+            defaultAvatar={this.props.defaultAvatar}
+          />
+        ) : null}
         {user && (
           <div className="c-listing-card__favorite-heart">
             <FavoriteHeart listing={listing} />

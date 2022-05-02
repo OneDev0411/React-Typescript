@@ -209,23 +209,9 @@ export const getListingFeatures = (
   return {
     bedroomCount: property.bedroom_count,
     bathroomCount: property.bathroom_count,
-    areaSqft: Math.floor(metersToFeet(property.square_meters)),
+    areaSqft: Math.round(metersToFeet(property.square_meters)),
     lotSizeAreaAcre: property.lot_size_area
   }
-}
-
-export const getListingPrice = (
-  listingPrice: number,
-  listingClosePrice: Nullable<number>,
-  user: Nullable<IUser>
-): number => {
-  let price = listingPrice
-
-  if (user && listingClosePrice && user.user_type === 'Agent') {
-    price = listingClosePrice
-  }
-
-  return price || 0
 }
 
 export const shortFromatPrice = (price: number): string => {
@@ -236,25 +222,20 @@ export const shortFromatPrice = (price: number): string => {
 
 export const getListingFormatedPrice = (
   listingPrice: number,
-  listingClosePrice: Nullable<number>,
-  user: Nullable<IUser>,
   isShortFormat: boolean = true
 ): string => {
-  const price = getListingPrice(listingPrice, listingClosePrice, user)
-
   if (isShortFormat) {
-    return shortFromatPrice(price)
+    return shortFromatPrice(listingPrice)
   }
 
-  return price.toLocaleString('en-US', { maximumFractionDigits: 1 })
+  return listingPrice.toLocaleString('en-US', { maximumFractionDigits: 1 })
 }
 
 export const getListingPricePerSquareFoot = (
   listing: ICompactListing | IListing,
-  user: Nullable<IUser>,
   fallback: Nullable<string> = null
 ): Nullable<string> => {
-  const price = getListingPrice(listing.price, listing.close_price, user)
+  const price = listing.price
   const squareMeters =
     listing.type === 'compact_listing'
       ? listing.compact_property.square_meters

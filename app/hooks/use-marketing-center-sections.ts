@@ -112,6 +112,11 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/BackToSchool')
       },
       {
+        title: getTemplateTypeLabel('BoxingDay'),
+        value: 'BoxingDay',
+        link: urlGenerator('/BoxingDay')
+      },
+      {
         title: getTemplateTypeLabel('ChineseNewYear'),
         value: 'ChineseNewYear',
         link: urlGenerator('/ChineseNewYear')
@@ -140,6 +145,11 @@ const ALL_SECTIONS: SectionCollection = {
         title: getTemplateTypeLabel('Easter'),
         value: 'Easter',
         link: urlGenerator('/Easter')
+      },
+      {
+        title: getTemplateTypeLabel('EidalFitr'),
+        value: 'EidalFitr',
+        link: urlGenerator('/EidalFitr')
       },
       {
         title: getTemplateTypeLabel('FathersDay'),
@@ -207,14 +217,19 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/Passover')
       },
       {
-        title: getTemplateTypeLabel('RoshHashanah'),
-        value: 'RoshHashanah',
-        link: urlGenerator('/RoshHashanah')
-      },
-      {
         title: getTemplateTypeLabel('PatriotsDay'),
         value: 'PatriotsDay',
         link: urlGenerator('/PatriotsDay')
+      },
+      {
+        title: getTemplateTypeLabel('Ramadan'),
+        value: 'Ramadan',
+        link: urlGenerator('/Ramadan')
+      },
+      {
+        title: getTemplateTypeLabel('RoshHashanah'),
+        value: 'RoshHashanah',
+        link: urlGenerator('/RoshHashanah')
       },
       {
         title: getTemplateTypeLabel('September11'),

@@ -284,6 +284,15 @@ class SendMlsListingCard extends Component {
       isSocialDrawerOpen: false
     })
 
+  closeSocialDrawerAndBuilder = () =>
+    this.setState(
+      {
+        isInstantMarketingBuilderOpen: false,
+        isSocialDrawerOpen: false
+      },
+      this.props.handleTrigger
+    )
+
   get TemplateInstanceData() {
     // We are offering marketing for unlisted deals by merging the deal data with
     // a base json which we are using it as base object (it is a mock `listing` object)
@@ -417,7 +426,11 @@ class SendMlsListingCard extends Component {
           onSelectListingsCallback={this.handleSelectListings}
           multipleSelection={this.IsMultiListing}
           renderAction={props => (
-            <Button {...props.buttonProps}>
+            <Button
+              variant="contained"
+              color="secondary"
+              {...props.buttonProps}
+            >
               {`Next (${props.selectedItemsCount} Listings Selected)`}
             </Button>
           )}
@@ -463,6 +476,8 @@ class SendMlsListingCard extends Component {
             template={this.state.htmlTemplate}
             templateInstanceData={this.TemplateInstanceData}
             onClose={this.closeSocialDrawer}
+            onPostScheduled={this.closeSocialDrawerAndBuilder}
+            onPostSent={this.closeSocialDrawerAndBuilder}
           />
         )}
       </Fragment>

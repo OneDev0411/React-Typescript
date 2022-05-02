@@ -22,11 +22,14 @@ import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 
 import { makeStyles } from '@material-ui/core'
 import _map from 'lodash/map'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { useTeamSetting } from '@app/hooks/team/use-team-setting'
 import { useViewAs } from '@app/hooks/team/use-view-as'
+import useNotify from '@app/hooks/use-notify'
 import { selectUser } from '@app/selectors/user'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import {
   CrmEventType,
   ApiOptions,
@@ -42,7 +45,10 @@ import { Event } from './components/Event'
 import { EventController } from './components/EventController'
 import { FilterEvents } from './components/FilterEvents'
 import { FilterShape } from './components/FilterEvents/type'
-import { INITIAL_FILTERS } from './components/FilterEvents/values'
+import {
+  CALENDAR_FILTER_EVENTS_KEY,
+  INITIAL_FILTERS
+} from './components/FilterEvents/values'
 import {
   getDateRange,
   shouldRecreateRange,
@@ -81,9 +87,10 @@ export const GridCalendarPresentation = ({
   associations = []
 }: Props) => {
   const classes = useStyles()
+  const dispatch = useDispatch()
+  const notify = useNotify()
   const user = useSelector(selectUser)
   const viewAsUsers = useViewAs()
-
   // list of server events
   const [rowEvents, setRowEvents] = useState<ICalendarEvent[]>([])
   // list of current events
@@ -104,7 +111,10 @@ export const GridCalendarPresentation = ({
 
   // filter events el
   const [filterEl, setFilterEl] = useState<HTMLButtonElement | null>(null)
-  const [activeFilter, setActiveFilter] = useState<FilterShape>(INITIAL_FILTERS)
+  const activeFilter: FilterShape = useTeamSetting(
+    CALENDAR_FILTER_EVENTS_KEY,
+    INITIAL_FILTERS
+  )
 
   const handleCloseFilterEvents = () => setFilterEl(null)
 
@@ -312,6 +322,10 @@ export const GridCalendarPresentation = ({
       throw e
     } finally {
       setIsLoading(false)
+      notify({
+        status: 'success',
+        message: 'Event updated!'
+      })
     }
   }
 
@@ -348,6 +362,14 @@ export const GridCalendarPresentation = ({
     },
     [rowEvents, updateEvents, viewAsUsers]
   )
+
+  /**
+   * handle filter change
+   */
+  const handleFilterEvents = (value: FilterShape) => {
+    dispatch(setActiveTeamSetting(CALENDAR_FILTER_EVENTS_KEY, value))
+    updateEvents(rowEvents, value)
+  }
 
   /**
    * Load initia events (behaves as componentDidMount)
@@ -397,10 +419,7 @@ export const GridCalendarPresentation = ({
       <FilterEvents
         el={filterEl}
         initialFilters={activeFilter}
-        setFilter={(value: FilterShape) => {
-          setActiveFilter(value)
-          updateEvents(rowEvents, value)
-        }}
+        setFilter={handleFilterEvents}
         onClose={handleCloseFilterEvents}
       />
       <div className={classes.calendarContainer}>
@@ -408,7 +427,13 @@ export const GridCalendarPresentation = ({
           height="100%"
           initialView="dayGridMonth"
           dayMaxEventRows={3}
-          editable
+          editable={!isLoading}
+          events={events}
+          datesSet={handleDatesRender}
+          dateClick={handleDayClick}
+          eventDrop={handleEditEvent}
+          eventResize={handleEditEvent}
+          moreLinkClick="day"
           customButtons={{
             filterButton: {
               text: 'Filter',
@@ -435,12 +460,6 @@ export const GridCalendarPresentation = ({
             timeGridPlugin,
             interactionPlugin
           ]}
-          events={events}
-          datesSet={handleDatesRender}
-          dateClick={handleDayClick}
-          eventDrop={handleEditEvent}
-          eventResize={handleEditEvent}
-          moreLinkClick="day"
           views={{
             timeGrid: {
               dayMaxEventRows: false

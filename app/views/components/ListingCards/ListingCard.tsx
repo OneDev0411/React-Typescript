@@ -25,8 +25,11 @@ import pluralize from 'pluralize'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { getFormattedPrice } from 'models/Deal/helpers/context'
-import { getListingFeatures, isLeaseProperty } from 'utils/listing'
+import {
+  getListingFeatures,
+  getListingFormatedPrice,
+  isLeaseProperty
+} from 'utils/listing'
 
 import ListingCardMedia from './ListingCardMedia'
 import { useStyles } from './styles'
@@ -87,6 +90,16 @@ export interface ListingCardProps {
   onClick?: () => void
 
   /**
+   * The mouse enter handler of listing card root
+   */
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>
+
+  /**
+   * The mouse leave handler of listing card root
+   */
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>
+
+  /**
    * The card hover state
    */
   hover?: boolean
@@ -107,7 +120,9 @@ export default function ListingCard({
   onToggleSelection = noop,
   liked = undefined,
   onLikeClick = noop,
-  onClick
+  onClick,
+  onMouseEnter,
+  onMouseLeave
 }: ListingCardProps) {
   const classes = useStyles({ listing })
 
@@ -147,6 +162,8 @@ export default function ListingCard({
 
   return (
     <Card
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       data-test="card"
       variant="outlined"
       className={cn({
@@ -241,7 +258,7 @@ export default function ListingCard({
             >
               <Grid item>
                 <Typography variant="subtitle1">
-                  {getFormattedPrice(listing.price, 'currency', 0)}
+                  {getListingFormatedPrice(listing.price, false)}
                   {isLeaseProperty(listing) ? '/mo' : ''}
                 </Typography>
               </Grid>

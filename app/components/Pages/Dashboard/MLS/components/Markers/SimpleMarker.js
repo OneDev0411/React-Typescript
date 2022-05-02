@@ -1,7 +1,9 @@
 import React from 'react'
 
 import ButtonBase from '@material-ui/core/ButtonBase'
+import { useDispatch } from 'react-redux'
 
+import toggleFavorite from '@app/store_actions/listings/favorites/toggle-favorite'
 import { changeUrl } from '@app/utils/change-url'
 import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 
@@ -28,6 +30,7 @@ const setMarkerCssPosition = listing => {
 }
 
 const SimpleMarker = ({ listing, isWidget }) => {
+  const dispatch = useDispatch()
   const [isHoverd, setIsHoverd] = React.useState(false)
   const [isListingOpen, setIsListingOpen] = React.useState(false)
 
@@ -46,6 +49,10 @@ const SimpleMarker = ({ listing, isWidget }) => {
 
     setIsListingOpen(true)
   }, [listing.id, isWidget])
+
+  const handleLikeClick = () => {
+    dispatch(toggleFavorite(listing))
+  }
 
   return (
     <>
@@ -67,6 +74,7 @@ const SimpleMarker = ({ listing, isWidget }) => {
         isOpen={isListingOpen}
         listingId={listing.id}
         closeHandler={closeListing}
+        onToggleFavorite={handleLikeClick}
       />
     </>
   )

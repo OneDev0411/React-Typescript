@@ -41,7 +41,7 @@ export const TypeEditor = ({
     }
 
     updateFilters({
-      deal_type: toggledDealTypes
+      deal_type: toggledDealTypes.sort()
     })
   }
 

@@ -15,7 +15,16 @@
 declare module 'grapesjs' {
   import { Collection } from 'backbone'
 
-  export interface Model extends Backbone.Model {
+  export interface ToolbarButton {
+    attributes: object
+    command: string
+  }
+
+  export interface Model<
+    T extends Backbone.ObjectHash = any,
+    S = Backbone.ModelSetOptions,
+    E = any
+  > extends Backbone.Model<T, S, E> {
     opt: any
     getAttributes(): any
     components(): Model[]
@@ -25,6 +34,27 @@ declare module 'grapesjs' {
     append(model: Model | string, opts?: object): Model[]
     remove(): Model
     clone(): Model
+    initToolbar(): void
+
+    // I borrowed the below definitions from the backbone package to be able to
+    // define the required overloads for the `get` and `set` methods.
+    get<A extends Backbone._StringKey<T>>(attributeName: A): Optional<T[A]>
+    set<A extends Backbone._StringKey<T>>(
+      attributeName: A,
+      value?: T[A],
+      options?: S
+    ): this
+    set(attributeName: Partial<T>, options?: S): this
+    set<A extends Backbone._StringKey<T>>(
+      attributeName: A | Partial<T>,
+      value?: T[A] | S,
+      options?: S
+    ): this
+
+    // The GrapesJS especial overloads for the `get` and `set` methods.
+    get(attributeName: 'toolbar'): Optional<ToolbarButton[]>
+    set(attributeName: 'toolbar', value?: ToolbarButton[], options?: S): this
+    view: Backbone.View
   }
 
   export interface Editor {

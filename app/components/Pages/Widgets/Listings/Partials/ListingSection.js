@@ -40,7 +40,7 @@ class Section extends Component {
   get params() {
     return {
       type: this.props.type,
-      'order_by[]': 'price'
+      'order_by[]': '-price'
     }
   }
 

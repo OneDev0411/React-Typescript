@@ -8,9 +8,7 @@ import {
   mdiDatabaseOutline,
   mdiMapMarkerOutline
 } from '@mdi/js'
-import { useSelector } from 'react-redux'
 
-import { selectUserUnsafe } from '@app/selectors/user'
 import { noop } from '@app/utils/helpers'
 import {
   getListingFormatedPrice,
@@ -124,7 +122,6 @@ const useStyles = makeStyles(
 
 interface Props {
   price: number
-  closePrice: Nullable<number>
   squareMeters: number
   status: IListingStatus
   address: ICompactAddress
@@ -140,7 +137,6 @@ const MarkerPopup = (props: Props) => {
   const {
     status,
     price,
-    closePrice,
     address,
     squareMeters,
     bathroomCount,
@@ -151,10 +147,9 @@ const MarkerPopup = (props: Props) => {
     onClick = noop
   } = props
   const classes = useStyles(props)
-  const user = useSelector(selectUserUnsafe)
 
-  const listingPrice = getListingFormatedPrice(price, closePrice, user, false)
-  const squareFeet = Math.floor(metersToFeet(squareMeters)).toLocaleString()
+  const listingPrice = getListingFormatedPrice(price, false)
+  const squareFeet = Math.round(metersToFeet(squareMeters)).toLocaleString()
   const fullAddress = addressTitle(address)
   const baths = bathroomCount ?? 0
   const bedrooms = bedroomCount ?? 0
