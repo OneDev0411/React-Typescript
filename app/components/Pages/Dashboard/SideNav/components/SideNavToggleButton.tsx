@@ -15,10 +15,10 @@ const useStyles = makeStyles(
       width: theme.spacing(8)
     }
   }),
-  { name: 'SideNavHamburgerButton' }
+  { name: 'SideNavToggleButton' }
 )
 
-export function SideNavHamburgerButton() {
+export function SideNavToggleButton() {
   const classes = useStyles()
   const { isDrawerOpen, onDrawerToggle } = useContext(SideNavContext)
 

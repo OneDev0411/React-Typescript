@@ -3,7 +3,7 @@ import React, { createContext, useState } from 'react'
 import { Hidden, makeStyles } from '@material-ui/core'
 
 import SideNav from './SideNav'
-import { SideNavHamburgerButton } from './SideNav/components/SideNavHamburgerButton'
+import { SideNavToggleButton } from './SideNav/components/SideNavToggleButton'
 import { appSidenavWidth } from './SideNav/variables'
 
 interface Props {
@@ -45,7 +45,7 @@ export function DashboardLayout({ children }: Props) {
       }}
     >
       <div>
-        <SideNavHamburgerButton />
+        <SideNavToggleButton />
         <div className={classes.drawerWrapper}>
           <Hidden smDown={!isDrawerOpen}>
             <SideNav />
