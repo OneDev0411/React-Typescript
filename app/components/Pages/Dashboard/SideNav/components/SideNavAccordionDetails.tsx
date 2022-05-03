@@ -33,25 +33,23 @@ export function SideNavAccordionDetails({ isOpen, subMenu }: Props) {
         root: classes.AccordionDetailsRoot
       }}
     >
-      {subMenu.map((item, index) => {
-        const { access, isHidden } = item
+      {subMenu
+        .filter(item => !item.isHidden)
+        .map((item, index) => {
+          const { access } = item
 
-        if (isHidden) {
-          return null
-        }
-
-        return access ? (
-          <Acl access={access} key={index}>
-            <SideNavAccordionDetailsItem item={item} isOpen={isOpen} />
-          </Acl>
-        ) : (
-          <SideNavAccordionDetailsItem
-            item={item}
-            isOpen={isOpen}
-            key={index}
-          />
-        )
-      })}
+          return access ? (
+            <Acl access={access} key={index}>
+              <SideNavAccordionDetailsItem item={item} isOpen={isOpen} />
+            </Acl>
+          ) : (
+            <SideNavAccordionDetailsItem
+              key={index}
+              item={item}
+              isOpen={isOpen}
+            />
+          )
+        })}
     </AccordionDetails>
   )
 }

@@ -25,8 +25,11 @@ import pluralize from 'pluralize'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { getFormattedPrice } from 'models/Deal/helpers/context'
-import { getListingFeatures, isLeaseProperty } from 'utils/listing'
+import {
+  getListingFeatures,
+  getListingFormatedPrice,
+  isLeaseProperty
+} from 'utils/listing'
 
 import ListingCardMedia from './ListingCardMedia'
 import { useStyles } from './styles'
@@ -255,7 +258,7 @@ export default function ListingCard({
             >
               <Grid item>
                 <Typography variant="subtitle1">
-                  {getFormattedPrice(listing.price, 'currency', 0)}
+                  {getListingFormatedPrice(listing.price, false)}
                   {isLeaseProperty(listing) ? '/mo' : ''}
                 </Typography>
               </Grid>

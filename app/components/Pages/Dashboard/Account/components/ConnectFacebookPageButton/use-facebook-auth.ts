@@ -17,7 +17,10 @@ export interface UseFacebookAuthOptions {
   onAuthWindowOpen?: () => void
   onAuthWindowClose?: () => void
   onAuthSuccess?: () => void
-  onAuthError?: (errorCode: FacebookAuthErrorCode) => void
+  onAuthError?: (
+    errorCode: FacebookAuthErrorCode,
+    message: Optional<string>
+  ) => void
 }
 
 interface UseFacebookAuth {
@@ -87,7 +90,7 @@ export function useFacebookAuth({
       return
     }
 
-    onAuthError?.(payload.errorCode)
+    onAuthError?.(payload.errorCode, payload.errorMessage)
   })
 
   return {

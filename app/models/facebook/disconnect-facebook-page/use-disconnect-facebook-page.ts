@@ -71,7 +71,7 @@ export function useDisconnectFacebookPage(
     ...mutation,
     mutate: inputData => {
       confirmation.setConfirmationModal({
-        message: 'Disconnecting your Instagram Account',
+        message: 'Disconnect from Instagram',
         description: `Are you sure you want to disconnect your Instagram Account (${inputData.facebookPage.name}) from Rechat?
           Please note all of your scheduled posts related to this account will be canceled.`,
         confirmLabel: 'Disconnect',

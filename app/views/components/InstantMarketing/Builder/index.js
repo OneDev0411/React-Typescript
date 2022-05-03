@@ -59,6 +59,7 @@ import CreateSuperCampaignButton from './CreateSuperCampaignButton'
 import DeviceManager from './DeviceManager'
 import { addFallbackSrcToImage } from './extensions/add-fallback-src-to-image'
 import { addFallbackSrcToMjImage } from './extensions/add-fallback-src-to-mj-image'
+import { patchConditionalToolbarButtonsIssue } from './extensions/patch-conditional-toolbar-buttons-issue'
 import {
   Container,
   Actions,
@@ -500,6 +501,7 @@ class Builder extends React.Component {
 
   setupGrapesJs = async () => {
     registerCommands(this.editor)
+    patchConditionalToolbarButtonsIssue(this.editor)
     registerToolbarButtons(this.editor, {
       onChangeImageClick: () => {
         this.setState({ isImageSelectDialogOpen: true })
