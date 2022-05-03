@@ -13,7 +13,7 @@ const useStyles = makeStyles(
     activeMenu: {
       color: `${theme.palette.common.white} !important`,
       backgroundColor: alpha(theme.navbar.background.contrastText, 0.24),
-      ...theme.typography.subtitle2,
+      ...theme.typography.subtitle1,
 
       '& svg': {
         color: theme.palette.primary.main
@@ -32,7 +32,8 @@ const useStyles = makeStyles(
       width: '100%',
 
       '&:focus, &:hover': {
-        color: theme.palette.primary.main,
+        color:
+          theme.navbar.background.contrastText ?? theme.palette.primary.main,
         textDecoration: 'none'
       },
 
