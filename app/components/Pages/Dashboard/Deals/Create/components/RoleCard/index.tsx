@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import {
   Box,
@@ -15,7 +15,7 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { RoleName } from '../../../components/Roles/RoleName'
 import { getLegalFullName } from '../../../utils/roles'
-import type { IDealFormRole } from '../../types'
+import type { IDealFormRole, Address } from '../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -54,11 +54,12 @@ export function RoleCard({
   const classes = useStyles()
   const [isRemoving, setIsRemoving] = useState(false)
 
-  // TODO: fix typescript issue
   const address =
     typeof role.current_address === 'string'
       ? role.current_address
-      : role.current_address?.full
+      : role.current_address !== null
+      ? (role.current_address as Address)?.full
+      : null
 
   const handleRemove = async () => {
     setIsRemoving(true)
