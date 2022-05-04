@@ -9,7 +9,7 @@ interface Props {
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      width: '400px'
+      width: '450px'
     }
   }),
   {
@@ -25,7 +25,7 @@ export function AttributeCell({ contact }: Props) {
   return (
     <div className={classes.container}>
       <Attribute />
-      <Attribute />
+      <Attribute values={{ value: 'hamed', label: '33' }} />
     </div>
   )
 }
