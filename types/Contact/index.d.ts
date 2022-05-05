@@ -26,7 +26,7 @@ declare interface IContactAttributeDefInput {
 
 declare interface IContactAttributeDef {
   id: UUID
-  name: string | null
+  name: Nullable<string>
   label: string
   data_type: 'number' | 'text' | 'date'
   section: string
@@ -37,10 +37,10 @@ declare interface IContactAttributeDef {
   searchable: boolean
   required: boolean
   has_label: boolean
-  labels: string[] | null
-  enum_values: string[] | null
-  user: UUID | null
-  brand: UUID | null
+  labels: Nullable<string[]>
+  enum_values: Nullable<string[]>
+  user: Nullable<UUID>
+  brand: Nullable<UUID>
 }
 
 type IContactAttributeWithDef = IContactAttribute & {

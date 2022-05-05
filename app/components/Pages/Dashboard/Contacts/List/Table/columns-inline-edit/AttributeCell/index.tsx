@@ -1,9 +1,11 @@
 import { makeStyles, Theme } from '@material-ui/core'
 
 import { Attribute } from './components/Attribute'
+import { useAttributeDef } from './hooks/use-attribute'
 
 interface Props {
-  contact: IContact
+  contact: IContactWithAssoc<'contact.attributes'>
+  attribute: string
 }
 
 const useStyles = makeStyles(
@@ -17,10 +19,11 @@ const useStyles = makeStyles(
   }
 )
 
-export function AttributeCell({ contact }: Props) {
+export function AttributeCell({ contact, attribute }: Props) {
   const classes = useStyles()
+  const s = useAttributeDef(contact, attribute)
 
-  console.log({ contact })
+  console.log({ contact, s })
 
   return (
     <div className={classes.container}>
