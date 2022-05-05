@@ -59,11 +59,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  labels: string[]
-  values: {
-    value: string
-    label: string
-  }
+  attr: Optional<IContactAttribute>
   actions?: ReactNode
   onAdd: () => void
   onDelete: () => void
@@ -73,7 +69,7 @@ interface FormData {
   label: string
 }
 
-export function Attribute({ values, actions }: Partial<Props>) {
+export function Attribute({ attr, actions }: Partial<Props>) {
   const classes = useStyles()
   const {
     reset,
@@ -82,8 +78,8 @@ export function Attribute({ values, actions }: Partial<Props>) {
     formState: { errors, isDirty, ...restData }
   } = useForm<FormData>({
     defaultValues: {
-      value: values?.value ?? '',
-      label: values?.label ?? ''
+      value: attr?.text ?? '',
+      label: attr?.label ?? ''
     }
   })
 
@@ -161,20 +157,26 @@ export function Attribute({ values, actions }: Partial<Props>) {
             )
           }}
         />
-        <Controller
-          name="label"
-          control={control}
-          rules={{
-            validate: (value: string) =>
-              !!value.trim() || 'This field is required.'
-          }}
-          render={props => (
-            <NativeSelect {...props} id="label" className={classes.label}>
-              <option value="22">test</option>
-              <option value="33">test 2</option>
-            </NativeSelect>
-          )}
-        />
+
+        {attr?.attribute_def.labels && (
+          <Controller
+            name="label"
+            control={control}
+            rules={{
+              validate: (value: string) =>
+                !!value.trim() || 'This field is required.'
+            }}
+            render={props => (
+              <NativeSelect {...props} id="label" className={classes.label}>
+                {attr?.attribute_def.labels?.map(label => (
+                  <option key={label} value={label}>
+                    {label}
+                  </option>
+                ))}
+              </NativeSelect>
+            )}
+          />
+        )}
       </form>
       <div className={classes.actionContainer}>{renderActionButton()}</div>
     </div>

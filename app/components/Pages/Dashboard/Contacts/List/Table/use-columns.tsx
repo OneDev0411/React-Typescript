@@ -84,7 +84,14 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       render: ({ row: contact }) => (
         <div className={classes.cell}>{contact.phone_number}</div>
       ),
-      renderInlineEdit: ({ row: contact }) => <div>11</div>
+      renderInlineEdit: ({ row: contact }) => (
+        <AttributeCell
+          contact={
+            contact as unknown as IContactWithAssoc<'contact.attributes'>
+          }
+          attribute="phone_number"
+        />
+      )
     },
     {
       id: 'email',

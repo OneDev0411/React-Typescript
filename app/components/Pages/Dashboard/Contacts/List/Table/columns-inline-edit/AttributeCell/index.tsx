@@ -21,14 +21,15 @@ const useStyles = makeStyles(
 
 export function AttributeCell({ contact, attribute }: Props) {
   const classes = useStyles()
-  const s = useAttributeDef(contact, attribute)
+  const { list } = useAttributeDef(contact, attribute)
 
-  console.log({ contact, s })
+  console.log({ contact, list })
 
   return (
     <div className={classes.container}>
-      <Attribute />
-      <Attribute values={{ value: 'hamed', label: '33' }} />
+      {list.map(attr => (
+        <Attribute key={attr.id} attr={attr} />
+      ))}
     </div>
   )
 }
