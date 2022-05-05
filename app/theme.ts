@@ -221,7 +221,7 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
     zIndex: {
       modal: 1001,
       gridAction: 100,
-      sideNavDrawer: 100
+      sideNavDrawer: 1000
     },
     navbar: {
       logo: {
