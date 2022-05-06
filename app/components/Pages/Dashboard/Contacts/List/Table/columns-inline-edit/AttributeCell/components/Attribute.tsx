@@ -10,6 +10,8 @@ import {
 import { mdiContentCopy, mdiTrashCanOutline } from '@mdi/js'
 import { useForm, Controller } from 'react-hook-form'
 
+import useNotify from '@app/hooks/use-notify'
+import copy from '@app/utils/copy-text-to-clipboard'
 import { SvgIcon, muiIconSizes } from '@app/views/components/SvgIcons'
 
 const useStyles = makeStyles(
@@ -71,6 +73,8 @@ interface FormData {
 
 export function Attribute({ attr, actions }: Partial<Props>) {
   const classes = useStyles()
+  const notify = useNotify()
+
   const {
     reset,
     control,
@@ -90,7 +94,13 @@ export function Attribute({ attr, actions }: Partial<Props>) {
   }
 
   const handleCopyAttribute = () => {
-    console.log('handleCopyAttribute')
+    if (attr?.text) {
+      copy(attr.text)
+      notify({
+        status: 'success',
+        message: 'Copied!'
+      })
+    }
   }
   const handleRemoveAttribute = () => {
     console.log('handleRemoveAttribute')
