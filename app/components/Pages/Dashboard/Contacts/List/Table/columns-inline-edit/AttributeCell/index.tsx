@@ -21,14 +21,18 @@ const useStyles = makeStyles(
 
 export function AttributeCell({ contact, attribute }: Props) {
   const classes = useStyles()
-  const { list } = useAttributeDef(contact, attribute)
+  const { list, deleteAttribute } = useAttributeDef(contact, attribute)
 
   console.log({ contact, list })
 
   return (
     <div className={classes.container}>
       {list.map(attr => (
-        <Attribute key={attr.id} attr={attr} />
+        <Attribute
+          key={attr.id}
+          attr={attr}
+          onDelete={() => deleteAttribute(attr.id)}
+        />
       ))}
     </div>
   )

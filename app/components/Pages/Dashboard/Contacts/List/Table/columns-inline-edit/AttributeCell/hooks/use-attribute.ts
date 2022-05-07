@@ -1,10 +1,14 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 
 import { useEffectOnce } from 'react-use'
+
+import useNotify from '@app/hooks/use-notify'
+import { deleteAttribute as removeAttribute } from '@app/models/contacts/delete-attribute'
 
 interface UseAttributeDef {
   id: Optional<UUID>
   list: IContactAttribute[]
+  deleteAttribute: (attributeId: UUID) => void
 }
 
 /**
@@ -17,6 +21,7 @@ export function useAttributeDef(
   contact: IContactWithAssoc<'contact.attributes'>,
   attributeName: string
 ): UseAttributeDef {
+  const notify = useNotify()
   const [list, setList] = useState<IContactAttribute[]>([])
 
   const attributeDefId = useMemo(() => {
@@ -41,8 +46,26 @@ export function useAttributeDef(
     }
   })
 
+  const deleteAttribute = useCallback(
+    async (attributeId: UUID) => {
+      try {
+        await removeAttribute(contact.id, attributeId)
+
+        setList(prevList => {
+          return prevList.filter(attr => attr.id !== attributeId)
+        })
+        notify({
+          status: 'success',
+          message: 'Deleted!'
+        })
+      } catch (_) {}
+    },
+    [contact.id, notify]
+  )
+
   return {
     id: attributeDefId,
-    list
+    list,
+    deleteAttribute
   }
 }

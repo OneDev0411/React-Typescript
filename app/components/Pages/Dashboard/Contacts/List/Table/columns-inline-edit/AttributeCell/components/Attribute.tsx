@@ -63,7 +63,7 @@ const useStyles = makeStyles(
 interface Props {
   attr: Optional<IContactAttribute>
   actions?: ReactNode
-  onAdd: () => void
+  onAdd?: () => void
   onDelete: () => void
 }
 interface FormData {
@@ -71,7 +71,7 @@ interface FormData {
   label: string
 }
 
-export function Attribute({ attr, actions }: Partial<Props>) {
+export function Attribute({ attr, actions, onDelete }: Props) {
   const classes = useStyles()
   const notify = useNotify()
 
@@ -102,9 +102,6 @@ export function Attribute({ attr, actions }: Partial<Props>) {
       })
     }
   }
-  const handleRemoveAttribute = () => {
-    console.log('handleRemoveAttribute')
-  }
 
   const renderActionButton = () => {
     if (isDirty) {
@@ -132,7 +129,7 @@ export function Attribute({ attr, actions }: Partial<Props>) {
         <div className={classes.actionButton} onClick={handleCopyAttribute}>
           <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
         </div>
-        <div className={classes.actionButton} onClick={handleRemoveAttribute}>
+        <div className={classes.actionButton} onClick={onDelete}>
           <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
         </div>
       </>
