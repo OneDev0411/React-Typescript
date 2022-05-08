@@ -8,11 +8,13 @@ import {
   Theme
 } from '@material-ui/core'
 import { mdiContentCopy, mdiTrashCanOutline } from '@mdi/js'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 
 import useNotify from '@app/hooks/use-notify'
 import copy from '@app/utils/copy-text-to-clipboard'
 import { SvgIcon, muiIconSizes } from '@app/views/components/SvgIcons'
+
+import { UseAttributeDef } from '../hooks/use-attribute'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -61,17 +63,17 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  attr: Optional<IContactAttribute>
+  attr?: IContactAttribute
   actions?: ReactNode
-  onAdd?: () => void
-  onDelete: () => void
+  onAdd?: UseAttributeDef['createAttribute']
+  onDelete?: UseAttributeDef['deleteAttribute']
 }
 interface FormData {
-  value: string
+  text: string
   label: string
 }
 
-export function Attribute({ attr, actions, onDelete }: Props) {
+export function Attribute({ attr, actions, onAdd, onDelete }: Props) {
   const classes = useStyles()
   const notify = useNotify()
 
@@ -82,15 +84,19 @@ export function Attribute({ attr, actions, onDelete }: Props) {
     formState: { errors, isDirty, ...restData }
   } = useForm<FormData>({
     defaultValues: {
-      value: attr?.text ?? '',
+      text: attr?.text ?? '',
       label: attr?.label ?? ''
     }
   })
 
   console.log({ errors, isDirty, restData })
 
-  const handleSaveAttribute = v => {
-    console.log('handleSaveAttribute', { v })
+  const handleSaveAttribute: SubmitHandler<FormData> = ({ text, label }) => {
+    console.log('handleSaveAttribute', { text, label })
+
+    if (!attr && onAdd) {
+      onAdd({ text, label: 'OtherHamed' })
+    }
   }
 
   const handleCopyAttribute = () => {
@@ -100,6 +106,12 @@ export function Attribute({ attr, actions, onDelete }: Props) {
         status: 'success',
         message: 'Copied!'
       })
+    }
+  }
+
+  const handleDeleteAttribute = () => {
+    if (attr && onDelete) {
+      onDelete(attr.id)
     }
   }
 
@@ -129,7 +141,7 @@ export function Attribute({ attr, actions, onDelete }: Props) {
         <div className={classes.actionButton} onClick={handleCopyAttribute}>
           <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
         </div>
-        <div className={classes.actionButton} onClick={onDelete}>
+        <div className={classes.actionButton} onClick={handleDeleteAttribute}>
           <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
         </div>
       </>
@@ -137,26 +149,25 @@ export function Attribute({ attr, actions, onDelete }: Props) {
   }
 
   return (
-    <div className={classes.container}>
-      <form
-        onSubmit={handleSubmit(handleSaveAttribute)}
-        className={classes.valuesContainer}
-        noValidate
-      >
+    <form
+      noValidate
+      onSubmit={handleSubmit(handleSaveAttribute)}
+      className={classes.container}
+    >
+      <div className={classes.valuesContainer}>
         <Controller
-          name="value"
+          name="text"
           control={control}
           rules={{
             validate: (value: string) =>
               !!value.trim() || 'This field is required.'
           }}
           render={props => {
-            const error: string | undefined = errors.value?.message
+            const error: string | undefined = errors.text?.message
 
             return (
               <InputBase
                 {...props}
-                name="value"
                 margin="none"
                 error={!!error}
                 className={classes.value}
@@ -184,8 +195,8 @@ export function Attribute({ attr, actions, onDelete }: Props) {
             )}
           />
         )}
-      </form>
+      </div>
       <div className={classes.actionContainer}>{renderActionButton()}</div>
-    </div>
+    </form>
   )
 }

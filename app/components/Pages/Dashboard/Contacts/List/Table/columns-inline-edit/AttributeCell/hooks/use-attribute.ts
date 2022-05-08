@@ -3,11 +3,13 @@ import { useState, useMemo, useCallback } from 'react'
 import { useEffectOnce } from 'react-use'
 
 import useNotify from '@app/hooks/use-notify'
+import { addAttributes } from '@app/models/contacts/add-attributes'
 import { deleteAttribute as removeAttribute } from '@app/models/contacts/delete-attribute'
 
-interface UseAttributeDef {
+export interface UseAttributeDef {
   id: Optional<UUID>
   list: IContactAttribute[]
+  createAttribute: (data: Record<string, unknown>) => void
   deleteAttribute: (attributeId: UUID) => void
 }
 
@@ -46,6 +48,26 @@ export function useAttributeDef(
     }
   })
 
+  const createAttribute = useCallback(
+    async (data: Record<string, unknown>) => {
+      try {
+        const response = await addAttributes(contact.id, [
+          { ...data, attribute_def: attributeDefId }
+        ])
+        const newAttrAdded = response.data[0]
+
+        setList(prevList => {
+          return { ...prevList, newAttrAdded }
+        })
+        notify({
+          status: 'success',
+          message: 'New attribute added!'
+        })
+      } catch (_) {}
+    },
+    [attributeDefId, contact.id, notify]
+  )
+
   const deleteAttribute = useCallback(
     async (attributeId: UUID) => {
       try {
@@ -66,6 +88,7 @@ export function useAttributeDef(
   return {
     id: attributeDefId,
     list,
+    createAttribute,
     deleteAttribute
   }
 }
