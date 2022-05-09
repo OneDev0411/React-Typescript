@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { useState, ReactNode } from 'react'
 
 import {
   ButtonBase,
@@ -63,7 +63,8 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  attr?: IContactAttribute
+  attributeDef: IContactAttributeDef
+  attribute?: IContactAttribute
   actions?: ReactNode
   onAdd?: UseAttributeDef['createAttribute']
   onDelete?: UseAttributeDef['deleteAttribute']
@@ -73,35 +74,50 @@ interface FormData {
   label: string
 }
 
-export function Attribute({ attr, actions, onAdd, onDelete }: Props) {
+export function Attribute({
+  attributeDef,
+  attribute,
+  actions,
+  onAdd,
+  onDelete
+}: Props) {
   const classes = useStyles()
   const notify = useNotify()
-
+  const [isSaving, setIsSaving] = useState<boolean>(false)
   const {
     reset,
     control,
     handleSubmit,
-    formState: { errors, isDirty, ...restData }
+    formState: { errors, isDirty }
   } = useForm<FormData>({
     defaultValues: {
-      text: attr?.text ?? '',
-      label: attr?.label ?? ''
+      text: attribute?.text ?? '',
+      label: attribute?.label ?? attributeDef.labels?.[0] ?? ''
     }
   })
 
-  console.log({ errors, isDirty, restData })
+  // console.log({ errors, isDirty, restData })
 
-  const handleSaveAttribute: SubmitHandler<FormData> = ({ text, label }) => {
+  const handleSaveAttribute: SubmitHandler<FormData> = async ({
+    text,
+    label
+  }) => {
     console.log('handleSaveAttribute', { text, label })
 
-    if (!attr && onAdd) {
-      onAdd({ text, label: 'OtherHamed' })
+    try {
+      setIsSaving(true)
+
+      if (!attribute && onAdd) {
+        await onAdd({ text, label })
+      }
+    } finally {
+      setIsSaving(false)
     }
   }
 
   const handleCopyAttribute = () => {
-    if (attr?.text) {
-      copy(attr.text)
+    if (attribute?.text) {
+      copy(attribute.text)
       notify({
         status: 'success',
         message: 'Copied!'
@@ -110,8 +126,8 @@ export function Attribute({ attr, actions, onAdd, onDelete }: Props) {
   }
 
   const handleDeleteAttribute = () => {
-    if (attr && onDelete) {
-      onDelete(attr.id)
+    if (attribute && onDelete) {
+      onDelete(attribute.id)
     }
   }
 
@@ -122,9 +138,10 @@ export function Attribute({ attr, actions, onAdd, onDelete }: Props) {
           <ButtonBase
             disableRipple
             type="submit"
+            disabled={isSaving}
             className={classes.saveButton}
           >
-            Save
+            {isSaving ? 'Saving' : 'Save'}{' '}
           </ButtonBase>
           <ButtonBase disableRipple onClick={() => reset()}>
             Discard
@@ -176,7 +193,7 @@ export function Attribute({ attr, actions, onAdd, onDelete }: Props) {
           }}
         />
 
-        {attr?.attribute_def.labels && (
+        {attributeDef.labels && (
           <Controller
             name="label"
             control={control}
@@ -186,7 +203,7 @@ export function Attribute({ attr, actions, onAdd, onDelete }: Props) {
             }}
             render={props => (
               <NativeSelect {...props} id="label" className={classes.label}>
-                {attr?.attribute_def.labels?.map(label => (
+                {(attributeDef.labels ?? []).map(label => (
                   <option key={label} value={label}>
                     {label}
                   </option>

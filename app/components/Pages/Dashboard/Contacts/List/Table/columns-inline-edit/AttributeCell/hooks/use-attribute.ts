@@ -1,14 +1,16 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 
+import { useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
 import useNotify from '@app/hooks/use-notify'
 import { addAttributes } from '@app/models/contacts/add-attributes'
 import { deleteAttribute as removeAttribute } from '@app/models/contacts/delete-attribute'
+import { IAppState } from '@app/reducers'
 
 export interface UseAttributeDef {
-  id: Optional<UUID>
   list: IContactAttribute[]
+  attributeDef: Nullable<IContactAttributeDef>
   createAttribute: (data: Record<string, unknown>) => void
   deleteAttribute: (attributeId: UUID) => void
 }
@@ -24,26 +26,28 @@ export function useAttributeDef(
   attributeName: string
 ): UseAttributeDef {
   const notify = useNotify()
+  const attributeDef = useSelector<IAppState, Nullable<IContactAttributeDef>>(
+    state => {
+      const attributeDefs = state.contacts.attributeDefs
+      const attributeDefId = attributeDefs.byName[attributeName]
+
+      return attributeDefs.byId[attributeDefId] ?? null
+    }
+  )
   const [list, setList] = useState<IContactAttribute[]>([])
 
-  const attributeDefId = useMemo(() => {
-    const attributeDef = contact.attributes.find(
-      attr => attr.attribute_def.name === attributeName
-    )
-
-    return attributeDef?.attribute_def.id
-  }, [attributeName, contact.attributes])
+  console.log({ attributeDef })
 
   useEffectOnce(() => {
     const handleFilterAttribute = () => {
-      const filteredAttribute = contact.attributes.filter(
-        attr => attr.attribute_def.id === attributeDefId
+      const filteredAttributes = contact.attributes.filter(
+        attr => attr.attribute_def.id === attributeDef?.id
       )
 
-      setList(filteredAttribute)
+      setList(filteredAttributes)
     }
 
-    if (attributeDefId) {
+    if ((contact.attributes ?? []).length > 0) {
       handleFilterAttribute()
     }
   })
@@ -52,20 +56,24 @@ export function useAttributeDef(
     async (data: Record<string, unknown>) => {
       try {
         const response = await addAttributes(contact.id, [
-          { ...data, attribute_def: attributeDefId }
+          { ...data, attribute_def: attributeDef?.id }
         ])
         const newAttrAdded = response.data[0]
 
+        console.log({ dd: response.data, newAttrAdded })
+
         setList(prevList => {
-          return { ...prevList, newAttrAdded }
+          return [...prevList, newAttrAdded]
         })
         notify({
           status: 'success',
           message: 'New attribute added!'
         })
-      } catch (_) {}
+      } catch (error) {
+        throw error
+      }
     },
-    [attributeDefId, contact.id, notify]
+    [attributeDef?.id, contact.id, notify]
   )
 
   const deleteAttribute = useCallback(
@@ -80,14 +88,16 @@ export function useAttributeDef(
           status: 'success',
           message: 'Deleted!'
         })
-      } catch (_) {}
+      } catch (error) {
+        throw error
+      }
     },
     [contact.id, notify]
   )
 
   return {
-    id: attributeDefId,
     list,
+    attributeDef,
     createAttribute,
     deleteAttribute
   }

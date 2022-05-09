@@ -5,7 +5,7 @@ import { useAttributeDef } from './hooks/use-attribute'
 
 interface Props {
   contact: IContactWithAssoc<'contact.attributes'>
-  attribute: string
+  attributeName: string
 }
 
 const useStyles = makeStyles(
@@ -19,20 +19,29 @@ const useStyles = makeStyles(
   }
 )
 
-export function AttributeCell({ contact, attribute }: Props) {
+export function AttributeCell({ contact, attributeName }: Props) {
   const classes = useStyles()
-  const { list, createAttribute, deleteAttribute } = useAttributeDef(
-    contact,
-    attribute
-  )
+  const { list, attributeDef, createAttribute, deleteAttribute } =
+    useAttributeDef(contact, attributeName)
+
+  console.log({ contact, list, attributeDef })
+
+  if (!attributeDef) {
+    return <span>Attribute is not valid</span>
+  }
 
   return (
     <div className={classes.container}>
       {list.map(attr => (
-        <Attribute key={attr.id} attr={attr} onDelete={deleteAttribute} />
+        <Attribute
+          key={attr.id}
+          attribute={attr}
+          attributeDef={attributeDef}
+          onDelete={deleteAttribute}
+        />
       ))}
-      <Attribute onAdd={createAttribute} />
-      <Attribute onAdd={createAttribute} />
+      <Attribute attributeDef={attributeDef} onAdd={createAttribute} />
+      <Attribute attributeDef={attributeDef} onAdd={createAttribute} />
     </div>
   )
 }
