@@ -66,8 +66,9 @@ interface Props {
   attributeDef: IContactAttributeDef
   attribute?: IContactAttribute
   actions?: ReactNode
-  onAdd?: UseAttributeDef['createAttribute']
-  onDelete?: UseAttributeDef['deleteAttribute']
+  onAdd?: UseAttributeDef['create']
+  onUpdate?: UseAttributeDef['update']
+  onDelete?: UseAttributeDef['remove']
 }
 interface FormData {
   text: string
@@ -78,8 +79,9 @@ export function Attribute({
   attributeDef,
   attribute,
   actions,
-  onAdd,
-  onDelete
+  onUpdate,
+  onDelete,
+  onAdd
 }: Props) {
   const classes = useStyles()
   const notify = useNotify()
@@ -107,10 +109,15 @@ export function Attribute({
     try {
       setIsSaving(true)
 
-      if (!attribute && onAdd) {
+      if (attribute && onUpdate) {
+        await onUpdate(attribute.id, { text, label })
+      }
+
+      if (onAdd) {
         await onAdd({ text, label })
       }
     } finally {
+      reset({ text, label })
       setIsSaving(false)
     }
   }
@@ -141,7 +148,7 @@ export function Attribute({
             disabled={isSaving}
             className={classes.saveButton}
           >
-            {isSaving ? 'Saving' : 'Save'}{' '}
+            {isSaving ? 'Saving' : 'Save'}
           </ButtonBase>
           <ButtonBase disableRipple onClick={() => reset()}>
             Discard

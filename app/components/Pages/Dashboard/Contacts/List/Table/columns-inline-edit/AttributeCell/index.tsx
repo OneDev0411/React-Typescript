@@ -21,8 +21,10 @@ const useStyles = makeStyles(
 
 export function AttributeCell({ contact, attributeName }: Props) {
   const classes = useStyles()
-  const { list, attributeDef, createAttribute, deleteAttribute } =
-    useAttributeDef(contact, attributeName)
+  const { list, attributeDef, create, update, remove } = useAttributeDef(
+    contact,
+    attributeName
+  )
 
   console.log({ contact, list, attributeDef })
 
@@ -37,11 +39,12 @@ export function AttributeCell({ contact, attributeName }: Props) {
           key={attr.id}
           attribute={attr}
           attributeDef={attributeDef}
-          onDelete={deleteAttribute}
+          onUpdate={update}
+          onDelete={remove}
         />
       ))}
-      <Attribute attributeDef={attributeDef} onAdd={createAttribute} />
-      <Attribute attributeDef={attributeDef} onAdd={createAttribute} />
+      <Attribute attributeDef={attributeDef} onAdd={create} />
+      <Attribute attributeDef={attributeDef} onAdd={create} />
     </div>
   )
 }

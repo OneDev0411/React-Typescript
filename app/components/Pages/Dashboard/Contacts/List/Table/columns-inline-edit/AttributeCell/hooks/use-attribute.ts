@@ -5,14 +5,16 @@ import { useEffectOnce } from 'react-use'
 
 import useNotify from '@app/hooks/use-notify'
 import { addAttributes } from '@app/models/contacts/add-attributes'
-import { deleteAttribute as removeAttribute } from '@app/models/contacts/delete-attribute'
+import { deleteAttribute } from '@app/models/contacts/delete-attribute'
+import { updateAttribute } from '@app/models/contacts/update-attribute'
 import { IAppState } from '@app/reducers'
 
 export interface UseAttributeDef {
   list: IContactAttribute[]
   attributeDef: Nullable<IContactAttributeDef>
-  createAttribute: (data: Record<string, unknown>) => void
-  deleteAttribute: (attributeId: UUID) => void
+  create: (data: Record<string, unknown>) => void
+  update: (attributeId: UUID, data: Record<string, unknown>) => void
+  remove: (attributeId: UUID) => void
 }
 
 /**
@@ -36,8 +38,6 @@ export function useAttributeDef(
   )
   const [list, setList] = useState<IContactAttribute[]>([])
 
-  console.log({ attributeDef })
-
   useEffectOnce(() => {
     const handleFilterAttribute = () => {
       const filteredAttributes = contact.attributes.filter(
@@ -52,15 +52,13 @@ export function useAttributeDef(
     }
   })
 
-  const createAttribute = useCallback(
+  const create = useCallback(
     async (data: Record<string, unknown>) => {
       try {
         const response = await addAttributes(contact.id, [
           { ...data, attribute_def: attributeDef?.id }
         ])
         const newAttrAdded = response.data[0]
-
-        console.log({ dd: response.data, newAttrAdded })
 
         setList(prevList => {
           return [...prevList, newAttrAdded]
@@ -75,11 +73,38 @@ export function useAttributeDef(
     },
     [attributeDef?.id, contact.id, notify]
   )
+  const update = useCallback(
+    async (attributeId: UUID, data: Record<string, unknown>) => {
+      try {
+        const attribute = await updateAttribute(contact.id, attributeId, data)
 
-  const deleteAttribute = useCallback(
+        setList(prevList => {
+          return prevList.map(attr => {
+            if (attr.id === attributeId) {
+              return {
+                ...attr,
+                ...attribute
+              }
+            }
+
+            return attr
+          })
+        })
+        notify({
+          status: 'success',
+          message: 'Updated!'
+        })
+      } catch (error) {
+        throw error
+      }
+    },
+    [contact.id, notify]
+  )
+
+  const remove = useCallback(
     async (attributeId: UUID) => {
       try {
-        await removeAttribute(contact.id, attributeId)
+        await deleteAttribute(contact.id, attributeId)
 
         setList(prevList => {
           return prevList.filter(attr => attr.id !== attributeId)
@@ -96,9 +121,10 @@ export function useAttributeDef(
   )
 
   return {
-    list,
     attributeDef,
-    createAttribute,
-    deleteAttribute
+    list,
+    create,
+    update,
+    remove
   }
 }
