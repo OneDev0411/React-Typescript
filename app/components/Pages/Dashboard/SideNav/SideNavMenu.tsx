@@ -168,9 +168,10 @@ function SideNavMenu(props: WithRouterProps) {
           to: '/dashboard/inbox'
         },
         {
+          access: ['Chat'],
           id: 'chat',
           label: 'Chat',
-          isHidden: !user,
+          isHidden: !useAcl(['Chat']),
           notificationCount: chatRoomsNotificationsNumber,
           action: handleOpenChatbarDrawer
         }

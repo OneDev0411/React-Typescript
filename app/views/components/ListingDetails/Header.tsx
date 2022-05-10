@@ -24,6 +24,8 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import api from 'models/listings/favorites'
 import { selectUserUnsafe } from 'selectors/user'
 
+import Acl from '../Acl'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
@@ -166,17 +168,22 @@ function Header({
               </Button>
             )}
             {user && (
-              <Button
-                size="small"
-                variant={isMobileScreen ? 'contained' : 'outlined'}
-                color={isMobileScreen ? 'primary' : 'default'}
-                onClick={handleShare}
-                startIcon={
-                  <SvgIcon size={muiIconSizes.small} path={mdiExportVariant} />
-                }
-              >
-                Share
-              </Button>
+              <Acl access={['Chat']}>
+                <Button
+                  size="small"
+                  variant={isMobileScreen ? 'contained' : 'outlined'}
+                  color={isMobileScreen ? 'primary' : 'default'}
+                  onClick={handleShare}
+                  startIcon={
+                    <SvgIcon
+                      size={muiIconSizes.small}
+                      path={mdiExportVariant}
+                    />
+                  }
+                >
+                  Share
+                </Button>
+              </Acl>
             )}
             {!isWidget && !user && (
               <Button

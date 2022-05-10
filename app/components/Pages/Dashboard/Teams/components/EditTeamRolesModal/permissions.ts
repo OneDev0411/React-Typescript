@@ -20,6 +20,10 @@ export const permissions: { value: IPermission; label: string }[] = [
     label: 'CRM'
   },
   {
+    value: 'Chat',
+    label: 'Chat'
+  },
+  {
     value: 'AgentNetwork',
     label: 'Agent Network'
   },

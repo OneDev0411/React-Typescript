@@ -20,6 +20,7 @@ declare type IPermission =
   | 'Websites'
   | 'Showings'
   | 'ShareToInstagram'
+  | 'Chat'
 
 declare type BrandMarketingPaletteKey =
   | 'body-bg-color'

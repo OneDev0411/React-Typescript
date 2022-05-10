@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 import { mdiGiftOutline, mdiEmailOutline } from '@mdi/js'
 
+import Acl from '@app/views/components/Acl'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import SendEmailButton from 'components/SendEmailButton'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -75,7 +76,9 @@ export const Actions = ({
           )}
         />
 
-        <Chat contact={contact} size={muiIconSizes.medium} />
+        <Acl access={['Chat']}>
+          <Chat contact={contact} size={muiIconSizes.medium} />
+        </Acl>
 
         <SendContactCard
           contact={contact}
