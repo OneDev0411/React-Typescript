@@ -53,6 +53,13 @@ export function AttributeCell({
           key={attr.id}
           attribute={attr}
           attributeDef={attributeDef}
+          validateRules={{
+            text: {
+              validate: (value: string) =>
+                !!value.trim() || 'This field is required.'
+            },
+            label: {}
+          }}
           onUpdate={update}
           onDelete={remove}
         />
@@ -62,6 +69,10 @@ export function AttributeCell({
           isNew
           attributeDef={attributeDef}
           onAdd={create}
+          validateRules={{
+            text: {},
+            label: {}
+          }}
           onDiscard={prependNewValue}
         />
       ) : (

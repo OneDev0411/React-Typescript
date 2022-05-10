@@ -1,85 +1,47 @@
 import { useState, ReactNode } from 'react'
 
+import { ButtonBase, InputBase, NativeSelect } from '@material-ui/core'
 import {
-  ButtonBase,
-  InputBase,
-  NativeSelect,
-  makeStyles,
-  Theme
-} from '@material-ui/core'
-import { mdiLoading, mdiContentCopy, mdiTrashCanOutline } from '@mdi/js'
-import { useForm, Controller, SubmitHandler } from 'react-hook-form'
+  mdiLoading,
+  mdiContentCopy,
+  mdiTrashCanOutline
+  // mdiAlertCircleOutline
+} from '@mdi/js'
+// import isEmpty from 'lodash/isEmpty'
+import {
+  useForm,
+  Controller,
+  SubmitHandler,
+  UseControllerOptions
+} from 'react-hook-form'
 
 import useNotify from '@app/hooks/use-notify'
 import copy from '@app/utils/copy-text-to-clipboard'
 import { SvgIcon, muiIconSizes } from '@app/views/components/SvgIcons'
 
-import { UseAttributeCell } from '../hooks/use-attribute-cell'
+import { UseAttributeCell } from '../../hooks/use-attribute-cell'
 
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    container: {
-      width: '100%',
-      display: 'flex',
-      padding: theme.spacing(1, 2),
-      borderBottom: `1px solid ${theme.palette.divider}`
-    },
-    valuesContainer: {
-      display: 'flex',
-      paddingRight: theme.spacing(1),
-      alignItems: 'center',
-      flexGrow: 1
-    },
-    value: {
-      flexGrow: 1
-    },
-    selectLabel: {
-      '&:focus': {
-        backgroundColor: 'transparent'
-      }
-    },
-    actionContainer: {
-      display: 'flex',
-      alignItems: 'center',
-      color: theme.palette.action.disabled
-    },
-    customActionContainer: {
-      marginRight: theme.spacing(0.5)
-    },
-    saveButton: {
-      marginRight: theme.spacing(0.5),
-      color: theme.palette.primary.main,
-      ...theme.typography.body2
-    },
-    actionButton: {
-      cursor: 'pointer',
-      '&:not(:last-child)': {
-        marginRight: theme.spacing(0.5)
-      }
-    }
-  }),
-  {
-    name: 'AttributeCell'
-  }
-)
+import { useAttributeStyles } from './styles'
 
+interface FormData {
+  text: string
+  label: string
+}
 interface Props {
   isNew?: boolean
   attributeDef: IContactAttributeDef
   attribute?: IContactAttribute
   actions?: ReactNode
+  validateRules?: Record<Partial<keyof FormData>, UseControllerOptions['rules']>
   onDiscard?: () => void
   onAdd?: UseAttributeCell['create']
   onUpdate?: UseAttributeCell['update']
   onDelete?: UseAttributeCell['remove']
 }
-interface FormData {
-  text: string
-  label: string
-}
 
 export function Attribute({
   isNew = false,
+  validateRules,
   attributeDef,
   attribute,
   actions,
@@ -88,29 +50,29 @@ export function Attribute({
   onDelete,
   onAdd
 }: Props) {
-  const classes = useStyles()
+  const classes = useAttributeStyles()
   const notify = useNotify()
-  const [isSaving, setIsSaving] = useState<boolean>(false)
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const {
     reset,
     control,
     handleSubmit,
-    formState: { errors, isDirty }
+    formState: { isDirty, isSubmitting, errors }
   } = useForm<FormData>({
+    reValidateMode: 'onChange',
     defaultValues: {
       text: attribute?.text ?? '',
       label: attribute?.label ?? attributeDef.labels?.[0] ?? ''
     }
   })
 
+  console.log({ errors })
+
   const handleSaveAttribute: SubmitHandler<FormData> = async ({
     text,
     label
   }) => {
     try {
-      setIsSaving(true)
-
       if (attribute) {
         await onUpdate?.(attribute.id, { text, label })
       }
@@ -118,7 +80,6 @@ export function Attribute({
       await onAdd?.({ text, label })
     } finally {
       reset({ text, label })
-      setIsSaving(false)
     }
   }
 
@@ -133,30 +94,39 @@ export function Attribute({
   }
 
   const handleCopyAttribute = () => {
-    if (attribute?.text) {
-      copy(attribute.text)
-      notify({
-        status: 'success',
-        message: 'Copied!'
-      })
-    }
+    copy(attribute?.text ?? '')
+    notify({
+      status: 'success',
+      message: 'Copied!'
+    })
   }
 
   const renderActionButton = () => {
+    // if (!isEmpty(errors)) {
+    // return (
+    //   <Tooltip title={errors}>
+    //     <div className={classes.errors}>
+    //       <span>Invalid</span>
+    //       <SvgIcon path={mdiAlertCircleOutline} size={muiIconSizes.small} />
+    //     </div>
+    //   </Tooltip>
+    // )
+    // }
+
     if (isDirty || isNew) {
       return (
         <>
           <ButtonBase
             disableRipple
             type="submit"
-            disabled={isSaving || !isDirty}
+            // disabled={isSubmitting || !isDirty}
             className={classes.saveButton}
           >
-            {isSaving ? 'Saving!' : 'Save'}
+            {isSubmitting ? 'Saving!' : 'Save'}
           </ButtonBase>
           <ButtonBase
             disableRipple
-            disabled={isSaving}
+            disabled={isSubmitting}
             onClick={() => {
               reset()
               onDiscard?.()
@@ -198,22 +168,18 @@ export function Attribute({
           name="text"
           control={control}
           rules={{
-            validate: (value: string) =>
-              !!value.trim() || 'This field is required.'
+            validate: (value: string) => !!value.trim() || 'Value is required.',
+            min: 15,
+            ...(validateRules?.text || {})
           }}
-          render={props => {
-            const error: string | undefined = errors.text?.message
-
-            return (
-              <InputBase
-                {...props}
-                disabled={isSaving || isDeleting}
-                margin="none"
-                error={!!error}
-                className={classes.value}
-              />
-            )
-          }}
+          render={props => (
+            <InputBase
+              {...props}
+              margin="none"
+              disabled={isSubmitting || isDeleting}
+              className={classes.value}
+            />
+          )}
         />
 
         {attributeDef.labels && (
@@ -222,14 +188,15 @@ export function Attribute({
             control={control}
             rules={{
               validate: (value: string) =>
-                !!value.trim() || 'This field is required.'
+                !!value.trim() || 'Label is required.',
+              ...(validateRules?.label || {})
             }}
             render={props => (
               <NativeSelect
                 {...props}
                 id="label"
                 disableUnderline
-                disabled={isSaving || isDeleting}
+                disabled={isSubmitting || isDeleting}
                 classes={{
                   root: classes.selectLabel
                 }}
