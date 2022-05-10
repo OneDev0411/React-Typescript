@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 import { Typography, makeStyles, Theme } from '@material-ui/core'
 
 import { Attribute } from './components/Attribute'
@@ -7,6 +9,7 @@ interface Props {
   contact: IContactWithAssoc<'contact.attributes'>
   attributeName: string
   addLabel?: string
+  actions?: ReactNode
 }
 
 const useStyles = makeStyles(
@@ -25,8 +28,9 @@ const useStyles = makeStyles(
   }
 )
 
-export function AttributeCell({
+export function InlineEditAttributeCell({
   contact,
+  actions,
   attributeName,
   addLabel = 'Add New Value'
 }: Props) {
@@ -52,6 +56,7 @@ export function AttributeCell({
         <Attribute
           key={attr.id}
           attribute={attr}
+          actions={actions}
           attributeDef={attributeDef}
           validateRules={{
             text: {

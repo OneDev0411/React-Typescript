@@ -15,7 +15,8 @@ import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderCo
 import { SelectionCount } from '@app/views/components/Grid/Table/features/Selection/SelectionCount'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
-import { AttributeCell } from './columns-inline-edit/AttributeCell'
+import { EmailsInlineEdit } from './columns-inline-edit/Emails'
+import { PhonesInlineEdit } from './columns-inline-edit/Phones'
 import { TagsInlineEdit } from './columns-inline-edit/Tags'
 import LastTouched from './columns/LastTouched'
 
@@ -85,9 +86,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
         <div className={classes.cell}>{contact.phone_number}</div>
       ),
       renderInlineEdit: ({ row: contact }) => (
-        <AttributeCell
-          attributeName="phone_number"
-          addLabel="Add Another Phone Number"
+        <PhonesInlineEdit
           contact={
             contact as unknown as IContactWithAssoc<'contact.attributes'>
           }
@@ -102,9 +101,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
         <div className={classes.cell}>{contact.email}</div>
       ),
       renderInlineEdit: ({ row: contact }) => (
-        <AttributeCell
-          attributeName="email"
-          addLabel="Add Another Email"
+        <EmailsInlineEdit
           contact={
             contact as unknown as IContactWithAssoc<'contact.attributes'>
           }

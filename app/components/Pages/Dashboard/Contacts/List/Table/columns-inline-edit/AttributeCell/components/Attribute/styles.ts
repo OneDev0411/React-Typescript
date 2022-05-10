@@ -24,11 +24,10 @@ export const useAttributeStyles = makeStyles(
     },
     actionContainer: {
       display: 'flex',
-      alignItems: 'center',
-      color: theme.palette.action.disabled
+      alignItems: 'center'
     },
     customActionContainer: {
-      marginRight: theme.spacing(0.5)
+      marginRight: theme.spacing(0.75)
     },
     saveButton: {
       marginRight: theme.spacing(0.5),
@@ -37,6 +36,7 @@ export const useAttributeStyles = makeStyles(
     },
     actionButton: {
       cursor: 'pointer',
+      color: theme.palette.action.disabled,
       '&:not(:last-child)': {
         marginRight: theme.spacing(0.5)
       }
