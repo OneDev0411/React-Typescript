@@ -31,11 +31,12 @@ const useStyles = makeStyles(
       flexGrow: 1
     },
     value: {
-      // background: 'red',
       flexGrow: 1
     },
-    label: {
-      // background: 'blue'
+    selectLabel: {
+      '&:focus': {
+        backgroundColor: 'transparent'
+      }
     },
     actionContainer: {
       display: 'flex',
@@ -63,6 +64,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  isNew?: boolean
   attributeDef: IContactAttributeDef
   attribute?: IContactAttribute
   actions?: ReactNode
@@ -77,6 +79,7 @@ interface FormData {
 }
 
 export function Attribute({
+  isNew = false,
   attributeDef,
   attribute,
   actions,
@@ -140,16 +143,16 @@ export function Attribute({
   }
 
   const renderActionButton = () => {
-    if (isDirty) {
+    if (isDirty || isNew) {
       return (
         <>
           <ButtonBase
             disableRipple
             type="submit"
-            disabled={isSaving}
+            disabled={isSaving || !isDirty}
             className={classes.saveButton}
           >
-            {isSaving ? 'Deleting' : 'Save'}
+            {isSaving ? 'Saving!' : 'Save'}
           </ButtonBase>
           <ButtonBase
             disableRipple
@@ -225,8 +228,11 @@ export function Attribute({
               <NativeSelect
                 {...props}
                 id="label"
+                disableUnderline
                 disabled={isSaving || isDeleting}
-                className={classes.label}
+                classes={{
+                  root: classes.selectLabel
+                }}
               >
                 {(attributeDef.labels ?? []).map(label => (
                   <option key={label} value={label}>

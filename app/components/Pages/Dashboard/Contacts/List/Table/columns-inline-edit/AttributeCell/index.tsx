@@ -59,6 +59,7 @@ export function AttributeCell({
       ))}
       {isAppending ? (
         <Attribute
+          isNew
           attributeDef={attributeDef}
           onAdd={create}
           onDiscard={prependNewValue}
