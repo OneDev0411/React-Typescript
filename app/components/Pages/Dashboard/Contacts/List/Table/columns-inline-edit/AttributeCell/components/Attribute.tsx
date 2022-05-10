@@ -7,14 +7,14 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import { mdiContentCopy, mdiTrashCanOutline } from '@mdi/js'
+import { mdiLoading, mdiContentCopy, mdiTrashCanOutline } from '@mdi/js'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 
 import useNotify from '@app/hooks/use-notify'
 import copy from '@app/utils/copy-text-to-clipboard'
 import { SvgIcon, muiIconSizes } from '@app/views/components/SvgIcons'
 
-import { UseAttributeDef } from '../hooks/use-attribute'
+import { UseAttributeCell } from '../hooks/use-attribute-cell'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -66,9 +66,10 @@ interface Props {
   attributeDef: IContactAttributeDef
   attribute?: IContactAttribute
   actions?: ReactNode
-  onAdd?: UseAttributeDef['create']
-  onUpdate?: UseAttributeDef['update']
-  onDelete?: UseAttributeDef['remove']
+  onDiscard?: () => void
+  onAdd?: UseAttributeCell['create']
+  onUpdate?: UseAttributeCell['update']
+  onDelete?: UseAttributeCell['remove']
 }
 interface FormData {
   text: string
@@ -79,6 +80,7 @@ export function Attribute({
   attributeDef,
   attribute,
   actions,
+  onDiscard,
   onUpdate,
   onDelete,
   onAdd
@@ -86,6 +88,7 @@ export function Attribute({
   const classes = useStyles()
   const notify = useNotify()
   const [isSaving, setIsSaving] = useState<boolean>(false)
+  const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const {
     reset,
     control,
@@ -98,28 +101,32 @@ export function Attribute({
     }
   })
 
-  // console.log({ errors, isDirty, restData })
-
   const handleSaveAttribute: SubmitHandler<FormData> = async ({
     text,
     label
   }) => {
-    console.log('handleSaveAttribute', { text, label })
-
     try {
       setIsSaving(true)
 
-      if (attribute && onUpdate) {
-        await onUpdate(attribute.id, { text, label })
+      if (attribute) {
+        await onUpdate?.(attribute.id, { text, label })
       }
 
-      if (onAdd) {
-        await onAdd({ text, label })
-      }
+      await onAdd?.({ text, label })
     } finally {
       reset({ text, label })
       setIsSaving(false)
     }
+  }
+
+  const handleDeleteAttribute = async () => {
+    if (isDeleting || !attribute) {
+      return
+    }
+
+    setIsDeleting(true)
+    await onDelete?.(attribute.id)
+    setIsDeleting(false)
   }
 
   const handleCopyAttribute = () => {
@@ -129,12 +136,6 @@ export function Attribute({
         status: 'success',
         message: 'Copied!'
       })
-    }
-  }
-
-  const handleDeleteAttribute = () => {
-    if (attribute && onDelete) {
-      onDelete(attribute.id)
     }
   }
 
@@ -148,9 +149,16 @@ export function Attribute({
             disabled={isSaving}
             className={classes.saveButton}
           >
-            {isSaving ? 'Saving' : 'Save'}
+            {isSaving ? 'Deleting' : 'Save'}
           </ButtonBase>
-          <ButtonBase disableRipple onClick={() => reset()}>
+          <ButtonBase
+            disableRipple
+            disabled={isSaving}
+            onClick={() => {
+              reset()
+              onDiscard?.()
+            }}
+          >
             Discard
           </ButtonBase>
         </>
@@ -166,7 +174,11 @@ export function Attribute({
           <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
         </div>
         <div className={classes.actionButton} onClick={handleDeleteAttribute}>
-          <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
+          <SvgIcon
+            path={isDeleting ? mdiLoading : mdiTrashCanOutline}
+            spin={!!isDeleting}
+            size={muiIconSizes.small}
+          />
         </div>
       </>
     )
@@ -192,6 +204,7 @@ export function Attribute({
             return (
               <InputBase
                 {...props}
+                disabled={isSaving || isDeleting}
                 margin="none"
                 error={!!error}
                 className={classes.value}
@@ -209,7 +222,12 @@ export function Attribute({
                 !!value.trim() || 'This field is required.'
             }}
             render={props => (
-              <NativeSelect {...props} id="label" className={classes.label}>
+              <NativeSelect
+                {...props}
+                id="label"
+                disabled={isSaving || isDeleting}
+                className={classes.label}
+              >
                 {(attributeDef.labels ?? []).map(label => (
                   <option key={label} value={label}>
                     {label}

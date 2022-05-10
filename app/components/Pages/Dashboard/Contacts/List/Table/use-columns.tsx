@@ -87,6 +87,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       renderInlineEdit: ({ row: contact }) => (
         <AttributeCell
           attributeName="phone_number"
+          addLabel="Add Another Phone Number"
           contact={
             contact as unknown as IContactWithAssoc<'contact.attributes'>
           }
@@ -103,6 +104,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       renderInlineEdit: ({ row: contact }) => (
         <AttributeCell
           attributeName="email"
+          addLabel="Add Another Email"
           contact={
             contact as unknown as IContactWithAssoc<'contact.attributes'>
           }

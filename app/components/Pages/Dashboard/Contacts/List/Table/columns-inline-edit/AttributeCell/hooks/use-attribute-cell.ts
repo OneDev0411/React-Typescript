@@ -9,24 +9,28 @@ import { deleteAttribute } from '@app/models/contacts/delete-attribute'
 import { updateAttribute } from '@app/models/contacts/update-attribute'
 import { IAppState } from '@app/reducers'
 
-export interface UseAttributeDef {
+export interface UseAttributeCell {
   list: IContactAttribute[]
   attributeDef: Nullable<IContactAttributeDef>
+  isAppending: boolean
   create: (data: Record<string, unknown>) => void
   update: (attributeId: UUID, data: Record<string, unknown>) => void
   remove: (attributeId: UUID) => void
+  appendNewValue: () => void
+  prependNewValue: () => void
 }
 
 /**
- * Returns the entire user info from the redux store.
- * @param state The app state
- * @returns The user state
+ * Returns specific contact attribute
+ * @param contact The Contact
+ * @param attributeName The attribute name we want to filter
+ * @returns The attributes with ability create, update, delete
  */
 
-export function useAttributeDef(
+export function useAttributeCell(
   contact: IContactWithAssoc<'contact.attributes'>,
   attributeName: string
-): UseAttributeDef {
+): UseAttributeCell {
   const notify = useNotify()
   const attributeDef = useSelector<IAppState, Nullable<IContactAttributeDef>>(
     state => {
@@ -37,6 +41,7 @@ export function useAttributeDef(
     }
   )
   const [list, setList] = useState<IContactAttribute[]>([])
+  const [isAppending, setIsAppending] = useState<boolean>(false)
 
   useEffectOnce(() => {
     const handleFilterAttribute = () => {
@@ -51,6 +56,9 @@ export function useAttributeDef(
       handleFilterAttribute()
     }
   })
+
+  const appendNewValue = () => setIsAppending(true)
+  const prependNewValue = useCallback(() => setIsAppending(false), [])
 
   const create = useCallback(
     async (data: Record<string, unknown>) => {
@@ -67,11 +75,11 @@ export function useAttributeDef(
           status: 'success',
           message: 'New attribute added!'
         })
-      } catch (error) {
-        throw error
+      } finally {
+        prependNewValue()
       }
     },
-    [attributeDef?.id, contact.id, notify]
+    [attributeDef?.id, contact.id, notify, prependNewValue]
   )
   const update = useCallback(
     async (attributeId: UUID, data: Record<string, unknown>) => {
@@ -95,12 +103,14 @@ export function useAttributeDef(
           message: 'Updated!'
         })
       } catch (error) {
-        throw error
+        notify({
+          status: 'error',
+          message: 'Something went wrong!'
+        })
       }
     },
     [contact.id, notify]
   )
-
   const remove = useCallback(
     async (attributeId: UUID) => {
       try {
@@ -114,15 +124,21 @@ export function useAttributeDef(
           message: 'Deleted!'
         })
       } catch (error) {
-        throw error
+        notify({
+          status: 'error',
+          message: 'Something went wrong!'
+        })
       }
     },
     [contact.id, notify]
   )
 
   return {
+    isAppending,
     attributeDef,
     list,
+    prependNewValue,
+    appendNewValue,
     create,
     update,
     remove
