@@ -102,6 +102,7 @@ export function sortListingsByIndex<T extends ICompactListing | IListing>(
   }
 
   const omitIndexValues = (listing: ReturnType<typeof injectIndexValues>) => {
+    // omit the unnecessary actualPrice property
     return omit(listing, [
       'baths',
       'beds',
@@ -111,9 +112,8 @@ export function sortListingsByIndex<T extends ICompactListing | IListing>(
     ]) as unknown as T // due to lodash typing limitations
   }
 
-  const formattedListings = listings.map(listing => injectIndexValues(listing))
-
-  return formattedListings
+  return listings
+    .map(listing => injectIndexValues(listing))
     .sort((a, b) => sortByIndex(a, b, index, ascending))
     .map(omitIndexValues)
 }

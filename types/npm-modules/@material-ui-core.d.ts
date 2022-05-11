@@ -1,7 +1,6 @@
-import { CSSProperties } from '@material-ui/core/styles/withStyles'
-import { TypographyStyle } from '@material-ui/core/styles/createTypography'
-
 import { ColorPartial } from '@material-ui/core/styles/createPalette'
+import { TypographyStyle } from '@material-ui/core/styles/createTypography'
+import { CSSProperties } from '@material-ui/core/styles/withStyles'
 
 declare module '@material-ui/core/styles/createPalette' {
   interface PaletteColor {
@@ -18,11 +17,6 @@ declare module '@material-ui/core/styles/createPalette' {
     warning: PaletteColor
     info: PaletteColor
     success: PaletteColor
-
-    navbar: {
-      background: CssObject
-      contrastText: CssObject
-    }
   }
 
   interface SimplePaletteColorOptions {
@@ -41,9 +35,41 @@ declare module '@material-ui/core/styles/createPalette' {
     warning?: PaletteColorOptions
     info?: PaletteColorOptions
     success?: PaletteColorOptions
+  }
+}
+
+declare module '@material-ui/core/styles' {
+  interface Theme {
+    navbar: {
+      logo: {
+        url: string
+      }
+      button: {
+        main: string
+        light: string
+        contrastText: string
+      }
+      background: {
+        color: string
+        contrastText: string
+      }
+    }
+  }
+
+  interface ThemeOptions {
     navbar?: {
-      background?: CssObject
-      contrastText?: CssObject
+      logo?: {
+        url?: string
+      }
+      button?: {
+        main?: string
+        light?: string
+        contrastText?: string
+      }
+      background?: {
+        color?: string
+        contrastText?: string
+      }
     }
   }
 }

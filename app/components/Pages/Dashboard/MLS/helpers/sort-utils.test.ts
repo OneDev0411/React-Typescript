@@ -105,6 +105,7 @@ describe('sortListingsByIndex', () => {
         id: '1',
         type: 'compact_listing',
         price: 420,
+        close_price: 300,
         compact_property: {
           bedroom_count: 1,
           bathroom_count: 2,
@@ -117,6 +118,7 @@ describe('sortListingsByIndex', () => {
         id: '2',
         type: 'compact_listing',
         price: 200,
+        close_price: 200,
         compact_property: {
           bedroom_count: 5,
           bathroom_count: 1,
@@ -129,6 +131,7 @@ describe('sortListingsByIndex', () => {
         id: '3',
         type: 'compact_listing',
         price: 300,
+        close_price: 500,
         compact_property: {
           bedroom_count: 4,
           bathroom_count: 1,

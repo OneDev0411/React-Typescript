@@ -9,9 +9,7 @@ import {
 } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
 import pluralize from 'pluralize'
-import { useSelector } from 'react-redux'
 
-import { selectUserUnsafe } from '@app/selectors/user'
 import { changeUrl } from '@app/utils/change-url'
 import {
   addressTitle,
@@ -54,7 +52,6 @@ const ListView = props => {
   const theme = useTheme()
   const classes = useStyles()
 
-  const user = useSelector(selectUserUnsafe)
   const gridClasses = useGridStyles()
   const [currentPage, setCurrentPage] = useState(1)
   const { selections, toggleItem } = useListSelection()
@@ -99,12 +96,7 @@ const ListView = props => {
       class: 'opaque',
       accessor: listing => listing.price,
       render: ({ row: listing }) =>
-        `$${getListingFormatedPrice(
-          listing.price,
-          listing.close_price,
-          user,
-          false
-        )}`
+        `$${getListingFormatedPrice(listing.price, false)}`
     },
     {
       header: 'Beds',
@@ -142,10 +134,10 @@ const ListView = props => {
       sortType: 'number',
       id: 'pricePerSquareFoot',
       class: 'opaque',
-      accessor: listing => getListingPricePerSquareFoot(listing, user),
+      accessor: listing => getListingPricePerSquareFoot(listing),
       render: ({ row: listing }) =>
-        getListingPricePerSquareFoot(listing, user)
-          ? `$${getListingPricePerSquareFoot(listing, user)}/Sqft`
+        getListingPricePerSquareFoot(listing)
+          ? `$${getListingPricePerSquareFoot(listing)}/Sqft`
           : CELL_FALLBACK
     },
     {

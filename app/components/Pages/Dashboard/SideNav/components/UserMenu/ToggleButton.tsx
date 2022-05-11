@@ -33,7 +33,7 @@ const useStyles = makeStyles(
       color: theme.palette.grey[400],
       lineHeight: 1.3,
       '&:hover': {
-        color: theme.palette.primary.main
+        color: theme.navbar.background.contrastText
       }
     },
     arrowIcon: {

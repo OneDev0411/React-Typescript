@@ -29,11 +29,13 @@ import { toggleChatbar } from '@app/store_actions/chatroom'
 import { fetchUnreadEmailThreadsCount } from '@app/store_actions/inbox'
 import { activateIntercom } from '@app/store_actions/intercom'
 import { getBrandHelpCenterURL } from '@app/utils/brand'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 import { GlobalActionsButton } from '@app/views/components/GlobalActionsButton'
 import { ScrollableArea } from '@app/views/components/ScrollableArea'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
+import { GlobalActionButtonComponent } from './components/GlobalActionButtonComponent'
 import Logo from './components/Logo'
 import PoweredBy from './components/PoweredBy'
 import SideNavAccordion from './components/SideNavAccordion'
@@ -45,7 +47,12 @@ const openHouseAccess = [ACL.CRM, ACL.MARKETING]
 const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
 const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
 const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
-const marketingAccess = { oneOf: [ACL.MARKETING, ACL.AGENT_NETWORK] }
+const marketingAccess = {
+  oneOf: [ACL.MARKETING, ACL.AGENT_NETWORK, ACL.WEBSITES, ACL.CRM]
+}
+const transactionsAccess = {
+  oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING, ACL.SHOWINGS, ACL.CRM]
+}
 const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 const useStyles = makeStyles(
@@ -56,10 +63,10 @@ const useStyles = makeStyles(
       position: 'fixed',
       top: 0,
       left: 0,
-      zIndex: 100,
+      zIndex: theme.zIndex.sideNavDrawer,
       display: 'flex',
       flexDirection: 'column',
-      backgroundColor: theme.palette.navbar.background
+      backgroundColor: theme.navbar.background.color
     }
   }),
   {
@@ -129,7 +136,7 @@ function SideNavMenu(props: WithRouterProps) {
       to: '/dashboard/overview'
     },
     {
-      access: dashboardAccess,
+      access: user ? [] : ['CRM'],
       hasChildrenNotification: !!(
         inboxNotificationNumber || chatRoomsNotificationsNumber
       ),
@@ -141,24 +148,26 @@ function SideNavMenu(props: WithRouterProps) {
         {
           access: ['CRM'],
           id: 'contacts',
+          isHidden: !useAcl(['CRM']),
           label: 'Contacts',
           to: '/dashboard/contacts'
         },
         {
           access: ['CRM'],
           id: 'calendar',
+          isHidden: !useAcl(['CRM']),
           label: 'Calendar',
           to: '/dashboard/calendar'
         },
         {
           access: ['CRM'],
           id: 'inbox',
+          isHidden: !useAcl(['CRM']),
           label: 'Inbox',
           notificationCount: inboxNotificationNumber,
           to: '/dashboard/inbox'
         },
         {
-          access: ['CRM'],
           id: 'chat',
           label: 'Chat',
           isHidden: !user,
@@ -177,30 +186,35 @@ function SideNavMenu(props: WithRouterProps) {
         {
           access: ['Marketing'],
           id: 'overview',
+          isHidden: !useAcl(['Marketing']),
           label: 'Overview',
           to: '/dashboard/marketing'
         },
         {
           access: ['CRM'],
           id: 'flows',
+          isHidden: !useAcl(['CRM']),
           label: 'Flows',
           to: '/dashboard/flows'
         },
         {
           access: ['AgentNetwork'],
           id: 'agent-network',
+          isHidden: !useAcl(['AgentNetwork']),
           label: 'Agent Network',
           to: '/dashboard/agent-network'
         },
         {
           access: ACL.WEBSITES,
           id: 'websites',
+          isHidden: !useAcl([ACL.WEBSITES]),
           label: 'Websites',
           to: '/dashboard/websites'
         },
         {
           access: insightAccess,
           id: 'insight',
+          isHidden: !useAcl(insightAccess),
           label: 'Insight',
           to: '/dashboard/insights'
         }
@@ -220,13 +234,14 @@ function SideNavMenu(props: WithRouterProps) {
         {
           access: ['CRM'],
           id: 'tours',
+          isHidden: !useAcl(openHouseAccess),
           label: 'Tours',
           to: '/dashboard/tours'
         }
       ]
     },
     {
-      access: ['Marketing'],
+      access: transactionsAccess,
       hasChildrenNotification: !!(
         dealsNotificationsNumber || showingsTotalNotificationCount
       ),
@@ -238,6 +253,7 @@ function SideNavMenu(props: WithRouterProps) {
         {
           access: dealsAccess,
           id: 'deals',
+          isHidden: !useAcl(dealsAccess),
           label: 'Deals',
           notificationCount: dealsNotificationsNumber,
           to: '/dashboard/deals'
@@ -245,18 +261,21 @@ function SideNavMenu(props: WithRouterProps) {
         {
           access: listingsAccess,
           id: 'listings',
+          isHidden: !useAcl(listingsAccess),
           label: 'Listings',
           to: '/dashboard/listings'
         },
         {
           access: openHouseAccess,
           id: 'open-house',
+          isHidden: !useAcl(['CRM']),
           label: 'Open House',
           to: '/dashboard/open-house'
         },
         {
           access: ACL.SHOWINGS,
           id: 'showings',
+          isHidden: !useAcl([ACL.SHOWINGS]),
           label: 'Showings',
           notificationCount: showingsTotalNotificationCount,
           to: '/dashboard/showings'
@@ -264,7 +283,6 @@ function SideNavMenu(props: WithRouterProps) {
       ]
     },
     {
-      access: ['Marketing'],
       hasDivider: false,
       icon: mdiBellOutline,
       id: 'notifications',
@@ -294,17 +312,19 @@ function SideNavMenu(props: WithRouterProps) {
     }
   ]
 
+  const filteredMenuItems = menuItems.filter(menu => !menu.isHidden)
+
   return (
     <aside className={classes.sidenav}>
       <Logo />
-      <GlobalActionsButton />
+      <GlobalActionsButton renderButton={GlobalActionButtonComponent} />
 
       <ScrollableArea
         shadowColor={scrollableAreaShadowColor}
         style={{ flex: '1 1' }}
         hasThinnerScrollbar
       >
-        {menuItems.map((menu: BaseAccordionMenu, index) => {
+        {filteredMenuItems.map((menu: BaseAccordionMenu, index) => {
           const { isHidden } = menu
 
           if (isHidden) {

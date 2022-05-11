@@ -21,7 +21,8 @@ const useStyles = makeStyles(
     accordionSummaryRootExpanded: {
       // Added primary color to the root menu's svg-icon, when it is expanded
       '& svg:first-child': {
-        color: theme.palette.primary.main
+        color:
+          theme.navbar.background.contrastText ?? theme.palette.primary.main
       }
     },
     accordionSummaryContent: {
@@ -122,15 +123,13 @@ export function SideNavAccordionSummary({
         subMenu={subMenu}
       >
         <div className={classes.summaryDiv}>
-          {subMenu && hoveredItem === menuId ? (
+          {subMenu && hoveredItem === menuId && (
             <div className={classes.summaryIconWrapper}>
-              {expandedMenu === menuId ? (
-                <SvgIcon path={mdiChevronUp} />
-              ) : (
-                <SvgIcon path={mdiChevronDown} />
-              )}
+              <SvgIcon
+                path={expandedMenu === menuId ? mdiChevronUp : mdiChevronDown}
+              />
             </div>
-          ) : null}
+          )}
 
           {notificationCount ? (
             <MenuBadge badgeContent={notificationCount} max={9}>
@@ -139,9 +138,9 @@ export function SideNavAccordionSummary({
           ) : (
             <>
               {menuIconWrapper}
-              {hasChildrenNotification ? (
+              {hasChildrenNotification && (
                 <div className={classes.summaryDot} />
-              ) : null}
+              )}
             </>
           )}
         </div>

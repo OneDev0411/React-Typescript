@@ -65,7 +65,7 @@ const CELL_FALLBACK = '--'
 interface TableColumnItem {
   header: string
   id: string
-  render: (listing: ICompactListing, user: Nullable<IUser>) => React.ReactNode
+  render: (listing: ICompactListing) => React.ReactNode
 }
 
 const primaryColumns: TableColumnItem[] = [
@@ -82,13 +82,7 @@ const primaryColumns: TableColumnItem[] = [
   {
     header: 'Price',
     id: 'price',
-    render: (listing, user) =>
-      `$${getListingFormatedPrice(
-        listing.price,
-        listing.close_price,
-        user,
-        false
-      )}`
+    render: listing => `$${getListingFormatedPrice(listing.price, false)}`
   },
   {
     header: 'Beds',
@@ -119,9 +113,9 @@ const secondaryColumns: TableColumnItem[] = [
   {
     header: '$/Sqft',
     id: 'pricePerSquareFoot',
-    render: (listing, user) =>
-      getListingPricePerSquareFoot(listing, user)
-        ? `$${getListingPricePerSquareFoot(listing, user)}/Sqft`
+    render: listing =>
+      getListingPricePerSquareFoot(listing)
+        ? `$${getListingPricePerSquareFoot(listing)}/Sqft`
         : CELL_FALLBACK
   },
   {
@@ -240,7 +234,7 @@ export const TableView = ({
                     onClick={() => openListingDetailsModal(listing.id)}
                     key={column.id}
                   >
-                    {column.render(listing, user)}
+                    {column.render(listing)}
                   </TableCell>
                 ))}
               </TableRow>

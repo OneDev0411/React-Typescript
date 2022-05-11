@@ -16,9 +16,9 @@ import { SideNavAccordionSummary } from './SideNavAccordionSummary'
 
 const useStyles = makeStyles(
   theme => ({
-    divider: {
-      backgroundColor: theme.palette.grey[800],
-      margin: theme.spacing(0.75, 0)
+    accordionExpanded: {
+      // I had to add !important to force accordion styles to change
+      margin: '0 !important'
     },
     accordionRoot: {
       backgroundColor: 'transparent',
@@ -27,38 +27,41 @@ const useStyles = makeStyles(
         height: 0
       }
     },
-    accordionExpanded: {
-      // I had to add !important to force accordion styles to change
-      margin: '0 !important'
+    divider: {
+      backgroundColor: theme.palette.grey[800],
+      margin: theme.spacing(0.75, 0)
     },
     list: {
-      margin: 0,
-      padding: 0,
       display: 'flex',
       flexDirection: 'column',
-      flexShrink: 0
-    },
-    popper: {
-      zIndex: 101,
-      overflow: 'hidden',
-      borderRadius: theme.spacing(
-        0,
-        `${theme.shape.borderRadius}px`,
-        `${theme.shape.borderRadius}px`,
-        0
-      )
+      flexShrink: 0,
+      margin: 0,
+      padding: 0
     },
     paper: {
-      backgroundColor: theme.palette.tertiary.light,
+      backgroundColor: theme.palette.background.default,
       paddingTop: theme.spacing(1),
       paddingBottom: theme.spacing(0.5),
 
       // I had to add element name to change accordionSummary styles because couldn't find proper class-name
       '& a': {
-        color: theme.palette.common.white,
+        color: theme.palette.common.black,
         minWidth: `${theme.spacing(18)}px`,
-        paddingLeft: theme.spacing(2)
+        paddingLeft: theme.spacing(2),
+
+        '&:hover': {
+          backgroundColor: theme.palette.action.hover,
+          color: theme.palette.common.black
+        }
       }
+    },
+    popper: {
+      borderRadius: theme.shape.borderRadius,
+      boxShadow: theme.shadows[3],
+      border: `1px solid ${theme.palette.grey[200]}`,
+      marginLeft: theme.spacing(-0.5),
+      overflow: 'hidden',
+      zIndex: theme.zIndex.sideNavDrawer
     }
   }),
   {
@@ -80,6 +83,8 @@ export default function SideNavAccordionItem({
   const classes = useStyles()
   const { testId = '', id, hasDivider, subMenu } = data
 
+  const filteredSubMenu = subMenu?.filter(menu => !menu.isHidden)
+
   const menuId = 'nav-'.concat(id) as ExpandedMenu
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -90,7 +95,7 @@ export default function SideNavAccordionItem({
   const popperId = isOpen ? id : undefined
 
   const handleShowPopper = (event: MouseEvent<HTMLElement>) => {
-    if (!subMenu || expandedMenu === menuId) {
+    if (!filteredSubMenu || expandedMenu === menuId) {
       return
     }
 
@@ -99,7 +104,7 @@ export default function SideNavAccordionItem({
   }
 
   const handleHidePopper = () => {
-    if (!subMenu) {
+    if (!filteredSubMenu) {
       return
     }
 
@@ -108,7 +113,7 @@ export default function SideNavAccordionItem({
   }
 
   const handleClick = () => {
-    if (!subMenu || expandedMenu === menuId) {
+    if (!filteredSubMenu || expandedMenu === menuId) {
       return
     }
 
@@ -129,7 +134,7 @@ export default function SideNavAccordionItem({
         onClick={handleClick}
       >
         <SideNavAccordionSummary
-          data={data}
+          data={{ ...data, subMenu: filteredSubMenu }}
           expandedMenu={expandedMenu}
           hoveredItem={hoveredItem}
           menuId={menuId}
@@ -137,7 +142,7 @@ export default function SideNavAccordionItem({
           onExpandMenu={onExpandMenu}
         />
 
-        {subMenu &&
+        {filteredSubMenu &&
           (isOpen ? (
             <Popper
               className={classes.popper}
@@ -153,7 +158,7 @@ export default function SideNavAccordionItem({
                     <div className={classes.paper}>
                       <SideNavAccordionDetails
                         isOpen={isOpen}
-                        subMenu={subMenu}
+                        subMenu={filteredSubMenu}
                       />
                     </div>
                   </Paper>
@@ -161,7 +166,10 @@ export default function SideNavAccordionItem({
               )}
             </Popper>
           ) : (
-            <SideNavAccordionDetails isOpen={isOpen} subMenu={subMenu} />
+            <SideNavAccordionDetails
+              isOpen={isOpen}
+              subMenu={filteredSubMenu}
+            />
           ))}
       </Accordion>
 

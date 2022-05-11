@@ -23,7 +23,10 @@ function postMessageAndCloseWindow(
 export default async (req: Request, res: Response) => {
   if (req.query.error) {
     return res.send(
-      postMessageAndCloseWindow('error', { errorCode: req.query.error })
+      postMessageAndCloseWindow('error', {
+        errorCode: req.query.error,
+        errorMessage: req.query.msg
+      })
     )
   }
 

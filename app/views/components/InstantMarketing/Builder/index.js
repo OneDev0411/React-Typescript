@@ -59,6 +59,7 @@ import CreateSuperCampaignButton from './CreateSuperCampaignButton'
 import DeviceManager from './DeviceManager'
 import { addFallbackSrcToImage } from './extensions/add-fallback-src-to-image'
 import { addFallbackSrcToMjImage } from './extensions/add-fallback-src-to-mj-image'
+import { patchConditionalToolbarButtonsIssue } from './extensions/patch-conditional-toolbar-buttons-issue'
 import {
   Container,
   Actions,
@@ -221,6 +222,7 @@ class Builder extends React.Component {
 
     this.editor.on('load', this.setupGrapesJs)
     this.editor.on('rte:enable', this.evaluateRte)
+    this.editor.on('frame:load:before', this.setCanvasModeToStandardHTML5)
 
     try {
       const listingDrawerListings = await getBrandListings(
@@ -289,6 +291,22 @@ class Builder extends React.Component {
       }
       // eslint-disable-next-line no-cond-assign
     } while ((model = model.parent()))
+  }
+
+  setCanvasModeToStandardHTML5 = ({ el }) => {
+    /**
+     * The grapes canvas ignores the <!DOCTYPE html> tag when it loads a template.
+     * This behaviour leads to render the code in HTML quirks mode which has different
+     * output than the standard HTML5 mode.
+     *
+     * The Grapesjs maintainer suggested the following solution to resolve the issue:
+     * https://github.com/artf/grapesjs/issues/3285#issuecomment-865389716
+     */
+    const doc = el.contentDocument
+
+    doc.open()
+    doc.write('<!DOCTYPE html>')
+    doc.close()
   }
 
   loadTemplateOptions = async () => {
@@ -483,6 +501,7 @@ class Builder extends React.Component {
 
   setupGrapesJs = async () => {
     registerCommands(this.editor)
+    patchConditionalToolbarButtonsIssue(this.editor)
     registerToolbarButtons(this.editor, {
       onChangeImageClick: () => {
         this.setState({ isImageSelectDialogOpen: true })

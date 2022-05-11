@@ -234,7 +234,9 @@ export function TaskActions({ deal }: Props) {
           )
         }
         initialValues={{
-          attachments: state.attachments,
+          ...(state.form?.attachments
+            ? {}
+            : { attachments: state.attachments }),
           ...(state.form || {})
         }}
         deal={deal}

@@ -78,7 +78,6 @@ interface Props {
   isWidget: boolean
   onChangeSort: (sort: SortString) => void
   activeSort: { index: SortIndex; ascending: boolean }
-  user: IUser
   onToggleListingModal?: (id: UUID, isOpen: boolean) => void
 }
 
@@ -90,7 +89,6 @@ export const Results = ({
   activeSort,
   onChangeSort,
   isWidget,
-  user,
   onToggleListingModal = noop
 }: Props) => {
   const classes = useStyles()
