@@ -2,7 +2,7 @@
 CKEDITOR.dialog.add('placeholder', editor => {
   let lang = editor.lang.placeholder
   let generalLabel = editor.lang.common.generalTab
-  let validFallbackRegex = /^[^\[\]<>]+$/
+  let validFallbackRegex = /^$|^[^\[\]<>]+$/
 
   return {
     title: lang.title,
@@ -42,7 +42,7 @@ CKEDITOR.dialog.add('placeholder', editor => {
             style: 'width: 100%;',
             label: lang.fallback,
             default: '',
-            required: true,
+            required: false,
             // eslint-disable-next-line no-undef
             validate: CKEDITOR.dialog.validate.regex(
               validFallbackRegex,

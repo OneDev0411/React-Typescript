@@ -18,12 +18,14 @@ import { SAVED_TEMPLATE_VARIANT } from '../InstantMarketing/Builder/AddToMarketi
 
 const HOLIDAY_TYPES = [
   'BackToSchool',
+  'BoxingDay',
   'ChineseNewYear',
   'Christmas',
   'ColumbusDay',
   'DaylightSaving',
   'Diwali',
   'Easter',
+  'EidalFitr',
   'FathersDay',
   'FourthOfJuly',
   'Halloween',
@@ -37,6 +39,7 @@ const HOLIDAY_TYPES = [
   'OtherHoliday',
   'Passover',
   'PatriotsDay',
+  'Ramadan',
   'RoshHashanah',
   'September11',
   'StPatrick',

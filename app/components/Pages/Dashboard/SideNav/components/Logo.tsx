@@ -1,12 +1,13 @@
 import { makeStyles, Theme } from '@material-ui/core'
 
-import MainLogo from '@app/views/components/Logo'
+import MainLogo from './MainLogo'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     logo: {
       width: '100%',
-      padding: theme.spacing(5, 2, 2.5)
+      maxWidth: theme.spacing(19),
+      margin: theme.spacing(5, 2, 3.5)
     }
   }),
   { name: 'Logo' }

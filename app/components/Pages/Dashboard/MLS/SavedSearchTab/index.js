@@ -190,7 +190,6 @@ class SavedSearch extends React.Component {
   )
 
   renderMain() {
-    const { user } = this.props
     const { listings, isFetching } = this.state
 
     const sortedListings = this.sortListings(
@@ -227,7 +226,6 @@ class SavedSearch extends React.Component {
             info={this.state.listings.info}
             sortedListings={sortedListings}
             listings={listings}
-            user={user}
             onToggleView={this.onToggleView}
             onChangeSort={this.onChangeSort}
             activeSort={this.state.activeSort}
