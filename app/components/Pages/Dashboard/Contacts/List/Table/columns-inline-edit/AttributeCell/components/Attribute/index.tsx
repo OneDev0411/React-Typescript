@@ -103,7 +103,7 @@ export function Attribute({
         <Tooltip
           title={Object.values(errors).map(
             err =>
-              err.message && (
+              err?.message && (
                 <span className={classes.error}>{err.message}</span>
               )
           )}
