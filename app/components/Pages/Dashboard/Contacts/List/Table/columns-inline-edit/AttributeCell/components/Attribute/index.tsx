@@ -24,10 +24,9 @@ interface FormData {
 }
 
 export interface Props {
-  isNew?: boolean
   attributeDef: IContactAttributeDef
   attribute?: IContactAttribute
-  actions?: ReactNode
+  actions?: (attribute?: IContactAttribute) => ReactNode
   validateRules?: Record<Partial<keyof FormData>, Validate>
   onDiscard?: () => void
   onAdd?: UseAttributeCell['create']
@@ -36,7 +35,6 @@ export interface Props {
 }
 
 export function Attribute({
-  isNew = false,
   validateRules,
   attributeDef,
   attribute,
@@ -116,7 +114,7 @@ export function Attribute({
       )
     }
 
-    if (isDirty || isNew) {
+    if (isDirty || !attribute) {
       return (
         <>
           <ButtonBase
@@ -145,7 +143,9 @@ export function Attribute({
     return (
       <>
         {actions && (
-          <div className={classes.customActionContainer}>{actions}</div>
+          <div className={classes.customActionContainer}>
+            {actions(attribute)}
+          </div>
         )}
         <div className={classes.actionButton} onClick={handleCopyAttribute}>
           <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />

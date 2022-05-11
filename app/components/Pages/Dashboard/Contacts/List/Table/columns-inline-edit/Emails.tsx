@@ -36,22 +36,28 @@ export function EmailsInlineEdit({ contact }: Props) {
         text: (value: string) => isEmail(value),
         label: () => undefined
       }}
-      actions={
-        <SendEmailButton
-          recipients={normalizeContactsForEmailCompose([
-            contact as unknown as IContact
-          ])}
-          render={({ onClick, testId }) => (
-            <div
-              onClick={onClick}
-              data-test={testId}
-              className={classes.emailButton}
-            >
-              <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
-            </div>
-          )}
-        />
-      }
+      actions={attribute => {
+        const targetContact = attribute
+          ? { ...contact, email: attribute.text }
+          : contact
+
+        return (
+          <SendEmailButton
+            recipients={normalizeContactsForEmailCompose([
+              targetContact as unknown as IContact
+            ])}
+            render={({ onClick, testId }) => (
+              <div
+                onClick={onClick}
+                data-test={testId}
+                className={classes.emailButton}
+              >
+                <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
+              </div>
+            )}
+          />
+        )
+      }}
     />
   )
 }

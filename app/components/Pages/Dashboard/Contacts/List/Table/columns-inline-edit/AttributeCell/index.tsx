@@ -1,5 +1,3 @@
-import { ReactNode } from 'react'
-
 import { Typography, makeStyles, Theme } from '@material-ui/core'
 
 import { Attribute, Props as AttributeProps } from './components/Attribute'
@@ -9,7 +7,7 @@ interface Props extends Pick<AttributeProps, 'validateRules'> {
   contact: IContactWithAssoc<'contact.attributes'>
   attributeName: string
   addLabel?: string
-  actions?: ReactNode
+  actions?: AttributeProps['actions']
 }
 
 const useStyles = makeStyles(
@@ -66,7 +64,6 @@ export function InlineEditAttributeCell({
       ))}
       {isAppending ? (
         <Attribute
-          isNew
           attributeDef={attributeDef}
           validateRules={validateRules}
           onAdd={create}
