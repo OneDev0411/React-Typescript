@@ -1,19 +1,14 @@
 import { useState, ReactNode } from 'react'
 
-import { ButtonBase, InputBase, NativeSelect } from '@material-ui/core'
+import { Tooltip, ButtonBase, InputBase, NativeSelect } from '@material-ui/core'
 import {
   mdiLoading,
   mdiContentCopy,
-  mdiTrashCanOutline
-  // mdiAlertCircleOutline
+  mdiTrashCanOutline,
+  mdiAlertCircleOutline
 } from '@mdi/js'
-// import isEmpty from 'lodash/isEmpty'
-import {
-  useForm,
-  Controller,
-  SubmitHandler,
-  UseControllerOptions
-} from 'react-hook-form'
+import isEmpty from 'lodash/isEmpty'
+import { useForm, Controller, SubmitHandler, Validate } from 'react-hook-form'
 
 import useNotify from '@app/hooks/use-notify'
 import copy from '@app/utils/copy-text-to-clipboard'
@@ -27,12 +22,13 @@ interface FormData {
   text: string
   label: string
 }
-interface Props {
+
+export interface Props {
   isNew?: boolean
   attributeDef: IContactAttributeDef
   attribute?: IContactAttribute
   actions?: ReactNode
-  validateRules?: Record<Partial<keyof FormData>, UseControllerOptions['rules']>
+  validateRules?: Record<Partial<keyof FormData>, Validate>
   onDiscard?: () => void
   onAdd?: UseAttributeCell['create']
   onUpdate?: UseAttributeCell['update']
@@ -66,7 +62,7 @@ export function Attribute({
     }
   })
 
-  console.log({ errors })
+  console.dir({ errors })
 
   const handleSaveAttribute: SubmitHandler<FormData> = async ({
     text,
@@ -102,16 +98,23 @@ export function Attribute({
   }
 
   const renderActionButton = () => {
-    // if (!isEmpty(errors)) {
-    // return (
-    //   <Tooltip title={errors}>
-    //     <div className={classes.errors}>
-    //       <span>Invalid</span>
-    //       <SvgIcon path={mdiAlertCircleOutline} size={muiIconSizes.small} />
-    //     </div>
-    //   </Tooltip>
-    // )
-    // }
+    if (!isEmpty(errors)) {
+      return (
+        <Tooltip
+          title={Object.values(errors).map(
+            err =>
+              err.message && (
+                <span className={classes.error}>{err.message}</span>
+              )
+          )}
+        >
+          <div className={classes.errors}>
+            <span>Invalid!</span>
+            <SvgIcon path={mdiAlertCircleOutline} size={muiIconSizes.small} />
+          </div>
+        </Tooltip>
+      )
+    }
 
     if (isDirty || isNew) {
       return (
@@ -119,7 +122,7 @@ export function Attribute({
           <ButtonBase
             disableRipple
             type="submit"
-            // disabled={isSubmitting || !isDirty}
+            disabled={isSubmitting || !isDirty}
             className={classes.saveButton}
           >
             {isSubmitting ? 'Saving!' : 'Save'}
@@ -127,6 +130,7 @@ export function Attribute({
           <ButtonBase
             disableRipple
             disabled={isSubmitting}
+            className={classes.discardButton}
             onClick={() => {
               reset()
               onDiscard?.()
@@ -168,9 +172,13 @@ export function Attribute({
           name="text"
           control={control}
           rules={{
-            validate: (value: string) => !!value.trim() || 'Value is required.',
-            min: 15,
-            ...(validateRules?.text || {})
+            validate: (value: string) => {
+              if (!value.trim()) {
+                return 'Value is required.'
+              }
+
+              return validateRules?.text?.(value)
+            }
           }}
           render={props => (
             <InputBase
@@ -187,9 +195,13 @@ export function Attribute({
             name="label"
             control={control}
             rules={{
-              validate: (value: string) =>
-                !!value.trim() || 'Label is required.',
-              ...(validateRules?.label || {})
+              validate: (value: string) => {
+                if (!value.trim()) {
+                  return 'Label is required.'
+                }
+
+                return validateRules?.label?.(value)
+              }
             }}
             render={props => (
               <NativeSelect

@@ -2,10 +2,10 @@ import { ReactNode } from 'react'
 
 import { Typography, makeStyles, Theme } from '@material-ui/core'
 
-import { Attribute } from './components/Attribute'
+import { Attribute, Props as AttributeProps } from './components/Attribute'
 import { useAttributeCell } from './hooks/use-attribute-cell'
 
-interface Props {
+interface Props extends Pick<AttributeProps, 'validateRules'> {
   contact: IContactWithAssoc<'contact.attributes'>
   attributeName: string
   addLabel?: string
@@ -32,6 +32,7 @@ export function InlineEditAttributeCell({
   contact,
   actions,
   attributeName,
+  validateRules,
   addLabel = 'Add New Value'
 }: Props) {
   const classes = useStyles()
@@ -58,13 +59,7 @@ export function InlineEditAttributeCell({
           attribute={attr}
           actions={actions}
           attributeDef={attributeDef}
-          validateRules={{
-            text: {
-              validate: (value: string) =>
-                !!value.trim() || 'This field is required.'
-            },
-            label: {}
-          }}
+          validateRules={validateRules}
           onUpdate={update}
           onDelete={remove}
         />
@@ -73,11 +68,8 @@ export function InlineEditAttributeCell({
         <Attribute
           isNew
           attributeDef={attributeDef}
+          validateRules={validateRules}
           onAdd={create}
-          validateRules={{
-            text: {},
-            label: {}
-          }}
           onDiscard={prependNewValue}
         />
       ) : (

@@ -34,6 +34,7 @@ export const useAttributeStyles = makeStyles(
       color: theme.palette.primary.main,
       ...theme.typography.body2
     },
+    discardButton: theme.typography.body2,
     actionButton: {
       cursor: 'pointer',
       color: theme.palette.action.disabled,
@@ -47,6 +48,9 @@ export const useAttributeStyles = makeStyles(
       color: theme.palette.error.main,
       cursor: 'help',
       ...theme.typography.button
+    },
+    error: {
+      display: 'block'
     }
   }),
   {

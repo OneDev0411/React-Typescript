@@ -2,6 +2,7 @@ import { makeStyles, Theme } from '@material-ui/core'
 import { mdiEmailOutline } from '@mdi/js'
 
 import { normalizeContactsForEmailCompose } from '@app/models/email/helpers/normalize-contact'
+import { isEmail } from '@app/utils/validations'
 import SendEmailButton from '@app/views/components/SendEmailButton'
 import { SvgIcon, muiIconSizes } from '@app/views/components/SvgIcons'
 
@@ -31,6 +32,10 @@ export function EmailsInlineEdit({ contact }: Props) {
       attributeName="email"
       addLabel="Add Another Email"
       contact={contact}
+      validateRules={{
+        text: (value: string) => isEmail(value),
+        label: () => undefined
+      }}
       actions={
         <SendEmailButton
           recipients={normalizeContactsForEmailCompose([
