@@ -60,8 +60,6 @@ export function Attribute({
     }
   })
 
-  console.dir({ errors })
-
   const handleSaveAttribute: SubmitHandler<FormData> = async ({
     text,
     label
