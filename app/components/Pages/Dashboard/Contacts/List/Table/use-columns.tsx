@@ -73,8 +73,8 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
           {contact.tags?.slice(0, 2).join(', ')}
         </div>
       ),
-      renderInlineEdit: ({ row: contact }) => (
-        <TagsInlineEdit contact={contact} />
+      renderInlineEdit: ({ row: contact }, close) => (
+        <TagsInlineEdit contact={contact} close={close} />
       )
     },
     {

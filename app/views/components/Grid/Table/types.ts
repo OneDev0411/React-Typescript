@@ -48,7 +48,7 @@ export interface TableColumn<Row> {
   render?: (data: RenderProps<Row>) => React.ReactNode | string
   renderInlineEdit?: (
     data: RenderProps<Row>,
-    close: (e: MouseEvent<HTMLButtonElement>) => void
+    close: (e?: MouseEvent<HTMLButtonElement>) => void
   ) => React.ReactNode
 }
 
