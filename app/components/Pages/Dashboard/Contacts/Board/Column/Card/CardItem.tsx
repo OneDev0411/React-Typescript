@@ -168,7 +168,7 @@ export function CardItem({
               size={muiIconSizes.xsmall}
             />
             <Typography variant="caption" className={classes.lastTouch}>
-              <LastTouched contact={contact} title="" />
+              <LastTouched contact={contact} />
             </Typography>
           </div>
         </Box>

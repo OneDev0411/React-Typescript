@@ -2,34 +2,26 @@ import { makeStyles, Theme, Tooltip } from '@material-ui/core'
 import timeago from 'timeago.js'
 
 interface Props {
-  title?: string
   contact: IContact
 }
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    notouch: {
-      fontSize: theme.typography.caption.fontSize
+    noTouch: {
+      color: theme.palette.grey[700],
+      ...theme.typography.caption
     },
-    lastTouchLabel: {
-      fontSize: theme.typography.caption.fontSize
-    },
-    lastTouchValue: {
-      fontSize: theme.typography.subtitle2.fontSize
-    }
+    lastTouchValue: theme.typography.body2
   }),
   { name: 'LastTouchedCell' }
 )
 
-export default function LastTouched({
-  contact,
-  title = 'Last Touch: '
-}: Props) {
+export default function LastTouched({ contact }: Props) {
   const classes = useStyles()
   const { last_touch: lastTouch, next_touch: nextTouch } = contact
 
   if (!lastTouch) {
-    return <span className={classes.notouch}>No Touches</span>
+    return <span className={classes.noTouch}>No Touches</span>
   }
 
   const formattedLastTouch = timeago().format(lastTouch * 1000)
@@ -46,16 +38,10 @@ export default function LastTouched({
             </span>
           }
         >
-          <span className={classes.lastTouchLabel}>
-            {title}
-            <b className={classes.lastTouchValue}>{formattedLastTouch}</b>
-          </span>
+          <span className={classes.lastTouchValue}>{formattedLastTouch}</span>
         </Tooltip>
       ) : (
-        <span className={classes.lastTouchLabel}>
-          {title}
-          <b className={classes.lastTouchValue}>{formattedLastTouch}</b>
-        </span>
+        <span className={classes.lastTouchValue}>{formattedLastTouch}</span>
       )}
     </div>
   )

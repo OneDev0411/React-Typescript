@@ -19,7 +19,7 @@ import { EmailsInlineEdit } from './columns-inline-edit/Emails'
 import { FlowsInlineEdit } from './columns-inline-edit/Flows'
 import { PhonesInlineEdit } from './columns-inline-edit/Phones'
 import { TagsInlineEdit } from './columns-inline-edit/Tags'
-// import FlowCell from './columns/Flows'
+import { FlowsCell } from './columns/Flows'
 import LastTouched from './columns/LastTouched'
 
 const useStyles = makeStyles(
@@ -116,7 +116,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       header: () => <HeaderColumn text="Last Touch" iconPath={mdiCalendar} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
-          <LastTouched contact={contact} title="" />
+          <LastTouched contact={contact} />
         </div>
       )
     },
@@ -124,7 +124,13 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       id: 'flows',
       hidden: breakpoint !== 'xl',
       header: () => <HeaderColumn text="Flows" iconPath={mdiFlash} />,
-      render: ({ row: contact }) => <div className={classes.cell}>ddd</div>,
+      render: ({ row: contact }) => (
+        <div className={classes.cell}>
+          <FlowsCell
+            count={Array.isArray(contact.flows) ? contact.flows.length : 0}
+          />
+        </div>
+      ),
       renderInlineEdit: ({ row: contact }, close) => (
         <FlowsInlineEdit contact={contact} close={close} />
       )
