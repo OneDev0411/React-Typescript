@@ -16,8 +16,10 @@ import { SelectionCount } from '@app/views/components/Grid/Table/features/Select
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
 import { EmailsInlineEdit } from './columns-inline-edit/Emails'
+import { FlowsInlineEdit } from './columns-inline-edit/Flows'
 import { PhonesInlineEdit } from './columns-inline-edit/Phones'
 import { TagsInlineEdit } from './columns-inline-edit/Tags'
+// import FlowCell from './columns/Flows'
 import LastTouched from './columns/LastTouched'
 
 const useStyles = makeStyles(
@@ -122,7 +124,10 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       id: 'flows',
       hidden: breakpoint !== 'xl',
       header: () => <HeaderColumn text="Flows" iconPath={mdiFlash} />,
-      render: ({ row: contact }) => <div>-</div>
+      render: ({ row: contact }) => <div className={classes.cell}>ddd</div>,
+      renderInlineEdit: ({ row: contact }, close) => (
+        <FlowsInlineEdit contact={contact} close={close} />
+      )
     },
     {
       id: 'birthday',
