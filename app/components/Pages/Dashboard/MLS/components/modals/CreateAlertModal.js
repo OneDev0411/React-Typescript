@@ -8,7 +8,6 @@ import withState from 'recompose/withState'
 import Flex from 'styled-flex-component'
 
 import createAlert from '@app/store_actions/listings/alerts/create-alert'
-import Acl from '@app/views/components/Acl'
 import ActionButton from '@app/views/components/Button/ActionButton'
 import { Modal, ModalFooter } from '@app/views/components/Modal'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
@@ -28,7 +27,6 @@ const CreateAlertModal = ({
   titleInputOnChange,
   hideShareAlertModal,
   successModalIsActive,
-  activeShareAlertModal,
   shareAlertModalIsActive,
   searchOptions,
   drawingPoints
@@ -73,16 +71,6 @@ const CreateAlertModal = ({
           >
             {isSaving ? 'Saving...' : 'Save for me'}
           </ActionButton>
-          <Acl access={['Chat']}>
-            <ActionButton
-              size="small"
-              appearance="outline"
-              onClick={activeShareAlertModal}
-              disabled={isSaving}
-            >
-              Save &amp; Share
-            </ActionButton>
-          </Acl>
         </Flex>
       </ModalFooter>
     </Modal>

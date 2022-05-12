@@ -9,7 +9,6 @@ import {
 } from '@material-ui/core'
 import { mdiGiftOutline, mdiEmailOutline } from '@mdi/js'
 
-import Acl from '@app/views/components/Acl'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import SendEmailButton from 'components/SendEmailButton'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -17,7 +16,6 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 
 import { Props } from '..'
-import Chat from '../../../components/ChatButton'
 
 import AddEvent from './AddEvent'
 import AddNote from './AddNote'
@@ -75,10 +73,6 @@ export const Actions = ({
             </Tooltip>
           )}
         />
-
-        <Acl access={['Chat']}>
-          <Chat contact={contact} size={muiIconSizes.medium} />
-        </Acl>
 
         <SendContactCard
           contact={contact}

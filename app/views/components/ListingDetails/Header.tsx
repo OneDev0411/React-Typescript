@@ -10,7 +10,7 @@ import {
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import { mdiClose, mdiExportVariant, mdiHeart, mdiHeartOutline } from '@mdi/js'
+import { mdiClose, mdiHeart, mdiHeartOutline } from '@mdi/js'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps, browserHistory } from 'react-router'
 import { notify } from 'reapop'
@@ -23,8 +23,6 @@ import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import api from 'models/listings/favorites'
 import { selectUserUnsafe } from 'selectors/user'
-
-import Acl from '../Acl'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -166,24 +164,6 @@ function Header({
               >
                 Like
               </Button>
-            )}
-            {user && (
-              <Acl access={['Chat']}>
-                <Button
-                  size="small"
-                  variant={isMobileScreen ? 'contained' : 'outlined'}
-                  color={isMobileScreen ? 'primary' : 'default'}
-                  onClick={handleShare}
-                  startIcon={
-                    <SvgIcon
-                      size={muiIconSizes.small}
-                      path={mdiExportVariant}
-                    />
-                  }
-                >
-                  Share
-                </Button>
-              </Acl>
             )}
             {!isWidget && !user && (
               <Button
