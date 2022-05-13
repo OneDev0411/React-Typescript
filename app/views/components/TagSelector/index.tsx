@@ -1,5 +1,5 @@
 export * from './type'
-export * from './components/BaseTagSelector'
+export * from './components/TagSelectorForm'
 export * from './components/PopoverTagSelector'
+export * from './components/TagSelectorTextField'
 export * from './components/PopoverContactTagSelector'
-export * from './components/BaseTagSelectorForPopoverUsage'

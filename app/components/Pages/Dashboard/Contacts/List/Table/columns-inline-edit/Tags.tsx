@@ -4,10 +4,7 @@ import { useDispatch } from 'react-redux'
 
 import { getContact } from '@app/models/contacts/get-contact'
 import { updateContactTags } from 'actions/contacts/update-contact-tags'
-import {
-  BaseTagSelectorForPopoverUsage as TagSelector,
-  SelectorOption
-} from 'components/TagSelector'
+import { TagSelectorForm, SelectorOption } from 'components/TagSelector'
 
 interface Props {
   contact: IContact
@@ -53,7 +50,7 @@ export function TagsInlineEdit({
   }
 
   return (
-    <TagSelector
+    <TagSelectorForm
       showManageTags
       label={`${contact.display_name}'s Tag`}
       value={currentTags}

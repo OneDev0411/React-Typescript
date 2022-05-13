@@ -4,13 +4,10 @@ import { Popover, PopoverProps } from '@material-ui/core'
 
 import useStateSafe from '@app/hooks/use-safe-state'
 
-import {
-  BaseTagSelectorForPopoverUsage,
-  BaseTagSelectorForPopoverUsageProps
-} from './BaseTagSelectorForPopoverUsage'
+import { TagSelectorForm, TagSelectorFormProps } from './TagSelectorForm'
 
 export interface PopoverTagSelectorProps
-  extends Omit<BaseTagSelectorForPopoverUsageProps, 'onCancel'> {
+  extends Omit<TagSelectorFormProps, 'onCancel'> {
   popoverProps?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
   anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
 }
@@ -51,7 +48,7 @@ export const PopoverTagSelector = ({
         }}
         {...popoverProps}
       >
-        <BaseTagSelectorForPopoverUsage {...props} onCancel={handleClose} />
+        <TagSelectorForm {...props} onCancel={handleClose} />
       </Popover>
     </>
   )

@@ -3,7 +3,7 @@ import React from 'react'
 import { Field } from 'react-final-form'
 
 import { Container, Label } from 'components/final-form-fields/styled'
-import { BaseTagSelector } from 'components/TagSelector'
+import { TagSelectorTextField } from 'components/TagSelector'
 
 export const Tags = () => (
   <Container>
@@ -11,7 +11,7 @@ export const Tags = () => (
     <Field
       name="tags"
       render={({ input }) => (
-        <BaseTagSelector value={input.value} onChange={input.onChange} />
+        <TagSelectorTextField value={input.value} onChange={input.onChange} />
       )}
     />
   </Container>

@@ -9,9 +9,9 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { SelectorOption } from '../type'
 
 import {
-  BaseTagSelector,
-  Props as BaseTagSelectorProps
-} from './BaseTagSelector'
+  TagSelectorTextField,
+  TagSelectorTextFieldProps
+} from './TagSelectorTextField'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -51,11 +51,11 @@ const useStyles = makeStyles(
       marginRight: theme.spacing(0.5)
     }
   }),
-  { name: 'BaseTagSelectorForPopoverUsage' }
+  { name: 'TagSelectorForm' }
 )
 
-export interface BaseTagSelectorForPopoverUsageProps
-  extends Omit<BaseTagSelectorProps, 'onChange'> {
+export interface TagSelectorFormProps
+  extends Omit<TagSelectorTextFieldProps, 'onChange'> {
   label?: string
   showManageTags?: boolean
   onSave: (tags: SelectorOption[], hasNewTag: boolean) => Promise<void>
@@ -64,7 +64,7 @@ export interface BaseTagSelectorForPopoverUsageProps
   minimumTag?: number
 }
 
-export const BaseTagSelectorForPopoverUsage = ({
+export const TagSelectorForm = ({
   showManageTags = false,
   onSave,
   onCancel,
@@ -73,7 +73,7 @@ export const BaseTagSelectorForPopoverUsage = ({
   defaultIsDirty = false,
   minimumTag = 0,
   ...props
-}: BaseTagSelectorForPopoverUsageProps) => {
+}: TagSelectorFormProps) => {
   const classes = useStyles()
   const [isDirty, setIsDirty] = useStateSafe<boolean>(defaultIsDirty)
   const [isSaving, setIsSaving] = useStateSafe<boolean>(defaultIsDirty)
@@ -104,7 +104,7 @@ export const BaseTagSelectorForPopoverUsage = ({
         <Typography variant="button" className={classes.label}>
           {label}
         </Typography>
-        <BaseTagSelector
+        <TagSelectorTextField
           {...props}
           chipProps={{
             variant: 'outlined',
