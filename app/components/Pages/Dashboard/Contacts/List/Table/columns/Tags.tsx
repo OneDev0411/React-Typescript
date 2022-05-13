@@ -124,7 +124,7 @@ const TagsString = ({
       filter={{
         selectedIds: [contact.id]
       }}
-      onSaveCallback={handleChangeTag}
+      callback={handleChangeTag}
     />
   )
 }

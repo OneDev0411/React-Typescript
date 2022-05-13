@@ -107,7 +107,7 @@ export const TagContacts = ({
         crm_tasks,
         flows
       }}
-      onSaveCallback={async () => {
+      callback={() => {
         resetSelectedRows()
         handleChangeContactsAttributes()
       }}

@@ -86,7 +86,7 @@ function Tags({ contact, onChange }: Props) {
         filter={{
           selectedIds: [contact.id]
         }}
-        onSaveCallback={async () => onChange()}
+        callback={() => onChange()}
       />
     </Box>
   )

@@ -17,12 +17,10 @@ import {
 export interface PopoverContactTagSelectorProps
   extends Omit<PopoverTagSelectorProps, 'onSave'> {
   filter: ContactFilterGenerator
-  onSaveCallback?: PopoverTagSelectorProps['onSave']
 }
 
 export const PopoverContactTagSelector = ({
   filter,
-  onSaveCallback,
   ...props
 }: PopoverContactTagSelectorProps) => {
   const dispatch = useDispatch()
@@ -43,8 +41,6 @@ export const PopoverContactTagSelector = ({
     } catch (err) {
       console.error(err)
     }
-
-    return onSaveCallback?.(selectedTags, hasNewTag)
   }
 
   return <PopoverTagSelector {...props} onSave={handleSave} />
