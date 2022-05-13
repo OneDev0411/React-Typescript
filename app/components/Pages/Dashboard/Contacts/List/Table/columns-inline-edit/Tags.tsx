@@ -2,9 +2,10 @@ import { useMemo } from 'react'
 
 import { useDispatch } from 'react-redux'
 
+import { ContactTagSelectorForm } from '@app/components/Pages/Dashboard/Contacts/components/TagSelector'
 import { getContact } from '@app/models/contacts/get-contact'
-import { updateContactTags } from 'actions/contacts/update-contact-tags'
-import { TagSelectorForm, SelectorOption } from 'components/TagSelector'
+import { updateContactTags } from '@app/store_actions/contacts/update-contact-tags'
+import { SelectorOption } from 'components/TagSelector'
 
 interface Props {
   contact: IContact
@@ -32,7 +33,7 @@ export function TagsInlineEdit({
     [contact?.tags]
   )
 
-  const handleSave = async (tags: SelectorOption[] = []) => {
+  const onSaveCallback = async (tags: SelectorOption[] = []) => {
     try {
       if (isParkTabActive || tags.length === 0) {
         return reloadContacts?.()
@@ -50,12 +51,15 @@ export function TagsInlineEdit({
   }
 
   return (
-    <TagSelectorForm
+    <ContactTagSelectorForm
       showManageTags
       label={`${contact.display_name}'s Tag`}
       value={currentTags}
-      onSave={handleSave}
       onCancel={close}
+      callback={onSaveCallback}
+      filter={{
+        selectedIds: [contact.id]
+      }}
     />
   )
 }
