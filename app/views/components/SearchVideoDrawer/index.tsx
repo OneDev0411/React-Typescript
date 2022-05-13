@@ -8,7 +8,11 @@ import OverlayDrawer from '@app/views/components/OverlayDrawer'
 
 import LoadingContainer from '../LoadingContainer'
 
-import { getVideoGif, getYouTubeVideoGif } from './helpers'
+import {
+  getVideoGif,
+  getYouTubeVideoGif,
+  shouldAddPlayIconWatermark
+} from './helpers'
 import OnlineVideos from './OnlineVideos'
 import { SearchVideoResult, Video, VideoTab } from './types'
 import useGalleryVideos from './use-gallery-videos'
@@ -46,6 +50,7 @@ interface SearchVideoDrawerProps {
   onClose: () => void
   onSelect: (video: Video) => void
   uploadThumbnail: (file: File) => Promise<string>
+  shouldSkipVideoGif: boolean
 }
 
 function SearchVideoDrawer({
@@ -53,7 +58,8 @@ function SearchVideoDrawer({
   model,
   onClose,
   onSelect,
-  uploadThumbnail
+  uploadThumbnail,
+  shouldSkipVideoGif
 }: SearchVideoDrawerProps) {
   const notify = useNotify()
   const classes = useStyles()
@@ -77,51 +83,47 @@ function SearchVideoDrawer({
   }
 
   const handleSelectVideo = async (video: SearchVideoResult) => {
-    let shouldAddPlayIconWatermark = true
+    setIsGeneratingThumbnail(true)
 
-    if (video.source === 'youtube') {
-      try {
-        setIsGeneratingThumbnail(true)
+    if (!shouldSkipVideoGif) {
+      if (video.source === 'youtube') {
+        try {
+          const result = await getYouTubeVideoGif(video.url)
 
-        const result = await getYouTubeVideoGif(video.url)
-
-        video.thumbnail = result.url
-        shouldAddPlayIconWatermark = false
-      } catch (err) {
-        console.error(err)
-        notify({
-          status: 'warning',
-          message:
-            'Failed to generate GIF thumbnail. Falling back to the static thumbnail.'
-        })
+          video.thumbnail = result.url
+        } catch (err) {
+          console.error(err)
+          notify({
+            status: 'warning',
+            message:
+              'Failed to generate GIF thumbnail. Falling back to the static thumbnail.'
+          })
+        }
       }
-    }
 
-    if (video.source === 'videobolt' || video.source === 'gallery') {
-      try {
-        setIsGeneratingThumbnail(true)
+      if (video.source === 'videobolt' || video.source === 'gallery') {
+        try {
+          const result = await getVideoGif(video.url)
 
-        const result = await getVideoGif(video.url)
-
-        video.thumbnail = result.url
-        shouldAddPlayIconWatermark = false
-      } catch (err) {
-        console.error(err)
-        notify({
-          status: 'warning',
-          message:
-            'Failed to generate GIF thumbnail. Falling back to a static thumbnail.'
-        })
-        video.thumbnail = STATIC_FALLBACK_THUMBNAIL
+          video.thumbnail = result.url
+        } catch (err) {
+          console.error(err)
+          notify({
+            status: 'warning',
+            message:
+              'Failed to generate GIF thumbnail. Falling back to a static thumbnail.'
+          })
+          video.thumbnail = STATIC_FALLBACK_THUMBNAIL
+        }
       }
     }
 
     const videoInfo: Video = {
-      url: video.playerUrl,
-      thumbnail: video.thumbnail,
-      thumbnailWithPlayIcon: shouldAddPlayIconWatermark
+      url: video.url,
+      thumbnail: video.thumbnail ?? video.url,
+      thumbnailWithPlayIcon: shouldAddPlayIconWatermark(video.source)
         ? await watermarkPlayIcon(video.thumbnail!, uploadThumbnail)
-        : video.thumbnail
+        : video.thumbnail ?? video.url
     }
 
     setIsGeneratingThumbnail(false)
@@ -148,7 +150,7 @@ function SearchVideoDrawer({
           </Grid>
           <Grid item>
             <Typography variant="body1" align="center">
-              Generating GIF thumbnail
+              Generating thumbnail
               <br />
               This may take a few seconds.
             </Typography>

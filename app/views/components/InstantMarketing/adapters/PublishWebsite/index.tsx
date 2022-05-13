@@ -150,6 +150,7 @@ function PublishWebsite({
           templateData={{ ...templateData, user }}
           onClose={handleCloseBuilder}
           handleSave={handleSaveBuilder}
+          shouldSkipVideoGif
           bareMode
           hideTemplatesColumn
           saveButtonText={publishButtonLabel}

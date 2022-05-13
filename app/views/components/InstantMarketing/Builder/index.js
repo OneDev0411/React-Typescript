@@ -1557,6 +1557,7 @@ class Builder extends React.Component {
           <SearchVideoDrawer
             isOpen={!!this.state.videoToEdit}
             model={this.state.videoToEdit}
+            shouldSkipVideoGif={this.props.shouldSkipVideoGif}
             onClose={() => {
               this.blocks.video.selectHandler()
               this.setState({ videoToEdit: null })
@@ -1798,7 +1799,8 @@ Builder.propTypes = {
   actionButtonsDisabled: PropTypes.bool,
   customActions: PropTypes.node,
   saveButtonWrapper: PropTypes.func,
-  templatePurpose: PropTypes.string
+  templatePurpose: PropTypes.string,
+  shouldSkipVideoGif: PropTypes.bool
 }
 
 Builder.defaultProps = {
