@@ -3,9 +3,9 @@ import { useMemo, memo } from 'react'
 import { Box, Tooltip, Chip, makeStyles } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
+import { PopoverContactTagSelector } from '@app/components/Pages/Dashboard/Contacts/components/TagSelector'
+import type { SelectorOption } from '@app/views/components/TagSelector'
 import { updateContactTags } from 'actions/contacts/update-contact-tags'
-import { PopoverContactTagSelector } from 'components/TagSelector'
-import { SelectorOption } from 'components/TagSelector/type'
 import { getContact } from 'models/contacts/get-contact'
 
 const useStyles = makeStyles(
