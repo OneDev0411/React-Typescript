@@ -1,16 +1,18 @@
 import AddToFlowForm from '@app/views/components/AddToFlowForm'
 
-interface Props {
-  contact: IContact
-  close: () => void
-  callback?: () => void
-}
+import { InlineEditColumnsProps as FlowsInlineEditProps } from './type'
 
-export function FlowsInlineEdit({ contact, callback, close }: Props) {
+export function FlowsInlineEdit({
+  contact,
+  callback,
+  close
+}: FlowsInlineEditProps) {
+  const onSaveCallback = () => callback?.(contact.id)
+
   return (
     <AddToFlowForm
       isOpen
-      callback={callback}
+      callback={onSaveCallback}
       contacts={{ ids: [contact.id] }}
       handleClose={close}
     />

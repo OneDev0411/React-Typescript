@@ -59,7 +59,7 @@ export interface TagSelectorFormProps
   label?: string
   showManageTags?: boolean
   onSave: (tags: SelectorOption[], hasNewTag: boolean) => Promise<void>
-  onCancel: () => void
+  onCancel?: () => void
   callback?: (tags: SelectorOption[], hasNewTag: boolean) => void
   defaultIsDirty?: boolean
   minimumTag?: number
@@ -101,7 +101,7 @@ export const TagSelectorForm = ({
       console.error(error)
     } finally {
       setIsSaving(false)
-      onCancel()
+      onCancel?.()
       callback?.(selectedTags, hasNewTag)
     }
   }
@@ -142,16 +142,18 @@ export const TagSelectorForm = ({
               {isSaving ? 'Saving' : 'Done'}
             </Button>
           </Box>
-          <Box flexGrow={1} mr={0.5}>
-            <Button
-              fullWidth
-              variant="outlined"
-              size="small"
-              onClick={onCancel}
-            >
-              Cancel
-            </Button>
-          </Box>
+          {onCancel && (
+            <Box flexGrow={1} mr={0.5}>
+              <Button
+                fullWidth
+                variant="outlined"
+                size="small"
+                onClick={onCancel}
+              >
+                Cancel
+              </Button>
+            </Box>
+          )}
         </Box>
       </Box>
       {showManageTags && (

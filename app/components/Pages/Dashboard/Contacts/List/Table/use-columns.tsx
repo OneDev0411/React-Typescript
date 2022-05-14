@@ -7,9 +7,15 @@ import {
   mdiPhone,
   mdiTag
 } from '@mdi/js'
+import { useDispatch } from 'react-redux'
 
 import { useBreakpoint } from '@app/hooks/use-breakpoint'
-import { getAttributeFromSummary } from '@app/models/contacts/helpers'
+import {
+  getAttributeFromSummary,
+  CRM_LIST_DEFAULT_ASSOCIATIONS,
+  updateContactQuery as defaultUpdateContactQuery
+} from '@app/models/contacts/helpers'
+import { getContact } from '@app/store_actions/contacts/get-contact'
 import { goTo } from '@app/utils/go-to'
 import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderColumn'
 import { SelectionCount } from '@app/views/components/Grid/Table/features/Selection/SelectionCount'
@@ -53,6 +59,18 @@ interface Data {
 export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
   const classes = useStyles()
   const breakpoint = useBreakpoint()
+  const dispatch = useDispatch()
+
+  const handleReloadContact = (contactId: UUID) => {
+    const query = {
+      associations: [
+        ...defaultUpdateContactQuery.associations,
+        ...CRM_LIST_DEFAULT_ASSOCIATIONS
+      ]
+    }
+
+    dispatch(getContact(contactId, query))
+  }
 
   return [
     {
@@ -78,7 +96,11 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
         </div>
       ),
       renderInlineEdit: ({ row: contact }, close) => (
-        <TagsInlineEdit contact={contact} close={close} />
+        <TagsInlineEdit
+          contact={contact}
+          callback={handleReloadContact}
+          close={close}
+        />
       )
     },
     {
@@ -132,7 +154,11 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
         </div>
       ),
       renderInlineEdit: ({ row: contact }, close) => (
-        <FlowsInlineEdit contact={contact} close={close} />
+        <FlowsInlineEdit
+          contact={contact}
+          callback={handleReloadContact}
+          close={close}
+        />
       )
     },
     {
