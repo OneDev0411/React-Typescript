@@ -26,11 +26,13 @@ import { PhonesInlineEdit } from './columns-inline-edit/Phones'
 import { TagsInlineEdit } from './columns-inline-edit/Tags'
 import { FlowsCell } from './columns/Flows'
 import LastTouched from './columns/LastTouched'
+import { TagsCell } from './columns/Tags'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     cell: {
-      paddingLeft: theme.spacing(2),
+      width: '100%',
+      padding: theme.spacing(0, 1, 0, 2),
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis'
@@ -88,7 +90,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       header: () => <HeaderColumn text="Tags" iconPath={mdiTag} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
-          {contact.tags?.slice(0, 2).join(', ')}
+          <TagsCell contact={contact} />
         </div>
       ),
       renderInlineEdit: ({ row: contact }, close) => (

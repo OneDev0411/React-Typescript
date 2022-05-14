@@ -1,132 +1,49 @@
-import { useMemo, memo } from 'react'
+import { useMemo } from 'react'
 
-import { Box, Tooltip, Chip, makeStyles } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
-
-import { PopoverContactTagSelector } from '@app/components/Pages/Dashboard/Contacts/components/TagSelector'
-import type { SelectorOption } from '@app/views/components/TagSelector'
-import { updateContactTags } from 'actions/contacts/update-contact-tags'
-import { getContact } from 'models/contacts/get-contact'
+import { Typography, Chip, Theme, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(
-  theme => ({
+  (theme: Theme) => ({
     container: {
       maxWidth: '100%',
-      display: 'inline-flex',
-      cursor: 'pointer',
-      flexWrap: 'nowrap'
+      display: 'flex',
+      flexWrap: 'nowrap',
+      alignItems: 'center',
+      alignContent: 'space-between'
     },
-    noTag: {
-      fontSize: theme.typography.caption.fontSize
-    },
-    tagLabel: {
-      fontSize: theme.typography.caption.fontSize,
-      marginRight: theme.spacing(0.5)
-    },
-    chip: {
-      maxWidth: '100%',
-      marginRight: theme.spacing(0.25)
+    tags: {
+      flexGrow: 1
     }
   }),
   { name: 'ContactListTagsString' }
 )
 
+const MAX_TAGS: number = 2
+
 interface Props {
   contact: IContact
-  isParkTabActive: boolean
-  hasAttributeFilters: boolean
-  reloadContacts: () => void
 }
 
-const TagsString = ({
-  contact,
-  hasAttributeFilters,
-  isParkTabActive,
-  reloadContacts
-}: Props) => {
+export function TagsCell({ contact }: Props) {
   const classes = useStyles()
-  const dispatch = useDispatch()
-
   const tags = useMemo(() => contact?.tags || [], [contact?.tags])
 
-  const tagsCount = tags.length
-  const showingTags: string[] = []
-  const currentTags = tags.map(tag => {
-    if (showingTags.length < 2) {
-      showingTags.push(tag)
-    }
-
-    return {
-      title: tag,
-      value: tag
-    }
-  })
-
-  const invisibleTagsCount = tagsCount - showingTags.length
-
-  const handleChangeTag = async (tags: SelectorOption[] = []) => {
-    try {
-      if (isParkTabActive || (hasAttributeFilters && tags.length === 0)) {
-        return reloadContacts()
-      }
-
-      const response = await getContact(contact.id, {
-        associations: []
-      })
-      const newTags = response.data?.tags ?? []
-
-      dispatch(updateContactTags(contact.id, newTags))
-    } catch (error) {
-      console.error(error)
-    }
+  if (tags.length === 0) {
+    return null
   }
 
   return (
-    <PopoverContactTagSelector
-      showManageTags
-      label={`${contact.display_name}'s Tag`}
-      anchorRenderer={onClick => (
-        <Tooltip title="Click to edit">
-          <Box
-            className={classes.container}
-            onClick={event => {
-              event.stopPropagation()
-              onClick(event)
-            }}
-          >
-            {tagsCount === 0 ? (
-              <span className={classes.noTag}>Add Tags</span>
-            ) : (
-              <Box maxWidth="100%">
-                <span className={classes.tagLabel}>TAGS:</span>
-                {showingTags.map(tag => (
-                  <Chip
-                    key={tag}
-                    variant="outlined"
-                    size="small"
-                    className={classes.chip}
-                    label={tag}
-                  />
-                ))}
-                {invisibleTagsCount > 0 && (
-                  <Chip
-                    variant="outlined"
-                    size="small"
-                    label={`+ ${invisibleTagsCount}`}
-                  />
-                )}
-              </Box>
-            )}
-          </Box>
-        </Tooltip>
+    <div className={classes.container}>
+      <Typography noWrap className={classes.tags}>
+        {tags.slice(0, MAX_TAGS).join(', ')}
+      </Typography>
+      {tags.length > MAX_TAGS && (
+        <Chip
+          variant="outlined"
+          size="small"
+          label={`${tags.length - MAX_TAGS} more`}
+        />
       )}
-      value={currentTags}
-      filter={{
-        selectedIds: [contact.id]
-      }}
-      callback={handleChangeTag}
-    />
+    </div>
   )
 }
-
-export default memo(TagsString)
