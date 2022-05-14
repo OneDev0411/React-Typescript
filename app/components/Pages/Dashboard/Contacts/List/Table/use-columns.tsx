@@ -12,7 +12,6 @@ import { useDispatch } from 'react-redux'
 import { useBreakpoint } from '@app/hooks/use-breakpoint'
 import {
   getAttributeFromSummary,
-  CRM_LIST_DEFAULT_ASSOCIATIONS,
   updateContactQuery as defaultUpdateContactQuery
 } from '@app/models/contacts/helpers'
 import { getContact } from '@app/store_actions/contacts/get-contact'
@@ -63,10 +62,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
 
   const handleReloadContact = (contactId: UUID) => {
     const query = {
-      associations: [
-        ...defaultUpdateContactQuery.associations,
-        ...CRM_LIST_DEFAULT_ASSOCIATIONS
-      ]
+      associations: [...defaultUpdateContactQuery.associations, 'contact.flows']
     }
 
     dispatch(getContact(contactId, query))
