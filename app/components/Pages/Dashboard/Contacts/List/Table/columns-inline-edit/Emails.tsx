@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { makeStyles, Theme } from '@material-ui/core'
 import { mdiEmailOutline } from '@mdi/js'
 
@@ -7,10 +9,7 @@ import SendEmailButton from '@app/views/components/SendEmailButton'
 import { SvgIcon, muiIconSizes } from '@app/views/components/SvgIcons'
 
 import { InlineEditAttributeCell } from './AttributeCell'
-
-interface Props {
-  contact: IContactWithAssoc<'contact.attributes'>
-}
+import { InlineEditColumnsProps as EmailsInlineEditProps } from './type'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -24,14 +23,18 @@ const useStyles = makeStyles(
   }
 )
 
-export function EmailsInlineEdit({ contact }: Props) {
+export function EmailsInlineEdit({ contact, callback }: EmailsInlineEditProps) {
   const classes = useStyles()
+  const updateContact = useCallback(() => {
+    callback?.(contact.id)
+  }, [callback, contact.id])
 
   return (
     <InlineEditAttributeCell
       attributeName="email"
       addLabel="Add Another Email"
-      contact={contact}
+      contact={contact as unknown as IContactWithAssoc<'contact.attributes'>}
+      callback={updateContact}
       validateRules={{
         text: (value: string) => isEmail(value)
       }}

@@ -108,11 +108,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
         <div className={classes.cell}>{contact.phone_number}</div>
       ),
       renderInlineEdit: ({ row: contact }) => (
-        <PhonesInlineEdit
-          contact={
-            contact as unknown as IContactWithAssoc<'contact.attributes'>
-          }
-        />
+        <PhonesInlineEdit contact={contact} callback={handleReloadContact} />
       )
     },
     {
@@ -123,11 +119,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
         <div className={classes.cell}>{contact.email}</div>
       ),
       renderInlineEdit: ({ row: contact }) => (
-        <EmailsInlineEdit
-          contact={
-            contact as unknown as IContactWithAssoc<'contact.attributes'>
-          }
-        />
+        <EmailsInlineEdit contact={contact} callback={handleReloadContact} />
       )
     },
     {

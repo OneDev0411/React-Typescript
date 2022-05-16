@@ -29,7 +29,8 @@ export interface UseAttributeCell {
 
 export function useAttributeCell(
   contact: IContactWithAssoc<'contact.attributes'>,
-  attributeName: string
+  attributeName: string,
+  callback?: () => void
 ): UseAttributeCell {
   const notify = useNotify()
   const attributeDef = useSelector<IAppState, Nullable<IContactAttributeDef>>(
@@ -68,6 +69,8 @@ export function useAttributeCell(
         ])
         const newAttrAdded = response.data[0]
 
+        callback?.()
+
         setList(prevList => {
           return [...prevList, newAttrAdded]
         })
@@ -79,13 +82,14 @@ export function useAttributeCell(
         prependNewValue()
       }
     },
-    [attributeDef?.id, contact.id, notify, prependNewValue]
+    [attributeDef?.id, callback, contact.id, notify, prependNewValue]
   )
   const update = useCallback(
     async (attributeId: UUID, data: Record<string, unknown>) => {
       try {
         const attribute = await updateAttribute(contact.id, attributeId, data)
 
+        callback?.()
         setList(prevList => {
           return prevList.map(attr => {
             if (attr.id === attributeId) {
@@ -98,6 +102,7 @@ export function useAttributeCell(
             return attr
           })
         })
+
         notify({
           status: 'success',
           message: 'Updated!'
@@ -109,12 +114,13 @@ export function useAttributeCell(
         })
       }
     },
-    [contact.id, notify]
+    [callback, contact.id, notify]
   )
   const remove = useCallback(
     async (attributeId: UUID) => {
       try {
         await deleteAttribute(contact.id, attributeId)
+        callback?.()
 
         setList(prevList => {
           return prevList.filter(attr => attr.id !== attributeId)
@@ -130,7 +136,7 @@ export function useAttributeCell(
         })
       }
     },
-    [contact.id, notify]
+    [callback, contact.id, notify]
   )
 
   return {

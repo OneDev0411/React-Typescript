@@ -1,17 +1,21 @@
+import { useCallback } from 'react'
+
 import { isPhoneNumber } from '@app/utils/validations'
 
 import { InlineEditAttributeCell } from './AttributeCell'
+import { InlineEditColumnsProps as PhonesInlineEditProps } from './type'
 
-interface Props {
-  contact: IContactWithAssoc<'contact.attributes'>
-}
+export function PhonesInlineEdit({ contact, callback }: PhonesInlineEditProps) {
+  const updateContact = useCallback(() => {
+    callback?.(contact.id)
+  }, [callback, contact.id])
 
-export function PhonesInlineEdit({ contact }: Props) {
   return (
     <InlineEditAttributeCell
       attributeName="phone_number"
       addLabel="Add Another Phone Number"
-      contact={contact}
+      contact={contact as unknown as IContactWithAssoc<'contact.attributes'>}
+      callback={updateContact}
       validateRules={{
         text: (value: string) => isPhoneNumber(value)
       }}

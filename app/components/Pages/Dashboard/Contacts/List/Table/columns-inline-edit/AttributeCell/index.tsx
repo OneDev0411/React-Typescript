@@ -8,6 +8,7 @@ interface Props extends Pick<AttributeProps, 'validateRules'> {
   attributeName: string
   addLabel?: string
   actions?: AttributeProps['actions']
+  callback?: () => void
 }
 
 const useStyles = makeStyles(
@@ -29,6 +30,7 @@ const useStyles = makeStyles(
 export function InlineEditAttributeCell({
   contact,
   actions,
+  callback,
   attributeName,
   validateRules,
   addLabel = 'Add New Value'
@@ -43,7 +45,7 @@ export function InlineEditAttributeCell({
     create,
     update,
     remove
-  } = useAttributeCell(contact, attributeName)
+  } = useAttributeCell(contact, attributeName, callback)
 
   if (!attributeDef) {
     return <span>Attribute is not valid</span>
