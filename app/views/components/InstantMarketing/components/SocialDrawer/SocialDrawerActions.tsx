@@ -29,7 +29,9 @@ function SocialDrawerActions({
   const setStep = useSetSocialDrawerStep()
 
   const hasInstagramButton =
-    instance.type === 'brand_asset' || instance.template.medium !== 'Social'
+    instance.type === 'brand_asset'
+      ? instance.medium === 'Social'
+      : instance.template.medium === 'Social'
 
   const gotoScheduleStep = () => setStep('Schedule')
 
