@@ -33,8 +33,7 @@ export function EmailsInlineEdit({ contact }: Props) {
       addLabel="Add Another Email"
       contact={contact}
       validateRules={{
-        text: (value: string) => isEmail(value),
-        label: () => undefined
+        text: (value: string) => isEmail(value)
       }}
       actions={attribute => {
         const targetContact = attribute

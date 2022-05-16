@@ -13,8 +13,7 @@ export function PhonesInlineEdit({ contact }: Props) {
       addLabel="Add Another Phone Number"
       contact={contact}
       validateRules={{
-        text: () => undefined,
-        label: (value: string) => isPhoneNumber(value)
+        text: (value: string) => isPhoneNumber(value)
       }}
     />
   )

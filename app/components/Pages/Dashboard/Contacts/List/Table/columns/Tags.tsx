@@ -34,7 +34,7 @@ export function TagsCell({ contact }: Props) {
 
   return (
     <div className={classes.container}>
-      <Typography noWrap className={classes.tags}>
+      <Typography variant="inherit" noWrap className={classes.tags}>
         {tags.slice(0, MAX_TAGS).join(', ')}
       </Typography>
       {tags.length > MAX_TAGS && (

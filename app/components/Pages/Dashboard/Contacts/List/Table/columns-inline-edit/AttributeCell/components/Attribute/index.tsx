@@ -27,7 +27,7 @@ export interface Props {
   attributeDef: IContactAttributeDef
   attribute?: IContactAttribute
   actions?: (attribute?: IContactAttribute) => ReactNode
-  validateRules?: Record<Partial<keyof FormData>, Validate>
+  validateRules?: { [K in keyof FormData]?: Validate }
   onDiscard?: () => void
   onAdd?: UseAttributeCell['create']
   onUpdate?: UseAttributeCell['update']
