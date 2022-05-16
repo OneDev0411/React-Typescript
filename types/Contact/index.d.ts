@@ -77,7 +77,7 @@ declare interface IContact extends IContactBase {
   // it doesn't exist when fetching a single contact. it exist on list
   // probably it's coming with some association). We need to figure it out
   brand?: UUID
-
+  birthday: Nullable<string>
   display_name: string
   profile_image_url: string | null
   last_touch: number | null

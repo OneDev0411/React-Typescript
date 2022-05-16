@@ -24,6 +24,7 @@ import { EmailsInlineEdit } from './columns-inline-edit/Emails'
 import { FlowsInlineEdit } from './columns-inline-edit/Flows'
 import { PhonesInlineEdit } from './columns-inline-edit/Phones'
 import { TagsInlineEdit } from './columns-inline-edit/Tags'
+import { BirthdayCell } from './columns/Birthday'
 import { FlowsCell } from './columns/Flows'
 import LastTouched from './columns/LastTouched'
 import { TagsCell } from './columns/Tags'
@@ -155,7 +156,11 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       id: 'birthday',
       hidden: breakpoint !== 'xl',
       header: () => <HeaderColumn text="Birthday" iconPath={mdiCake} />,
-      render: ({ row: contact }) => <div>-</div>
+      render: ({ row: contact }) => (
+        <div className={classes.cell}>
+          <BirthdayCell contact={contact} />
+        </div>
+      )
     }
   ]
 }
