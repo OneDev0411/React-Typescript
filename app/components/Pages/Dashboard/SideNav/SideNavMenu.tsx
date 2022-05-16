@@ -127,7 +127,7 @@ function SideNavMenu(props: WithRouterProps) {
       to: '/dashboard/overview'
     },
     {
-      access: user ? [] : ['CRM'],
+      access: ['CRM'],
       hasChildrenNotification: !!(
         inboxNotificationNumber || chatRoomsNotificationsNumber
       ),
