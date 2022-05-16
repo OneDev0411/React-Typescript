@@ -62,6 +62,7 @@ export interface InstantMarketingProps {
   customActions?: ReactNode
   saveButtonWrapper?: (saveButton: ReactNode) => ReactNode
   templatePurpose?: IMarketingTemplatePurpose
+  shouldSkipVideoGif?: boolean
 }
 
 export default function InstantMarketing({
@@ -83,7 +84,8 @@ export default function InstantMarketing({
   actionButtonsDisabled = false,
   customActions,
   saveButtonWrapper,
-  templatePurpose: initialTemplatePurpose
+  templatePurpose: initialTemplatePurpose,
+  shouldSkipVideoGif = false
 }: InstantMarketingProps) {
   const confirmation = useContext(ConfirmationModalContext)
 
@@ -147,6 +149,7 @@ export default function InstantMarketing({
           customActions={customActions}
           saveButtonWrapper={saveButtonWrapper}
           templatePurpose={templatePurpose}
+          shouldSkipVideoGif={shouldSkipVideoGif}
         />
       )}
     </>
