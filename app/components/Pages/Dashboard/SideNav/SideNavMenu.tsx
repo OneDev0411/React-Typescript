@@ -63,7 +63,7 @@ const useStyles = makeStyles(
       position: 'fixed',
       top: 0,
       left: 0,
-      zIndex: 100,
+      zIndex: theme.zIndex.sideNavDrawer,
       display: 'flex',
       flexDirection: 'column',
       backgroundColor: theme.navbar.background.color
