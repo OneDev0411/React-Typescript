@@ -16,7 +16,6 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 
 import { Props } from '..'
-import Chat from '../../../components/ChatButton'
 
 import AddEvent from './AddEvent'
 import AddNote from './AddNote'
@@ -74,8 +73,6 @@ export const Actions = ({
             </Tooltip>
           )}
         />
-
-        <Chat contact={contact} size={muiIconSizes.medium} />
 
         <SendContactCard
           contact={contact}
