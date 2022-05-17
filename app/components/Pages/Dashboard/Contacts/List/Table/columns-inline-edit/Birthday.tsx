@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import { Button, Theme, makeStyles } from '@material-ui/core'
+import { Typography, Button, Theme, makeStyles } from '@material-ui/core'
 
 import { DateField } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/EditMode/Value/fields'
 import { convertDateToTimestamp } from '@app/utils/date-utils'
@@ -20,6 +20,10 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       padding: theme.spacing(1.5, 1)
+    },
+    error: {
+      marginTop: theme.spacing(1),
+      marginLeft: theme.spacing(1)
     },
     save: {
       marginTop: theme.spacing(1.5)
@@ -91,6 +95,16 @@ export function BirthdayInlineEdit({
   return (
     <div className={classes.container}>
       <DateField onChange={onChangeValue} value={birthday} />
+      {error && (
+        <Typography
+          noWrap
+          variant="caption"
+          color="error"
+          className={classes.error}
+        >
+          {error}
+        </Typography>
+      )}
       <Button
         fullWidth
         disabled={!isDirty}
