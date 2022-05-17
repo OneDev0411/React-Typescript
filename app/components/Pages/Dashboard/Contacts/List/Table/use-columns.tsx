@@ -20,6 +20,7 @@ import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderCo
 import { SelectionCount } from '@app/views/components/Grid/Table/features/Selection/SelectionCount'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
+import { BirthdayInlineEdit } from './columns-inline-edit/Birthday'
 import { EmailsInlineEdit } from './columns-inline-edit/Emails'
 import { FlowsInlineEdit } from './columns-inline-edit/Flows'
 import { PhonesInlineEdit } from './columns-inline-edit/Phones'
@@ -160,6 +161,13 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
         <div className={classes.cell}>
           <BirthdayCell contact={contact} />
         </div>
+      ),
+      renderInlineEdit: ({ row: contact }, close) => (
+        <BirthdayInlineEdit
+          contact={contact}
+          callback={handleReloadContact}
+          close={close}
+        />
       )
     }
   ]
