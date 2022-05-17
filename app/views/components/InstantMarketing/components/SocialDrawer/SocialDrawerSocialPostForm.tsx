@@ -38,10 +38,10 @@ function SocialDrawerSocialPostForm({
         }`,
       onError: error => {
         if (error.response?.body.code === 'ResourceNotFound') {
-          return 'There is something wrong with this account'
+          return 'This account has been disconnected. Please try with another account or contact support for more information.'
         }
 
-        return 'Something went wrong. Please try again.'
+        return 'Something went wrong. Please contact support for more information.'
       }
     },
     onSuccess: () => {
@@ -72,7 +72,7 @@ function SocialDrawerSocialPostForm({
     } catch (error) {
       if (error?.response.body.code === 'ResourceNotFound') {
         return {
-          facebookPage: 'There is something wrong with this account'
+          facebookPage: 'The selected account has been disconnected.'
         }
       }
     }
