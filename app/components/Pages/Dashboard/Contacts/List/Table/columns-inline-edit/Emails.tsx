@@ -32,7 +32,11 @@ export function EmailsInlineEdit({ contact, callback }: EmailsInlineEditProps) {
   return (
     <InlineEditAttributeCell
       attributeName="email"
-      addLabel="Add Another Email"
+      addLabel={
+        (contact.emails || []).length > 1
+          ? 'Add Another Email Address'
+          : 'Add An Email Address'
+      }
       contact={contact}
       callback={updateContact}
       validateRules={{

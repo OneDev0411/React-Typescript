@@ -13,7 +13,11 @@ export function PhonesInlineEdit({ contact, callback }: PhonesInlineEditProps) {
   return (
     <InlineEditAttributeCell
       attributeName="phone_number"
-      addLabel="Add Another Phone Number"
+      addLabel={
+        (contact.phone_numbers || []).length > 1
+          ? 'Add Another Phone Number'
+          : 'Add An Phone Number'
+      }
       contact={contact}
       callback={updateContact}
       validateRules={{
