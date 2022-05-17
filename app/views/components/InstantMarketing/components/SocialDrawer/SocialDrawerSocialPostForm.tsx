@@ -36,7 +36,13 @@ function SocialDrawerSocialPostForm({
         `The Instagram post has been ${
           isScheduledRef.current ? 'scheduled' : 'sent'
         }`,
-      onError: 'Something went wrong. Please try again.'
+      onError: error => {
+        if (error.response?.body.code === 'ResourceNotFound') {
+          return 'There is something wrong with this account'
+        }
+
+        return 'Something went wrong. Please try again.'
+      }
     },
     onSuccess: () => {
       if (isScheduledRef.current) {
