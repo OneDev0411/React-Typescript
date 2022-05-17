@@ -26,8 +26,10 @@ import { FlowsInlineEdit } from './columns-inline-edit/Flows'
 import { PhonesInlineEdit } from './columns-inline-edit/Phones'
 import { TagsInlineEdit } from './columns-inline-edit/Tags'
 import { BirthdayCell } from './columns/Birthday'
+import { EmailsCell } from './columns/Emails'
 import { FlowsCell } from './columns/Flows'
 import LastTouched from './columns/LastTouched'
+import { PhonesCell } from './columns/Phones'
 import { TagsCell } from './columns/Tags'
 
 const useStyles = makeStyles(
@@ -107,7 +109,9 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       id: 'phone',
       header: () => <HeaderColumn text="Phone" iconPath={mdiPhone} />,
       render: ({ row: contact }) => (
-        <div className={classes.cell}>{contact.phone_number}</div>
+        <div className={classes.cell}>
+          <PhonesCell contact={contact} />
+        </div>
       ),
       renderInlineEdit: ({ row: contact }) => (
         <PhonesInlineEdit contact={contact} callback={handleReloadContact} />
@@ -118,7 +122,9 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       hidden: ['xs'].includes(breakpoint),
       header: () => <HeaderColumn text="Email" iconPath={mdiEmail} />,
       render: ({ row: contact }) => (
-        <div className={classes.cell}>{contact.email}</div>
+        <div className={classes.cell}>
+          <EmailsCell contact={contact} />
+        </div>
       ),
       renderInlineEdit: ({ row: contact }) => (
         <EmailsInlineEdit contact={contact} callback={handleReloadContact} />

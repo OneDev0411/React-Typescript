@@ -85,8 +85,11 @@ declare interface IContact extends IContactBase {
   phone_number?: string
   touch_freq?: number | null
 
-  email: string | null
-  emails: string[] | null
+  phone_number?: Nullable<string>
+  phone_numbers: Nullable<string[]>
+
+  email: Nullable<string>
+  emails: Nullable<string[]>
 
   partner_email: string | null
   partner_first_name: string | null
