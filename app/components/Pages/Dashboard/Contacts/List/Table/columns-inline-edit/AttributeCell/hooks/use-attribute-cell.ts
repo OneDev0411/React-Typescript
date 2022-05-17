@@ -28,7 +28,7 @@ export interface UseAttributeCell {
  */
 
 export function useAttributeCell(
-  contact: IContactWithAssoc<'contact.attributes'>,
+  contact: IContact,
   attributeName: string,
   callback?: () => void
 ): UseAttributeCell {
@@ -46,7 +46,7 @@ export function useAttributeCell(
 
   useEffectOnce(() => {
     const handleFilterAttribute = () => {
-      const filteredAttributes = contact.attributes.filter(
+      const filteredAttributes = contact.attributes!.filter(
         attr => attr.attribute_def.id === attributeDef?.id
       )
 

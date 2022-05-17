@@ -33,7 +33,7 @@ export function EmailsInlineEdit({ contact, callback }: EmailsInlineEditProps) {
     <InlineEditAttributeCell
       attributeName="email"
       addLabel="Add Another Email"
-      contact={contact as unknown as IContactWithAssoc<'contact.attributes'>}
+      contact={contact}
       callback={updateContact}
       validateRules={{
         text: (value: string) => isEmail(value)

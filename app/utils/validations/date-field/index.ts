@@ -7,7 +7,7 @@ interface Select {
   value: number | null
 }
 
-interface Values {
+export interface Values {
   day: Select
   month: Select
   year: number | string | null

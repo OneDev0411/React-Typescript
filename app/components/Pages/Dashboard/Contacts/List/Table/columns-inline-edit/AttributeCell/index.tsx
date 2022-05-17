@@ -4,7 +4,7 @@ import { Attribute, Props as AttributeProps } from './components/Attribute'
 import { useAttributeCell } from './hooks/use-attribute-cell'
 
 interface Props extends Pick<AttributeProps, 'validateRules'> {
-  contact: IContactWithAssoc<'contact.attributes'>
+  contact: IContact
   attributeName: string
   addLabel?: string
   actions?: AttributeProps['actions']

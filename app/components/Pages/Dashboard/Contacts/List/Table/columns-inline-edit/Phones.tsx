@@ -14,7 +14,7 @@ export function PhonesInlineEdit({ contact, callback }: PhonesInlineEditProps) {
     <InlineEditAttributeCell
       attributeName="phone_number"
       addLabel="Add Another Phone Number"
-      contact={contact as unknown as IContactWithAssoc<'contact.attributes'>}
+      contact={contact}
       callback={updateContact}
       validateRules={{
         text: (value: string) => isPhoneNumber(value)
