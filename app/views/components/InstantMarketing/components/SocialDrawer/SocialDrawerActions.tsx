@@ -28,10 +28,10 @@ function SocialDrawerActions({
   const classes = useStyles()
   const setStep = useSetSocialDrawerStep()
 
+  // Currently, we only support Instagram posts for social template instance
   const hasInstagramButton =
-    instance.type === 'brand_asset'
-      ? instance.medium === 'Social'
-      : instance.template.medium === 'Social'
+    instance.type === 'template_instance' &&
+    instance.template.medium === 'Social'
 
   const gotoScheduleStep = () => setStep('Schedule')
 
