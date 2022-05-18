@@ -56,7 +56,7 @@ export function EmailsInlineEdit({ contact, callback }: EmailsInlineEditProps) {
               targetContact as unknown as IContact
             ])}
             render={({ onClick, testId }) => (
-              <Tooltip title="Sena an Email">
+              <Tooltip title="Send an Email">
                 <div
                   onClick={onClick}
                   data-test={testId}
