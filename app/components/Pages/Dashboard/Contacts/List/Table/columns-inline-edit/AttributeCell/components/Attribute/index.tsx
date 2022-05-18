@@ -145,16 +145,20 @@ export function Attribute({
             {actions(attribute)}
           </div>
         )}
-        <div className={classes.actionButton} onClick={handleCopyAttribute}>
-          <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
-        </div>
-        <div className={classes.actionButton} onClick={handleDeleteAttribute}>
-          <SvgIcon
-            path={isDeleting ? mdiLoading : mdiTrashCanOutline}
-            spin={!!isDeleting}
-            size={muiIconSizes.small}
-          />
-        </div>
+        <Tooltip title="Copy">
+          <div className={classes.actionButton} onClick={handleCopyAttribute}>
+            <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
+          </div>
+        </Tooltip>
+        <Tooltip title="Delete">
+          <div className={classes.actionButton} onClick={handleDeleteAttribute}>
+            <SvgIcon
+              path={isDeleting ? mdiLoading : mdiTrashCanOutline}
+              spin={!!isDeleting}
+              size={muiIconSizes.small}
+            />
+          </div>
+        </Tooltip>
       </>
     )
   }

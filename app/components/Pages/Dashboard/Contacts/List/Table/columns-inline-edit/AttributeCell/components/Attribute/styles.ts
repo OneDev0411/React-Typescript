@@ -40,6 +40,9 @@ export const useAttributeStyles = makeStyles(
       color: theme.palette.action.disabled,
       '&:not(:last-child)': {
         marginRight: theme.spacing(0.5)
+      },
+      '&:hover': {
+        color: theme.palette.grey[800]
       }
     },
     errors: {

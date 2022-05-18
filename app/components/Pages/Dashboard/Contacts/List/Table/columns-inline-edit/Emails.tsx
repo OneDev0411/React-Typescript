@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { makeStyles, Theme } from '@material-ui/core'
+import { Tooltip, Theme, makeStyles } from '@material-ui/core'
 import { mdiEmailOutline } from '@mdi/js'
 
 import { normalizeContactsForEmailCompose } from '@app/models/email/helpers/normalize-contact'
@@ -15,7 +15,10 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     emailButton: {
       cursor: 'pointer',
-      color: theme.palette.action.disabled
+      color: theme.palette.action.disabled,
+      '&:hover': {
+        color: theme.palette.grey[800]
+      }
     }
   }),
   {
@@ -53,13 +56,15 @@ export function EmailsInlineEdit({ contact, callback }: EmailsInlineEditProps) {
               targetContact as unknown as IContact
             ])}
             render={({ onClick, testId }) => (
-              <div
-                onClick={onClick}
-                data-test={testId}
-                className={classes.emailButton}
-              >
-                <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
-              </div>
+              <Tooltip title="Sena an Email">
+                <div
+                  onClick={onClick}
+                  data-test={testId}
+                  className={classes.emailButton}
+                >
+                  <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
+                </div>
+              </Tooltip>
             )}
           />
         )
