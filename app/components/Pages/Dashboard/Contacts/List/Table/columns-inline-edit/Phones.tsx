@@ -16,7 +16,7 @@ export function PhonesInlineEdit({ contact, callback }: PhonesInlineEditProps) {
       addLabel={
         (contact.phone_numbers || []).length > 1
           ? 'Add Another Phone Number'
-          : 'Add An Phone Number'
+          : 'Add a Phone Number'
       }
       contact={contact}
       callback={updateContact}
