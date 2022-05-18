@@ -100,13 +100,16 @@ export function Attribute({
           title={Object.values(errors).map(
             err =>
               err?.message && (
-                <span className={classes.error}>{err.message}</span>
+                <>
+                  <span>{err.message}</span>
+                  <br />
+                </>
               )
           )}
         >
           <div className={classes.errors}>
-            <span>Invalid!</span>
             <SvgIcon path={mdiAlertCircleOutline} size={muiIconSizes.small} />
+            <span className={classes.errorLabel}>Invalid</span>
           </div>
         </Tooltip>
       )
@@ -125,7 +128,7 @@ export function Attribute({
           </ButtonBase>
           <ButtonBase
             disableRipple
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isDirty}
             className={classes.discardButton}
             onClick={() => {
               reset()

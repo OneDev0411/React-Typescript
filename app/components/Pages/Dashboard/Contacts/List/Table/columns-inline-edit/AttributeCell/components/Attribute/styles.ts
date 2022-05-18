@@ -30,11 +30,20 @@ export const useAttributeStyles = makeStyles(
       marginRight: theme.spacing(0.75)
     },
     saveButton: {
-      marginRight: theme.spacing(0.5),
+      marginRight: theme.spacing(0.75),
       color: theme.palette.primary.main,
-      ...theme.typography.body2
+      ...theme.typography.body2,
+      '&:disabled': {
+        color: theme.palette.action.disabled
+      }
     },
-    discardButton: theme.typography.body2,
+    discardButton: {
+      color: theme.palette.grey[900],
+      ...theme.typography.body2,
+      '&:disabled': {
+        color: theme.palette.action.disabled
+      }
+    },
     actionButton: {
       cursor: 'pointer',
       color: theme.palette.action.disabled,
@@ -52,8 +61,8 @@ export const useAttributeStyles = makeStyles(
       cursor: 'help',
       ...theme.typography.button
     },
-    error: {
-      display: 'block'
+    errorLabel: {
+      marginLeft: theme.spacing(0.5)
     }
   }),
   {
