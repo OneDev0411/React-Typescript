@@ -64,7 +64,7 @@ export function InlineEditAttributeCell({
           onDelete={remove}
         />
       ))}
-      {isAppending ? (
+      {isAppending || list.length === 0 ? (
         <Attribute
           attributeDef={attributeDef}
           validateRules={validateRules}
