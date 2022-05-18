@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { memo } from 'react'
 
 import { ListItemText, makeStyles, Theme } from '@material-ui/core'
 
@@ -25,46 +25,52 @@ const useStyles = makeStyles(
   { name: 'CalendarListItemText' }
 )
 
-export default function CalendarListItemText({ event }: Props) {
-  let eventSubTitle
-  let eventTitleLink
-  const eventTitle = getTitle(event)
-
+function CalendarListItemText({ event }: Props) {
   const classes = useStyles()
 
   const contact = event.people?.[0]?.type === 'contact' ? event.people[0] : null
 
-  const humanizedEventTime = useMemo(() => {
-    const eventTime = new Date(event.next_occurence)
+  const baseTitle = getTitle(event)
+  const getEventTitle = () => {
+    if (isDealEvent(event)) {
+      return <Link to={`/dashboard/deals/${event.deal}`}>{baseTitle}</Link>
+    }
 
-    return fromNow(eventTime)
-  }, [event.next_occurence])
+    if (contact) {
+      return <Link to={`/dashboard/contacts/${contact.id}`}>{baseTitle}</Link>
+    }
 
-  // Build titles
-  if (isDealEvent(event)) {
-    eventTitleLink = (
-      <Link to={`/dashboard/deals/${event.deal}`}>{eventTitle}</Link>
-    )
+    return baseTitle
   }
+  const getEventSubTitle = () => {
+    const baseDate = new Date(event.timestamp * 1000)
+    const nextOccurrence = new Date(event.next_occurence)
 
-  if (contact) {
-    eventTitleLink = (
-      <Link to={`/dashboard/contacts/${contact.id}`}>{eventTitle}</Link>
-    )
-  }
+    if (event.all_day) {
+      baseDate.setFullYear(
+        nextOccurrence.getUTCFullYear(),
+        baseDate.getUTCMonth(),
+        baseDate.getUTCDate()
+      )
+      baseDate.setHours(baseDate.getUTCHours(), baseDate.getUTCMinutes(), 0, 0)
+    }
 
-  // Build subTitles
-  eventSubTitle = humanizedEventTime
+    const humanizedEventTime = fromNow(baseDate)
 
-  if (event.type === 'home_anniversary' && contact) {
-    eventSubTitle = `${eventTitle} ${humanizedEventTime}`
+    if (event.type === 'home_anniversary' && contact) {
+      return `${baseTitle} ${humanizedEventTime}`
+    }
+
+    return humanizedEventTime
   }
 
   return (
     <ListItemText
       classes={{ root: classes.root }}
-      primary={eventTitleLink || eventTitle}
-      secondary={eventSubTitle}
+      primary={getEventTitle()}
+      secondary={getEventSubTitle()}
     />
   )
 }
+
+export default memo(CalendarListItemText)
