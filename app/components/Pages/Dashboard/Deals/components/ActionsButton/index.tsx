@@ -40,6 +40,7 @@ import {
 import MakeVisibleToAdmin from '../../Create/MakeVisibleToAdmin'
 import PdfSplitter from '../../PdfSplitter'
 import UploadManager from '../../UploadManager'
+import { EmbedApplication } from '../EmbedApplication'
 import { TaskACL } from '../TaskACL'
 
 import { SelectItemDrawer } from './components/SelectItemDrawer'
@@ -93,6 +94,7 @@ interface State {
   isTasksDrawerOpen: boolean
   isMakeVisibleToAdminFormOpen: boolean
   isTaskAclDialogOpen: boolean
+  isApplicationOpen: boolean
   multipleItemsSelection: {
     items: IDealFile[]
     title: string
@@ -125,6 +127,7 @@ class ActionsButton extends React.Component<
       isTasksDrawerOpen: false,
       isMakeVisibleToAdminFormOpen: false,
       isTaskAclDialogOpen: false,
+      isApplicationOpen: false,
       multipleItemsSelection: null
     }
 
@@ -154,7 +157,8 @@ class ActionsButton extends React.Component<
       'email-form': this.emailForm,
       'email-file': this.emailFile,
       'email-envelope': this.emailEnvelope,
-      'task-acl': this.handleShowTaskAclDialog
+      'task-acl': this.handleShowTaskAclDialog,
+      'application-open': this.openApplication
     }
 
     this.handleSelectAction = this.handleSelectAction.bind(this)
@@ -459,6 +463,11 @@ class ActionsButton extends React.Component<
     })
   }
 
+  openApplication = () =>
+    this.setState({
+      isApplicationOpen: true
+    })
+
   render() {
     const isTaskViewActionActive =
       this.props.actionsState.mode.type === 'View/Print' &&
@@ -636,6 +645,14 @@ class ActionsButton extends React.Component<
             }
           />
         )}
+
+        {this.state.isApplicationOpen &&
+          this.props.task?.task_type === 'Application' && (
+            <EmbedApplication
+              task={this.props.task}
+              onClose={() => this.setState({ isApplicationOpen: false })}
+            />
+          )}
       </div>
     )
   }
