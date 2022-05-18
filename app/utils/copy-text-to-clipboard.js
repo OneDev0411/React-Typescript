@@ -1,45 +1,59 @@
 'use strict'
 
 // / from https://github.com/sindresorhus/copy-text-to-clipboard
-module.exports = input => {
-  const el = document.createElement('textarea')
+function fallbackCopyTextToClipboard(input, { target = document.body } = {}) {
+  const element = document.createElement('textarea')
+  const previouslyFocusedElement = document.activeElement
 
-  el.value = input
+  element.value = input
 
   // Prevent keyboard from showing on mobile
-  el.setAttribute('readonly', '')
+  element.setAttribute('readonly', '')
 
-  el.style.contain = 'strict'
-  el.style.position = 'absolute'
-  el.style.left = '-9999px'
-  el.style.fontSize = '12pt' // Prevent zooming on iOS
+  element.style.contain = 'strict'
+  element.style.position = 'absolute'
+  element.style.left = '-9999px'
+  element.style.fontSize = '12pt' // Prevent zooming on iOS
 
   const selection = document.getSelection()
-  let originalRange = false
+  const originalRange = selection.rangeCount > 0 && selection.getRangeAt(0)
 
-  if (selection.rangeCount > 0) {
-    originalRange = selection.getRangeAt(0)
-  }
-
-  document.body.appendChild(el)
-  el.select()
+  target.append(element)
+  element.select()
 
   // Explicit selection workaround for iOS
-  el.selectionStart = 0
-  el.selectionEnd = input.length
+  element.selectionStart = 0
+  element.selectionEnd = input.length
 
-  let success = false
+  let isSuccess = false
 
   try {
-    success = document.execCommand('copy')
-  } catch (err) {}
+    isSuccess = document.execCommand('copy')
+  } catch {}
 
-  document.body.removeChild(el)
+  element.remove()
 
   if (originalRange) {
     selection.removeAllRanges()
     selection.addRange(originalRange)
   }
 
-  return success
+  // Get the focus back on the previously focused element, if any
+  if (previouslyFocusedElement) {
+    previouslyFocusedElement.focus()
+  }
+
+  return isSuccess
+}
+
+module.exports = input => {
+  if (!navigator.clipboard) {
+    fallbackCopyTextToClipboard(input)
+
+    return
+  }
+
+  navigator.clipboard.writeText(input).then(() => {
+    console.log('Copying to clipboard was successful!')
+  })
 }
