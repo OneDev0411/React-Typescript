@@ -11,7 +11,7 @@ import {
   QuestionForm
 } from 'components/QuestionWizard'
 
-const APP_URL = '/static/apps/hello-world/dist/bundle.js'
+// const APP_URL = '/static/apps/hello-world/dist/bundle.js'
 
 interface Props {
   task: IDealTask
@@ -24,7 +24,9 @@ export function EmbedApplication({ task, onClose }: Props) {
 
   useEffectOnce(() => {
     ;(async () => {
-      const module = await import(/* webpackIgnore: true */ APP_URL)
+      const module = await import(
+        /* webpackIgnore: true */ task.application.url
+      )
 
       setModule(module)
     })()
