@@ -185,6 +185,7 @@ export function Attribute({
           render={props => (
             <InputBase
               {...props}
+              autoFocus
               margin="none"
               disabled={isSubmitting || isDeleting}
               className={classes.value}
