@@ -25,7 +25,7 @@ export function EmbedApplication({ task, onClose }: Props) {
   useEffectOnce(() => {
     ;(async () => {
       const module = await import(
-        /* webpackIgnore: true */ task.application.url
+        /* webpackIgnore: true */ `/api/apps?url=${task.application.url}`
       )
 
       setModule(module)
