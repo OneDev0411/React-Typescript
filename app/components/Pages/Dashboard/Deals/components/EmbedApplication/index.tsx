@@ -10,6 +10,7 @@ import {
   QuestionTitle,
   QuestionForm
 } from 'components/QuestionWizard'
+import config from 'config'
 
 // const APP_URL = '/static/apps/hello-world/dist/bundle.js'
 
@@ -25,7 +26,9 @@ export function EmbedApplication({ task, onClose }: Props) {
   useEffectOnce(() => {
     ;(async () => {
       const module = await import(
-        /* webpackIgnore: true */ `/api/apps?url=${task.application.url}`
+        /* webpackIgnore: true */ `${config.app.share_url ?? ''}/api/apps?url=${
+          task.application.url
+        }`
       )
 
       setModule(module)
