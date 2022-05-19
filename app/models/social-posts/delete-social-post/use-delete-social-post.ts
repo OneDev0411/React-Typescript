@@ -35,10 +35,11 @@ export function useDeleteSocialPost(
     {
       ...options,
       notify: {
-        onSuccess: options?.notify?.onSuccess ?? 'The social post was deleted',
+        onSuccess:
+          options?.notify?.onSuccess ?? 'Instagram post has been deleted.',
         onError:
           options?.notify?.onError ??
-          'Something went wrong while deleting the social post. Please try again.'
+          'Something went wrong while deleting the Instagram post. Please try again.'
       },
       onMutate: async socialPost => ({
         cache: await deleteFromCacheList(
