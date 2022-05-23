@@ -10,13 +10,12 @@ import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
-import { EmailInsightsZeroState } from '../../List/ZeroState'
-
 import { sortSocialPosts } from './helpers'
 import SocialPostTableColumnActions from './SocialPostTableColumnActions'
 import SocialPostTableColumnOwner from './SocialPostTableColumnOwner'
 import SocialPostTableColumnPost from './SocialPostTableColumnPost'
 import SocialPostTableFilter from './SocialPostTableFilter'
+import { SocialPostZeroState } from './SocialPostZeroState'
 import { SocialPostFilter } from './types'
 import { useLoadAndFilterSocialPosts } from './use-load-and-filter-social-posts'
 
@@ -96,9 +95,7 @@ function SocialPostTable({ sortBy }: SocialPostTableProps) {
           onReachStart: noop,
           onReachEnd: fetchNextPage
         }}
-        EmptyStateComponent={() => (
-          <EmailInsightsZeroState title="There are no Instagram posts." />
-        )}
+        EmptyStateComponent={() => <SocialPostZeroState />}
       />
     </>
   )
