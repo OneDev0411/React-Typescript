@@ -1,6 +1,6 @@
 import pluralize from 'pluralize'
 
-import { shortFromatPrice } from '@app/utils/listing'
+import { shortFormatPrice } from '@app/utils/listing'
 
 interface IStringifyMinMaxFilters {
   filters: Partial<AlertFilters>
@@ -91,7 +91,7 @@ const stringifyPriceFilters = (filters: Partial<AlertFilters>): string => {
     title: '',
     minElement: 'minimum_price',
     maxElement: 'maximum_price',
-    formatter: (n: number) => `$${shortFromatPrice(n)}`,
+    formatter: (n: number) => `$${shortFormatPrice(n)}`,
     anyText: 'Any $'
   })
 }
@@ -119,7 +119,7 @@ const stringifyBathFilters = (filters: Partial<AlertFilters>): string => {
 const stringifyAreaFilters = (filters: Partial<AlertFilters>): string => {
   return stringifyMinMaxFiltersGenerator({
     filters,
-    title: 'Square metters',
+    title: 'Square meters',
     maxElement: 'maximum_square_meters',
     minElement: 'minimum_square_meters',
     anyText: ''

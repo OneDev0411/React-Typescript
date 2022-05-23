@@ -13,7 +13,7 @@ import pluralize from 'pluralize'
 import { changeUrl } from '@app/utils/change-url'
 import {
   addressTitle,
-  getListingFormatedPrice,
+  getListingFormattedPrice,
   metersToFeet,
   getListingPricePerSquareFoot
 } from '@app/utils/listing'
@@ -96,7 +96,7 @@ const ListView = props => {
       class: 'opaque',
       accessor: listing => listing.price,
       render: ({ row: listing }) =>
-        `$${getListingFormatedPrice(listing.price, false)}`
+        `$${getListingFormattedPrice(listing.price, false)}`
     },
     {
       header: 'Beds',
