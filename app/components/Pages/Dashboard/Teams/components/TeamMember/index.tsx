@@ -1,11 +1,10 @@
-import React from 'react'
-
 import { FlexItem } from 'styled-flex-component'
 
 import { BasicMultiSelectDropdown } from 'components/BasicMultiSelectDropdown'
 import { TextWithHighlights } from 'components/TextWithHighlights'
 import { notUndefined } from 'utils/ts-utils'
 
+import { InviteButton } from './InviteButton'
 import {
   DeactivatedOverlay,
   TeamMemberItem,
@@ -47,7 +46,7 @@ export function TeamMember({
         </TeamMemberSubTitle>
       </FlexItem>
       {user.is_shadow ? (
-        <span style={{ marginRight: '1rem' }}>Pending</span>
+        <InviteButton user={user} userRoles={userRoles} />
       ) : (
         <BasicMultiSelectDropdown
           disabled={isSaving}
