@@ -214,18 +214,18 @@ export const getListingFeatures = (
   }
 }
 
-export const shortFromatPrice = (price: number): string => {
+export const shortFormatPrice = (price: number): string => {
   return price > 9999
     ? numeral(Math.round(price / 1000) * 1000).format('0.[00]a')
     : price
 }
 
-export const getListingFormatedPrice = (
+export const getListingFormattedPrice = (
   listingPrice: number,
   isShortFormat: boolean = true
 ): string => {
   if (isShortFormat) {
-    return shortFromatPrice(listingPrice)
+    return shortFormatPrice(listingPrice)
   }
 
   return listingPrice.toLocaleString('en-US', { maximumFractionDigits: 1 })
@@ -282,5 +282,5 @@ export default {
   squareMetersToAcres,
   isLeaseProperty,
   isUserCoAgent,
-  getListingPrice: getListingFormatedPrice
+  getListingPrice: getListingFormattedPrice
 }
