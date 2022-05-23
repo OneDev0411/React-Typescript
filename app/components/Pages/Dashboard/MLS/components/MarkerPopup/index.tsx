@@ -11,7 +11,7 @@ import {
 
 import { noop } from '@app/utils/helpers'
 import {
-  getListingFormatedPrice,
+  getListingFormattedPrice,
   addressTitle,
   metersToFeet,
   getResizeUrl,
@@ -148,7 +148,7 @@ const MarkerPopup = (props: Props) => {
   } = props
   const classes = useStyles(props)
 
-  const listingPrice = getListingFormatedPrice(price, false)
+  const listingPrice = getListingFormattedPrice(price, false)
   const squareFeet = Math.round(metersToFeet(squareMeters)).toLocaleString()
   const fullAddress = addressTitle(address)
   const baths = bathroomCount ?? 0
