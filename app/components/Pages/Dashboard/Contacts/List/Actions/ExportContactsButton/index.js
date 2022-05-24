@@ -10,7 +10,7 @@ import removeSpecialCharacters from 'utils/remove-special-characters'
 import { ExportButton } from './ExportButton'
 
 class ExportContacts extends React.Component {
-  sendDownloadReuqest = async exportType => {
+  sendDownloadRequest = async exportType => {
     const {
       conditionOperator: filter_type,
       activeBrandId,
@@ -80,7 +80,7 @@ class ExportContacts extends React.Component {
     return (
       <ExportButton
         disabled={this.props.disabled}
-        onExportClick={this.sendDownloadReuqest}
+        onExportClick={this.sendDownloadRequest}
       />
     )
   }

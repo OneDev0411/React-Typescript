@@ -14,12 +14,13 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     users,
     type,
     searchText,
+    parked,
     filter_type: filterType = 'and'
   } = req.body
 
   const data = ids
     ? normalizeIds(ids)
-    : createFilters(filters, flows, crmTasks, excludes, searchText)
+    : createFilters(filters, flows, crmTasks, excludes, searchText, parked)
 
   const query = `filter_type=${filterType}&format=csv${getUsersList(users)}`
 
@@ -83,14 +84,16 @@ function createFilters(
   flows: string[],
   crmTasks: string[],
   excludes: string[] = [],
-  searchText: string = ''
+  searchText: string = '',
+  parked: boolean = false
 ) {
   return Object.entries({
     filter: Array.isArray(filters) && filters.length ? filters : undefined,
     excludes: Array.isArray(excludes) && excludes.length ? excludes : undefined,
     crmTasks: Array.isArray(crmTasks) && crmTasks.length ? crmTasks : undefined,
     flows: Array.isArray(flows) && flows.length ? flows : undefined,
-    query: searchText.length > 0 ? searchText : undefined
+    query: searchText.length > 0 ? searchText : undefined,
+    parked: parked !== undefined ? parked : undefined
   }).reduce((acc, [key, value]) => {
     if (value === undefined) {
       return acc
