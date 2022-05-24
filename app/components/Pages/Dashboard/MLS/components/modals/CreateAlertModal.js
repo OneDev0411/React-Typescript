@@ -27,7 +27,6 @@ const CreateAlertModal = ({
   titleInputOnChange,
   hideShareAlertModal,
   successModalIsActive,
-  activeShareAlertModal,
   shareAlertModalIsActive,
   searchOptions,
   drawingPoints
@@ -71,14 +70,6 @@ const CreateAlertModal = ({
             disabled={isSaving}
           >
             {isSaving ? 'Saving...' : 'Save for me'}
-          </ActionButton>
-          <ActionButton
-            size="small"
-            appearance="outline"
-            onClick={activeShareAlertModal}
-            disabled={isSaving}
-          >
-            Save &amp; Share
           </ActionButton>
         </Flex>
       </ModalFooter>

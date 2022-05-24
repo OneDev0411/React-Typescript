@@ -54,11 +54,11 @@ export default class MlsSearchAutocomplete extends Component<Props> {
     const mapUrl = Brand.asset('map_url', '', brand)
 
     // Send to search map
-    if (q) {
+    if (q && window.top) {
       if (mapUrl) {
         window.top.location.href = `${mapUrl}?q=${q}`
       } else {
-        window.top.location.href = `https://rechat.com/dashboard/mls/?q=${q}`
+        window.top.location.href = `https://app.rechat.com/dashboard/mls/?q=${q}`
       }
     }
   }

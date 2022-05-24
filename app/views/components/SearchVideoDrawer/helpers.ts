@@ -1,6 +1,10 @@
 import superagent from 'superagent'
 
-import { VideoboltVideo, YouTubeVideoResource } from './types'
+import {
+  SearchVideoSource,
+  VideoboltVideo,
+  YouTubeVideoResource
+} from './types'
 
 const REQUEST_TIMEOUT_MS = 120 * 1000
 
@@ -105,4 +109,16 @@ export function getVideoPlayerUrl(url: string): string {
   return `${window.location.origin}/dashboard/player?video=${encodeURIComponent(
     url
   )}`
+}
+
+export function shouldAddPlayIconWatermark(
+  videoSource: SearchVideoSource
+): boolean {
+  const watermarkBlacklist: SearchVideoSource[] = [
+    'youtube',
+    'videobolt',
+    'gallery'
+  ]
+
+  return !watermarkBlacklist.includes(videoSource)
 }

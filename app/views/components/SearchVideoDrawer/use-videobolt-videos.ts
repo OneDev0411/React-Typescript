@@ -22,7 +22,13 @@ export default function useVideoboltVideos(): () => SearchVideoResult[] {
 
       const fetchedVideos = await getVideoboltVideos(email)
 
-      setVideos(fetchedVideos)
+      // Filter out videos that are not in the correct format
+      // https://gitlab.com/rechat/web/-/issues/6493#note_947641316
+      const validVideos = fetchedVideos.filter(
+        video => !!video.video_url_branded
+      )
+
+      setVideos(validVideos)
     }
 
     fetchVideos()

@@ -48,7 +48,7 @@ export default function MediaManager({ user, deal }: Props) {
       const response = await uploadMedia(
         deal.id,
         fileObject,
-        null,
+        undefined,
         order,
         progressEvent => {
           if (progressEvent.percent) {
