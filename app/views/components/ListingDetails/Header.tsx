@@ -10,7 +10,7 @@ import {
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import { mdiClose, mdiExportVariant, mdiHeart, mdiHeartOutline } from '@mdi/js'
+import { mdiClose, mdiHeart, mdiHeartOutline } from '@mdi/js'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps, browserHistory } from 'react-router'
 import { notify } from 'reapop'
@@ -163,19 +163,6 @@ function Header({
                 className={classes.button}
               >
                 Like
-              </Button>
-            )}
-            {user && (
-              <Button
-                size="small"
-                variant={isMobileScreen ? 'contained' : 'outlined'}
-                color={isMobileScreen ? 'primary' : 'default'}
-                onClick={handleShare}
-                startIcon={
-                  <SvgIcon size={muiIconSizes.small} path={mdiExportVariant} />
-                }
-              >
-                Share
               </Button>
             )}
             {!isWidget && !user && (
