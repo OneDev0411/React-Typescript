@@ -13,12 +13,11 @@ import {
   useTheme
 } from '@material-ui/core'
 import { useDropzone } from 'dropzone'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
-import { confirmation } from 'actions/confirmation'
-import Masonry from 'components/Masonry'
-import { selectUser } from 'selectors/user'
+import { confirmation } from '@app/store_actions/confirmation'
+import Masonry from '@app/views/components/Masonry'
 
 import { isGifImage } from '../../helpers'
 import ImageThumbnail from '../../ImageThumbnail'
@@ -27,6 +26,7 @@ import NoResults from '../../NoResults'
 import { SearchableImageTabProps } from '../../types'
 
 import { DEFAULT_ASSET_LABEL } from './constants'
+import { isImageAsset } from './helpers'
 import { useTeamLibrary } from './hooks'
 
 const useStyles = makeStyles(
@@ -59,12 +59,10 @@ function TeamLibrary({
   query,
   setQuery,
   onSelect,
-  onEdit,
-  containerRef
+  onEdit
 }: SearchableImageTabProps) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const user = useSelector(selectUser)
   const activeBrandId = useActiveBrandId()
   const {
     results,
@@ -74,7 +72,7 @@ function TeamLibrary({
     hasDeleteAccess,
     deleteAsset,
     uploadAsset
-  } = useTeamLibrary(activeBrandId, user, query)
+  } = useTeamLibrary(activeBrandId, query, isImageAsset)
 
   const theme = useTheme()
 
