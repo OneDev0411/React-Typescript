@@ -75,7 +75,7 @@ export const ViewSwitcher = ({ onChangeView, activeView }: Props) => {
       </DropdownToggleButton>
 
       <Popover
-        id={viewSwitcherAnchorEl ? 'sorting-popover' : undefined}
+        id={viewSwitcherAnchorEl ? 'view-switcher-popover' : undefined}
         open={Boolean(viewSwitcherAnchorEl)}
         anchorEl={viewSwitcherAnchorEl}
         onClose={handleViewSwitcherToggle}
@@ -87,7 +87,6 @@ export const ViewSwitcher = ({ onChangeView, activeView }: Props) => {
           vertical: 'top',
           horizontal: 'left'
         }}
-        style={{ zIndex: 10 }}
       >
         {Object.values(listingViewOptions).map(option => (
           <MenuItem
