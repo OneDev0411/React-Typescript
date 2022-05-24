@@ -85,7 +85,7 @@ function createFilters(
   crmTasks: string[],
   excludes: string[] = [],
   searchText: string = '',
-  parked: boolean = false
+  parked?: boolean
 ) {
   return Object.entries({
     filter: Array.isArray(filters) && filters.length ? filters : undefined,
