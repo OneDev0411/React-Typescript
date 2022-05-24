@@ -81,7 +81,6 @@ export function EmbedApplication({ task, onClose }: Props) {
     }
 
     return module.default({
-      name: manifest.name,
       notify,
       Components: {
         Logo,
