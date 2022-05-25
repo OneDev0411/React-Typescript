@@ -85,7 +85,6 @@ function YardSign({ deal, style }: Props) {
           vertical: 'top',
           horizontal: 'left'
         }}
-        style={{ zIndex: 10 }}
       >
         {showForm ? (
           <Form deal={deal} onCreateTask={onCreateTask} />
