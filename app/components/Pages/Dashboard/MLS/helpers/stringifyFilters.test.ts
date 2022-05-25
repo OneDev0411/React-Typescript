@@ -196,7 +196,7 @@ describe('stringifyFilters', () => {
 
       const result = stringifyFilters(filters)
 
-      expect(result).toBe('Any $, Any Beds, Any Baths, + 200 Square metters')
+      expect(result).toBe('Any $, Any Beds, Any Baths, + 200 Square meters')
     })
 
     it('should return stringified filters if only max square_meters filter', () => {
@@ -206,7 +206,7 @@ describe('stringifyFilters', () => {
 
       const result = stringifyFilters(filters)
 
-      expect(result).toBe('Any $, Any Beds, Any Baths, - 3000 Square metters')
+      expect(result).toBe('Any $, Any Beds, Any Baths, - 3000 Square meters')
     })
   })
 
@@ -227,7 +227,7 @@ describe('stringifyFilters', () => {
     const result = stringifyFilters(filters)
 
     expect(result).toBe(
-      'Residential - Commercial, In 12345 - 54321, $200k-$500k, 2-3 Beds, 1-2 Baths, 100-200 Square metters'
+      'Residential - Commercial, In 12345 - 54321, $200k-$500k, 2-3 Beds, 1-2 Baths, 100-200 Square meters'
     )
   })
 })
