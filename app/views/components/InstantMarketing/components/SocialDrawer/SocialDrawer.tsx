@@ -41,21 +41,27 @@ interface SocialDrawerProps
     SocialDrawerSocialPostFormProps,
     'onPostScheduled' | 'onPostSent'
   > {
-  template: (IBrandMarketingTemplate | IMarketingTemplate) & { result: string }
+  title?: string
+  template?: (IBrandMarketingTemplate | IMarketingTemplate) & { result: string }
   instance?: IMarketingTemplateInstance
   brandAsset?: IBrandAsset
   templateInstanceData?: Omit<TemplateInstanceInputData, 'html'>
   onClose: () => void
+  initialStep?: SocialDrawerStep
+  socialPostFormInitialValues?: SocialDrawerSocialPostFormProps['initialValues']
 }
 
 function SocialDrawer({
+  title = 'Schedule or Share?',
   template,
   instance: passedInstance,
   brandAsset,
   templateInstanceData = {},
   onClose,
   onPostScheduled,
-  onPostSent
+  onPostSent,
+  initialStep = 'Share',
+  socialPostFormInitialValues
 }: SocialDrawerProps) {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -64,7 +70,7 @@ function SocialDrawer({
     useState<Optional<IMarketingTemplateInstance>>(passedInstance)
   const [errorMessage, setErrorMessage] = useState<Nullable<string>>(null)
 
-  const [step, setStep] = useState<SocialDrawerStep>('Share')
+  const [step, setStep] = useState<SocialDrawerStep>(initialStep)
 
   useDeepCompareEffect(() => {
     async function makeTemplateInstance() {
@@ -74,6 +80,12 @@ function SocialDrawer({
 
       if (templateInstance) {
         return
+      }
+
+      if (!template) {
+        throw new Error(
+          'You are supposed to provide the template prop when no instance is passed'
+        )
       }
 
       try {
@@ -105,7 +117,7 @@ function SocialDrawer({
 
   return (
     <Drawer open onClose={onClose}>
-      <Drawer.Header title="Schedule or Share?" />
+      <Drawer.Header title={title} />
       <SocialDrawerPreviewFile
         className={classes.preview}
         instance={instance}
@@ -126,6 +138,7 @@ function SocialDrawer({
                 instance={instance}
                 onPostScheduled={onPostScheduled}
                 onPostSent={onPostSent}
+                initialValues={socialPostFormInitialValues}
               />
             )}
           </>

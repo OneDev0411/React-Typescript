@@ -41,10 +41,11 @@ export function useUpdateSocialPost(
     {
       ...options,
       notify: {
-        onSuccess: options?.notify?.onSuccess ?? 'The social post was updated',
+        onSuccess:
+          options?.notify?.onSuccess ?? 'Instagram post has been updated',
         onError:
           options?.notify?.onError ??
-          'Something went wrong while saving the social post. Please try again.'
+          'Something went wrong while saving the Instagram post. Please try again.'
       },
       onMutate: async ({ inputData, socialPost }) => ({
         cache: await updateCacheList(
