@@ -10,13 +10,11 @@ export function getUserLastInvitation(
 
   for (let i = 0; i < userRoles.length; i++) {
     const brandUser = userRoles[i].users?.find(
-      brandUser => brandUser.id === user.id
+      userRoleUser => userRoleUser.user.id === user.id
     )
 
     if (brandUser && brandUser.last_invited_at) {
-      const newInvitationDate = new Date(
-        Number(brandUser.last_invited_at) * 1000
-      )
+      const newInvitationDate = new Date(brandUser.last_invited_at)
 
       lastInvitation =
         !lastInvitation || newInvitationDate > lastInvitation
