@@ -54,14 +54,14 @@ export function EmbedApplication({ task, onClose }: Props) {
         setManifest(manifest)
 
         const chunkUrl = development
-          ? `${baseUrl}/bundle.js?${Math.random()}`
+          ? `${baseUrl}/bundle.js?v=${Math.random()}`
           : `${baseUrl}/bundle.${manifest.build}.js`
 
-        const module = await import(
-          /* webpackIgnore: true */ `${
-            config.app.share_url ?? ''
-          }/api/apps?url=${chunkUrl}`
-        )
+        const url = development
+          ? chunkUrl
+          : `${config.app.share_url ?? ''}/api/apps?url=${chunkUrl}`
+
+        const module = await import(/* webpackIgnore: true */ url)
 
         setModule(module)
       })()
