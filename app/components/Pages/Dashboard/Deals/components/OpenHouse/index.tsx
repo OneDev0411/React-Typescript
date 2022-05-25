@@ -149,7 +149,6 @@ function OpenHouses({
             vertical: 'top',
             horizontal: 'left'
           }}
-          style={{ zIndex: 10 }}
         >
           {showForm ? (
             <Form

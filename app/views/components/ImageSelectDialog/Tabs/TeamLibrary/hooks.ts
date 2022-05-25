@@ -19,8 +19,8 @@ interface UseTeamLibrary {
 
 export function useTeamLibrary(
   brandId: UUID,
-  user: IUser,
-  searchQuery: string
+  searchQuery: string,
+  filterFn?: (asset: IBrandAsset) => boolean
 ): UseTeamLibrary {
   const activeBrandId = useActiveBrandId()
 
@@ -101,11 +101,17 @@ export function useTeamLibrary(
         return
       }
 
+      const filteredBrandAssets = filterFn
+        ? brandAssets.filter(asset => filterFn(asset))
+        : brandAssets
+
       if (!searchQuery) {
-        setResults(brandAssets)
+        setResults(filteredBrandAssets)
+
+        return
       }
 
-      const matchingAssets = brandAssets.filter(asset =>
+      const matchingAssets = filteredBrandAssets.filter(asset =>
         asset.label.toLowerCase().includes(searchQuery.toLowerCase())
       )
 
@@ -113,7 +119,7 @@ export function useTeamLibrary(
     }
 
     searchBrandAssets()
-  }, [searchQuery, brandAssets])
+  }, [searchQuery, filterFn, brandAssets])
 
   useEffect(() => {
     if (!brandAssets) {

@@ -13,11 +13,17 @@ import LoadingContainer from '../LoadingContainer'
 import { NO_IMAGE_URL } from '../SearchResultCard'
 
 import { RSS_SOURCES } from './constants'
+import { isRSSSearchErrorCode } from './helpers'
 import { getUrlMetadataRequest } from './models'
 import SearchArticleEmptyState from './SearchArticleEmptyState'
+import SearchArticleErrorState from './SearchArticleErrorState'
 import SearchArticleImageCacheProvider from './SearchArticleImageCacheProvider'
 import SearchArticleResults from './SearchArticleResults'
-import { ArticleMetadata, RSSArticleMetadata } from './types'
+import {
+  ArticleMetadata,
+  RSSArticleMetadata,
+  RSSSearchErrorCode
+} from './types'
 import { useCreateImageCache } from './use-create-image-cache'
 import { useSearchArticles } from './use-search-articles'
 
@@ -76,12 +82,16 @@ function SearchArticleDrawer({
   const [selected, setSelected] = useState<RSSArticleMetadata[]>([])
   const imageCache = useCreateImageCache()
   const getUrlMetadataRequestRef = useRef<Optional<SuperAgentRequest>>()
+  const [searchErrorCode, setSearchErrorCode] =
+    useState<Nullable<RSSSearchErrorCode>>(null)
 
   const { searchArticles, isArticlesLoading, allArticles } =
     useSearchArticles(RSS_SOURCES)
 
   const handleSearch = useCallback(
     (term: string) => {
+      setSearchErrorCode(null)
+
       const searchTerm = term.trim()
 
       run(async () => {
@@ -134,12 +144,20 @@ function SearchArticleDrawer({
               description: articleMetadata.description
             }
           ]
-        } catch (_) {
+        } catch (e) {
+          const errorCode: Optional<string> = e.response.body?.errorCode
+
+          if (isRSSSearchErrorCode(errorCode)) {
+            setSearchErrorCode(errorCode)
+          } else {
+            setSearchErrorCode('MetadataNotFound')
+          }
+
           return []
         }
       })
     },
-    [allArticles, imageCache, run, searchArticles]
+    [allArticles, imageCache, run, searchArticles, setSearchErrorCode]
   )
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) =>
@@ -224,6 +242,8 @@ function SearchArticleDrawer({
           <SearchArticleImageCacheProvider imageCache={imageCache}>
             {isLoadingState ? (
               <LoadingContainer />
+            ) : searchErrorCode ? (
+              <SearchArticleErrorState errorCode={searchErrorCode} />
             ) : isEmptyState ? (
               <SearchArticleEmptyState />
             ) : (
