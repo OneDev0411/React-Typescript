@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import {
   makeStyles,
   Button,
@@ -40,7 +42,9 @@ interface Props {
 export function InviteButton({ user, userRoles }: Props) {
   const classes = useStyles()
 
-  const lastInvitationDate = getUserLastInvitation(user, userRoles)
+  const [lastInvitationDate, setLastInvitationDate] = useState<Optional<Date>>(
+    getUserLastInvitation(user, userRoles)
+  )
   const isInvited = !!lastInvitationDate
 
   const { mutateAsync, isLoading } = useInviteUser({
@@ -52,7 +56,9 @@ export function InviteButton({ user, userRoles }: Props) {
 
   const inviteUser = () => {
     if (user.brand) {
-      mutateAsync({ user: user.id, brand: user.brand })
+      mutateAsync({ user: user.id, brand: user.brand }).then(() => {
+        setLastInvitationDate(new Date())
+      })
     }
   }
 
@@ -89,7 +95,7 @@ export function InviteButton({ user, userRoles }: Props) {
                     lastInvitationDate,
                     'LLL dd, yyyy  hh:mmaaa'
                   )}`
-                : 'Invite sent.'
+                : 'Invitation sent.'
             }
           >
             <Typography
@@ -102,7 +108,7 @@ export function InviteButton({ user, userRoles }: Props) {
                 size={muiIconSizes.small}
                 className={classes.inviteSentIcon}
               />
-              Invite sent
+              Invitation sent
             </Typography>
           </Tooltip>
         </>
