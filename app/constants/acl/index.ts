@@ -7,8 +7,7 @@ export type AccessRecord = Record<
   | 'BETA'
   | 'AGENT_NETWORK'
   | 'WEBSITES'
-  | 'SHOWINGS'
-  | 'SHARE_TO_INSTAGRAM',
+  | 'SHOWINGS',
   IPermission
 >
 export const ACL: AccessRecord = {
@@ -20,6 +19,5 @@ export const ACL: AccessRecord = {
   BETA: 'BetaFeatures',
   AGENT_NETWORK: 'AgentNetwork',
   WEBSITES: 'Websites',
-  SHOWINGS: 'Showings',
-  SHARE_TO_INSTAGRAM: 'ShareToInstagram'
+  SHOWINGS: 'Showings'
 }
