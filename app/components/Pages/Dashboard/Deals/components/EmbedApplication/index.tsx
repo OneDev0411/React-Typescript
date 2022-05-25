@@ -51,7 +51,6 @@ export function EmbedApplication({ task, onClose }: Props) {
           `${baseUrl}/manifest.json`
         )
 
-        console.log(manifest)
         setManifest(manifest)
 
         const chunkUrl = development
