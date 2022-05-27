@@ -1,5 +1,6 @@
-import { memo, useState } from 'react'
+import React, { memo, useState } from 'react'
 
+import * as Ui from '@material-ui/core'
 import {
   Box,
   CircularProgress,
@@ -80,6 +81,8 @@ export function EmbedApplication({ task, onClose }: Props) {
     }
 
     return module.default({
+      React,
+      Ui,
       notify,
       Components: {
         Logo,
