@@ -51,7 +51,7 @@ class AddRecipient extends React.Component {
     super(props)
 
     this.state = initialState
-    this.search = _.debounce(this.search, 500)
+    this.search = _.debounce(this.search, 750)
   }
 
   componentDidMount() {
@@ -336,8 +336,7 @@ class AddRecipient extends React.Component {
                   value: this.state.searchText,
                   onChange: this.handleSearchContact,
                   onBlur: this.handleInputBlur,
-                  placeholder: this.props.placeholder || 'Add new recipient',
-                  readOnly: this.state.isContactsLoading
+                  placeholder: this.props.placeholder || 'Add new recipient'
                 })}
               />
 
