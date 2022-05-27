@@ -40,7 +40,8 @@ function InstagramAccountAutocompleteField(
     return null
   }
 
-  const getOptionLabel = (option: IFacebookPage) => option.instagram_username
+  const getOptionLabel = (option: IFacebookPage) =>
+    option.instagram_username || ''
 
   return (
     <Field<IFacebookPage>
