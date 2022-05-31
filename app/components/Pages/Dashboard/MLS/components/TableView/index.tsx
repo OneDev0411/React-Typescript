@@ -20,7 +20,7 @@ import { noop } from '@app/utils/helpers'
 import {
   metersToFeet,
   addressTitle,
-  getListingFormatedPrice,
+  getListingFormattedPrice,
   getListingPricePerSquareFoot
 } from '@app/utils/listing'
 import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
@@ -82,7 +82,7 @@ const primaryColumns: TableColumnItem[] = [
   {
     header: 'Price',
     id: 'price',
-    render: listing => `$${getListingFormatedPrice(listing.price, false)}`
+    render: listing => `$${getListingFormattedPrice(listing.price, false)}`
   },
   {
     header: 'Beds',

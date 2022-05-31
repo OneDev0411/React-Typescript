@@ -4,11 +4,15 @@ import { useActiveBrandId } from '@app/hooks/brand'
 import { useCreateSocialPost } from '@app/models/social-posts'
 import { convertDateToTimestamp } from '@app/utils/date-utils'
 
-import SocialPostForm, { FormValues } from '../SocialPostForm'
+import SocialPostForm, {
+  SocialPostFormProps,
+  FormValues
+} from '../SocialPostForm'
 
 import SocialDrawerSocialPostFormFooter from './SocialDrawerSocialPostFormFooter'
 
-export interface SocialDrawerSocialPostFormProps {
+export interface SocialDrawerSocialPostFormProps
+  extends Pick<SocialPostFormProps, 'initialValues'> {
   className?: string
   instance: Optional<IMarketingTemplateInstance | IBrandAsset>
   onPostScheduled?: () => void
@@ -21,7 +25,8 @@ function SocialDrawerSocialPostForm({
   className,
   instance,
   onPostScheduled,
-  onPostSent
+  onPostSent,
+  initialValues
 }: SocialDrawerSocialPostFormProps) {
   const isScheduledRef = useRef<boolean>(false)
 
@@ -31,7 +36,13 @@ function SocialDrawerSocialPostForm({
         `The Instagram post has been ${
           isScheduledRef.current ? 'scheduled' : 'sent'
         }`,
-      onError: 'Something went wrong. Please try again.'
+      onError: error => {
+        if (error.response?.body.code === 'ResourceNotFound') {
+          return 'This account has been disconnected. Please try with another account or contact support for more information.'
+        }
+
+        return 'Something went wrong. Please contact support for more information.'
+      }
     },
     onSuccess: () => {
       if (isScheduledRef.current) {
@@ -50,13 +61,21 @@ function SocialDrawerSocialPostForm({
 
     isScheduledRef.current = !!values.dueAt
 
-    await mutateAsync({
-      ...values,
-      facebookPage: values.facebookPage.id,
-      due_at: convertDateToTimestamp(values.dueAt ?? new Date()),
-      templateInstance: instance.id,
-      brand: activeBrandId
-    })
+    try {
+      await mutateAsync({
+        ...values,
+        facebookPage: values.facebookPage.id,
+        due_at: convertDateToTimestamp(values.dueAt ?? new Date()),
+        templateInstance: instance.id,
+        brand: activeBrandId
+      })
+    } catch (error) {
+      if (error?.response.body.code === 'ResourceNotFound') {
+        return {
+          facebookPage: 'The selected account has been disconnected.'
+        }
+      }
+    }
   }
 
   return (
@@ -64,6 +83,7 @@ function SocialDrawerSocialPostForm({
       className={className}
       onSubmit={handleSubmit}
       formId={formId}
+      initialValues={initialValues}
     >
       <SocialDrawerSocialPostFormFooter formId={formId} />
     </SocialPostForm>
