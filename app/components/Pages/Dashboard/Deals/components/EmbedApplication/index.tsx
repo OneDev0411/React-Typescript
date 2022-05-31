@@ -1,6 +1,6 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 
-import * as Ui from '@material-ui/core'
+import * as MaterialUi from '@material-ui/core'
 import {
   Box,
   CircularProgress,
@@ -11,13 +11,22 @@ import {
   Typography
 } from '@material-ui/core'
 import { mdiReload } from '@mdi/js'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 import superagent from 'superagent'
 
+import { useDealBrandContexts } from '@app/hooks/use-deal-brand-contexts'
 import useNotify from '@app/hooks/use-notify'
 import { useQueryParamValue } from '@app/hooks/use-query-param'
+import { createContextObject } from '@app/models/Deal/helpers/brand-context/create-context-object'
+import { getContext } from '@app/models/Deal/helpers/context'
+import { IAppState } from '@app/reducers'
+import { getBrandChecklistsById } from '@app/reducers/deals/brand-checklists'
+import { getDealChecklists } from '@app/reducers/deals/checklists'
+import { upsertContexts } from '@app/store_actions/deals'
 import { DialogTitle } from '@app/views/components/DialogTitle'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import DealRoleForm from 'components/DealRole/Form'
 import Logo from 'components/Logo'
 import {
   QuestionWizard,
@@ -29,12 +38,24 @@ import config from 'config'
 
 import { Manifest } from './types'
 
+interface State {
+  user: Nullable<IUser>
+  brandChecklists: IBrandChecklist[]
+  checklists: IDealChecklist[]
+  attributeDefs: {
+    byId: Record<UUID, IContactAttributeDef>
+    byName: Record<string, UUID>
+    bySection: Record<string, UUID[]>
+  }
+}
 interface Props {
+  deal: IDeal
   task: IDealTask
+  isBackOffice: boolean
   onClose: () => void
 }
 
-export function EmbedApplication({ task, onClose }: Props) {
+export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
   const development = useQueryParamValue('dev')
   const host = useQueryParamValue('host', 'localhost:8081')
 
@@ -42,6 +63,21 @@ export function EmbedApplication({ task, onClose }: Props) {
   const [manifest, setManifest] = useState<Partial<Manifest>>({})
 
   const notify = useNotify()
+  const dispatch = useDispatch()
+
+  const { user, attributeDefs, brandChecklists, checklists } = useSelector<
+    IAppState,
+    State
+  >(({ deals, user, contacts }) => ({
+    user,
+    attributeDefs: contacts.attributeDefs,
+    brandChecklists: deal
+      ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
+      : [],
+    checklists: getDealChecklists(deal, deals.checklists)
+  }))
+
+  const brandContexts = useDealBrandContexts(deal)
 
   const loadChunk = () => {
     try {
@@ -75,17 +111,68 @@ export function EmbedApplication({ task, onClose }: Props) {
     loadChunk()
   })
 
+  useEffectOnce(() => {
+    window.libs = {
+      React,
+      MaterialUi
+    }
+
+    return () => {
+      window.libs = undefined
+    }
+  })
+
+  const updateDealContext = (key: string, value: unknown) => {
+    const brandContext = brandContexts.find(context => context.key === key)
+
+    if (!brandContext) {
+      console.error(`Invalid Context Key: ${key}`)
+
+      return
+    }
+
+    try {
+      const context = createContextObject(
+        deal,
+        brandChecklists,
+        checklists,
+        brandContext.key,
+        value,
+        isBackOffice ? true : !brandContext.needs_approval
+      )
+
+      dispatch(upsertContexts(deal.id, [context]))
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const getDealContext = useCallback(
+    (name: string) => getContext(deal, name),
+    [deal]
+  )
+
   const App = memo(() => {
     if (!module) {
       return null
     }
 
     return module.default({
-      React,
-      Ui,
-      notify,
+      models: {
+        deal,
+        user,
+        attributeDefs
+      },
+      utils: {
+        notify
+      },
+      api: {
+        getDealContext,
+        updateDealContext
+      },
       Components: {
         Logo,
+        RoleForm: DealRoleForm,
         Wizard: {
           QuestionWizard,
           QuestionSection,

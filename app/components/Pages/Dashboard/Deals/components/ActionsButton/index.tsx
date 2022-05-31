@@ -649,7 +649,9 @@ class ActionsButton extends React.Component<
         {this.state.isApplicationOpen &&
           this.props.task?.task_type === 'Application' && (
             <EmbedApplication
+              deal={this.props.deal}
               task={this.props.task}
+              isBackOffice={this.props.isBackOffice}
               onClose={() => this.setState({ isApplicationOpen: false })}
             />
           )}
