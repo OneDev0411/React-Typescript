@@ -3,7 +3,7 @@ import React from 'react'
 import { mdiEmailOutline } from '@mdi/js'
 import { connect } from 'react-redux'
 
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
+import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
 import SendEmailButton from 'components/SendEmailButton'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'

@@ -1,9 +1,11 @@
-import React, { CSSProperties, memo } from 'react'
+import { CSSProperties, memo } from 'react'
 
 import cn from 'classnames'
 
 import { StateContext } from '../../context'
+import { Header } from '../../Header'
 import { TableColumn, TrProps, TdProps, GridClasses } from '../../types'
+import { Column } from '../Column'
 
 import { RowContainer } from './styled'
 
@@ -13,6 +15,8 @@ interface Props<Row> {
   data: {
     rows: Row[]
     columns: TableColumn<Row>[]
+    headless: boolean
+    totalRows: number
     state: StateContext
     classes: GridClasses
     columnsSize: string[]
@@ -21,19 +25,34 @@ interface Props<Row> {
   }
 }
 
-function Row<T>({
+function Row<Row>({
   index: rowIndex,
   style,
   data: {
     columns,
     rows,
+    totalRows,
     state,
+    headless,
     classes,
     columnsSize,
     getTrProps = () => ({}),
     getTdProps = () => ({})
   }
-}: Props<T & { id?: string }>) {
+}: Props<Row & { id?: string }>) {
+  if (headless === false && rowIndex === 0) {
+    return (
+      <Header<Row>
+        columns={columns}
+        rows={rows}
+        totalRows={totalRows}
+        columnsSize={columnsSize}
+        classes={classes}
+        style={style}
+      />
+    )
+  }
+
   const row = rows[rowIndex]
 
   const isRowSelected =
@@ -45,8 +64,14 @@ function Row<T>({
     <RowContainer
       index={rowIndex}
       selected={isRowSelected}
-      className={classes.row}
-      style={style}
+      className={cn(classes.row, {
+        selected: isRowSelected
+      })}
+      style={{
+        ...style,
+        width: undefined,
+        minWidth: '100%'
+      }}
       data-tour-id={`row-${rowIndex}`}
       {...getTrProps({
         rowIndex,
@@ -55,50 +80,24 @@ function Row<T>({
       })}
     >
       {columns
-        .filter((column: TableColumn<T>) => column.render)
-        .map((column: TableColumn<T>, columnIndex: number) => (
-          <div
+        .filter(
+          (column: TableColumn<Row>) =>
+            (column.render || column.accessor) && column.hidden !== true
+        )
+        .map((column: TableColumn<Row>, columnIndex: number) => (
+          <Column<Row>
             key={columnIndex}
-            className={cn('column', column.class, {
-              primary: column.primary === true
-            })}
-            style={{
-              width: columnsSize[columnIndex],
-              textAlign: column.align || 'left',
-              ...(column.rowStyle || {}),
-              ...(column.style || {})
-            }}
-            {...getTdProps({
-              columnIndex,
-              column,
-              rowIndex,
-              row
-            })}
-          >
-            {getCell(column, row, rowIndex, columnIndex, rows.length)}
-          </div>
+            column={column}
+            columnIndex={columnIndex}
+            row={row}
+            rowIndex={rowIndex}
+            columnWidth={columnsSize[columnIndex]}
+            totalRows={rows.length}
+            getTdProps={getTdProps}
+          />
         ))}
     </RowContainer>
   )
-}
-
-function getCell<Row>(
-  column: TableColumn<Row>,
-  row: Row,
-  rowIndex: number,
-  columnIndex: number,
-  totalRows: number
-) {
-  if (column.render) {
-    return column.render({
-      row,
-      totalRows,
-      rowIndex,
-      columnIndex
-    })
-  }
-
-  return null
 }
 
 export default memo(Row)

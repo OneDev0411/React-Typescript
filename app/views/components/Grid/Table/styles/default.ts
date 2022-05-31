@@ -15,6 +15,9 @@ export const styles = (theme: Theme) =>
           visibility: 'hidden'
         }
       },
+      '&.selected .column': {
+        backgroundColor: theme.palette.action.hover
+      },
       '&:hover .column': {
         cursor: 'pointer',
         '&.primary a': {
@@ -30,6 +33,26 @@ export const styles = (theme: Theme) =>
         '& .underline-on-hover': {
           textDecoration: 'underline',
           color: theme.palette.secondary.main
+        }
+      },
+      '& .inline-edit': {
+        position: 'relative',
+        '& .inline-edit-icon': {
+          position: 'absolute',
+          right: 0,
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          visibility: 'hidden',
+          '&.open': {
+            visibility: 'visible'
+          }
+        },
+        '&:hover .inline-edit-icon': {
+          visibility: 'visible'
+        },
+        '&:hover': {
+          boxShadow: `inset 0px 0px 0px 2px ${theme.palette.primary.main} !important`,
+          borderRadius: theme.shape.borderRadius
         }
       }
     }

@@ -1,6 +1,6 @@
 import { Typography, makeStyles } from '@material-ui/core'
 
-import { BaseTagSelector } from '@app/views/components/TagSelector'
+import { TagSelectorTextField } from '@app/views/components/TagSelector'
 import { SelectorOption } from '@app/views/components/TagSelector/type'
 
 const useStyles = makeStyles(
@@ -37,7 +37,7 @@ function SuperCampaignTagsField({
     onChange(value.map(tag => tag.title))
 
   return (
-    <BaseTagSelector
+    <TagSelectorTextField
       {...otherProps}
       value={value.map(tag => ({
         title: tag,

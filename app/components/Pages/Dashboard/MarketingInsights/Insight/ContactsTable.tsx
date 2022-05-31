@@ -2,9 +2,9 @@ import React, { useMemo } from 'react'
 
 import { Tooltip } from '@material-ui/core'
 
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import ContactInfo from 'components/ContactInfo'
 import Table from 'components/Grid/Table'
-import { useGridStyles } from 'components/Grid/Table/styles'
 import { RenderProps } from 'components/Grid/Table/types'
 import MiniContact from 'components/MiniContact'
 

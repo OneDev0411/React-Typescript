@@ -7,7 +7,7 @@ import { GetBrandListingsOptions } from '@app/models/listings/search/get-brand-l
 import { selectUserAgents } from '@app/selectors/user'
 import { isUserCoAgent } from '@app/utils/listing'
 import { Table } from '@app/views/components/Grid/Table'
-import { useGridStyles } from '@app/views/components/Grid/Table/styles'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 import LoadingContainer from '@app/views/components/LoadingContainer'
 import { getFormattedPrice } from 'models/Deal/helpers/context'

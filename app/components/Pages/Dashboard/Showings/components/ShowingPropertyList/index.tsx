@@ -2,7 +2,7 @@ import { Box, makeStyles } from '@material-ui/core'
 import { mdiOpenInNew, mdiCheck, mdiEyeOutline, mdiAccountTie } from '@mdi/js'
 import classNames from 'classnames'
 
-import { useGridStyles } from '@app/views/components/Grid/Table/styles'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
