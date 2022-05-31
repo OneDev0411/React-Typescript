@@ -1,3 +1,5 @@
+import { SearchVideoSource } from '@app/views/components/SearchVideoDrawer/types'
+
 export function getYouTubeVideoId(url: string) {
   return new URL(url).searchParams.get('v')
 }
@@ -16,4 +18,17 @@ export function generateEmbedVideoUrl(url: string) {
   }
 
   return url
+}
+
+export function getVideoTag(source: SearchVideoSource) {
+  switch (source) {
+    case 'videobolt':
+    case 'gallery':
+      return 'video'
+    case 'youtube':
+    case 'vimeo':
+      return 'iframe'
+    default:
+      return 'iframe'
+  }
 }

@@ -123,7 +123,8 @@ function SearchVideoDrawer({
       thumbnail: video.thumbnail ?? video.url,
       thumbnailWithPlayIcon: shouldAddPlayIconWatermark(video.source)
         ? await watermarkPlayIcon(video.thumbnail!, uploadThumbnail)
-        : video.thumbnail ?? video.url
+        : video.thumbnail ?? video.url,
+      source: video.source
     }
 
     setIsGeneratingThumbnail(false)
