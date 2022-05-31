@@ -16,6 +16,7 @@ export interface Video {
   url: string
   thumbnail?: string
   thumbnailWithPlayIcon?: string
+  source: SearchVideoSource
 }
 
 // https://developer.vimeo.com/api/oembed/videos#embedding-a-video-with-oembed
