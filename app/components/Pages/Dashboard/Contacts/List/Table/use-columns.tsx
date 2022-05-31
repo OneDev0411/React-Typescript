@@ -7,21 +7,36 @@ import {
   mdiPhone,
   mdiTag
 } from '@mdi/js'
+import { useDispatch } from 'react-redux'
 
 import { useBreakpoint } from '@app/hooks/use-breakpoint'
-import { getAttributeFromSummary } from '@app/models/contacts/helpers'
+import {
+  getAttributeFromSummary,
+  updateContactQuery as defaultUpdateContactQuery
+} from '@app/models/contacts/helpers'
+import { getContact } from '@app/store_actions/contacts/get-contact'
 import { goTo } from '@app/utils/go-to'
 import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderColumn'
 import { SelectionCount } from '@app/views/components/Grid/Table/features/Selection/SelectionCount'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
+import { BirthdayInlineEdit } from './columns-inline-edit/Birthday'
+import { EmailsInlineEdit } from './columns-inline-edit/Emails'
+import { FlowsInlineEdit } from './columns-inline-edit/Flows'
+import { PhonesInlineEdit } from './columns-inline-edit/Phones'
 import { TagsInlineEdit } from './columns-inline-edit/Tags'
+import { BirthdayCell } from './columns/Birthday'
+import { EmailsCell } from './columns/Emails'
+import { FlowsCell } from './columns/Flows'
 import LastTouched from './columns/LastTouched'
+import { PhonesCell } from './columns/Phones'
+import { TagsCell } from './columns/Tags'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     cell: {
-      paddingLeft: theme.spacing(2),
+      width: '100%',
+      padding: theme.spacing(0, 1, 0, 2),
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis'
@@ -49,6 +64,15 @@ interface Data {
 export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
   const classes = useStyles()
   const breakpoint = useBreakpoint()
+  const dispatch = useDispatch()
+
+  const handleReloadContact = (contactId: UUID) => {
+    const query = {
+      associations: [...defaultUpdateContactQuery.associations, 'contact.flows']
+    }
+
+    dispatch(getContact(contactId, query))
+  }
 
   return [
     {
@@ -70,29 +94,41 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       header: () => <HeaderColumn text="Tags" iconPath={mdiTag} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
-          {contact.tags?.slice(0, 2).join(', ')}
+          <TagsCell contact={contact} />
         </div>
       ),
-      renderInlineEdit: ({ row: contact }) => (
-        <TagsInlineEdit contact={contact} />
+      renderInlineEdit: ({ row: contact }, close) => (
+        <TagsInlineEdit
+          contact={contact}
+          callback={handleReloadContact}
+          close={close}
+        />
       )
     },
     {
       id: 'phone',
       header: () => <HeaderColumn text="Phone" iconPath={mdiPhone} />,
       render: ({ row: contact }) => (
-        <div className={classes.cell}>{contact.phone_number}</div>
+        <div className={classes.cell}>
+          <PhonesCell contact={contact} />
+        </div>
       ),
-      renderInlineEdit: ({ row: contact }) => <div>11</div>
+      renderInlineEdit: ({ row: contact }) => (
+        <PhonesInlineEdit contact={contact} callback={handleReloadContact} />
+      )
     },
     {
       id: 'email',
       hidden: ['xs'].includes(breakpoint),
       header: () => <HeaderColumn text="Email" iconPath={mdiEmail} />,
       render: ({ row: contact }) => (
-        <div className={classes.cell}>{contact.email}</div>
+        <div className={classes.cell}>
+          <EmailsCell contact={contact} />
+        </div>
       ),
-      renderInlineEdit: ({ row: contact }) => <div>22</div>
+      renderInlineEdit: ({ row: contact }) => (
+        <EmailsInlineEdit contact={contact} callback={handleReloadContact} />
+      )
     },
     {
       id: 'last-touch',
@@ -100,7 +136,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       header: () => <HeaderColumn text="Last Touch" iconPath={mdiCalendar} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
-          <LastTouched contact={contact} title="" />
+          <LastTouched contact={contact} />
         </div>
       )
     },
@@ -108,13 +144,37 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       id: 'flows',
       hidden: breakpoint !== 'xl',
       header: () => <HeaderColumn text="Flows" iconPath={mdiFlash} />,
-      render: ({ row: contact }) => <div>-</div>
+      render: ({ row: contact }) => (
+        <div className={classes.cell}>
+          <FlowsCell
+            count={Array.isArray(contact.flows) ? contact.flows.length : 0}
+          />
+        </div>
+      ),
+      renderInlineEdit: ({ row: contact }, close) => (
+        <FlowsInlineEdit
+          contact={contact}
+          callback={handleReloadContact}
+          close={close}
+        />
+      )
     },
     {
       id: 'birthday',
       hidden: breakpoint !== 'xl',
       header: () => <HeaderColumn text="Birthday" iconPath={mdiCake} />,
-      render: ({ row: contact }) => <div>-</div>
+      render: ({ row: contact }) => (
+        <div className={classes.cell}>
+          <BirthdayCell contact={contact} />
+        </div>
+      ),
+      renderInlineEdit: ({ row: contact }, close) => (
+        <BirthdayInlineEdit
+          contact={contact}
+          callback={handleReloadContact}
+          close={close}
+        />
+      )
     }
   ]
 }

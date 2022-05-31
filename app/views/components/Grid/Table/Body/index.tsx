@@ -67,7 +67,7 @@ export function Body<Row>({
 
   const columnsSize = useMemo(() => getColumnsSize<Row>(columns), [columns])
 
-  const [deboundedOnReachStart] = useDebouncedCallback(
+  const [debouncedOnReachStart] = useDebouncedCallback(
     infiniteScrolling ? infiniteScrolling.onReachStart : () => null,
     300
   )
@@ -92,7 +92,7 @@ export function Body<Row>({
 
     if (isReachedStart(data, scroll.scrollDirection)) {
       console.log('[ Grid ] Reached Start')
-      deboundedOnReachStart()
+      debouncedOnReachStart()
     }
 
     if (isReachedEnd(data, scroll.scrollDirection, rows.length)) {

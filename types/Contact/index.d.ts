@@ -26,7 +26,7 @@ declare interface IContactAttributeDefInput {
 
 declare interface IContactAttributeDef {
   id: UUID
-  name: string | null
+  name: Nullable<string>
   label: string
   data_type: 'number' | 'text' | 'date'
   section: string
@@ -37,10 +37,10 @@ declare interface IContactAttributeDef {
   searchable: boolean
   required: boolean
   has_label: boolean
-  labels: string[] | null
-  enum_values: string[] | null
-  user: UUID | null
-  brand: UUID | null
+  labels: Nullable<string[]>
+  enum_values: Nullable<string[]>
+  user: Nullable<UUID>
+  brand: Nullable<UUID>
 }
 
 type IContactAttributeWithDef = IContactAttribute & {
@@ -77,7 +77,7 @@ declare interface IContact extends IContactBase {
   // it doesn't exist when fetching a single contact. it exist on list
   // probably it's coming with some association). We need to figure it out
   brand?: UUID
-
+  birthday: Nullable<string>
   display_name: string
   profile_image_url: string | null
   last_touch: number | null
@@ -85,8 +85,11 @@ declare interface IContact extends IContactBase {
   phone_number?: string
   touch_freq?: number | null
 
-  email: string | null
-  emails: string[] | null
+  phone_number?: Nullable<string>
+  phone_numbers: Nullable<string[]>
+
+  email: Nullable<string>
+  emails: Nullable<string[]>
 
   partner_email: string | null
   partner_first_name: string | null
