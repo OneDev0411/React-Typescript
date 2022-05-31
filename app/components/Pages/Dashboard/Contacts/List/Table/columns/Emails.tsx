@@ -1,6 +1,6 @@
 import { CellWithMultipleValue } from './components/CellWithMultipleValue'
 
-const MAX_VALUES: number = 1
+const MAX_LENGTH: number = 1
 
 interface Props {
   contact: IContact
@@ -15,8 +15,8 @@ export function EmailsCell({ contact }: Props) {
     <CellWithMultipleValue
       label={contact.email}
       info={
-        (contact.emails || []).length > MAX_VALUES
-          ? `${contact.emails?.length! - MAX_VALUES} more`
+        (contact.emails || []).length > MAX_LENGTH
+          ? `${contact.emails?.length! - MAX_LENGTH} more`
           : undefined
       }
     />
