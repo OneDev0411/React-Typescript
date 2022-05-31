@@ -5,7 +5,7 @@ import cn from 'classnames'
 
 import { noop } from '@app/utils/helpers'
 import {
-  getListingFormatedPrice,
+  getListingFormattedPrice,
   getStatusColorClass
 } from '@app/utils/listing'
 
@@ -129,7 +129,7 @@ const Marker = ({
     return null
   }
 
-  const formatedPrice = getListingFormatedPrice(price, true)
+  const formattedPrice = getListingFormattedPrice(price, true)
   const statusColor = getStatusColorClass(status)
 
   const isShowBubble = zoom >= MINIMAL_MARKER_ZOOM_LEVEL
@@ -149,7 +149,7 @@ const Marker = ({
         })}
         style={{ backgroundColor: statusColor }}
       >
-        {isShowBubble && formatedPrice}
+        {isShowBubble && formattedPrice}
       </div>
       {isShowPopper && (
         <Popper

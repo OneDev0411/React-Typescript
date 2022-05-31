@@ -1,5 +1,3 @@
-import { RefObject } from 'react'
-
 import { DialogProps } from '@material-ui/core'
 
 export type TabValue =
@@ -20,7 +18,6 @@ export interface SearchableImageTabProps {
   setQuery?: (query: string) => void
   onSelect: ImageSelectDialogProps['onSelect']
   onEdit?: (file: File | string) => void
-  containerRef?: RefObject<HTMLDivElement>
 }
 
 export interface UploadableImageTabProps {
