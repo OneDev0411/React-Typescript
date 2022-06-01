@@ -70,64 +70,70 @@ export function InviteButton({ user, userRoles }: Props) {
       alignItems="center"
       wrap="nowrap"
     >
-      {!user.brand && <span>Pending</span>}
-      {user.brand && isInvited ? (
-        <>
-          <Button
-            size="small"
-            variant="outlined"
-            disabled={isLoading}
-            startIcon={
-              isLoading ? (
-                <CircularProgress size={16} color="inherit" />
-              ) : (
-                <SvgIcon path={mdiRefresh} size={muiIconSizes.small} />
-              )
-            }
-            onClick={inviteUser}
-          >
-            {isLoading ? 'Resending...' : 'Resend Invitation'}
-          </Button>
-          <Tooltip
-            title={
-              lastInvitationDate
-                ? `Last invitation sent at ${format(
-                    lastInvitationDate,
-                    'LLL dd, yyyy  hh:mmaaa'
-                  )}`
-                : 'Invitation sent.'
-            }
-          >
-            <Typography
-              className={classes.inviteSent}
-              variant="body2"
-              color="primary"
-            >
-              <SvgIcon
-                path={mdiCheck}
-                size={muiIconSizes.small}
-                className={classes.inviteSentIcon}
-              />
-              Invitation sent
-            </Typography>
-          </Tooltip>
-        </>
+      {!user.brand ? (
+        <span>Pending</span>
       ) : (
-        <Button
-          size="small"
-          variant="outlined"
-          disabled={isLoading}
-          startIcon={
-            isLoading ? (
-              <CircularProgress size={16} color="inherit" />
-            ) : (
-              <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
-            )
-          }
-          onClick={inviteUser}
-        >
-          {isLoading ? 'Inviting...' : 'Invite'}
-        </Button>
+        <>
+          {isInvited && (
+            <>
+              <Button
+                size="small"
+                variant="outlined"
+                disabled={isLoading}
+                startIcon={
+                  isLoading ? (
+                    <CircularProgress size={16} color="inherit" />
+                  ) : (
+                    <SvgIcon path={mdiRefresh} size={muiIconSizes.small} />
+                  )
+                }
+                onClick={inviteUser}
+              >
+                {isLoading ? 'Resending...' : 'Resend Invitation'}
+              </Button>
+              <Tooltip
+                title={
+                  lastInvitationDate
+                    ? `Last invitation sent at ${format(
+                        lastInvitationDate,
+                        'LLL dd, yyyy  hh:mmaaa'
+                      )}`
+                    : 'Invitation sent.'
+                }
+              >
+                <Typography
+                  className={classes.inviteSent}
+                  variant="body2"
+                  color="primary"
+                >
+                  <SvgIcon
+                    path={mdiCheck}
+                    size={muiIconSizes.small}
+                    className={classes.inviteSentIcon}
+                  />
+                  Invitation sent
+                </Typography>
+              </Tooltip>
+            </>
+          )}
+          {!isInvited && (
+            <Button
+              size="small"
+              variant="outlined"
+              disabled={isLoading}
+              startIcon={
+                isLoading ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : (
+                  <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
+                )
+              }
+              onClick={inviteUser}
+            >
+              {isLoading ? 'Inviting...' : 'Invite'}
+            </Button>
+          )}
+        </>
       )}
     </Grid>
   )
