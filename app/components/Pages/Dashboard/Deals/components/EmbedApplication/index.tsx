@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import * as MaterialUi from '@material-ui/core'
 import {
@@ -122,67 +122,61 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
     }
   })
 
-  const updateDealContext = (key: string, value: unknown) => {
-    const brandContext = brandContexts.find(context => context.key === key)
+  const updateDealContext = useCallback(
+    (key: string, value: unknown) => {
+      const brandContext = brandContexts.find(context => context.key === key)
 
-    if (!brandContext) {
-      console.error(`Invalid Context Key: ${key}`)
+      if (!brandContext) {
+        console.error(`Invalid Context Key: ${key}`)
 
-      return
-    }
+        return
+      }
 
-    try {
-      const context = createContextObject(
-        deal,
-        brandChecklists,
-        checklists,
-        brandContext.key,
-        value,
-        isBackOffice ? true : !brandContext.needs_approval
-      )
+      try {
+        const context = createContextObject(
+          deal,
+          brandChecklists,
+          checklists,
+          brandContext.key,
+          value,
+          isBackOffice ? true : !brandContext.needs_approval
+        )
 
-      dispatch(upsertContexts(deal.id, [context]))
-    } catch (e) {
-      console.log(e)
-    }
-  }
+        dispatch(upsertContexts(deal.id, [context]))
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    [brandChecklists, brandContexts, checklists, deal, dispatch, isBackOffice]
+  )
 
   const getDealContext = useCallback(
     (name: string) => getContext(deal, name),
     [deal]
   )
 
-  const App = memo(() => {
-    if (!module) {
-      return null
-    }
+  const App = useCallback(
+    props => {
+      if (!module) {
+        return null
+      }
 
-    return module.default({
-      models: {
-        deal,
-        user,
-        attributeDefs
-      },
-      utils: {
-        notify
-      },
-      api: {
-        getDealContext,
-        updateDealContext
-      },
-      Components: {
-        Logo,
-        RoleForm: DealRoleForm,
-        Wizard: {
-          QuestionWizard,
-          QuestionSection,
-          QuestionTitle,
-          QuestionForm
+      return module.default({
+        ...props,
+        Components: {
+          Logo,
+          RoleForm: DealRoleForm,
+          Wizard: {
+            QuestionWizard,
+            QuestionSection,
+            QuestionTitle,
+            QuestionForm
+          }
         }
-      },
-      onSubmit: () => {}
-    })
-  })
+      })
+    },
+    [module]
+  )
 
   return (
     <Dialog open fullWidth maxWidth={manifest?.size ?? 'md'}>
@@ -200,7 +194,22 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
         </Box>
       </DialogTitle>
 
-      <DialogContent>{module ? <App /> : <CircularProgress />}</DialogContent>
+      <DialogContent>
+        {module ? (
+          <App
+            models={{ deal, user, attributeDefs }}
+            utils={{
+              notify
+            }}
+            api={{
+              getDealContext,
+              updateDealContext
+            }}
+          />
+        ) : (
+          <CircularProgress />
+        )}
+      </DialogContent>
     </Dialog>
   )
 }
