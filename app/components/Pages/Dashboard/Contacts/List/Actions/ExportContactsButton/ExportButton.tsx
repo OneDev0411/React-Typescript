@@ -8,8 +8,8 @@ import {
   mdiExportVariant
 } from '@mdi/js'
 
+import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
 import { BaseDropdown } from 'components/BaseDropdown'
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Item } from './Item'

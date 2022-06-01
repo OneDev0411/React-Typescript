@@ -1,5 +1,9 @@
 import { makeStyles } from '@material-ui/core'
-import { mdiCalendarCheckOutline, mdiClockOutline } from '@mdi/js'
+import {
+  mdiCalendarCheckOutline,
+  mdiClockOutline,
+  mdiAlertOutline
+} from '@mdi/js'
 
 import SocialPostTableFilterButton from './SocialPostTableFilterButton'
 import { SocialPostFilter } from './types'
@@ -12,10 +16,34 @@ const useStyles = makeStyles(
   { name: 'SocialPostTableFilter' }
 )
 
+interface FilterItem {
+  icon: string
+  value: SocialPostFilter
+  label: string
+}
+
 interface SocialPostTableFilterProps {
   value: SocialPostFilter
   onChange: (value: SocialPostFilter) => void
 }
+
+const filterItems: FilterItem[] = [
+  {
+    icon: mdiCalendarCheckOutline,
+    value: 'posted',
+    label: 'Posted'
+  },
+  {
+    icon: mdiClockOutline,
+    value: 'scheduled',
+    label: 'Scheduled'
+  },
+  {
+    icon: mdiAlertOutline,
+    value: 'failed',
+    label: 'Failed'
+  }
+]
 
 function SocialPostTableFilter({
   value,
@@ -25,22 +53,17 @@ function SocialPostTableFilter({
 
   return (
     <div className={classes.root}>
-      <SocialPostTableFilterButton
-        className={classes.filter}
-        icon={mdiCalendarCheckOutline}
-        isActive={value === 'posted'}
-        onClick={() => onChange('posted')}
-      >
-        Posted
-      </SocialPostTableFilterButton>
-      <SocialPostTableFilterButton
-        className={classes.filter}
-        icon={mdiClockOutline}
-        isActive={value === 'scheduled'}
-        onClick={() => onChange('scheduled')}
-      >
-        Scheduled
-      </SocialPostTableFilterButton>
+      {filterItems.map(item => (
+        <SocialPostTableFilterButton
+          key={item.value}
+          className={classes.filter}
+          icon={item.icon}
+          isActive={value === item.value}
+          onClick={() => onChange(item.value)}
+        >
+          {item.label}
+        </SocialPostTableFilterButton>
+      ))}
     </div>
   )
 }

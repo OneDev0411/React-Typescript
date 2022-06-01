@@ -21,8 +21,11 @@ function HowToConnectToInstagramDialog({
 }: HowToConnectToInstagramDialogProps) {
   const classes = useStyles()
   const handleLearnMore = () => {
-    // TODO: Set the address that will be provided by Sahar
-    window.open('https://help.rechat.com/guides/marketing', '_blank')
+    // TODO: Set the final address that will be provided by Abi
+    window.open(
+      'https://help.rechat.com/guides/marketing/social-marketing',
+      '_blank'
+    )
   }
 
   return (

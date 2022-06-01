@@ -6,15 +6,16 @@ export const RowContainer = styled.div<{
   selected: boolean
   theme: Theme
 }>`
-  ${({ theme, index, selected }) => css`
+  ${({ theme, index, selected }) => `
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-size: 14px !important;
     ${theme.typography.body2};
 
-    background-color: ${index % 2 === 0
-      ? theme.palette.grey[50]
-      : 'transparent'};
+    background-color: ${
+      index % 2 === 0 ? theme.palette.grey[50] : 'transparent'
+    };
 
     .column:first-child {
       padding-left: ${theme.spacing(1)}px;
@@ -41,9 +42,11 @@ export const RowContainer = styled.div<{
       display: block !important;
     }
 
-    ${selected &&
-    css`
-      background-color: ${theme.palette.action.selected};
-    `}
+    ${
+      selected &&
+      css`
+        background-color: ${theme.palette.action.selected};
+      `
+    }
   `}
 `

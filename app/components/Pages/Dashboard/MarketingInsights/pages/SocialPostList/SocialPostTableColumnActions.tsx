@@ -1,21 +1,16 @@
-import { Button, IconButton, makeStyles } from '@material-ui/core'
+import { IconButton, makeStyles } from '@material-ui/core'
 import { mdiTrashCanOutline, mdiOpenInNew } from '@mdi/js'
+import { useSelector } from 'react-redux'
 
-import {
-  useDeleteSocialPost,
-  useUpdateSocialPost
-} from '@app/models/social-posts'
-import {
-  convertDateToTimestamp,
-  convertTimestampToDate
-} from '@app/utils/date-utils'
-import { futureTimeValidator } from '@app/utils/validations/future-time'
-import { DateTimePicker } from '@app/views/components/DateTimePicker'
+import { useDeleteSocialPost } from '@app/models/social-posts'
+import { selectUserId } from '@app/selectors/user'
 import LinkButton from '@app/views/components/LinkButton'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import { isSocialPostExecuted } from './helpers'
+import { isSocialPostExecuted, isSocialPostFailed } from './helpers'
+import SocialPostFailedChip from './SocialPostFailedChip'
+import SocialPostPreviewButton from './SocialPostPreviewButton'
 
 const useStyles = makeStyles(
   theme => ({
@@ -29,7 +24,7 @@ const useStyles = makeStyles(
         color: theme.palette.primary.main
       }
     },
-    deleteButton: { marginLeft: theme.spacing(1) }
+    actionMargin: { marginLeft: theme.spacing(1) }
   }),
   { name: 'SocialPostTableColumnActions' }
 )
@@ -45,18 +40,18 @@ function SocialPostTableColumnActions({
 
   const { mutate: deleteSocialPost, isLoading: isDeleting } =
     useDeleteSocialPost()
-  const { mutate: updateSocialPost, isLoading: isUpdating } =
-    useUpdateSocialPost()
+
+  const { mutate: silentDeleteSocialPost, isLoading: isSilentDeleting } =
+    useDeleteSocialPost({ notify: { onSuccess: '', onError: '' } })
 
   const handleDelete = () => deleteSocialPost(socialPost)
 
-  const handleDueAtChange = (date: Date) =>
-    updateSocialPost({
-      socialPost,
-      inputData: { due_at: convertDateToTimestamp(date) }
-    })
+  const handleSilentDelete = () => silentDeleteSocialPost(socialPost)
 
-  const isWorking = isDeleting || isUpdating
+  const socialPostBelongsToCurrentUser =
+    useSelector(selectUserId) === socialPost.owner.id
+
+  const isWorking = isDeleting || isSilentDeleting
 
   // If it is already posted, it can display the post link
   if (socialPost.post_link) {
@@ -74,47 +69,37 @@ function SocialPostTableColumnActions({
     )
   }
 
-  // If it is executed, display nothing
-  if (isSocialPostExecuted(socialPost)) {
+  const isFailed = isSocialPostFailed(socialPost)
+
+  // If it is executed successfully, display nothing
+  if (isSocialPostExecuted(socialPost) && !isFailed) {
     return null
   }
 
-  const selectedDate = convertTimestampToDate(socialPost.due_at)
-
-  // Otherwise, it is not executed yet and we need to have the reschedule and delete buttons
+  // Otherwise, it is not executed yet and we need to have the reschedule/retry and delete buttons
   return (
     <div className={classes.root}>
-      <DateTimePicker
-        onClose={handleDueAtChange}
-        showTimePicker
-        selectedDate={selectedDate}
-        defaultSelectedDate={selectedDate}
-        datePickerModifiers={{
-          disabled: {
-            before: new Date()
-          }
-        }}
-        validate={futureTimeValidator}
-      >
-        {({ handleOpen }) => (
-          <Button
+      {isFailed && <SocialPostFailedChip />}
+      {socialPostBelongsToCurrentUser && (
+        <>
+          <SocialPostPreviewButton
+            className={classes.actionMargin}
+            socialPost={socialPost}
             color="primary"
             size="small"
-            onClick={handleOpen}
+            disabled={isWorking}
+            onSocialPostScheduledOrSent={handleSilentDelete}
+          />
+          <IconButton
+            className={classes.actionMargin}
+            size="small"
+            onClick={handleDelete}
             disabled={isWorking}
           >
-            Reschedule
-          </Button>
-        )}
-      </DateTimePicker>
-      <IconButton
-        className={classes.deleteButton}
-        size="small"
-        onClick={handleDelete}
-        disabled={isWorking}
-      >
-        <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.medium} />
-      </IconButton>
+            <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.medium} />
+          </IconButton>
+        </>
+      )}
     </div>
   )
 }

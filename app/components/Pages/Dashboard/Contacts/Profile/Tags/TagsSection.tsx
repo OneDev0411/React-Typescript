@@ -3,9 +3,9 @@ import React, { useMemo } from 'react'
 import { Box, Chip, Typography, makeStyles, Theme } from '@material-ui/core'
 import { mdiTagOutline } from '@mdi/js'
 
+import { PopoverContactTagSelector } from '@app/components/Pages/Dashboard/Contacts/components/TagSelector'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { PopoverContactTagSelector } from 'components/TagSelector'
 
 import { Tag } from './Tag'
 
@@ -86,7 +86,7 @@ function Tags({ contact, onChange }: Props) {
         filter={{
           selectedIds: [contact.id]
         }}
-        onSaveCallback={async () => onChange()}
+        callback={() => onChange()}
       />
     </Box>
   )

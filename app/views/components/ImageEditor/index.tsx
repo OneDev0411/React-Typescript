@@ -159,7 +159,6 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
 
     const file = await convertUrlToImageFile(
       editor!.toDataURL({
-        format: 'jpeg',
         quality: 1
       })
     )

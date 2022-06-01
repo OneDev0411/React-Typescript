@@ -1,7 +1,5 @@
 import { Grid, Divider, makeStyles } from '@material-ui/core'
 
-import { ACL } from '@app/constants/acl'
-import { useAcl } from '@app/views/components/Acl/use-acl'
 import { getFileType } from 'utils/file-utils/get-file-type'
 
 import SocialDrawerCopyLink from './SocialDrawerCopyLink'
@@ -30,7 +28,10 @@ function SocialDrawerActions({
   const classes = useStyles()
   const setStep = useSetSocialDrawerStep()
 
-  const hasAccess = useAcl(ACL.SHARE_TO_INSTAGRAM)
+  // Currently, we only support Instagram posts for social template instance
+  const hasInstagramButton =
+    instance.type === 'template_instance' &&
+    instance.template.medium === 'Social'
 
   const gotoScheduleStep = () => setStep('Schedule')
 
@@ -42,18 +43,12 @@ function SocialDrawerActions({
     <div className={className}>
       <div className={classes.row}>
         <Grid container spacing={2}>
-          {hasAccess && (
+          {hasInstagramButton && (
             <Grid item sm={6}>
-              <SocialDrawerInstagramButton
-                disabled={
-                  instance.type === 'brand_asset' ||
-                  instance.template.medium !== 'Social'
-                }
-                onClick={gotoScheduleStep}
-              />
+              <SocialDrawerInstagramButton onClick={gotoScheduleStep} />
             </Grid>
           )}
-          <Grid item sm={hasAccess ? 6 : 12}>
+          <Grid item sm={hasInstagramButton ? 6 : 12}>
             <SocialDrawerDownloadButton instance={instance} />
           </Grid>
         </Grid>

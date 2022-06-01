@@ -6,8 +6,8 @@ import { useActiveTeam } from '@app/hooks/team/use-active-team'
 import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
 import { useMakeOriginQueryParamFromLocation } from '@app/hooks/use-make-origin-query-param-from-location'
 import { goTo } from '@app/utils/go-to'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import Grid from 'components/Grid/Table'
-import { useGridStyles } from 'components/Grid/Table/styles'
 import {
   TrProps,
   SortableColumn,

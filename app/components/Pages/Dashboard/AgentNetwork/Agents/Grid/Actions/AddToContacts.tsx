@@ -4,7 +4,7 @@ import { mdiAccountPlusOutline } from '@mdi/js'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
+import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
 import { addNotification as notify } from 'components/notification'
 import { getAttributeDefs } from 'models/contacts/get-attribute-defs'
 import { importContacts } from 'models/contacts/import-contacts'
