@@ -35,6 +35,8 @@ function SuperCampaignTemplatePreview({
   const user = useSelector(selectUser)
   const brand = useSelector(selectActiveBrand)
 
+  const correctedUser = getCorrectedUser(user, viewAsAdmin)
+
   return (
     <Card
       variant="outlined"
@@ -44,7 +46,8 @@ function SuperCampaignTemplatePreview({
         template={template}
         brand={brand}
         data={{
-          user: getCorrectedUser(user, viewAsAdmin),
+          user: correctedUser,
+          sender: correctedUser,
           listing: template.listings?.[0],
           contact: template.contacts?.[0]
         }}
