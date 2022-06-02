@@ -30,6 +30,7 @@ const allMarketingTemplateType: IMarketingTemplateType[] = [
   'MLKDay',
   'MothersDay',
   'NewAgent',
+  'Recruiting',
   'News',
   'Newsletter',
   'NewYear',

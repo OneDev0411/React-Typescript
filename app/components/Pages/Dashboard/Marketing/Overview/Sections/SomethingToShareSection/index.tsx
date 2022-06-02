@@ -18,7 +18,11 @@ import { useTemplates } from '../../../hooks/use-templates'
 import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
 
-const BRANDING_TEMPLATE_TYPES: IMarketingTemplateType[] = ['Brand', 'NewAgent']
+const BRANDING_TEMPLATE_TYPES: IMarketingTemplateType[] = [
+  'Brand',
+  'NewAgent',
+  'Recruiting'
+]
 const SOCIAL_TEMPLATE_MEDIUMS: IMarketingTemplateMedium[] = [
   'Social',
   'FacebookCover',

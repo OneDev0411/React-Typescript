@@ -16,6 +16,7 @@ import { baseView, isComponent } from '../utils'
 import template from './template.njk'
 import {
   generateEmbedVideoUrl,
+  getVideoTag,
   getVimeoVideoId,
   getYouTubeVideoId
 } from './utils'
@@ -172,7 +173,8 @@ export default function registerVideoBlock(
     allBlocks,
     selectedVideo => ({
       ...renderData,
-      url: generateEmbedVideoUrl(selectedVideo.url)
+      url: generateEmbedVideoUrl(selectedVideo.url),
+      tag: getVideoTag(selectedVideo.source)
     }),
     onVideoDrop
   )
