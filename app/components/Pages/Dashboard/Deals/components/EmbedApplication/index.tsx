@@ -23,6 +23,7 @@ import { getContext } from '@app/models/Deal/helpers/context'
 import { IAppState } from '@app/reducers'
 import { getBrandChecklistsById } from '@app/reducers/deals/brand-checklists'
 import { getDealChecklists } from '@app/reducers/deals/checklists'
+import { selectDealRoles } from '@app/reducers/deals/roles'
 import { upsertContexts } from '@app/store_actions/deals'
 import { DialogTitle } from '@app/views/components/DialogTitle'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -42,6 +43,7 @@ interface State {
   user: Nullable<IUser>
   brandChecklists: IBrandChecklist[]
   checklists: IDealChecklist[]
+  roles: IDealRole[]
   attributeDefs: {
     byId: Record<UUID, IContactAttributeDef>
     byName: Record<string, UUID>
@@ -65,17 +67,16 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
   const notify = useNotify()
   const dispatch = useDispatch()
 
-  const { user, attributeDefs, brandChecklists, checklists } = useSelector<
-    IAppState,
-    State
-  >(({ deals, user, contacts }) => ({
-    user,
-    attributeDefs: contacts.attributeDefs,
-    brandChecklists: deal
-      ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
-      : [],
-    checklists: getDealChecklists(deal, deals.checklists)
-  }))
+  const { user, roles, attributeDefs, brandChecklists, checklists } =
+    useSelector<IAppState, State>(({ deals, user, contacts }) => ({
+      user,
+      roles: selectDealRoles(deals.roles, deal),
+      attributeDefs: contacts.attributeDefs,
+      brandChecklists: deal
+        ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
+        : [],
+      checklists: getDealChecklists(deal, deals.checklists)
+    }))
 
   const brandContexts = useDealBrandContexts(deal)
 
@@ -197,7 +198,12 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
       <DialogContent>
         {module ? (
           <App
-            models={{ deal, user, attributeDefs }}
+            models={{
+              deal,
+              user,
+              roles,
+              attributeDefs
+            }}
             utils={{
               notify
             }}
