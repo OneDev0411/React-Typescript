@@ -57,6 +57,7 @@ const GENERAL_FLOW_TYPES = [
   'Layout',
   'MarketReport',
   'NewAgent',
+  'Recruiting',
   'News',
   'Newsletter',
   'Recruitment',

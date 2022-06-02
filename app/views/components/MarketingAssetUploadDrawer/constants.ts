@@ -38,6 +38,7 @@ export const TEMPLATE_TYPES: IMarketingTemplateType[] = [
   'MLKDay',
   'MothersDay',
   'NewAgent',
+  'Recruiting',
   'News',
   'Newsletter',
   'NewYear',

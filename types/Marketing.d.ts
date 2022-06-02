@@ -91,6 +91,7 @@ declare type IMarketingTemplateType =
   | 'MLKDay'
   | 'MothersDay'
   | 'NewAgent'
+  | 'Recruiting'
   | 'News'
   | 'Newsletter'
   | 'NewYear'
