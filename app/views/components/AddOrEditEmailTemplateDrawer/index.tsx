@@ -143,7 +143,7 @@ export function AddOrEditEmailTemplateDrawer({
       submittingButtonLabel="Saving ..."
       title={getTitle()}
       isSubmitDisabled={!editable}
-      submitButtonTooltip={!editable ? "Template isn't editable!" : 'Save'}
+      submitButtonTooltip={!editable ? "Template isn't editable!" : undefined}
       render={() => (
         <div>
           <Field
