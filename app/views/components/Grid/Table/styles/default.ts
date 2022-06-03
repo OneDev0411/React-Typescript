@@ -43,6 +43,8 @@ export const styles = (theme: Theme) =>
           top: '50%',
           transform: 'translate(-50%, -50%)',
           visibility: 'hidden',
+          background: theme.palette.common.white,
+          boxShadow: theme.shadows[1],
           '&.open': {
             visibility: 'visible'
           }
