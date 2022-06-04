@@ -14,6 +14,7 @@ import {
 } from './styled'
 
 interface Props {
+  team: IBrand
   user: IUser
   userRoles: IBrandRole[]
   allRoles: IBrandRole[]
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export function TeamMember({
+  team,
   user,
   userRoles,
   allRoles,
@@ -46,7 +48,7 @@ export function TeamMember({
         </TeamMemberSubTitle>
       </FlexItem>
       {user.is_shadow ? (
-        <InviteButton user={user} userRoles={userRoles} />
+        <InviteButton team={team} user={user} userRoles={userRoles} />
       ) : (
         <BasicMultiSelectDropdown
           disabled={isSaving}
