@@ -37,6 +37,7 @@ import {
 } from 'components/QuestionWizard'
 import config from 'config'
 
+import { ContactRoles } from '../../Create/components/ContactRoles'
 import { RoleCard } from '../RoleCard'
 
 import { Manifest } from './types'
@@ -170,6 +171,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
           Logo,
           RoleForm: DealRoleForm,
           RoleCard,
+          ContactRoles,
           Wizard: {
             QuestionWizard,
             QuestionSection,
