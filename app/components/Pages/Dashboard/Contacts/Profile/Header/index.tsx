@@ -30,13 +30,15 @@ export interface Props {
   contactChangeCallback: () => void
   onCreateEvent: () => void
   onCreateNote: (contact: INormalizedContact) => void
+  onUpdateTouchFreq(newValue: Nullable<number>): void
 }
 
 export const Header = ({
   contact,
   onCreateNote,
   onCreateEvent,
-  contactChangeCallback
+  contactChangeCallback,
+  onUpdateTouchFreq
 }: Props) => {
   const classes = useStyles()
 
@@ -53,6 +55,7 @@ export const Header = ({
           contact={contact}
           onCreateNote={onCreateNote}
           onCreateEvent={onCreateEvent}
+          onUpdateTouchFreq={onUpdateTouchFreq}
         />
       </div>
     </div>

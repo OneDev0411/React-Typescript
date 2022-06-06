@@ -19,6 +19,7 @@ import { Props } from '..'
 
 import AddEvent from './AddEvent'
 import AddNote from './AddNote'
+import { ManageRelationship } from './ManageRelationship'
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -40,6 +41,7 @@ const useStyles = makeStyles(
         }
       },
       actionContainer: {
+        justifyContent: 'flex-end',
         minWidth: '200px',
         display: 'flex',
         alignItems: 'center',
@@ -52,47 +54,60 @@ const useStyles = makeStyles(
 export const Actions = ({
   contact,
   onCreateNote,
-  onCreateEvent
+  onCreateEvent,
+  onUpdateTouchFreq
 }: Omit<Props, 'contactChangeCallback'>) => {
   const classes = useStyles()
 
   return (
     <div className={classes.container}>
-      <div className={classes.shortcutContainer}>
-        <SendEmailButton
-          recipients={normalizeContactsForEmailCompose([contact])}
-          render={({ onClick, testId }) => (
-            <Tooltip title="Send Email">
-              <IconButton
-                onClick={onClick}
-                data-test={testId}
-                className={classes.shortcutIconButton}
-              >
-                <SvgIcon path={mdiEmailOutline} size={muiIconSizes.medium} />
-              </IconButton>
-            </Tooltip>
-          )}
+      {false && (
+        <div className={classes.shortcutContainer}>
+          <SendEmailButton
+            recipients={normalizeContactsForEmailCompose([contact])}
+            render={({ onClick, testId }) => (
+              <Tooltip title="Send Email">
+                <IconButton
+                  onClick={onClick}
+                  data-test={testId}
+                  className={classes.shortcutIconButton}
+                >
+                  <SvgIcon path={mdiEmailOutline} size={muiIconSizes.medium} />
+                </IconButton>
+              </Tooltip>
+            )}
+          />
+
+          <SendContactCard
+            contact={contact}
+            mediums="Email"
+            buttonRenderrer={({ disabled, onClick }) => (
+              <Tooltip title="Send a Card">
+                <IconButton
+                  onClick={onClick}
+                  disabled={disabled}
+                  className={classes.shortcutIconButton}
+                >
+                  <SvgIcon path={mdiGiftOutline} size={muiIconSizes.medium} />
+                </IconButton>
+              </Tooltip>
+            )}
+          />
+        </div>
+      )}
+      <div className={classes.actionContainer}>
+        <ManageRelationship
+          contactId={contact.id}
+          contactTouchFreq={contact.touch_freq || null}
+          onUpdateTouchFreq={onUpdateTouchFreq}
         />
 
-        <SendContactCard
-          contact={contact}
-          mediums="Email"
-          buttonRenderrer={({ disabled, onClick }) => (
-            <Tooltip title="Send a Card">
-              <IconButton
-                onClick={onClick}
-                disabled={disabled}
-                className={classes.shortcutIconButton}
-              >
-                <SvgIcon path={mdiGiftOutline} size={muiIconSizes.medium} />
-              </IconButton>
-            </Tooltip>
-          )}
-        />
-      </div>
-      <div className={classes.actionContainer}>
-        <AddNote contactId={contact.id} onCreateNote={onCreateNote} />
-        <AddEvent contact={contact} callback={onCreateEvent} />
+        {false && (
+          <>
+            <AddNote contactId={contact.id} onCreateNote={onCreateNote} />
+            <AddEvent contact={contact} callback={onCreateEvent} />
+          </>
+        )}
       </div>
     </div>
   )

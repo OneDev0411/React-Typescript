@@ -197,6 +197,13 @@ const ContactProfile = props => {
     }
   }
 
+  const handleUpdateTouchFreq = (newVal: Nullable<number>) => {
+    setContact((prevContact: INormalizedContact) => ({
+      ...prevContact,
+      touch_freq: newVal
+    }))
+  }
+
   const handleCreateNote = (contact: INormalizedContact) => {
     setNewContact(contact)
 
@@ -410,6 +417,7 @@ const ContactProfile = props => {
             contactChangeCallback={fetchContact}
             onCreateNote={handleCreateNote}
             onCreateEvent={fetchTimeline}
+            onUpdateTouchFreq={handleUpdateTouchFreq}
           />
           <Tabs
             contact={contact}
