@@ -2,10 +2,10 @@ import { memo } from 'react'
 
 import { ListItemText, makeStyles, Theme } from '@material-ui/core'
 
+import { convertTimestampToDate, fromNow } from '@app/utils/date-utils'
 import { isDealEvent } from '@app/views/components/GridCalendar/helpers/normalize-events/helpers/event-checker'
 import { getTitle } from '@app/views/components/GridCalendar/helpers/normalize-events/helpers/get-title'
 import Link from 'components/ALink'
-import { fromNow } from 'utils/date-utils'
 
 interface Props {
   event: ICalendarEvent
@@ -43,12 +43,12 @@ function CalendarListItemText({ event }: Props) {
     return baseTitle
   }
   const getEventSubTitle = () => {
-    const baseDate = new Date(event.timestamp * 1000)
-    const nextOccurrence = new Date(event.next_occurence)
+    const baseDate = convertTimestampToDate(event.timestamp)
+    const currentDate = new Date()
 
     if (event.all_day) {
       baseDate.setFullYear(
-        nextOccurrence.getUTCFullYear(),
+        currentDate.getUTCFullYear(),
         baseDate.getUTCMonth(),
         baseDate.getUTCDate()
       )

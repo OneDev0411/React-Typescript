@@ -55,6 +55,7 @@ interface Props {
   data?: {
     listing?: Nullable<IListing>
     user?: Nullable<IUser>
+    sender?: Nullable<IUser>
     contact?: Nullable<IContact>
   }
 

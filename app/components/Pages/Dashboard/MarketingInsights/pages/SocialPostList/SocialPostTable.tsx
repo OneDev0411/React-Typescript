@@ -7,7 +7,7 @@ import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { noop } from '@app/utils/helpers'
 import Table from '@app/views/components/Grid/Table'
-import { useGridStyles } from '@app/views/components/Grid/Table/styles'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
 import { sortSocialPosts } from './helpers'

@@ -1,21 +1,31 @@
-import React, { useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 
+import { ListItem, makeStyles } from '@material-ui/core'
 import { isLeapYear, getDaysInMonth } from 'date-fns'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import { BasicDropdown } from 'components/BasicDropdown'
+import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import Button from 'components/Button/ActionButton'
 import { addZero, months } from 'utils/date-times'
 
 import { Input } from './styled'
 
+const useStyles = makeStyles(
+  () => ({
+    itemsContainer: {
+      maxHeight: '200px',
+      overflowY: 'scroll'
+    }
+  }),
+  { name: 'LegacyDateField' }
+)
+
 export function DateField(props) {
-  const [day, setDay] = useState(props.day || { label: 'Day', value: null })
-  const [month, setMonth] = useState(
-    props.month || { label: 'Month', value: null }
-  )
-  const [year, setYear] = useState(props.year || '')
+  const classes = useStyles()
+  const [day, setDay] = useState(props.day)
+  const [month, setMonth] = useState(props.month)
+  const [year, setYear] = useState(props.year)
 
   const daysItems = useMemo(() => {
     const selectedMonth = month.value ? parseInt(month.value, 10) + 1 : 0
@@ -84,23 +94,42 @@ export function DateField(props) {
     }
   }
 
+  const renderItems = (items, onChange, close) => {
+    return (
+      <div className={classes.itemsContainer}>
+        {items.map((item, key) => (
+          <ListItem
+            key={key}
+            button
+            onClick={e => {
+              e.stopPropagation()
+              close()
+              onChange(item)
+            }}
+          >
+            {item.label}
+          </ListItem>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <Flex data-test="date-field">
-      <BasicDropdown
-        items={monthsItems}
-        onChange={onChangeMonth}
-        selectedItem={month}
-        style={{ display: 'flex' }}
-        buttonRenderer={props.dropdownButtonRenderer}
+      <BaseDropdown
+        buttonLabel={month.label}
+        renderMenu={({ close }) =>
+          renderItems(monthsItems, onChangeMonth, close)
+        }
       />
-      <BasicDropdown
-        disabled={!(Number.isInteger(month.value) && month.value >= 0)}
-        items={daysItems}
-        selectedItem={day}
-        onChange={onChangeDay}
-        style={{ display: 'flex', margin: '0 0.5rem 0' }}
-        buttonRenderer={props.dropdownButtonRenderer}
+      <BaseDropdown
+        buttonLabel={day.label}
+        DropdownToggleButtonProps={{
+          disabled: !(Number.isInteger(month.value) && month.value >= 0)
+        }}
+        renderMenu={({ close }) => renderItems(daysItems, onChangeDay, close)}
       />
+
       {props.showYear ? (
         <Input
           type="text"
@@ -120,8 +149,8 @@ export function DateField(props) {
 }
 
 DateField.propTypes = {
-  day: PropTypes.shape().isRequired,
-  month: PropTypes.shape().isRequired,
+  day: PropTypes.shape(),
+  month: PropTypes.shape(),
   year: PropTypes.any,
   onChangeDay: PropTypes.func.isRequired,
   onChangeMonth: PropTypes.func.isRequired,
@@ -134,5 +163,7 @@ DateField.defaultProps = {
   showYear: false,
   onChangeYear() {},
   toggleYearOption() {},
+  day: { label: 'Day', value: null },
+  month: { label: 'Month', value: null },
   year: ''
 }

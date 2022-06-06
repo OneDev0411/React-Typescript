@@ -28,8 +28,11 @@ const GlobalPageLayout = ({ gutter = 4, ...props }: Props) => {
 GlobalPageLayout.Header = (props: GlobalHeaderProps) => (
   <GlobalHeader {...props} noPadding />
 )
-GlobalPageLayout.HeaderWithSearch = (props: GlobalHeaderWithSearchProps) => (
-  <GlobalHeaderWithSearch {...props} noPadding />
+GlobalPageLayout.HeaderWithSearch = ({
+  noPadding = true,
+  ...props
+}: GlobalHeaderWithSearchProps) => (
+  <GlobalHeaderWithSearch {...props} noPadding={noPadding} />
 )
 
 GlobalPageLayout.Main = ({ gutter = 0, ...props }: Props) => (

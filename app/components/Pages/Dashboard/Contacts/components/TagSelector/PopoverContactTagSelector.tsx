@@ -1,28 +1,24 @@
 import { useDispatch } from 'react-redux'
 
-import { getContactsTags } from 'actions/contacts'
-import { bulkTag } from 'models/contacts/bulk-tag'
+import { bulkTag } from '@app/models/contacts/bulk-tag'
 import {
   generateContactFilters,
   ContactFilterGenerator
-} from 'models/contacts/bulk-tag/utils/generate-contact-filters'
-
-import { SelectorOption } from '../type'
-
+} from '@app/models/contacts/bulk-tag/utils/generate-contact-filters'
+import { getContactsTags } from '@app/store_actions/contacts'
 import {
+  SelectorOption,
   PopoverTagSelector,
   PopoverTagSelectorProps
-} from './PopoverTagSelector'
+} from '@app/views/components/TagSelector'
 
 export interface PopoverContactTagSelectorProps
   extends Omit<PopoverTagSelectorProps, 'onSave'> {
   filter: ContactFilterGenerator
-  onSaveCallback?: PopoverTagSelectorProps['onSave']
 }
 
 export const PopoverContactTagSelector = ({
   filter,
-  onSaveCallback,
   ...props
 }: PopoverContactTagSelectorProps) => {
   const dispatch = useDispatch()
@@ -43,8 +39,6 @@ export const PopoverContactTagSelector = ({
     } catch (err) {
       console.error(err)
     }
-
-    return onSaveCallback?.(selectedTags, hasNewTag)
   }
 
   return <PopoverTagSelector {...props} onSave={handleSave} />
