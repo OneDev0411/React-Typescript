@@ -37,6 +37,8 @@ import {
 } from 'components/QuestionWizard'
 import config from 'config'
 
+import { RoleCard } from '../RoleCard'
+
 import { Manifest } from './types'
 
 interface State {
@@ -167,6 +169,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
         Components: {
           Logo,
           RoleForm: DealRoleForm,
+          RoleCard,
           Wizard: {
             QuestionWizard,
             QuestionSection,
