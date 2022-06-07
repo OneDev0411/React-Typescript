@@ -1,4 +1,4 @@
-import { ButtonBase, makeStyles, Theme } from '@material-ui/core'
+import { Typography, makeStyles, Theme } from '@material-ui/core'
 import {
   mdiCake,
   mdiCalendar,
@@ -8,6 +8,7 @@ import {
   mdiTag
 } from '@mdi/js'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router'
 
 import { useBreakpoint } from '@app/hooks/use-breakpoint'
 import {
@@ -15,7 +16,6 @@ import {
   updateContactQuery as defaultUpdateContactQuery
 } from '@app/models/contacts/helpers'
 import { getContact } from '@app/store_actions/contacts/get-contact'
-import { goTo } from '@app/utils/go-to'
 import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderColumn'
 import { SelectionCount } from '@app/views/components/Grid/Table/features/Selection/SelectionCount'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
@@ -42,6 +42,10 @@ const useStyles = makeStyles(
       textOverflow: 'ellipsis'
     },
     cellName: {
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
       '&:hover': {
         textDecoration: 'underline'
       }
@@ -49,7 +53,10 @@ const useStyles = makeStyles(
     nameTitleButton: {
       width: '100%',
       height: '100%',
-      justifyContent: 'flex-start'
+      justifyContent: 'flex-start',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
     }
   }),
   {
@@ -78,14 +85,15 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     {
       id: 'name',
       header: () => <SelectionCount totalRows={totalRows} />,
-      class: classes.cellName,
       render: ({ row: contact }) => (
-        <ButtonBase
-          className={classes.nameTitleButton}
-          onClick={() => goTo(`/dashboard/contacts/${contact.id}`)}
+        <Link
+          className={classes.cellName}
+          to={`/dashboard/contacts/${contact.id}`}
         >
-          {getAttributeFromSummary(contact, 'display_name')}
-        </ButtonBase>
+          <Typography noWrap variant="inherit">
+            {getAttributeFromSummary(contact, 'display_name')}
+          </Typography>
+        </Link>
       )
     },
     {
