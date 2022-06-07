@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Box, Theme, makeStyles, Typography } from '@material-ui/core'
+import { Box, Theme, makeStyles, Typography, Tooltip } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form } from 'react-final-form'
@@ -162,12 +162,25 @@ export function Register(props: WithRouterProps) {
 
             return (
               <form onSubmit={handleSubmit}>
+                {paramsFromURI.email && !paramsFromURI.phone_number && (
+                  <Tooltip title="Your email cannot be changed after you have been invited.">
+                    <TextField
+                      name="email"
+                      type="email"
+                      label="Email Address (unchangeable)"
+                      InputProps={{
+                        readOnly: true
+                      }}
+                    />
+                  </Tooltip>
+                )}
+
                 <TextField name="first_name" label="First Name" />
 
                 <TextField name="last_name" label="Last Name" />
 
                 {paramsFromURI.phone_number && (
-                  <TextField name="email" type="email" label="Email" />
+                  <TextField name="email" type="email" label="Email Address" />
                 )}
 
                 <TextField
