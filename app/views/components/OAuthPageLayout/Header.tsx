@@ -26,21 +26,23 @@ export interface HeaderProps {
   classes?: ClassesProps<typeof styles>
   className?: string
   subtitle?: string
-  title: string
+  title?: string
 }
 
 const useStyles = makeStyles(styles)
 
-export function Header({ title, ...props }: HeaderProps) {
+export function Header({ title, subtitle, ...props }: HeaderProps) {
   const classes = useStyles(props.classes)
 
   return (
     <Box className={classnames(classes.box, props.className)}>
       <Logo />
-      <Typography variant="h4" className={classes.title}>
-        {title}
-      </Typography>
-      <Typography variant="body1">{props.subtitle}</Typography>
+      {title && (
+        <Typography variant="h4" className={classes.title}>
+          {title}
+        </Typography>
+      )}
+      {subtitle && <Typography variant="body1">{subtitle}</Typography>}
     </Box>
   )
 }
