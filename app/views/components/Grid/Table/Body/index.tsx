@@ -49,7 +49,7 @@ export function Body<Row>({
   rows,
   classes,
   virtualize,
-  headless = false,
+  headless = true,
   rowSize = 8,
   totalRows,
   infiniteScrolling,
