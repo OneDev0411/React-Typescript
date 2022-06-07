@@ -3,6 +3,8 @@ import { MouseEvent, useState } from 'react'
 import { Button, makeStyles } from '@material-ui/core'
 import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
 
+import useNotify from '@app/hooks/use-notify'
+import { updateContactTouchReminder } from '@app/models/contacts/update-contact-touch-reminder'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -28,6 +30,7 @@ export function ManageRelationship({
   onUpdateTouchFreq
 }: Props) {
   const classes = useStyles()
+  const notify = useNotify()
 
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLButtonElement | null>(
     null
@@ -44,9 +47,25 @@ export function ManageRelationship({
 
   const onChangeTouchFreq = (newValue: Nullable<number>) => {
     handleCloseMenu()
-    // Todo: update contactTouchFreq
-    console.log('onChangeTouchFreq', contactId, newValue)
-    onUpdateTouchFreq(newValue)
+
+    // we should treat any falsy value ('' / 0 / etc) as null for the backend
+    const updatedTouchFreq = newValue || null
+
+    // To do the optimistic update,
+    // we need to update the contact object in parent component
+    onUpdateTouchFreq(updatedTouchFreq)
+
+    const oldValue = contactTouchFreq
+
+    updateContactTouchReminder(contactId, updatedTouchFreq).catch(e => {
+      console.log(e)
+      notify({
+        status: 'error',
+        message: 'Something went wrong. Please try again or contact support.'
+      })
+      // revert optimistic update if error
+      onUpdateTouchFreq(oldValue)
+    })
   }
 
   return (

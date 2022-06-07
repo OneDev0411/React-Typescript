@@ -61,14 +61,14 @@ export function ManageRelationshipMenu({
             Object.keys has wrong return type for some reason
             https://github.com/Microsoft/TypeScript/issues/12870
           */}
-          {(Object.keys(frequencyOptions) as unknown as number[]).map(value => (
+          {Object.keys(frequencyOptions).map(value => (
             <MenuItem
               key={value}
               onClick={() => {
-                onChangeTouchFreq(value)
+                onChangeTouchFreq(Number(value))
               }}
             >
-              {frequencyToString(value)}
+              {frequencyToString(Number(value))}
             </MenuItem>
           ))}
           <Divider />
