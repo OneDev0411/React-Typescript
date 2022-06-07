@@ -14,13 +14,13 @@ import { DraggableProvided } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router'
 
+import { PopoverContactTagSelector } from '@app/components/Pages/Dashboard/Contacts/components/TagSelector'
 import { updateContactTags } from 'actions/contacts/update-contact-tags'
 import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
 import MiniContact from 'components/MiniContact'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { PopoverContactTagSelector } from 'components/TagSelector'
-import type { SelectorOption } from 'components/TagSelector/type'
+import type { SelectorOption } from 'components/TagSelector'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { getContactNameInitials } from 'models/contacts/helpers'
 
@@ -109,7 +109,7 @@ export function CardItem({
   const dispatch = useDispatch()
   const theme = useTheme<Theme>()
 
-  const handleChangeTag = async (tags: SelectorOption[]) => {
+  const handleChangeTag = (tags: SelectorOption[]) => {
     const newTags = tags.filter(tag => !!tag.value).map(tag => tag.value!)
 
     dispatch(updateContactTags(contact.id, newTags))
@@ -168,7 +168,7 @@ export function CardItem({
               size={muiIconSizes.xsmall}
             />
             <Typography variant="caption" className={classes.lastTouch}>
-              <LastTouched contact={contact} title="" />
+              <LastTouched contact={contact} />
             </Typography>
           </div>
         </Box>
@@ -182,7 +182,7 @@ export function CardItem({
           filter={{
             selectedIds: [contact.id]
           }}
-          onSaveCallback={handleChangeTag}
+          callback={handleChangeTag}
           anchorRenderer={onClick => (
             <Box display="flex" alignItems="center" mt={2} onClick={onClick}>
               {(contact.tags || []).length > 0 ? (

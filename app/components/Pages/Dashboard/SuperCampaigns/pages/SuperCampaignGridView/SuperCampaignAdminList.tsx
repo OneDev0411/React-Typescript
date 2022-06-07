@@ -8,7 +8,7 @@ import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/Marketin
 import { useGetAllSuperCampaigns } from '@app/models/super-campaign'
 import { goTo } from '@app/utils/go-to'
 import Table from '@app/views/components/Grid/Table'
-import { useGridStyles } from '@app/views/components/Grid/Table/styles'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 import { noop } from 'utils/helpers'
 

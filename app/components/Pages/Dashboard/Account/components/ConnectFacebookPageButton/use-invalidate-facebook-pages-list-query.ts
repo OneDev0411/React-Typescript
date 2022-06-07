@@ -5,6 +5,7 @@ import { list } from '@app/models/facebook/query-keys'
 
 type UseInvalidateFacebookPagesListQuery = () => void
 
+// eslint-disable-next-line max-len
 export function useInvalidateFacebookPagesListQuery(): UseInvalidateFacebookPagesListQuery {
   const queryClient = useQueryClient()
   const activeBrandId = useActiveBrandId()

@@ -25,7 +25,7 @@ const filter = createFilterOptions<SelectorOption>({
   trim: true
 })
 
-export interface Props {
+export interface TagSelectorTextFieldProps {
   className?: string
   value?: SelectorOption[]
   chipProps?: ChipProps
@@ -36,14 +36,14 @@ export interface Props {
   disabled?: boolean
 }
 
-export const BaseTagSelector = ({
+export const TagSelectorTextField = ({
   className,
   value = [],
   onChange,
   chipProps = {},
   textFieldProps,
   disabled
-}: Props) => {
+}: TagSelectorTextFieldProps) => {
   const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
   const [availableTags, setAvailableTags] = useState<SelectorOption[]>([])
   const [availableTagKeys, setAvailableTagKeys] = useState<string[]>([])
