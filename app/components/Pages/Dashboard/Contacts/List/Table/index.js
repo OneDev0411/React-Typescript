@@ -75,6 +75,7 @@ const ContactsList = props => {
   return (
     <>
       <Table
+        headless={false}
         rows={props.data}
         totalRows={props.totalRows}
         loading={getLoading()}
