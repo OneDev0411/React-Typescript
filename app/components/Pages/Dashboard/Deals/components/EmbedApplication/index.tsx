@@ -35,6 +35,9 @@ import {
   QuestionTitle,
   QuestionForm
 } from 'components/QuestionWizard'
+import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
+import { useSectionErrorContext } from 'components/QuestionWizard/hooks/use-section-error-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import config from 'config'
 
 import { ContactRoles } from '../../Create/components/ContactRoles'
@@ -167,6 +170,13 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
 
       return module.default({
         ...props,
+        hooks: {
+          wizard: {
+            useSectionContext,
+            useWizardContext,
+            useSectionErrorContext
+          }
+        },
         Components: {
           Logo,
           RoleForm: DealRoleForm,
