@@ -1,14 +1,10 @@
-import React from 'react'
-
 import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import idx from 'idx'
 import { Form } from 'react-final-form'
-import { useSelector } from 'react-redux'
 import { WithRouterProps, Link } from 'react-router'
 
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-import { IAppState } from 'reducers'
 
 import Container from '../Container'
 import Header from '../Header'
@@ -27,7 +23,6 @@ export function ChooseMls(props: WithRouterProps) {
 
   const agents: IAgent[] = idx(props, p => p.location.state.agents)
   const mlsId = props.location.query.mlsId
-  const brand = useSelector((store: IAppState) => store.brand)
 
   if (!Array.isArray(agents) || agents.length === 0) {
     props.router.push('/oops')
@@ -68,7 +63,6 @@ export function ChooseMls(props: WithRouterProps) {
     <Container>
       <SkipButton to="/onboarding/config-brand" />
       <Header
-        brand={brand}
         title="Choose MLS"
         subtitle={`You entred ${mlsId} for MLS #, Choose which MLS you are in.`}
       />

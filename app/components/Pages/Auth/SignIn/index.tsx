@@ -11,11 +11,12 @@ import { getActiveTeam } from '@app/models/user/get-active-team'
 import { logUserActivity } from '@app/models/user/log-activity'
 import { lookUpUserByEmail } from '@app/models/user/lookup-user-by-email'
 import { setUserAndActiveTeam } from '@app/store_actions/active-team'
+import { Logo } from '@app/views/components/OAuthPageLayout/Logo'
+import { PoweredBy } from '@app/views/components/OAuthPageLayout/PoweredBy'
 
 import { IAppState } from '../../../../reducers'
 import { getUserDefaultHomepage } from '../../../../utils/get-default-home-page'
 
-import { getBrandInfo } from './get-brand-info'
 import LookUpUserForm from './LookupUserForm'
 import SignInForm from './SiginForm'
 import { SubmitMessage } from './types'
@@ -31,7 +32,6 @@ export default function Signin(props: Props) {
   const [username, setUsername] = useState<string>(
     window.decodeURIComponent((props.location.query.username as string) || '')
   )
-  const { siteLogo, siteTitle, siteColor } = getBrandInfo(brand)
 
   const redirectTo =
     props.location.state?.redirectTo || props.location.query?.redirectTo
@@ -149,15 +149,10 @@ export default function Signin(props: Props) {
     <div className="signin-page-wrapper">
       <article className="c-auth">
         <header className="c-auth__header">
-          {siteLogo && (
-            <a href="/" tabIndex={-1}>
-              <img
-                src={siteLogo}
-                alt={`${siteTitle} logo`}
-                className="c-auth__logo"
-              />
-            </a>
-          )}
+          <a href="/" tabIndex={-1}>
+            <Logo />
+          </a>
+
           <h1 className="c-auth__title">
             {isHiddenLookUpForm ? 'Welcome' : 'Sign In'}
           </h1>
@@ -168,7 +163,6 @@ export default function Signin(props: Props) {
         <main className="c-auth__main">
           {isHiddenLookUpForm ? (
             <SignInForm
-              brandColor={siteColor}
               isLoading={isLogging}
               onSubmit={handleSignin}
               submitMessage={signInFormSubmitMsg}
@@ -180,7 +174,6 @@ export default function Signin(props: Props) {
             />
           ) : (
             <LookUpUserForm
-              brandColor={siteColor}
               initialValues={{ username }}
               isLoading={isLookinUp}
               onSubmit={handleLookUp}
@@ -189,6 +182,7 @@ export default function Signin(props: Props) {
           )}
         </main>
       </article>
+      <PoweredBy />
     </div>
   )
 }

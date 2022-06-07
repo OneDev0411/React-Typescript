@@ -1,12 +1,8 @@
-import React from 'react'
-
 import { Box, Typography, Theme } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/styles'
 import classnames from 'classnames'
 
 import { ClassesProps } from 'utils/ts-utils'
-
-import Brand from '../../../controllers/Brand'
 
 import { Logo } from './Logo'
 
@@ -27,7 +23,6 @@ const styles = (theme: Theme) =>
   })
 
 export interface HeaderProps {
-  brand: IBrand
   classes?: ClassesProps<typeof styles>
   className?: string
   subtitle?: string
@@ -36,17 +31,12 @@ export interface HeaderProps {
 
 const useStyles = makeStyles(styles)
 
-export function Header({ brand, title, ...props }: HeaderProps) {
+export function Header({ title, ...props }: HeaderProps) {
   const classes = useStyles(props.classes)
-  let brandLogo
-
-  if (brand) {
-    brandLogo = Brand.asset('site_logo', null, brand)
-  }
 
   return (
     <Box className={classnames(classes.box, props.className)}>
-      <Logo brandLogo={brandLogo} />
+      <Logo />
       <Typography variant="h4" className={classes.title}>
         {title}
       </Typography>
