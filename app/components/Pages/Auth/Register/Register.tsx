@@ -150,7 +150,7 @@ export function Register(props: WithRouterProps) {
 
   return (
     <OAuthPageLayout>
-      <OAuthPageLayout.Header title="Welcome to Rechat" />
+      <OAuthPageLayout.Header subtitle="Complete your registration" />
       <OAuthPageLayout.Main>
         <Form
           initialValues={getInitialValues()}
@@ -162,11 +162,15 @@ export function Register(props: WithRouterProps) {
             return (
               <form onSubmit={handleSubmit}>
                 {paramsFromURI.email && !paramsFromURI.phone_number && (
-                  <Tooltip title="Your email cannot be changed after you have been invited.">
+                  <Tooltip
+                    title="You have to sign up with this email you were invited with,
+                          but once you are in the app, you can always go to your settings and
+                          change your email to whatever you desire."
+                  >
                     <TextField
                       name="email"
                       type="email"
-                      label="Email Address (unchangeable)"
+                      label="Email Address"
                       InputProps={{
                         readOnly: true
                       }}
