@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import compose from 'recompose/compose'
@@ -7,16 +5,17 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import { Field, reduxForm } from 'redux-form'
 
+import { Logo } from '@app/views/components/OAuthPageLayout/Logo'
+import { PoweredBy } from '@app/views/components/OAuthPageLayout/PoweredBy'
+
 import updatePassword from '../../../../../models/auth/password/update'
 import { createUrlSearch } from '../../../../../utils/helpers'
 import Button from '../../../../../views/components/Button/ActionButton'
 import ConflictModal from '../../../Branch/components/ConflictModal'
 import SimpleField from '../../../Dashboard/Account/Profile/components/SimpleField'
-import { getBrandInfo } from '../../SignIn/get-brand-info'
 
 const Reset = ({
   user,
-  brand,
   loginParams,
   submitError,
   isSubmitting,
@@ -25,22 +24,14 @@ const Reset = ({
   onSubmitHandler,
   submitSuccessfully
 }) => {
-  const brandInfo = getBrandInfo(brand)
-  const { siteLogo, siteTitle } = brandInfo
   const isDisabled = isSubmitting
 
   let content = (
     <article className="c-auth">
       <header className="c-auth__header">
-        {siteLogo && (
-          <a href="/" tabIndex={-1}>
-            <img
-              src={siteLogo}
-              alt={`${siteTitle} logo`}
-              className="c-auth__logo"
-            />
-          </a>
-        )}
+        <a href="/" tabIndex={-1}>
+          <Logo />
+        </a>
         {!submitSuccessfully && (
           <p className="c-auth__subtitle">Reset your password</p>
         )}
@@ -132,10 +123,15 @@ const Reset = ({
         'You are logged in on this device. To reset your password, please sign out.'
     }
 
-    content = <ConflictModal params={params} brandInfo={brandInfo} />
+    content = <ConflictModal params={params} />
   }
 
-  return <div className="signin-page-wrapper">{content}</div>
+  return (
+    <div className="signin-page-wrapper">
+      <>{content}</>
+      <PoweredBy />
+    </div>
+  )
 }
 
 const validate = values => {
