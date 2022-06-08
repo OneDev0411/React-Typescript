@@ -97,6 +97,7 @@ export function ManageRelationshipCustomItem({
 
       <TextField
         className={classes.input}
+        autoFocus
         variant="standard"
         size="small"
         InputProps={{
