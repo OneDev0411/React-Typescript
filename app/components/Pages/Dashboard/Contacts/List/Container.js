@@ -890,12 +890,14 @@ class ContactsList extends React.Component {
                 <ManageRelationship
                   value={activeSegment.touch_freq}
                   onChange={this.handleListTouchReminderUpdate}
+                  label="Manage Relationships"
                 />
               )}
               {activeTag && activeTag.id && (
                 <ManageRelationship
                   value={activeTag.touch_freq}
                   onChange={this.handleTagTouchReminderUpdate}
+                  label="Manage Relationships"
                 />
               )}
               {showImportAction && (

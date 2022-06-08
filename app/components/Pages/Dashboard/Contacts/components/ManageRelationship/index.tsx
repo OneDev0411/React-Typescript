@@ -12,6 +12,7 @@ import { ManageRelationshipMenu } from './ManageRelationshipMenu'
 interface Props {
   value: Nullable<number>
   onChange(newValue: Nullable<number>): void
+  label?: string
 }
 
 const useStyles = makeStyles(
@@ -21,7 +22,11 @@ const useStyles = makeStyles(
   { name: 'ManageRelationship' }
 )
 
-export function ManageRelationship({ value, onChange }: Props) {
+export function ManageRelationship({
+  value,
+  onChange,
+  label = 'Manage Relationship'
+}: Props) {
   const classes = useStyles()
 
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLButtonElement | null>(
@@ -62,7 +67,7 @@ export function ManageRelationship({ value, onChange }: Props) {
           />
         }
       >
-        {frequencyToString(value)}
+        {frequencyToString(value, label)}
       </Button>
 
       {isMenuOpen && (
