@@ -1,11 +1,7 @@
-import React from 'react'
-
 import { Box, Typography, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
 import { Logo } from 'components/OAuthPageLayout/Logo'
-
-import Brand from '../../../controllers/Brand'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -26,18 +22,16 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  brand?: IBrand | null
   subtitle?: string
   title: string
 }
 
-export default function Header({ brand, title, subtitle }: Props) {
+export default function Header({ title, subtitle }: Props) {
   const classes = useStyles()
-  const brandLogo = brand && Brand.asset('site_logo', '', brand)
 
   return (
     <Box className={classes.box}>
-      <Logo brandLogo={brandLogo} />
+      <Logo />
       <Typography variant="h4">{title}</Typography>
       <Typography variant="body1">{subtitle}</Typography>
     </Box>

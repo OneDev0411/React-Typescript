@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Button } from '@material-ui/core'
+import { Button, useTheme } from '@material-ui/core'
 import { Form, Field } from 'react-final-form'
 import { Link } from 'react-router'
 
@@ -11,7 +11,6 @@ import SubmitButton from './SubmitButton'
 import { SubmitMessage } from './types'
 
 interface Props {
-  brandColor: string
   isLoading: boolean
   submitMessage: SubmitMessage | null
   onSubmit: (values) => void
@@ -20,13 +19,13 @@ interface Props {
 }
 
 export default function SignInForm({
-  brandColor,
   isLoading,
   submitMessage,
   onSubmit,
   handleBackToLookupForm,
   username
 }: Props) {
+  const theme = useTheme()
   const validate = values => {
     let errors: { password?: string } = {}
 
@@ -58,7 +57,7 @@ export default function SignInForm({
           )}
           <SubmitButton
             isDisabled={isLoading}
-            color={brandColor}
+            color={theme.palette.primary.main}
             text={isLoading ? 'Signing in...' : 'Sign in'}
           />
           <p style={{ textAlign: 'center' }}>

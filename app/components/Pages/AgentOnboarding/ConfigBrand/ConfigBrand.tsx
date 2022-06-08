@@ -135,7 +135,6 @@ export function ConfigBrand() {
   return (
     <Container>
       <Header
-        brand={activeBrand}
         title="Enter Brokerage or Brand Name"
         subtitle="We use this information to set up your brand."
       />
