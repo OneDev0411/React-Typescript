@@ -58,9 +58,10 @@ export function TableToolbar({ rows }: Props) {
   return (
     <Grid container alignItems="center">
       <Grid item>
-        <Box pl={1}>
+        <Box pl={isAllRowsSelected || isSomeRowsSelected ? 0 : 1}>
           <Tooltip title={tooltipTitle}>
             <Checkbox
+              color="primary"
               checked={isAllRowsSelected}
               indeterminate={isSomeRowsSelected}
               onChange={handleToggleSelectionClick}
