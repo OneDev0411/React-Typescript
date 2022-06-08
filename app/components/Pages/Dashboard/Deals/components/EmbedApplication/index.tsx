@@ -27,6 +27,7 @@ import { selectDealRoles } from '@app/reducers/deals/roles'
 import { upsertContexts } from '@app/store_actions/deals'
 import { DialogTitle } from '@app/views/components/DialogTitle'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import DatePicker from 'components/DatePicker'
 import DealRoleForm from 'components/DealRole/Form'
 import Logo from 'components/Logo'
 import {
@@ -69,6 +70,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
 
   const app = useRef<any>(null)
   const [module, setModule] = useState<any>(null)
+  const [debugVersion, setDebugVersion] = useState(Math.random())
   const [manifest, setManifest] = useState<Partial<Manifest>>({})
 
   const notify = useNotify()
@@ -96,10 +98,12 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
           `${baseUrl}/manifest.json`
         )
 
+        const version = Math.random()
+
         setManifest(manifest)
 
         const chunkUrl = development
-          ? `${baseUrl}/bundle.js?v=${Math.random()}`
+          ? `${baseUrl}/bundle.js?v=${version}`
           : `${baseUrl}/bundle.${manifest.build}.js`
 
         const url = development
@@ -109,6 +113,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
         const module = await import(/* webpackIgnore: true */ url)
 
         setModule(module)
+        setDebugVersion(version)
       })()
     } catch (e) {
       console.log(e)
@@ -169,36 +174,40 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
         return null
       }
 
-      if (app.current) {
-        return React.cloneElement(app.current, props)
+      if (app.current?.version === debugVersion) {
+        return React.cloneElement(app.current.bundle, props)
       }
 
-      app.current = module.default({
-        ...props,
-        hooks: {
-          wizard: {
-            useSectionContext,
-            useWizardContext,
-            useSectionErrorContext
+      app.current = {
+        version: debugVersion,
+        bundle: module.default({
+          ...props,
+          hooks: {
+            wizard: {
+              useSectionContext,
+              useWizardContext,
+              useSectionErrorContext
+            }
+          },
+          Components: {
+            Logo,
+            RoleForm: DealRoleForm,
+            RoleCard,
+            ContactRoles,
+            DatePicker,
+            Wizard: {
+              QuestionWizard,
+              QuestionSection,
+              QuestionTitle,
+              QuestionForm
+            }
           }
-        },
-        Components: {
-          Logo,
-          RoleForm: DealRoleForm,
-          RoleCard,
-          ContactRoles,
-          Wizard: {
-            QuestionWizard,
-            QuestionSection,
-            QuestionTitle,
-            QuestionForm
-          }
-        }
-      })
+        })
+      }
 
-      return app.current
+      return app.current.bundle
     },
-    [module]
+    [module, debugVersion]
   )
 
   return (
