@@ -3,7 +3,7 @@ import React from 'react'
 import { render } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-import { frequencyToString } from '@app/components/Pages/Dashboard/Contacts/Profile/Header/Actions/ManageRelationship/helper'
+import { frequencyToString } from '@app/components/Pages/Dashboard/Contacts/components/ManageRelationship/helper'
 import fullContact from 'fixtures/contacts/full-contact.json'
 import mockDate, { RealDate } from 'utils/test-utils/mock-date'
 

@@ -4,67 +4,41 @@ import { frequencyOptions, frequencyToString } from './helper'
 
 import { ManageRelationship } from './index'
 
-jest.mock('@app/models/contacts/update-contact-touch-reminder', () => ({
-  updateContactTouchReminder: () => Promise.resolve()
-}))
-
-jest.mock('@app/hooks/use-notify')
-
 describe('ManageRelationship', () => {
-  let contactId: UUID
-  let contactTouchFreq: Nullable<number>
-  const onUpdateTouchFreq = jest.fn()
+  let value: Nullable<number>
+  const onChange = jest.fn()
 
   beforeEach(() => {
     jest.resetAllMocks()
 
-    contactId = 'some_id_for_test'
-    contactTouchFreq = null
+    value = null
   })
 
   describe('ManageRelationship button text', () => {
     it('should render button default text when touch_freq is null', async () => {
-      render(
-        <ManageRelationship
-          contactId={contactId}
-          contactTouchFreq={contactTouchFreq}
-          onUpdateTouchFreq={onUpdateTouchFreq}
-        />
-      )
+      render(<ManageRelationship value={value} onChange={onChange} />)
 
-      const expectedText = frequencyToString(contactTouchFreq)
+      const expectedText = frequencyToString(value)
 
       await waitFor(() => {
         expect(screen.getByText(expectedText)).toBeInTheDocument()
       })
     })
     it('should render monthly when touch_freq is 30', async () => {
-      contactTouchFreq = 30
-      render(
-        <ManageRelationship
-          contactId={contactId}
-          contactTouchFreq={contactTouchFreq}
-          onUpdateTouchFreq={onUpdateTouchFreq}
-        />
-      )
+      value = 30
+      render(<ManageRelationship value={value} onChange={onChange} />)
 
-      const expectedText = frequencyToString(contactTouchFreq)
+      const expectedText = frequencyToString(value)
 
       await waitFor(() => {
         expect(screen.getByText(expectedText)).toBeInTheDocument()
       })
     })
     it('should render exact day when touch_freq is 91', async () => {
-      contactTouchFreq = 91
-      render(
-        <ManageRelationship
-          contactId={contactId}
-          contactTouchFreq={contactTouchFreq}
-          onUpdateTouchFreq={onUpdateTouchFreq}
-        />
-      )
+      value = 91
+      render(<ManageRelationship value={value} onChange={onChange} />)
 
-      const expectedText = frequencyToString(contactTouchFreq)
+      const expectedText = frequencyToString(value)
 
       await waitFor(() => {
         expect(screen.getByText(expectedText)).toBeInTheDocument()
@@ -74,13 +48,7 @@ describe('ManageRelationship', () => {
 
   describe('ManageRelationship menu', () => {
     it('should open the menu when user clicks the button', async () => {
-      render(
-        <ManageRelationship
-          contactId={contactId}
-          contactTouchFreq={contactTouchFreq}
-          onUpdateTouchFreq={onUpdateTouchFreq}
-        />
-      )
+      render(<ManageRelationship value={value} onChange={onChange} />)
 
       fireEvent.click(screen.getByRole('button'))
 
@@ -95,13 +63,7 @@ describe('ManageRelationship', () => {
       })
     })
     it('should change the touch frequency when user clicks on weekly item', async () => {
-      render(
-        <ManageRelationship
-          contactId={contactId}
-          contactTouchFreq={contactTouchFreq}
-          onUpdateTouchFreq={onUpdateTouchFreq}
-        />
-      )
+      render(<ManageRelationship value={value} onChange={onChange} />)
 
       fireEvent.click(screen.getByRole('button'))
 
@@ -112,19 +74,13 @@ describe('ManageRelationship', () => {
       fireEvent.click(screen.getByText('Weekly'))
 
       await waitFor(() => {
-        expect(onUpdateTouchFreq).toBeCalledTimes(1)
-        expect(onUpdateTouchFreq).toBeCalledWith(7)
+        expect(onChange).toBeCalledTimes(1)
+        expect(onChange).toBeCalledWith(7)
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()
       })
     })
     it('should change the touch frequency when user enter custom value', async () => {
-      render(
-        <ManageRelationship
-          contactId={contactId}
-          contactTouchFreq={contactTouchFreq}
-          onUpdateTouchFreq={onUpdateTouchFreq}
-        />
-      )
+      render(<ManageRelationship value={value} onChange={onChange} />)
 
       fireEvent.click(screen.getByRole('button'))
 
@@ -147,21 +103,15 @@ describe('ManageRelationship', () => {
       fireEvent.click(screen.getByTitle('Change frequency'))
 
       await waitFor(() => {
-        expect(onUpdateTouchFreq).toBeCalledTimes(1)
-        expect(onUpdateTouchFreq).toBeCalledWith(121)
+        expect(onChange).toBeCalledTimes(1)
+        expect(onChange).toBeCalledWith(121)
 
         expect(screen.queryByTitle('Change frequency')).not.toBeInTheDocument()
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()
       })
     })
     it('should reset the touch frequency when user enter 0 custom value', async () => {
-      render(
-        <ManageRelationship
-          contactId={contactId}
-          contactTouchFreq={contactTouchFreq}
-          onUpdateTouchFreq={onUpdateTouchFreq}
-        />
-      )
+      render(<ManageRelationship value={value} onChange={onChange} />)
 
       fireEvent.click(screen.getByRole('button'))
 
@@ -184,21 +134,15 @@ describe('ManageRelationship', () => {
       fireEvent.click(screen.getByTitle('Change frequency'))
 
       await waitFor(() => {
-        expect(onUpdateTouchFreq).toBeCalledTimes(1)
-        expect(onUpdateTouchFreq).toBeCalledWith(null)
+        expect(onChange).toBeCalledTimes(1)
+        expect(onChange).toBeCalledWith(null)
 
         expect(screen.queryByTitle('Change frequency')).not.toBeInTheDocument()
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()
       })
     })
     it('should reset the touch frequency when user enter empty custom value', async () => {
-      render(
-        <ManageRelationship
-          contactId={contactId}
-          contactTouchFreq={contactTouchFreq}
-          onUpdateTouchFreq={onUpdateTouchFreq}
-        />
-      )
+      render(<ManageRelationship value={value} onChange={onChange} />)
 
       fireEvent.click(screen.getByRole('button'))
 
@@ -221,8 +165,8 @@ describe('ManageRelationship', () => {
       fireEvent.click(screen.getByTitle('Change frequency'))
 
       await waitFor(() => {
-        expect(onUpdateTouchFreq).toBeCalledTimes(1)
-        expect(onUpdateTouchFreq).toBeCalledWith(null)
+        expect(onChange).toBeCalledTimes(1)
+        expect(onChange).toBeCalledWith(null)
 
         expect(screen.queryByTitle('Change frequency')).not.toBeInTheDocument()
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()

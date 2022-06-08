@@ -4,7 +4,7 @@ import { Typography, Box, Theme } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/styles'
 import timeago from 'timeago.js'
 
-import { frequencyToString } from '@app/components/Pages/Dashboard/Contacts/Profile/Header/Actions/ManageRelationship/helper'
+import { frequencyToString } from '@app/components/Pages/Dashboard/Contacts/components/ManageRelationship/helper'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

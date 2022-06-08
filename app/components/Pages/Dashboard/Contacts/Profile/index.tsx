@@ -12,6 +12,8 @@ import { useEffectOnce } from 'react-use'
 
 import { useGetGlobalTriggers } from '@app/components/Pages/Dashboard/Account/Triggers/hooks/use-get-global-triggers'
 import useConfirmation from '@app/hooks/use-confirmation'
+import useNotify from '@app/hooks/use-notify'
+import { updateContactTouchReminder } from '@app/models/contacts/update-contact-touch-reminder'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import PageLayout from 'components/GlobalPageLayout'
 import { deleteContacts } from 'models/contacts/delete-contact'
@@ -95,6 +97,8 @@ const useStyles = makeStyles(
 
 const ContactProfile = props => {
   useGetGlobalTriggers()
+
+  const notify = useNotify()
 
   const classes = useStyles()
   const confirmation = useConfirmation()
@@ -198,10 +202,30 @@ const ContactProfile = props => {
   }
 
   const handleUpdateTouchFreq = (newVal: Nullable<number>) => {
+    if (!contact) {
+      return
+    }
+
+    const oldValue = contact.touch_freq || null
+
+    // optimistic update
     setContact((prevContact: INormalizedContact) => ({
       ...prevContact,
       touch_freq: newVal
     }))
+
+    updateContactTouchReminder(contact.id, newVal).catch(e => {
+      console.log(e)
+      notify({
+        status: 'error',
+        message: 'Something went wrong. Please try again or contact support.'
+      })
+      // revert optimistic update if error
+      setContact((prevContact: INormalizedContact) => ({
+        ...prevContact,
+        touch_freq: oldValue
+      }))
+    })
   }
 
   const handleCreateNote = (contact: INormalizedContact) => {

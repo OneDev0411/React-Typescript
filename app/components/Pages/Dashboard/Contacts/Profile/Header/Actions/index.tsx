@@ -16,10 +16,10 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 
 import { Props } from '..'
+import { ManageRelationship } from '../../../components/ManageRelationship'
 
 import AddEvent from './AddEvent'
 import AddNote from './AddNote'
-import { ManageRelationship } from './ManageRelationship'
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -97,9 +97,8 @@ export const Actions = ({
       )}
       <div className={classes.actionContainer}>
         <ManageRelationship
-          contactId={contact.id}
-          contactTouchFreq={contact.touch_freq || null}
-          onUpdateTouchFreq={onUpdateTouchFreq}
+          value={contact.touch_freq || null}
+          onChange={onUpdateTouchFreq}
         />
 
         {false && (
