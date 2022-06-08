@@ -131,7 +131,7 @@ const Reset = ({
 
   return (
     <div className="signin-page-wrapper">
-      <>{content}</>
+      {content}
       <PoweredBy />
     </div>
   )
