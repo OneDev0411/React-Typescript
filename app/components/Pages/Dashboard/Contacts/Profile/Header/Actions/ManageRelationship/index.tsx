@@ -48,16 +48,16 @@ export function ManageRelationship({
   const onChangeTouchFreq = (newValue: Nullable<number>) => {
     handleCloseMenu()
 
-    // we should treat any falsy value ('' / 0 / etc) as null for the backend
-    const updatedTouchFreq = newValue || null
+    // Falsy values ('' / 0 / undefined) should be considered null in the backend
+    const normalizedNewValue = newValue || null
 
     // To do the optimistic update,
     // we need to update the contact object in parent component
-    onUpdateTouchFreq(updatedTouchFreq)
+    onUpdateTouchFreq(normalizedNewValue)
 
     const oldValue = contactTouchFreq
 
-    updateContactTouchReminder(contactId, updatedTouchFreq).catch(e => {
+    updateContactTouchReminder(contactId, normalizedNewValue).catch(e => {
       console.log(e)
       notify({
         status: 'error',
