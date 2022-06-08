@@ -1,3 +1,4 @@
+import { useTheme } from '@material-ui/styles'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import compose from 'recompose/compose'
@@ -24,6 +25,7 @@ const Reset = ({
   onSubmitHandler,
   submitSuccessfully
 }) => {
+  const theme = useTheme()
   const isDisabled = isSubmitting
 
   let content = (
@@ -75,6 +77,7 @@ const Reset = ({
               isBlock
               disabled={isDisabled}
               style={{ marginBottom: '2em' }}
+              brandColor={theme.palette.primary.main}
             >
               {isSubmitting ? 'Submitting...' : 'Reset Password'}
             </Button>

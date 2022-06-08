@@ -1,9 +1,8 @@
-import { Grid } from '@material-ui/core'
+import { Grid, Button } from '@material-ui/core'
 
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 import LinkButton from '../../../../../views/components/Button/LinkButton'
 import RedirectModal from '../RedirectModal'
-import { SigninButton } from '../SigninButton'
 
 const ConflictModal = ({ params }) => {
   let { to, email, userInfo, redirectTo, messageText, actionButtonProps } =
@@ -48,9 +47,13 @@ const ConflictModal = ({ params }) => {
           </Grid>
           <Grid item xs={6}>
             {actionButton.href ? (
-              <SigninButton href={actionButton.href}>
+              <Button
+                color="primary"
+                variant="contained"
+                href={actionButton.href}
+              >
                 {actionButton.text}
-              </SigninButton>
+              </Button>
             ) : (
               <ActionButton {...actionButton}>{actionButton.text}</ActionButton>
             )}
