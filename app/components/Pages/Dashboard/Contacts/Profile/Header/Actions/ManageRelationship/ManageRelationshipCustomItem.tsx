@@ -25,7 +25,7 @@ const mask = createNumberMask({
   includeThousandsSeparator: false,
   allowNegative: false,
   allowLeadingZeroes: false,
-  allowDecimal: true
+  allowDecimal: false
 })
 
 const useStyles = makeStyles(
