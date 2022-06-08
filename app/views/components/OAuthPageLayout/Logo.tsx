@@ -11,7 +11,8 @@ const useStyles = makeStyles(
   () => ({
     logo: {
       maxWidth: 160,
-      maxHeight: 80
+      maxHeight: 80,
+      minHeight: 60
     }
   }),
   { name: 'Logo' }
