@@ -44,6 +44,7 @@ import {
 import { viewAs, getTeamSetting } from 'utils/user-teams'
 
 import { Board } from '../Board'
+import { ManageRelationship } from '../components/ManageRelationship'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 
 import {
@@ -60,7 +61,6 @@ import { ViewMode } from './styled'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import Table from './Table'
 import ContactsTabs from './Tabs'
-import TouchReminder from './TouchReminder'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
 import { ContactsZeroState } from './ZeroState'
 
@@ -887,13 +887,13 @@ class ContactsList extends React.Component {
           {!isZeroState && (
             <Box display="flex" ml={1}>
               {activeSegment && activeSegment.is_editable && (
-                <TouchReminder
+                <ManageRelationship
                   value={activeSegment.touch_freq}
                   onChange={this.handleListTouchReminderUpdate}
                 />
               )}
               {activeTag && activeTag.id && (
-                <TouchReminder
+                <ManageRelationship
                   value={activeTag.touch_freq}
                   onChange={this.handleTagTouchReminderUpdate}
                 />
