@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 
 import * as MaterialUi from '@material-ui/core'
 import {
@@ -67,6 +67,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
   const development = useQueryParamValue('dev')
   const host = useQueryParamValue('host', 'localhost:8081')
 
+  const app = useRef<any>(null)
   const [module, setModule] = useState<any>(null)
   const [manifest, setManifest] = useState<Partial<Manifest>>({})
 
@@ -168,7 +169,11 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
         return null
       }
 
-      return module.default({
+      if (app.current) {
+        return app.current
+      }
+
+      app.current = module.default({
         ...props,
         hooks: {
           wizard: {
@@ -190,6 +195,8 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
           }
         }
       })
+
+      return app.current
     },
     [module]
   )
