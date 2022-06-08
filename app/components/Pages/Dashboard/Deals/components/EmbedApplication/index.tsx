@@ -170,7 +170,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
       }
 
       if (app.current) {
-        return app.current
+        return React.cloneElement(app.current, props)
       }
 
       app.current = module.default({
