@@ -101,6 +101,7 @@ export function ManageRelationshipCustomItem({
         size="small"
         InputProps={{
           inputProps: {
+            'aria-label': 'Remind to touch every',
             mask
           },
           inputComponent: mask ? MaskedInput : undefined,
@@ -115,6 +116,7 @@ export function ManageRelationshipCustomItem({
 
       <Tooltip title="Change frequency">
         <IconButton
+          role="button"
           size="small"
           onClick={onConfirm}
           color="primary"

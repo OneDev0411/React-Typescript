@@ -55,7 +55,7 @@ export function ManageRelationshipMenu({
           onChangeTouchFreq={onChangeTouchFreq}
         />
       ) : (
-        <List className={classes.menu}>
+        <List className={classes.menu} role="menu">
           {/* 
             We have to use `as unknown as number[]` because
             Object.keys has wrong return type for some reason
