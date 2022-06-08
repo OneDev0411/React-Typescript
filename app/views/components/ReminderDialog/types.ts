@@ -8,5 +8,6 @@ export interface ReminderDialogBaseProps {
   buttonText?: string
   checkboxText?: string
   image?: string
+  arrow?: boolean
   placement?: PopperPlacementType
 }

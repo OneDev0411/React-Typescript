@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 
 import {
   Tooltip,
@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 import { mdiGiftOutline, mdiEmailOutline } from '@mdi/js'
 
+import { ReminderDialog } from '@app/views/components/ReminderDialog'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import SendEmailButton from 'components/SendEmailButton'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -17,6 +18,7 @@ import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize
 
 import { Props } from '..'
 import { ManageRelationship } from '../../../components/ManageRelationship'
+import { TOUCH_REMINDER_HINT_DISMISSED_SETTINGS_KEY } from '../../../constants'
 
 import AddEvent from './AddEvent'
 import AddNote from './AddNote'
@@ -59,6 +61,11 @@ export const Actions = ({
 }: Omit<Props, 'contactChangeCallback'>) => {
   const classes = useStyles()
 
+  const [manageRelationshipRef, setManageRelationshipRef] =
+    useState<Nullable<HTMLDivElement>>(null)
+
+  const shouldShowReminderDialog = contact.touch_freq === null
+
   return (
     <div className={classes.container}>
       {false && (
@@ -95,12 +102,11 @@ export const Actions = ({
           />
         </div>
       )}
-      <div className={classes.actionContainer}>
+      <div ref={setManageRelationshipRef} className={classes.actionContainer}>
         <ManageRelationship
           value={contact.touch_freq || null}
           onChange={onUpdateTouchFreq}
         />
-
         {false && (
           <>
             <AddNote contactId={contact.id} onCreateNote={onCreateNote} />
@@ -108,6 +114,13 @@ export const Actions = ({
           </>
         )}
       </div>
+      {shouldShowReminderDialog && (
+        <ReminderDialog
+          userSettingsKey={TOUCH_REMINDER_HINT_DISMISSED_SETTINGS_KEY}
+          anchorEl={manageRelationshipRef}
+          title="Setup how frequently you want to be in touch with this customer. We will remind you next time"
+        />
+      )}
     </div>
   )
 }
