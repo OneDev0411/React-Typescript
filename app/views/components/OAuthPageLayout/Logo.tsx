@@ -32,7 +32,7 @@ export function Logo() {
   )
 
   return (
-    <Box mb={4}>
+    <Box mb={4} display="flex" justifyContent="center">
       <img
         src={logo || '/static/images/logo.svg'}
         className={classes.logo}
