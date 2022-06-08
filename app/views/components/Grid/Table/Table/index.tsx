@@ -60,7 +60,7 @@ export function GridTable<Row>({
   getTrProps,
   virtualize = true,
   rowSize,
-  headless = false,
+  headless = true,
   summary = null,
   loading = null,
   selection = null,
