@@ -47,7 +47,6 @@ export function Profile() {
   const classes = useStyles()
   const dispatch = useDispatch()
   const activeTeam = useUnsafeActiveTeam()
-  const brand = useSelector((store: IAppState) => store.brand)
 
   const [editorState, setEditorState, signatureEditor] = useEditorState('')
 
@@ -122,7 +121,6 @@ export function Profile() {
     <Container classes={{ box: classes.container }}>
       <SkipButton to={nextStepUrl} />
       <Header
-        brand={brand}
         title="Let’s make it feel more like home!"
         // eslint-disable-next-line max-len
         subtitle="Personalize your account and make your communications more connected."

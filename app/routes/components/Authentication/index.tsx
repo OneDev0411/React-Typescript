@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
@@ -18,13 +18,20 @@ function Authentication({ location, children }: Props) {
   // TODO: we must deprecate data object
   const data = useSelector(({ data }: { data: any }) => data)
   const { user, isLoading: isLoadingUser } = useLoadUserAndActiveTeam()
+  const [isBrandLoading, setIsBrandLoading] = useState(true)
   const dispatch = useReduxDispatch()
 
   useEffectOnce(() => {
-    dispatch(getBrand())
+    const loadBrand = async () => {
+      await dispatch(getBrand())
+
+      setIsBrandLoading(false)
+    }
+
+    loadBrand()
   })
 
-  if (!user?.id && isLoadingUser) {
+  if ((!user?.id && isLoadingUser) || isBrandLoading) {
     return <AnimatedLoader />
   }
 

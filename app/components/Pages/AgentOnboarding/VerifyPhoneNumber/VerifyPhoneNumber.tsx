@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Box, Button, Typography, makeStyles, Theme } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { WithRouterProps, Link } from 'react-router'
 
 import { updateUser } from 'actions/user'
@@ -13,7 +13,6 @@ import { addNotification as notify } from 'components/notification'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import verify from 'models/verify/confirm'
 import getVerificationCode from 'models/verify/request'
-import { IAppState } from 'reducers'
 import { formatPhoneNumber } from 'utils/format'
 
 import { useCommonStyles } from '../common-styles'
@@ -56,7 +55,6 @@ export function VerifyPhoneNumber(props: WithRouterProps) {
   const classes = useStyles()
   const commonClasses = useCommonStyles()
   const dispatch = useDispatch()
-  const brand = useSelector((store: IAppState) => store.brand)
   const phoneNumber = window.decodeURIComponent(props.location.query.pn || '')
   const [isReSending, setIsReSending] = useState(false)
 
@@ -135,7 +133,6 @@ export function VerifyPhoneNumber(props: WithRouterProps) {
     <Container>
       <SkipButton to="/onboarding/oauth-accounts" />
       <Header
-        brand={brand}
         title="Enter Code"
         subtitle={`We sent an activation code to ${formatPhoneNumber(
           phoneNumber
