@@ -75,6 +75,7 @@ export const TeamView = React.memo(
           </Box>
           {teamUsers.map(teamUser => (
             <TeamMember
+              team={team}
               key={teamUser.user.id}
               user={teamUser.user}
               userRoles={teamUser.roles || []}

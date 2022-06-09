@@ -1,13 +1,10 @@
-import React from 'react'
-
-import { Grid } from '@material-ui/core'
+import { Grid, Button } from '@material-ui/core'
 
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 import LinkButton from '../../../../../views/components/Button/LinkButton'
 import RedirectModal from '../RedirectModal'
-import { SigninButton } from '../SigninButton'
 
-const ConflictModal = ({ params, brandInfo }) => {
+const ConflictModal = ({ params }) => {
   let { to, email, userInfo, redirectTo, messageText, actionButtonProps } =
     params
   let is_shadow
@@ -29,7 +26,7 @@ const ConflictModal = ({ params, brandInfo }) => {
   }
 
   return (
-    <RedirectModal brandInfo={brandInfo}>
+    <RedirectModal>
       <div>
         <h3 className="c-confirm-modal__title">Conflict</h3>
         <p
@@ -50,9 +47,13 @@ const ConflictModal = ({ params, brandInfo }) => {
           </Grid>
           <Grid item xs={6}>
             {actionButton.href ? (
-              <SigninButton href={actionButton.href}>
+              <Button
+                color="primary"
+                variant="contained"
+                href={actionButton.href}
+              >
                 {actionButton.text}
-              </SigninButton>
+              </Button>
             ) : (
               <ActionButton {...actionButton}>{actionButton.text}</ActionButton>
             )}

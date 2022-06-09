@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Box, ButtonBase, Theme, useTheme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { mdiCheckCircle } from '@mdi/js'
@@ -70,7 +68,6 @@ export function OAuthAccounts() {
   const theme = useTheme()
   const classes = useStyles({})
   const dispatch = useDispatch()
-  const brand = useSelector((store: IAppState) => store.brand)
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
   const connectedAccounts = useSelector((store: IAppState) =>
@@ -100,9 +97,7 @@ export function OAuthAccounts() {
     <Container classes={{ box: classes.container }}>
       <SkipButton to="/onboarding/profile" />
       <Header
-        brand={brand}
         title="Be Connected"
-        // eslint-disable-next-line max-len
         subtitle="To get the best experience select the accounts you would like to connect"
       />
       <Box marginBottom={6} width="100%" display="flex">
