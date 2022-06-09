@@ -5,14 +5,15 @@ import { useSelector } from 'react-redux'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand'
 import { IAppState } from '@app/reducers'
-import { getBrandLogo } from '@app/utils/get-brand-logo'
+import { getBrandMarketingPalette } from '@app/utils/get-brand-marketing-palette'
 
 const useStyles = makeStyles(
   () => ({
     logo: {
       maxWidth: 160,
       maxHeight: 80,
-      minHeight: 60
+      minHeight: 60,
+      objectFit: 'contain'
     }
   }),
   { name: 'Logo' }
@@ -26,10 +27,14 @@ export function Logo() {
     (state: IAppState) => state.brand
   )
 
-  const logo = useMemo(
-    () => getBrandLogo(brand, hostBrand, ''),
-    [brand, hostBrand]
-  )
+  const logo = useMemo(() => {
+    console.log(getBrandMarketingPalette(brand, hostBrand))
+
+    return (
+      getBrandMarketingPalette(brand, hostBrand)?.['container-logo-wide'] ||
+      null
+    )
+  }, [brand, hostBrand])
 
   return (
     <Box mb={4} display="flex" justifyContent="center">
