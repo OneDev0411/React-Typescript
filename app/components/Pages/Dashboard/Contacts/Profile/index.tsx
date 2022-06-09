@@ -34,6 +34,8 @@ import skipEmailThreadChangeEvent from '../../Inbox/helpers/skip-email-thread-ch
 import { Container } from '../components/Container'
 
 import AddressesSection from './Addresses'
+import AddEvent from './components/AddEvent'
+import AddNote from './components/AddNote'
 import { ContactInfo } from './ContactInfo'
 import { Dates } from './Dates'
 import Deals from './Deals'
@@ -64,7 +66,27 @@ const useStyles = makeStyles(
     contentContainer: {
       background: theme.palette.background.paper,
       border: `1px solid ${theme.palette.action.disabledBackground}`,
-      borderRadius: `${theme.shape.borderRadius}px`
+      borderRadius: `${theme.shape.borderRadius}px`,
+      width: '100%',
+      height: '100%'
+    },
+    tabContainer: {
+      flex: '1 1 auto',
+      display: 'flex',
+      flexDirection: 'column'
+    },
+    tabHeaderContainer: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start'
+    },
+    timelineContainer: {
+      background: theme.palette.background.paper,
+      border: `1px solid ${theme.palette.action.disabledBackground}`,
+      borderRadius: `${theme.shape.borderRadius}px`,
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%'
     },
     boxContainer: {
       display: 'flex',
@@ -75,9 +97,6 @@ const useStyles = makeStyles(
       minWidth: '350px',
       maxWidth: '450px',
       padding: theme.spacing(2)
-    },
-    timelineContainer: {
-      flex: '1 1 auto'
     },
     warnContainer: {
       marginBottom: theme.spacing(2),
@@ -439,14 +458,7 @@ const ContactProfile = props => {
           <Header
             contact={contact}
             contactChangeCallback={fetchContact}
-            onCreateNote={handleCreateNote}
-            onCreateEvent={fetchTimeline}
             onUpdateTouchFreq={handleUpdateTouchFreq}
-          />
-          <Tabs
-            contact={contact}
-            activeFilter={activeFilter}
-            onChangeFilter={handleChangeFilter}
           />
         </div>
 
@@ -480,18 +492,33 @@ const ContactProfile = props => {
               />
               <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
             </div>
-            <div
-              className={cn(
-                classes.contentContainer,
-                classes.timelineContainer
-              )}
-            >
-              <Timeline
-                activeFilter={activeFilter}
-                ref={timelineRef}
-                contact={contact}
-                onChangeNote={setNewContact}
-              />
+
+            <div className={classes.tabContainer}>
+              <div className={classes.tabHeaderContainer}>
+                <Tabs
+                  contact={contact}
+                  activeFilter={activeFilter}
+                  onChangeFilter={handleChangeFilter}
+                />
+                {activeFilter === Filters.Notes && (
+                  <AddNote
+                    contactId={contact.id}
+                    onCreateNote={handleCreateNote}
+                  />
+                )}
+                {activeFilter === Filters.Events && (
+                  <AddEvent contact={contact} callback={fetchTimeline} />
+                )}
+              </div>
+
+              <div className={classes.timelineContainer}>
+                <Timeline
+                  activeFilter={activeFilter}
+                  ref={timelineRef}
+                  contact={contact}
+                  onChangeNote={setNewContact}
+                />
+              </div>
             </div>
           </div>
         </div>
