@@ -119,6 +119,7 @@ declare interface IBrandMessage {
 }
 
 declare interface IBrandUser {
+  last_invited_at: Optional<string | null>
   deleted_at: string | null
   id: UUID
   role: UUID

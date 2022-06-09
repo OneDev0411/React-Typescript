@@ -1,11 +1,10 @@
-import React from 'react'
-
 import { FlexItem } from 'styled-flex-component'
 
 import { BasicMultiSelectDropdown } from 'components/BasicMultiSelectDropdown'
 import { TextWithHighlights } from 'components/TextWithHighlights'
 import { notUndefined } from 'utils/ts-utils'
 
+import { InviteButton } from './InviteButton'
 import {
   DeactivatedOverlay,
   TeamMemberItem,
@@ -15,6 +14,7 @@ import {
 } from './styled'
 
 interface Props {
+  team: IBrand
   user: IUser
   userRoles: IBrandRole[]
   allRoles: IBrandRole[]
@@ -23,6 +23,7 @@ interface Props {
 }
 
 export function TeamMember({
+  team,
   user,
   userRoles,
   allRoles,
@@ -47,7 +48,7 @@ export function TeamMember({
         </TeamMemberSubTitle>
       </FlexItem>
       {user.is_shadow ? (
-        <span style={{ marginRight: '1rem' }}>Pending</span>
+        <InviteButton team={team} user={user} userRoles={userRoles} />
       ) : (
         <BasicMultiSelectDropdown
           disabled={isSaving}

@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import compose from 'recompose/compose'
@@ -7,38 +5,31 @@ import lifecycle from 'recompose/lifecycle'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 
+import { Logo } from '@app/views/components/OAuthPageLayout/Logo'
+import { PoweredBy } from '@app/views/components/OAuthPageLayout/PoweredBy'
+
 import verify from '../../../../models/verify'
 import { updateUser } from '../../../../store_actions/user'
 import { Spinner } from '../../../Partials/Loading'
-import { getBrandInfo } from '../../Auth/SignIn/get-brand-info'
 import Alert from '../../Dashboard/Partials/Alert'
 
 const ERROR_MESSAGE =
   // eslint-disable-next-line max-len
   "You have encountered an unknown system issue. We're working on it. In the meantime, connect with our support."
 
-const confirmVerify = ({
-  brand,
+const ConfirmVerify = ({
   verifyType,
   userMessage,
   isSubmitting,
   verifyQueryParams
 }) => {
-  const { siteLogo, siteTitle } = getBrandInfo(brand)
-
   return (
     <div className="signin-page-wrapper">
       <article className="c-auth">
         <header className="c-auth__header" style={{ marginBottom: '4rem' }}>
-          {siteLogo && (
-            <Link to="/" tabIndex={-1}>
-              <img
-                src={siteLogo}
-                alt={`${siteTitle} logo`}
-                className="c-auth__logo"
-              />
-            </Link>
-          )}
+          <Link to="/" tabIndex={-1}>
+            <Logo />
+          </Link>
           <p className="c-auth__subticonfirmtle">Verification for</p>
           <p>
             {
@@ -63,6 +54,7 @@ const confirmVerify = ({
           )}
         </main>
       </article>
+      <PoweredBy />
     </div>
   )
 }
@@ -179,4 +171,4 @@ export default compose(
       confirmHandler()
     }
   })
-)(confirmVerify)
+)(ConfirmVerify)
