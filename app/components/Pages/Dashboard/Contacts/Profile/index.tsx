@@ -233,6 +233,8 @@ const ContactProfile = props => {
       touch_freq: newVal
     }))
 
+    fetchTimeline()
+
     updateContactTouchReminder(contact.id, newVal).catch(e => {
       console.log(e)
       notify({
