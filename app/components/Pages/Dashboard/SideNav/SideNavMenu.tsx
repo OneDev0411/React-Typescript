@@ -158,6 +158,14 @@ function SideNavMenu(props: WithRouterProps) {
           label: 'Inbox',
           notificationCount: inboxNotificationNumber,
           to: '/dashboard/inbox'
+        },
+        {
+          access: ['CRM'],
+          id: 'tasks',
+          isHidden: !useAcl(['CRM']),
+          label: 'Tasks',
+          notificationCount: inboxNotificationNumber,
+          to: '/dashboard/tasks'
         }
       ]
     },

@@ -453,6 +453,19 @@ const AsyncToursList = withAcl.crm(
 )
 
 /* ==================================== */
+//  CRM Tours List
+/* ==================================== */
+
+const AsyncCrmTasks = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Tasks' /* webpackChunkName: "crm_tasks" */
+      )
+  })
+)
+
+/* ==================================== */
 //  Marketing Center
 /* ==================================== */
 
@@ -981,6 +994,8 @@ export default (
         <Route path="contacts/duplicates" component={AsyncDuplicateContacts} />
         <Route path="contacts/:id" component={AsyncContactProfile} />
         <Route path="contacts/import/csv" component={AsyncContactsCsvImport} />
+
+        <Route path="tasks" component={AsyncCrmTasks} />
 
         <Route path="marketing" component={AsyncMarketingOverview} />
         <Route path="marketing/designs" component={AsyncMarketingHistory} />
