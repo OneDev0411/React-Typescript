@@ -6,9 +6,11 @@ import PropTypes from 'prop-types'
 import { Form } from 'react-final-form'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 import { getContactsTags } from '@app/store_actions/contacts'
 import { TextField } from 'components/final-form-fields'
+import { MaskedInput } from 'components/MaskedInput'
 import { addNotification as notify } from 'components/notification'
 import Drawer from 'components/OverlayDrawer'
 import { createContacts } from 'models/contacts/create-contacts'
@@ -23,6 +25,14 @@ import { generateInitialValues } from './helpers/generate-initial-values'
 import { Owner } from './Owner'
 import { Phones } from './Phones'
 import { Tags } from './Tags'
+
+const numberMask = createNumberMask({
+  prefix: '',
+  includeThousandsSeparator: false,
+  allowNegative: false,
+  allowLeadingZeroes: false,
+  allowDecimal: false
+})
 
 const propTypes = {
   isOpen: PropTypes.bool,
@@ -79,7 +89,7 @@ class NewContactDrawer extends React.Component {
       }
 
       const response = await createContacts(
-        [{ attributes, user: values.owner.id }],
+        [{ attributes, user: values.owner.id, touch_freq: values.touch_freq }],
         query
       )
 
@@ -141,6 +151,8 @@ class NewContactDrawer extends React.Component {
     const { isSubmitting, submitError } = this.state
     const initValues = generateInitialValues(this.props.initValues)
 
+    console.log(this.props.attributeDefs)
+
     return (
       <Drawer open={this.props.isOpen} onClose={this.onClose}>
         {this.props.isOpen && (
@@ -172,6 +184,18 @@ class NewContactDrawer extends React.Component {
                     <TextField name="last_name" label="Last Name" />
                     <Tags />
                     <TextField name="source" label="Source" />
+                    <TextField
+                      name="touch_freq"
+                      label="Manage Relationship"
+                      placeholder="Touch reminders in days. eg: If you want weekly reminders, enter 7"
+                      InputProps={{
+                        inputProps: {
+                          'aria-label': 'Remind to touch every',
+                          mask: numberMask
+                        },
+                        inputComponent: numberMask ? MaskedInput : undefined
+                      }}
+                    />
                     <Emails
                       labels={this.getDefaultValues('email', 'labels')}
                       mutators={formProps.form.mutators}
