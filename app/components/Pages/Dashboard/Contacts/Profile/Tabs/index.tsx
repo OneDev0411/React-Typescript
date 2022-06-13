@@ -22,9 +22,6 @@ const useStyles = makeStyles(
         cursor: 'default'
       }
     },
-    // Based on MUI doc:
-    // Use $ruleName to reference a local rule within the same style sheet
-    // https://v4.mui.com/customization/components/#use-rulename-to-reference-a-local-rule-within-the-same-style-sheet
     selected: {
       backgroundColor: theme.palette.success.ultralight,
       color: theme.palette.primary.main
