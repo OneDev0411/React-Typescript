@@ -24,6 +24,7 @@ describe('ManageRelationship', () => {
         expect(screen.getByText(expectedText)).toBeInTheDocument()
       })
     })
+
     it('should render monthly when touch_freq is 30', async () => {
       value = 30
       render(<ManageRelationship value={value} onChange={onChange} />)
@@ -100,13 +101,13 @@ describe('ManageRelationship', () => {
       fireEvent.input(screen.getByLabelText('Remind to touch every'), {
         target: { value: '121' }
       })
-      fireEvent.click(screen.getByTitle('Change frequency'))
+      fireEvent.click(screen.getByTitle('Save'))
 
       await waitFor(() => {
         expect(onChange).toBeCalledTimes(1)
         expect(onChange).toBeCalledWith(121)
 
-        expect(screen.queryByTitle('Change frequency')).not.toBeInTheDocument()
+        expect(screen.queryByTitle('Save')).not.toBeInTheDocument()
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()
       })
     })
@@ -131,13 +132,13 @@ describe('ManageRelationship', () => {
       fireEvent.input(screen.getByLabelText('Remind to touch every'), {
         target: { value: '0' }
       })
-      fireEvent.click(screen.getByTitle('Change frequency'))
+      fireEvent.click(screen.getByTitle('Save'))
 
       await waitFor(() => {
         expect(onChange).toBeCalledTimes(1)
         expect(onChange).toBeCalledWith(null)
 
-        expect(screen.queryByTitle('Change frequency')).not.toBeInTheDocument()
+        expect(screen.queryByTitle('Save')).not.toBeInTheDocument()
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()
       })
     })
@@ -162,13 +163,13 @@ describe('ManageRelationship', () => {
       fireEvent.input(screen.getByLabelText('Remind to touch every'), {
         target: { value: '' }
       })
-      fireEvent.click(screen.getByTitle('Change frequency'))
+      fireEvent.click(screen.getByTitle('Save'))
 
       await waitFor(() => {
         expect(onChange).toBeCalledTimes(1)
         expect(onChange).toBeCalledWith(null)
 
-        expect(screen.queryByTitle('Change frequency')).not.toBeInTheDocument()
+        expect(screen.queryByTitle('Save')).not.toBeInTheDocument()
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()
       })
     })
