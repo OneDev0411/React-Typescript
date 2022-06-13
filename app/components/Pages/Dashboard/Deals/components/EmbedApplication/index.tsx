@@ -24,7 +24,7 @@ import { IAppState } from '@app/reducers'
 import { getBrandChecklistsById } from '@app/reducers/deals/brand-checklists'
 import { getDealChecklists } from '@app/reducers/deals/checklists'
 import { selectDealRoles } from '@app/reducers/deals/roles'
-import { upsertContexts } from '@app/store_actions/deals'
+import { changeNeedsAttention, upsertContexts } from '@app/store_actions/deals'
 import { DialogTitle } from '@app/views/components/DialogTitle'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import DatePicker from 'components/DatePicker'
@@ -41,6 +41,7 @@ import { useSectionErrorContext } from 'components/QuestionWizard/hooks/use-sect
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import config from 'config'
 
+import Message from '../../../Chatroom/Util/message'
 import { ContactRoles } from '../../Create/components/ContactRoles'
 import { RoleCard } from '../RoleCard'
 
@@ -134,6 +135,21 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
       window.libs = undefined
     }
   })
+
+  const notifyOffice = useCallback(
+    async (comment: string) => {
+      if (comment && user) {
+        Message.postTaskComment(task, {
+          comment,
+          author: user.id,
+          room: task.room.id
+        })
+      }
+
+      await dispatch(changeNeedsAttention(deal.id, task.id, true))
+    },
+    [deal.id, task, dispatch, user]
+  )
 
   const updateDealContext = useCallback(
     (key: string, value: unknown) => {
@@ -236,7 +252,8 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
               attributeDefs
             }}
             utils={{
-              notify
+              notify,
+              notifyOffice
             }}
             api={{
               getDealContext,
