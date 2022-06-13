@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { makeStyles, Theme, Tooltip } from '@material-ui/core'
 import {
   mdiWeb,
@@ -26,6 +24,9 @@ const useStyles = makeStyles(
     container: {
       display: 'flex',
       alignItems: 'center'
+    },
+    tooltip: {
+      textTransform: 'capitalize'
     },
     item: {
       display: 'flex',
@@ -73,7 +74,8 @@ export const Social = ({ contact }: Props) => {
         return (
           <Tooltip
             key={attr.id || attr.text}
-            title={attr.attribute_def.name || 'social'}
+            classes={{ tooltip: classes.tooltip }}
+            title={attr.attribute_def.name || 'Social'}
           >
             <a
               href={getUrl(attr.text)}
