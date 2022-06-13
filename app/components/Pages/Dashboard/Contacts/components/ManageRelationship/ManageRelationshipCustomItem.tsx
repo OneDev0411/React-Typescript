@@ -115,7 +115,7 @@ export function ManageRelationshipCustomItem({
         Days
       </Typography>
 
-      <Tooltip title="Change frequency">
+      <Tooltip title="Save">
         <IconButton
           role="button"
           size="small"
