@@ -19,8 +19,6 @@ const useStyles = makeStyles(
       padding: theme.spacing(1, 2)
     },
     popup: {
-      marginTop: theme.spacing(1),
-      marginRight: theme.spacing(1),
       zIndex: theme.zIndex.modal - 2
     },
     container: {
@@ -37,6 +35,16 @@ const useStyles = makeStyles(
     },
     gotItButton: {
       marginTop: theme.spacing(1)
+    },
+    arrow: {
+      overflow: 'hidden',
+      position: 'absolute',
+      width: 0,
+      height: 0,
+      top: 2,
+      borderLeft: '6px solid transparent',
+      borderRight: '6px solid transparent',
+      borderBottom: '8px solid #fff'
     }
   }),
   { name: 'ReminderDialog' }
@@ -44,21 +52,24 @@ const useStyles = makeStyles(
 
 interface Props extends Omit<ReminderDialogBaseProps, 'userSettingsKey'> {
   open: boolean
-  onClickGotIt: (dontShwo: boolean) => void
+  onClickGotIt: (dontShow: boolean) => void
 }
 
 export function ReminderPopper({
   open,
   anchorEl,
   title,
-  placement = 'bottom',
+  arrow = true,
+  placement = 'bottom-end',
   buttonText = 'Got it!',
   checkboxText = "Don't show me this message again",
   image = '/static/images/bell/bell.gif',
   onClickGotIt
 }: Props) {
   const classes = useStyles()
+
   const [dontShow, setDontShow] = useState(false)
+  const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null)
 
   const handleDontShowChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDontShow(event.target.checked)
@@ -72,10 +83,12 @@ export function ReminderPopper({
       className={classes.popup}
       modifiers={{
         arrow: {
-          enabled: true
+          enabled: arrow,
+          element: arrowRef
         }
       }}
     >
+      {arrow ? <span className={classes.arrow} ref={setArrowRef} /> : null}
       <Paper elevation={4}>
         <Grid
           className={classes.container}
