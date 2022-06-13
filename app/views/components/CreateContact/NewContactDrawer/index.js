@@ -187,7 +187,7 @@ class NewContactDrawer extends React.Component {
                     <TextField
                       name="touch_freq"
                       label="Manage Relationship"
-                      placeholder="Touch reminders in days. eg: If you want weekly reminders, enter 7"
+                      placeholder="How frequently do you want to be in touch with this contact (day)"
                       InputProps={{
                         inputProps: {
                           'aria-label': 'Remind to touch every',
