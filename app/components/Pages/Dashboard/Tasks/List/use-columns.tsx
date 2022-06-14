@@ -1,12 +1,14 @@
 import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderColumn'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
-export function useColumns(): TableColumn<any>[] {
+export function useColumns(): TableColumn<
+  ICRMTask<'assignees' | 'associations', 'contact'>
+>[] {
   return [
     {
       id: 'task',
       header: () => <HeaderColumn text="Tasks" />,
-      render: () => <div>+</div>
+      render: ({ row: task }) => <div>{task.title}</div>
     },
     {
       id: 'contact',
@@ -16,12 +18,12 @@ export function useColumns(): TableColumn<any>[] {
     {
       id: 'type',
       header: () => <HeaderColumn text="Type" />,
-      render: () => <div>+++</div>
+      render: ({ row: task }) => <div>{task.task_type}</div>
     },
     {
       id: 'due-date',
       header: () => <HeaderColumn text="Due Date" />,
-      render: () => <div>+++</div>
+      render: ({ row: task }) => <div>{task.due_date}</div>
     },
     {
       id: 'assignee',
