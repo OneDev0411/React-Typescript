@@ -28,15 +28,13 @@ const useStyles = makeStyles(
 export interface Props {
   contact: INormalizedContact
   contactChangeCallback: () => void
-  onCreateEvent: () => void
-  onCreateNote: (contact: INormalizedContact) => void
+  onUpdateTouchFreq(newValue: Nullable<number>): void
 }
 
 export const Header = ({
   contact,
-  onCreateNote,
-  onCreateEvent,
-  contactChangeCallback
+  contactChangeCallback,
+  onUpdateTouchFreq
 }: Props) => {
   const classes = useStyles()
 
@@ -49,11 +47,7 @@ export const Header = ({
         />
       </div>
       <div className={classes.actionsContainer}>
-        <Actions
-          contact={contact}
-          onCreateNote={onCreateNote}
-          onCreateEvent={onCreateEvent}
-        />
+        <Actions contact={contact} onUpdateTouchFreq={onUpdateTouchFreq} />
       </div>
     </div>
   )

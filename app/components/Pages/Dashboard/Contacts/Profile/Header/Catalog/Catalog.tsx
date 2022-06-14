@@ -53,7 +53,7 @@ const useStyles = makeStyles(
 export default function Catalog({
   contact,
   contactChangeCallback
-}: Omit<Props, 'onCreateNote' | 'onCreateEvent'>) {
+}: Omit<Props, 'onCreateNote' | 'onCreateEvent' | 'onUpdateTouchFreq'>) {
   const classes = useStyles()
 
   return (
