@@ -31,14 +31,15 @@ export function useMarketingTemplateTypesWithMediums(
       templateTypes.flatMap(templateType => {
         const currentTypeMediums = mediums[templateType]
 
-        if (!currentTypeMediums) {
-          return { type: templateType }
+        // Only categories with content should be displayed
+        if (!!currentTypeMediums && currentTypeMediums.length !== 0) {
+          return currentTypeMediums.map(medium => ({
+            type: templateType,
+            medium
+          }))
         }
 
-        return currentTypeMediums.map(medium => ({
-          type: templateType,
-          medium
-        }))
+        return []
       }),
     [mediums, templateTypes]
   )
