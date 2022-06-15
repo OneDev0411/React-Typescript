@@ -44,25 +44,37 @@ export function useColumns(): TableColumn<
             association => association.association_type === 'contact'
           )}
         />
-      )
+      ),
+      renderInlineEdit: () => {
+        return <div>--</div>
+      }
     },
     {
       id: 'type',
       width: '180px',
       header: () => <HeaderColumn text="Type" />,
-      render: ({ row: task }) => <TaskTypeCell type={task.task_type} />
+      render: ({ row: task }) => <TaskTypeCell type={task.task_type} />,
+      renderInlineEdit: () => {
+        return <div>-+-</div>
+      }
     },
     {
       id: 'due-date',
       width: '200px',
       header: () => <HeaderColumn text="Due Date" />,
-      render: ({ row: task }) => <DueDateCell dueDate={task.due_date} />
+      render: ({ row: task }) => <DueDateCell dueDate={task.due_date} />,
+      renderInlineEdit: () => {
+        return <div>x--</div>
+      }
     },
     {
       id: 'assignee',
       width: '150px',
       header: () => <HeaderColumn text="Assignee" />,
-      render: ({ row: task }) => <AssigneeCell assignees={task.assignees} />
+      render: ({ row: task }) => <AssigneeCell assignees={task.assignees} />,
+      renderInlineEdit: () => {
+        return <div>--</div>
+      }
     },
     {
       id: 'property-deal',
@@ -73,7 +85,10 @@ export function useColumns(): TableColumn<
             ['listing', 'deal'].includes(association.association_type)
           )}
         />
-      )
+      ),
+      renderInlineEdit: () => {
+        return <div>-a-</div>
+      }
     }
   ]
 }

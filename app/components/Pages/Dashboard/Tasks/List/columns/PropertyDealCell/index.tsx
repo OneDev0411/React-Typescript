@@ -26,5 +26,5 @@ export function PropertyDealCell({ associations }: Props) {
     return <div>{deals[0].deal?.title}</div>
   }
 
-  return ''
+  return null
 }
