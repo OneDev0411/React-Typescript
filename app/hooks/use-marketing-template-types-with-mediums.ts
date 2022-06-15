@@ -32,7 +32,7 @@ export function useMarketingTemplateTypesWithMediums(
         const currentTypeMediums = mediums[templateType]
 
         // Only categories with content should be displayed
-        if (!!currentTypeMediums && currentTypeMediums.length !== 0) {
+        if (currentTypeMediums?.length) {
           return currentTypeMediums.map(medium => ({
             type: templateType,
             medium
