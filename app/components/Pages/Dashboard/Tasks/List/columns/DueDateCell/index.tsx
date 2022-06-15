@@ -60,7 +60,7 @@ export function DueDateCell({ dueDate }: Props) {
   }
 
   if (remainingDays === 0 && remainingHours < 24) {
-    return <div className={classes.soon}>in {remainingHours} hours</div>
+    return <div className={classes.soon}>in {fromNow}</div>
   }
 
   if (remainingDays > 0 && remainingDays < 7) {

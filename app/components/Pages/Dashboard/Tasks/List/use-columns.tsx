@@ -5,16 +5,35 @@ import { AssigneeCell } from './columns/AssigneeCell'
 import { ContactsCell } from './columns/ContactsCell'
 import { DueDateCell } from './columns/DueDateCell'
 import { PropertyDealCell } from './columns/PropertyDealCell'
+import { StatusButtonCell } from './columns/StatusButtonCell'
 import { TaskTypeCell } from './columns/TaskTypeCell'
+import { TitleCell } from './columns/TitleCell'
 
 export function useColumns(): TableColumn<
   ICRMTask<'assignees' | 'associations', 'contact' | 'deal' | 'listing'>
 >[] {
   return [
     {
+      id: 'status',
+      width: '50px',
+      header: '',
+      headerStyle: {
+        borderRight: 'none'
+      },
+      rowStyle: {
+        borderRight: 'none'
+      },
+      render: ({ row: task }) => (
+        <StatusButtonCell defaultStatus={task.status} />
+      )
+    },
+    {
       id: 'task',
-      header: () => <HeaderColumn text="Tasks" />,
-      render: ({ row: task }) => <div>{task.title}</div>
+      header: () => <HeaderColumn text="Task" />,
+      render: ({ row: task }) => <TitleCell title={task.title} />,
+      renderInlineEdit: () => {
+        return <div>++</div>
+      }
     },
     {
       id: 'contacts',

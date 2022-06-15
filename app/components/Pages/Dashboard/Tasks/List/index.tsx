@@ -41,7 +41,7 @@ export function List() {
       rowSize={5}
       selection={{
         columnProps: {
-          width: '80px'
+          width: '65px'
         },
         showSelectAll: false
       }}
