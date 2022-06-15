@@ -9,6 +9,8 @@ export function useTasks() {
     () =>
       getTasks({
         order: '-created_at',
+        limit: 50,
+        start: 0,
         associations: [
           'crm_task.associations',
           'crm_task.assignees',
