@@ -38,7 +38,8 @@ const propTypes = {
   handleTrigger: PropTypes.func,
   disabled: PropTypes.bool,
   buttonRenderer: PropTypes.func,
-  listings: PropTypes.arrayOf(PropTypes.object)
+  listings: PropTypes.arrayOf(PropTypes.object),
+  tags: PropTypes.arrayOf(PropTypes.string)
 }
 
 const defaultProps = {
@@ -468,6 +469,7 @@ class SendMlsListingCard extends Component {
             onClose={this.toggleComposeEmail}
             onSent={this.closeMarketing}
             isSubmitDisabled={this.state.isGettingTemplateInstance}
+            tags={this.props.tags}
           />
         )}
 
