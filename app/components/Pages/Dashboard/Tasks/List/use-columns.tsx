@@ -8,6 +8,7 @@ import { PropertyDealCell } from './columns/PropertyDealCell'
 import { StatusButtonCell } from './columns/StatusButtonCell'
 import { TaskTypeCell } from './columns/TaskTypeCell'
 import { TitleCell } from './columns/TitleCell'
+import { InlineDueDateCell } from './inline-columns/InlineDueDateCell'
 import { InlineTitleCell } from './inline-columns/InlineTitleCell'
 import { InlineTypeCell } from './inline-columns/InlineTypeCell'
 
@@ -81,9 +82,14 @@ export function useColumns(): TableColumn<
       width: '200px',
       header: () => <HeaderColumn text="Due Date" />,
       render: ({ row: task }) => <DueDateCell dueDate={task.due_date} />,
-      renderInlineEdit: () => {
-        return <div>x--</div>
-      }
+      inlineEditStyles: {
+        popover: ({ height }) => ({
+          marginTop: height
+        })
+      },
+      renderInlineEdit: ({ row: task }, close) => (
+        <InlineDueDateCell defaultValue={task.due_date} closeHandler={close} />
+      )
     },
     {
       id: 'assignee',
