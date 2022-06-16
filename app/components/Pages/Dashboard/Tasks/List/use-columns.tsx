@@ -8,6 +8,7 @@ import { PropertyDealCell } from './columns/PropertyDealCell'
 import { StatusButtonCell } from './columns/StatusButtonCell'
 import { TaskTypeCell } from './columns/TaskTypeCell'
 import { TitleCell } from './columns/TitleCell'
+import { InlineAssigneeCell } from './inline-columns/InlineAssigneeCell'
 import { InlineDueDateCell } from './inline-columns/InlineDueDateCell'
 import { InlineTitleCell } from './inline-columns/InlineTitleCell'
 import { InlineTypeCell } from './inline-columns/InlineTypeCell'
@@ -95,10 +96,18 @@ export function useColumns(): TableColumn<
       id: 'assignee',
       width: '150px',
       header: () => <HeaderColumn text="Assignee" />,
+      inlineEditStyles: {
+        popover: ({ height }) => ({
+          marginTop: height
+        })
+      },
       render: ({ row: task }) => <AssigneeCell assignees={task.assignees} />,
-      renderInlineEdit: () => {
-        return <div>--</div>
-      }
+      renderInlineEdit: ({ row: task }, close) => (
+        <InlineAssigneeCell
+          defaultAssignees={task.assignees}
+          closeHandler={close}
+        />
+      )
     },
     {
       id: 'property-deal',
