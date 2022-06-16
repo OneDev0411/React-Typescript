@@ -118,10 +118,10 @@ export function EmailRecipientQuickSuggestions({
     onSelect(recipient, sendType)
   }
 
-  // Filter out brands that don't have any sub-brands and team members
+  // Filter out brands that don't have any sub-brands and also have no team members
   // https://gitlab.com/rechat/web/-/issues/6554
   const filterDeactivatedBrands = useCallback((team: IBrand) => {
-    return !!team.children?.length && team.member_count > 0
+    return !!team.children?.length || team.member_count > 0
   }, [])
 
   return (
