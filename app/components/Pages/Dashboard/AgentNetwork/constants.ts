@@ -1,3 +1,3 @@
 export const DEFAULT_SEARCH_RADIUS = 3
 export const DEFAULT_SEARCH_MONTHS_PERIOD = 18
-export const AGENT_NETWORK_EMAIL_CAMPAIGN_TAG = 'Agent Network'
+export const AGENT_NETWORK_EMAIL_CAMPAIGN_TAG = 'AgentNetwork'
