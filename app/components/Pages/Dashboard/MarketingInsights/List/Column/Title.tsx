@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 import { Box, Typography, Tooltip } from '@material-ui/core'
 
@@ -45,7 +45,7 @@ function TitleColumn({ data, reloadList }: Props) {
   }
 
   return (
-    <>
+    <Box display="flex" flexDirection="column" alignItems="flex-start">
       {titleRenderer}
       <Box>
         <Date data={data} />
@@ -58,7 +58,7 @@ function TitleColumn({ data, reloadList }: Props) {
           <StyledBadge appearance="warning">In Progress</StyledBadge>
         )}
       </Box>
-    </>
+    </Box>
   )
 }
 
