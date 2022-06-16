@@ -8,6 +8,8 @@ import { PropertyDealCell } from './columns/PropertyDealCell'
 import { StatusButtonCell } from './columns/StatusButtonCell'
 import { TaskTypeCell } from './columns/TaskTypeCell'
 import { TitleCell } from './columns/TitleCell'
+import { InlineTitleCell } from './inline-columns/InlineTitleCell'
+import { InlineTypeCell } from './inline-columns/InlineTypeCell'
 
 export function useColumns(): TableColumn<
   ICRMTask<'assignees' | 'associations', 'contact' | 'deal' | 'listing'>
@@ -28,12 +30,20 @@ export function useColumns(): TableColumn<
       )
     },
     {
-      id: 'task',
+      id: 'title',
       header: () => <HeaderColumn text="Task" />,
+      inlineEditStyles: {
+        container: () => ({
+          border: 'none'
+        }),
+        paper: {
+          boxShadow: 'none'
+        }
+      },
       render: ({ row: task }) => <TitleCell title={task.title} />,
-      renderInlineEdit: () => {
-        return <div>++</div>
-      }
+      renderInlineEdit: ({ row: task }, close) => (
+        <InlineTitleCell defaultValue={task.title} closeHandler={close} />
+      )
     },
     {
       id: 'contacts',
@@ -53,10 +63,18 @@ export function useColumns(): TableColumn<
       id: 'type',
       width: '180px',
       header: () => <HeaderColumn text="Type" />,
+      inlineEditStyles: {
+        container: () => ({
+          border: 'none'
+        }),
+        popover: ({ height }) => ({
+          marginTop: height
+        })
+      },
       render: ({ row: task }) => <TaskTypeCell type={task.task_type} />,
-      renderInlineEdit: () => {
-        return <div>-+-</div>
-      }
+      renderInlineEdit: ({ row: task }, close) => (
+        <InlineTypeCell defaultValue={task.task_type} closeHandler={close} />
+      )
     },
     {
       id: 'due-date',

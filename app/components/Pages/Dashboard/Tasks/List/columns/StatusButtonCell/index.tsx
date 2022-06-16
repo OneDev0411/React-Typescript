@@ -15,7 +15,7 @@ const useStyles = makeStyles(
       width: theme.spacing(2.8),
       height: theme.spacing(2.8),
       borderRadius: '100%',
-      border: `1px solid ${theme.palette.action.disabled}`,
+      border: '1px solid #000',
       backgroundColor: '#fff',
       '&.done': {
         backgroundColor: theme.palette.success.ultralight,
@@ -57,11 +57,7 @@ export function StatusButtonCell({ defaultStatus }: Props) {
       <SvgIcon
         path={mdiCheck}
         size={muiIconSizes.large}
-        color={
-          status === 'DONE'
-            ? theme.palette.success.main
-            : theme.palette.action.disabled
-        }
+        color={status === 'DONE' ? theme.palette.success.main : '#000'}
       />
     </button>
   )
