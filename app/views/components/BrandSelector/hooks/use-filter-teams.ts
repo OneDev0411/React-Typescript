@@ -11,15 +11,22 @@ export interface UseFilterTeamsReturnType {
   handleSearch: Dispatch<SetStateAction<string>>
 }
 
-export function useFilterTeams(): UseFilterTeamsReturnType {
+export function useFilterTeams(
+  filterFn?: (team: IBrand) => boolean
+): UseFilterTeamsReturnType {
   const [query, setQuery] = useState<string>('')
   const [debouncedSetQuery] = useDebouncedCallback(setQuery, 400)
 
   const matches = useCallback(
-    (team: IBrand) =>
-      teamMatches(team, query) || (team.children || []).some(matches),
-    [query]
+    (team: IBrand) => {
+      return (
+        (filterFn ? filterFn(team) : true) &&
+        (teamMatches(team, query) || (team.children || []).some(matches))
+      )
+    },
+    [filterFn, query]
   )
+
   const filterTeams = useCallback(
     (getChildNodes: TreeFn<IBrand>) => {
       return (parent?: IBrand) => {
