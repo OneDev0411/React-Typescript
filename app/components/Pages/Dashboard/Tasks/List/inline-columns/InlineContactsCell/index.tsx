@@ -13,7 +13,7 @@ import { mdiOpenInNew, mdiTrashCanOutline } from '@mdi/js'
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
 interface Props {
-  contactAssociations: ICRMTaskAssociation<'contact'>[]
+  contactAssociations?: ICRMTaskAssociation<'contact'>[]
   closeHandler: () => void
 }
 
