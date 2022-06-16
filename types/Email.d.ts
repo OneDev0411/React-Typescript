@@ -144,7 +144,8 @@ declare type IEmailCampaignEmailAssociation = 'email'
 declare type IEmailCampaign<
   Associations extends IEmailCampaignAssociation = '',
   RecipientAssociations extends IEmailCampaignRecipientAssociation = '',
-  EmailCampaignEmailAssociation extends IEmailCampaignEmailAssociation = ''
+  EmailCampaignEmailAssociation extends IEmailCampaignEmailAssociation = '',
+  EmailFields extends IEmailOptionalFields = ''
 > = {
   id: UUID
   created_at: number
@@ -188,7 +189,8 @@ declare type IEmailCampaign<
     IEmailCampaignEmail<EmailCampaignEmailAssociation>[] | null,
     Associations
   > &
-  Association<'attachments', IEmailCampaignAttachment[] | null, Associations>
+  Association<'attachments', IEmailCampaignAttachment[] | null, Associations> &
+  Association<'email', IEmail<EmailFields>, Associations>
 
 declare type IEmailCampaignEmail<
   Associations extends IEmailCampaignEmailAssociation = '',
