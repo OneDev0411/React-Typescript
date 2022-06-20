@@ -53,13 +53,13 @@ export class VideoToolbar extends React.Component {
         progress: t.progress
       })
 
-      const next = this.KeyFrames[this.state.activeFrame + 1]
+      const currentFrame = this.state.activeFrame
+      const current = this.KeyFrames[currentFrame]
+      const next = this.KeyFrames[currentFrame + 1]
 
-      if (next && t.currentTime > next.at) {
-        this.setState(prevState => {
-          return {
-            activeFrame: prevState.activeFrame + 1
-          }
+      if (next && t.currentTime > current.at) {
+        this.setState({
+          activeFrame: currentFrame + 1
         })
       }
     }
