@@ -1765,7 +1765,7 @@ class Builder extends React.Component {
               ref={ref => (this.grapes = ref)}
               style={{ position: 'relative' }}
             >
-              {this.isVideoTemplate && this.isTemplateLoaded && (
+              {this.isVideoTemplate && this.editor && (
                 <VideoToolbar
                   onRef={ref => (this.videoToolbar = ref)}
                   editor={this.editor}

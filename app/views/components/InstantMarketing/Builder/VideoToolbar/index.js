@@ -1,7 +1,10 @@
 import React from 'react'
 
+import { LinearProgress } from '@material-ui/core'
+import { mdiPauseCircleOutline, mdiPlayCircleOutline } from '@mdi/js'
+
 import IconButton from 'components/Button/IconButton'
-import IconPlay from 'components/SvgIcons/Play/IconPlay'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Container, Divider, FrameButton } from './styled'
 
@@ -11,7 +14,9 @@ export class VideoToolbar extends React.Component {
 
     this.state = {
       activeFrame: 0,
-      isLoaded: false
+      progress: 0,
+      isLoaded: false,
+      isPlaying: false
     }
 
     const { editor } = this.props
@@ -39,7 +44,25 @@ export class VideoToolbar extends React.Component {
       isLoaded: true
     })
 
+    this.Timeline.pause()
     this.seekTo(0)
+
+    this.Timeline.update = t => {
+      this.setState({
+        isPlaying: !t.paused,
+        progress: t.progress
+      })
+
+      const next = this.KeyFrames[this.state.activeFrame + 1]
+
+      if (next && t.currentTime > next.at) {
+        this.setState(prevState => {
+          return {
+            activeFrame: prevState.activeFrame + 1
+          }
+        })
+      }
+    }
   }
 
   get Timeline() {
@@ -53,6 +76,8 @@ export class VideoToolbar extends React.Component {
   }
 
   seekTo = frameId => {
+    this.handlePause()
+
     const keyframe = this.Timeline.keyframes[frameId]
 
     this.setState({
@@ -63,9 +88,14 @@ export class VideoToolbar extends React.Component {
   }
 
   handlePlay = () => {
-    this.seekTo(0)
-    this.Timeline.reset()
     this.Timeline.play()
+  }
+
+  handlePause = () => {
+    this.Timeline.pause()
+    this.setState({
+      isPlaying: false
+    })
   }
 
   render() {
@@ -75,9 +105,23 @@ export class VideoToolbar extends React.Component {
 
     return (
       <Container ref={this.props.onRef}>
-        <IconButton iconSize="large" isFit onClick={this.handlePlay}>
-          <IconPlay />
-        </IconButton>
+        {this.state.isPlaying && (
+          <IconButton iconSize="large" isFit onClick={this.handlePause}>
+            <SvgIcon path={mdiPauseCircleOutline} />
+          </IconButton>
+        )}
+
+        {!this.state.isPlaying && (
+          <IconButton iconSize="large" isFit onClick={this.handlePlay}>
+            <SvgIcon path={mdiPlayCircleOutline} />
+          </IconButton>
+        )}
+
+        <Divider />
+
+        <div style={{ width: '50%' }}>
+          <LinearProgress variant="determinate" value={this.state.progress} />
+        </div>
 
         <Divider />
 
