@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core'
 import { mdiOpenInNew, mdiTrashCanOutline } from '@mdi/js'
 
+import { ContactsList } from '@app/views/components/ContactsList'
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
 interface Props {
@@ -21,17 +22,19 @@ export function InlineContactsCell({
   contactAssociations,
   closeHandler
 }: Props) {
-  const [contacts /* setContacts */] = useState(contactAssociations)
+  const [contacts, setContacts] = useState(contactAssociations)
   const [showContactsList, setShowContactsList] = useState(false)
   const theme = useTheme<Theme>()
 
+  const handleDelete = (id: UUID) => {}
+
   return (
     <>
-      {showContactsList && <div>++</div>}
-
-      {!showContactsList && (
+      {showContactsList ? (
+        <ContactsList />
+      ) : (
         <>
-          {contacts.map(({ contact }) => (
+          {contacts?.map(({ contact }) => (
             <MenuItem key={contact?.id}>
               <Box
                 width="100%"
@@ -44,7 +47,7 @@ export function InlineContactsCell({
                   <IconButton
                     size="small"
                     onClick={() =>
-                      window.open(`/dashboard/contacts/${contact?.id}`)
+                      window.open(`/dashboard/contacts/${contact!.id}`)
                     }
                   >
                     <SvgIcon
@@ -54,7 +57,10 @@ export function InlineContactsCell({
                     />
                   </IconButton>
 
-                  <IconButton size="small">
+                  <IconButton
+                    size="small"
+                    onClick={() => handleDelete(contact!.id)}
+                  >
                     <SvgIcon
                       path={mdiTrashCanOutline}
                       size={muiIconSizes.small}

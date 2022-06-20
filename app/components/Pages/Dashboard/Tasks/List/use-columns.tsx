@@ -51,6 +51,11 @@ export function useColumns(): TableColumn<
     {
       id: 'contacts',
       header: () => <HeaderColumn text="Contacts" />,
+      inlineEditStyles: {
+        popover: ({ height }) => ({
+          marginTop: height
+        })
+      },
       render: ({ row: task }) => (
         <ContactsCell
           contactAssociations={task.associations?.filter(
@@ -99,9 +104,9 @@ export function useColumns(): TableColumn<
       )
     },
     {
-      id: 'assignee',
+      id: 'assignees',
       width: '150px',
-      header: () => <HeaderColumn text="Assignee" />,
+      header: () => <HeaderColumn text="Assignees" />,
       inlineEditStyles: {
         popover: ({ height }) => ({
           marginTop: height
