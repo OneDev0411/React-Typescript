@@ -1,5 +1,14 @@
-import { Avatar, Box, makeStyles, Theme, Typography } from '@material-ui/core'
+import {
+  Avatar,
+  Box,
+  IconButton,
+  makeStyles,
+  Theme,
+  Typography
+} from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
 
+import { muiIconSizes, SvgIcon } from '../SvgIcons'
 import { TextMiddleTruncate } from '../TextMiddleTruncate'
 
 const useStyles = makeStyles(
@@ -26,9 +35,10 @@ const useStyles = makeStyles(
 
 interface Props {
   contacts: IContact[]
+  onRemove: (id: UUID) => void
 }
 
-export function SelectedContacts({ contacts }: Props) {
+export function SelectedContacts({ contacts, onRemove }: Props) {
   const classes = useStyles()
 
   return (
@@ -41,11 +51,15 @@ export function SelectedContacts({ contacts }: Props) {
           >
             {contact.display_name[0]}
           </Avatar>
-          <Box ml={1}>
+          <Box mx={1}>
             <Typography variant="body2">
-              <TextMiddleTruncate text={contact.display_name} maxLength={15} />{' '}
+              <TextMiddleTruncate text={contact.display_name} maxLength={15} />
             </Typography>
           </Box>
+
+          <IconButton size="small" onClick={() => onRemove(contact.id)}>
+            <SvgIcon path={mdiClose} size={muiIconSizes.small} />
+          </IconButton>
         </div>
       ))}
     </>

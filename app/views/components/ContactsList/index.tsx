@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { makeStyles, TextField, Theme } from '@material-ui/core'
 import { useDebounce } from 'react-use'
@@ -61,12 +61,18 @@ export function ContactsList() {
         ? list.filter(({ id }) => id !== contact.id)
         : [...list, contact]
     )
+
+    setSearchCriteria('')
   }
+
+  const handleRemove = useCallback((id: UUID) => {
+    setSelectedContacts(list => list.filter(contact => id !== contact.id))
+  }, [])
 
   return (
     <div className={classes.root}>
       <div className={classes.searchContainer}>
-        <SelectedContacts contacts={selectedContacts} />
+        <SelectedContacts contacts={selectedContacts} onRemove={handleRemove} />
         <TextField
           placeholder="Search contact"
           value={searchCriteria}
@@ -85,20 +91,21 @@ export function ContactsList() {
               itemCount={list?.length ?? 0}
               itemData={
                 {
-                  rows: contacts,
+                  rows: list,
                   onSelectContact: handleSelectContact
                 } as React.ComponentProps<typeof ContactRow>['data']
               }
               threshold={2}
               itemSize={() => 60}
               overscanCount={3}
-              onReachEnd={() => fetchNextPage()}
+              onReachEnd={() => !searchCriteria && fetchNextPage()}
               isLoading={isLoading || isFetchingNextPage || isSearching}
               loadingPosition={
                 isFetchingNextPage
                   ? LoadingPosition.Bottom
                   : LoadingPosition.Middle
               }
+              itemKey={index => list[index].id}
             >
               {ContactRow}
             </VirtualList>
