@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Button } from '@material-ui/core'
+import { mdiPlus } from '@mdi/js'
 import { connect } from 'react-redux'
 
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { EventDrawer } from 'components/EventDrawer'
 import { normalizeContact } from 'views/utils/association-normalizers'
 
@@ -34,6 +36,7 @@ function AddEvent({ contact, user, callback }: Props & StateProps) {
         variant="contained"
         onClick={toggleDrawer}
         data-tour-id="add-event-button"
+        startIcon={<SvgIcon path={mdiPlus} />}
       >
         Add Event
       </Button>

@@ -17,7 +17,8 @@ TextField.propTypes = {
   placeholder: PropTypes.string,
   required: PropTypes.bool,
   style: PropTypes.shape(),
-  validate: PropTypes.func
+  validate: PropTypes.func,
+  InputProps: PropTypes.shape()
 }
 
 TextField.defaultProps = {
@@ -28,7 +29,8 @@ TextField.defaultProps = {
   placeholder: '',
   required: false,
   style: {},
-  validate: () => undefined
+  validate: () => undefined,
+  InputProps: undefined
 }
 
 export function TextField(props) {
@@ -54,6 +56,7 @@ export function TextField(props) {
             <Input
               autoComplete="disabled"
               {...input}
+              InputProps={props.InputProps}
               id={id}
               placeholder={props.placeholder}
               data-test={`text-field-${props.name}`}

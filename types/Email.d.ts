@@ -104,7 +104,7 @@ declare interface IEmailCampaignInputBase {
   template?: UUID
   notifications_enabled?: boolean
   individual: boolean
-
+  tags?: string[]
   /**
    * @deprecated, This is not used in practice and is added in initial
    * implementation by the API. It should be removed.
@@ -189,7 +189,8 @@ declare type IEmailCampaign<
     IEmailCampaignEmail<EmailCampaignEmailAssociation>[] | null,
     Associations
   > &
-  Association<'attachments', IEmailCampaignAttachment[] | null, Associations>
+  Association<'attachments', IEmailCampaignAttachment[] | null, Associations> &
+  Association<'email', IEmail<EmailFields>, Associations>
 
 declare type IEmailCampaignEmail<
   Associations extends IEmailCampaignEmailAssociation = '',
