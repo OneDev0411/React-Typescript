@@ -138,7 +138,7 @@ export function Body<Row>({
             itemSize={theme.spacing(rowSize)}
             width={width}
             height={windowHeight}
-            overscanCount={8}
+            overscanCount={12}
             itemKey={getItemKey}
             itemData={
               {

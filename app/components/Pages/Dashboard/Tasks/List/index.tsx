@@ -1,12 +1,16 @@
+import { useCallback } from 'react'
+
 import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 
 import Table from '@app/views/components/Grid/Table'
 import { useGridBorderedStyles } from '@app/views/components/Grid/Table/styles/bordered'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
+import type { LoadingPosition } from '@app/views/components/Grid/Table/types'
 
 import { useTasks } from '../queries/use-tasks'
 
+import { LoadingState } from './LoadingState'
 import { useColumns } from './use-columns'
 
 export const useStyles = makeStyles(
@@ -33,7 +37,19 @@ export function List() {
   const classes = useStyles()
   const gridClasses = useGridStyles()
   const gridBorderedClasses = useGridBorderedStyles()
-  const { isLoading, data } = useTasks()
+  const { isLoading, tasks, fetchNextPage, isFetchingNextPage } = useTasks()
+
+  const getLoadingPosition = useCallback((): LoadingPosition => {
+    if (isLoading) {
+      return 'middle'
+    }
+
+    if (isFetchingNextPage) {
+      return 'bottom'
+    }
+
+    return null
+  }, [isLoading, isFetchingNextPage])
 
   return (
     <Table<ICRMTask<'assignees' | 'associations'>>
@@ -50,7 +66,13 @@ export function List() {
       }}
       totalRows={0}
       columns={columns}
-      rows={data}
+      rows={tasks}
+      infiniteScrolling={{
+        onReachStart: () => {},
+        onReachEnd: fetchNextPage
+      }}
+      loading={getLoadingPosition()}
+      LoadingStateComponent={LoadingState}
     />
   )
 }

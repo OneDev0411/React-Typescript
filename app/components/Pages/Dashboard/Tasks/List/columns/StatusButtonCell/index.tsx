@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 
 import { useTheme, Theme, makeStyles } from '@material-ui/core'
 import { mdiCheck } from '@mdi/js'
@@ -35,7 +35,7 @@ interface Props {
   defaultStatus: ICRMTaskStatus
 }
 
-export function StatusButtonCell({ defaultStatus }: Props) {
+function StatusButtonCellComponent({ defaultStatus }: Props) {
   const [status, setStatus] = useState(defaultStatus)
   const classes = useStyles()
   const theme = useTheme<Theme>()
@@ -62,3 +62,5 @@ export function StatusButtonCell({ defaultStatus }: Props) {
     </button>
   )
 }
+
+export const StatusButtonCell = memo(StatusButtonCellComponent)

@@ -18,9 +18,5 @@ export function InlineDueDateCell({ defaultValue, closeHandler }: Props) {
     }
   }
 
-  return (
-    <>
-      <DatePicker selectedDate={date} onChange={handleSelectDate} />
-    </>
-  )
+  return <DatePicker selectedDate={date} onChange={handleSelectDate} />
 }

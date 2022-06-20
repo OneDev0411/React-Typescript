@@ -35,6 +35,7 @@ export function useColumns(): TableColumn<
     {
       id: 'title',
       header: () => <HeaderColumn text="Task" />,
+      width: '300px',
       inlineEditStyles: {
         container: () => ({
           border: 'none'
@@ -45,12 +46,17 @@ export function useColumns(): TableColumn<
       },
       render: ({ row: task }) => <TitleCell title={task.title} />,
       renderInlineEdit: ({ row: task }, close) => (
-        <InlineTitleCell defaultValue={task.title} closeHandler={close} />
+        <InlineTitleCell
+          taskId={task.id}
+          defaultValue={task.title}
+          closeHandler={close}
+        />
       )
     },
     {
       id: 'contacts',
       header: () => <HeaderColumn text="Contacts" />,
+      width: '200px',
       inlineEditStyles: {
         popover: ({ height }) => ({
           marginTop: height
