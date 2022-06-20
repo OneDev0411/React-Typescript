@@ -2,20 +2,16 @@ import { Avatar, Box, makeStyles, Theme, Typography } from '@material-ui/core'
 
 import { truncateTextFromMiddle } from '@app/utils/truncate-text-from-middle'
 
-interface Props {
-  index: number
-  style: React.CSSProperties
-  data: {
-    rows: IContact[]
-  }
-}
-
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
       display: 'flex',
       alignItems: 'center',
-      padding: theme.spacing(0, 1)
+      padding: theme.spacing(0, 1),
+      cursor: 'pointer',
+      '&:hover': {
+        backgroundColor: theme.palette.action.hover
+      }
     },
     avatar: {
       width: theme.spacing(5),
@@ -30,12 +26,29 @@ const useStyles = makeStyles(
   }
 )
 
-export function ContactRow({ index, style, data: { rows } }: Props) {
+interface Props {
+  index: number
+  style: React.CSSProperties
+  data: {
+    rows: IContact[]
+    onSelectContact: (contact: IContact) => void
+  }
+}
+
+export function ContactRow({
+  index,
+  style,
+  data: { rows, onSelectContact }
+}: Props) {
   const contact = rows[index]
   const classes = useStyles()
 
   return (
-    <div style={style} className={classes.root}>
+    <div
+      style={style}
+      className={classes.root}
+      onClick={() => onSelectContact(contact)}
+    >
       <Avatar src={contact.profile_image_url ?? ''} className={classes.avatar}>
         {contact.display_name[0]}
       </Avatar>

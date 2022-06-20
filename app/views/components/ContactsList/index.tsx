@@ -9,6 +9,7 @@ import VirtualList, { LoadingPosition } from '../VirtualList'
 import { ContactRow } from './ContactRow'
 import { useContactsList } from './queries/use-contacts-list'
 import { useFilterContacts } from './queries/use-filter-contacts'
+import { SelectedContacts } from './SelectedContacts'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -16,10 +17,13 @@ const useStyles = makeStyles(
       width: '400px'
     },
     list: {
-      minHeight: '400px'
+      height: '400px'
     },
     searchContainer: {
-      padding: theme.spacing(1, 2)
+      maxHeight: '200px',
+      overflow: 'auto',
+      padding: theme.spacing(1, 2),
+      backgroundColor: theme.palette.action.hover
     }
   }),
   {
@@ -29,6 +33,7 @@ const useStyles = makeStyles(
 
 export function ContactsList() {
   const classes = useStyles()
+  const [selectedContacts, setSelectedContacts] = useState<IContact[]>([])
   const [searchCriteria, setSearchCriteria] = useState('')
   const [debouncedSearchCriteria, setDebouncedSearchCriteria] =
     useState(searchCriteria)
@@ -50,9 +55,18 @@ export function ContactsList() {
 
   const list = searchCriteria.length > 0 ? filteredContacts : contacts
 
+  const handleSelectContact = (contact: IContact) => {
+    setSelectedContacts(list =>
+      list.some(({ id }) => contact.id === id)
+        ? list.filter(({ id }) => id !== contact.id)
+        : [...list, contact]
+    )
+  }
+
   return (
     <div className={classes.root}>
       <div className={classes.searchContainer}>
+        <SelectedContacts contacts={selectedContacts} />
         <TextField
           placeholder="Search contact"
           value={searchCriteria}
@@ -71,7 +85,8 @@ export function ContactsList() {
               itemCount={list?.length ?? 0}
               itemData={
                 {
-                  rows: contacts
+                  rows: contacts,
+                  onSelectContact: handleSelectContact
                 } as React.ComponentProps<typeof ContactRow>['data']
               }
               threshold={2}
