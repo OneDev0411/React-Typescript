@@ -16,6 +16,7 @@ import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 import { useTaskMutation } from '../../../queries/use-task-mutation'
 import type { ITask } from '../../../types'
 
+type TaskAssociation = ICRMTaskAssociation<'contact' | 'deal' | 'listing'>
 interface Props {
   task: ITask
   closeHandler: () => void
@@ -26,26 +27,34 @@ export function InlineContactsCell({ task, closeHandler }: Props) {
   const [contacts, setContacts] = useState(
     task.associations?.filter(
       association => association.association_type === 'contact'
-    )
+    ) ?? []
   )
   const [showContactsList, setShowContactsList] = useState(false)
   const theme = useTheme<Theme>()
 
   const handleDelete = (id: UUID) => {
-    setContacts(list => list?.filter(item => item.contact?.id !== id))
+    const nextAssociations = contacts.filter(item => item.contact?.id !== id)
+
+    setContacts(nextAssociations)
+
+    mutation.mutate({
+      associations: nextAssociations.map(association => ({
+        association_type: 'contact',
+        id: association.id,
+        contact: association.contact
+      })) as unknown as TaskAssociation[]
+    })
   }
 
   const onChangeContact = (list: IContact[]) => {
-    const associations = [
-      ...(contacts ?? []),
-      ...list.map(contact => ({
-        association_type: 'contact',
-        contact
-      }))
-    ]
-
     mutation.mutate({
-      associations
+      associations: [
+        ...contacts,
+        ...(list.map(contact => ({
+          association_type: 'contact',
+          contact
+        })) as unknown as TaskAssociation[])
+      ]
     })
   }
 
@@ -55,7 +64,7 @@ export function InlineContactsCell({ task, closeHandler }: Props) {
         <ContactsList onChange={onChangeContact} />
       ) : (
         <>
-          {contacts?.map(({ contact }) => (
+          {contacts.map(({ contact }) => (
             <MenuItem key={contact!.id}>
               <Box
                 width="100%"

@@ -38,6 +38,7 @@ export function InlineTitleCell({ task, closeHandler }: Props) {
 
   useEffect(() => {
     inputRef.current?.focus()
+    inputRef.current?.select()
   }, [inputRef])
 
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {

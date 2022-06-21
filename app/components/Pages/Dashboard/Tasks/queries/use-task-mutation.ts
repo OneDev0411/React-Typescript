@@ -37,17 +37,16 @@ export function useTaskMutation(task: ITask) {
     }))
   }
 
-  const normalize = (data: Partial<ITask>) => {
-    return {
-      ...data,
-      associations: data.associations?.map(association => ({
-        association_type: association.association_type,
-        id: association.id,
-        [association.association_type]:
-          association[association.association_type].id
-      }))
-    }
-  }
+  const normalize = (data: Partial<ITask>) => ({
+    ...data,
+    associations: data.associations?.map(association => ({
+      association_type: association.association_type,
+      id: association.id,
+      [association.association_type]:
+        association[association.association_type].id
+    })),
+    assignees: data.assignees?.map(assignee => assignee.id)
+  })
 
   return useMutation(
     async (data: Partial<ITask>) =>
@@ -94,6 +93,9 @@ export function useTaskMutation(task: ITask) {
           message: 'We were unable to store data. It can be attempted again.',
           status: 'error'
         })
+      },
+      onSettled: () => {
+        // queryClient.invalidateQueries(list())
       }
     }
   )

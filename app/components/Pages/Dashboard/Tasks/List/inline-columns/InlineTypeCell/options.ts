@@ -1,4 +1,7 @@
-export const TaskTypeOptions = [
+export const TaskTypeOptions: {
+  label: string
+  value: CRMTaskTypes
+}[] = [
   {
     label: 'Call',
     value: 'Call'

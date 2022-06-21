@@ -97,7 +97,7 @@ export function useColumns(): TableColumn<
         })
       },
       renderInlineEdit: ({ row: task }, close) => (
-        <InlineDueDateCell defaultValue={task.due_date} closeHandler={close} />
+        <InlineDueDateCell task={task} closeHandler={close} />
       )
     },
     {
@@ -111,10 +111,7 @@ export function useColumns(): TableColumn<
       },
       render: ({ row: task }) => <AssigneeCell assignees={task.assignees} />,
       renderInlineEdit: ({ row: task }, close) => (
-        <InlineAssigneeCell
-          defaultAssignees={task.assignees}
-          closeHandler={close}
-        />
+        <InlineAssigneeCell task={task} closeHandler={close} />
       )
     },
     {

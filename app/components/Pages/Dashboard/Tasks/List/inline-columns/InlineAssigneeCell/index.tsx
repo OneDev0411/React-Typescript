@@ -1,20 +1,21 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 import {
   Box,
   Checkbox,
   CircularProgress,
   makeStyles,
-  MenuItem,
-  Theme
+  MenuItem
 } from '@material-ui/core'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team'
 
 import { useTaskMembers } from '../../../queries/use-task-members'
+import { useTaskMutation } from '../../../queries/use-task-mutation'
+import type { ITask } from '../../../types'
 
 const useStyles = makeStyles(
-  (theme: Theme) => ({
+  () => ({
     root: {
       maxHeight: '200px',
       overflow: 'auto'
@@ -26,18 +27,30 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  defaultAssignees: Nullable<IUser[]>
+  task: ITask
   closeHandler: () => void
 }
 
-export function InlineAssigneeCell({ defaultAssignees, closeHandler }: Props) {
-  const [assignees /* setAssignees */] = useState(
-    defaultAssignees?.map(assignee => assignee.id)
-  )
+export function InlineAssigneeCell({ task, closeHandler }: Props) {
+  const mutation = useTaskMutation(task)
 
   const classes = useStyles()
+  const [assignees, setAssignees] = useState(task.assignees ?? [])
+
   const activeTeam = useUnsafeActiveTeam()
   const { data: members, isLoading } = useTaskMembers(activeTeam?.brand.id)
+
+  const onChange = (user: IUser, checked: boolean) => {
+    const nextAssignees = checked
+      ? [...assignees, user]
+      : assignees.filter(assignee => assignee.id !== user.id)
+
+    setAssignees(nextAssignees)
+
+    mutation.mutate({
+      assignees: nextAssignees
+    })
+  }
 
   if (isLoading) {
     return (
@@ -60,7 +73,10 @@ export function InlineAssigneeCell({ defaultAssignees, closeHandler }: Props) {
             <Checkbox
               size="small"
               color="primary"
-              checked={assignees?.includes(member.id)}
+              checked={assignees.some(assignee => assignee.id === member.id)}
+              onChange={(_: ChangeEvent<HTMLInputElement>, checked: boolean) =>
+                onChange(member, checked)
+              }
             />
             {member.display_name}
           </Box>

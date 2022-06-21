@@ -13,7 +13,7 @@ interface Props {
 export function InlineTypeCell({ task, closeHandler }: Props) {
   const mutation = useTaskMutation(task)
 
-  const handleSelectItem = (value: string) => {
+  const handleSelectItem = (value: CRMTaskTypes) => {
     mutation.mutate({
       task_type: value
     })
