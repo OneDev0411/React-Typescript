@@ -88,7 +88,7 @@ export function useColumns(): TableColumn<
       },
       render: ({ row: task }) => <TaskTypeCell type={task.task_type} />,
       renderInlineEdit: ({ row: task }, close) => (
-        <InlineTypeCell defaultValue={task.task_type} closeHandler={close} />
+        <InlineTypeCell task={task} closeHandler={close} />
       )
     },
     {

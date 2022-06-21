@@ -1,15 +1,23 @@
 import { MenuItem } from '@material-ui/core'
 
+import { useTaskMutation } from '../../../queries/use-task-mutation'
+import type { ITask } from '../../../types'
+
 import { TaskTypeOptions } from './options'
 
 interface Props {
-  defaultValue: string
+  task: ITask
   closeHandler: () => void
 }
 
-export function InlineTypeCell({ defaultValue, closeHandler }: Props) {
+export function InlineTypeCell({ task, closeHandler }: Props) {
+  const mutation = useTaskMutation(task)
+
   const handleSelectItem = (value: string) => {
-    console.log(value)
+    mutation.mutate({
+      task_type: value
+    })
+
     closeHandler()
   }
 
@@ -18,7 +26,7 @@ export function InlineTypeCell({ defaultValue, closeHandler }: Props) {
       {TaskTypeOptions.map(({ label, value }) => (
         <MenuItem
           key={value}
-          selected={value === defaultValue}
+          selected={value === task.task_type}
           onClick={() => handleSelectItem(value)}
         >
           {label}
