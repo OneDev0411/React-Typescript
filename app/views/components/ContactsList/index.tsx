@@ -31,7 +31,11 @@ const useStyles = makeStyles(
   }
 )
 
-export function ContactsList() {
+interface Props {
+  onChange: (contact: IContact[]) => void
+}
+
+export function ContactsList({ onChange }: Props) {
   const classes = useStyles()
   const [selectedContacts, setSelectedContacts] = useState<IContact[]>([])
   const [searchCriteria, setSearchCriteria] = useState('')
@@ -56,18 +60,25 @@ export function ContactsList() {
   const list = searchCriteria.length > 0 ? filteredContacts : contacts
 
   const handleSelectContact = (contact: IContact) => {
-    setSelectedContacts(list =>
-      list.some(({ id }) => contact.id === id)
-        ? list.filter(({ id }) => id !== contact.id)
-        : [...list, contact]
-    )
+    const nextList = selectedContacts.some(({ id }) => contact.id === id)
+      ? selectedContacts.filter(({ id }) => id !== contact.id)
+      : [...selectedContacts, contact]
 
+    setSelectedContacts(nextList)
     setSearchCriteria('')
+
+    onChange(nextList)
   }
 
-  const handleRemove = useCallback((id: UUID) => {
-    setSelectedContacts(list => list.filter(contact => id !== contact.id))
-  }, [])
+  const handleRemove = useCallback(
+    (id: UUID) => {
+      const nextList = selectedContacts.filter(contact => id !== contact.id)
+
+      setSelectedContacts(nextList)
+      onChange(nextList)
+    },
+    [selectedContacts, onChange]
+  )
 
   return (
     <div className={classes.root}>

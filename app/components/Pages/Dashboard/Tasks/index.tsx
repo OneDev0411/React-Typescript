@@ -16,8 +16,8 @@ export default function Tasks() {
 
       <PageLayout.Main>
         <Box my={2} px={2}>
-          --- Filters --- Filters --- Filters --- Filters --- Filters ---
-          Filters --- Filters --- Filters ---
+          {/* --- Filters --- Filters --- Filters --- Filters --- Filters ---
+          Filters --- Filters --- Filters --- */}
         </Box>
         <List />
       </PageLayout.Main>

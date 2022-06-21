@@ -37,6 +37,18 @@ export function useTaskMutation(task: ITask) {
     }))
   }
 
+  const normalize = (data: Partial<ITask>) => {
+    return {
+      ...data,
+      associations: data.associations?.map(association => ({
+        association_type: association.association_type,
+        id: association.id,
+        [association.association_type]:
+          association[association.association_type].id
+      }))
+    }
+  }
+
   return useMutation(
     async (data: Partial<ITask>) =>
       updateTask(
@@ -46,7 +58,7 @@ export function useTaskMutation(task: ITask) {
           due_date: task.due_date,
           task_type: task.task_type,
           status: task.status,
-          ...data
+          ...normalize(data)
         },
         CRM_TASKS_QUERY
       ),

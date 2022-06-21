@@ -13,36 +13,57 @@ import { mdiOpenInNew, mdiTrashCanOutline } from '@mdi/js'
 import { ContactsList } from '@app/views/components/ContactsList'
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
+import { useTaskMutation } from '../../../queries/use-task-mutation'
+import type { ITask } from '../../../types'
+
 interface Props {
-  contactAssociations?: ICRMTaskAssociation<'contact'>[]
+  task: ITask
   closeHandler: () => void
 }
 
-export function InlineContactsCell({
-  contactAssociations,
-  closeHandler
-}: Props) {
-  const [contacts, setContacts] = useState(contactAssociations)
+export function InlineContactsCell({ task, closeHandler }: Props) {
+  const mutation = useTaskMutation(task)
+  const [contacts, setContacts] = useState(
+    task.associations?.filter(
+      association => association.association_type === 'contact'
+    )
+  )
   const [showContactsList, setShowContactsList] = useState(false)
   const theme = useTheme<Theme>()
 
-  const handleDelete = (id: UUID) => {}
+  const handleDelete = (id: UUID) => {
+    setContacts(list => list?.filter(item => item.contact?.id !== id))
+  }
+
+  const onChangeContact = (list: IContact[]) => {
+    const associations = [
+      ...(contacts ?? []),
+      ...list.map(contact => ({
+        association_type: 'contact',
+        contact
+      }))
+    ]
+
+    mutation.mutate({
+      associations
+    })
+  }
 
   return (
     <>
       {showContactsList ? (
-        <ContactsList />
+        <ContactsList onChange={onChangeContact} />
       ) : (
         <>
           {contacts?.map(({ contact }) => (
-            <MenuItem key={contact?.id}>
+            <MenuItem key={contact!.id}>
               <Box
                 width="100%"
                 display="flex"
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <div>{contact?.display_name}</div>
+                <div>{contact!.display_name}</div>
                 <div>
                   <IconButton
                     size="small"

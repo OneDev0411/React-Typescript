@@ -66,12 +66,7 @@ export function useColumns(): TableColumn<
         />
       ),
       renderInlineEdit: ({ row: task }, close) => (
-        <InlineContactsCell
-          contactAssociations={task.associations?.filter(
-            association => association.association_type === 'contact'
-          )}
-          closeHandler={close}
-        />
+        <InlineContactsCell task={task} closeHandler={close} />
       )
     },
     {

@@ -1,1 +1,4 @@
-export declare type ITask = ICRMTask<'assignees' | 'associations'>
+export declare type ITask = ICRMTask<
+  'assignees' | 'associations',
+  'contact' | 'deal' | 'listing'
+>
