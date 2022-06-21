@@ -1,6 +1,7 @@
 import { CSSProperties, memo } from 'react'
 
 import cn from 'classnames'
+import { areEqual } from 'react-window'
 
 import { StateContext } from '../../context'
 import { Header } from '../../Header'
@@ -100,4 +101,4 @@ function Row<Row>({
   )
 }
 
-export default memo(Row)
+export default memo(Row, areEqual)

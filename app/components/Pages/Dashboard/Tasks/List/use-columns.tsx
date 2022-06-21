@@ -46,11 +46,7 @@ export function useColumns(): TableColumn<
       },
       render: ({ row: task }) => <TitleCell title={task.title} />,
       renderInlineEdit: ({ row: task }, close) => (
-        <InlineTitleCell
-          taskId={task.id}
-          defaultValue={task.title}
-          closeHandler={close}
-        />
+        <InlineTitleCell task={task} closeHandler={close} />
       )
     },
     {

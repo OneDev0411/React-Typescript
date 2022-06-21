@@ -1,8 +1,10 @@
-import { Avatar, Box, makeStyles, Theme } from '@material-ui/core'
+import { Avatar, makeStyles, Theme } from '@material-ui/core'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
+      display: 'flex',
+      alignItems: 'center',
       '& $avatar:not(:first-child)': {
         marginLeft: theme.spacing(-0.5),
         border: '1px solid #fff'
@@ -26,7 +28,7 @@ export function AssigneeCell({ assignees }: Props) {
   const classes = useStyles()
 
   return (
-    <Box display="flex" alignItems="center" className={classes.root}>
+    <div className={classes.root}>
       {assignees?.map(assignee => (
         <Avatar
           key={assignee.id}
@@ -36,6 +38,6 @@ export function AssigneeCell({ assignees }: Props) {
           {assignee.display_name[0]}
         </Avatar>
       ))}
-    </Box>
+    </div>
   )
 }

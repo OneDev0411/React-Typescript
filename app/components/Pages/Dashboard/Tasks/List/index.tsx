@@ -58,8 +58,7 @@ export function List() {
       selection={{
         columnProps: {
           width: '65px'
-        },
-        showSelectAll: false
+        }
       }}
       classes={{
         row: cn(gridClasses.row, gridBorderedClasses.row, classes.row)
