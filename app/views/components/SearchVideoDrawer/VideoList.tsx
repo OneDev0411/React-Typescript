@@ -15,18 +15,23 @@ const useStyles = makeStyles(
   { name: 'Videobolt' }
 )
 
-interface VideoboltProps {
+interface Props {
   videos: SearchVideoResult[]
   onSelect: (video: Video) => void
+  shouldShowUploader?: boolean
 }
 
-function VideoList({ videos, onSelect }: VideoboltProps) {
+function VideoList({ videos, onSelect, shouldShowUploader = false }: Props) {
   const classes = useStyles()
 
   return (
     <>
       <Box flex={1} className={classes.result} py={2} px={3}>
-        <SearchVideoResults videos={videos} onSelect={onSelect} />
+        <SearchVideoResults
+          shouldShowUploader={shouldShowUploader}
+          videos={videos}
+          onSelect={onSelect}
+        />
       </Box>
     </>
   )

@@ -168,6 +168,7 @@ function SearchVideoDrawer({
 
     return (
       <VideoList
+        shouldShowUploader={activeTab === VideoTab.Gallery}
         videos={
           activeTab === VideoTab.Videobolt ? videoboltVideos : galleryVideos
         }
