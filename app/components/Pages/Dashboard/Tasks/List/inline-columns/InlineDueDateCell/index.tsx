@@ -11,8 +11,8 @@ interface Props {
 }
 
 export function InlineDueDateCell({ task, closeHandler }: Props) {
-  const [date, setDate] = useState(new Date(task.due_date * 1000))
   const mutation = useTaskMutation(task)
+  const [date, setDate] = useState(new Date(task.due_date * 1000))
 
   const handleSelectDate = (value: Date, type: string) => {
     setDate(value)

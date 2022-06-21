@@ -24,6 +24,9 @@ export const useStyles = makeStyles(
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis'
+      },
+      '&[data-status="DONE"] .column': {
+        backgroundColor: theme.palette.success.ultralight
       }
     }
   }),
@@ -70,6 +73,9 @@ export function List() {
         onReachStart: () => {},
         onReachEnd: fetchNextPage
       }}
+      getTrProps={({ row: task }) => ({
+        'data-status': task.status
+      })}
       loading={getLoadingPosition()}
       LoadingStateComponent={LoadingState}
     />

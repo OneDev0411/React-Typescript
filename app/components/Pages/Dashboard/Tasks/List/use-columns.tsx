@@ -28,9 +28,7 @@ export function useColumns(): TableColumn<
       rowStyle: {
         borderRight: 'none'
       },
-      render: ({ row: task }) => (
-        <StatusButtonCell defaultStatus={task.status} />
-      )
+      render: ({ row: task }) => <StatusButtonCell task={task} />
     },
     {
       id: 'title',
@@ -125,7 +123,7 @@ export function useColumns(): TableColumn<
         />
       ),
       renderInlineEdit: () => {
-        return <div>-a-</div>
+        return <div>-TBD-</div>
       }
     }
   ]
