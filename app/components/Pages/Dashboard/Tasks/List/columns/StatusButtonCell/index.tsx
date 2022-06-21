@@ -3,7 +3,9 @@ import { memo, useState } from 'react'
 import { useTheme, Theme, makeStyles } from '@material-ui/core'
 import { mdiCheck } from '@mdi/js'
 import cn from 'classnames'
+import { useDispatch } from 'react-redux'
 
+import { confirmation } from '@app/store_actions/confirmation'
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
 import { useTaskMutation } from '../../../queries/use-task-mutation'
@@ -43,14 +45,34 @@ function StatusButtonCellComponent({ task }: Props) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
   const mutation = useTaskMutation(task)
+  const dispatch = useDispatch()
 
   const handleChangeStatus = () => {
     const nextStatus: ICRMTaskStatus = status === 'DONE' ? 'PENDING' : 'DONE'
 
-    setStatus(nextStatus)
+    if (nextStatus !== 'DONE') {
+      changeStatus(nextStatus)
+
+      return
+    }
+
+    dispatch(
+      confirmation({
+        message: 'Heads up!',
+        description:
+          'If you mark this event as done, the event due date will change to now. Are you sure?',
+        confirmLabel: 'Confirm',
+        onConfirm: () => changeStatus(nextStatus)
+      })
+    )
+  }
+
+  const changeStatus = (status: ICRMTaskStatus) => {
+    setStatus(status)
 
     mutation.mutate({
-      status: nextStatus
+      status,
+      due_date: status === 'DONE' ? new Date().getTime() / 1000 : task.due_date
     })
   }
 
