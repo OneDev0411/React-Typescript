@@ -62,7 +62,7 @@ export function useTaskMutation(task: ITask) {
         CRM_TASKS_QUERY
       ),
     {
-      onMutate: async data => {
+      onMutate: async (data: Partial<ITask>) => {
         await queryClient.cancelQueries(list())
 
         const previousTasks = queryClient.getQueryData<TasksQuery>(list())
@@ -78,13 +78,25 @@ export function useTaskMutation(task: ITask) {
           previousTasks
         }
       },
-      onSuccess: (data: ITask, _, { previousTasks }) => {
+      onSuccess: (
+        data: ITask,
+        _: Partial<ITask>,
+        {
+          previousTasks
+        }: {
+          previousTasks: TasksQuery
+        }
+      ) => {
         queryClient.setQueryData<TasksQuery>(list(), {
           ...previousTasks,
           pages: getNextPages(previousTasks, data) ?? []
         })
       },
-      onError: (_, __, context) => {
+      onError: (
+        _: unknown,
+        __: Partial<ITask>,
+        context: { previousTasks: TasksQuery }
+      ) => {
         if (context?.previousTasks) {
           queryClient.setQueryData<TasksQuery>(list(), context.previousTasks)
         }
