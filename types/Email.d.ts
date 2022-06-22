@@ -178,7 +178,7 @@ declare type IEmailCampaign<
   microsoft_credential: UUID | null
   google_credential: UUID | null
   headers: IEmailCampaignInput['headers']
-  recipients_count: nullable<number>
+  recipients_count: Nullable<number>
 } & Association<
   'recipients',
   IEmailRecipient<RecipientAssociations>[],
