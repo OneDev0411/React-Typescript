@@ -38,7 +38,6 @@ export function InlineTitleCell({ task, closeHandler }: Props) {
 
   useEffect(() => {
     inputRef.current?.focus()
-    inputRef.current?.select()
   }, [inputRef])
 
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -49,6 +48,12 @@ export function InlineTitleCell({ task, closeHandler }: Props) {
 
       closeHandler()
     }
+  }
+
+  const handleBlur = () => {
+    mutation.mutate({
+      title: value
+    })
   }
 
   return (
@@ -65,6 +70,7 @@ export function InlineTitleCell({ task, closeHandler }: Props) {
           }
         }}
         className={classes.inputRoot}
+        onBlur={handleBlur}
         onChange={e => setValue(e.target.value)}
         onKeyPress={handleKeyPress}
       />
