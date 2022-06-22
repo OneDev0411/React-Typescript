@@ -10,6 +10,8 @@ import {
 } from '@material-ui/core'
 import { mdiOpenInNew, mdiTrashCanOutline } from '@mdi/js'
 
+import { getContactNameInitials } from '@app/models/contacts/helpers'
+import { Avatar } from '@app/views/components/Avatar'
 import { ContactsList } from '@app/views/components/ContactsList'
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
@@ -24,6 +26,7 @@ interface Props {
 
 export function InlineContactsCell({ task, closeHandler }: Props) {
   const mutation = useTaskMutation(task)
+
   const [contacts, setContacts] = useState(
     task.associations?.filter(
       association => association.association_type === 'contact'
@@ -72,7 +75,14 @@ export function InlineContactsCell({ task, closeHandler }: Props) {
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <div>{contact!.display_name}</div>
+                <Box display="flex" mr={4}>
+                  <Avatar contact={contact!} size="small">
+                    {getContactNameInitials(contact)}
+                  </Avatar>
+
+                  <Box ml={1}>{contact!.display_name}</Box>
+                </Box>
+
                 <div>
                   <IconButton
                     size="small"
@@ -103,7 +113,7 @@ export function InlineContactsCell({ task, closeHandler }: Props) {
           ))}
 
           <MenuItem onClick={() => setShowContactsList(true)}>
-            <Typography variant="subtitle1" color="primary">
+            <Typography variant="body1" color="primary">
               Add Client
             </Typography>
           </MenuItem>

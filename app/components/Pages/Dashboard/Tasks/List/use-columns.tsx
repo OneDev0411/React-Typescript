@@ -42,7 +42,9 @@ export function useColumns(): TableColumn<
           boxShadow: 'none'
         }
       },
-      render: ({ row: task }) => <TitleCell title={task.title} />,
+      render: ({ row: task }) => (
+        <TitleCell title={task.title} status={task.status} />
+      ),
       renderInlineEdit: ({ row: task }, close) => (
         <InlineTitleCell task={task} closeHandler={close} />
       )

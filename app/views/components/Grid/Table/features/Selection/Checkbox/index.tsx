@@ -46,24 +46,17 @@ export default function Checkbox({
     setIsChecked(!isChecked)
     setTimeout(onChange, 0)
   }
-  const checkBox = (
-    <MUICheckbox
-      {...props}
-      classes={{ root: classes.root }}
-      color="primary"
-      checked={isChecked}
-      indeterminate={indeterminate}
-      onChange={handleToggleRow}
-    />
+
+  return (
+    <Tooltip title={tooltipTitle || ''} placement="top">
+      <MUICheckbox
+        {...props}
+        classes={{ root: classes.root }}
+        color="primary"
+        checked={isChecked}
+        indeterminate={indeterminate}
+        onChange={handleToggleRow}
+      />
+    </Tooltip>
   )
-
-  if (tooltipTitle) {
-    return (
-      <Tooltip title={tooltipTitle} placement="top">
-        {checkBox}
-      </Tooltip>
-    )
-  }
-
-  return checkBox
 }

@@ -1,5 +1,6 @@
 import { Avatar, Box, makeStyles, Theme, Typography } from '@material-ui/core'
 
+import { getContactNameInitials } from '@app/models/contacts/helpers'
 import { truncateTextFromMiddle } from '@app/utils/truncate-text-from-middle'
 
 const useStyles = makeStyles(
@@ -50,7 +51,7 @@ export function ContactRow({
       onClick={() => onSelectContact(contact)}
     >
       <Avatar src={contact.profile_image_url ?? ''} className={classes.avatar}>
-        {contact.display_name[0]}
+        {getContactNameInitials(contact)}
       </Avatar>
 
       <Box ml={2}>

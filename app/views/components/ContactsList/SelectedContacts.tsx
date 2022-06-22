@@ -8,6 +8,8 @@ import {
 } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
 
+import { getContactNameInitials } from '@app/models/contacts/helpers'
+
 import { muiIconSizes, SvgIcon } from '../SvgIcons'
 import { TextMiddleTruncate } from '../TextMiddleTruncate'
 
@@ -49,7 +51,7 @@ export function SelectedContacts({ contacts, onRemove }: Props) {
             src={contact.profile_image_url ?? ''}
             className={classes.avatar}
           >
-            {contact.display_name[0]}
+            {getContactNameInitials(contact)}
           </Avatar>
           <Box mx={1}>
             <Typography variant="body2">
