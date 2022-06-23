@@ -46,6 +46,7 @@ interface Props
   ) => IIndividualEmailCampaignInput
   emailId?: string
   disableAddNewRecipient?: boolean
+  tags?: string[]
 }
 
 export function BulkEmailComposeForm({
@@ -55,6 +56,7 @@ export function BulkEmailComposeForm({
   deal,
   preferredAccountId,
   filterAccounts = hasAccountSendPermission,
+  tags,
   ...otherProps
 }: Props) {
   const user = useSelector(selectUser)
@@ -95,7 +97,8 @@ export function BulkEmailComposeForm({
       ),
       due_at: formValue.due_at || new Date(),
       notifications_enabled: formValue.notifications_enabled,
-      individual: true
+      individual: true,
+      tags
     })
 
     return emailId
