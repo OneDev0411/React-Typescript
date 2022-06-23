@@ -5,6 +5,11 @@ import RelativeSendTime from '@app/views/components/RelativeSendTime'
 
 const useStyles = makeStyles(
   theme => ({
+    root: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start'
+    },
     date: {
       color: theme.palette.grey[500],
       textDecoration: 'none'
@@ -29,7 +34,7 @@ function SuperCampaignListColumnSubject({
   const isPast = !!dueAt && isBefore(dueAt * 1000, new Date())
 
   return (
-    <>
+    <div className={classes.root}>
       <Typography variant="body1" noWrap>
         {subject || '(Untitled Campaign)'}
       </Typography>
@@ -38,7 +43,7 @@ function SuperCampaignListColumnSubject({
           <RelativeSendTime prefix={isPast ? 'Sent ' : 'Send '} time={dueAt} />
         </Typography>
       )}
-    </>
+    </div>
   )
 }
 
