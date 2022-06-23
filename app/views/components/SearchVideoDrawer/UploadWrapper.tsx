@@ -1,5 +1,6 @@
 import { ReactNode, useCallback, useState } from 'react'
 
+import { Grid } from '@material-ui/core'
 import { useDropzone, FileRejection } from 'dropzone'
 
 import { useActiveBrandId } from '@app/hooks/brand'
@@ -19,6 +20,7 @@ interface Props {
   onDone: (brandAsset: IBrandAsset) => void
   onError: () => void
   noDrag?: boolean
+  disabled?: boolean
   children: (renderProps: RenderProps) => ReactNode
 }
 
@@ -29,6 +31,7 @@ export default function UploadWrapper({
   onDone,
   onError,
   noDrag = false,
+  disabled = false,
   children
 }: Props) {
   const notify = useNotify()
@@ -47,7 +50,7 @@ export default function UploadWrapper({
           [activeBrandId],
           file,
           {
-            label: '',
+            label: file.name.split('.')[0], // get file name without extension
             template_type: templateType,
             medium
           },
@@ -111,14 +114,17 @@ export default function UploadWrapper({
     multiple: false,
     noClick: true,
     noDrag,
+    disabled,
     accept: ['video/mp4']
   })
 
   return (
-    <div {...getRootProps()}>
-      {uploadProgress === null && <input {...getInputProps()} />}
+    <Grid container {...getRootProps()}>
+      {uploadProgress === null && (
+        <input disabled={disabled} {...getInputProps()} />
+      )}
 
       {children({ isDragActive, open, uploadProgress })}
-    </div>
+    </Grid>
   )
 }

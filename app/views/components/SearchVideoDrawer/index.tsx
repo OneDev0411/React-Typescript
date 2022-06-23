@@ -51,6 +51,8 @@ interface SearchVideoDrawerProps {
   onSelect: (video: Video) => void
   uploadThumbnail: (file: File) => Promise<string>
   shouldSkipVideoGif: boolean
+  templateType: IMarketingTemplateType
+  medium: IMarketingTemplateMedium
 }
 
 function SearchVideoDrawer({
@@ -59,7 +61,9 @@ function SearchVideoDrawer({
   onClose,
   onSelect,
   uploadThumbnail,
-  shouldSkipVideoGif
+  shouldSkipVideoGif,
+  templateType,
+  medium
 }: SearchVideoDrawerProps) {
   const notify = useNotify()
   const classes = useStyles()
@@ -168,6 +172,8 @@ function SearchVideoDrawer({
 
     return (
       <VideoList
+        medium={medium}
+        templateType={templateType}
         shouldShowUploader={activeTab === VideoTab.Gallery}
         videos={
           activeTab === VideoTab.Videobolt ? videoboltVideos : galleryVideos
@@ -192,9 +198,8 @@ function SearchVideoDrawer({
               indicatorColor="primary"
             >
               <Tab label="Online Videos" value={VideoTab.Online} />
-              {galleryVideos.length > 0 && (
-                <Tab label="Your Gallery" value={VideoTab.Gallery} />
-              )}
+              <Tab label="Your Gallery" value={VideoTab.Gallery} />
+
               {videoboltVideos.length > 0 && (
                 <Tab label="Videobolt" value={VideoTab.Videobolt} />
               )}

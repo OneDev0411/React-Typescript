@@ -1555,6 +1555,8 @@ class Builder extends React.Component {
             />
           )}
           <SearchVideoDrawer
+            medium={this.selectedTemplate.medium}
+            templateType={this.selectedTemplate.template_type}
             isOpen={!!this.state.videoToEdit}
             model={this.state.videoToEdit}
             shouldSkipVideoGif={this.props.shouldSkipVideoGif}
