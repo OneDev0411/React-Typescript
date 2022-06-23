@@ -45,7 +45,6 @@ const useStyles = makeStyles(
 )
 
 interface SearchVideoDrawerProps {
-  isOpen: boolean
   model: Nullable<Model>
   onClose: () => void
   onSelect: (video: Video) => void
@@ -56,7 +55,6 @@ interface SearchVideoDrawerProps {
 }
 
 function SearchVideoDrawer({
-  isOpen,
   model,
   onClose,
   onSelect,
@@ -184,7 +182,7 @@ function SearchVideoDrawer({
   }
 
   return (
-    <OverlayDrawer open={isOpen} onClose={handleCloseDrawer} width="690px">
+    <OverlayDrawer open onClose={handleCloseDrawer} width="690px">
       <OverlayDrawer.Header title="Insert a video" />
       <OverlayDrawer.Body className={classes.body}>
         {isGeneratingThumbnail ? (

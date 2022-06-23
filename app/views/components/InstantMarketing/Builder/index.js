@@ -1554,27 +1554,28 @@ class Builder extends React.Component {
               }}
             />
           )}
-          <SearchVideoDrawer
-            medium={this.selectedTemplate.medium}
-            templateType={this.selectedTemplate.template_type}
-            isOpen={!!this.state.videoToEdit}
-            model={this.state.videoToEdit}
-            shouldSkipVideoGif={this.props.shouldSkipVideoGif}
-            onClose={() => {
-              this.blocks.video.selectHandler()
-              this.setState({ videoToEdit: null })
-            }}
-            onSelect={video => {
-              this.blocks.video.selectHandler(video)
-              this.setState({ videoToEdit: null })
-            }}
-            uploadThumbnail={async file => {
-              const templateId = this.selectedTemplate.id
-              const uploadedAsset = await uploadAsset(templateId, file)
+          {!!this.state.videoToEdit && (
+            <SearchVideoDrawer
+              medium={this.selectedTemplate.medium}
+              templateType={this.selectedTemplate.template_type}
+              model={this.state.videoToEdit}
+              shouldSkipVideoGif={this.props.shouldSkipVideoGif}
+              onClose={() => {
+                this.blocks.video.selectHandler()
+                this.setState({ videoToEdit: null })
+              }}
+              onSelect={video => {
+                this.blocks.video.selectHandler(video)
+                this.setState({ videoToEdit: null })
+              }}
+              uploadThumbnail={async file => {
+                const templateId = this.selectedTemplate.id
+                const uploadedAsset = await uploadAsset(templateId, file)
 
-              return uploadedAsset.file.url
-            }}
-          />
+                return uploadedAsset.file.url
+              }}
+            />
+          )}
           <SearchArticleDrawer
             isOpen={this.state.isArticleDrawerOpen}
             onClose={() => {
