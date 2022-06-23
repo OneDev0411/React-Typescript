@@ -1556,8 +1556,6 @@ class Builder extends React.Component {
           )}
           {!!this.state.videoToEdit && (
             <SearchVideoDrawer
-              medium={this.selectedTemplate.medium}
-              templateType={this.selectedTemplate.template_type}
               model={this.state.videoToEdit}
               shouldSkipVideoGif={this.props.shouldSkipVideoGif}
               onClose={() => {

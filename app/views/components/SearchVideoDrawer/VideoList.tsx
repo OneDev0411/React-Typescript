@@ -48,17 +48,9 @@ interface Props {
   videos: SearchVideoResult[]
   onSelect: (video: Video) => void
   shouldShowUploader: boolean
-  templateType: IMarketingTemplateType
-  medium: IMarketingTemplateMedium
 }
 
-function VideoList({
-  videos,
-  onSelect,
-  shouldShowUploader = false,
-  templateType,
-  medium
-}: Props) {
+function VideoList({ videos, onSelect, shouldShowUploader = false }: Props) {
   const classes = useStyles()
 
   const [uploadingVideoPreview, setUploadingVideoPreview] =
@@ -103,8 +95,6 @@ function VideoList({
           onStart={onStartUploading}
           onDone={onDoneUploading}
           onError={onErrorUploading}
-          medium={medium}
-          templateType={templateType}
         >
           {({ isDragActive, uploadProgress, open }) => (
             <Grid className={classes.container} container>

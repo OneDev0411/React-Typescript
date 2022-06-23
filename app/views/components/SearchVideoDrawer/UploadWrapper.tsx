@@ -14,8 +14,6 @@ interface RenderProps {
 }
 
 interface Props {
-  templateType: IMarketingTemplateType
-  medium: IMarketingTemplateMedium
   onStart: (file: File) => void
   onDone: (brandAsset: IBrandAsset) => void
   onError: () => void
@@ -25,8 +23,6 @@ interface Props {
 }
 
 export default function UploadWrapper({
-  templateType,
-  medium,
   onStart,
   onDone,
   onError,
@@ -50,9 +46,7 @@ export default function UploadWrapper({
           [activeBrandId],
           file,
           {
-            label: file.name.split('.')[0], // get file name without extension
-            template_type: templateType,
-            medium
+            label: file.name.split('.')[0] // get file name without extension
           },
           progressEvent => {
             if (
@@ -81,7 +75,7 @@ export default function UploadWrapper({
         setUploadProgress(null)
       }
     },
-    [activeBrandId, medium, notify, onDone, onError, onStart, templateType]
+    [activeBrandId, notify, onDone, onError, onStart]
   )
 
   const onDrop = useCallback(
