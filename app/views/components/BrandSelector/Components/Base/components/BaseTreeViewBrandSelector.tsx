@@ -46,7 +46,6 @@ export interface BaseTreeViewBrandSelectorProps
   initialExpandedNodes?: string[]
   nodeRenderer?: (props: NodeRenderer) => ReactNode
   onNodeClick?: (value?: IBrand) => void
-  filterFn?: (team: IBrand) => boolean
 }
 
 export function BaseTreeViewBrandSelector({

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { Button } from '@material-ui/core'
 
@@ -15,14 +15,9 @@ interface Props {
     recipient: IDenormalizedEmailRecipientInput,
     sendType: IEmailRecipientSendType | undefined
   ) => void
-  filterFn?: (team: IBrand) => boolean
 }
 
-export function BrandSelector({
-  onSelect,
-  currentRecipients = [],
-  filterFn
-}: Props) {
+export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const handleOpenDrawer = () => setIsOpen(true)
@@ -48,6 +43,12 @@ export function BrandSelector({
     )
   }
 
+  // Filter out brands that don't have any sub-brands and also have no team members
+  // https://gitlab.com/rechat/web/-/issues/6554
+  const filterDeactivatedBrands = useCallback((team: IBrand) => {
+    return !!team.children?.length || team.member_count > 0
+  }, [])
+
   return (
     <>
       <Button size="small" onClick={handleOpenDrawer}>
@@ -64,7 +65,7 @@ export function BrandSelector({
           onClose={handleCloseDrawer}
           brandSelectorProps={{
             nodeRenderer: renderBrandNode,
-            filterFn
+            filterFn: filterDeactivatedBrands
           }}
         />
       )}

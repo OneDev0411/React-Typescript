@@ -20,7 +20,7 @@ export function useFilterTeams(
   const matches = useCallback(
     (team: IBrand) => {
       return (
-        (filterFn ? filterFn(team) : true) &&
+        (filterFn?.(team) ?? true) &&
         (teamMatches(team, query) || (team.children || []).some(matches))
       )
     },

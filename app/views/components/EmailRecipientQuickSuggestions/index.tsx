@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 
 import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { useSelector } from 'react-redux'
@@ -118,12 +118,6 @@ export function EmailRecipientQuickSuggestions({
     onSelect(recipient, sendType)
   }
 
-  // Filter out brands that don't have any sub-brands and also have no team members
-  // https://gitlab.com/rechat/web/-/issues/6554
-  const filterDeactivatedBrands = useCallback((team: IBrand) => {
-    return !!team.children?.length || team.member_count > 0
-  }, [])
-
   return (
     <div className={classes.container}>
       <Typography color="textSecondary" className={classes.item}>
@@ -144,7 +138,6 @@ export function EmailRecipientQuickSuggestions({
       <BrandSelector
         onSelect={handleSelectSuggestion}
         currentRecipients={currentRecipients}
-        filterFn={filterDeactivatedBrands}
       />
     </div>
   )

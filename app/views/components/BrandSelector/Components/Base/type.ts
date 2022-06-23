@@ -6,5 +6,4 @@ export type BaseBrandSelectorProps = Pick<
   | 'onNodeClick'
   | 'shouldExpandOnNodeClick'
   | 'searchPlaceholder'
-  | 'filterFn'
->
+> & { filterFn?: (team: IBrand) => boolean }
