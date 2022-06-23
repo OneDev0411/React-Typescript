@@ -32,10 +32,14 @@ export function useFilterTeams(
       return (parent?: IBrand) => {
         const nodes = getChildNodes(parent)
 
+        if (!query && !filterFn) {
+          return nodes
+        }
+
         return nodes.filter(matches)
       }
     },
-    [matches]
+    [query, filterFn, matches]
   )
 
   return {
