@@ -9,6 +9,7 @@ import { StatusButtonCell } from './columns/StatusButtonCell'
 import { TaskTypeCell } from './columns/TaskTypeCell'
 import { TitleCell } from './columns/TitleCell'
 import { InlineAssigneeCell } from './inline-columns/InlineAssigneeCell'
+import { InlineAssociationCell } from './inline-columns/InlineAssociationCell'
 import { InlineContactsCell } from './inline-columns/InlineContactsCell'
 import { InlineDueDateCell } from './inline-columns/InlineDueDateCell'
 import { InlineTitleCell } from './inline-columns/InlineTitleCell'
@@ -124,8 +125,8 @@ export function useColumns(): TableColumn<
           )}
         />
       ),
-      renderInlineEdit: () => {
-        return <div>-TBD-</div>
+      renderInlineEdit: ({ row: task }) => {
+        return <InlineAssociationCell task={task} />
       }
     }
   ]
