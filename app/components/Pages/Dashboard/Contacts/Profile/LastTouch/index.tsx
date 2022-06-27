@@ -1,11 +1,6 @@
-import React from 'react'
-
 import { Box, makeStyles, Theme } from '@material-ui/core'
-import { mdiInformationOutline } from '@mdi/js'
 
 import { LastTouched } from 'components/LastTouched'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { BasicSection } from '../components/Section/Basic'
 
@@ -34,13 +29,7 @@ export const LastTouch = ({ contact }: Props) => {
   return (
     <BasicSection title="Last Touch">
       <Box className={classes.wrapper}>
-        <LastTouched contact={contact}>
-          <SvgIcon
-            path={mdiInformationOutline}
-            size={muiIconSizes.small}
-            className={classes.icon}
-          />
-        </LastTouched>
+        <LastTouched contact={contact} />
       </Box>
     </BasicSection>
   )

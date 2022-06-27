@@ -86,6 +86,7 @@
   "sort_field": "Espari Pour Mojtaba",
   "last_touch": 1556209976.344,
   "next_touch": 3554037176.344,
+  "touch_freq": 30,
   "summary": {
     "id": "e58aa965-600f-4b3c-a400-fd0f52a66b6f",
     "is_partner": false,

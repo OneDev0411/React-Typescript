@@ -1,39 +1,48 @@
-import React from 'react'
+import { useMemo } from 'react'
 
-import { Box, makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles } from '@material-ui/core'
+import { useSelector } from 'react-redux'
+
+import { useUnsafeActiveBrand } from '@app/hooks/brand'
+import { IAppState } from '@app/reducers'
+import { getBrandMarketingPalette } from '@app/utils/get-brand-marketing-palette'
 
 const useStyles = makeStyles(
-  (theme: Theme) => ({
-    brandLogo: {
-      width: theme.spacing(10),
-      height: theme.spacing(10)
-    },
-    rechatLogo: {
-      width: theme.spacing(20)
+  () => ({
+    logo: {
+      maxWidth: 160,
+      maxHeight: 80,
+      minHeight: 60,
+      objectFit: 'contain'
     }
   }),
   { name: 'Logo' }
 )
 
-interface Props {
-  brandLogo?: string
-}
-
-export function Logo({ brandLogo }: Props) {
-  const alt = 'Rechat'
+export function Logo() {
   const classes = useStyles()
 
+  const brand = useUnsafeActiveBrand()
+  const hostBrand = useSelector<IAppState, IBrand>(
+    (state: IAppState) => state.brand
+  )
+
+  const logo = useMemo(() => {
+    console.log(getBrandMarketingPalette(brand, hostBrand))
+
+    return (
+      getBrandMarketingPalette(brand, hostBrand)?.['container-logo-wide'] ||
+      null
+    )
+  }, [brand, hostBrand])
+
   return (
-    <Box mb={4}>
-      {brandLogo ? (
-        <img src={brandLogo} className={classes.brandLogo} alt={alt} />
-      ) : (
-        <img
-          alt={alt}
-          className={classes.rechatLogo}
-          src="/static/images/logo.svg"
-        />
-      )}
+    <Box mb={4} display="flex" justifyContent="center">
+      <img
+        src={logo || '/static/images/logo.svg'}
+        className={classes.logo}
+        alt={logo ? 'Brand Logo powered by Rechat' : 'Rechat logo'}
+      />
     </Box>
   )
 }
