@@ -7,12 +7,12 @@ import { list } from './keys'
 
 const LIMIT = 100
 
-export function useTasks() {
+export function useTasks(sortyBy: string) {
   const { data, ...params } = useInfiniteQuery(
-    list(),
+    list(sortyBy),
     ({ pageParam = 0 }) =>
       getTasks({
-        order: '-created_at',
+        order: sortyBy,
         limit: LIMIT,
         start: pageParam,
         associations: [

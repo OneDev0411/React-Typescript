@@ -1,5 +1,17 @@
+import {
+  mdiAccountArrowLeft,
+  mdiCalendarOutline,
+  mdiContactsOutline,
+  mdiFormatListBulleted,
+  mdiOfficeBuildingOutline,
+  mdiSortAscending,
+  mdiSortDescending
+} from '@mdi/js'
+
 import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderColumn'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
+
+import type { ITask } from '../types'
 
 import { AssigneeCell } from './columns/AssigneeCell'
 import { ContactsCell } from './columns/ContactsCell'
@@ -15,9 +27,15 @@ import { InlineDueDateCell } from './inline-columns/InlineDueDateCell'
 import { InlineTitleCell } from './inline-columns/InlineTitleCell'
 import { InlineTypeCell } from './inline-columns/InlineTypeCell'
 
-export function useColumns(): TableColumn<
-  ICRMTask<'assignees' | 'associations', 'contact' | 'deal' | 'listing'>
->[] {
+interface Options {
+  activeSort: string
+  onChangeSort: (value: string) => void
+}
+
+export function useColumns({
+  activeSort,
+  onChangeSort
+}: Options): TableColumn<ITask>[] {
   return [
     {
       id: 'status',
@@ -33,7 +51,25 @@ export function useColumns(): TableColumn<
     },
     {
       id: 'title',
-      header: () => <HeaderColumn text="Task" />,
+      header: () => (
+        <HeaderColumn
+          text="Task"
+          sortIconPath={
+            activeSort.includes('created_at')
+              ? activeSort.startsWith('-')
+                ? mdiSortDescending
+                : mdiSortAscending
+              : undefined
+          }
+          onClick={() =>
+            onChangeSort(
+              activeSort === 'created_at' && !activeSort.startsWith('-')
+                ? '-created_at'
+                : 'created_at'
+            )
+          }
+        />
+      ),
       width: '300px',
       inlineEditStyles: {
         container: () => ({
@@ -52,7 +88,9 @@ export function useColumns(): TableColumn<
     },
     {
       id: 'contacts',
-      header: () => <HeaderColumn text="Contacts" />,
+      header: () => (
+        <HeaderColumn text="Contacts" iconPath={mdiContactsOutline} />
+      ),
       width: '200px',
       inlineEditStyles: {
         popover: ({ height }) => ({
@@ -71,9 +109,44 @@ export function useColumns(): TableColumn<
       )
     },
     {
+      id: 'due-date',
+      width: '200px',
+      header: () => (
+        <HeaderColumn
+          text="Due Date"
+          iconPath={mdiCalendarOutline}
+          sortIconPath={
+            activeSort.includes('due_date')
+              ? activeSort.startsWith('-')
+                ? mdiSortDescending
+                : mdiSortAscending
+              : undefined
+          }
+          onClick={() =>
+            onChangeSort(
+              activeSort === 'due_date' && !activeSort.startsWith('-')
+                ? '-due_date'
+                : 'due_date'
+            )
+          }
+        />
+      ),
+      render: ({ row: task }) => <DueDateCell dueDate={task.due_date} />,
+      inlineEditStyles: {
+        popover: ({ height }) => ({
+          marginTop: height
+        })
+      },
+      renderInlineEdit: ({ row: task }, close) => (
+        <InlineDueDateCell task={task} closeHandler={close} />
+      )
+    },
+    {
       id: 'type',
       width: '180px',
-      header: () => <HeaderColumn text="Type" />,
+      header: () => (
+        <HeaderColumn text="Type" iconPath={mdiFormatListBulleted} />
+      ),
       inlineEditStyles: {
         container: () => ({
           border: 'none'
@@ -88,23 +161,11 @@ export function useColumns(): TableColumn<
       )
     },
     {
-      id: 'due-date',
-      width: '200px',
-      header: () => <HeaderColumn text="Due Date" />,
-      render: ({ row: task }) => <DueDateCell dueDate={task.due_date} />,
-      inlineEditStyles: {
-        popover: ({ height }) => ({
-          marginTop: height
-        })
-      },
-      renderInlineEdit: ({ row: task }, close) => (
-        <InlineDueDateCell task={task} closeHandler={close} />
-      )
-    },
-    {
       id: 'assignees',
       width: '150px',
-      header: () => <HeaderColumn text="Assignees" />,
+      header: () => (
+        <HeaderColumn text="Assignees" iconPath={mdiAccountArrowLeft} />
+      ),
       inlineEditStyles: {
         popover: ({ height }) => ({
           marginTop: height
@@ -117,7 +178,12 @@ export function useColumns(): TableColumn<
     },
     {
       id: 'property-deal',
-      header: () => <HeaderColumn text="Property & Deal" />,
+      header: () => (
+        <HeaderColumn
+          text="Property & Deal"
+          iconPath={mdiOfficeBuildingOutline}
+        />
+      ),
       render: ({ row: task }) => (
         <PropertyDealCell
           associations={task.associations?.filter(association =>

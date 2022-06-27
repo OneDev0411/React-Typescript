@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
@@ -10,6 +10,7 @@ import type { LoadingPosition } from '@app/views/components/Grid/Table/types'
 
 import { useTasks } from '../queries/use-tasks'
 
+import { LoadingSkeleton } from './LoadingSkeleton'
 import { LoadingState } from './LoadingState'
 import { useColumns } from './use-columns'
 
@@ -33,23 +34,34 @@ export const useStyles = makeStyles(
 )
 
 export function List() {
-  const columns = useColumns()
   const classes = useStyles()
   const gridClasses = useGridStyles()
   const gridBorderedClasses = useGridBorderedStyles()
-  const { isLoading, tasks, fetchNextPage, isFetchingNextPage } = useTasks()
+
+  const [activeSort, setActiveSort] = useState('-created_at')
+  const handleChangeSort = (column: string) => {
+    setActiveSort(column)
+  }
+
+  const columns = useColumns({
+    activeSort,
+    onChangeSort: handleChangeSort
+  })
+
+  const { isLoading, tasks, fetchNextPage, isFetchingNextPage } =
+    useTasks(activeSort)
 
   const getLoadingPosition = useCallback((): LoadingPosition => {
-    if (isLoading) {
-      return 'middle'
-    }
-
     if (isFetchingNextPage) {
       return 'bottom'
     }
 
     return null
-  }, [isLoading, isFetchingNextPage])
+  }, [isFetchingNextPage])
+
+  if (isLoading) {
+    return <LoadingSkeleton columns={columns} classes={classes} />
+  }
 
   return (
     <Table<ICRMTask<'assignees' | 'associations'>>
@@ -63,7 +75,7 @@ export function List() {
       classes={{
         row: cn(gridClasses.row, gridBorderedClasses.row, classes.row)
       }}
-      totalRows={0}
+      totalRows={tasks?.length ?? 0}
       columns={columns}
       rows={tasks}
       infiniteScrolling={{

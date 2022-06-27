@@ -21,6 +21,7 @@ import { useColumns } from './use-columns'
 const useCustomGridStyles = makeStyles(theme => ({
   row: {
     '& .column': {
+      padding: theme.spacing(0, 1, 0, 2),
       '&.tags': {
         '& .MuiChip-root': { opacity: 0.5 }
       },
