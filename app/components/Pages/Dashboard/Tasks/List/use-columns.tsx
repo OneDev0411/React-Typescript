@@ -20,6 +20,7 @@ import { PropertyDealCell } from './columns/PropertyDealCell'
 import { StatusButtonCell } from './columns/StatusButtonCell'
 import { TaskTypeCell } from './columns/TaskTypeCell'
 import { TitleCell } from './columns/TitleCell'
+import { useTasksListContext } from './context/use-tasks-list-context'
 import { InlineAssigneeCell } from './inline-columns/InlineAssigneeCell'
 import { InlineAssociationCell } from './inline-columns/InlineAssociationCell'
 import { InlineContactsCell } from './inline-columns/InlineContactsCell'
@@ -27,15 +28,19 @@ import { InlineDueDateCell } from './inline-columns/InlineDueDateCell'
 import { InlineTitleCell } from './inline-columns/InlineTitleCell'
 import { InlineTypeCell } from './inline-columns/InlineTypeCell'
 
-interface Options {
-  activeSort: string
-  onChangeSort: (value: string) => void
-}
+export function useColumns(): TableColumn<ITask>[] {
+  const { sortBy, setSortBy } = useTasksListContext()
 
-export function useColumns({
-  activeSort,
-  onChangeSort
-}: Options): TableColumn<ITask>[] {
+  const getSortIcon = (column: string) =>
+    sortBy.includes(column)
+      ? sortBy.startsWith('-')
+        ? mdiSortDescending
+        : mdiSortAscending
+      : undefined
+
+  const getNextSort = (column: string) =>
+    sortBy === column && !sortBy.startsWith('-') ? `-${column}` : column
+
   return [
     {
       id: 'status',
@@ -54,20 +59,8 @@ export function useColumns({
       header: () => (
         <HeaderColumn
           text="Task"
-          sortIconPath={
-            activeSort.includes('created_at')
-              ? activeSort.startsWith('-')
-                ? mdiSortDescending
-                : mdiSortAscending
-              : undefined
-          }
-          onClick={() =>
-            onChangeSort(
-              activeSort === 'created_at' && !activeSort.startsWith('-')
-                ? '-created_at'
-                : 'created_at'
-            )
-          }
+          sortIconPath={getSortIcon('created_at')}
+          onClick={() => setSortBy(getNextSort('created_at'))}
         />
       ),
       width: '300px',
@@ -115,20 +108,8 @@ export function useColumns({
         <HeaderColumn
           text="Due Date"
           iconPath={mdiCalendarOutline}
-          sortIconPath={
-            activeSort.includes('due_date')
-              ? activeSort.startsWith('-')
-                ? mdiSortDescending
-                : mdiSortAscending
-              : undefined
-          }
-          onClick={() =>
-            onChangeSort(
-              activeSort === 'due_date' && !activeSort.startsWith('-')
-                ? '-due_date'
-                : 'due_date'
-            )
-          }
+          sortIconPath={getSortIcon('due_date')}
+          onClick={() => setSortBy(getNextSort('due_date'))}
         />
       ),
       render: ({ row: task }) => <DueDateCell dueDate={task.due_date} />,

@@ -14,7 +14,7 @@ import { ITask } from '../types'
 const Rows = Array.from({ length: 30 }).map(() => ({}))
 
 interface Props {
-  classes: ClassNameMap
+  classes: ClassNameMap<'row'>
   columns: TableColumn<ITask>[]
 }
 

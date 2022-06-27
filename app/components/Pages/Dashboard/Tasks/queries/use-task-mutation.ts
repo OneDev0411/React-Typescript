@@ -5,9 +5,10 @@ import useNotify from '@app/hooks/use-notify'
 import { CRM_TASKS_QUERY } from '@app/models/contacts/helpers'
 import { updateTask } from '@app/models/tasks/update-task'
 
+import { useTasksListContext } from '../List/context/use-tasks-list-context'
 import type { ITask } from '../types'
 
-import { list } from './keys'
+import { allLists, list } from './keys'
 
 interface TasksQuery {
   pageParams?: string[] | undefined
@@ -18,6 +19,8 @@ interface TasksQuery {
 
 export function useTaskMutation(task: ITask) {
   const queryClient = useQueryClient()
+  const { sortBy } = useTasksListContext()
+
   const notify = useNotify()
 
   const getNextPages = (
@@ -63,12 +66,12 @@ export function useTaskMutation(task: ITask) {
       ),
     {
       onMutate: async (data: Partial<ITask>) => {
-        await queryClient.cancelQueries(list())
+        await queryClient.cancelQueries(list(sortBy))
 
-        const previousTasks = queryClient.getQueryData<TasksQuery>(list())
+        const previousTasks = queryClient.getQueryData<TasksQuery>(list(sortBy))
 
         if (previousTasks) {
-          queryClient.setQueryData<TasksQuery>(list(), {
+          queryClient.setQueryData<TasksQuery>(list(sortBy), {
             ...previousTasks,
             pages: getNextPages(previousTasks, data) ?? []
           })
@@ -87,7 +90,7 @@ export function useTaskMutation(task: ITask) {
           previousTasks: TasksQuery
         }
       ) => {
-        queryClient.setQueryData<TasksQuery>(list(), {
+        queryClient.setQueryData<TasksQuery>(list(sortBy), {
           ...previousTasks,
           pages: getNextPages(previousTasks, data) ?? []
         })
@@ -98,7 +101,10 @@ export function useTaskMutation(task: ITask) {
         context: { previousTasks: TasksQuery }
       ) => {
         if (context?.previousTasks) {
-          queryClient.setQueryData<TasksQuery>(list(), context.previousTasks)
+          queryClient.setQueryData<TasksQuery>(
+            list(sortBy),
+            context.previousTasks
+          )
         }
 
         notify({
@@ -107,7 +113,7 @@ export function useTaskMutation(task: ITask) {
         })
       },
       onSettled: () => {
-        // queryClient.invalidateQueries(list())
+        queryClient.invalidateQueries(allLists())
       }
     }
   )

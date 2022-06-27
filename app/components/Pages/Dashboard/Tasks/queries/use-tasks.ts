@@ -3,16 +3,20 @@ import { useMemo } from 'react'
 import { useInfiniteQuery } from '@app/hooks/query'
 import { getTasks } from 'models/tasks/get-tasks'
 
+import { useTasksListContext } from '../List/context/use-tasks-list-context'
+
 import { list } from './keys'
 
 const LIMIT = 100
 
-export function useTasks(sortyBy: string) {
+export function useTasks() {
+  const { sortBy } = useTasksListContext()
+
   const { data, ...params } = useInfiniteQuery(
-    list(sortyBy),
+    list(sortBy),
     ({ pageParam = 0 }) =>
       getTasks({
-        order: sortyBy,
+        order: sortBy,
         limit: LIMIT,
         start: pageParam,
         associations: [

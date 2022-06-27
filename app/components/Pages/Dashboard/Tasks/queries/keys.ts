@@ -1,7 +1,22 @@
+const TYPE = ['crm_tasks']
+
+export function all() {
+  return [TYPE]
+}
+
+export function allLists() {
+  return [...all(), 'list']
+}
+
 export function list(sortyBy: string) {
-  return ['crm_tasks', 'list', sortyBy]
+  return [
+    ...allLists(),
+    {
+      sortyBy
+    }
+  ]
 }
 
 export function taskMembers() {
-  return ['crm_task', 'task_members']
+  return [...all(), 'task_members']
 }
