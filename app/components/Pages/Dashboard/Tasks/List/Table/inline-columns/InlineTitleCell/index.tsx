@@ -2,8 +2,8 @@ import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 
 import { makeStyles, TextField, Theme } from '@material-ui/core'
 
-import { useTaskMutation } from '../../../queries/use-task-mutation'
-import type { ITask } from '../../../types'
+import { useTaskMutation } from '../../../../queries/use-task-mutation'
+import type { ITask } from '../../../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

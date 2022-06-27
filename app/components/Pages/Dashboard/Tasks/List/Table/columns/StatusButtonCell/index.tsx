@@ -6,8 +6,8 @@ import cn from 'classnames'
 
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
-import { useTaskMutation } from '../../../queries/use-task-mutation'
-import type { ITask } from '../../../types'
+import { useTaskMutation } from '../../../../queries/use-task-mutation'
+import type { ITask } from '../../../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

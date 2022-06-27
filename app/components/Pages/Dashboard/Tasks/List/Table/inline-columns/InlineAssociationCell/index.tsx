@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 
 import { AssociationPicker } from '@app/views/components/AssociationPicker'
 
-import { useTaskMutation } from '../../../queries/use-task-mutation'
-import type { ITask } from '../../../types'
+import { useTaskMutation } from '../../../../queries/use-task-mutation'
+import type { ITask } from '../../../../types'
 
 interface Props {
   task: ITask

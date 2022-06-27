@@ -15,8 +15,8 @@ import { Avatar } from '@app/views/components/Avatar'
 import { ContactsList } from '@app/views/components/ContactsList'
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
-import { useTaskMutation } from '../../../queries/use-task-mutation'
-import type { ITask } from '../../../types'
+import { useTaskMutation } from '../../../../queries/use-task-mutation'
+import type { ITask } from '../../../../types'
 
 type TaskAssociation = ICRMTaskAssociation<'contact' | 'deal' | 'listing'>
 interface Props {

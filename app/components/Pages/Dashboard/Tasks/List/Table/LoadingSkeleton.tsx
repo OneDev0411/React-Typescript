@@ -9,7 +9,7 @@ import { useGridBorderedStyles } from '@app/views/components/Grid/Table/styles/b
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
-import { ITask } from '../types'
+import { ITask } from '../../types'
 
 const Rows = Array.from({ length: 30 }).map(() => ({}))
 

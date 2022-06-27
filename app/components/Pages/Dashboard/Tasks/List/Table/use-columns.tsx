@@ -11,7 +11,8 @@ import {
 import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderColumn'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
-import type { ITask } from '../types'
+import type { ITask } from '../../types'
+import { useTasksListContext } from '../context/use-tasks-list-context'
 
 import { AssigneeCell } from './columns/AssigneeCell'
 import { ContactsCell } from './columns/ContactsCell'
@@ -20,7 +21,6 @@ import { PropertyDealCell } from './columns/PropertyDealCell'
 import { StatusButtonCell } from './columns/StatusButtonCell'
 import { TaskTypeCell } from './columns/TaskTypeCell'
 import { TitleCell } from './columns/TitleCell'
-import { useTasksListContext } from './context/use-tasks-list-context'
 import { InlineAssigneeCell } from './inline-columns/InlineAssigneeCell'
 import { InlineAssociationCell } from './inline-columns/InlineAssociationCell'
 import { InlineContactsCell } from './inline-columns/InlineContactsCell'

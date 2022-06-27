@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { TasksListContext } from './context'
+import { TasksFilters } from './Filters'
 import { TasksTable } from './Table'
 
 export function List() {
@@ -8,6 +9,7 @@ export function List() {
 
   return (
     <TasksListContext.Provider value={{ sortBy, setSortBy }}>
+      <TasksFilters />
       <TasksTable />
     </TasksListContext.Provider>
   )

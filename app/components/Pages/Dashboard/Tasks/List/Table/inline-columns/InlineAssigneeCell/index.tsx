@@ -10,9 +10,9 @@ import {
 
 import { useUnsafeActiveTeam } from '@app/hooks/team'
 
-import { useTaskMembers } from '../../../queries/use-task-members'
-import { useTaskMutation } from '../../../queries/use-task-mutation'
-import type { ITask } from '../../../types'
+import { useTaskMembers } from '../../../../queries/use-task-members'
+import { useTaskMutation } from '../../../../queries/use-task-mutation'
+import type { ITask } from '../../../../types'
 
 const useStyles = makeStyles(
   () => ({
