@@ -25,8 +25,8 @@ export default function useListData(
 
     try {
       const allEmailCampaigns = await getEmailCampaigns(activeBrandId, {
-        emailCampaignAssociations: ['recipients', 'template'],
-        emailRecipientsAssociations: ['list'],
+        emailCampaignAssociations: ['template'],
+        emailRecipientsAssociations: [],
         emailCampaignEmailsAssociation: []
       })
 
@@ -51,8 +51,8 @@ export default function useListData(
 
       try {
         const emailCampaign = await getEmailCampaign(emailCampaignId, {
-          emailCampaignAssociations: ['recipients', 'template'],
-          emailRecipientsAssociations: ['list'],
+          emailCampaignAssociations: ['template'],
+          emailRecipientsAssociations: [],
           emailCampaignEmailsAssociation: [],
           emailFields: []
         })

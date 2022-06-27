@@ -4,7 +4,7 @@ import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand
 import { useLoadingEntities } from 'hooks/use-loading'
 import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 
-type EmailCampaign = IEmailCampaign<'recipients' | 'template', 'list', 'email'>
+type EmailCampaign = IEmailCampaign<'template', '', 'email'>
 
 interface UseEmailCampaigns {
   isLoading: boolean
@@ -19,8 +19,8 @@ export function useEmailCampaigns(): UseEmailCampaigns {
   useEffect(() => {
     async function fetchEmailCampaigns() {
       const emailCampaigns = await getEmailCampaigns(activeBrandId, {
-        emailCampaignAssociations: ['recipients', 'template'],
-        emailRecipientsAssociations: ['list'],
+        emailCampaignAssociations: ['template'],
+        emailRecipientsAssociations: [],
         emailCampaignEmailsAssociation: ['email']
       })
 
