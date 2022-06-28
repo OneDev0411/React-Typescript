@@ -70,7 +70,8 @@ function SearchResultCardImage({
               <div className={classes.alt}>{imageAlt}</div>
               <div>(no image)</div>
             </Typography>
-          ) : imageUrl?.endsWith('mp4') ? (
+          ) : imageUrl?.endsWith('mp4') ||
+            imageUrl?.startsWith('data:video/mp4') ? (
             <VideoThumbnail className={classes.item} url={imageUrl} />
           ) : (
             <img

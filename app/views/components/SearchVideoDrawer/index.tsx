@@ -45,7 +45,6 @@ const useStyles = makeStyles(
 )
 
 interface SearchVideoDrawerProps {
-  isOpen: boolean
   model: Nullable<Model>
   onClose: () => void
   onSelect: (video: Video) => void
@@ -54,7 +53,6 @@ interface SearchVideoDrawerProps {
 }
 
 function SearchVideoDrawer({
-  isOpen,
   model,
   onClose,
   onSelect,
@@ -168,6 +166,7 @@ function SearchVideoDrawer({
 
     return (
       <VideoList
+        shouldShowUploader={activeTab === VideoTab.Gallery}
         videos={
           activeTab === VideoTab.Videobolt ? videoboltVideos : galleryVideos
         }
@@ -177,7 +176,7 @@ function SearchVideoDrawer({
   }
 
   return (
-    <OverlayDrawer open={isOpen} onClose={handleCloseDrawer} width="690px">
+    <OverlayDrawer open onClose={handleCloseDrawer} width="690px">
       <OverlayDrawer.Header title="Insert a video" />
       <OverlayDrawer.Body className={classes.body}>
         {isGeneratingThumbnail ? (
@@ -191,9 +190,8 @@ function SearchVideoDrawer({
               indicatorColor="primary"
             >
               <Tab label="Online Videos" value={VideoTab.Online} />
-              {galleryVideos.length > 0 && (
-                <Tab label="Your Gallery" value={VideoTab.Gallery} />
-              )}
+              <Tab label="Your Gallery" value={VideoTab.Gallery} />
+
               {videoboltVideos.length > 0 && (
                 <Tab label="Videobolt" value={VideoTab.Videobolt} />
               )}

@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 import { startOfDay, compareAsc, setYear, isToday } from 'date-fns'
-import { useSelector } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
 import { useLoadingEntities } from '@app/hooks/use-loading'
@@ -9,7 +8,6 @@ import {
   getCalendar,
   CalendarObjectType
 } from '@app/models/calendar/get-calendar'
-import { selectUser } from '@app/selectors/user'
 import {
   getDateRange,
   Format
@@ -27,7 +25,6 @@ export function useCalendarEvents(
   const [events, setEvents] = useState<Nullable<ICalendarEvent[]>>(null)
 
   const [isLoading] = useLoadingEntities(events)
-  const user = useSelector(selectUser)
 
   useDeepCompareEffect(() => {
     async function fetchEvents() {
@@ -37,8 +34,7 @@ export function useCalendarEvents(
         filter: {
           'object_types[]': objectTypes
         },
-        associations: ['calendar_event.people'], // , 'calendar_event.full_thread'
-        users: [user.id]
+        associations: ['calendar_event.people'] // , 'calendar_event.full_thread'
       })) as ICalendarEvent[]
 
       const sortedEvents = sortCalendarEventsOnNextOccurrence(calendarEvents)
