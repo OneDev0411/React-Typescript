@@ -56,11 +56,12 @@ export function TasksTable() {
     <Table<ICRMTask<'assignees' | 'associations'>>
       headless={false}
       rowSize={5}
-      selection={{
-        columnProps: {
-          width: '65px'
-        }
-      }}
+      // TODO: Phase #2
+      // selection={{
+      //   columnProps: {
+      //     width: '65px'
+      //   }
+      // }}
       classes={{
         row: cn(gridClasses.row, gridBorderedClasses.row, classes.row)
       }}

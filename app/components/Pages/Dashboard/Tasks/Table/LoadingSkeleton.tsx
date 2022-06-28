@@ -40,11 +40,6 @@ export function LoadingSkeleton({ columns, classes }: Props) {
     <Table
       headless={false}
       rowSize={5}
-      selection={{
-        columnProps: {
-          width: '65px'
-        }
-      }}
       classes={{
         row: cn(gridClasses.row, gridBorderedClasses.row, classes.row)
       }}

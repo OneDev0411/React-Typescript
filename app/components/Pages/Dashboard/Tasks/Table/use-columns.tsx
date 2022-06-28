@@ -44,7 +44,7 @@ export function useColumns(): TableColumn<ITask>[] {
   return [
     {
       id: 'status',
-      width: '50px',
+      width: '70px',
       header: '',
       headerStyle: {
         borderRight: 'none'
