@@ -1,10 +1,32 @@
 import { ChangeEvent, useState } from 'react'
 
-import { Box, Checkbox, CircularProgress, MenuItem } from '@material-ui/core'
+import {
+  Avatar,
+  Box,
+  Checkbox,
+  CircularProgress,
+  makeStyles,
+  MenuItem,
+  Theme
+} from '@material-ui/core'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team'
 
+import { getAvatarTitle } from '../../Deals/utils/get-avatar-title'
 import { useTaskMembers } from '../queries/use-task-members'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    avatar: {
+      width: theme.spacing(3),
+      height: theme.spacing(3),
+      fontSize: theme.typography.caption.fontSize
+    }
+  }),
+  {
+    name: 'Tasks-AssigneeFilter'
+  }
+)
 
 interface Props {
   defaultAssignees: IUser[]
@@ -12,6 +34,7 @@ interface Props {
 }
 
 export function AssigneesList({ defaultAssignees, onChange }: Props) {
+  const classes = useStyles()
   const activeTeam = useUnsafeActiveTeam()
   const { data: members, isLoading } = useTaskMembers(activeTeam?.brand.id)
   const [assignees, setAssignees] = useState(defaultAssignees ?? [])
@@ -53,6 +76,15 @@ export function AssigneesList({ defaultAssignees, onChange }: Props) {
                 handleChange(member, checked)
               }
             />
+
+            <Box mr={1}>
+              <Avatar
+                className={classes.avatar}
+                src={member.profile_image_url ?? ''}
+              >
+                {getAvatarTitle(member.display_name)}
+              </Avatar>
+            </Box>
             {member.display_name}
           </Box>
         </MenuItem>
