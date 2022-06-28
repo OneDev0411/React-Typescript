@@ -1,6 +1,6 @@
 import { Grid, makeStyles } from '@material-ui/core'
 
-import { SearchResultCard } from '../SearchResultCard'
+import { CARD_IMAGE_RATIO, SearchResultCard } from '../SearchResultCard'
 
 import { SearchVideoResult } from './types'
 
@@ -23,7 +23,7 @@ function SearchVideoResults({ videos, onSelect }: SearchVideoResultsProps) {
   const classes = useStyles()
 
   return (
-    <Grid container>
+    <>
       {videos.map(video => (
         <Grid item key={video.url} xs={4}>
           <SearchResultCard
@@ -31,7 +31,7 @@ function SearchVideoResults({ videos, onSelect }: SearchVideoResultsProps) {
             link={video.playerUrl ?? video.url}
             imageUrl={video.thumbnail ?? video.url}
             imageAlt={video.publisher}
-            imageAspect={0.56} // 9/16 aspect ratio
+            imageAspect={CARD_IMAGE_RATIO}
             overline={video.publisher}
             overlineDate={video.publishedAt}
             overlineIcon={video.sourceIcon}
@@ -40,7 +40,7 @@ function SearchVideoResults({ videos, onSelect }: SearchVideoResultsProps) {
           />
         </Grid>
       ))}
-    </Grid>
+    </>
   )
 }
 
