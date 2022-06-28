@@ -1,6 +1,6 @@
-import { useTaskMutation } from '../../../../queries/use-task-mutation'
-import type { ITask } from '../../../../types'
 import { TypesList } from '../../../components/TypesList'
+import { useTaskMutation } from '../../../queries/use-task-mutation'
+import type { ITask } from '../../../types'
 
 interface Props {
   task: ITask

@@ -1,8 +1,8 @@
 import { makeStyles } from '@material-ui/core'
 
-import { useTaskMutation } from '../../../../queries/use-task-mutation'
-import type { ITask } from '../../../../types'
 import { AssigneesList } from '../../../components/AssigneesList'
+import { useTaskMutation } from '../../../queries/use-task-mutation'
+import type { ITask } from '../../../types'
 
 const useStyles = makeStyles(
   () => ({

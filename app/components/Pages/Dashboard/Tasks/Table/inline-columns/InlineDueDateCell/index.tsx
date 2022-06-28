@@ -2,8 +2,8 @@ import { useState } from 'react'
 
 import DatePicker from '@app/views/components/DatePicker'
 
-import { useTaskMutation } from '../../../../queries/use-task-mutation'
-import type { ITask } from '../../../../types'
+import { useTaskMutation } from '../../../queries/use-task-mutation'
+import type { ITask } from '../../../types'
 
 interface Props {
   task: ITask

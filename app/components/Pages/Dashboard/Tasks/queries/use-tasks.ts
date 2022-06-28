@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useInfiniteQuery } from '@app/hooks/query'
 import { getTasks } from 'models/tasks/get-tasks'
 
-import { useTasksListContext } from '../List/context/use-tasks-list-context'
+import { useTasksListContext } from '../context/use-tasks-list-context'
 
 import { list } from './keys'
 

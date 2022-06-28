@@ -5,7 +5,7 @@ import useNotify from '@app/hooks/use-notify'
 import { CRM_TASKS_QUERY } from '@app/models/contacts/helpers'
 import { updateTask } from '@app/models/tasks/update-task'
 
-import { useTasksListContext } from '../List/context/use-tasks-list-context'
+import { useTasksListContext } from '../context/use-tasks-list-context'
 import type { ITask } from '../types'
 
 import { allLists, list } from './keys'

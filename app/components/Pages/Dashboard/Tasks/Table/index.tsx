@@ -8,7 +8,7 @@ import { useGridBorderedStyles } from '@app/views/components/Grid/Table/styles/b
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import type { LoadingPosition } from '@app/views/components/Grid/Table/types'
 
-import { useTasks } from '../../queries/use-tasks'
+import { useTasks } from '../queries/use-tasks'
 
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { LoadingState } from './LoadingState'

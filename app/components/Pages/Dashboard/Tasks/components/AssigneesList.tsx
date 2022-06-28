@@ -4,7 +4,7 @@ import { Box, Checkbox, CircularProgress, MenuItem } from '@material-ui/core'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team'
 
-import { useTaskMembers } from '../../queries/use-task-members'
+import { useTaskMembers } from '../queries/use-task-members'
 
 interface Props {
   defaultAssignees: IUser[]

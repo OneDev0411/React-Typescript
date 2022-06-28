@@ -11,8 +11,8 @@ import {
 import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderColumn'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
-import type { ITask } from '../../types'
 import { useTasksListContext } from '../context/use-tasks-list-context'
+import type { ITask } from '../types'
 
 import { AssigneeCell } from './columns/AssigneeCell'
 import { ContactsCell } from './columns/ContactsCell'
