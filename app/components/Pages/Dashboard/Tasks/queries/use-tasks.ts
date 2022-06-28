@@ -10,12 +10,13 @@ import { list } from './keys'
 const LIMIT = 100
 
 export function useTasks() {
-  const { sortBy } = useTasksListContext()
+  const { sortBy, filter } = useTasksListContext()
 
   const { data, ...params } = useInfiniteQuery(
-    list(sortBy),
+    list(sortBy, filter),
     ({ pageParam = 0 }) =>
       getTasks({
+        ...filter,
         order: sortBy,
         limit: LIMIT,
         start: pageParam,

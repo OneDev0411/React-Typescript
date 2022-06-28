@@ -2,23 +2,21 @@ import { Box } from '@material-ui/core'
 
 import { Filters } from '@app/views/components/Filters'
 
+import type { TasksListFilters } from '../context'
+
 import { AssigneeFilter } from './AssigneeFilter'
 import { StatusFilter } from './StatusFilter'
 import { TypeFilter } from './TypeFilter'
-
-export interface TasksListFilters {
-  assignee: any
-}
 
 export function TasksFilters() {
   return (
     <Box px={4} my={2}>
       <Filters<TasksListFilters>
         systemDefaultFilters={{
-          assignee: []
+          assignees: []
         }}
         userFilters={{
-          assignee: []
+          assignees: []
         }}
         onChange={filters => () => {}}
       >

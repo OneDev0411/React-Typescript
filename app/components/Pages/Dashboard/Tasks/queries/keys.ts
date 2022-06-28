@@ -1,3 +1,5 @@
+import { TasksListFilters } from '../context'
+
 const TYPE = ['crm_tasks']
 
 export function all() {
@@ -8,11 +10,12 @@ export function allLists() {
   return [...all(), 'list']
 }
 
-export function list(sortyBy: string) {
+export function list(sortyBy: string, filter: Partial<TasksListFilters>) {
   return [
     ...allLists(),
     {
-      sortyBy
+      sortyBy,
+      ...filter
     }
   ]
 }

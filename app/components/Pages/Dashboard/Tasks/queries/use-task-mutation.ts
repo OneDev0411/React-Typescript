@@ -19,7 +19,7 @@ interface TasksQuery {
 
 export function useTaskMutation(task: ITask) {
   const queryClient = useQueryClient()
-  const { sortBy } = useTasksListContext()
+  const { sortBy, filter } = useTasksListContext()
 
   const notify = useNotify()
 
@@ -66,12 +66,14 @@ export function useTaskMutation(task: ITask) {
       ),
     {
       onMutate: async (data: Partial<ITask>) => {
-        await queryClient.cancelQueries(list(sortBy))
+        await queryClient.cancelQueries(list(sortBy, filter))
 
-        const previousTasks = queryClient.getQueryData<TasksQuery>(list(sortBy))
+        const previousTasks = queryClient.getQueryData<TasksQuery>(
+          list(sortBy, filter)
+        )
 
         if (previousTasks) {
-          queryClient.setQueryData<TasksQuery>(list(sortBy), {
+          queryClient.setQueryData<TasksQuery>(list(sortBy, filter), {
             ...previousTasks,
             pages: getNextPages(previousTasks, data) ?? []
           })
@@ -90,7 +92,7 @@ export function useTaskMutation(task: ITask) {
           previousTasks: TasksQuery
         }
       ) => {
-        queryClient.setQueryData<TasksQuery>(list(sortBy), {
+        queryClient.setQueryData<TasksQuery>(list(sortBy, filter), {
           ...previousTasks,
           pages: getNextPages(previousTasks, data) ?? []
         })
@@ -102,7 +104,7 @@ export function useTaskMutation(task: ITask) {
       ) => {
         if (context?.previousTasks) {
           queryClient.setQueryData<TasksQuery>(
-            list(sortBy),
+            list(sortBy, filter),
             context.previousTasks
           )
         }

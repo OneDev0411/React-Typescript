@@ -1,27 +1,32 @@
 import { useState } from 'react'
 
-import { Box, TextField } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import PageLayout from '@app/views/components/GlobalPageLayout'
 
-import { TasksListContext } from './context'
+import { TasksListContext, TasksListFilters } from './context'
 import { CreateTask } from './CreateTask'
 import { TasksFilters } from './Filters'
 import { TasksTable } from './Table'
 
 export default function Tasks() {
   const [sortBy, setSortBy] = useState('-created_at')
+  const [filter, setFilter] = useState<Partial<TasksListFilters>>({
+    q: ''
+  })
 
   return (
-    <TasksListContext.Provider value={{ sortBy, setSortBy }}>
+    <TasksListContext.Provider value={{ sortBy, filter, setSortBy, setFilter }}>
       <PageLayout gutter={0}>
         <Box m={4}>
-          <PageLayout.Header title="Tasks">
-            <Box mr={1}>
-              <TextField placeholder="Search" variant="outlined" size="small" />
+          <PageLayout.HeaderWithSearch
+            title="Tasks"
+            onSearch={value => setFilter(filter => ({ ...filter, q: value }))}
+          >
+            <Box ml={1}>
+              <CreateTask />
             </Box>
-            <CreateTask />
-          </PageLayout.Header>
+          </PageLayout.HeaderWithSearch>
         </Box>
 
         <PageLayout.Main>
