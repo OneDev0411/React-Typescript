@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { Grid, Box, Checkbox, Tooltip, Typography } from '@material-ui/core'
+import { Grid, Checkbox, Tooltip, Typography } from '@material-ui/core'
 import pluralize from 'pluralize'
 
 import { AgentWithStats } from '@app/models/agent-network/get-agents'
@@ -58,16 +58,14 @@ export function TableToolbar({ rows }: Props) {
   return (
     <Grid container alignItems="center">
       <Grid item>
-        <Box pl={isAllRowsSelected || isSomeRowsSelected ? 0 : 1}>
-          <Tooltip title={tooltipTitle}>
-            <Checkbox
-              color="primary"
-              checked={isAllRowsSelected}
-              indeterminate={isSomeRowsSelected}
-              onChange={handleToggleSelectionClick}
-            />
-          </Tooltip>
-        </Box>
+        <Tooltip title={tooltipTitle}>
+          <Checkbox
+            color="primary"
+            checked={isAllRowsSelected}
+            indeterminate={isSomeRowsSelected}
+            onChange={handleToggleSelectionClick}
+          />
+        </Tooltip>
       </Grid>
       <Grid item>
         <Typography variant="body2">{tableSummary}</Typography>
