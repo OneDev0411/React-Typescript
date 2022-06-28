@@ -7,11 +7,16 @@ import {
 import { Options as ImportOptions } from 'draft-js-import-html'
 import { wrap } from 'lodash'
 
+import { TABLE_WRAPPER_CLASS_NAME } from '../config'
 import { signatureCustomBlockFn } from '../features/Signature/draft-js-signature-plugin'
 import {
   iFrameCustomBlockFn,
   renderIFrame
 } from '../plugins/draft-js-iframe-plugin'
+import {
+  tableCustomBlockFn,
+  renderTable
+} from '../plugins/draft-js-table-plugin'
 
 import { blockLevelLinkCustomBlockFn } from './block-level-link-custom-block-fn'
 import { blockLevelLinkRendererWrapper } from './block-level-link-renderer-wrapper'
@@ -40,7 +45,7 @@ export function getHtmlConversionOptions(
       blockStyleFn,
       blockRenderers: {
         atomic: wrap(
-          combine(renderImage(getEditorState), renderIFrame),
+          combine(renderImage(getEditorState), renderIFrame, renderTable),
           blockLevelLinkRendererWrapper
         )
       },
@@ -48,6 +53,7 @@ export function getHtmlConversionOptions(
     },
     stateFromHtmlOptions: {
       customBlockFn: mergeFunctions(
+        tableCustomBlockFn(TABLE_WRAPPER_CLASS_NAME),
         iFrameCustomBlockFn('rechat-quote'),
         signatureCustomBlockFn('rechat-signature'),
         blockLevelLinkCustomBlockFn
