@@ -1,9 +1,6 @@
-import { MenuItem } from '@material-ui/core'
-
 import { useTaskMutation } from '../../../../queries/use-task-mutation'
 import type { ITask } from '../../../../types'
-
-import { TaskTypeOptions } from './options'
+import { TypesList } from '../../../components/TypesList'
 
 interface Props {
   task: ITask
@@ -22,16 +19,6 @@ export function InlineTypeCell({ task, closeHandler }: Props) {
   }
 
   return (
-    <>
-      {TaskTypeOptions.map(({ label, value }) => (
-        <MenuItem
-          key={value}
-          selected={value === task.task_type}
-          onClick={() => handleSelectItem(value)}
-        >
-          {label}
-        </MenuItem>
-      ))}
-    </>
+    <TypesList selectedItem={task.task_type} onSelectItem={handleSelectItem} />
   )
 }
