@@ -16,7 +16,15 @@ export default function Tasks() {
   })
 
   return (
-    <TasksListContext.Provider value={{ sortBy, filter, setSortBy, setFilter }}>
+    <TasksListContext.Provider
+      value={{
+        sortBy,
+        filter,
+        setSortBy,
+        setFilter: (data: Partial<TasksListFilters>) =>
+          setFilter(filter => ({ ...filter, ...data }))
+      }}
+    >
       <PageLayout gutter={0}>
         <Box m={4}>
           <PageLayout.HeaderWithSearch

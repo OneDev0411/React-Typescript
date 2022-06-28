@@ -1,16 +1,21 @@
 import {
+  Box,
   ListItemIcon,
   ListItemText,
   makeStyles,
   MenuItem,
-  Theme
+  Theme,
+  Typography
 } from '@material-ui/core'
 import { mdiListStatus } from '@mdi/js'
 
-import FilterButton from '@app/views/components/Filters/FilterButton'
+import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
+import type { TasksListFilters } from '../context'
+
 import { Button } from './components/Button'
+import { ResetButton } from './components/ResetButton'
 
 const Options = [
   { label: 'Completed', value: 'DONE' },
@@ -19,6 +24,9 @@ const Options = [
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
+    root: {
+      minWidth: '200px'
+    },
     listItemIcon: {
       minWidth: theme.spacing(3)
     }
@@ -27,23 +35,55 @@ const useStyles = makeStyles(
     name: 'Tasks-Filters-Status'
   }
 )
-export function StatusFilter() {
+
+interface Props {
+  currentFilters: TasksListFilters
+  updateFilters: (filters: Partial<TasksListFilters>) => void
+}
+
+export function StatusFilter({
+  currentFilters: { status },
+  updateFilters
+}: Props) {
   const classes = useStyles()
 
   return (
-    <FilterButton
-      renderButton={({ onClick }) => (
+    <BaseDropdown
+      renderDropdownButton={({ onClick, ref }) => (
         <Button
-          title="Status"
+          title={
+            status
+              ? Options.find(({ value }) => value === status)!.label
+              : 'Status'
+          }
           startIconPath={mdiListStatus}
-          isActive={false}
+          isActive={!!status}
+          innerRef={ref}
           onClick={onClick}
         />
       )}
-      renderDropdown={() => (
-        <div>
+      renderMenu={({ close }) => (
+        <div className={classes.root}>
+          <Box p={2}>
+            <Typography variant="subtitle1">Task Status</Typography>
+          </Box>
+
           {Options.map(option => (
-            <MenuItem key={option.value}>
+            <MenuItem
+              key={option.value}
+              selected={option.value === status}
+              onClick={() => {
+                close()
+
+                setTimeout(
+                  () =>
+                    updateFilters({
+                      status: option.value
+                    }),
+                  0
+                )
+              }}
+            >
               <ListItemIcon className={classes.listItemIcon}>
                 <SvgIcon path={mdiListStatus} size={muiIconSizes.small} />
               </ListItemIcon>
@@ -51,6 +91,17 @@ export function StatusFilter() {
               <ListItemText>{option.label}</ListItemText>
             </MenuItem>
           ))}
+
+          {status && (
+            <ResetButton
+              variant="text"
+              onClick={() =>
+                updateFilters({
+                  status: undefined
+                })
+              }
+            />
+          )}
         </div>
       )}
     />

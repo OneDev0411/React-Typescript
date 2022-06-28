@@ -16,7 +16,10 @@ export function useTasks() {
     list(sortBy, filter),
     ({ pageParam = 0 }) =>
       getTasks({
-        ...filter,
+        q: filter.q,
+        task_type: filter.type,
+        status: filter.status,
+        assignees: filter.assignees?.map(user => user.id),
         order: sortBy,
         limit: LIMIT,
         start: pageParam,

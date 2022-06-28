@@ -3,40 +3,43 @@ import { Box } from '@material-ui/core'
 import { Filters } from '@app/views/components/Filters'
 
 import type { TasksListFilters } from '../context'
+import { useTasksListContext } from '../context/use-tasks-list-context'
 
 import { AssigneeFilter } from './AssigneeFilter'
 import { StatusFilter } from './StatusFilter'
 import { TypeFilter } from './TypeFilter'
 
 export function TasksFilters() {
+  const { filter, setFilter } = useTasksListContext()
+
   return (
     <Box px={4} my={2}>
       <Filters<TasksListFilters>
-        systemDefaultFilters={{
-          assignees: []
-        }}
-        userFilters={{
-          assignees: []
-        }}
-        onChange={filters => () => {}}
+        systemDefaultFilters={filter}
+        userFilters={filter}
+        onChange={setFilter}
       >
-        {(
-          currentFilters,
-          updateFilters,
-          resetFilters,
-          systemDefaultFilters
-        ) => (
+        {(currentFilters, updateFilters) => (
           <Box display="flex">
             <Box mr={1}>
-              <AssigneeFilter />
+              <AssigneeFilter
+                currentFilters={currentFilters}
+                updateFilters={updateFilters}
+              />
             </Box>
 
             <Box mr={1}>
-              <StatusFilter />
+              <StatusFilter
+                currentFilters={currentFilters}
+                updateFilters={updateFilters}
+              />
             </Box>
 
             <Box mr={1}>
-              <TypeFilter />
+              <TypeFilter
+                currentFilters={currentFilters}
+                updateFilters={updateFilters}
+              />
             </Box>
           </Box>
         )}

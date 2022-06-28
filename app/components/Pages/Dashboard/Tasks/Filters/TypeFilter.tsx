@@ -1,24 +1,56 @@
+import { Box, Typography } from '@material-ui/core'
 import { mdiShapeOutline } from '@mdi/js'
 
-import FilterButton from '@app/views/components/Filters/FilterButton'
+import { BaseDropdown } from '@app/views/components/BaseDropdown'
 
 import { TypesList } from '../components/TypesList'
+import type { TasksListFilters } from '../context'
 
 import { Button } from './components/Button'
+import { ResetButton } from './components/ResetButton'
 
-export function TypeFilter() {
+interface Props {
+  currentFilters: TasksListFilters
+  updateFilters: (filters: Partial<TasksListFilters>) => void
+}
+
+export function TypeFilter({ currentFilters: { type }, updateFilters }: Props) {
   return (
-    <FilterButton
-      renderButton={({ onClick }) => (
+    <BaseDropdown
+      renderDropdownButton={({ onClick, ref }) => (
         <Button
-          title="Type"
+          title={type ?? 'Type'}
           startIconPath={mdiShapeOutline}
-          isActive={false}
+          isActive={!!type}
+          innerRef={ref}
           onClick={onClick}
         />
       )}
-      renderDropdown={() => (
-        <TypesList selectedItem={null} onSelectItem={() => {}} />
+      renderMenu={({ close }) => (
+        <div>
+          <Box p={2}>
+            <Typography variant="subtitle1">Task Type</Typography>
+          </Box>
+
+          <TypesList
+            selectedItem={type}
+            onSelectItem={type => {
+              close()
+              setTimeout(() => updateFilters({ type }), 0)
+            }}
+          />
+
+          {type && (
+            <ResetButton
+              variant="text"
+              onClick={() =>
+                updateFilters({
+                  type: undefined
+                })
+              }
+            />
+          )}
+        </div>
       )}
     />
   )

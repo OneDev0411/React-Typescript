@@ -1,10 +1,10 @@
 import { createContext } from 'react'
 
 export interface TasksListFilters {
-  q: string
-  assignees: string[]
-  type: string
-  status: string
+  q?: string
+  assignees?: IUser[]
+  type?: CRMTaskTypes
+  status?: string
 }
 export interface Context {
   sortBy: string

@@ -35,7 +35,7 @@ export const TaskTypeOptions: {
 ]
 
 interface Props {
-  selectedItem: Nullable<CRMTaskTypes>
+  selectedItem?: Nullable<CRMTaskTypes>
   onSelectItem: (value: CRMTaskTypes) => void
 }
 
