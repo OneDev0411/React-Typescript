@@ -9,13 +9,7 @@ import { useTasksListContext } from '../context/use-tasks-list-context'
 import type { ITask } from '../types'
 
 import { allLists, list } from './keys'
-
-interface TasksQuery {
-  pageParams?: string[] | undefined
-  pages: {
-    data: ITask[]
-  }[]
-}
+import type { TasksQuery } from './types'
 
 export function useTaskMutation(task: ITask) {
   const queryClient = useQueryClient()
