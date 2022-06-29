@@ -10,3 +10,5 @@ interface ResizablePluginOptions {
 export const resizablePluginOptions: ResizablePluginOptions = {
   horizontal: 'absolute'
 }
+
+export const TABLE_WRAPPER_CLASS_NAME = 'rechat-table-wrapper'
