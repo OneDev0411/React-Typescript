@@ -1,4 +1,4 @@
-import { useState, useEffect, ComponentProps } from 'react'
+import { useState, useEffect, ComponentProps, Ref } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import { useInView } from 'react-intersection-observer'
@@ -12,7 +12,7 @@ import { getTemplateImage } from 'utils/marketing-center/helpers'
 
 const useStyles = makeStyles(
   () => ({
-    image: {
+    thumb: {
       width: '100%'
     },
     templateThumbnailWrapper: {
@@ -29,7 +29,7 @@ interface Props {
   template: IMarketingTemplateInstance | IBrandMarketingTemplate
   listing?: IListing
   useStaticImage?: boolean
-
+  videoRef?: Ref<HTMLVideoElement>
   onClick?: ComponentProps<typeof TemplateThumbnail>['onClick']
 }
 
@@ -38,7 +38,8 @@ export function Thumbnail({
   template,
   listing: receivedListing,
   useStaticImage,
-  onClick
+  onClick,
+  videoRef
 }: Props) {
   const activeBrand = useUnsafeActiveBrand()
   const { ref, inView } = useInView({ delay: 100 })
@@ -94,7 +95,15 @@ export function Thumbnail({
 
     return template.template.video ? (
       <div ref={ref}>
-        {shouldRender && <video src={thumbnail} muted autoPlay />}
+        {shouldRender && (
+          <video
+            ref={videoRef}
+            src={thumbnail}
+            muted
+            loop
+            className={classes.thumb}
+          />
+        )}
       </div>
     ) : (
       <div ref={ref}>
@@ -102,7 +111,7 @@ export function Thumbnail({
           <img
             alt={template.template.name}
             src={thumbnail}
-            className={classes.image}
+            className={classes.thumb}
           />
         )}
       </div>

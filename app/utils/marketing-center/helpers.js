@@ -12,6 +12,12 @@ export function getTemplateImage(
     }
   }
 
+  if (template.template.video && template.thumbnail.url) {
+    return {
+      thumbnail: template.thumbnail.url
+    }
+  }
+
   if (
     template.type === 'template_instance' ||
     template.type === 'template' ||

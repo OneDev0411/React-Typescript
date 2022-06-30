@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useRef } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux'
 import { selectUser } from 'selectors/user'
 import { itemDateText } from 'utils/marketing-center/helpers'
 import { ClassesProps } from 'utils/ts-utils'
+
+import { isPlaying } from '../VideoThumbnail'
 
 import { marketingTemplateCardStyles } from './styles'
 import { Thumbnail } from './Thumbnail'
@@ -29,7 +31,7 @@ function MarketingTemplateCard(
   const { template } = props
   const classes = useStyles({ classes: props.classes })
   const user = useSelector(selectUser)
-
+  const videoThumbRef = useRef<HTMLVideoElement>(null)
   const isInstance = template.type === 'template_instance'
 
   const handlePreview = e => {
@@ -42,6 +44,31 @@ function MarketingTemplateCard(
     }
   }
 
+  const handleMouseEnter = () => {
+    const video = videoThumbRef.current
+
+    if (video) {
+      if (isPlaying(video)) {
+        return
+      }
+
+      video.play()
+    }
+  }
+
+  const handleMouseOut = () => {
+    const video = videoThumbRef.current
+
+    if (video) {
+      if (!isPlaying(video)) {
+        return
+      }
+
+      video.currentTime = 0
+      video.pause()
+    }
+  }
+
   return (
     <div
       key={template.id}
@@ -49,6 +76,10 @@ function MarketingTemplateCard(
       className={classNames(classes.root, {
         [classes.rootHasSuffix]: isInstance
       })}
+      onMouseOut={handleMouseOut}
+      onMouseEnter={handleMouseEnter}
+      onBlur={handleMouseOut}
+      onFocus={handleMouseEnter}
     >
       <div
         className={classNames(classes.card, {
@@ -61,7 +92,12 @@ function MarketingTemplateCard(
         data-card="true"
         data-test="marketing-template"
       >
-        <Thumbnail useStaticImage template={template} user={user} />
+        <Thumbnail
+          videoRef={videoThumbRef}
+          useStaticImage
+          template={template}
+          user={user}
+        />
         <div className={classes.actions}>{props.actions}</div>
       </div>
       {isInstance && (
