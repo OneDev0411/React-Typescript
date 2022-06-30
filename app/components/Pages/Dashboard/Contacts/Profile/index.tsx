@@ -277,6 +277,8 @@ const ContactProfile = props => {
       return
     }
 
+    console.log('[ + ] Fetching Timeline')
+
     return setTimeout(timelineRef.current.refresh, 500)
   }, [timelineRef])
 
@@ -374,63 +376,54 @@ const ContactProfile = props => {
       fetchTimeline()
     }
   }
-  const onTouchChange = useCallback(({ contacts }) => {
-    if (Array.isArray(contacts) && contacts.includes(currentContactId)) {
-      updateContact()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const onTouchChange = useCallback(
+    ({ contacts }) => {
+      if (Array.isArray(contacts) && contacts.includes(currentContactId)) {
+        console.log('[ Socket ] Touch Changed')
+        updateContact()
+      }
+    },
+    [currentContactId, updateContact]
+  )
 
   useEffectOnce(() => {
-    const socket: SocketIOClient.Socket = (window as any).socket
-
     detectScreenSize()
     initializeContact()
-
-    window.addEventListener('resize', detectScreenSize)
-
-    if (!socket) {
-      return
-    }
-
-    socket.on('contact:touch', payload => onTouchChange(payload))
-    socket.on('crm_task:create', () => fetchTimeline())
-    socket.on('email_campaign:create', () => fetchTimeline())
-    socket.on('email_campaign:send', () => fetchTimeline())
-    socket.on('email_thread:update', handleEmailThreadChangeEvent)
-    socket.on('email_thread:delete', handleEmailThreadChangeEvent)
   })
 
   useEffect(() => {
+    const socket: SocketIOClient.Socket = (window as any).socket
+
     if (props.params.id !== currentContactId) {
       setCurrentContactId(props.params.id)
       initializeContact(true)
     }
 
+    window.addEventListener('resize', detectScreenSize)
+    socket?.on('contact:touch', onTouchChange)
+    socket?.on('crm_task:create', fetchTimeline)
+    socket?.on('email_campaign:create', fetchTimeline)
+    socket?.on('email_campaign:send', fetchTimeline)
+    socket?.on('email_thread:update', handleEmailThreadChangeEvent)
+    socket?.on('email_thread:delete', handleEmailThreadChangeEvent)
+
     return () => {
-      const socket: SocketIOClient.Socket = (window as any).socket
-
-      if (!socket) {
-        return
-      }
-
       window.removeEventListener('resize', detectScreenSize)
-      socket.off('contact:touch', onTouchChange)
-      socket.off('crm_task:create', fetchTimeline)
-      socket.off('email_campaign:create', fetchTimeline)
-      socket.off('email_campaign:send', fetchTimeline)
-      socket.off('email_thread:update', handleEmailThreadChangeEvent)
-      socket.off('email_thread:delete', handleEmailThreadChangeEvent)
+      socket?.off('contact:touch', onTouchChange)
+      socket?.off('crm_task:create', fetchTimeline)
+      socket?.off('email_campaign:create', fetchTimeline)
+      socket?.off('email_campaign:send', fetchTimeline)
+      socket?.off('email_thread:update', handleEmailThreadChangeEvent)
+      socket?.off('email_thread:delete', handleEmailThreadChangeEvent)
     }
   }, [
-    props.params,
-    onTouchChange,
+    props.params.id,
     currentContactId,
     detectScreenSize,
     fetchTimeline,
     handleEmailThreadChangeEvent,
     initializeContact,
-    updateContact
+    onTouchChange
   ])
 
   if (isLoading) {
@@ -514,12 +507,14 @@ const ContactProfile = props => {
               </div>
 
               <div className={classes.timelineContainer}>
-                <Timeline
-                  activeFilter={activeFilter}
-                  ref={timelineRef}
-                  contact={contact}
-                  onChangeNote={setNewContact}
-                />
+                {contact && (
+                  <Timeline
+                    activeFilter={activeFilter}
+                    ref={timelineRef}
+                    contact={contact}
+                    onChangeNote={setNewContact}
+                  />
+                )}
               </div>
             </div>
           </div>
