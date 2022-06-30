@@ -1,12 +1,6 @@
 import React from 'react'
 
-import { LinearProgress } from '@material-ui/core'
-import { mdiPauseCircleOutline, mdiPlayCircleOutline } from '@mdi/js'
-
-import IconButton from 'components/Button/IconButton'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { Container, Divider, FrameButton } from './styled'
+import { VideoControls } from './VideoControls'
 
 export class VideoToolbar extends React.Component {
   constructor(props) {
@@ -14,7 +8,6 @@ export class VideoToolbar extends React.Component {
 
     this.state = {
       activeFrame: 0,
-      progress: 0,
       isLoaded: false,
       isPlaying: false
     }
@@ -49,17 +42,22 @@ export class VideoToolbar extends React.Component {
 
     this.Timeline.update = t => {
       this.setState({
-        isPlaying: !t.paused,
-        progress: t.progress
+        isPlaying: !t.paused
       })
 
       const currentFrame = this.state.activeFrame
       const current = this.KeyFrames[currentFrame]
-      const next = this.KeyFrames[currentFrame + 1]
 
-      if (next && t.currentTime > current.at) {
+      if (current && t.currentTime > current.at) {
         this.setState({
           activeFrame: currentFrame + 1
+        })
+      }
+
+      if (t.currentTime === t.duration) {
+        this.Timeline.pause()
+        this.setState({
+          isPlaying: false
         })
       }
     }
@@ -104,38 +102,17 @@ export class VideoToolbar extends React.Component {
     }
 
     return (
-      <Container ref={this.props.onRef}>
-        {this.state.isPlaying && (
-          <IconButton iconSize="large" isFit onClick={this.handlePause}>
-            <SvgIcon path={mdiPauseCircleOutline} />
-          </IconButton>
-        )}
-
-        {!this.state.isPlaying && (
-          <IconButton iconSize="large" isFit onClick={this.handlePlay}>
-            <SvgIcon path={mdiPlayCircleOutline} />
-          </IconButton>
-        )}
-
-        <Divider />
-
-        <div style={{ width: '50%' }}>
-          <LinearProgress variant="determinate" value={this.state.progress} />
-        </div>
-
-        <Divider />
-
-        {this.KeyFrames.map((frame, index) => (
-          <FrameButton
-            appearance="outline"
-            className={this.state.activeFrame === index ? 'is-active' : ''}
-            key={index}
-            onClick={() => this.seekTo(index)}
-          >
-            {index + 1}
-          </FrameButton>
-        ))}
-      </Container>
+      <VideoControls
+        ref={this.props.onRef}
+        activeFrame={this.state.activeFrame}
+        isPlaying={this.state.isPlaying}
+        currentTime={this.Timeline.currentTime}
+        duration={this.Timeline.duration}
+        keyframes={this.KeyFrames}
+        onPause={this.handlePause}
+        onPlay={this.handlePlay}
+        onSeek={this.seekTo}
+      />
     )
   }
 }
