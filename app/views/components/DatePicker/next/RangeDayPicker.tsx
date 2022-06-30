@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   DateRange,
@@ -26,6 +26,10 @@ export function RangeDayPicker({
     setRange(range)
     onSelect(range)
   }
+
+  useEffect(() => {
+    setRange(defaultValue)
+  }, [defaultValue])
 
   return (
     <Container>

@@ -6,6 +6,7 @@ import type { TasksListFilters } from '../context'
 import { useTasksListContext } from '../context/use-tasks-list-context'
 
 import { AssigneeFilter } from './AssigneeFilter'
+import { DueDateFilter } from './DueDateFilter'
 import { StatusFilter } from './StatusFilter'
 import { TypeFilter } from './TypeFilter'
 
@@ -37,6 +38,13 @@ export function TasksFilters() {
 
             <Box mr={1}>
               <TypeFilter
+                currentFilters={currentFilters}
+                updateFilters={updateFilters}
+              />
+            </Box>
+
+            <Box mr={1}>
+              <DueDateFilter
                 currentFilters={currentFilters}
                 updateFilters={updateFilters}
               />

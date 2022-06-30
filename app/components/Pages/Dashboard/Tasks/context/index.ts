@@ -5,6 +5,8 @@ export interface TasksListFilters {
   assignees?: IUser[]
   type?: CRMTaskTypes
   status?: string
+  startDueDate?: Date
+  endDueDate?: Date
 }
 export interface Context {
   sortBy: string

@@ -32,7 +32,7 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'Tasks-AssigneeFilter'
+    name: 'Tasks-Filters-Assignee'
   }
 )
 
