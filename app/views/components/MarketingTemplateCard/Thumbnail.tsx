@@ -12,6 +12,9 @@ import { getTemplateImage } from 'utils/marketing-center/helpers'
 
 const useStyles = makeStyles(
   () => ({
+    videoThumbWrapper: {
+      display: 'flex'
+    },
     thumb: {
       width: '100%'
     },
@@ -92,7 +95,7 @@ export function Thumbnail({
     const { thumbnail } = getTemplateImage(template)
 
     return template.template.video ? (
-      <div ref={ref}>
+      <div className={classes.videoThumbWrapper} ref={ref}>
         {shouldRender && (
           <video
             autoPlay

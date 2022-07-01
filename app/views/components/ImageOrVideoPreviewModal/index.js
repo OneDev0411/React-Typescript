@@ -17,6 +17,7 @@ import {
 
 export class ImageOrVideoPreviewModal extends Component {
   static propTypes = {
+    isVideo: PropTypes.bool.isRequired,
     imgSrc: PropTypes.string.isRequired,
     imgSrcTiny: PropTypes.string,
     isOpen: PropTypes.bool.isRequired,
@@ -88,20 +89,22 @@ export class ImageOrVideoPreviewModal extends Component {
               </Tooltip>
             </IconContainer>
           )}
-          {this.props.imgSrcTiny ? (
+          {this.props.isVideo ? (
+            <video
+              controls
+              loop
+              muted
+              autoPlay
+              src={this.props.imgSrcTiny || this.props.imgSrc}
+              style={{ maxWidth: '70%', maxHeight: '80vh' }}
+            />
+          ) : this.props.imgSrcTiny ? (
             <ProgressiveImage
               src={this.props.imgSrc}
               placeholder={this.props.imgSrcTiny}
             >
               {src => <Image alt={title} src={src} />}
             </ProgressiveImage>
-          ) : this.props.imgSrc.endsWith('.mp4') ? (
-            <video
-              controls
-              loop
-              src={this.props.imgSrc}
-              style={{ maxWidth: '70%' }}
-            />
           ) : (
             <Image alt={title} src={this.props.imgSrc} />
           )}

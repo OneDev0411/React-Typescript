@@ -32,11 +32,7 @@ function MarketingTemplateCard(
   const isInstance = template.type === 'template_instance'
 
   const handlePreview = e => {
-    if (
-      !template.template.video &&
-      props.handlePreview &&
-      e.target.dataset.card === 'true'
-    ) {
+    if (props.handlePreview && e.target.dataset.card === 'true') {
       props.handlePreview()
     }
   }
@@ -51,8 +47,7 @@ function MarketingTemplateCard(
     >
       <div
         className={classNames(classes.card, {
-          [classes.cardHasPreview]:
-            !template.template.video && !!props.handlePreview,
+          [classes.cardHasPreview]: !!props.handlePreview,
           [classes.cardLoading]: props.isLoading,
           [classes.cardWebsite]: props.template.template.medium === 'Website'
         })}
