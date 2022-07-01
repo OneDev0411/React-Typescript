@@ -119,8 +119,6 @@ function PreviewModal(props: Props) {
     )
   }
 
-  console.log({ ...modalProps })
-
   return <ImageOrVideoPreviewModal {...modalProps} />
 }
 
