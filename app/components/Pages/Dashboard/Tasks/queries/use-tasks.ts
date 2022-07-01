@@ -19,11 +19,11 @@ export function useTasks() {
         q: filter.q,
         task_type: filter.type,
         status: filter.status,
-        due_gte: filter.startDueDate
-          ? filter.startDueDate.getTime() / 1000
+        due_gte: filter.dueDate?.from
+          ? filter.dueDate.from.getTime() / 1000
           : undefined,
-        due_lte: filter.endDueDate
-          ? filter.endDueDate.getTime() / 1000
+        due_lte: filter.dueDate?.to
+          ? filter.dueDate?.to.getTime() / 1000
           : undefined,
         'assignees[]': filter.assignees?.map(user => user.id),
         order: sortBy,

@@ -1,14 +1,11 @@
-import {
-  Box,
-  makeStyles,
-  Button as DayButton,
-  Theme,
-  Typography
-} from '@material-ui/core'
+import { useMemo, useState } from 'react'
+
+import { Box, makeStyles, Theme, Typography, MenuItem } from '@material-ui/core'
 import { mdiCalendarOutline } from '@mdi/js'
 import moment from 'moment'
 import { DateRange } from 'react-day-picker-next'
 
+import { getDateRanges } from '@app/utils/get-date-ranges'
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import { RangeDayPicker } from '@app/views/components/DatePicker/next/RangeDayPicker'
 
@@ -37,16 +34,40 @@ interface Props {
 }
 
 export function DueDateFilter({
-  currentFilters: { startDueDate, endDueDate },
+  currentFilters: { dueDate },
   updateFilters
 }: Props) {
   const classes = useStyles()
-  const hasDueDate = startDueDate || endDueDate
+  const [showCustomRange, setShowCustomRange] = useState(false)
 
-  const handleSelect = (range: DateRange) => {
+  const hasDueDate = dueDate?.from || dueDate?.to
+
+  const dates = useMemo(getDateRanges, [])
+  const currentDue = useMemo(
+    () =>
+      Object.values(dates).find(
+        date => dueDate?.from === date.from && dueDate?.to === date.to
+      ),
+    [dates, dueDate?.from, dueDate?.to]
+  )
+
+  const getTitle = () => {
+    if (showCustomRange) {
+      return `Due from ${moment(dueDate?.from).format(
+        'dddd, MMMM DD'
+      )} to ${moment(dueDate?.to).format('dddd, MMMM DD')}`
+    }
+
+    if (currentDue) {
+      return `Due ${currentDue.label}`
+    }
+
+    return 'Due Date'
+  }
+
+  const handleSelectDate = (range: DateRange) => {
     updateFilters({
-      startDueDate: range.from,
-      endDueDate: range.to
+      dueDate: range
     })
   }
 
@@ -54,7 +75,7 @@ export function DueDateFilter({
     <BaseDropdown
       renderDropdownButton={({ onClick, ref }) => (
         <Button
-          title="Due Date"
+          title={getTitle()}
           startIconPath={mdiCalendarOutline}
           isActive={!!hasDueDate}
           innerRef={ref}
@@ -67,51 +88,50 @@ export function DueDateFilter({
             <Typography variant="subtitle1">Due Date</Typography>
           </Box>
 
-          <DayButton
-            variant="outlined"
-            onClick={() =>
-              updateFilters({
-                startDueDate: moment().clone().startOf('isoWeek').toDate(),
-                endDueDate: moment().clone().endOf('isoWeek').toDate()
-              })
-            }
-          >
-            This week
-          </DayButton>
-          <DayButton variant="outlined">Last week</DayButton>
-          <div>
-            <DayButton
-              variant="outlined"
-              onClick={() =>
-                updateFilters({
-                  startDueDate: moment().clone().startOf('month').toDate(),
-                  endDueDate: moment().clone().endOf('month').toDate()
-                })
-              }
-            >
-              This Month
-            </DayButton>
-            <DayButton variant="outlined">Next Month</DayButton>
-          </div>
+          {showCustomRange ? (
+            <RangeDayPicker onSelect={handleSelectDate} />
+          ) : (
+            <>
+              {Object.entries(dates).map(([name, date]) => (
+                <MenuItem
+                  key={name}
+                  button
+                  selected={
+                    dueDate?.from === date.from && dueDate?.to === date.to
+                  }
+                  onClick={() => {
+                    close()
 
-          <div>
-            <RangeDayPicker
-              defaultValue={{
-                from: startDueDate,
-                to: endDueDate
-              }}
-              onSelect={handleSelect}
-            />
-          </div>
+                    handleSelectDate({
+                      from: date.from,
+                      to: date.to
+                    })
+                  }}
+                >
+                  {date.label}
+                </MenuItem>
+              ))}
+
+              <MenuItem
+                button
+                selected={showCustomRange}
+                onClick={() => setShowCustomRange(true)}
+              >
+                Custom Range
+              </MenuItem>
+            </>
+          )}
+
           {hasDueDate && (
             <ResetButton
               variant="text"
-              onClick={() =>
+              onClick={() => {
                 updateFilters({
-                  startDueDate: undefined,
-                  endDueDate: undefined
+                  dueDate: undefined
                 })
-              }
+
+                setShowCustomRange(false)
+              }}
             />
           )}
         </div>
