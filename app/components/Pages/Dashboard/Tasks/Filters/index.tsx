@@ -14,7 +14,7 @@ export function TasksFilters() {
   const { filter, setFilter } = useTasksListContext()
 
   return (
-    <Box px={4} my={2}>
+    <Box px={4} mb={2}>
       <Filters<TasksListFilters>
         systemDefaultFilters={filter}
         userFilters={filter}
