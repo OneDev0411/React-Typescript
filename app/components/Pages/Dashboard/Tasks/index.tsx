@@ -21,8 +21,7 @@ export default function Tasks() {
         sortBy,
         filter,
         setSortBy,
-        setFilter: (data: Partial<TasksListFilters>) =>
-          setFilter(filter => ({ ...filter, ...data }))
+        setFilter
       }}
     >
       <PageLayout gutter={0}>

@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 import { Filters } from '@app/views/components/Filters'
 
@@ -16,11 +16,11 @@ export function TasksFilters() {
   return (
     <Box px={4} mb={2}>
       <Filters<TasksListFilters>
-        systemDefaultFilters={filter}
+        systemDefaultFilters={{}}
         userFilters={filter}
         onChange={setFilter}
       >
-        {(currentFilters, updateFilters) => (
+        {(currentFilters, updateFilters, resetFilters) => (
           <Box display="flex">
             <Box mr={1}>
               <AssigneeFilter
@@ -49,6 +49,12 @@ export function TasksFilters() {
                 updateFilters={updateFilters}
               />
             </Box>
+
+            {Object.keys(currentFilters).length > 0 && (
+              <Box mr={1}>
+                <Button onClick={resetFilters}>Reset Filters</Button>
+              </Box>
+            )}
           </Box>
         )}
       </Filters>
