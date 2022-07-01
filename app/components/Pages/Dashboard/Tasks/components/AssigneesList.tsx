@@ -9,8 +9,11 @@ import {
   MenuItem,
   Theme
 } from '@material-ui/core'
+import { sortBy } from 'lodash'
+import { useSelector } from 'react-redux'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team'
+import { selectUserUnsafe } from '@app/selectors/user'
 
 import { getAvatarTitle } from '../../Deals/utils/get-avatar-title'
 import { useTaskMembers } from '../queries/use-task-members'
@@ -36,6 +39,7 @@ interface Props {
 export function AssigneesList({ defaultAssignees, onChange }: Props) {
   const classes = useStyles()
   const activeTeam = useUnsafeActiveTeam()
+  const user = useSelector(selectUserUnsafe)
   const { data: members, isLoading } = useTaskMembers(activeTeam?.brand.id)
   const [assignees, setAssignees] = useState(defaultAssignees ?? [])
 
@@ -63,32 +67,38 @@ export function AssigneesList({ defaultAssignees, onChange }: Props) {
     )
   }
 
+  if (!members?.length) {
+    return null
+  }
+
   return (
     <>
-      {members?.map(member => (
-        <MenuItem key={member.id} button dense>
-          <Box display="flex" alignItems="center">
-            <Checkbox
-              size="small"
-              color="primary"
-              checked={assignees.some(assignee => assignee.id === member.id)}
-              onChange={(_: ChangeEvent<HTMLInputElement>, checked: boolean) =>
-                handleChange(member, checked)
-              }
-            />
-
-            <Box mr={1}>
-              <Avatar
-                className={classes.avatar}
-                src={member.profile_image_url ?? ''}
-              >
-                {getAvatarTitle(member.display_name)}
-              </Avatar>
+      {sortBy(members, member => (member.id === user?.id ? 0 : 1)).map(
+        member => (
+          <MenuItem key={member.id} button dense>
+            <Box display="flex" alignItems="center">
+              <Checkbox
+                size="small"
+                color="primary"
+                checked={assignees.some(assignee => assignee.id === member.id)}
+                onChange={(
+                  _: ChangeEvent<HTMLInputElement>,
+                  checked: boolean
+                ) => handleChange(member, checked)}
+              />
+              <Box mr={1}>
+                <Avatar
+                  className={classes.avatar}
+                  src={member.profile_image_url ?? ''}
+                >
+                  {getAvatarTitle(member.display_name)}
+                </Avatar>
+              </Box>
+              {member.display_name} {member.id === user?.id && <>(Myself)</>}
             </Box>
-            {member.display_name}
-          </Box>
-        </MenuItem>
-      ))}
+          </MenuItem>
+        )
+      )}
     </>
   )
 }
