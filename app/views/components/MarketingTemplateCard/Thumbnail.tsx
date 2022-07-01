@@ -1,4 +1,4 @@
-import { useState, useEffect, ComponentProps, Ref } from 'react'
+import { useState, useEffect, ComponentProps } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import { useInView } from 'react-intersection-observer'
@@ -29,7 +29,6 @@ interface Props {
   template: IMarketingTemplateInstance | IBrandMarketingTemplate
   listing?: IListing
   useStaticImage?: boolean
-  videoRef?: Ref<HTMLVideoElement>
   onClick?: ComponentProps<typeof TemplateThumbnail>['onClick']
 }
 
@@ -38,8 +37,7 @@ export function Thumbnail({
   template,
   listing: receivedListing,
   useStaticImage,
-  onClick,
-  videoRef
+  onClick
 }: Props) {
   const activeBrand = useUnsafeActiveBrand()
   const { ref, inView } = useInView({ delay: 100 })
@@ -97,7 +95,7 @@ export function Thumbnail({
       <div ref={ref}>
         {shouldRender && (
           <video
-            ref={videoRef}
+            autoPlay
             src={thumbnail}
             muted
             loop
