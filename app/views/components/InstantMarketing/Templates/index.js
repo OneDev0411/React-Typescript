@@ -171,8 +171,6 @@ class Templates extends React.Component {
               brandTemplate.template.template_type
           )
           .map(template => {
-            console.log({ template })
-
             return (
               <TemplateItem
                 key={template.id}
