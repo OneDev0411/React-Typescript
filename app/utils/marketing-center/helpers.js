@@ -12,9 +12,15 @@ export function getTemplateImage(
     }
   }
 
-  if (template.template.video && template.thumbnail.url) {
+  if (template.template.video && template.thumbnail?.url) {
     return {
       thumbnail: template.thumbnail.url
+    }
+  }
+
+  if (template.template.video && template.file?.url) {
+    return {
+      thumbnail: template.file.url
     }
   }
 
