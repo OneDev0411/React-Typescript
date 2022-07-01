@@ -171,18 +171,22 @@ class Templates extends React.Component {
               brandTemplate.template.template_type
           )
           .map(template => {
+            console.log({ template })
+
             return (
               <TemplateItem
                 key={template.id}
                 onClick={() => this.handleSelectTemplate(template)}
                 isSelected={this.state.selectedTemplate === template.id}
               >
-                {template.video ? (
+                {template.template.video && template.thumbnail?.url ? (
                   <Video
                     autoPlay="true"
+                    muted
                     loop="true"
                     type="video/mp4"
-                    src={`${template.url}/thumbnail.mp4`}
+                    width="97%"
+                    src={template.thumbnail.url}
                   />
                 ) : (
                   <Image
