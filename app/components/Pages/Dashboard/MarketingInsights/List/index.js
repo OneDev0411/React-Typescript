@@ -78,7 +78,7 @@ export default function List(props) {
         header: 'Title',
         id: 'title-date',
         primary: true,
-        width: '32%',
+        width: '300px',
         verticalAlign: 'center',
         accessor: row => row.due_at,
         render: ({ row }) => <TitleColumn data={row} reloadList={reloadList} />
