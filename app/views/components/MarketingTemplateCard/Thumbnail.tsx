@@ -12,7 +12,10 @@ import { getTemplateImage } from 'utils/marketing-center/helpers'
 
 const useStyles = makeStyles(
   () => ({
-    image: {
+    videoThumbWrapper: {
+      display: 'flex'
+    },
+    thumb: {
       width: '100%'
     },
     templateThumbnailWrapper: {
@@ -29,7 +32,6 @@ interface Props {
   template: IMarketingTemplateInstance | IBrandMarketingTemplate
   listing?: IListing
   useStaticImage?: boolean
-
   onClick?: ComponentProps<typeof TemplateThumbnail>['onClick']
 }
 
@@ -93,8 +95,16 @@ export function Thumbnail({
     const { thumbnail } = getTemplateImage(template)
 
     return template.template.video ? (
-      <div ref={ref}>
-        {shouldRender && <video src={thumbnail} muted autoPlay />}
+      <div className={classes.videoThumbWrapper} ref={ref}>
+        {shouldRender && (
+          <video
+            autoPlay
+            src={thumbnail}
+            muted
+            loop
+            className={classes.thumb}
+          />
+        )}
       </div>
     ) : (
       <div ref={ref}>
@@ -102,7 +112,7 @@ export function Thumbnail({
           <img
             alt={template.template.name}
             src={thumbnail}
-            className={classes.image}
+            className={classes.thumb}
           />
         )}
       </div>
