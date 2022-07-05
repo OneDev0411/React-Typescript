@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 
 import { Box, Typography, Tooltip } from '@material-ui/core'
 
@@ -18,14 +18,16 @@ function TitleColumn({ data, reloadList }: Props) {
   const isFailed: boolean = isEmailFailed(data)
   const isScheduled: boolean = isEmailScheduled(data)
   const isInProgress: boolean = isEmailInProgress(data)
-  let titleRenderer: ReactNode
+  let titleRenderer: ReactElement
 
   const title = (
-    <div className="info-title">
-      <Box pr={2} maxWidth="100%">
-        <Typography noWrap>{data.subject || '(untitled)'}</Typography>
-      </Box>
-    </div>
+    <Tooltip title={data.subject || '(untitled)'}>
+      <div className="info-title">
+        <Box pr={2} maxWidth="100%">
+          <Typography noWrap>{data.subject || '(untitled)'}</Typography>
+        </Box>
+      </div>
+    </Tooltip>
   )
 
   if (isScheduled || isInProgress) {
@@ -45,7 +47,12 @@ function TitleColumn({ data, reloadList }: Props) {
   }
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="flex-start">
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="flex-start"
+      maxWidth="100%"
+    >
       {titleRenderer}
       <Box>
         <Date data={data} />

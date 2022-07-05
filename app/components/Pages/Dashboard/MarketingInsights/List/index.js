@@ -70,7 +70,7 @@ export default function List(props) {
         header: 'Thumbnail',
         id: 'thumbnail',
         class: 'opaque',
-        width: 70,
+        width: '70px',
         verticalAlign: 'center',
         render: ({ row }) => <ThumbnailColumn data={row} />
       },

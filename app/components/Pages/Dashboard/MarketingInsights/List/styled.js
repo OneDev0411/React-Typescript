@@ -38,6 +38,7 @@ export const StyledLink = styled(ALink)`
   font-weight: 500;
   margin-top: -4px;
   cursor: pointer;
+  max-width: 100%;
   &:hover {
     text-decoration-color: ${props => props.theme.palette.secondary.main};
   }
