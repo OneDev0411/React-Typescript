@@ -46,6 +46,7 @@ const useStyles = makeStyles(theme => ({
 
 interface Props extends Pick<ButtonProps, 'disabled'> {
   medium: string
+  video: boolean
   mjml: boolean
   originalTemplateId?: UUID
   getTemplateMarkup: () => string
@@ -53,6 +54,7 @@ interface Props extends Pick<ButtonProps, 'disabled'> {
 
 export function AddToMarketingCenterButton({
   medium,
+  video,
   mjml,
   originalTemplateId,
   getTemplateMarkup,
@@ -100,6 +102,7 @@ export function AddToMarketingCenterButton({
         medium,
         html,
         brands: [team.id],
+        video,
         mjml,
         originalTemplateId
       }
