@@ -66,7 +66,7 @@ export const useStyles = makeStyles(
       backgroundColor: alpha('#6A7589', 0.2)
     },
     zeroState: {
-      margin: 'auto',
+      marginTop: theme.spacing(16),
       textAlign: 'center'
     }
   }),

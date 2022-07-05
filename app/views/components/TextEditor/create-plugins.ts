@@ -3,6 +3,7 @@ import { composeDecorators } from 'draft-js-plugins-editor'
 import { createCollapsibleDecorator } from './block-decorators/create-collapsible-decorator'
 import createIframePlugin from './plugins/draft-js-iframe-plugin'
 import createPasteHtmlPlugin from './plugins/draft-js-paste-html'
+import createTablePlugin from './plugins/draft-js-table-plugin'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 
 export function createPlugins() {
@@ -12,6 +13,8 @@ export function createPlugins() {
     )
   })
 
+  const tablePlugin = createTablePlugin()
+
   const pasteHtmlPlugin = createPasteHtmlPlugin({
     stateFromHtmlOptions: editorState =>
       getHtmlConversionOptions(editorState).stateFromHtmlOptions
@@ -19,6 +22,7 @@ export function createPlugins() {
 
   return {
     iframePlugin,
+    tablePlugin,
     pasteHtmlPlugin
   }
 }

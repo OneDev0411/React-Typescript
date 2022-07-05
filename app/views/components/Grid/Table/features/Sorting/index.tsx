@@ -75,7 +75,6 @@ export function Sorting<Row>({ columns, options }: Props<Row>) {
           vertical: 'top',
           horizontal: 'left'
         }}
-        style={{ zIndex: 10 }}
       >
         {sortableColumns.map((item, index) => (
           <MenuItem

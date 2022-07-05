@@ -1,11 +1,4 @@
-import {
-  Box,
-  Checkbox,
-  Tooltip,
-  createStyles,
-  makeStyles
-} from '@material-ui/core'
-import cn from 'classnames'
+import { Box } from '@material-ui/core'
 import { connect } from 'react-redux'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
@@ -13,8 +6,6 @@ import Filters from 'components/Grid/Filters'
 import { OperatorAndOperandFilter } from 'components/Grid/Filters/FilterTypes/OparatorAndOperand'
 import { SimpleList } from 'components/Grid/Filters/FilterTypes/SimpleList'
 import SaveSegment from 'components/Grid/SavedSegments/Create'
-import { SELECTION__TOGGLE_ENTIRE_ROWS } from 'components/Grid/Table/context/constants'
-import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { selectTags } from 'reducers/contacts/tags'
 
@@ -27,53 +18,8 @@ import getFlows from './helpers/get-flows'
 import getOpenHouseEvents from './helpers/get-open-house-events'
 import getUniqTags from './helpers/get-uniq-tags'
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    infoContainer: {
-      display: 'inline-block',
-      marginLeft: theme.spacing(2)
-    },
-    toggleAll: {
-      padding: 0,
-      marginRight: theme.spacing(1)
-    },
-    totalRow: {
-      display: 'inline-flex',
-      marginRight: theme.spacing(2),
-      fontSize: theme.typography.overline.fontSize,
-      color: theme.palette.grey['500']
-    },
-    totalRowDisable: {
-      color: theme.palette.text.disabled
-    }
-  })
-)
-
 function ContactFilters(props) {
-  const [state, dispatch] = useGridContext()
-  const classes = useStyles()
   const activeBrandId = useActiveBrandId()
-  const {
-    isAllRowsSelected,
-    isEntireRowsSelected,
-    selectedRowIds,
-    excludedRows
-  } = state.selection
-  const isAllSelected =
-    isAllRowsSelected ||
-    selectedRowIds.length === props.contactCount ||
-    (isEntireRowsSelected && excludedRows.length === 0)
-
-  const isSomeRowsSelected =
-    (isAllRowsSelected === false &&
-      selectedRowIds.length > 0 &&
-      selectedRowIds.length < props.contactCount) ||
-    (isEntireRowsSelected && excludedRows.length > 0)
-
-  const tooltipTitle =
-    isAllSelected || isEntireRowsSelected
-      ? 'Deselect All Rows'
-      : 'Select All Rows'
 
   const getConfig = () => {
     const { attributeDefs, tags } = props
@@ -121,54 +67,9 @@ function ContactFilters(props) {
       }
     ]
   }
-  const getSummeryInfo = () => {
-    let selectedCount
-
-    if (isEntireRowsSelected) {
-      selectedCount = props.contactCount - excludedRows.length
-    } else if (selectedRowIds.length > 0) {
-      selectedCount = selectedRowIds.length
-    }
-
-    return selectedCount
-      ? `${selectedCount} of ${props.contactCount} selected`
-      : `${props.contactCount} CONTACTS`
-  }
-  const toggleAll = () =>
-    dispatch({
-      type: SELECTION__TOGGLE_ENTIRE_ROWS
-    })
-
-  const defaultSelectAllValue =
-    Number(props.contactCount) === 0 ? false : isAllSelected
-
-  const isSelectAllDisable = Number(props.contactCount) === 0
 
   return (
     <Box display="flex" alignItems="center">
-      {props.viewMode === 'table' && (
-        <div className={classes.infoContainer}>
-          <Tooltip title={tooltipTitle}>
-            <Checkbox
-              disableRipple
-              className={classes.toggleAll}
-              disabled={isSelectAllDisable}
-              checked={defaultSelectAllValue}
-              indeterminate={isSomeRowsSelected}
-              onChange={toggleAll}
-              data-tour-id="select-deselect-checkbox"
-            />
-          </Tooltip>
-          <span
-            className={cn(classes.totalRow, {
-              [classes.totalRowDisable]: isSelectAllDisable
-            })}
-          >
-            {getSummeryInfo()}
-          </span>
-        </div>
-      )}
-
       {props?.show && (
         <Filters
           name="contacts"

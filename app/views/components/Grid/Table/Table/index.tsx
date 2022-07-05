@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { makeStyles, Theme } from '@material-ui/core'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
@@ -62,6 +60,7 @@ export function GridTable<Row>({
   getTrProps,
   virtualize = true,
   rowSize,
+  headless = true,
   summary = null,
   loading = null,
   selection = null,
@@ -92,7 +91,7 @@ export function GridTable<Row>({
     plugins.push([useRowsSorting, sorting])
   }
 
-  const { columns: newColumns, rows: newRows } = useTable<Row>(
+  const { columns: nextColumns, rows: nextRows } = useTable<Row>(
     columns,
     rows,
     plugins
@@ -123,11 +122,13 @@ export function GridTable<Row>({
       <div className={gridClasses.tableContainer}>
         {rows && rows.length > 0 && (
           <Body<Row>
-            columns={newColumns}
-            rows={newRows}
+            columns={nextColumns}
+            rows={nextRows}
             classes={classes}
             virtualize={virtualize}
+            totalRows={totalRows}
             rowSize={rowSize}
+            headless={headless}
             getTdProps={getTdProps}
             getTrProps={getTrProps}
             infiniteScrolling={infiniteScrolling}
@@ -142,7 +143,7 @@ export function GridTable<Row>({
       </div>
 
       <Actions<Row>
-        rows={newRows}
+        rows={nextRows}
         totalRows={totalRows}
         showSelectAll={
           selection && selection.showSelectAll !== undefined

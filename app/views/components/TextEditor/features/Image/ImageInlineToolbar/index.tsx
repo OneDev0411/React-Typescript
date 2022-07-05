@@ -27,9 +27,10 @@ export function InlineImageToolbar(props: Props) {
       blockFilter={block => {
         const blockIsAtomic = block.getType() === 'atomic'
         const { value: firstEntry, done } = block.getData().entries().next()
-        const blockIsNotTheQuotedMessages = done || firstEntry[0] !== 'srcDoc'
+        const blockIsImage =
+          done || (firstEntry[0] !== 'srcDoc' && firstEntry[0] !== 'outerHTML')
 
-        return blockIsAtomic && blockIsNotTheQuotedMessages
+        return blockIsAtomic && blockIsImage
       }}
       placement="top"
     >

@@ -47,6 +47,7 @@ declare type IEmailCampaignRecipientAssociation =
   | 'list'
   | 'brand'
   | 'agent'
+  | ''
 
 type IEmailRecipientSendType = 'CC' | 'BCC' | 'To'
 
@@ -104,7 +105,7 @@ declare interface IEmailCampaignInputBase {
   template?: UUID
   notifications_enabled?: boolean
   individual: boolean
-
+  tags?: string[]
   /**
    * @deprecated, This is not used in practice and is added in initial
    * implementation by the API. It should be removed.
@@ -177,6 +178,7 @@ declare type IEmailCampaign<
   microsoft_credential: UUID | null
   google_credential: UUID | null
   headers: IEmailCampaignInput['headers']
+  recipients_count: Nullable<number>
 } & Association<
   'recipients',
   IEmailRecipient<RecipientAssociations>[],
@@ -189,7 +191,8 @@ declare type IEmailCampaign<
     IEmailCampaignEmail<EmailCampaignEmailAssociation>[] | null,
     Associations
   > &
-  Association<'attachments', IEmailCampaignAttachment[] | null, Associations>
+  Association<'attachments', IEmailCampaignAttachment[] | null, Associations> &
+  Association<'email', IEmail<EmailFields>, Associations>
 
 declare type IEmailCampaignEmail<
   Associations extends IEmailCampaignEmailAssociation = '',

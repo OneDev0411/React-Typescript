@@ -25,7 +25,6 @@ import { selectNotificationNewCount } from '@app/reducers/notifications'
 import { selectIntercom } from '@app/selectors/intercom'
 import { selectShowingsTotalNotificationCount } from '@app/selectors/showings'
 import { selectUserUnsafe } from '@app/selectors/user'
-import { toggleChatbar } from '@app/store_actions/chatroom'
 import { fetchUnreadEmailThreadsCount } from '@app/store_actions/inbox'
 import { activateIntercom } from '@app/store_actions/intercom'
 import { getBrandHelpCenterURL } from '@app/utils/brand'
@@ -64,7 +63,7 @@ const useStyles = makeStyles(
       position: 'fixed',
       top: 0,
       left: 0,
-      zIndex: 100,
+      zIndex: theme.zIndex.sideNavDrawer,
       display: 'flex',
       flexDirection: 'column',
       backgroundColor: theme.navbar.background.color
@@ -107,14 +106,6 @@ function SideNavMenu(props: WithRouterProps) {
 
   const [expandedMenu, setExpandedMenu] = useState<ExpandedMenu>(null)
 
-  const handleOpenChatbarDrawer = () => {
-    if (window.location.pathname.includes('/recents/')) {
-      return
-    }
-
-    dispatch(toggleChatbar())
-  }
-
   const handleOpenSupportDialogueBox = () => {
     if (isIntercomActive) {
       return
@@ -137,7 +128,7 @@ function SideNavMenu(props: WithRouterProps) {
       to: '/dashboard/overview'
     },
     {
-      access: user ? [] : ['CRM'],
+      access: ['CRM'],
       hasChildrenNotification: !!(
         inboxNotificationNumber || chatRoomsNotificationsNumber
       ),
@@ -167,13 +158,6 @@ function SideNavMenu(props: WithRouterProps) {
           label: 'Inbox',
           notificationCount: inboxNotificationNumber,
           to: '/dashboard/inbox'
-        },
-        {
-          id: 'chat',
-          label: 'Chat',
-          isHidden: !user,
-          notificationCount: chatRoomsNotificationsNumber,
-          action: handleOpenChatbarDrawer
         }
       ]
     },

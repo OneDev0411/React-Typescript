@@ -1,10 +1,10 @@
 import { Typography, Theme, Box } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/styles'
 
-interface Props {
+export interface Props {
   imageUrl: string
   title: string
-  subTitle: string
+  subTitle: React.ReactNode
   ctaNode?: React.ReactNode
   footerNode?: React.ReactNode
 }

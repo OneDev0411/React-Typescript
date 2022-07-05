@@ -44,6 +44,7 @@ import {
 import { viewAs, getTeamSetting } from 'utils/user-teams'
 
 import { Board } from '../Board'
+import { ManageRelationship } from '../components/ManageRelationship'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 
 import {
@@ -60,7 +61,6 @@ import { ViewMode } from './styled'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import Table from './Table'
 import ContactsTabs from './Tabs'
-import TouchReminder from './TouchReminder'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
 import { ContactsZeroState } from './ZeroState'
 
@@ -864,11 +864,12 @@ class ContactsList extends React.Component {
 
     return (
       <PageLayout
+        gutter={0}
         {...(isBoardMode && {
           display: 'flex',
           flexDirection: 'column',
           height: '100vh',
-          oferflow: 'hidden',
+          overflow: 'hidden',
           pb: 1
         })}
       >
@@ -876,6 +877,8 @@ class ContactsList extends React.Component {
           flex="0 1 auto"
           title={title}
           onSearch={this.handleSearch}
+          gutter={4}
+          noPadding={false}
           SearchInputProps={{
             defaultValue: this.state.searchInputValue || '',
             placeholder: 'Search Contacts'
@@ -884,15 +887,17 @@ class ContactsList extends React.Component {
           {!isZeroState && (
             <Box display="flex" ml={1}>
               {activeSegment && activeSegment.is_editable && (
-                <TouchReminder
+                <ManageRelationship
                   value={activeSegment.touch_freq}
                   onChange={this.handleListTouchReminderUpdate}
+                  label="Manage Relationships"
                 />
               )}
               {activeTag && activeTag.id && (
-                <TouchReminder
+                <ManageRelationship
                   value={activeTag.touch_freq}
                   onChange={this.handleTagTouchReminderUpdate}
+                  label="Manage Relationships"
                 />
               )}
               {showImportAction && (
@@ -906,11 +911,13 @@ class ContactsList extends React.Component {
           <ViewAs containerStyle={{ marginLeft: '0.5rem' }} />
         </PageLayout.HeaderWithSearch>
         <PageLayout.Main
+          mt={0}
           {...(isBoardMode && {
             display: 'flex',
             flexDirection: 'column',
             flex: '1 1 auto',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            px: 4
           })}
         >
           {this.state.syncStatus === 'pending' && (
@@ -945,10 +952,10 @@ class ContactsList extends React.Component {
           {isZeroState && <ContactsZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
-              {this.state.viewMode === 'table' &&
-                this.renderOtherContactsBadge()}
-
-              {this.renderTabs()}
+              <Box px={isTableMode ? 4 : 0}>
+                {isTableMode && this.renderOtherContactsBadge()}
+                {this.renderTabs()}
+              </Box>
 
               <Box
                 mt={2}

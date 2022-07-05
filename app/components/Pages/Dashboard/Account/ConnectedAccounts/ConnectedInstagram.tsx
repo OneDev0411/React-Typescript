@@ -3,9 +3,7 @@ import { useRef, useState } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { upperFirst } from 'lodash'
 
-import { ACL } from '@app/constants/acl'
 import useNotify from '@app/hooks/use-notify'
-import { useAcl } from '@app/views/components/Acl/use-acl'
 
 import ConnectFacebookPageButton, {
   FacebookAuthErrorCode
@@ -34,8 +32,6 @@ function ConnectedInstagram({ className }: Props) {
 
   const [isHelpDialogOpen, setIsHelpDialogOpen] = useState<boolean>(false)
 
-  const hasAccess = useAcl(ACL.SHARE_TO_INSTAGRAM)
-
   const handleAuthSuccess = () =>
     notify({
       status: 'success',
@@ -50,10 +46,6 @@ function ConnectedInstagram({ className }: Props) {
       status: 'error',
       message: errorMessage ? upperFirst(errorMessage) : 'Something went wrong.'
     })
-
-  if (!hasAccess) {
-    return null
-  }
 
   const openHelpDialog = () => setIsHelpDialogOpen(true)
 

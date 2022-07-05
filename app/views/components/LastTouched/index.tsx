@@ -4,6 +4,8 @@ import { Typography, Box, Theme } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/styles'
 import timeago from 'timeago.js'
 
+import { frequencyToString } from '@app/components/Pages/Dashboard/Contacts/components/ManageRelationship/helper'
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     wrapper: {
@@ -23,7 +25,7 @@ interface Props {
 
 export function LastTouched({ contact, children }: Props) {
   const classes = useStyles()
-  const { last_touch: lastTouch, next_touch: nextTouch } = contact
+  const { last_touch: lastTouch, touch_freq: touchFreq } = contact
 
   if (!lastTouch) {
     return (
@@ -41,12 +43,12 @@ export function LastTouched({ contact, children }: Props) {
     <Box className={classes.wrapper} data-tour-id="last-touch">
       <span>
         Last Touch was <b>{timeago().format(lastTouch * 1000)}</b>
-        {!nextTouch && '.'}
+        {!touchFreq && '.'}
       </span>
-      {nextTouch && (
+      {touchFreq && (
         <span>
-          , you wanted to be in touch every{' '}
-          <b>{Math.round((nextTouch - lastTouch) / 86400)}</b> days.
+          , you wanted to be in touch{' '}
+          <b>{frequencyToString(touchFreq || null).toLocaleLowerCase()}</b>
         </span>
       )}
       {children}

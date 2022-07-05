@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { mdiBullhornOutline } from '@mdi/js'
 
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
+import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
 import { convertToTemplate } from 'utils/marketing-center/helpers'
 
+import { AGENT_NETWORK_EMAIL_CAMPAIGN_TAG } from '../../../constants'
 import { ListingWithProposedAgent } from '../../types'
 
 const MEDIUM: IMarketingTemplateMedium = 'Email'
@@ -81,6 +82,7 @@ export default function PromoteListing({ user, listing, agents }: Props) {
           listing={listing}
           selectedTemplate={selectedTemplate}
           selectedRows={agents}
+          tags={[AGENT_NETWORK_EMAIL_CAMPAIGN_TAG]}
           handleTrigger={handleCloseMarketingEditor}
         />
       )}

@@ -1,5 +1,10 @@
 import { RSS_SOURCES } from './constants'
-import { RSSArticleMetadata, RSSFeedItem, RSSSource } from './types'
+import {
+  RSSArticleMetadata,
+  RSSFeedItem,
+  RSSSearchErrorCode,
+  RSSSource
+} from './types'
 
 function getRSSFeedItemImage(
   rssFeedItem: RSSFeedItem,
@@ -53,4 +58,18 @@ export function sortRSSFeedItems(feedItems: RSSFeedItem[]): RSSFeedItem[] {
 
     return 0
   })
+}
+
+const validErrorCodes: RSSSearchErrorCode[] = [
+  'CloudflareProtected',
+  'MetadataNotFound'
+]
+export function isRSSSearchErrorCode(
+  errorCode: Optional<string>
+): errorCode is RSSSearchErrorCode {
+  if (!errorCode) {
+    return false
+  }
+
+  return validErrorCodes.includes(errorCode as RSSSearchErrorCode)
 }

@@ -37,6 +37,8 @@ interface Props<Row> {
   classes: GridClasses
   virtualize: boolean
   rowSize?: number
+  headless?: boolean
+  totalRows: number
   infiniteScrolling: InfiniteScrollingOptions | null
   getTrProps?: (data: TrProps<Row>) => object
   getTdProps?: (data: TdProps<Row>) => object
@@ -47,7 +49,9 @@ export function Body<Row>({
   rows,
   classes,
   virtualize,
+  headless = true,
   rowSize = 8,
+  totalRows,
   infiniteScrolling,
   getTdProps = () => ({}),
   getTrProps = () => ({})
@@ -63,7 +67,7 @@ export function Body<Row>({
 
   const columnsSize = useMemo(() => getColumnsSize<Row>(columns), [columns])
 
-  const [deboundedOnReachStart] = useDebouncedCallback(
+  const [debouncedOnReachStart] = useDebouncedCallback(
     infiniteScrolling ? infiniteScrolling.onReachStart : () => null,
     300
   )
@@ -76,6 +80,11 @@ export function Body<Row>({
     listRef.current && listRef.current.scrollTo(scrollTop)
   }, [scrollTop])
 
+  const getItemKey = (
+    index: number,
+    { rows }: ComponentProps<typeof Row>['data']
+  ) => rows[index]?.id ?? index
+
   const onItemsRendered = (data: ListOnItemsRenderedProps): void => {
     if (!scroll) {
       return
@@ -83,7 +92,7 @@ export function Body<Row>({
 
     if (isReachedStart(data, scroll.scrollDirection)) {
       console.log('[ Grid ] Reached Start')
-      deboundedOnReachStart()
+      debouncedOnReachStart()
     }
 
     if (isReachedEnd(data, scroll.scrollDirection, rows.length)) {
@@ -103,7 +112,9 @@ export function Body<Row>({
               height: theme.spacing(rowSize)
             }}
             data={{
-              rows,
+              rows: headless ? rows : [{}, ...rows],
+              totalRows,
+              headless,
               columns,
               state,
               classes,
@@ -123,18 +134,17 @@ export function Body<Row>({
         {({ width }) => (
           <FixedSizeList
             ref={listRef}
-            itemCount={rows.length}
+            itemCount={headless ? rows.length : rows.length + 1}
             itemSize={theme.spacing(rowSize)}
             width={width}
             height={windowHeight}
             overscanCount={8}
-            itemKey={(
-              index: number,
-              { rows }: ComponentProps<typeof Row>['data']
-            ) => rows[index].id || index}
+            itemKey={getItemKey}
             itemData={
               {
-                rows,
+                rows: headless ? rows : [{}, ...rows],
+                totalRows,
+                headless,
                 columns,
                 state,
                 classes,
@@ -144,7 +154,6 @@ export function Body<Row>({
               } as ComponentProps<typeof Row>['data']
             }
             style={{
-              // I've searched 1.5 days to find this
               height: '100% !important'
             }}
             {...(infiniteScrolling

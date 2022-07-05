@@ -2,8 +2,8 @@ import React, { memo } from 'react'
 
 import { mdiTrashCanOutline, mdiShoppingOutline } from '@mdi/js'
 
+import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 

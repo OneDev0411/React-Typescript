@@ -7,7 +7,7 @@ import Layout from '../../List/Layout'
 import SocialPostTable from './SocialPostTable'
 
 function SocialPostList() {
-  useTitle('Social Post List | Rechat')
+  useTitle('Instagram Post List | Rechat')
 
   const renderContent = props => <SocialPostTable {...props} />
 

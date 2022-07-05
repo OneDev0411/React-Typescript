@@ -1554,24 +1554,26 @@ class Builder extends React.Component {
               }}
             />
           )}
-          <SearchVideoDrawer
-            isOpen={!!this.state.videoToEdit}
-            model={this.state.videoToEdit}
-            onClose={() => {
-              this.blocks.video.selectHandler()
-              this.setState({ videoToEdit: null })
-            }}
-            onSelect={video => {
-              this.blocks.video.selectHandler(video)
-              this.setState({ videoToEdit: null })
-            }}
-            uploadThumbnail={async file => {
-              const templateId = this.selectedTemplate.id
-              const uploadedAsset = await uploadAsset(templateId, file)
+          {!!this.state.videoToEdit && (
+            <SearchVideoDrawer
+              model={this.state.videoToEdit}
+              shouldSkipVideoGif={this.props.shouldSkipVideoGif}
+              onClose={() => {
+                this.blocks.video.selectHandler()
+                this.setState({ videoToEdit: null })
+              }}
+              onSelect={video => {
+                this.blocks.video.selectHandler(video)
+                this.setState({ videoToEdit: null })
+              }}
+              uploadThumbnail={async file => {
+                const templateId = this.selectedTemplate.id
+                const uploadedAsset = await uploadAsset(templateId, file)
 
-              return uploadedAsset.file.url
-            }}
-          />
+                return uploadedAsset.file.url
+              }}
+            />
+          )}
           <SearchArticleDrawer
             isOpen={this.state.isArticleDrawerOpen}
             onClose={() => {
@@ -1696,6 +1698,7 @@ class Builder extends React.Component {
                   medium={this.selectedTemplate.medium}
                   inputs={this.selectedTemplate.inputs}
                   originalTemplateId={this.selectedTemplate.id}
+                  video={this.selectedTemplate.video}
                   mjml={this.selectedTemplate.mjml}
                   getTemplateMarkup={this.getTemplateMarkup.bind(this)}
                   disabled={this.props.actionButtonsDisabled}
@@ -1764,12 +1767,14 @@ class Builder extends React.Component {
               ref={ref => (this.grapes = ref)}
               style={{ position: 'relative' }}
             >
-              {this.isVideoTemplate && this.isTemplateLoaded && (
-                <VideoToolbar
-                  onRef={ref => (this.videoToolbar = ref)}
-                  editor={this.editor}
-                />
-              )}
+              {this.isVideoTemplate &&
+                this.editor &&
+                this.editor.DomComponents.getWrapper().view && (
+                  <VideoToolbar
+                    onRef={ref => (this.videoToolbar = ref)}
+                    editor={this.editor}
+                  />
+                )}
             </div>
           </BuilderContainer>
         </Container>
@@ -1798,7 +1803,8 @@ Builder.propTypes = {
   actionButtonsDisabled: PropTypes.bool,
   customActions: PropTypes.node,
   saveButtonWrapper: PropTypes.func,
-  templatePurpose: PropTypes.string
+  templatePurpose: PropTypes.string,
+  shouldSkipVideoGif: PropTypes.bool
 }
 
 Builder.defaultProps = {

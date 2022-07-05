@@ -18,7 +18,6 @@ interface FormValues {
 }
 
 interface Props {
-  brandColor: string
   isLoading: boolean
   initialValues?: FormValues
   submitMessage: SubmitMessage | null
@@ -26,7 +25,6 @@ interface Props {
 }
 
 export default function LookUpForm({
-  brandColor,
   isLoading,
   initialValues = { username: '' },
   submitMessage,
@@ -82,7 +80,7 @@ export default function LookUpForm({
           )}
           <SubmitButton
             isDisabled={isLoading}
-            color={brandColor}
+            color={theme.palette.primary.main}
             text={isLoading ? 'Looking up...' : 'Next'}
           />
 

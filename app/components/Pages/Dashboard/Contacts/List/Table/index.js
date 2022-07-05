@@ -1,28 +1,22 @@
-import React from 'react'
-
-import { makeStyles, useTheme } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import cn from 'classnames'
+// import DayPicker from 'react-day-picker'
 
+// import { DateTimePicker } from '@app/views/components/DateTimePicker'
+import { useGridBorderedStyles } from '@app/views/components/Grid/Table/styles/bordered'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { Table } from 'components/Grid/Table'
-import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
-import { useGridStyles } from 'components/Grid/Table/styles'
-import { getAttributeFromSummary } from 'models/contacts/helpers'
-import { goTo } from 'utils/go-to'
+// import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
+// import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
+// import { getAttributeFromSummary } from 'models/contacts/helpers'
 
 import NoSearchResults from '../../../../../Partials/no-search-results'
-import { PARKED_CONTACTS_LIST_ID } from '../constants'
+// import { PARKED_CONTACTS_LIST_ID } from '../constants'
 
 import { TableActions } from './Actions'
 import Avatar from './columns/Avatar'
-import CtaAction from './columns/Cta'
-import FlowCell from './columns/Flows'
-import LastTouched from './columns/LastTouched'
-import Menu from './columns/Menu'
-import Name from './columns/Name'
-import TagsString from './columns/Tags'
-import { UnparkContact } from './columns/UnparkContact'
 import { LoadingComponent } from './components/LoadingComponent'
+import { useColumns } from './use-columns'
 
 const useCustomGridStyles = makeStyles(theme => ({
   row: {
@@ -48,105 +42,12 @@ const useCustomGridStyles = makeStyles(theme => ({
 }))
 
 const ContactsList = props => {
-  const [state, dispatch] = useGridContext()
   const gridClasses = useGridStyles()
+  const gridBorderedClasses = useGridBorderedStyles()
   const customGridClasses = useCustomGridStyles()
-  const theme = useTheme()
-  const isParkTabActive = props.activeSegment?.id === PARKED_CONTACTS_LIST_ID
-  const resetSelectedRow = () => {
-    const {
-      selection: { selectedRowIds, isAllRowsSelected, isEntireRowsSelected }
-    } = state
-
-    if (
-      selectedRowIds.length > 0 ||
-      isAllRowsSelected ||
-      isEntireRowsSelected
-    ) {
-      dispatch(resetRows())
-    }
-  }
-
-  const columns = [
-    {
-      id: 'name',
-      primary: true,
-      width: '21%',
-      accessor: contact => getAttributeFromSummary(contact, 'display_name'),
-      render: ({ row: contact }) => <Name contact={contact} />
-    },
-    {
-      id: 'cta',
-      primary: true,
-      width: '12%',
-      class: 'visible-on-hover',
-      render: ({ row: contact }) => {
-        return !contact?.parked ? <CtaAction contact={contact} /> : null
-      }
-    },
-    {
-      id: 'last_touched',
-      sortable: false,
-      width: '17%',
-      class: 'opaque',
-      render: ({ row: contact }) => <LastTouched contact={contact} />
-    },
-    {
-      id: 'flows',
-      sortable: false,
-      width: '7%',
-      class: 'opaque flows',
-      render: ({ row: contact }) => (
-        <FlowCell
-          contactId={contact.id}
-          callback={() => {
-            resetSelectedRow()
-            props.reloadContacts()
-          }}
-          flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
-        />
-      )
-    },
-    {
-      id: 'tag',
-      width: !isParkTabActive ? '34%' : '22%',
-      class: 'opaque tags',
-      render: ({ row: contact }) => (
-        <TagsString
-          contact={contact}
-          reloadContacts={props.reloadContacts}
-          hasAttributeFilters={
-            (props.filters?.attributeFilters || []).length > 0
-          }
-          isParkTabActive={isParkTabActive}
-        />
-      )
-    },
-    {
-      id: 'unpark-contact',
-      class: 'opaque',
-      render: ({ row: contact }) => {
-        return contact?.parked ? (
-          <UnparkContact
-            contactId={contact.id}
-            callback={() => {
-              resetSelectedRow()
-              props.reloadContacts()
-            }}
-          />
-        ) : null
-      }
-    },
-    {
-      id: 'delete-contact',
-      sortable: false,
-      width: '5%',
-      class: 'visible-on-hover',
-      render: ({ row: contact }) => (
-        <Menu contactId={contact.id} handleOnDelete={props.onRequestDelete} />
-      )
-    }
-  ]
+  const columns = useColumns({
+    totalRows: props.totalRows
+  })
 
   const getLoading = () => {
     const { isFetching, isFetchingMore, isFetchingMoreBefore } = props
@@ -168,47 +69,34 @@ const ContactsList = props => {
     }
   }
 
-  const getRowProps = ({ row: contact }) => {
-    return {
-      onClick: () => goTo(`/dashboard/contacts/${contact.id}`)
-    }
-  }
-  const getColumnProps = ({ column }) => {
-    if (
-      [
-        'name',
-        'cta',
-        'flows',
-        'tag',
-        'delete-contact',
-        'unpark-contact'
-      ].includes(column.id)
-    ) {
-      return {
-        onClick: e => e.stopPropagation()
-      }
-    }
-  }
+  const getRowProps = () => ({})
+  const getColumnProps = () => ({})
 
   return (
     <>
       <Table
+        headless={false}
         rows={props.data}
         totalRows={props.totalRows}
         loading={getLoading()}
         columns={columns}
+        rowSize={5}
         LoadingStateComponent={LoadingComponent}
         getTrProps={getRowProps}
         getTdProps={getColumnProps}
         selection={{
           defaultRender: ({ row }) => <Avatar contact={row} />,
           columnProps: {
-            width: theme.spacing(7)
+            width: '80px'
           },
           showSelectAll: false
         }}
         classes={{
-          row: cn(gridClasses.row, customGridClasses.row)
+          row: cn(
+            gridClasses.row,
+            customGridClasses.row,
+            gridBorderedClasses.row
+          )
         }}
         infiniteScrolling={{
           onReachEnd: props.onRequestLoadMore,

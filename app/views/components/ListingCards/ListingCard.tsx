@@ -27,7 +27,7 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import {
   getListingFeatures,
-  getListingFormatedPrice,
+  getListingFormattedPrice,
   isLeaseProperty
 } from 'utils/listing'
 
@@ -258,7 +258,7 @@ export default function ListingCard({
             >
               <Grid item>
                 <Typography variant="subtitle1">
-                  {getListingFormatedPrice(listing.price, false)}
+                  ${getListingFormattedPrice(listing.price, false)}
                   {isLeaseProperty(listing) ? '/mo' : ''}
                 </Typography>
               </Grid>
