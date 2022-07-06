@@ -1,7 +1,8 @@
 import { ReactElement } from 'react'
 
-import { Box, Typography, Tooltip } from '@material-ui/core'
+import { Box, Tooltip } from '@material-ui/core'
 
+import { TextMiddleTruncate } from '@app/views/components/TextMiddleTruncate'
 import { EditEmailButton } from 'components/EditEmailButton'
 
 import { isEmailFailed, isEmailInProgress, isEmailScheduled } from '../helpers'
@@ -21,13 +22,14 @@ function TitleColumn({ data, reloadList }: Props) {
   let titleRenderer: ReactElement
 
   const title = (
-    <Tooltip title={data.subject || '(untitled)'}>
-      <div className="info-title">
-        <Box pr={2} maxWidth="100%">
-          <Typography noWrap>{data.subject || '(untitled)'}</Typography>
-        </Box>
-      </div>
-    </Tooltip>
+    <div className="info-title">
+      <Box pr={2} maxWidth="100%">
+        <TextMiddleTruncate
+          text={data.subject || '(untitled)'}
+          maxLength={isScheduled ? 150 : 60}
+        />
+      </Box>
+    </div>
   )
 
   if (isScheduled || isInProgress) {

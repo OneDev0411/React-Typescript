@@ -78,8 +78,7 @@ export default function List(props) {
         header: 'Title',
         id: 'title-date',
         primary: true,
-        width: '300px',
-        verticalAlign: 'center',
+        width: isScheduled ? '100%' : '32%',
         accessor: row => row.due_at,
         render: ({ row }) => <TitleColumn data={row} reloadList={reloadList} />
       },
@@ -89,6 +88,7 @@ export default function List(props) {
         class: 'opaque',
         width: '26%',
         verticalAlign: 'center',
+        hidden: isScheduled,
         render: ({ row }) => <RecipientsColumn data={row} />
       },
       {
@@ -97,6 +97,7 @@ export default function List(props) {
         class: 'opaque',
         width: '14%',
         verticalAlign: 'center',
+        hidden: isScheduled,
         render: ({ row }) => {
           const { executed_at, delivered, sent, failed } = row
 
@@ -118,6 +119,7 @@ export default function List(props) {
         class: 'opaque',
         width: '14%',
         verticalAlign: 'center',
+        hidden: isScheduled,
         render: ({ row }) => {
           const { executed_at, opened, delivered } = row
 
@@ -148,6 +150,7 @@ export default function List(props) {
         class: 'opaque',
         width: '14%',
         verticalAlign: 'center',
+        hidden: isScheduled,
         render: ({ row }) => {
           const { executed_at, clicked, delivered } = row
 
@@ -188,7 +191,7 @@ export default function List(props) {
         )
       }
     ],
-    [reloadItem, reloadList]
+    [isScheduled, reloadItem, reloadList]
   )
 
   const renderContent = ({ sortBy, onChangeSort }) => {
@@ -202,6 +205,7 @@ export default function List(props) {
 
     return (
       <Table
+        virtualize
         rows={list}
         totalRows={list.length}
         columns={columns}

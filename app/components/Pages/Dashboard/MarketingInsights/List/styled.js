@@ -7,6 +7,7 @@ import { grey } from 'views/utils/colors'
 export const InsightContainer = styled.div`
   & .info-title {
     display: flex;
+    width: 100%;
     justify-content: space-between;
     font-size: ${props => props.theme.typography.body2.fontSize};
     &:hover {
