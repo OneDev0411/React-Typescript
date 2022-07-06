@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ForwardedRef, forwardRef, useImperativeHandle, useState } from 'react'
 
 import { makeStyles, TextField, Theme } from '@material-ui/core'
 import { useDebounce } from 'react-use'
@@ -33,15 +33,24 @@ const useStyles = makeStyles(
   }
 )
 
+export interface InputRef {
+  clear(): void
+}
+
 interface Props<T> {
   defaultAssociations?: T[]
   onChange: (value: string) => void
   onRemove: (association: T) => void
 }
 
-export function SelectedItems<
-  T extends ICRMTaskAssociation<'deal' | 'listing'>
->({ defaultAssociations, onChange, onRemove }: Props<T>) {
+function SelectedItems<T extends ICRMTaskAssociation<'deal' | 'listing'>>({
+  defaultAssociations,
+  inputRef,
+  onChange,
+  onRemove
+}: Props<T> & {
+  inputRef: ForwardedRef<InputRef>
+}) {
   const classes = useStyles()
   const [criteria, setCriteria] = useState('')
 
@@ -52,6 +61,10 @@ export function SelectedItems<
     200,
     [criteria, onChange]
   )
+
+  useImperativeHandle(inputRef, () => ({
+    clear: () => setCriteria('')
+  }))
 
   return (
     <div className={classes.root}>
@@ -99,3 +112,13 @@ export function SelectedItems<
     </div>
   )
 }
+
+function SelectedItemsWithRef<
+  T extends ICRMTaskAssociation<'deal' | 'listing'>
+>(props: Props<T>, ref: ForwardedRef<InputRef>) {
+  return <SelectedItems {...props} inputRef={ref} />
+}
+
+export default forwardRef(SelectedItemsWithRef) as <T>(
+  props: Props<T> & { ref?: ForwardedRef<InputRef> }
+) => ReturnType<typeof SelectedItems>

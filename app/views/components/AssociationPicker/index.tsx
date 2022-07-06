@@ -1,10 +1,10 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 
 import { Deals } from './Deals'
 import { Listings } from './Listings'
-import { SelectedItems } from './SelectedItems'
+import SelectedItems, { InputRef } from './SelectedItems'
 
 const useStyles = makeStyles(
   () => ({
@@ -36,6 +36,7 @@ export function AssociationPicker<
   T extends ICRMTaskAssociation<'deal' | 'listing'>
 >({ defaultAssociations, onChange }: Props<T>) {
   const classes = useStyles()
+  const inputRef = useRef<Nullable<InputRef>>(null)
   const [criteria, setCriteria] = useState('')
   const [associations, setAssociations] = useState(defaultAssociations ?? [])
   const onChangeCriteria = useCallback((criteria: string) => {
@@ -59,6 +60,7 @@ export function AssociationPicker<
             } as T
           ]
 
+      inputRef.current?.clear()
       setAssociations(nextAssociations)
       onChange(nextAssociations)
     },
@@ -86,6 +88,7 @@ export function AssociationPicker<
             } as T
           ]
 
+      inputRef.current?.clear()
       setAssociations(nextAssociations)
       onChange(nextAssociations)
     },
@@ -124,8 +127,9 @@ export function AssociationPicker<
     <div className={classes.root}>
       <div className={classes.search}>
         <SelectedItems<T>
-          onChange={onChangeCriteria}
+          ref={inputRef}
           defaultAssociations={associations}
+          onChange={onChangeCriteria}
           onRemove={handleRemove}
         />
       </div>
