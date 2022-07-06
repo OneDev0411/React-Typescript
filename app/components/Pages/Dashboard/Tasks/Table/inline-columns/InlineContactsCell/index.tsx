@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   Box,
@@ -32,8 +32,16 @@ export function InlineContactsCell({ task, closeHandler }: Props) {
       association => association.association_type === 'contact'
     ) ?? []
   )
-  const [showContactsList, setShowContactsList] = useState(false)
+  const [showContactsList, setShowContactsList] = useState(
+    contacts.length === 0
+  )
   const theme = useTheme<Theme>()
+
+  useEffect(() => {
+    if (contacts.length === 0) {
+      setShowContactsList(true)
+    }
+  }, [contacts.length])
 
   const handleDelete = (id: UUID) => {
     const nextAssociations = contacts.filter(item => item.contact?.id !== id)
@@ -114,7 +122,7 @@ export function InlineContactsCell({ task, closeHandler }: Props) {
 
           <MenuItem onClick={() => setShowContactsList(true)}>
             <Typography variant="body1" color="primary">
-              Add Client
+              Add Contact
             </Typography>
           </MenuItem>
         </>
