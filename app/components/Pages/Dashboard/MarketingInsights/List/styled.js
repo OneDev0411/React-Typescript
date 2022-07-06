@@ -7,6 +7,7 @@ import { grey } from 'views/utils/colors'
 export const InsightContainer = styled.div`
   & .info-title {
     display: flex;
+    width: 100%;
     justify-content: space-between;
     font-size: ${props => props.theme.typography.body2.fontSize};
     &:hover {
@@ -38,6 +39,7 @@ export const StyledLink = styled(ALink)`
   font-weight: 500;
   margin-top: -4px;
   cursor: pointer;
+  max-width: 100%;
   &:hover {
     text-decoration-color: ${props => props.theme.palette.secondary.main};
   }
