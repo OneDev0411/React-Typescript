@@ -19,6 +19,13 @@ const useStyles = makeStyles(
       minHeight: theme.spacing(4),
       maxHeight: '150px',
       overflow: 'auto'
+    },
+    searchInput: {
+      marginBottom: theme.spacing(0.5),
+      padding: theme.spacing(0.75, 1),
+      '&:focus': {
+        backgroundColor: theme.palette.common.white
+      }
     }
   }),
   {
@@ -83,7 +90,10 @@ export function SelectedItems<
         value={criteria}
         onChange={e => setCriteria(e.target.value)}
         InputProps={{
-          disableUnderline: true
+          disableUnderline: true,
+          classes: {
+            input: classes.searchInput
+          }
         }}
       />
     </div>

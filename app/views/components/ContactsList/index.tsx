@@ -24,6 +24,13 @@ const useStyles = makeStyles(
       overflow: 'auto',
       padding: theme.spacing(1, 2),
       backgroundColor: theme.palette.action.hover
+    },
+    searchInput: {
+      marginBottom: theme.spacing(0.5),
+      padding: theme.spacing(0.75, 1),
+      '&:focus': {
+        backgroundColor: theme.palette.common.white
+      }
     }
   }),
   {
@@ -88,7 +95,10 @@ export function ContactsList({ onChange }: Props) {
           placeholder="Search contact"
           value={searchCriteria}
           InputProps={{
-            disableUnderline: true
+            disableUnderline: true,
+            classes: {
+              input: classes.searchInput
+            }
           }}
           onChange={e => setSearchCriteria(e.target.value)}
         />

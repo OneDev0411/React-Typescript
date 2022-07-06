@@ -1,13 +1,13 @@
 import { useCallback, useState } from 'react'
 
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 
 import { Deals } from './Deals'
 import { Listings } from './Listings'
 import { SelectedItems } from './SelectedItems'
 
 const useStyles = makeStyles(
-  (theme: Theme) => ({
+  () => ({
     root: {
       display: 'flex',
       flexDirection: 'column',
