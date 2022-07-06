@@ -42,7 +42,9 @@ app.use(morgan('combined'))
 /**
  * Checks OFAC embargo to restricting access from sanctioned countries
  */
-app.use(checkOFACEmbargo)
+if (isProduction) {
+  app.use(checkOFACEmbargo)
+}
 
 /**
  * Checks user-agent and navigates old browsers to
