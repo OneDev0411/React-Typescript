@@ -14,6 +14,7 @@ import webpack from 'webpack'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 
 import { checkBrowser } from './app/middlewares/check-browser'
+import { checkOFACEmbargo } from './app/middlewares/check-ofac-embargo'
 import { userCookie } from './app/middlewares/user-cookie'
 import appConfig from './config'
 import routes from './routes'
@@ -37,6 +38,11 @@ app.use(
 )
 
 app.use(morgan('combined'))
+
+/**
+ * Checks OFAC embargo to restricting access from sanctioned countries
+ */
+app.use(checkOFACEmbargo)
 
 /**
  * Checks user-agent and navigates old browsers to
