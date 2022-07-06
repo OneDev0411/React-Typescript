@@ -24,16 +24,16 @@ export default function PromoteListingsSection() {
     >
       {isLoading && (
         <>
-          <Grid item md={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <CardSkeleton style={{ height: '293px' }} />
           </Grid>
-          <Grid item md={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <CardSkeleton style={{ height: '293px' }} />
           </Grid>
-          <Grid item md={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <CardSkeleton style={{ height: '293px' }} />
           </Grid>
-          <Grid item md={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <CardSkeleton style={{ height: '293px' }} />
           </Grid>
         </>
