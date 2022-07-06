@@ -4,11 +4,11 @@ import { noop } from '@app/utils/helpers'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-interface Props extends ButtonProps {
+type Props = ButtonProps & {
   title: string | React.ReactNode
-  onClick?: React.MouseEventHandler<HTMLButtonElement>
   isActive: boolean
   startIconPath?: string
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
 }
 
 export function Button({
