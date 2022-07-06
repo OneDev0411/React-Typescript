@@ -90,13 +90,7 @@ export function useColumns(): TableColumn<ITask>[] {
           marginTop: height
         })
       },
-      render: ({ row: task }) => (
-        <ContactsCell
-          contactAssociations={task.associations?.filter(
-            association => association.association_type === 'contact'
-          )}
-        />
-      ),
+      render: ({ row: task }) => <ContactsCell task={task} />,
       renderInlineEdit: ({ row: task }, close) => (
         <InlineContactsCell task={task} closeHandler={close} />
       )
@@ -112,7 +106,7 @@ export function useColumns(): TableColumn<ITask>[] {
           onClick={() => setSortBy(getNextSort('due_date'))}
         />
       ),
-      render: ({ row: task }) => <DueDateCell dueDate={task.due_date} />,
+      render: ({ row: task }) => <DueDateCell task={task} />,
       inlineEditStyles: {
         popover: ({ height }) => ({
           marginTop: height
@@ -136,7 +130,7 @@ export function useColumns(): TableColumn<ITask>[] {
           marginTop: height
         })
       },
-      render: ({ row: task }) => <TaskTypeCell type={task.task_type} />,
+      render: ({ row: task }) => <TaskTypeCell task={task} />,
       renderInlineEdit: ({ row: task }, close) => (
         <InlineTypeCell task={task} closeHandler={close} />
       )
@@ -165,13 +159,7 @@ export function useColumns(): TableColumn<ITask>[] {
           iconPath={mdiOfficeBuildingOutline}
         />
       ),
-      render: ({ row: task }) => (
-        <PropertyDealCell
-          associations={task.associations?.filter(association =>
-            ['listing', 'deal'].includes(association.association_type)
-          )}
-        />
-      ),
+      render: ({ row: task }) => <PropertyDealCell task={task} />,
       renderInlineEdit: ({ row: task }) => {
         return <InlineAssociationCell task={task} />
       }

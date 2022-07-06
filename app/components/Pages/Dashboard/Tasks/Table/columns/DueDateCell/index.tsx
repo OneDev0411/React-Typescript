@@ -1,7 +1,10 @@
 import { useMemo } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
+import cn from 'classnames'
 import moment from 'moment'
+
+import type { ITask } from '../../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -25,6 +28,9 @@ const useStyles = makeStyles(
     },
     date: {
       color: theme.palette.grey[700]
+    },
+    done: {
+      color: theme.palette.grey[400]
     }
   }),
   {
@@ -33,43 +39,52 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  dueDate: number
+  task: ITask
 }
 
-export function DueDateCell({ dueDate }: Props) {
+export function DueDateCell({ task }: Props) {
   const classes = useStyles()
 
   const [remainingDays, remainingHours, fromNow] = useMemo(() => {
     const today = moment()
-    const taskDate = moment.unix(dueDate)
+    const taskDate = moment.unix(task.due_date)
 
     return [
       taskDate.diff(today, 'days'),
       taskDate.diff(today, 'hours'),
       taskDate.fromNow(true)
     ]
-  }, [dueDate])
+  }, [task.due_date])
 
   if (remainingDays < 0) {
     return (
       <div className={classes.past}>
         <span>{fromNow} ago</span>{' '}
-        <span className={classes.pastDue}>Past Due</span>
+        {task.status !== 'DONE' && (
+          <span className={classes.pastDue}>Past Due</span>
+        )}
       </div>
     )
   }
 
-  if (remainingDays === 0 && remainingHours < 24) {
-    return <div className={classes.soon}>in {fromNow}</div>
-  }
-
-  if (remainingDays > 0 && remainingDays < 7) {
-    return <div className={classes.soon}>in {fromNow}</div>
+  if (
+    (remainingDays === 0 && remainingHours < 24) ||
+    (remainingDays > 0 && remainingDays < 7)
+  ) {
+    return (
+      <div
+        className={cn(classes.soon, { [classes.done]: task.status === 'DONE' })}
+      >
+        in {fromNow}
+      </div>
+    )
   }
 
   return (
-    <div className={classes.date}>
-      {moment.unix(dueDate).format('ddd, MMM DD, YYYY')}
+    <div
+      className={cn(classes.date, { [classes.done]: task.status === 'DONE' })}
+    >
+      {moment.unix(task.due_date).format('ddd, MMM DD, YYYY')}
     </div>
   )
 }
