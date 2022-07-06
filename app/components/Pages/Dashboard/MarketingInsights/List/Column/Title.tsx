@@ -26,7 +26,7 @@ function TitleColumn({ data, reloadList }: Props) {
       <Box pr={2} maxWidth="100%">
         <TextMiddleTruncate
           text={data.subject || '(untitled)'}
-          maxLength={isScheduled ? 150 : 60}
+          maxLength={isScheduled ? 140 : 55}
         />
       </Box>
     </div>

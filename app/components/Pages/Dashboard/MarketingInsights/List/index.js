@@ -78,7 +78,7 @@ export default function List(props) {
         header: 'Title',
         id: 'title-date',
         primary: true,
-        width: isScheduled ? '100%' : '32%',
+        width: isScheduled ? '100%' : '38%',
         accessor: row => row.due_at,
         render: ({ row }) => <TitleColumn data={row} reloadList={reloadList} />
       },
@@ -86,7 +86,7 @@ export default function List(props) {
         header: 'Recipients',
         id: 'recipients',
         class: 'opaque',
-        width: '26%',
+        width: '23%',
         verticalAlign: 'center',
         hidden: isScheduled,
         render: ({ row }) => <RecipientsColumn data={row} />
@@ -95,7 +95,7 @@ export default function List(props) {
         header: 'Delivered',
         id: 'delivered',
         class: 'opaque',
-        width: '14%',
+        width: '13%',
         verticalAlign: 'center',
         hidden: isScheduled,
         render: ({ row }) => {
@@ -117,7 +117,7 @@ export default function List(props) {
         header: 'Opened',
         id: 'opened',
         class: 'opaque',
-        width: '14%',
+        width: '13%',
         verticalAlign: 'center',
         hidden: isScheduled,
         render: ({ row }) => {
@@ -148,7 +148,7 @@ export default function List(props) {
         header: 'Clicked',
         id: 'clicked',
         class: 'opaque',
-        width: '14%',
+        width: '13%',
         verticalAlign: 'center',
         hidden: isScheduled,
         render: ({ row }) => {
