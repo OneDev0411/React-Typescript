@@ -8,6 +8,7 @@ import {
   mdiSortDescending
 } from '@mdi/js'
 
+import { useBreakpoint } from '@app/hooks/use-breakpoint'
 import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderColumn'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
@@ -30,6 +31,7 @@ import { InlineTypeCell } from './inline-columns/InlineTypeCell'
 
 export function useColumns(): TableColumn<ITask>[] {
   const { sortBy, setSortBy } = useTasksListContext()
+  const breakpoint = useBreakpoint()
 
   const getSortIcon = (column: string) =>
     sortBy.includes(column)
@@ -59,11 +61,11 @@ export function useColumns(): TableColumn<ITask>[] {
       header: () => (
         <HeaderColumn
           text="Task"
+          isActive={sortBy.includes('created_at')}
           sortIconPath={getSortIcon('created_at')}
           onClick={() => setSortBy(getNextSort('created_at'))}
         />
       ),
-      width: '300px',
       inlineEditStyles: {
         container: () => ({
           border: 'none'
@@ -84,7 +86,7 @@ export function useColumns(): TableColumn<ITask>[] {
       header: () => (
         <HeaderColumn text="Contacts" iconPath={mdiContactsOutline} />
       ),
-      width: '200px',
+      width: '15%',
       inlineEditStyles: {
         popover: ({ height }) => ({
           marginTop: height
@@ -97,11 +99,12 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'due-date',
-      width: '200px',
+      width: '15%',
       header: () => (
         <HeaderColumn
           text="Due Date"
           iconPath={mdiCalendarOutline}
+          isActive={sortBy.includes('due_date')}
           sortIconPath={getSortIcon('due_date')}
           onClick={() => setSortBy(getNextSort('due_date'))}
         />
@@ -118,7 +121,8 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'type',
-      width: '180px',
+      width: '10%',
+      hidden: ['xs', 'sm'].includes(breakpoint),
       header: () => (
         <HeaderColumn text="Type" iconPath={mdiFormatListBulleted} />
       ),
@@ -137,7 +141,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'assignees',
-      width: '150px',
+      width: '15%',
       header: () => (
         <HeaderColumn text="Assignees" iconPath={mdiAccountArrowLeft} />
       ),
@@ -153,6 +157,8 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'property-deal',
+      width: '20%',
+      hidden: ['xs', 'sm'].includes(breakpoint),
       header: () => (
         <HeaderColumn
           text="Property & Deal"

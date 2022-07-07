@@ -1,5 +1,5 @@
 import { Box, Typography } from '@material-ui/core'
-import { mdiShapeOutline } from '@mdi/js'
+import { mdiFormatListBulleted } from '@mdi/js'
 
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 
@@ -20,7 +20,7 @@ export function TypeFilter({ currentFilters: { type }, updateFilters }: Props) {
       renderDropdownButton={({ onClick, ref }) => (
         <Button
           title={type ?? 'Type'}
-          startIconPath={mdiShapeOutline}
+          startIconPath={mdiFormatListBulleted}
           isActive={!!type}
           innerRef={ref}
           onClick={onClick}

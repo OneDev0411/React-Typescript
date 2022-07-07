@@ -8,11 +8,19 @@ const useStyles = makeStyles(
     root: {
       userSelect: 'none',
       cursor: 'auto',
+      padding: theme.spacing(0, 1, 0, 2),
       '&.clickable': {
         cursor: 'pointer',
+        '&:hover': {
+          backgroundColor: theme.palette.action.hover
+        },
         '&:hover $title': {
-          fontWeight: '600'
+          fontWeight: 600
         }
+      },
+      '&.active': {
+        fontWeight: 600,
+        backgroundColor: theme.palette.action.hover
       }
     },
     icon: {
@@ -33,6 +41,7 @@ const useStyles = makeStyles(
 
 interface Props {
   text: string | React.ReactNode
+  isActive?: boolean
   iconPath?: string
   sortIconPath?: string
   onClick?: () => void
@@ -42,7 +51,13 @@ interface Props {
  * The component represents the standard layout of a grid
  * column that contains text and icon
  */
-export function HeaderColumn({ text, iconPath, sortIconPath, onClick }: Props) {
+export function HeaderColumn({
+  text,
+  iconPath,
+  sortIconPath,
+  isActive,
+  onClick
+}: Props) {
   const classes = useStyles()
 
   return (
@@ -50,23 +65,26 @@ export function HeaderColumn({ text, iconPath, sortIconPath, onClick }: Props) {
       display="flex"
       alignItems="center"
       justifyContent="space-between"
+      width="100%"
+      height="100%"
       className={cn(classes.root, {
-        clickable: !!onClick
+        clickable: !!onClick,
+        active: isActive
       })}
       onClick={onClick}
     >
-      <Box display="flex" alignItems="center" width="90%">
+      <Box display="flex" alignItems="center" flexGrow={1}>
         {iconPath && <SvgIcon className={classes.icon} path={iconPath} />}
         <Typography variant="body2" className={classes.title}>
           {text}
         </Typography>
       </Box>
 
-      <Box display="flex" flexGrow={1} justifyContent="flex-end">
-        {sortIconPath && (
+      {sortIconPath && (
+        <Box display="flex" width="24px" justifyContent="flex-end">
           <SvgIcon className={classes.icon} path={sortIconPath} />
-        )}
-      </Box>
+        </Box>
+      )}
     </Box>
   )
 }

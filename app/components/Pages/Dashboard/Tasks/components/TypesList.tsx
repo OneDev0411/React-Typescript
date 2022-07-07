@@ -1,4 +1,7 @@
-import { MenuItem } from '@material-ui/core'
+import { MenuItem, Box } from '@material-ui/core'
+
+import { muiIconSizes } from '@app/views/components/SvgIcons'
+import { eventTypesIcons } from '@app/views/utils/event-types-icons'
 
 export const TaskTypeOptions: {
   label: string
@@ -48,7 +51,12 @@ export function TypesList({ selectedItem, onSelectItem }: Props) {
           selected={value === selectedItem}
           onClick={() => onSelectItem(value)}
         >
-          {label}
+          <Box display="flex" alignItems="center">
+            {eventTypesIcons[value].icon({
+              size: muiIconSizes.small
+            })}
+            <Box ml={1}>{label}</Box>
+          </Box>
         </MenuItem>
       ))}
     </>

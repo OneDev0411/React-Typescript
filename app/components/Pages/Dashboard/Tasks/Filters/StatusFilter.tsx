@@ -7,7 +7,7 @@ import {
   Theme,
   Typography
 } from '@material-ui/core'
-import { mdiListStatus } from '@mdi/js'
+import { mdiCheck, mdiClose, mdiListStatus } from '@mdi/js'
 
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
@@ -18,8 +18,8 @@ import { Button } from './components/Button'
 import { ResetButton } from './components/ResetButton'
 
 const Options = [
-  { label: 'Completed', value: 'DONE' },
-  { label: 'Unfinished', value: 'PENDING' }
+  { label: 'Completed', value: 'DONE', icon: mdiCheck },
+  { label: 'Unfinished', value: 'PENDING', icon: mdiClose }
 ]
 
 const useStyles = makeStyles(
@@ -85,7 +85,7 @@ export function StatusFilter({
               }}
             >
               <ListItemIcon className={classes.listItemIcon}>
-                <SvgIcon path={mdiListStatus} size={muiIconSizes.small} />
+                <SvgIcon path={option.icon} size={muiIconSizes.small} />
               </ListItemIcon>
 
               <ListItemText>{option.label}</ListItemText>

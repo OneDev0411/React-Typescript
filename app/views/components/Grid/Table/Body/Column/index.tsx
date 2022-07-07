@@ -52,7 +52,8 @@ export function Column<Row>({
         'inline-edit': !!column.renderInlineEdit
       })}
       style={{
-        width: columnWidth,
+        minWidth: columnWidth,
+        maxWidth: columnWidth,
         textAlign: column.align || 'left',
         ...(column.rowStyle || {}),
         ...(column.style || {})

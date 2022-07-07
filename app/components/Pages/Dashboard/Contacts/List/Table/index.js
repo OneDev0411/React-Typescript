@@ -20,7 +20,7 @@ import { useColumns } from './use-columns'
 
 const useCustomGridStyles = makeStyles(theme => ({
   row: {
-    '& .column': {
+    '& .column:not(.heading)': {
       padding: theme.spacing(0, 1, 0, 2),
       '&.tags': {
         '& .MuiChip-root': { opacity: 0.5 }
@@ -30,7 +30,7 @@ const useCustomGridStyles = makeStyles(theme => ({
         '& svg': { fill: theme.palette.grey['500'] }
       }
     },
-    '&:hover .column': {
+    '&:hover .column:not(.heading)': {
       '&.tags': {
         '& .MuiChip-root': { opacity: 1 }
       },

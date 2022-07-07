@@ -57,7 +57,7 @@ export function Header<Row>({
         .map((column, columnIndex) => (
           <div
             key={columnIndex}
-            className={cn('column', headerClasses.column, column.id)}
+            className={cn('column heading', headerClasses.column, column.id)}
             style={{
               width: columnsSize[columnIndex],
               textAlign: column.align || 'left',

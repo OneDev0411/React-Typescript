@@ -36,7 +36,9 @@ export function ContactsCell({ task }: Props) {
   const list = contactAssociations?.map(({ contact }) => contact?.display_name)
 
   return (
-    <div className={cn(classes.root, { done: task.status === 'DONE' })}>
+    <div
+      className={cn(classes.root, 'caption', { done: task.status === 'DONE' })}
+    >
       {list?.join(', ')}
     </div>
   )

@@ -17,10 +17,10 @@ import { useColumns } from './use-columns'
 export const useStyles = makeStyles(
   (theme: Theme) => ({
     row: {
-      '& .column': {
+      '& .column:not(.heading)': {
         padding: theme.spacing(0, 1, 0, 2)
       },
-      '& .column div': {
+      '& .column:not(.heading) div.caption': {
         width: '100%',
         whiteSpace: 'nowrap',
         overflow: 'hidden',

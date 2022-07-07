@@ -6,7 +6,7 @@ const useStyles = makeStyles(
     root: {
       color: 'inherit',
       '&.done': {
-        color: theme.palette.success.main
+        color: theme.palette.grey[400]
       }
     }
   }),
@@ -24,6 +24,8 @@ export function TitleCell({ title, status }: Props) {
   const classes = useStyles()
 
   return (
-    <div className={cn(classes.root, { done: status === 'DONE' })}>{title}</div>
+    <div className={cn(classes.root, 'caption', { done: status === 'DONE' })}>
+      {title}
+    </div>
   )
 }

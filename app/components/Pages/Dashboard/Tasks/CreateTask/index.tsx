@@ -20,7 +20,7 @@ export function CreateTask() {
   return (
     <>
       <Button
-        size="medium"
+        size="large"
         color="primary"
         variant="contained"
         startIcon={<SvgIcon path={mdiPlus} />}

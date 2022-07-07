@@ -16,15 +16,7 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      color: theme.palette.grey[400]
-    },
-    pastDue: {
-      display: 'inline-block',
-      padding: theme.spacing(0.25, 0.5),
-      color: theme.palette.error.main,
-      backgroundColor: theme.palette.error.ultralight,
-      borderRadius: '30px',
-      ...theme.typography.body3
+      color: theme.palette.error.main
     },
     date: {
       color: theme.palette.grey[700]
@@ -45,6 +37,8 @@ interface Props {
 export function DueDateCell({ task }: Props) {
   const classes = useStyles()
 
+  const isTaskDone = task.status === 'DONE'
+
   const [remainingDays, remainingHours, fromNow] = useMemo(() => {
     const today = moment()
     const taskDate = moment.unix(task.due_date)
@@ -56,13 +50,22 @@ export function DueDateCell({ task }: Props) {
     ]
   }, [task.due_date])
 
+  const normalizeMessage = (message: string) => {
+    if (message === 'in a day') {
+      return 'Tomorrow'
+    }
+
+    if (message === 'a day ago') {
+      return 'Yesterday'
+    }
+
+    return message
+  }
+
   if (remainingDays < 0) {
     return (
-      <div className={classes.past}>
-        <span>{fromNow} ago</span>{' '}
-        {task.status !== 'DONE' && (
-          <span className={classes.pastDue}>Past Due</span>
-        )}
+      <div className={cn(classes.past, { [classes.done]: isTaskDone })}>
+        <span>{normalizeMessage(`${fromNow} ago`)}</span>
       </div>
     )
   }
@@ -72,18 +75,14 @@ export function DueDateCell({ task }: Props) {
     (remainingDays > 0 && remainingDays < 7)
   ) {
     return (
-      <div
-        className={cn(classes.soon, { [classes.done]: task.status === 'DONE' })}
-      >
-        in {fromNow}
+      <div className={cn(classes.soon, { [classes.done]: isTaskDone })}>
+        {normalizeMessage(`in ${fromNow}`)}
       </div>
     )
   }
 
   return (
-    <div
-      className={cn(classes.date, { [classes.done]: task.status === 'DONE' })}
-    >
+    <div className={cn(classes.date, { [classes.done]: isTaskDone })}>
       {moment.unix(task.due_date).format('ddd, MMM DD, YYYY')}
     </div>
   )
