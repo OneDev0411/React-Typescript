@@ -26,11 +26,7 @@ export function LoadingSkeleton({ columns, classes }: Props) {
     () =>
       columns.map(column => ({
         ...column,
-        render: () => (
-          <div>
-            <Skeleton variant="text" width="50%" />
-          </div>
-        ),
+        render: () => <Skeleton variant="text" width="50%" />,
         renderInlineEdit: undefined
       })),
     [columns]

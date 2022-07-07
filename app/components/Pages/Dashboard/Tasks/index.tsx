@@ -28,6 +28,9 @@ export default function Tasks() {
         <Box m={4}>
           <PageLayout.HeaderWithSearch
             title="Tasks"
+            SearchInputProps={{
+              placeholder: 'Search'
+            }}
             onSearch={value => setFilter(filter => ({ ...filter, q: value }))}
           >
             <Box ml={1}>

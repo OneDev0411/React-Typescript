@@ -2,6 +2,7 @@ import { Box, Typography } from '@material-ui/core'
 import { mdiFormatListBulleted } from '@mdi/js'
 
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
+import { eventTypesIcons } from '@app/views/utils/event-types-icons'
 
 import { TypesList } from '../components/TypesList'
 import type { TasksListFilters } from '../context'
@@ -20,7 +21,9 @@ export function TypeFilter({ currentFilters: { type }, updateFilters }: Props) {
       renderDropdownButton={({ onClick, ref }) => (
         <Button
           title={type ?? 'Type'}
-          startIconPath={mdiFormatListBulleted}
+          startIconPath={
+            type ? eventTypesIcons[type].iconPath : mdiFormatListBulleted
+          }
           isActive={!!type}
           innerRef={ref}
           onClick={onClick}

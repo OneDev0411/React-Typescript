@@ -1,4 +1,5 @@
 import { Box, makeStyles, Theme, Typography } from '@material-ui/core'
+import { mdiSort, mdiSortAscending, mdiSortDescending } from '@mdi/js'
 import cn from 'classnames'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -16,6 +17,9 @@ const useStyles = makeStyles(
         },
         '&:hover $title': {
           fontWeight: 600
+        },
+        '&:hover $sortIcon': {
+          opacity: 1
         }
       },
       '&.active': {
@@ -29,6 +33,12 @@ const useStyles = makeStyles(
       width: `${theme.spacing(2)}px !important`,
       height: `${theme.spacing(2)}px !important`
     },
+    sortIcon: {
+      opacity: 0,
+      '&.active': {
+        opacity: 1
+      }
+    },
     title: {
       fontWeight: 400,
       color: theme.palette.grey['900']
@@ -41,9 +51,9 @@ const useStyles = makeStyles(
 
 interface Props {
   text: string | React.ReactNode
-  isActive?: boolean
+  isSortActive?: boolean
+  sortOrder?: 'asc' | 'desc'
   iconPath?: string
-  sortIconPath?: string
   onClick?: () => void
 }
 
@@ -54,11 +64,23 @@ interface Props {
 export function HeaderColumn({
   text,
   iconPath,
-  sortIconPath,
-  isActive,
+  sortOrder,
+  isSortActive,
   onClick
 }: Props) {
   const classes = useStyles()
+
+  const getIconPath = () => {
+    if (sortOrder === 'asc') {
+      return mdiSortAscending
+    }
+
+    if (sortOrder === 'desc') {
+      return mdiSortDescending
+    }
+
+    return mdiSort
+  }
 
   return (
     <Box
@@ -69,7 +91,7 @@ export function HeaderColumn({
       height="100%"
       className={cn(classes.root, {
         clickable: !!onClick,
-        active: isActive
+        active: isSortActive
       })}
       onClick={onClick}
     >
@@ -80,11 +102,14 @@ export function HeaderColumn({
         </Typography>
       </Box>
 
-      {sortIconPath && (
-        <Box display="flex" width="24px" justifyContent="flex-end">
-          <SvgIcon className={classes.icon} path={sortIconPath} />
-        </Box>
-      )}
+      <Box display="flex" width="24px" justifyContent="flex-end">
+        <SvgIcon
+          className={cn(classes.icon, classes.sortIcon, {
+            active: isSortActive
+          })}
+          path={getIconPath()}
+        />
+      </Box>
     </Box>
   )
 }

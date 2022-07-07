@@ -3,9 +3,7 @@ import {
   mdiCalendarOutline,
   mdiContactsOutline,
   mdiFormatListBulleted,
-  mdiOfficeBuildingOutline,
-  mdiSortAscending,
-  mdiSortDescending
+  mdiOfficeBuildingOutline
 } from '@mdi/js'
 
 import { useBreakpoint } from '@app/hooks/use-breakpoint'
@@ -33,11 +31,11 @@ export function useColumns(): TableColumn<ITask>[] {
   const { sortBy, setSortBy } = useTasksListContext()
   const breakpoint = useBreakpoint()
 
-  const getSortIcon = (column: string) =>
+  const getSortOrder = (column: string) =>
     sortBy.includes(column)
       ? sortBy.startsWith('-')
-        ? mdiSortDescending
-        : mdiSortAscending
+        ? 'desc'
+        : 'asc'
       : undefined
 
   const getNextSort = (column: string) =>
@@ -61,8 +59,8 @@ export function useColumns(): TableColumn<ITask>[] {
       header: () => (
         <HeaderColumn
           text="Task"
-          isActive={sortBy.includes('created_at')}
-          sortIconPath={getSortIcon('created_at')}
+          sortOrder={getSortOrder('created_at')}
+          isSortActive={sortBy.includes('created_at')}
           onClick={() => setSortBy(getNextSort('created_at'))}
         />
       ),
@@ -104,8 +102,8 @@ export function useColumns(): TableColumn<ITask>[] {
         <HeaderColumn
           text="Due Date"
           iconPath={mdiCalendarOutline}
-          isActive={sortBy.includes('due_date')}
-          sortIconPath={getSortIcon('due_date')}
+          isSortActive={sortBy.includes('due_date')}
+          sortOrder={getSortOrder('due_date')}
           onClick={() => setSortBy(getNextSort('due_date'))}
         />
       ),
