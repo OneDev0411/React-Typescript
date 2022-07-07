@@ -23,8 +23,7 @@ const useStyles = makeStyles(
         }
       },
       '&.active': {
-        fontWeight: 600,
-        backgroundColor: theme.palette.action.hover
+        fontWeight: 600
       }
     },
     icon: {
