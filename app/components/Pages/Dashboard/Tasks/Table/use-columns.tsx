@@ -60,7 +60,6 @@ export function useColumns(): TableColumn<ITask>[] {
         <HeaderColumn
           text="Task"
           sortOrder={getSortOrder('created_at')}
-          isSortActive={sortBy.includes('created_at')}
           onClick={() => setSortBy(getNextSort('created_at'))}
         />
       ),
@@ -102,7 +101,6 @@ export function useColumns(): TableColumn<ITask>[] {
         <HeaderColumn
           text="Due Date"
           iconPath={mdiCalendarOutline}
-          isSortActive={sortBy.includes('due_date')}
           sortOrder={getSortOrder('due_date')}
           onClick={() => setSortBy(getNextSort('due_date'))}
         />

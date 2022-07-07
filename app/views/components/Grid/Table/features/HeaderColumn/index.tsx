@@ -51,7 +51,6 @@ const useStyles = makeStyles(
 
 interface Props {
   text: string | React.ReactNode
-  isSortActive?: boolean
   sortOrder?: 'asc' | 'desc'
   iconPath?: string
   onClick?: () => void
@@ -61,13 +60,7 @@ interface Props {
  * The component represents the standard layout of a grid
  * column that contains text and icon
  */
-export function HeaderColumn({
-  text,
-  iconPath,
-  sortOrder,
-  isSortActive,
-  onClick
-}: Props) {
+export function HeaderColumn({ text, iconPath, sortOrder, onClick }: Props) {
   const classes = useStyles()
 
   const getIconPath = () => {
@@ -79,7 +72,7 @@ export function HeaderColumn({
       return mdiSortDescending
     }
 
-    return mdiSort
+    return undefined
   }
 
   return (
@@ -91,7 +84,7 @@ export function HeaderColumn({
       height="100%"
       className={cn(classes.root, {
         clickable: !!onClick,
-        active: isSortActive
+        active: !!sortOrder
       })}
       onClick={onClick}
     >
@@ -105,9 +98,9 @@ export function HeaderColumn({
       <Box display="flex" width="24px" justifyContent="flex-end">
         <SvgIcon
           className={cn(classes.icon, classes.sortIcon, {
-            active: isSortActive
+            active: !!sortOrder
           })}
-          path={getIconPath()}
+          path={getIconPath() ?? mdiSort}
         />
       </Box>
     </Box>
