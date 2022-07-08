@@ -1,6 +1,6 @@
 import { useCallback, useEffect, memo } from 'react'
 
-import { Box, makeStyles, Typography } from '@material-ui/core'
+import { Box, Grid, makeStyles, Typography } from '@material-ui/core'
 import unescape from 'lodash/unescape'
 
 import useAsync from '@app/hooks/use-async'
@@ -141,7 +141,9 @@ function OnlineVideos({ onSelect }: OnlineVideosProps) {
         ) : isEmptyState ? (
           <SearchVideoEmptyState />
         ) : (
-          <SearchVideoResults videos={result} onSelect={onSelect} />
+          <Grid container>
+            <SearchVideoResults videos={result} onSelect={onSelect} />
+          </Grid>
         )}
       </Box>
     </>

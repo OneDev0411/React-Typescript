@@ -38,6 +38,7 @@ import { GlobalActionButtonComponent } from './components/GlobalActionButtonComp
 import Logo from './components/Logo'
 import PoweredBy from './components/PoweredBy'
 import SideNavAccordion from './components/SideNavAccordion'
+import { SideNavToggleButton } from './components/SideNavToggleButton'
 import { UserMenu } from './components/UserMenu'
 import { AccordionMenu, BaseAccordionMenu, ExpandedMenu } from './types'
 import { appSidenavWidth, scrollableAreaShadowColor } from './variables'
@@ -300,6 +301,7 @@ function SideNavMenu(props: WithRouterProps) {
 
   return (
     <aside className={classes.sidenav}>
+      <SideNavToggleButton />
       <Logo />
       <GlobalActionsButton renderButton={GlobalActionButtonComponent} />
 

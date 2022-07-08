@@ -1,14 +1,14 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   Button,
   ListItem,
   ListItemAvatar,
   ListItemSecondaryAction,
-  Avatar as MuiAvatar,
-  withStyles,
   makeStyles,
-  Theme
+  Theme,
+  useTheme,
+  withStyles
 } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
@@ -26,12 +26,16 @@ interface Props {
   event: ICalendarEvent
 }
 
-// Customizing MUI Avatar backgroundColor
-const CustomizedMuiAvatar = withStyles((theme: Theme) => ({
-  colorDefault: {
-    backgroundColor: theme.palette.grey['200']
+const CustomizedAvatar = withStyles((theme: Theme) => ({
+  root: {
+    backgroundColor: theme.palette.grey['200'],
+
+    '& svg': {
+      fill: theme.palette.common.black,
+      color: theme.palette.common.black
+    }
   }
-}))(MuiAvatar)
+}))(Avatar)
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -43,10 +47,8 @@ const useStyles = makeStyles(
 )
 
 export default function CalendarEventListItem({ event }: Props) {
-  let avatarIcon
-  let Icon
-
   const classes = useStyles()
+  const theme = useTheme()
 
   const user = useSelector(selectUser)
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
@@ -68,23 +70,26 @@ export default function CalendarEventListItem({ event }: Props) {
 
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
 
-  // Build avatars
-  if (contact && contact.profile_image_url) {
-    avatarIcon = (
-      <Link to={`/dashboard/contacts/${contact.id}`}>
-        <Avatar disableLazyLoad size="medium" contact={contact} />
-      </Link>
+  const avatarIcon = useMemo(() => {
+    const Icon = eventTypesIcons[event.event_type]?.icon
+
+    const eventIcon = (
+      <CustomizedAvatar
+        disableLazyLoad
+        size="medium"
+        contact={contact!}
+        statusColor={theme.palette.grey[50]}
+      >
+        {Icon && <Icon />}
+      </CustomizedAvatar>
     )
-  } else if (eventTypesIcons[event.event_type]) {
-    Icon = eventTypesIcons[event.event_type].icon
-    avatarIcon = (
-      <CustomizedMuiAvatar>
-        <Icon />
-      </CustomizedMuiAvatar>
-    )
-  } else {
-    avatarIcon = <CustomizedMuiAvatar />
-  }
+
+    if (contact) {
+      return <Link to={`/dashboard/contacts/${contact.id}`}>{eventIcon}</Link>
+    }
+
+    return eventIcon
+  }, [contact, event.event_type, theme])
 
   return (
     <>

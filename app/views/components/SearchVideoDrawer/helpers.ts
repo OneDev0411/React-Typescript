@@ -1,6 +1,7 @@
 import superagent from 'superagent'
 
 import {
+  SearchVideoResult,
   SearchVideoSource,
   VideoboltVideo,
   YouTubeVideoResource
@@ -121,4 +122,17 @@ export function shouldAddPlayIconWatermark(
   ]
 
   return !watermarkBlacklist.includes(videoSource)
+}
+
+export function createGalleryVideoObject(
+  asset: IBrandAsset
+): SearchVideoResult {
+  return {
+    source: 'gallery',
+    playerUrl: getVideoPlayerUrl(asset.file.url),
+    url: asset.file.url,
+    title: asset.label || 'No Label',
+    publishedAt: new Date(asset.created_at * 1000).toISOString(),
+    sourceIcon: '/static/images/favicons/favicon-32x32.png'
+  }
 }

@@ -6,12 +6,12 @@ export function getColumnsSize<Row>(columns: TableColumn<Row>[]): string[] {
   )
   const sizelessColumns = renderableColumns.filter(col => !col.width)
 
-  const calc = columns
+  const calc = renderableColumns
     .filter(col => col.width)
     .map(col => col.width)
     .join(' + ')
 
-  return columns.map(
+  return renderableColumns.map(
     col => col.width || `calc((100% - (${calc})) / ${sizelessColumns.length})`
   )
 }

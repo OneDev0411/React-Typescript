@@ -12,6 +12,10 @@ import {
   selectUserFormattedPhoneNumber
 } from '@app/selectors/user'
 import { isValidPhoneNumber } from '@app/utils/helpers'
+import {
+  MaskedInput,
+  PHONE_NUMBER_MASK
+} from '@app/views/components/MaskedInput'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
@@ -98,7 +102,13 @@ function SocialDrawerSendSMS({
           label: 'SMS:',
           name: 'phone',
           onChange: handleChange,
-          defaultValue: phoneNumber || ''
+          defaultValue: phoneNumber || '',
+          inputProps: {
+            mask: PHONE_NUMBER_MASK
+          },
+          InputProps: {
+            inputComponent: MaskedInput
+          }
         }}
         buttonProps={{
           children: isSending ? 'Sending...' : 'Send',
