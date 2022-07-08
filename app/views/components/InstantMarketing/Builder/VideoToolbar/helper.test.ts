@@ -2,7 +2,8 @@ import {
   fixLeadingZero,
   msToMinutesAndSeconds,
   getSlotWidth,
-  getSlotProgress
+  getSlotProgress,
+  normalizeKeyframes
 } from './helper'
 
 describe('fixLeadingZero', () => {
@@ -169,5 +170,77 @@ describe('getSlotProgress', () => {
     expect(getSlotProgress(index, keyframes, currentTime, duration)).toBe(
       expected
     )
+  })
+})
+
+describe('normalizeKeyframes', () => {
+  it('should remove last keyframe if its bigger than duration', () => {
+    const keyframes = [
+      { at: 0 },
+      { at: 2000 },
+      { at: 8000 },
+      { at: 15000 },
+      { at: 23000 }
+    ]
+    const duration = 22800
+
+    const expected = [{ at: 0 }, { at: 2000 }, { at: 8000 }, { at: 15000 }]
+
+    expect(normalizeKeyframes(keyframes, duration)).toStrictEqual(expected)
+  })
+
+  it('should remove all keyframes which has bigger time than duration', () => {
+    const keyframes = [
+      { at: 0 },
+      { at: 2000 },
+      { at: 8000 },
+      { at: 15000 },
+      { at: 23000 },
+      { at: 29000 }
+    ]
+    const duration = 14800
+
+    const expected = [{ at: 0 }, { at: 2000 }, { at: 8000 }]
+
+    expect(normalizeKeyframes(keyframes, duration)).toStrictEqual(expected)
+  })
+
+  it('should add first keyframe if its not at 0', () => {
+    const keyframes = [{ at: 2000 }, { at: 8000 }, { at: 15000 }, { at: 23000 }]
+    const duration = 25000
+
+    const expected = [
+      { at: 0 },
+      { at: 2000 },
+      { at: 8000 },
+      { at: 15000 },
+      { at: 23000 }
+    ]
+
+    expect(normalizeKeyframes(keyframes, duration)).toStrictEqual(expected)
+  })
+
+  it('should returns first keyframe and remove last keyframe if its not at 0 and bigger than duration', () => {
+    const keyframes = [{ at: 2000 }, { at: 8000 }, { at: 15000 }, { at: 23000 }]
+    const duration = 22800
+
+    const expected = [{ at: 0 }, { at: 2000 }, { at: 8000 }, { at: 15000 }]
+
+    expect(normalizeKeyframes(keyframes, duration)).toStrictEqual(expected)
+  })
+
+  it('should returns keyframes if first frame is 0 and last one is smaller than duration', () => {
+    const keyframes = [
+      { at: 0 },
+      { at: 2000 },
+      { at: 8000 },
+      { at: 15000 },
+      { at: 23000 }
+    ]
+    const duration = 24800
+
+    const expected = keyframes
+
+    expect(normalizeKeyframes(keyframes, duration)).toStrictEqual(expected)
   })
 })
