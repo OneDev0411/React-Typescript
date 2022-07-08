@@ -75,7 +75,7 @@ export function DueDateFilter({
     <BaseDropdown
       renderDropdownButton={({ onClick, ref }) => (
         <Button
-          title={getTitle()}
+          text={getTitle()}
           startIconPath={mdiCalendarOutline}
           isActive={!!hasDueDate}
           innerRef={ref}
@@ -122,15 +122,15 @@ export function DueDateFilter({
             </>
           )}
 
-          {hasDueDate && (
+          {(hasDueDate || showCustomRange) && (
             <ResetButton
               variant="text"
               onClick={() => {
+                close()
+                setShowCustomRange(false)
                 updateFilters({
                   dueDate: undefined
                 })
-
-                setShowCustomRange(false)
               }}
             />
           )}

@@ -1,4 +1,5 @@
 import { Avatar, makeStyles, Theme } from '@material-ui/core'
+import { AvatarGroup } from '@material-ui/lab'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -12,7 +13,8 @@ const useStyles = makeStyles(
     },
     avatar: {
       width: `${theme.spacing(3)}px !important`,
-      height: theme.spacing(3)
+      height: theme.spacing(3),
+      fontSize: theme.typography.caption.fontSize
     }
   }),
   {
@@ -29,15 +31,23 @@ export function AssigneeCell({ assignees }: Props) {
 
   return (
     <div className={classes.root}>
-      {assignees?.map(assignee => (
-        <Avatar
-          key={assignee.id}
-          className={classes.avatar}
-          src={assignee.profile_image_url ?? ''}
-        >
-          {assignee.display_name[0]}
-        </Avatar>
-      ))}
+      <AvatarGroup
+        max={5}
+        spacing={5}
+        classes={{
+          avatar: classes.avatar
+        }}
+      >
+        {assignees?.map(assignee => (
+          <Avatar
+            key={assignee.id}
+            className={classes.avatar}
+            src={assignee.profile_image_url ?? ''}
+          >
+            {assignee.display_name[0]}
+          </Avatar>
+        ))}
+      </AvatarGroup>
     </div>
   )
 }

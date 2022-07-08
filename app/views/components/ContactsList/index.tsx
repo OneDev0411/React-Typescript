@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 
 import { makeStyles, TextField, Theme } from '@material-ui/core'
+import cn from 'classnames'
 import { useDebounce } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
@@ -88,7 +89,7 @@ export function ContactsList({ onChange }: Props) {
   )
 
   return (
-    <div className={classes.root}>
+    <div className={cn(classes.root, 'u-scrollbar--thinner')}>
       <div className={classes.searchContainer}>
         <SelectedContacts contacts={selectedContacts} onRemove={handleRemove} />
         <TextField

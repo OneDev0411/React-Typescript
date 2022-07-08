@@ -5,14 +5,14 @@ import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 type Props = ButtonProps & {
-  title: string | React.ReactNode
+  text: React.ReactNode | JSX.Element | string
   isActive: boolean
   startIconPath?: string
   onClick?: React.MouseEventHandler<HTMLButtonElement>
 }
 
 export function Button({
-  title,
+  text,
   onClick = noop,
   isActive = false,
   startIconPath,
@@ -31,7 +31,7 @@ export function Button({
       }
       {...rest}
     >
-      {title}
+      {text}
     </BaseButton>
   )
 }

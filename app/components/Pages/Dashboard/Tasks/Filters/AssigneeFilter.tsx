@@ -47,13 +47,13 @@ export function AssigneeFilter({
 }: Props) {
   const classes = useStyles()
 
-  const getTitle = () => {
+  const getTitle = (): React.ReactNode => {
     if (!assignees?.length) {
-      return 'Assignee'
+      return <div>Assignee</div>
     }
 
     if (assignees.length === 1) {
-      return `Assigned to ${assignees[0].display_name}`
+      return <div>Assigned to {assignees[0].display_name}</div>
     }
 
     return (
@@ -82,7 +82,7 @@ export function AssigneeFilter({
     <BaseDropdown
       renderDropdownButton={({ onClick, ref }) => (
         <Button
-          title={getTitle()}
+          text={getTitle()}
           startIconPath={mdiAccountArrowLeft}
           isActive={!!assignees?.length}
           innerRef={ref}
@@ -95,13 +95,15 @@ export function AssigneeFilter({
             <Typography variant="subtitle1">Task Assignees</Typography>
           </Box>
 
-          <div className={classes.list}>
-            <AssigneesList
-              defaultAssignees={assignees ?? []}
-              onChange={assignees =>
-                setTimeout(() => updateFilters({ assignees }), 0)
-              }
-            />
+          <div className="u-scrollbar--thinner">
+            <div className={classes.list}>
+              <AssigneesList
+                defaultAssignees={assignees ?? []}
+                onChange={assignees =>
+                  setTimeout(() => updateFilters({ assignees }), 0)
+                }
+              />
+            </div>
           </div>
 
           {!!assignees?.length && (

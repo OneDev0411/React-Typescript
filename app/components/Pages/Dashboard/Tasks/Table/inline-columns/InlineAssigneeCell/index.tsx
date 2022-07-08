@@ -8,7 +8,7 @@ const useStyles = makeStyles(
   () => ({
     root: {
       maxHeight: '200px',
-      overflow: 'auto'
+      overflow: 'scroll'
     }
   }),
   {
@@ -33,11 +33,13 @@ export function InlineAssigneeCell({ task, closeHandler }: Props) {
   }
 
   return (
-    <div className={classes.root}>
-      <AssigneesList
-        defaultAssignees={task.assignees ?? []}
-        onChange={onChange}
-      />
+    <div className="u-scrollbar--thinner">
+      <div className={classes.root}>
+        <AssigneesList
+          defaultAssignees={task.assignees ?? []}
+          onChange={onChange}
+        />
+      </div>
     </div>
   )
 }

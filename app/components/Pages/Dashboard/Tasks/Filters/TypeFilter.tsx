@@ -20,7 +20,7 @@ export function TypeFilter({ currentFilters: { type }, updateFilters }: Props) {
     <BaseDropdown
       renderDropdownButton={({ onClick, ref }) => (
         <Button
-          title={type ?? 'Type'}
+          text={type ?? 'Type'}
           startIconPath={
             type ? eventTypesIcons[type].iconPath : mdiFormatListBulleted
           }

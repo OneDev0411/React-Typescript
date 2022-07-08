@@ -51,7 +51,7 @@ export function StatusFilter({
     <BaseDropdown
       renderDropdownButton={({ onClick, ref }) => (
         <Button
-          title={
+          text={
             status
               ? Options.find(({ value }) => value === status)!.label
               : 'Status'

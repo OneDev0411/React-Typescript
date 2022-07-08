@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react'
 
 import { makeStyles } from '@material-ui/core'
+import cn from 'classnames'
 
 import { Deals } from './Deals'
 import { Listings } from './Listings'
@@ -124,7 +125,7 @@ export function AssociationPicker<
   )
 
   return (
-    <div className={classes.root}>
+    <div className={cn(classes.root, 'u-scrollbar--thinner')}>
       <div className={classes.search}>
         <SelectedItems<T>
           ref={inputRef}

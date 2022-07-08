@@ -25,7 +25,7 @@ export default function Tasks() {
       }}
     >
       <PageLayout gutter={0}>
-        <Box m={4}>
+        <Box m={4} mb={0}>
           <PageLayout.HeaderWithSearch
             title="Tasks"
             SearchInputProps={{

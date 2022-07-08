@@ -37,7 +37,7 @@ export function TaskTypeCell({ task }: Props) {
         size: muiIconSizes.small
       })}
 
-      <div className={classes.type}>{task.type}</div>
+      <div className={classes.type}>{task.task_type}</div>
     </div>
   )
 }

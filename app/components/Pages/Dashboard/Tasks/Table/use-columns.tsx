@@ -83,7 +83,7 @@ export function useColumns(): TableColumn<ITask>[] {
       header: () => (
         <HeaderColumn text="Contacts" iconPath={mdiContactsOutline} />
       ),
-      width: '15%',
+      width: '18%',
       inlineEditStyles: {
         popover: ({ height }) => ({
           marginTop: height
@@ -117,7 +117,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'type',
-      width: '10%',
+      width: '12%',
       hidden: ['xs', 'sm'].includes(breakpoint),
       header: () => (
         <HeaderColumn text="Type" iconPath={mdiFormatListBulleted} />
@@ -137,7 +137,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'assignees',
-      width: '15%',
+      width: '10%',
       header: () => (
         <HeaderColumn text="Assignees" iconPath={mdiAccountArrowLeft} />
       ),
