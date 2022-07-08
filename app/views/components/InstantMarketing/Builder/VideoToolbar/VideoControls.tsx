@@ -65,7 +65,7 @@ const useStyles = makeStyles(
       },
       '&:after': {
         content: 'attr(data-number)',
-        paddingLeft: theme.spacing(1),
+        paddingLeft: theme.spacing(0.5),
         position: 'absolute',
         top: '50%',
         transform: 'translateY(-50%)',
@@ -170,9 +170,7 @@ export const VideoControls = forwardRef<HTMLDivElement, Props>(
             <div
               className={cn(
                 classes.progressSlot,
-                activeFrame > index &&
-                  currentTime !== 0 &&
-                  classes.activeProgressSlot
+                currentTime >= keyframes[index].at && classes.activeProgressSlot
               )}
               style={{
                 width: `${getSlotWidth(index, keyframes, duration).toFixed(2)}%`
