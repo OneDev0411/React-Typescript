@@ -371,43 +371,26 @@ export const GridCalendarPresentation = ({
   }
 
   /**
-   * Load initia events (behaves as componentDidMount)
+   * Load initial events (behaves as componentDidMount)
    */
   useEffectOnce(() => {
     handleLoadEvents(initialRange)
+
+    const reload = () => {
+      console.log('[ Calendar ] Reloading')
+      handleLoadEvents(calendarRange)
+    }
+
+    window.socket?.on('crm_task:create', reload)
+    window.socket?.on('crm_task:delete', reload)
+    window.socket?.on('Calendar.Updated', reload)
+
+    return () => {
+      window.socket?.off('crm_task:create', reload)
+      window.socket?.off('crm_task:delete', reload)
+      window.socket?.off('Calendar.Updated', reload)
+    }
   })
-
-  /**
-   * sync Google and Outlook real-time
-   */
-  // useEffect(() => {
-  //   const socket: SocketIOClient.Socket = (window as any).socket
-
-  //   if (!socket) {
-  //     return
-  //   }
-
-  //   function handleUpdate({ upserted, deleted }: SocketUpdate) {
-  //     if (upserted.length === 0 && deleted.length === 0) {
-  //       return
-  //     }
-
-  //     const currentEvents: ICalendarEvent[] =
-  //       deleted.length > 0
-  //         ? rowEvents.filter(e => !deleted.includes(e.id))
-  //         : rowEvents
-  //     const nextEvents =
-  //       upserted.length > 0 ? [...upserted, ...currentEvents] : currentEvents
-
-  //     updateEvents(nextEvents)
-  //   }
-
-  //   socket.on('Calendar.Updated', handleUpdate)
-
-  //   return () => {
-  //     socket.off('Calendar.Updated', handleUpdate)
-  //   }
-  // })
 
   useImperativeHandle(actionRef, () => ({
     updateCrmEvents: handleCrmEventChange
