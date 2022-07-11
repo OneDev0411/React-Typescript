@@ -196,7 +196,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
       }
 
       try {
-        await dispatch(deleteRole(deal.id, role.id))
+        dispatch(deleteRole(deal.id, role.id))
 
         return true
       } catch (e) {

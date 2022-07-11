@@ -1,7 +1,7 @@
 import * as actionTypes from '../../../../constants/deals'
 import Deals from '../../../../models/Deal'
 
-export async function deleteRole(deal_id, role_id) {
+export function deleteRole(deal_id, role_id) {
   return async dispatch => {
     try {
       await Deals.deleteRole(deal_id, role_id)
