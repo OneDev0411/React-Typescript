@@ -1,4 +1,4 @@
-import { Typography, makeStyles } from '@material-ui/core'
+import { Typography, makeStyles, Tooltip } from '@material-ui/core'
 import isBefore from 'date-fns/isBefore'
 
 import { useUser } from '@app/hooks/use-user'
@@ -8,7 +8,8 @@ import RelativeSendTime from '@app/views/components/RelativeSendTime'
 const useStyles = makeStyles(
   theme => ({
     root: {
-      display: 'flex'
+      display: 'flex',
+      maxWidth: '100%'
     },
     image: {
       width: theme.spacing(5),
@@ -52,9 +53,11 @@ function SocialPostTableColumnPost({
         />
       </div>
       <div className={classes.details}>
-        <Typography variant="body2" component="div" noWrap>
-          {socialPost.caption}
-        </Typography>
+        <Tooltip title={socialPost.caption}>
+          <Typography variant="body2" component="div" noWrap>
+            {socialPost.caption}
+          </Typography>
+        </Tooltip>
         <Typography
           className={classes.date}
           variant="body2"

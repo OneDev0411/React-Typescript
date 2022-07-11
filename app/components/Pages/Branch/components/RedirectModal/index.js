@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Modal, ModalContent } from 'components/Modal'
 
 const RedirectModal = ({ children }) => {

@@ -3,6 +3,7 @@ import React from 'react'
 import { render } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
+import { frequencyToString } from '@app/components/Pages/Dashboard/Contacts/components/ManageRelationship/helper'
 import fullContact from 'fixtures/contacts/full-contact.json'
 import mockDate, { RealDate } from 'utils/test-utils/mock-date'
 
@@ -43,11 +44,23 @@ describe('Contact profile last touched component', () => {
 
     const decimalPointedPeriod =
       (fullContact.next_touch! - fullContact.last_touch!) / 86400
-    const rounedPeriod = Math.round(
-      (fullContact.next_touch! - fullContact.last_touch!) / 86400
-    )
 
     expect(wrapper.text().includes(decimalPointedPeriod.toString())).toBeFalsy()
-    expect(wrapper.text().includes(rounedPeriod.toString())).toBeTruthy()
+  })
+
+  it('renders monthly touch reminder freq', () => {
+    const wrapper = render(
+      <TestBed>
+        <AppTheme>
+          <LastTouched contact={fullContact as any} />
+        </AppTheme>
+      </TestBed>
+    )
+
+    const freqString = frequencyToString(
+      fullContact.touch_freq as any
+    ).toLowerCase()
+
+    expect(wrapper.text().includes(freqString)).toBeTruthy()
   })
 })

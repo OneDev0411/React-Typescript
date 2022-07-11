@@ -1,3 +1,5 @@
+import { formatPhoneNumber } from '@app/utils/format'
+
 import { CellWithMultipleValue } from './components/CellWithMultipleValue'
 
 const MAX_VALUES: number = 1
@@ -13,7 +15,7 @@ export function PhonesCell({ contact }: Props) {
 
   return (
     <CellWithMultipleValue
-      label={contact.phone_number}
+      label={formatPhoneNumber(contact.phone_number)}
       info={
         (contact.phone_numbers || []).length > MAX_VALUES
           ? `${contact.phone_numbers?.length! - MAX_VALUES} more`

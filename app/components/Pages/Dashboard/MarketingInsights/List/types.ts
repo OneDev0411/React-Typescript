@@ -3,10 +3,7 @@ export enum InsightFilterType {
   SENT = 'sent'
 }
 
-export type InsightEmailCampaign = IEmailCampaign<
-  'recipients' | 'template',
-  'list'
->
+export type InsightEmailCampaign = IEmailCampaign<'template', ''>
 
 export interface InsightState {
   isLoading: boolean

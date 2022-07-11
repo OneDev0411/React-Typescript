@@ -1,7 +1,8 @@
-import React, { ReactNode } from 'react'
+import { ReactElement } from 'react'
 
-import { Box, Typography, Tooltip } from '@material-ui/core'
+import { Box, Tooltip } from '@material-ui/core'
 
+import { TextMiddleTruncate } from '@app/views/components/TextMiddleTruncate'
 import { EditEmailButton } from 'components/EditEmailButton'
 
 import { isEmailFailed, isEmailInProgress, isEmailScheduled } from '../helpers'
@@ -18,12 +19,15 @@ function TitleColumn({ data, reloadList }: Props) {
   const isFailed: boolean = isEmailFailed(data)
   const isScheduled: boolean = isEmailScheduled(data)
   const isInProgress: boolean = isEmailInProgress(data)
-  let titleRenderer: ReactNode
+  let titleRenderer: ReactElement
 
   const title = (
     <div className="info-title">
       <Box pr={2} maxWidth="100%">
-        <Typography noWrap>{data.subject || '(untitled)'}</Typography>
+        <TextMiddleTruncate
+          text={data.subject || '(untitled)'}
+          maxLength={isScheduled ? 140 : 55}
+        />
       </Box>
     </div>
   )
@@ -45,7 +49,12 @@ function TitleColumn({ data, reloadList }: Props) {
   }
 
   return (
-    <>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="flex-start"
+      maxWidth="100%"
+    >
       {titleRenderer}
       <Box>
         <Date data={data} />
@@ -58,7 +67,7 @@ function TitleColumn({ data, reloadList }: Props) {
           <StyledBadge appearance="warning">In Progress</StyledBadge>
         )}
       </Box>
-    </>
+    </Box>
   )
 }
 

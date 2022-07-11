@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
+import { useEffectOnce } from 'react-use'
 
 import { useLoadUserAndActiveTeam } from '@app/hooks/use-load-user-and-active-team'
+import { useReduxDispatch } from '@app/hooks/use-redux-dispatch'
+import getBrand from '@app/store_actions/brand'
 import { AnimatedLoader } from 'components/AnimatedLoader'
 
 interface Props {
@@ -15,8 +18,20 @@ function Authentication({ location, children }: Props) {
   // TODO: we must deprecate data object
   const data = useSelector(({ data }: { data: any }) => data)
   const { user, isLoading: isLoadingUser } = useLoadUserAndActiveTeam()
+  const [isBrandLoading, setIsBrandLoading] = useState(true)
+  const dispatch = useReduxDispatch()
 
-  if (!user?.id && isLoadingUser) {
+  useEffectOnce(() => {
+    const loadBrand = async () => {
+      await dispatch(getBrand())
+
+      setIsBrandLoading(false)
+    }
+
+    loadBrand()
+  })
+
+  if ((!user?.id && isLoadingUser) || isBrandLoading) {
     return <AnimatedLoader />
   }
 

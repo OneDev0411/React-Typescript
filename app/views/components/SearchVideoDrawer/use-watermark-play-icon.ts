@@ -22,7 +22,7 @@ export function useWatermarkPlayIcon(): UseWatermarkPlayIcon {
     const newThumbnailBlob = await watermark(
       [
         `/api/utils/cors/${btoa(currentThumbnail)}`,
-        'https://i.ibb.co/Vv4nsW8/play-96x96.png'
+        'https://i.ibb.co/fqk7kgY/ic-play.png'
       ],
       {
         init(img) {

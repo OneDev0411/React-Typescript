@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { useBrandAssets } from '@app/hooks/use-brand-assets'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
-import { getVideoPlayerUrl } from './helpers'
+import { createGalleryVideoObject } from './helpers'
 import { SearchVideoResult } from './types'
 
 export default function useGalleryVideos(): () => SearchVideoResult[] {
@@ -15,13 +15,6 @@ export default function useGalleryVideos(): () => SearchVideoResult[] {
   return useCallback(() => {
     const videoAssets = assets.filter(asset => asset.file.name.endsWith('.mp4'))
 
-    return videoAssets.map<SearchVideoResult>(asset => ({
-      source: 'gallery',
-      playerUrl: getVideoPlayerUrl(asset.file.url),
-      url: asset.file.url,
-      title: asset.label || 'No Label',
-      publishedAt: new Date(asset.created_at * 1000).toISOString(),
-      sourceIcon: '/static/images/favicons/favicon-32x32.png'
-    }))
+    return videoAssets.map<SearchVideoResult>(createGalleryVideoObject)
   }, [assets])
 }

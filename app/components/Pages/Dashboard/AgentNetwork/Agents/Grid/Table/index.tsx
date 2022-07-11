@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { Button, Tooltip, Theme, useTheme } from '@material-ui/core'
+import { Typography, Button, Tooltip, Theme, useTheme } from '@material-ui/core'
 import { mdiEmailOutline } from '@mdi/js'
 import Flex from 'styled-flex-component'
 
@@ -48,10 +46,12 @@ export function ListTable({
       width: '20%',
       accessor: (agentData: AgentWithStats) => agentData.full_name,
       render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
-        <>
-          <div>{agentData.full_name}</div>
-          <Caption variant="body2">{agentData.office?.name ?? ''}</Caption>
-        </>
+        <Typography noWrap>
+          {agentData.full_name}
+          {agentData.office?.name && (
+            <Caption variant="body2">{agentData.office?.name}</Caption>
+          )}
+        </Typography>
       )
     },
     {

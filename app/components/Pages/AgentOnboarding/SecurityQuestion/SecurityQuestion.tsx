@@ -1,17 +1,14 @@
-import React from 'react'
-
 import { Box, Typography } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Link, WithRouterProps } from 'react-router'
 
 import { updateUser } from 'actions/user'
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { upgradeAgent } from 'models/user/upgrade-to-agent'
-import { IAppState } from 'reducers'
 
 import { useCommonStyles } from '../common-styles'
 import Container from '../Container'
@@ -29,7 +26,6 @@ export function SecurityQuestion(props: WithRouterProps) {
 
   const dispatch = useDispatch()
   const commonClasses = useCommonStyles({})
-  const brand: IBrand = useSelector((store: IAppState) => store.brand)
   const agent: IAgent = props.location.state.agent
 
   const onSubmit = async (values: FormValues) => {
@@ -67,7 +63,6 @@ export function SecurityQuestion(props: WithRouterProps) {
     <Container>
       <SkipButton to="/onboarding/config-brand" />
       <Header
-        brand={brand}
         title="Agent Verification"
         subtitle="Enter the complete mobile number or email address."
       />
