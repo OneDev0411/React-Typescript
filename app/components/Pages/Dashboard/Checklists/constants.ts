@@ -23,5 +23,6 @@ export const dealTaskTypeToString: { [key in IDealTaskType]: string } = {
   YardSign: 'Yard Sign',
   OpenHouse: 'Open House',
   Media: 'Media',
-  Splitter: 'Splitter'
+  Splitter: 'Splitter',
+  Application: 'Application'
 }
