@@ -12,6 +12,7 @@ import { parseFullName } from 'parse-full-name'
 import { useAsync, useDebounce } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
+import { isMlsNumber } from '@app/utils/is-mls-number'
 import { isValidNameTitle } from '@app/views/components/DealRole/validators/is-valid-legal-prefix'
 import VirtualList from 'components/VirtualList'
 import searchAgents from 'models/agent/search'
@@ -131,13 +132,19 @@ export function ContactRoles({
    * Starts creating a new contact based on the given name
    */
   const createNewContact = () => {
-    const { first, last, middle, title } = parseFullName(
+    let { first, last, middle, title } = parseFullName(
       debouncedSearchCriteria,
       'all',
       1,
       0,
       0
     )
+
+    if (isMlsNumber(debouncedSearchCriteria)) {
+      first = ''
+      last = ''
+      middle = ''
+    }
 
     handleSelectRole({
       legal_prefix: isValidNameTitle(title) ? title : undefined,
