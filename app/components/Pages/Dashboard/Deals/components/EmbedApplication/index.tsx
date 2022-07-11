@@ -24,7 +24,11 @@ import { IAppState } from '@app/reducers'
 import { getBrandChecklistsById } from '@app/reducers/deals/brand-checklists'
 import { getDealChecklists } from '@app/reducers/deals/checklists'
 import { selectDealRoles } from '@app/reducers/deals/roles'
-import { changeNeedsAttention, upsertContexts } from '@app/store_actions/deals'
+import {
+  changeNeedsAttention,
+  upsertContexts,
+  deleteRole
+} from '@app/store_actions/deals'
 import { DialogTitle } from '@app/views/components/DialogTitle'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import DatePicker from 'components/DatePicker'
@@ -43,6 +47,7 @@ import config from 'config'
 
 import Message from '../../../Chatroom/Util/message'
 import { ContactRoles } from '../../Create/components/ContactRoles'
+import { isPrimaryAgent } from '../../utils/roles'
 import { RoleCard } from '../RoleCard'
 
 import { Manifest } from './types'
@@ -184,6 +189,25 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
     [deal]
   )
 
+  const deleteDealRole = useCallback(
+    async (role: IDealRole) => {
+      if (isPrimaryAgent(role.role, deal.deal_type)) {
+        return null
+      }
+
+      try {
+        await dispatch(deleteRole(deal.id, role.id))
+
+        return true
+      } catch (e) {
+        console.log(e)
+
+        return null
+      }
+    },
+    [deal, dispatch]
+  )
+
   const App = useCallback(
     props => {
       if (!module) {
@@ -257,7 +281,8 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
             }}
             api={{
               getDealContext,
-              updateDealContext
+              updateDealContext,
+              deleteRole: deleteDealRole
             }}
           />
         ) : (
