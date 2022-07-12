@@ -54,13 +54,15 @@ export function normalizeTeams(
         office: office.name
       }))
 
+      console.log(agents)
+
       return {
         id: office.id,
         name: office.name,
         subtitle: getSubtitle(office),
         users: searchTerm
           ? new Fuse(agents, {
-              keys: ['office', 'display_name', 'email'],
+              keys: ['office', 'display_name', 'email', 'agents.mlsid'],
               threshold: 0.1
             }).search(searchTerm)
           : agents

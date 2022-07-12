@@ -2,7 +2,6 @@ import {
   memo,
   useState,
   RefObject,
-  useEffect,
   useCallback,
   useImperativeHandle
 } from 'react'
@@ -56,7 +55,7 @@ import {
 } from './helpers/get-date-range'
 import { normalizeEventOnEdit } from './helpers/normalize-event-on-edit'
 import { normalizeEvents } from './helpers/normalize-events'
-import { SocketUpdate, ActionRef } from './types'
+import { ActionRef } from './types'
 
 const useStyles = makeStyles(
   () => ({
@@ -379,36 +378,36 @@ export const GridCalendarPresentation = ({
   })
 
   /**
-   * sync with google and out look real-time
+   * sync Google and Outlook real-time
    */
-  useEffect(() => {
-    const socket: SocketIOClient.Socket = (window as any).socket
+  // useEffect(() => {
+  //   const socket: SocketIOClient.Socket = (window as any).socket
 
-    if (!socket) {
-      return
-    }
+  //   if (!socket) {
+  //     return
+  //   }
 
-    function handleUpdate({ upserted, deleted }: SocketUpdate) {
-      if (upserted.length === 0 && deleted.length === 0) {
-        return
-      }
+  //   function handleUpdate({ upserted, deleted }: SocketUpdate) {
+  //     if (upserted.length === 0 && deleted.length === 0) {
+  //       return
+  //     }
 
-      const currentEvents: ICalendarEvent[] =
-        deleted.length > 0
-          ? rowEvents.filter(e => !deleted.includes(e.id))
-          : rowEvents
-      const nextEvents =
-        upserted.length > 0 ? [...upserted, ...currentEvents] : currentEvents
+  //     const currentEvents: ICalendarEvent[] =
+  //       deleted.length > 0
+  //         ? rowEvents.filter(e => !deleted.includes(e.id))
+  //         : rowEvents
+  //     const nextEvents =
+  //       upserted.length > 0 ? [...upserted, ...currentEvents] : currentEvents
 
-      updateEvents(nextEvents)
-    }
+  //     updateEvents(nextEvents)
+  //   }
 
-    socket.on('Calendar.Updated', handleUpdate)
+  //   socket.on('Calendar.Updated', handleUpdate)
 
-    return () => {
-      socket.off('Calendar.Updated', handleUpdate)
-    }
-  })
+  //   return () => {
+  //     socket.off('Calendar.Updated', handleUpdate)
+  //   }
+  // })
 
   useImperativeHandle(actionRef, () => ({
     updateCrmEvents: handleCrmEventChange

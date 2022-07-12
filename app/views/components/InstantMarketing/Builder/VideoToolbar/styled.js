@@ -10,7 +10,7 @@ export const Container = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
-  right: 25%;
+  right: 0;
 
   background-color: #fff;
   padding: 0 2rem;

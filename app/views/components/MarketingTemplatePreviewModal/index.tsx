@@ -43,7 +43,10 @@ function PreviewModal(props: Props) {
   let modalProps: ComponentProps<typeof ImageOrVideoPreviewModal> = {
     isOpen: props.isOpen,
     handleClose: () => props.onClose && props.onClose(),
-    menuRenderer: () => props.actions
+    menuRenderer: () => props.actions,
+    isVideo: !!(
+      selectedTemplate as IBrandMarketingTemplate | IMarketingTemplateInstance
+    ).template?.video
   }
 
   if (props.type === 'history') {

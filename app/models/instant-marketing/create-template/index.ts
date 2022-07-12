@@ -8,6 +8,7 @@ export interface CreateTemplateOptions {
   html: string
   brands: UUID[]
   originalTemplateId?: UUID
+  video?: boolean
   mjml?: boolean
   inputs?: string[]
 }
@@ -20,6 +21,7 @@ export async function createTemplate({
   html,
   brands,
   originalTemplateId,
+  video = false,
   mjml = false,
   inputs = []
 }: CreateTemplateOptions): Promise<ApiResponseBody<IMarketingTemplate>> {
@@ -32,6 +34,7 @@ export async function createTemplate({
       html,
       brands,
       origin: originalTemplateId,
+      video,
       mjml,
       inputs
     })
