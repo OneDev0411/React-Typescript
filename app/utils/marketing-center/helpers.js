@@ -12,14 +12,14 @@ export function getTemplateImage(
     }
   }
 
-  if (template.template.video && template.thumbnail?.url) {
+  if (template.template?.video && template.thumbnail?.url) {
     return {
       original: template.thumbnail.url,
       thumbnail: template.thumbnail.url
     }
   }
 
-  if (template.template.video && template.file?.url) {
+  if (template.template?.video && template.file?.url) {
     return {
       original: template.file.url,
       thumbnail: template.file.url
