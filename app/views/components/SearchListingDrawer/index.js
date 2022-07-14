@@ -143,12 +143,17 @@ class SearchListingDrawer extends React.Component {
   handleSaveHipPocketListing = async data => {
     const listingData = convertHipPocketListingToListing(data)
 
-    this.setState(oldState => ({
-      selectedItems: {
-        ...oldState.selectedItems,
-        [listingData.id]: listingData
-      }
-    }))
+    if (this.props.multipleSelection) {
+      this.setState(oldState => ({
+        selectedItems: {
+          ...oldState.selectedItems,
+          [listingData.id]: listingData
+        }
+      }))
+    } else {
+      this.handleSelectListings([listingData])
+    }
+
     this.closeHipPocketListingDrawer()
   }
 
