@@ -20,8 +20,7 @@ export const useStyles = makeStyles(
       '& .column:not(.heading)': {
         padding: theme.spacing(0, 1, 0, 2)
       },
-      '& .column:not(.heading) div.caption': {
-        width: '100%',
+      '& .column:not(.heading) .overflow-ellipsis': {
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis'

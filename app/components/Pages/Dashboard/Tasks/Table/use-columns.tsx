@@ -80,10 +80,11 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'contacts',
+      width: '280px',
+      hidden: ['xs', 'sm'].includes(breakpoint),
       header: () => (
         <HeaderColumn text="Contacts" iconPath={mdiContactsOutline} />
       ),
-      width: '18%',
       inlineEditStyles: {
         popover: ({ height }) => ({
           marginTop: height
@@ -97,6 +98,7 @@ export function useColumns(): TableColumn<ITask>[] {
     {
       id: 'due-date',
       width: '15%',
+      hidden: ['xs'].includes(breakpoint),
       header: () => (
         <HeaderColumn
           text="Due Date"
@@ -138,6 +140,7 @@ export function useColumns(): TableColumn<ITask>[] {
     {
       id: 'assignees',
       width: '10%',
+      hidden: ['xs', 'sm'].includes(breakpoint),
       header: () => (
         <HeaderColumn text="Assignees" iconPath={mdiAccountArrowLeft} />
       ),

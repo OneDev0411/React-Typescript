@@ -37,7 +37,9 @@ export function ContactsCell({ task }: Props) {
 
   return (
     <div
-      className={cn(classes.root, 'caption', { done: task.status === 'DONE' })}
+      className={cn(classes.root, 'overflow-ellipsis', {
+        done: task.status === 'DONE'
+      })}
     >
       {list?.join(', ')}
     </div>

@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import { makeStyles, TextField, Theme } from '@material-ui/core'
+import { Box, makeStyles, TextField, Theme } from '@material-ui/core'
 import cn from 'classnames'
 import { useDebounce } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
@@ -93,6 +93,8 @@ export function ContactsList({ onChange }: Props) {
       <div className={classes.searchContainer}>
         <SelectedContacts contacts={selectedContacts} onRemove={handleRemove} />
         <TextField
+          autoFocus
+          fullWidth={selectedContacts.length === 0}
           placeholder="Search contact"
           value={searchCriteria}
           InputProps={{
@@ -133,6 +135,17 @@ export function ContactsList({ onChange }: Props) {
             </VirtualList>
           )}
         </AutoSizer>
+
+        {list?.length === 0 && !(isLoading || isSearching) && (
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            height="100%"
+          >
+            Nothing Found
+          </Box>
+        )}
       </div>
     </div>
   )

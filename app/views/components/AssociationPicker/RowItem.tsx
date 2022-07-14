@@ -69,7 +69,7 @@ export function RowItem({
         <Typography
           className={classes.status}
           style={{
-            backgroundColor: getStatusColorClass(status)
+            backgroundColor: getStatusColorClass(status) || '#262626'
           }}
           variant="caption"
         >

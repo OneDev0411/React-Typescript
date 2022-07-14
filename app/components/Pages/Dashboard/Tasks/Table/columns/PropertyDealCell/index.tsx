@@ -1,17 +1,26 @@
 import { useMemo } from 'react'
 
-import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
+import {
+  Box,
+  Chip,
+  makeStyles,
+  Theme,
+  Tooltip,
+  Typography
+} from '@material-ui/core'
+import { mdiHome } from '@mdi/js'
 import cn from 'classnames'
 
-import { getAvatarTitle } from '@app/components/Pages/Dashboard/Deals/utils/get-avatar-title'
 import { getField } from '@app/models/Deal/helpers/context'
 import { Avatar } from '@app/views/components/Avatar'
+import { SvgIcon } from '@app/views/components/SvgIcons'
 
 import type { ITask } from '../../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
+      width: '100%',
       display: 'flex',
       alignItems: 'center'
     },
@@ -73,11 +82,11 @@ export function PropertyDealCell({ task }: Props) {
 
   const getCaption = () => {
     if (deals?.length) {
-      return deals[0].deal?.title
+      return deals[0].deal?.title ?? ''
     }
 
     if (listings?.length) {
-      return listings[0].listing?.property?.address.full_address
+      return listings[0].listing?.property?.address.full_address ?? ''
     }
 
     return ''
@@ -89,13 +98,20 @@ export function PropertyDealCell({ task }: Props) {
 
   return (
     <div className={cn(classes.root, { [classes.done]: isTaskDone })}>
-      <Box className="caption" display="flex" alignItems="center" mr={1}>
+      <Box
+        className="overflow-ellipsis"
+        display="flex"
+        alignItems="center"
+        mr={1}
+      >
         <Box mr={1}>
           <Avatar size="small" url={getImageUrl()}>
-            {getAvatarTitle(getCaption())}
+            <SvgIcon path={mdiHome} />
           </Avatar>
         </Box>
-        <Typography variant="caption">{getCaption()}</Typography>
+        <Tooltip title={getCaption()}>
+          <Typography variant="caption">{getCaption()}</Typography>
+        </Tooltip>
       </Box>
 
       {badgeCounter > 0 && (

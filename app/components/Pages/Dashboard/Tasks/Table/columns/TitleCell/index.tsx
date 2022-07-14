@@ -24,7 +24,11 @@ export function TitleCell({ title, status }: Props) {
   const classes = useStyles()
 
   return (
-    <div className={cn(classes.root, 'caption', { done: status === 'DONE' })}>
+    <div
+      className={cn(classes.root, 'overflow-ellipsis', {
+        done: status === 'DONE'
+      })}
+    >
       {title}
     </div>
   )

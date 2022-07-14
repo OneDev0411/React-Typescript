@@ -42,15 +42,18 @@ export function InlineTitleCell({ task, closeHandler }: Props) {
 
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      mutation.mutate({
-        title: value
-      })
-
+      updateTitle()
       closeHandler()
     }
   }
 
-  const handleBlur = () => {
+  const updateTitle = () => {
+    if (value.trim().length === 0) {
+      setValue(task.title)
+
+      return
+    }
+
     mutation.mutate({
       title: value
     })
@@ -70,7 +73,7 @@ export function InlineTitleCell({ task, closeHandler }: Props) {
           }
         }}
         className={classes.inputRoot}
-        onBlur={handleBlur}
+        onBlur={updateTitle}
         onChange={e => setValue(e.target.value)}
         onKeyPress={handleKeyPress}
       />
