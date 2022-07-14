@@ -2,7 +2,7 @@ import fecha from 'fecha'
 
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
-export function getTemplateImage(
+export function getTemplateImageOrVideo(
   template,
   fallbackImage = 'https://i.ibb.co/ZhVwVzy/template-placeholder.png'
 ) {
@@ -189,4 +189,19 @@ export function convertToTemplate(template) {
   }
 
   return template
+}
+
+export function isVideoThumb(template) {
+  if (template.type === 'brand_asset' && template.file?.url.endsWith('.mp4')) {
+    return true
+  }
+
+  if (
+    (template.template?.video && template.thumbnail?.url) ||
+    (template.template?.video && template.file?.url)
+  ) {
+    return true
+  }
+
+  return false
 }
