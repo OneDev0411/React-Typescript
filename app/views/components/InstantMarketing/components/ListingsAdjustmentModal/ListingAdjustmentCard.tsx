@@ -1,22 +1,13 @@
-import { Divider, Grid, makeStyles, Typography } from '@material-ui/core'
-import {
-  mdiStar,
-  mdiShower,
-  mdiBedKingOutline,
-  mdiVectorSquare,
-  mdiMapMarkerOutline
-} from '@mdi/js'
+import { Button, Divider, makeStyles, Typography } from '@material-ui/core'
+import { mdiStar } from '@mdi/js'
 import cn from 'classnames'
 
-import {
-  getListingFormattedPrice,
-  addressTitle,
-  metersToFeet,
-  getResizeUrl
-} from '@app/utils/listing'
+import { getListingFormattedPrice, getResizeUrl } from '@app/utils/listing'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
+import { OVER_LAYER_HEIGHT } from './constants'
+import ListingAdjustmentCardSummery from './ListingAdjustmentCardSummery'
 import ListingAdjustmentRow from './ListingAdjustmentRow'
 import ListingAmenityRow from './ListingAmenityRow'
 import { IListingWithAdjustment } from './types'
@@ -62,37 +53,10 @@ const useStyles = makeStyles(
       width: '100%',
       height: 150
     },
-    headerInfo: {
+    cardSummery: {
       padding: theme.spacing(2, 2, 1, 2),
       textAlign: 'left'
     },
-    address: {
-      display: 'flex',
-      alignItems: 'center'
-    },
-    addressIcon: {
-      marginRight: theme.spacing(0.5),
-      marginLeft: theme.spacing(-0.5)
-    },
-    details: {
-      margin: theme.spacing(1, 0)
-    },
-    detailItem: {
-      fontSize: 12,
-      display: 'flex',
-      alignItems: 'center',
-      '&:not(:last-child)': {
-        paddingRight: theme.spacing(1),
-        borderRight: '1px solid #ccc',
-        marginRight: theme.spacing(1)
-      }
-    },
-    icon: {
-      maxWidth: 14,
-      maxHeight: 14,
-      marginRight: theme.spacing(0.5)
-    },
-    adjustmentsContainer: {},
     subjectProperty: {
       padding: theme.spacing(2),
       display: 'flex',
@@ -138,8 +102,12 @@ const useStyles = makeStyles(
       top: 0,
       left: 0,
       width: '100%',
-      height: '100px',
-      zIndex: 100
+      height: OVER_LAYER_HEIGHT,
+      zIndex: 100,
+      display: 'flex',
+      alignItems: 'flex-end',
+      justifyContent: 'center',
+      paddingBottom: theme.spacing(2)
     }
   }),
   { name: 'ListingAdjustmentCard' }
@@ -148,24 +116,24 @@ const useStyles = makeStyles(
 interface Props {
   listing: IListingWithAdjustment
   isSubjectProperty: boolean
+  onOpenAddAdjustmentModal: (id: UUID) => void
+  // TODO: This usually should be handled with css position
+  // But, I have to hack it this way because position:fixed didn't work inside of Swiper
+  overLayerTopPosition: number | string
 }
 
-const ListingAdjustmentCard = ({ listing, isSubjectProperty }: Props) => {
+const ListingAdjustmentCard = ({
+  listing,
+  isSubjectProperty,
+  onOpenAddAdjustmentModal,
+  overLayerTopPosition
+}: Props) => {
   const {
     price,
     adjustments,
     adjusted_price: adjustedPrice,
-    cover_image_url: coverImageUrl,
-    property
+    cover_image_url: coverImageUrl
   } = listing
-
-  const {
-    square_meters: squareMeters,
-    bathroom_count: bathroomCount,
-    bedroom_count: bedroomCount,
-    property_type: propertyType,
-    address
-  } = property
 
   const classes = useStyles()
 
@@ -173,17 +141,23 @@ const ListingAdjustmentCard = ({ listing, isSubjectProperty }: Props) => {
   const listingAdjustedPrice = adjustedPrice
     ? getListingFormattedPrice(adjustedPrice, false)
     : undefined
-  const squareFeet = Math.round(metersToFeet(squareMeters)).toLocaleString()
-  const fullAddress = addressTitle(address)
-  const baths = bathroomCount ?? 0
-  const bedrooms = bedroomCount ?? 0
   const coverImageURL = coverImageUrl
     ? `${getResizeUrl(coverImageUrl)}?w=160`
     : PLACEHOLDER_IMAGE
 
   return (
     <div className={classes.root}>
-      <div className={classes.overLayer} />
+      <div className={classes.overLayer} style={{ top: overLayerTopPosition }}>
+        <Button
+          variant="text"
+          color="secondary"
+          onClick={() => {
+            onOpenAddAdjustmentModal(listing.id)
+          }}
+        >
+          + Add Adjustments
+        </Button>
+      </div>
       <div
         className={cn(
           classes.container,
@@ -191,39 +165,15 @@ const ListingAdjustmentCard = ({ listing, isSubjectProperty }: Props) => {
           isSubjectProperty && classes.primary
         )}
       >
-        <img className={classes.image} alt={fullAddress} src={coverImageURL} />
+        <img className={classes.image} alt="listing" src={coverImageURL} />
 
-        <div className={classes.headerInfo}>
-          <Typography variant="button" className={classes.address}>
-            <SvgIcon
-              path={mdiMapMarkerOutline}
-              size={muiIconSizes.small}
-              className={classes.addressIcon}
-            />
-            {fullAddress}
-          </Typography>
-          {!['Commercial', 'Lots & Acreage'].includes(propertyType) && (
-            <Grid className={classes.details} container>
-              <Grid className={classes.detailItem} item>
-                <SvgIcon path={mdiBedKingOutline} className={classes.icon} />
-                {bedrooms}
-              </Grid>
-              <Grid className={classes.detailItem} item>
-                <SvgIcon path={mdiShower} className={classes.icon} />
-                {baths}
-              </Grid>
-              <Grid className={classes.detailItem} item>
-                <SvgIcon path={mdiVectorSquare} className={classes.icon} />
-                {squareFeet} ft
-                <sup>2</sup>
-              </Grid>
-            </Grid>
-          )}
+        <div className={classes.cardSummery}>
+          <ListingAdjustmentCardSummery listing={listing} />
         </div>
 
         <Divider />
 
-        <div className={classes.adjustmentsContainer}>
+        <div>
           {!!adjustments && !isSubjectProperty && (
             <ListingAdjustmentRow adjustments={adjustments} />
           )}
