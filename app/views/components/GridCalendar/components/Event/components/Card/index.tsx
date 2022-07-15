@@ -1,4 +1,4 @@
-import React, { useState, useMemo, memo } from 'react'
+import { useState, useMemo, memo } from 'react'
 
 import { Popover, Button, IconButton } from '@material-ui/core'
 import { mdiClose, mdiTrashCanOutline, mdiPencilOutline } from '@mdi/js'
@@ -174,7 +174,7 @@ const EventCardComponent = ({
                 {event.event.title}
               </span>
               <span className={popoverClasses.eventDate}>
-                {getFormatDate(rowEvent)}
+                {getFormatDate(rowEvent, event)}
               </span>
             </div>
           </div>

@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 
 import { Button } from '@material-ui/core'
 import { useSelector } from 'react-redux'
+import { ToWords } from 'to-words'
 
 import DatePicker from 'components/DatePicker'
 import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
@@ -15,6 +16,16 @@ import { formatDate } from '../../../../utils/format-date'
 
 import { Body, Footer } from './styled'
 import { TextInput } from './TextInput'
+
+const toWords = new ToWords({
+  localeCode: 'en-US',
+  converterOptions: {
+    currency: true,
+    ignoreDecimal: false,
+    ignoreZeroCurrency: false,
+    doNotAddOnly: true
+  }
+})
 
 export function ContextField(props) {
   const box = props.rect
@@ -49,6 +60,10 @@ export function ContextField(props) {
   }
 
   const formatValue = () => {
+    if (props.annotation.format === 'NumeralCurrency' && props.value) {
+      return toWords.convert(Number(props.value.replace(/[^0-9.-]+/g, '')))
+    }
+
     if (context.current?.data_type === 'Date' && props.value) {
       return isValidDate(new Date(props.value))
         ? formatDate(props.value, props.annotation.format)
