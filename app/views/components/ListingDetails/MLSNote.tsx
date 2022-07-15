@@ -1,5 +1,10 @@
 import { Grid, makeStyles, Theme, Typography } from '@material-ui/core'
 import fecha from 'fecha'
+import nunjucks from 'nunjucks'
+import { useSelector } from 'react-redux'
+
+import { useUnsafeActiveBrand } from '@app/hooks/brand'
+import { IAppState } from '@app/reducers'
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -40,7 +45,18 @@ interface Props {
 
 export default function MLSNote({ disclaimer, mlsName, logo }: Props) {
   const classes = useStyles()
+  const activeBrand = useUnsafeActiveBrand()
+  const hostBrand = useSelector<IAppState, IBrand>(
+    (state: IAppState) => state.brand
+  )
+
   const lastUpdateDate = getLastUpdateDate()
+  const brokerage = {
+    name: hostBrand?.name || activeBrand?.name || mlsName,
+    logo
+  }
+
+  const renderedDisclaimer = nunjucks.renderString(disclaimer, { brokerage })
 
   return (
     <div className={classes.container}>
@@ -52,9 +68,8 @@ export default function MLSNote({ disclaimer, mlsName, logo }: Props) {
       <Grid item className={classes.noteWrapper}>
         <Typography
           variant="body1"
-          dangerouslySetInnerHTML={{ __html: disclaimer }}
+          dangerouslySetInnerHTML={{ __html: renderedDisclaimer }}
         />
-
         <Typography variant="body1" className={classes.closedNote}>
           Some properties which appear for sale on this website may no longer be
           available because they are under contract, have Closed or are no
