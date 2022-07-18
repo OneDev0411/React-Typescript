@@ -59,6 +59,7 @@ export function convertHipPocketListingToListing(
       hipPocketListing.images || [],
       PLACEHOLDER_IMAGE_URL
     ),
+    cover_image_url: hipPocketListing?.images?.[0] ?? null,
     url: hipPocketListing.url || '',
     price: hipPocketListing.price || 0,
     property: {

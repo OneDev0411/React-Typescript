@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { Button, CircularProgress, Tooltip } from '@material-ui/core'
+import pluralize from 'pluralize'
 import { useSelector } from 'react-redux'
 
 import useListingsEditorAssets from '@app/hooks/use-listings-editor-assets'
@@ -236,7 +237,12 @@ function PublishWebsite({
               color="secondary"
               {...props.buttonProps}
             >
-              {`Next (${props.selectedItemsCount} Listings Selected)`}
+              Next
+              {isMultiListing &&
+                ` (${props.selectedItemsCount} ${pluralize(
+                  'Listing',
+                  props.selectedItemsCount
+                )} Selected)`}
             </Button>
           )}
         />
