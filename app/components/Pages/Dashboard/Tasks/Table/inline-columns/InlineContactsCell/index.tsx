@@ -72,7 +72,12 @@ export function InlineContactsCell({ task, closeHandler }: Props) {
   return (
     <>
       {showContactsList ? (
-        <ContactsList onChange={onChangeContact} />
+        <ContactsList
+          defaultSelectedContacts={contacts.map(
+            association => association.contact as IContact
+          )}
+          onChange={onChangeContact}
+        />
       ) : (
         <>
           {contacts.map(({ contact }) => (

@@ -74,30 +74,41 @@ export function AssigneesList({ defaultAssignees, onChange }: Props) {
   return (
     <>
       {sortBy(members, member => (member.id === user?.id ? 0 : 1)).map(
-        member => (
-          <MenuItem key={member.id} button dense>
-            <Box display="flex" alignItems="center">
-              <Checkbox
-                size="small"
-                color="primary"
-                checked={assignees.some(assignee => assignee.id === member.id)}
-                onChange={(
-                  _: ChangeEvent<HTMLInputElement>,
-                  checked: boolean
-                ) => handleChange(member, checked)}
-              />
-              <Box mr={1}>
-                <Avatar
-                  className={classes.avatar}
-                  src={member.profile_image_url ?? ''}
-                >
-                  {getAvatarTitle(member.display_name)}
-                </Avatar>
+        member => {
+          const isChecked = assignees.some(
+            assignee => assignee.id === member.id
+          )
+
+          return (
+            <MenuItem
+              key={member.id}
+              button
+              dense
+              onClick={() => handleChange(member, !isChecked)}
+            >
+              <Box display="flex" alignItems="center">
+                <Checkbox
+                  size="small"
+                  color="primary"
+                  checked={isChecked}
+                  onChange={(
+                    _: ChangeEvent<HTMLInputElement>,
+                    checked: boolean
+                  ) => handleChange(member, checked)}
+                />
+                <Box mr={1}>
+                  <Avatar
+                    className={classes.avatar}
+                    src={member.profile_image_url ?? ''}
+                  >
+                    {getAvatarTitle(member.display_name)}
+                  </Avatar>
+                </Box>
+                {member.display_name} {member.id === user?.id && <>(Myself)</>}
               </Box>
-              {member.display_name} {member.id === user?.id && <>(Myself)</>}
-            </Box>
-          </MenuItem>
-        )
+            </MenuItem>
+          )
+        }
       )}
     </>
   )

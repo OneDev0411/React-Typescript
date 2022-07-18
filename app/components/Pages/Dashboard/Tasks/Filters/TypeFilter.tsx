@@ -46,11 +46,12 @@ export function TypeFilter({ currentFilters: { type }, updateFilters }: Props) {
           {type && (
             <ResetButton
               variant="text"
-              onClick={() =>
+              onClick={() => {
+                close()
                 updateFilters({
                   type: undefined
                 })
-              }
+              }}
             />
           )}
         </div>

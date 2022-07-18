@@ -95,11 +95,12 @@ export function StatusFilter({
           {status && (
             <ResetButton
               variant="text"
-              onClick={() =>
+              onClick={() => {
+                close()
                 updateFilters({
                   status: undefined
                 })
-              }
+              }}
             />
           )}
         </div>

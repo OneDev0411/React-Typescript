@@ -1,19 +1,17 @@
-import { Avatar, Box, makeStyles, Theme, Typography } from '@material-ui/core'
+import {
+  Avatar,
+  Box,
+  makeStyles,
+  MenuItem,
+  Theme,
+  Typography
+} from '@material-ui/core'
 
 import { getContactNameInitials } from '@app/models/contacts/helpers'
 import { truncateTextFromMiddle } from '@app/utils/truncate-text-from-middle'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    root: {
-      display: 'flex',
-      alignItems: 'center',
-      padding: theme.spacing(0, 1),
-      cursor: 'pointer',
-      '&:hover': {
-        backgroundColor: theme.palette.action.hover
-      }
-    },
     avatar: {
       width: theme.spacing(5),
       height: theme.spacing(5)
@@ -31,6 +29,7 @@ interface Props {
   index: number
   style: React.CSSProperties
   data: {
+    selectedContacts: IContact[]
     rows: IContact[]
     onSelectContact: (contact: IContact) => void
   }
@@ -39,15 +38,16 @@ interface Props {
 export function ContactRow({
   index,
   style,
-  data: { rows, onSelectContact }
+  data: { rows, selectedContacts, onSelectContact }
 }: Props) {
   const contact = rows[index]
+  const isDisabled = selectedContacts?.some(({ id }) => id === contact.id)
   const classes = useStyles()
 
   return (
-    <div
+    <MenuItem
       style={style}
-      className={classes.root}
+      disabled={isDisabled}
       onClick={() => onSelectContact(contact)}
     >
       <Avatar src={contact.profile_image_url ?? ''} className={classes.avatar}>
@@ -62,6 +62,6 @@ export function ContactRow({
             .join(', ')}
         </Typography>
       </Box>
-    </div>
+    </MenuItem>
   )
 }

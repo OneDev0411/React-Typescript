@@ -40,10 +40,14 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  defaultSelectedContacts?: IContact[]
   onChange: (contact: IContact[]) => void
 }
 
-export function ContactsList({ onChange }: Props) {
+export function ContactsList({
+  defaultSelectedContacts = [],
+  onChange
+}: Props) {
   const classes = useStyles()
   const [selectedContacts, setSelectedContacts] = useState<IContact[]>([])
   const [searchCriteria, setSearchCriteria] = useState('')
@@ -115,6 +119,9 @@ export function ContactsList({ onChange }: Props) {
               itemCount={list?.length ?? 0}
               itemData={
                 {
+                  selectedContacts: selectedContacts.concat(
+                    defaultSelectedContacts
+                  ),
                   rows: list,
                   onSelectContact: handleSelectContact
                 } as React.ComponentProps<typeof ContactRow>['data']
