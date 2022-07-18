@@ -10,8 +10,6 @@ import { addressTitle, metersToFeet } from '@app/utils/listing'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { IListingWithAdjustment } from './types'
-
 const useStyles = makeStyles(
   theme => ({
     headerInfo: {
@@ -49,7 +47,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  listing: IListingWithAdjustment
+  listing: IListing
 }
 
 const ListingAdjustmentCardSummery = ({ listing }: Props) => {

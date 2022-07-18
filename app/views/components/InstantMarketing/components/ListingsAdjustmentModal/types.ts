@@ -3,6 +3,7 @@ export interface IAdjustment {
   value: number
 }
 
+export type IAdjustmentOptionalValue = OptionalBy<IAdjustment, 'value'>
 export type Adjustments = Record<UUID, IAdjustment[]>
 
 export interface IListingWithAdjustment extends IListing {

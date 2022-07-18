@@ -6,13 +6,12 @@ import { getListingFormattedPrice, getResizeUrl } from '@app/utils/listing'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { OVER_LAYER_HEIGHT } from './constants'
+import { OVER_LAYER_HEIGHT, PLACEHOLDER_IMAGE } from './constants'
+import { sumAdjustmentsPrice } from './helpers'
 import ListingAdjustmentCardSummery from './ListingAdjustmentCardSummery'
 import ListingAdjustmentRow from './ListingAdjustmentRow'
 import ListingAmenityRow from './ListingAmenityRow'
-import { IListingWithAdjustment } from './types'
-
-const PLACEHOLDER_IMAGE = '/static/images/logo--gray.svg'
+import { IAdjustment } from './types'
 
 const useStyles = makeStyles(
   theme => ({
@@ -97,7 +96,7 @@ const useStyles = makeStyles(
     },
     overLayer: {
       background:
-        'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 60%, rgba(255,255,255,1) 100%)',
+        'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 55%, rgba(255,255,255,1) 100%)',
       position: 'absolute',
       top: 0,
       left: 0,
@@ -107,39 +106,38 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'flex-end',
       justifyContent: 'center',
-      paddingBottom: theme.spacing(2)
+      paddingBottom: theme.spacing(2),
+      transition: '0.3s 0.1s top ease-in-out'
     }
   }),
   { name: 'ListingAdjustmentCard' }
 )
 
 interface Props {
-  listing: IListingWithAdjustment
+  listing: IListing
+  adjustments: IAdjustment[]
   isSubjectProperty: boolean
   onOpenAddAdjustmentModal: (id: UUID) => void
-  // TODO: This usually should be handled with css position
-  // But, I have to hack it this way because position:fixed didn't work inside of Swiper
+  // This usually should be handled with css position but due to a technical limitation
+  // I have to hack it this way because position:fixed didn't work inside of Swiper
   overLayerTopPosition: number | string
 }
 
 const ListingAdjustmentCard = ({
   listing,
+  adjustments,
   isSubjectProperty,
   onOpenAddAdjustmentModal,
   overLayerTopPosition
 }: Props) => {
-  const {
-    price,
-    adjustments,
-    adjusted_price: adjustedPrice,
-    cover_image_url: coverImageUrl
-  } = listing
+  const { price, cover_image_url: coverImageUrl } = listing
 
   const classes = useStyles()
 
   const listingPrice = getListingFormattedPrice(price, false)
-  const listingAdjustedPrice = adjustedPrice
-    ? getListingFormattedPrice(adjustedPrice, false)
+  const adjustmentsTotal = sumAdjustmentsPrice(adjustments)
+  const listingAdjustedPrice = adjustmentsTotal
+    ? getListingFormattedPrice(adjustmentsTotal + listing.price, false)
     : undefined
   const coverImageURL = coverImageUrl
     ? `${getResizeUrl(coverImageUrl)}?w=160`
@@ -148,15 +146,17 @@ const ListingAdjustmentCard = ({
   return (
     <div className={classes.root}>
       <div className={classes.overLayer} style={{ top: overLayerTopPosition }}>
-        <Button
-          variant="text"
-          color="secondary"
-          onClick={() => {
-            onOpenAddAdjustmentModal(listing.id)
-          }}
-        >
-          + Add Adjustments
-        </Button>
+        {!isSubjectProperty && (
+          <Button
+            variant="text"
+            color="secondary"
+            onClick={() => {
+              onOpenAddAdjustmentModal(listing.id)
+            }}
+          >
+            + Add Adjustments
+          </Button>
+        )}
       </div>
       <div
         className={cn(

@@ -16,7 +16,7 @@ import ListingAdjustmentCard from './ListingAdjustmentCard'
 import { IListingWithAdjustment, Adjustments, IAdjustment } from './types'
 
 interface Props {
-  listings: IListing[]
+  listings: IListingWithAdjustment[]
   onSave: (listings: IListingWithAdjustment[]) => void
   onClose: () => void
 }
@@ -74,10 +74,11 @@ export function ListingsAdjustmentModal({ listings, onSave, onClose }: Props) {
   const [overLayerTopPosition, setOverLayerTopPosition] = useState<
     string | number | undefined
   >()
-  const [editingListing, setEditingListing] = useState<Nullable<UUID>>(null)
-  const editingMode = !!editingListing
+
+  const [editingListingId, setEditingListing] = useState<Nullable<UUID>>(null)
+  const editingMode = !!editingListingId
   const selectedListing = editingMode
-    ? listings.find(listing => listing.id === editingListing)
+    ? listings.find(listing => listing.id === editingListingId)
     : null
   const [prevEl, setPrevEl] = useState<HTMLElement | null>(null)
   const [nextEl, setNextEl] = useState<HTMLElement | null>(null)
@@ -88,11 +89,8 @@ export function ListingsAdjustmentModal({ listings, onSave, onClose }: Props) {
   )
 
   const handleSave = () => {
+    console.log(addAdjustmentToListings(listings, adjustments))
     onSave(addAdjustmentToListings(listings, adjustments))
-  }
-
-  const onChangeAdjustment = (id: UUID, changedValue: IAdjustment[]) => {
-    setAdjustments(oldValues => ({ ...oldValues, [id]: changedValue }))
   }
 
   const onOpenAddAdjustmentModal = (id: UUID) => {
@@ -103,8 +101,13 @@ export function ListingsAdjustmentModal({ listings, onSave, onClose }: Props) {
     setEditingListing(null)
   }
 
-  // TODO: This usually should be handled with css position
-  // But, I have to hack it this way because position:fixed didn't work inside of Swiper
+  const onChangeAdjustment = (id: UUID, changedValue: IAdjustment[]) => {
+    setAdjustments(oldValues => ({ ...oldValues, [id]: changedValue }))
+    onCloseEditAdjustmentModal()
+  }
+
+  // This usually should be handled with css position but due to a technical limitation
+  // I have to hack it this way because position:fixed didn't work inside of Swiper
   const handleScroll = (event: UIEvent<HTMLDivElement>) => {
     setOverLayerTopPosition(
       (event.currentTarget.scrollTop || 0) +
@@ -117,6 +120,7 @@ export function ListingsAdjustmentModal({ listings, onSave, onClose }: Props) {
     return (
       <EditAdjustmentModal
         listing={selectedListing}
+        adjustments={adjustments[editingListingId]}
         onChange={onChangeAdjustment}
         onClose={onCloseEditAdjustmentModal}
       />
@@ -177,6 +181,7 @@ export function ListingsAdjustmentModal({ listings, onSave, onClose }: Props) {
                   (bodyRef.current?.clientHeight || 0) - OVER_LAYER_HEIGHT
                 }
                 listing={listing}
+                adjustments={adjustments[listing.id]}
                 isSubjectProperty={index === 0}
               />
             </SwiperSlide>

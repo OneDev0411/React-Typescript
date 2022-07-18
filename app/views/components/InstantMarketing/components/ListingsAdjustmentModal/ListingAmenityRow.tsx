@@ -4,8 +4,6 @@ import { makeStyles, Typography } from '@material-ui/core'
 
 import { getStatusColor, metersToFeet } from '@app/utils/listing'
 
-import { IListingWithAdjustment } from './types'
-
 const useStyles = makeStyles(
   theme => ({
     amenity: {
@@ -69,7 +67,7 @@ export function createAmenitiesList(
 }
 
 interface Props {
-  listing: IListingWithAdjustment
+  listing: IListing
 }
 
 const ListingAmenityRow = ({ listing }: Props) => {
