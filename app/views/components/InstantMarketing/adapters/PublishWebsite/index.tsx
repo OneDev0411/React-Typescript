@@ -14,8 +14,6 @@ import { getHipPocketTemplateImagesUploader } from 'components/InstantMarketing/
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import usePublishWebsite from 'hooks/use-publish-website'
 import { selectUser } from 'selectors/user'
-// TODO remove mock
-import MockListings from 'tests/unit/fixtures/marketing-center/cma-listings.json'
 
 import { ListingsAdjustmentModal } from '../../components/ListingsAdjustmentModal'
 import getTemplateObject from '../../helpers/get-template-object'
@@ -66,18 +64,11 @@ function PublishWebsite({
 
   const closeDomainManagement = () => setIsDomainManagementOpen(false)
 
-  // TODO remove mock
-  const [adjustmentModalListings, setAdjustmentModalListings] = useState<
-    Optional<IListing[]>
-  >((MockListings.listings as unknown as IListing[]) || undefined)
+  const [adjustmentModalListings, setAdjustmentModalListings] =
+    useState<Optional<IListing[]>>(undefined)
 
   const isAdjustmentModalOpen = !!adjustmentModalListings
-  // TODO remove this comment line
-  // const closeAdjustmentModal = () => setAdjustmentModalListings(undefined)
-  const closeAdjustmentModal = () =>
-    setAdjustmentModalListings(old =>
-      old ? undefined : (MockListings.listings as unknown as IListing[])
-    )
+  const handleCloseAdjustmentModal = () => setAdjustmentModalListings(undefined)
 
   const { publishWebsite, isPublishing, publishButtonLabel } =
     usePublishWebsite(result => {
@@ -151,16 +142,17 @@ function PublishWebsite({
 
   const handleSelectListings = listings => {
     setSelectedListings(listings)
+    handleCloseAdjustmentModal()
   }
 
   const isMultiListing =
     !!selectedTemplate &&
     getTemplateObject(selectedTemplate).template_type === 'Listings'
 
-  // TODO: Remove this comment line
+  // TODO: Remove this line after testing
+  const isCmaListing = isMultiListing
   // const isCmaListing =
   //   getTemplateObject(selectedTemplate).template_type === 'CMA'
-  const isCmaListing = isMultiListing
 
   const assets = useListingsEditorAssets(selectedListings)
 
@@ -259,7 +251,7 @@ function PublishWebsite({
       )}
       {isAdjustmentModalOpen && (
         <ListingsAdjustmentModal
-          onClose={closeAdjustmentModal}
+          onClose={handleCloseAdjustmentModal}
           listings={adjustmentModalListings}
           onSave={handleSelectListings}
         />
