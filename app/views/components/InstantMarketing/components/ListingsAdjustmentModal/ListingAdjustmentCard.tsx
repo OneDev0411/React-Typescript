@@ -41,7 +41,8 @@ const useStyles = makeStyles(
       flex: 1
     },
     amenitiesContainer: {
-      height: 'auto'
+      height: 'auto',
+      marginBottom: theme.spacing(7)
     },
     primary: {
       backgroundColor: theme.palette.grey[100]
