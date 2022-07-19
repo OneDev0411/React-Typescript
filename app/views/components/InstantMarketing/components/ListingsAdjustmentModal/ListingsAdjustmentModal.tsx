@@ -9,7 +9,11 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Modal, ModalHeader, ModalFooter } from 'components/Modal'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { OVER_LAYER_HEIGHT } from './constants'
+import {
+  OVER_LAYER_HEIGHT,
+  XL_MAX_SLIDER_ITEMS_COUNT,
+  LG_MAX_SLIDER_ITEMS_COUNT
+} from './constants'
 import { EditAdjustmentModal } from './EditAdjustmentModal'
 import { addAdjustmentToListings, createInitialAdjustments } from './helpers'
 import ListingAdjustmentCard from './ListingAdjustmentCard'
@@ -128,7 +132,12 @@ export function ListingsAdjustmentModal({ listings, onSave, onClose }: Props) {
   }
 
   return (
-    <Modal isOpen autoHeight xLarge>
+    <Modal
+      isOpen
+      autoHeight
+      xLarge={listings.length > XL_MAX_SLIDER_ITEMS_COUNT - 1}
+      large={listings.length > 1 && listings.length < XL_MAX_SLIDER_ITEMS_COUNT}
+    >
       <ModalHeader closeHandler={onClose} title="Listings Adjustment" />
       <div className={classes.body} ref={bodyRef} onScroll={handleScroll}>
         <Button
@@ -153,21 +162,31 @@ export function ListingsAdjustmentModal({ listings, onSave, onClose }: Props) {
           navigation={{ prevEl, nextEl }}
           slidesPerView={1}
           spaceBetween={theme.spacing(1)}
+          centerInsufficientSlides
           breakpoints={{
             [theme.breakpoints.values.sm]: {
               slidesPerView: 2,
               spaceBetween: theme.spacing(2)
             },
             [theme.breakpoints.values.md]: {
-              slidesPerView: 3,
+              slidesPerView:
+                listings.length >= LG_MAX_SLIDER_ITEMS_COUNT
+                  ? LG_MAX_SLIDER_ITEMS_COUNT
+                  : listings.length,
               spaceBetween: theme.spacing(2)
             },
             [theme.breakpoints.values.lg]: {
-              slidesPerView: 3,
+              slidesPerView:
+                listings.length >= LG_MAX_SLIDER_ITEMS_COUNT
+                  ? LG_MAX_SLIDER_ITEMS_COUNT
+                  : listings.length,
               spaceBetween: theme.spacing(4)
             },
             [theme.breakpoints.values.xl]: {
-              slidesPerView: 4,
+              slidesPerView:
+                listings.length >= XL_MAX_SLIDER_ITEMS_COUNT
+                  ? XL_MAX_SLIDER_ITEMS_COUNT
+                  : listings.length,
               spaceBetween: theme.spacing(4)
             }
           }}
