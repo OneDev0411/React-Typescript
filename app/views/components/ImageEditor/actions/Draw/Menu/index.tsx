@@ -66,7 +66,7 @@ export function DrawMenu() {
     return () => {
       editor?.off('board:change-active-drawing', onChangeActiveDrawing)
     }
-  }, [editor])
+  }, [editor, drawingType])
 
   const brand = useSelector<IAppState, Nullable<IBrand>>(({ activeTeam }) =>
     getBrandByType(activeTeam, 'Brokerage')

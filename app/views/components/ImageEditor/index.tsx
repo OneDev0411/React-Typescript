@@ -22,6 +22,7 @@ import { Flip } from './actions/Flip'
 import { Image } from './actions/Image/Button'
 import { Rotation } from './actions/Rotation'
 import { Text } from './actions/Text/Button'
+import { TextMenu } from './actions/Text/Menu'
 import { ImageEditorContext } from './context'
 import { Actions } from './types'
 
@@ -146,6 +147,7 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
             >
               {activeAction === 'crop' && <CropMenu />}
               {activeAction === 'draw' && <DrawMenu />}
+              {activeAction === 'text' && <TextMenu />}
             </Box>
           )}
 

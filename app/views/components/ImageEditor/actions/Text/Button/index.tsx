@@ -7,13 +7,23 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { useImageEditor } from '../../../hooks/use-image-editor'
 
 export function Text() {
-  const { editor, setActiveAction } = useImageEditor()
+  const { activeAction, setActiveAction } = useImageEditor()
+
+  const toggleDrawing = () => {
+    if (activeAction === 'text') {
+      setActiveAction(null)
+
+      return
+    }
+
+    setActiveAction('text')
+  }
 
   return (
     <Button
       startIcon={<SvgIcon path={mdiFormatTextbox} size={muiIconSizes.small} />}
       variant="outlined"
-      onClick={() => {}}
+      onClick={toggleDrawing}
     >
       Text
     </Button>
