@@ -43,3 +43,27 @@ export function getLocalFileType(file: File): FileType {
 
   return 'unknown'
 }
+
+export function parseImageMimeType(mimeType: string) {
+  if (mimeType === 'image/png') {
+    return 'png'
+  }
+
+  if (mimeType === 'image/jpeg') {
+    return 'jpg'
+  }
+
+  if (mimeType === 'image/gif') {
+    return 'gif'
+  }
+
+  if (mimeType === 'image/webp') {
+    return 'webp'
+  }
+
+  if (mimeType === 'image/bmp') {
+    return 'bmp'
+  }
+
+  return 'unknown'
+}

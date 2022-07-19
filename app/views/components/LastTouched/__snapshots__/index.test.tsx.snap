@@ -12,11 +12,10 @@ exports[`Contact profile last touched component renders 1`] = `
     </b>
   </span>
   <span>
-    , you wanted to be in touch every 
+    , you wanted to be in touch 
     <b>
-      23123
+      monthly
     </b>
-     days.
   </span>
 </div>
 `;

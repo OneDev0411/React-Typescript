@@ -3,7 +3,7 @@ import React from 'react'
 import { mdiCallMerge } from '@mdi/js'
 import { connect } from 'react-redux'
 
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
+import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
 
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import { mergeContact } from '../../../../../../store_actions/contacts'

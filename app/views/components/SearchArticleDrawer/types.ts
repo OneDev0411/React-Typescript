@@ -33,3 +33,5 @@ export interface RSSSource {
   url: string
   imageSanitizer?: (image: string) => string
 }
+
+export type RSSSearchErrorCode = 'CloudflareProtected' | 'MetadataNotFound'

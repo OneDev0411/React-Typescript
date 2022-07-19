@@ -2,7 +2,9 @@ import { DraftHandleValue, EditorState, Modifier } from 'draft-js'
 import { stateFromHTML, Options } from 'draft-js-import-html'
 import { PluginFunctions } from 'draft-js-plugins-editor'
 
+import { TABLE_WRAPPER_CLASS_NAME } from '../config'
 import { fixImageBlockTypes } from '../utils/fix-image-block-types'
+import { wrapTableTag } from '../utils/wrap-table-tag'
 
 /**
  * Draft.js has it's own convertFromHTMLtoContentBlocks which is not
@@ -53,7 +55,10 @@ export default function createPasteHtmlPlugin({
             ? stateFromHtmlOptions(editorState)
             : stateFromHtmlOptions
 
-        const state = stateFromHTML(html, options)
+        const state = stateFromHTML(
+          wrapTableTag(html, TABLE_WRAPPER_CLASS_NAME),
+          options
+        )
 
         const newContentState = Modifier.replaceWithFragment(
           editorState.getCurrentContent(),

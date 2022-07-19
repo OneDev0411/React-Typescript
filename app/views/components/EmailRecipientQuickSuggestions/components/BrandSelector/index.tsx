@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { Button } from '@material-ui/core'
 
@@ -20,8 +20,8 @@ interface Props {
 export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
-  const hanldeOpenDrawer = () => setIsOpen(true)
-  const hanldeCloseDrawer = () => setIsOpen(false)
+  const handleOpenDrawer = () => setIsOpen(true)
+  const handleCloseDrawer = () => setIsOpen(false)
 
   const handleOnClickBrand = (brand: IBrand) => {
     const recipient: IDenormalizedEmailRecipientBrandInput = {
@@ -30,7 +30,7 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
     }
 
     onSelect(recipient, 'BCC')
-    hanldeCloseDrawer()
+    handleCloseDrawer()
   }
 
   const renderBrandNode = ({ brand }: NodeRenderer) => {
@@ -43,22 +43,29 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
     )
   }
 
+  // Filter out brands that don't have any sub-brands and also have no team members
+  // https://gitlab.com/rechat/web/-/issues/6554
+  const filterDeactivatedBrands = useCallback((team: IBrand) => {
+    return !!team.children?.length || team.member_count > 0
+  }, [])
+
   return (
     <>
-      <Button size="small" onClick={hanldeOpenDrawer}>
+      <Button size="small" onClick={handleOpenDrawer}>
         Our Agents
       </Button>
       {isOpen && (
         <UserRootBrandSelectorDrawer
           open
           /*
-          we set the drawer width to the 43rem manually bacause in our email drawer we set this
-          value and base on shayan request we want the brand selector drawer cover the email drawer
+          we set the drawer width to the 43rem manually because in our email drawer we set this
+          value and base on Shayan request we want the brand selector drawer cover the email drawer
           */
           width="43rem"
-          onClose={hanldeCloseDrawer}
+          onClose={handleCloseDrawer}
           brandSelectorProps={{
-            nodeRenderer: renderBrandNode
+            nodeRenderer: renderBrandNode,
+            filterFn: filterDeactivatedBrands
           }}
         />
       )}

@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 import pluralize from 'pluralize'
 
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import Table from 'components/Grid/Table'
-import { useGridStyles } from 'components/Grid/Table/styles'
 
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
@@ -70,7 +70,7 @@ export default function List(props) {
         header: 'Thumbnail',
         id: 'thumbnail',
         class: 'opaque',
-        width: 70,
+        width: '70px',
         verticalAlign: 'center',
         render: ({ row }) => <ThumbnailColumn data={row} />
       },
@@ -78,8 +78,7 @@ export default function List(props) {
         header: 'Title',
         id: 'title-date',
         primary: true,
-        width: '32%',
-        verticalAlign: 'center',
+        width: isScheduled ? '100%' : '38%',
         accessor: row => row.due_at,
         render: ({ row }) => <TitleColumn data={row} reloadList={reloadList} />
       },
@@ -87,16 +86,18 @@ export default function List(props) {
         header: 'Recipients',
         id: 'recipients',
         class: 'opaque',
-        width: '26%',
+        width: '23%',
         verticalAlign: 'center',
+        hidden: isScheduled,
         render: ({ row }) => <RecipientsColumn data={row} />
       },
       {
         header: 'Delivered',
         id: 'delivered',
         class: 'opaque',
-        width: '14%',
+        width: '13%',
         verticalAlign: 'center',
+        hidden: isScheduled,
         render: ({ row }) => {
           const { executed_at, delivered, sent, failed } = row
 
@@ -116,8 +117,9 @@ export default function List(props) {
         header: 'Opened',
         id: 'opened',
         class: 'opaque',
-        width: '14%',
+        width: '13%',
         verticalAlign: 'center',
+        hidden: isScheduled,
         render: ({ row }) => {
           const { executed_at, opened, delivered } = row
 
@@ -146,8 +148,9 @@ export default function List(props) {
         header: 'Clicked',
         id: 'clicked',
         class: 'opaque',
-        width: '14%',
+        width: '13%',
         verticalAlign: 'center',
+        hidden: isScheduled,
         render: ({ row }) => {
           const { executed_at, clicked, delivered } = row
 
@@ -188,7 +191,7 @@ export default function List(props) {
         )
       }
     ],
-    [reloadItem, reloadList]
+    [isScheduled, reloadItem, reloadList]
   )
 
   const renderContent = ({ sortBy, onChangeSort }) => {
@@ -202,6 +205,7 @@ export default function List(props) {
 
     return (
       <Table
+        virtualize
         rows={list}
         totalRows={list.length}
         columns={columns}

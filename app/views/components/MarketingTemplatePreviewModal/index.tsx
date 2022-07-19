@@ -4,7 +4,8 @@ import { ImageOrVideoPreviewModal } from 'components/ImageOrVideoPreviewModal'
 import { PdfViewerModal } from 'components/PdfViewer/Modal'
 import { getFileType } from 'utils/file-utils/get-file-type'
 import {
-  getTemplateImage,
+  getTemplateImageOrVideo,
+  isVideoThumb,
   navigateBetweenTemplatesUsingKeyboard,
   selectNextTemplate,
   selectPreviousTemplate
@@ -38,12 +39,13 @@ function PreviewModal(props: Props) {
   }
 
   const { thumbnail: imgSrcTiny, original: imgSrc } =
-    getTemplateImage(selectedTemplate)
+    getTemplateImageOrVideo(selectedTemplate)
 
   let modalProps: ComponentProps<typeof ImageOrVideoPreviewModal> = {
     isOpen: props.isOpen,
     handleClose: () => props.onClose && props.onClose(),
-    menuRenderer: () => props.actions
+    menuRenderer: () => props.actions,
+    isVideo: isVideoThumb(selectedTemplate)
   }
 
   if (props.type === 'history') {

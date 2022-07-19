@@ -1,16 +1,15 @@
 import React from 'react'
 
-import { Box, Theme, makeStyles, Typography } from '@material-ui/core'
+import { Box, Theme, makeStyles, Typography, Tooltip } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form } from 'react-final-form'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { browserHistory, WithRouterProps, Link } from 'react-router'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import updatePassword from '../../../../models/auth/password/update'
 import { editUser } from '../../../../models/user/edit'
-import { IAppState } from '../../../../reducers'
 import submitSigninForm from '../../../../store_actions/auth/signin'
 import { updateUser } from '../../../../store_actions/user'
 import NextButton from '../../../../views/components/OAuthFormNextButton'
@@ -42,7 +41,7 @@ const useStyles = makeStyles(
 export function Register(props: WithRouterProps) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const brand = useSelector((store: IAppState) => store.brand)
+
   const paramsFromURI: {
     first_name?: string
     last_name?: string
@@ -151,7 +150,7 @@ export function Register(props: WithRouterProps) {
 
   return (
     <OAuthPageLayout>
-      <OAuthPageLayout.Header title="Welcome to Rechat" brand={brand} />
+      <OAuthPageLayout.Header subtitle="Complete your registration" />
       <OAuthPageLayout.Main>
         <Form
           initialValues={getInitialValues()}
@@ -162,12 +161,29 @@ export function Register(props: WithRouterProps) {
 
             return (
               <form onSubmit={handleSubmit}>
+                {paramsFromURI.email && !paramsFromURI.phone_number && (
+                  <Tooltip
+                    title="You have to sign up with this email you were invited with,
+                          but once you are in the app, you can always go to your settings and
+                          change your email to whatever you desire."
+                  >
+                    <TextField
+                      name="email"
+                      type="email"
+                      label="Email Address"
+                      InputProps={{
+                        readOnly: true
+                      }}
+                    />
+                  </Tooltip>
+                )}
+
                 <TextField name="first_name" label="First Name" />
 
                 <TextField name="last_name" label="Last Name" />
 
                 {paramsFromURI.phone_number && (
-                  <TextField name="email" type="email" label="Email" />
+                  <TextField name="email" type="email" label="Email Address" />
                 )}
 
                 <TextField
@@ -204,13 +220,14 @@ export function Register(props: WithRouterProps) {
           }}
         />
 
-        <Box py={3}>
+        <Box pt={4} pb={6} position="relative">
           <Typography color="textSecondary" variant="button">
             Already a member,
           </Typography>
           <Link className={classes.link} to={getSignInUrl()}>
             Sign in
           </Link>
+          <OAuthPageLayout.PoweredBy />
         </Box>
       </OAuthPageLayout.Main>
     </OAuthPageLayout>

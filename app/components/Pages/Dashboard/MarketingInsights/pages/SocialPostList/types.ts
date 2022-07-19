@@ -1,1 +1,1 @@
-export type SocialPostFilter = 'scheduled' | 'posted'
+export type SocialPostFilter = 'posted' | 'scheduled' | 'failed'

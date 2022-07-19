@@ -1,5 +1,4 @@
 import { UseMutationResult } from 'react-query'
-import { ResponseError } from 'superagent'
 
 import { useMutation, UseMutationOptions } from '@app/hooks/query'
 
@@ -11,14 +10,27 @@ interface DataInput extends ISocialPostInput {
   brand: UUID
 }
 
+interface ISocialError {
+  original: Nullable<string>
+  status: number
+  message: string
+  response?: {
+    body: {
+      code: string
+      http: number
+      message: string
+    }
+  }
+}
+
 export type UseCreateSocialPost = UseMutationResult<
   ISocialPost,
-  ResponseError,
+  ISocialError,
   DataInput
 >
 
 export type UseCreateSocialPostOptions = Omit<
-  UseMutationOptions<ISocialPost, ResponseError, DataInput>,
+  UseMutationOptions<ISocialPost, ISocialError, DataInput>,
   'invalidates'
 >
 
@@ -29,7 +41,7 @@ export function useCreateSocialPost(
     async ({ brand, ...values }) => createSocialPost(brand, values),
     {
       ...options,
-      // Just invalidate the lists of campaigns because we dont know the list sort logic
+      // Just invalidate the lists of social-posts because we dont know the list sort logic
       // at this stage so having an optimistic update is not easy
       invalidates: (_, values) => [list(values.brand)]
     }

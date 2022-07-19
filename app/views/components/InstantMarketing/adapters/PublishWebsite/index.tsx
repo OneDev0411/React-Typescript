@@ -34,7 +34,9 @@ function PublishWebsite({
   selectedTemplate
 }: PublishWebsiteProps) {
   const [isDomainManagementOpen, setIsDomainManagementOpen] = useState(false)
-  const [selectedListings, setSelectedListings] = useState<IListing[]>([])
+  const [selectedListings, setSelectedListings] = useState<
+    WithMock<IListing>[]
+  >([])
   const [websiteData, setWebsiteData] = useState<IWebsite | null>(null)
   const user = useSelector(selectUser)
 
@@ -77,7 +79,9 @@ function PublishWebsite({
       websiteData?.id,
       template,
       {
-        listings: selectedListings?.map(listing => listing.id),
+        listings: selectedListings
+          ?.filter(listing => !listing?.isMock) // We should never send our mock listing id to API
+          .map(listing => listing.id),
         html: template.result
       },
       websiteData
@@ -150,6 +154,7 @@ function PublishWebsite({
           templateData={{ ...templateData, user }}
           onClose={handleCloseBuilder}
           handleSave={handleSaveBuilder}
+          shouldSkipVideoGif
           bareMode
           hideTemplatesColumn
           saveButtonText={publishButtonLabel}

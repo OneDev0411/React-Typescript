@@ -1,6 +1,5 @@
 import {
   useState,
-  useEffect,
   forwardRef,
   RefObject,
   useImperativeHandle,
@@ -32,11 +31,6 @@ interface Props {
   initialRange?: NumberRange
   contrariwise?: boolean
   onLoadEvents?: (events: ICalendarEventsList, range: NumberRange) => void
-}
-
-interface SocketUpdate {
-  upserted: ICalendarEvent[]
-  deleted: UUID[]
 }
 
 export function Calendar({
@@ -258,42 +252,6 @@ export function Calendar({
     refresh: handleLoadEvents,
     updateCrmEvents: handleCrmEventChange
   }))
-
-  useEffect(() => {
-    const socket: SocketIOClient.Socket = (window as any).socket
-
-    if (!socket) {
-      return
-    }
-
-    function handleUpdate({ upserted, deleted }: SocketUpdate) {
-      if (upserted.length === 0 && deleted.length === 0) {
-        return
-      }
-
-      const currentEvents: ICalendarEvent[] =
-        deleted.length > 0
-          ? events.filter(e => !deleted.includes(e.id))
-          : events
-      const nextEvents =
-        upserted.length > 0 ? [...upserted, ...currentEvents] : currentEvents
-
-      const normalizedEvents = normalizeEvents(nextEvents, calendarRange)
-
-      const nextRows = createListRows(normalizedEvents)
-
-      // update events list
-      setEvents(nextEvents)
-
-      setListRows(nextRows)
-    }
-
-    socket.on('Calendar.Updated', handleUpdate)
-
-    return () => {
-      socket.off('Calendar.Updated', handleUpdate)
-    }
-  })
 
   return (
     <CalendarList

@@ -1,6 +1,11 @@
 import superagent from 'superagent'
 
-import { VideoboltVideo, YouTubeVideoResource } from './types'
+import {
+  SearchVideoResult,
+  SearchVideoSource,
+  VideoboltVideo,
+  YouTubeVideoResource
+} from './types'
 
 const REQUEST_TIMEOUT_MS = 120 * 1000
 
@@ -105,4 +110,29 @@ export function getVideoPlayerUrl(url: string): string {
   return `${window.location.origin}/dashboard/player?video=${encodeURIComponent(
     url
   )}`
+}
+
+export function shouldAddPlayIconWatermark(
+  videoSource: SearchVideoSource
+): boolean {
+  const watermarkBlacklist: SearchVideoSource[] = [
+    'youtube',
+    'videobolt',
+    'gallery'
+  ]
+
+  return !watermarkBlacklist.includes(videoSource)
+}
+
+export function createGalleryVideoObject(
+  asset: IBrandAsset
+): SearchVideoResult {
+  return {
+    source: 'gallery',
+    playerUrl: getVideoPlayerUrl(asset.file.url),
+    url: asset.file.url,
+    title: asset.label || 'No Label',
+    publishedAt: new Date(asset.created_at * 1000).toISOString(),
+    sourceIcon: '/static/images/favicons/favicon-32x32.png'
+  }
 }

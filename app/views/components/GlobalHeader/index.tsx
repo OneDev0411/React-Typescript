@@ -15,10 +15,10 @@ const styles = (theme: Theme) =>
     wrapper: {
       display: 'flex',
       flexDirection: 'column',
-      padding: ({ noPadding }: GlobalHeaderProps) =>
-        !noPadding ? theme.spacing(3) : 0,
+      padding: ({ noPadding, gutter = 3 }: GlobalHeaderProps) =>
+        !noPadding ? theme.spacing(gutter) : 0,
       width: '100%',
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('sm')]: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
@@ -26,13 +26,13 @@ const styles = (theme: Theme) =>
     },
     title: {
       marginBottom: theme.spacing(3),
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('sm')]: {
         marginBottom: 0,
         marginRight: theme.spacing(1)
       }
     },
     content: {
-      [theme.breakpoints.up('md')]: {
+      [theme.breakpoints.up('sm')]: {
         flexGrow: 1,
         display: 'flex',
         justifyContent: 'flex-end'
@@ -44,6 +44,7 @@ const useStyles = makeStyles(styles, { name: 'GlobalHeader' })
 
 export interface GlobalHeaderProps {
   title?: string
+  gutter?: number
   noPadding?: boolean
   isHiddenOnMobile?: boolean
   children?: React.ReactNode

@@ -3,10 +3,16 @@ import React from 'react'
 import { SELECTION__TOGGLE_ROW } from '../../context/constants'
 import { getRowId } from '../../helpers/get-row-id'
 import { useGridContext } from '../../hooks/use-grid-context'
-import { TableColumn, RenderProps, GridSelectionOptions } from '../../types'
+import {
+  TableColumn,
+  RenderProps,
+  GridSelectionOptions,
+  ColumnHeaderProps
+} from '../../types'
 
 import Checkbox from './Checkbox'
 import { isRowSelected } from './helpers/is-row-selected'
+import { SelectionHeaderColumn } from './SelectionHeaderColumn'
 
 export function useRowsSelection<Row>(
   columns: TableColumn<Row>[],
@@ -31,9 +37,12 @@ export function useRowsSelection<Row>(
   const newColumns = [
     {
       id: 'row-selection',
-      class: 'opaque',
+      class: 'opaque row-selection',
       width: '40px', // default value
       ...(options.columnProps || {}),
+      header: (data: ColumnHeaderProps<Row>) => (
+        <SelectionHeaderColumn<Row> {...data} />
+      ),
       render: (rowItem: RenderProps<Row>) => {
         const showDefaultValue =
           options.defaultRender &&

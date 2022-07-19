@@ -1,16 +1,15 @@
-import React, { useState, ReactNode } from 'react'
+import { useState, ReactNode } from 'react'
 
 import { Button, Typography, Box } from '@material-ui/core'
 import { Form, Field } from 'react-final-form'
-import { useSelector } from 'react-redux'
 import { Link } from 'react-router'
 
-import { IAppState } from 'reducers'
+import { Logo } from '@app/views/components/OAuthPageLayout/Logo'
+import { PoweredBy } from '@app/views/components/OAuthPageLayout/PoweredBy'
 
 import signup from '../../../../models/auth/signup'
 import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
 import { validateEmail } from '../Password/Forgot'
-import { getBrandInfo } from '../SignIn/get-brand-info'
 
 import { getFailedMessage, getSucceedMessage } from './getMessage'
 
@@ -20,7 +19,6 @@ interface SubmitState {
 }
 
 export default function Signup(props) {
-  const brand = useSelector((state: IAppState) => state.brand)
   const [email, setEmail] = useState<string>(
     window.decodeURIComponent(props.location.query.email || '')
   )
@@ -31,7 +29,6 @@ export default function Signup(props) {
   const isSubmitting = submitState.status === 'pending'
   const wasSuccessfulSubmit = submitState.status === 'succeed'
   const isDisabled = isSubmitting
-  const { siteLogo, siteTitle } = getBrandInfo(brand)
   const onSubmitHandler = async ({ email }) => {
     setEmail(email)
     setSubmitState({
@@ -58,15 +55,9 @@ export default function Signup(props) {
     <div className="signin-page-wrapper">
       <article className="c-auth">
         <header className="c-auth__header">
-          {siteLogo && (
-            <a href="/" tabIndex={-1}>
-              <img
-                src={siteLogo}
-                alt={`${siteTitle} logo`}
-                className="c-auth__logo"
-              />
-            </a>
-          )}
+          <a href="/" tabIndex={-1}>
+            <Logo />
+          </a>
           <h1 className="c-auth__title">Sign Up</h1>
           {!wasSuccessfulSubmit ? (
             <Typography variant="body2">Hello, lets get started.</Typography>
@@ -115,6 +106,7 @@ export default function Signup(props) {
           )}
         </main>
       </article>
+      <PoweredBy />
     </div>
   )
 }

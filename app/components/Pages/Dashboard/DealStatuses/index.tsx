@@ -20,7 +20,7 @@ import { getDealStatusColor } from '@app/utils/get-deal-status-color'
 import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import Grid from '@app/views/components/Grid/Table'
-import { useGridStyles } from '@app/views/components/Grid/Table/styles'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 
 import { StatusForm } from './StatusForm'
 

@@ -19,12 +19,12 @@ import {
 } from '@mdi/js'
 import pluralize from 'pluralize'
 
+import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
 import { BaseDropdown } from 'components/BaseDropdown'
 import {
   EmailFormValues,
   SingleEmailComposeDrawer
 } from 'components/EmailCompose'
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import {
@@ -234,7 +234,9 @@ export function TaskActions({ deal }: Props) {
           )
         }
         initialValues={{
-          attachments: state.attachments,
+          ...(state.form?.attachments
+            ? {}
+            : { attachments: state.attachments }),
           ...(state.form || {})
         }}
         deal={deal}

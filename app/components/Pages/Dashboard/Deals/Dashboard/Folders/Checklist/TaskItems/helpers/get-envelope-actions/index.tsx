@@ -4,7 +4,8 @@ import {
   VOID_ENVELOPE,
   DOCUSIGN_ENVELOPE,
   EMAIL_ENVELOPE,
-  VIEW_ENVELOPE
+  VIEW_ENVELOPE,
+  SPLIT_PDF
 } from 'deals/components/ActionsButton/data/action-buttons'
 
 export function getEnvelopeActions(envelope: IDealEnvelope): ActionButtonId[] {
@@ -16,7 +17,8 @@ export function getEnvelopeActions(envelope: IDealEnvelope): ActionButtonId[] {
         VOID_ENVELOPE,
         DOCUSIGN_ENVELOPE,
         EMAIL_ENVELOPE,
-        VIEW_ENVELOPE
+        VIEW_ENVELOPE,
+        SPLIT_PDF
       ]
 
     case 'Sent':
@@ -26,13 +28,14 @@ export function getEnvelopeActions(envelope: IDealEnvelope): ActionButtonId[] {
         RESEND_ENVELOPE,
         DOCUSIGN_ENVELOPE,
         EMAIL_ENVELOPE,
-        VIEW_ENVELOPE
+        VIEW_ENVELOPE,
+        SPLIT_PDF
       ]
 
     case 'Completed':
     case 'Voided':
     case 'Declined':
     default:
-      return [VIEW_ENVELOPE, DOCUSIGN_ENVELOPE, EMAIL_ENVELOPE]
+      return [VIEW_ENVELOPE, DOCUSIGN_ENVELOPE, EMAIL_ENVELOPE, SPLIT_PDF]
   }
 }

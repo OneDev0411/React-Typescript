@@ -13,12 +13,12 @@ import pluralize from 'pluralize'
 import { changeUrl } from '@app/utils/change-url'
 import {
   addressTitle,
-  getListingFormatedPrice,
+  getListingFormattedPrice,
   metersToFeet,
   getListingPricePerSquareFoot
 } from '@app/utils/listing'
 import Table from '@app/views/components/Grid/Table'
-import { useGridStyles } from '@app/views/components/Grid/Table/styles'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 import { useListSelection } from '@app/views/components/ListSelection/use-list-selection'
 import LoadingComponent from '@app/views/components/Spinner'
@@ -96,7 +96,7 @@ const ListView = props => {
       class: 'opaque',
       accessor: listing => listing.price,
       render: ({ row: listing }) =>
-        `$${getListingFormatedPrice(listing.price, false)}`
+        `$${getListingFormattedPrice(listing.price, false)}`
     },
     {
       header: 'Beds',

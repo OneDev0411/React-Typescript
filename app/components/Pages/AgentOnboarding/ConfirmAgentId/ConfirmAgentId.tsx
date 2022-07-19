@@ -1,16 +1,12 @@
-import React from 'react'
-
 import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
-import { useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import searchAgent from 'models/agent/search'
-import { IAppState } from 'reducers'
 
 import { useCommonStyles } from '../common-styles'
 import Container from '../Container'
@@ -28,7 +24,6 @@ export default function ConfirmAgentId(props: WithRouterProps) {
 
   const commonClasses = useCommonStyles()
   const mlsId = props.location.query.mlsId
-  const brand = useSelector((store: IAppState) => store.brand)
 
   const onSubmit = async (values: FormValues) => {
     const notFoundError = {
@@ -73,7 +68,6 @@ export default function ConfirmAgentId(props: WithRouterProps) {
     <Container>
       <SkipButton to="/onboarding/config-brand" />
       <Header
-        brand={brand}
         title="Agent Verification"
         subtitle="Enter your agent license # to unlock MLS features."
       />

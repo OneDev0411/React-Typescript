@@ -1,23 +1,16 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Tooltip, IconButton, makeStyles, Theme } from '@material-ui/core'
-import {
-  mdiCalendarOutline,
-  mdiEmailOutline,
-  mdiChatProcessingOutline
-} from '@mdi/js'
+import { mdiCalendarOutline, mdiEmailOutline } from '@mdi/js'
 import { useSelector } from 'react-redux'
 
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { EventDrawer } from 'components/EventDrawer'
 import MissingEmailModal from 'components/MissingEmailModal'
-import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 import { selectUser } from 'selectors/user'
 import { normalizeContact } from 'views/utils/association-normalizers'
-
-import ChatButton from '../../../components/ChatButton'
 
 interface Props {
   contact: IContact
@@ -46,7 +39,7 @@ export default function CtaAction({ contact }: Props) {
   const [showEventDrawer, setShowEventDrawer] = useState<boolean>(false)
   const [showMissingEmailModal, setShowMissingEmailModal] =
     useState<boolean>(false)
-  const { id, emails, email, phone_number, users } = contact
+  const { id, emails } = contact
   const classes = useStyles()
 
   const toggleEmailComposer = () => {
@@ -57,30 +50,6 @@ export default function CtaAction({ contact }: Props) {
     setShowEmailComposer(!showEmailComposer)
   }
   const toggleEventDrawer = () => setShowEventDrawer(!showEventDrawer)
-
-  const renderChatButton = (email || phone_number || users) && (
-    <ChatButton
-      contact={contact}
-      render={({ onClick, isDisabled }) => (
-        <>
-          {isDisabled ? (
-            <Loading data-icon="loading" />
-          ) : (
-            <Tooltip title="Chat with contact">
-              <IconButton
-                size="small"
-                className={classes.item}
-                disabled={isDisabled}
-                onClick={onClick}
-              >
-                <SvgIcon path={mdiChatProcessingOutline} />
-              </IconButton>
-            </Tooltip>
-          )}
-        </>
-      )}
-    />
-  )
 
   return (
     <>
@@ -133,7 +102,6 @@ export default function CtaAction({ contact }: Props) {
             <SvgIcon path={mdiEmailOutline} />
           </IconButton>
         </Tooltip>
-        {renderChatButton}
       </div>
     </>
   )
