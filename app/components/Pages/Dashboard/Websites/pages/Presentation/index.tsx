@@ -9,32 +9,32 @@ import WebsiteList from '../../components/WebsiteList'
 import WebsiteTabs from '../../components/WebsiteTabs'
 import WebsiteTemplates from '../../components/WebsiteTemplates'
 import {
-  websitesRouteRoot,
-  PRESENTATION_TEMPLATE_TYPES,
-  WEBSITES_DEFAULT_TABS
+  presentationsRouteRoot,
+  PRESENTATION_DEFAULT_TABS,
+  PRESENTATION_TEMPLATE_TYPES
 } from '../../constants'
 import useWebsiteTabsWithTemplates from '../../hooks/use-website-tabs-with-templates'
 import useWebsiteTemplates from '../../hooks/use-website-templates'
 
 type WebsiteProps = WithRouterProps<{ type?: string }, {}>
 
-function Website({ params }: WebsiteProps) {
-  useTitle('Websites | Rechat')
+function Presentation({ params }: WebsiteProps) {
+  useTitle('Presentation | Rechat')
 
-  const selectedTab = params.type || websitesRouteRoot
+  const selectedTab = params.type || presentationsRouteRoot
 
-  const isMyWebsitesTab = selectedTab === websitesRouteRoot
+  const isMyPresentationsTab = selectedTab === presentationsRouteRoot
 
   const {
     templates,
     isLoading: isTemplatesLoading,
     deleteTemplate
-  } = useWebsiteTemplates({ typesBlackList: PRESENTATION_TEMPLATE_TYPES })
+  } = useWebsiteTemplates({ typesWhiteList: PRESENTATION_TEMPLATE_TYPES })
 
   const tabsWithTemplates = useWebsiteTabsWithTemplates(
     templates,
-    WEBSITES_DEFAULT_TABS,
-    true
+    PRESENTATION_DEFAULT_TABS,
+    false
   )
 
   const tabTemplates = tabsWithTemplates[selectedTab]?.templates ?? []
@@ -42,17 +42,22 @@ function Website({ params }: WebsiteProps) {
 
   return (
     <PageLayout position="relative" overflow="hidden">
-      <PageLayout.Header title="Websites" />
+      <PageLayout.Header title="Presentation" />
       <PageLayout.Main>
-        <WebsiteTabs value={selectedTab} tabs={tabsWithTemplates} />
-        {isMyWebsitesTab ? (
+        <WebsiteTabs
+          myTitle="Presentations"
+          routeRoot={presentationsRouteRoot}
+          value={selectedTab}
+          tabs={tabsWithTemplates}
+        />
+        {isMyPresentationsTab ? (
           <WebsiteList
-            title="Website"
-            typesBlackList={PRESENTATION_TEMPLATE_TYPES}
+            title="Presentation"
+            typesWhiteList={PRESENTATION_TEMPLATE_TYPES}
           />
         ) : (
           <WebsiteTemplates
-            routeRoot={websitesRouteRoot}
+            routeRoot="presentations"
             types={tabTypes}
             items={tabTemplates}
             isLoading={isTemplatesLoading}
@@ -64,4 +69,4 @@ function Website({ params }: WebsiteProps) {
   )
 }
 
-export default memo(Website)
+export default memo(Presentation)

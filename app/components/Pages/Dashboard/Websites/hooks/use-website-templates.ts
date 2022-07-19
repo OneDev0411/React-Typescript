@@ -6,10 +6,35 @@ import { useTemplates } from '../../Marketing/hooks/use-templates'
 
 const mediums: IWebsiteTemplateMedium[] = ['Website']
 
-function useWebsiteTemplates(type?: IWebsiteTemplateType) {
+interface UseWebsiteTemplates {
+  typesWhiteList?: IWebsiteTemplateType[]
+  typesBlackList?: IWebsiteTemplateType[]
+}
+
+function useWebsiteTemplates(
+  props: UseWebsiteTemplates = {
+    typesWhiteList: undefined,
+    typesBlackList: undefined
+  }
+) {
+  const { typesWhiteList, typesBlackList } = props
   const brandId = useSelector(selectActiveBrandId)
 
-  return useTemplates(brandId, mediums, type ? [type] : undefined)
+  const templates = useTemplates(brandId, mediums, typesWhiteList)
+
+  if (typesBlackList) {
+    return {
+      ...templates,
+      templates: templates.templates.filter(
+        template =>
+          !typesBlackList.includes(
+            template.template.template_type as IWebsiteTemplateType
+          )
+      )
+    }
+  }
+
+  return templates
 }
 
 export default useWebsiteTemplates

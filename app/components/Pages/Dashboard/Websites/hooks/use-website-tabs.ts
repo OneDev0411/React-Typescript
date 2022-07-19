@@ -1,4 +1,4 @@
-import { omitBy, mapValues, merge } from 'lodash'
+import { omitBy, mapValues } from 'lodash'
 
 import {
   SectionCollection,
@@ -8,20 +8,7 @@ import { SectionsEnum } from 'components/PageSideNav/types'
 
 import { WebsiteTab, WebsiteTabCollection } from '../types'
 
-const DEFAULT_TABS: WebsiteTabCollection = {
-  agent: {
-    key: 'agent',
-    title: 'Agent IDX',
-    types: ['Agent']
-  },
-  properties: {
-    key: 'properties',
-    title: 'Properties',
-    types: ['Listing']
-  }
-}
-
-function useWebsiteTabs(): WebsiteTabCollection {
+function useExtractedWebsiteTabs(): WebsiteTabCollection {
   const marketingSections = useMarketingCenterSections({ types: '' }) // TODO: Ask Mamal about this
 
   const websiteSections = omitBy(
@@ -46,7 +33,7 @@ function useWebsiteTabs(): WebsiteTabCollection {
     })
   )
 
-  return merge(extractedWebsiteTabs, DEFAULT_TABS)
+  return extractedWebsiteTabs
 }
 
-export default useWebsiteTabs
+export default useExtractedWebsiteTabs

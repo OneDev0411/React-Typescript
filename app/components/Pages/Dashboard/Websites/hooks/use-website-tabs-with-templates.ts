@@ -1,13 +1,22 @@
-import { mapValues } from 'lodash'
+import { mapValues, merge } from 'lodash'
 
-import { WebsiteTabWithTemplatesCollection } from '../types'
+import {
+  WebsiteTabCollection,
+  WebsiteTabWithTemplatesCollection
+} from '../types'
 
-import useWebsiteTabs from './use-website-tabs'
+import useExtractedWebsiteTabs from './use-website-tabs'
 
 function useWebsiteTabsWithTemplates(
-  templates: IBrandMarketingTemplate[]
+  templates: IBrandMarketingTemplate[],
+  defaultTabs: WebsiteTabCollection,
+  shouldUseExtractedWebsiteTabs = true
 ): WebsiteTabWithTemplatesCollection {
-  const tabs = useWebsiteTabs()
+  const extractedWebsiteTabs = useExtractedWebsiteTabs()
+
+  const tabs = shouldUseExtractedWebsiteTabs
+    ? merge(extractedWebsiteTabs, defaultTabs)
+    : defaultTabs
 
   return mapValues(tabs, tab => ({
     ...tab,

@@ -197,6 +197,13 @@ function SideNavMenu(props: WithRouterProps) {
           to: '/dashboard/websites'
         },
         {
+          access: ACL.BETA,
+          id: 'presentations',
+          isHidden: !useAcl([ACL.BETA, ACL.WEBSITES]),
+          label: 'Presentations',
+          to: '/dashboard/presentations'
+        },
+        {
           access: insightAccess,
           id: 'insight',
           isHidden: !useAcl(insightAccess),

@@ -1,16 +1,23 @@
-import React from 'react'
-
 import { PageTabs, TabLink } from 'components/PageTabs'
 
-import { myWebsitesTab } from '../../constants'
-import { WebsiteTabWithTemplatesCollection } from '../../types'
+import {
+  WebsitesRouteRoots,
+  WebsiteTabWithTemplatesCollection
+} from '../../types'
 
 export interface WebsiteTabsProps {
+  myTitle?: string
+  routeRoot?: WebsitesRouteRoots
   value: string
   tabs: WebsiteTabWithTemplatesCollection
 }
 
-function WebsiteTabs({ value, tabs }: WebsiteTabsProps) {
+function WebsiteTabs({
+  myTitle = 'Websites',
+  routeRoot = 'websites',
+  value,
+  tabs
+}: WebsiteTabsProps) {
   return (
     <PageTabs
       defaultValue={value}
@@ -18,9 +25,9 @@ function WebsiteTabs({ value, tabs }: WebsiteTabsProps) {
       tabs={[
         <TabLink
           key={1}
-          value={myWebsitesTab}
-          to="/dashboard/websites"
-          label="My Websites"
+          value={routeRoot}
+          to={`/dashboard/${routeRoot}`}
+          label={`My ${myTitle}`}
         />,
         ...Object.values(tabs)
           .filter(tab => tab.templates.length > 0)
@@ -28,8 +35,8 @@ function WebsiteTabs({ value, tabs }: WebsiteTabsProps) {
             <TabLink
               key={tab.key}
               value={tab.key}
-              to={`/dashboard/websites/templates/${tab.key}`}
-              label={`${tab.title} Sites`}
+              to={`/dashboard/${routeRoot}/templates/${tab.key}`}
+              label={tab.title}
             />
           ))
       ]}

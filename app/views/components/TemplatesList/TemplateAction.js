@@ -67,7 +67,7 @@ const GENERAL_FLOW_TYPES = [
 
 const CONTACT_FLOW_TYPES = ['WeddingAnniversary', 'HomeAnniversary']
 
-const WEBSITE_FLOW_TYPES = ['Listing', 'Agent', 'Listings']
+const WEBSITE_FLOW_TYPES = ['Listing', 'Agent', 'Listings', 'CMA']
 
 function TemplateAction(props) {
   const { isEdit } = props

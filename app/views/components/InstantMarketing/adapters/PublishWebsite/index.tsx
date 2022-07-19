@@ -16,6 +16,7 @@ import usePublishWebsite from 'hooks/use-publish-website'
 import { selectUser } from 'selectors/user'
 
 import { ListingsAdjustmentModal } from '../../components/ListingsAdjustmentModal'
+import { MULTI_LISTINGS_TEMPLATE_TYPES_LIST } from '../../constants'
 import getTemplateObject from '../../helpers/get-template-object'
 
 import useLoadListingsData from './use-load-listings-data'
@@ -52,7 +53,7 @@ function PublishWebsite({
    * I didn't refactor that because we are planning to refactor the builder to use
    * `template.variables` instead of having these flows.
    */
-  const isListing = ['Listing', 'Listings'].includes(templateType)
+  const isListing = ['Listing', 'Listings', 'CMA'].includes(templateType)
   const isListingTriggered = !isEdit && isTriggered && isListing
 
   const isBuilderOpen =
@@ -147,7 +148,9 @@ function PublishWebsite({
 
   const isMultiListing =
     !!selectedTemplate &&
-    getTemplateObject(selectedTemplate).template_type === 'Listings'
+    MULTI_LISTINGS_TEMPLATE_TYPES_LIST.includes(
+      getTemplateObject(selectedTemplate).template_type
+    )
 
   // TODO: Remove this line after testing
   const isCmaListing = isMultiListing
