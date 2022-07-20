@@ -78,7 +78,7 @@ export function useImageFilters(
   >({})
 
   useEffect(() => {
-    if (!file) {
+    if (!file || !ref) {
       return
     }
 
@@ -93,7 +93,7 @@ export function useImageFilters(
       setEditor(editor)
     }
 
-    load()
+    setTimeout(() => load(), 0)
   }, [file, ref])
 
   useEffect(() => {

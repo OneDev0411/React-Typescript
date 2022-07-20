@@ -49,8 +49,6 @@ export function FilterMenu({ filters }: Props) {
   const classes = useStyles()
   const { editor, activeFilter, setActiveFilter } = useImageEditor()
 
-  console.log(activeFilter)
-
   const applyFilter = async (filter: Filters | null = null) => {
     if (!editor) {
       return
