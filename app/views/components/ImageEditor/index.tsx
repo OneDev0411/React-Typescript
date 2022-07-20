@@ -7,7 +7,8 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Button
+  Button,
+  ClickAwayListener
 } from '@material-ui/core'
 import Pikaso from 'pikaso'
 
@@ -72,11 +73,17 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
   const [activeAction, setActiveAction] = useState<Actions | null>(null)
+  const [isFocused, setIsFocused] = useState(false)
 
   const setupEditor = () => {
     const editor = new Pikaso({
       container: editorRef.current as HTMLDivElement,
-      height: 500
+      height: 500,
+      selection: {
+        keyboard: {
+          enabled: false
+        } as any
+      }
     })
 
     setEditor(editor)
@@ -134,7 +141,13 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
       </DialogTitle>
 
       <DialogContent className={classes.dialogContent}>
-        <div ref={editorRef} className={classes.editor} />
+        <ClickAwayListener onClickAway={() => setIsFocused(false)}>
+          <div
+            ref={editorRef}
+            className={classes.editor}
+            onClick={() => setIsFocused(true)}
+          />
+        </ClickAwayListener>
 
         <ImageEditorContext.Provider
           value={{ editor, activeAction, setActiveAction }}
