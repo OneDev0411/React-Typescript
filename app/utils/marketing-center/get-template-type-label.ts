@@ -11,6 +11,7 @@ const TEMPLATE_TYPE_LABEL_MAP: {
   Brand: 'Brand Campaigns',
   ChineseNewYear: 'Lunar New Year',
   Christmas: 'Christmas',
+  CMA: 'CMA',
   ColumbusDay: 'Columbus Day',
   ComingSoon: 'Coming Soon',
   Contact: 'Contact',
