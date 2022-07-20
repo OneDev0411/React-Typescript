@@ -152,10 +152,9 @@ function PublishWebsite({
       getTemplateObject(selectedTemplate).template_type
     )
 
-  // TODO: Remove this line after testing
-  const isCmaListing = isMultiListing
-  // const isCmaListing =
-  //   getTemplateObject(selectedTemplate).template_type === 'CMA'
+  const isCmaListing =
+    !!selectedTemplate &&
+    getTemplateObject(selectedTemplate).template_type === 'CMA'
 
   const assets = useListingsEditorAssets(selectedListings)
 
