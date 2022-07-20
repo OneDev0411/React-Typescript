@@ -22,7 +22,7 @@ import deleteWebsite from 'models/website/delete-website'
 import { selectUser } from 'selectors/user'
 import {
   convertToTemplate,
-  getTemplateImage
+  getTemplateImageOrVideo
 } from 'utils/marketing-center/helpers'
 import { generateWebsiteUrl } from 'utils/website'
 
@@ -48,7 +48,7 @@ function WebsiteCard({
   const [isEditorOpen, setIsEditorOpen] = useState(false)
   const user = useSelector(selectUser)
 
-  const { thumbnail } = getTemplateImage(template_instance)
+  const { thumbnail } = getTemplateImageOrVideo(template_instance)
 
   const hostnames = websiteHostnames ?? []
   const hostname = hostnames.length > 0 ? hostnames[0] : ''
