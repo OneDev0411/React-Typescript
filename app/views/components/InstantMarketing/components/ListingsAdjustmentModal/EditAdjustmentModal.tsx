@@ -45,10 +45,13 @@ interface Props {
 const useStyles = makeStyles(
   theme => ({
     body: {
+      width: '100%',
       position: 'relative',
+      marginTop: 1,
       padding: theme.spacing(0, 2),
       overflowY: 'scroll',
-      height: '75vh'
+      height: '75vh',
+      backgroundColor: theme.palette.common.white
     },
     headerContainer: {
       display: 'flex',
