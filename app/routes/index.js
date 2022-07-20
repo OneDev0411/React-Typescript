@@ -1117,11 +1117,11 @@ export default (
           <IndexRoute component={AsyncBrandSettings} />
         </Route>
 
-        <Route path="websites(/templates/:type)">
+        <Route path="websites">
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
 
-        <Route path="presentations(/templates/:type)">
+        <Route path="presentations">
           <IndexRoute component={AsyncPresentationsList} />
         </Route>
 
