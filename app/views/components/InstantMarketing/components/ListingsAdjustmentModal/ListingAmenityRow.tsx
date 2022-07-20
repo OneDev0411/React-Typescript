@@ -46,8 +46,8 @@ export function createAmenitiesList(
     },
     { title: 'MLS #', value: listing.mls_number || '-' },
     { title: 'PROPERTY TYPE', value: listing.property.property_type || '-' },
-    { title: 'BEDROOMS', value: listing.property.bedroom_count || '0' },
-    { title: 'BATHROOMS', value: listing.property.bathroom_count || '0' },
+    { title: 'BEDROOMS', value: listing.property.bedroom_count || '-' },
+    { title: 'BATHROOMS', value: listing.property.bathroom_count || '-' },
     {
       title: 'BATHROOM DETAILS',
       value: `Full Bath ${
