@@ -49,7 +49,7 @@ const useStyles = makeStyles(
       position: 'relative',
       marginTop: 1,
       padding: theme.spacing(0, 2),
-      overflowY: 'scroll',
+      overflowY: 'auto',
       height: '75vh',
       backgroundColor: theme.palette.common.white
     },
