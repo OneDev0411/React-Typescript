@@ -8,9 +8,14 @@ import {
   IconButton,
   useTheme
 } from '@material-ui/core'
-import { mdiFormatBold, mdiFormatItalic, mdiFormatUnderline } from '@mdi/js'
+import {
+  mdiDeleteOutline,
+  mdiFormatBold,
+  mdiFormatItalic,
+  mdiFormatUnderline
+} from '@mdi/js'
 import FontFaceObserver from 'fontfaceobserver'
-import type { LabelModel } from 'pikaso'
+import type { EventListenerCallbackEvent, LabelModel } from 'pikaso'
 import { ColorState } from 'react-color'
 import { useSelector } from 'react-redux'
 
@@ -66,7 +71,7 @@ const DefaultFontSize = 50
 export function TextMenu() {
   const classes = useStyles()
   const theme = useTheme<Theme>()
-  const { editor, activeAction } = useImageEditor()
+  const { editor } = useImageEditor()
   const [selectedLabel, setSelectedLabel] = useState<Nullable<LabelModel>>(null)
   const [textProperties, setTextProperties] = useState<TextProperties>({
     fontStyle: '',
@@ -81,11 +86,19 @@ export function TextMenu() {
     getBrandByType(activeTeam, 'Brokerage')
   )
 
-  const object = {
-    fontFamily: 'Tahoma',
-    fontSize: 12,
-    fill: 'red'
-  }
+  useEffect(() => {
+    const onSelectionChange = (e: EventListenerCallbackEvent) => {
+      const shape = e.shapes?.[0] as Nullable<LabelModel>
+
+      setSelectedLabel(shape ?? null)
+    }
+
+    editor?.on('selection:change', onSelectionChange)
+
+    return () => {
+      editor?.off('selection:change', onSelectionChange)
+    }
+  }, [editor])
 
   useEffect(() => {
     const handleClick = () => {
@@ -228,87 +241,106 @@ export function TextMenu() {
   }
 
   return (
-    <Box display="flex" alignItems="center" className={classes.container}>
-      <IconButton
-        disabled={!selectedLabel}
-        size="small"
-        color="primary"
-        onClick={toggleBold}
-      >
-        <SvgIcon
-          path={mdiFormatBold}
-          size={muiIconSizes.medium}
-          color={isBold ? theme.palette.secondary.main : '#000'}
-        />
-      </IconButton>
-      <IconButton disabled={!selectedLabel} size="small" onClick={toggleItalic}>
-        <SvgIcon
-          path={mdiFormatItalic}
-          size={muiIconSizes.medium}
-          color={isItalic ? theme.palette.secondary.main : '#000'}
-        />
-      </IconButton>
-      <IconButton
-        disabled={!selectedLabel}
-        size="small"
-        onClick={toggleUnderline}
-      >
-        <SvgIcon
-          path={mdiFormatUnderline}
-          size={muiIconSizes.medium}
-          color={hasUnderline ? theme.palette.secondary.main : '#000'}
-        />
-      </IconButton>
-
-      <Divider orientation="vertical" className={classes.divider} />
-
-      {brand && (
-        <div className={classes.fontFamily}>
-          <FontField
-            type="font-family"
-            label="Font Family"
-            names={[]}
-            brandFonts={getBrandFontFamilies(brand)}
-            value={object.fontFamily}
-            onChange={onChangeFontFamily}
-          />
-        </div>
-      )}
-
-      <Divider orientation="vertical" className={classes.divider} />
-
-      {brand && (
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          width="60px"
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="space-between"
+      className={classes.container}
+    >
+      <Box display="flex" alignItems="center">
+        <IconButton
+          disabled={!selectedLabel}
+          size="small"
+          color="primary"
+          onClick={toggleBold}
         >
-          <ColorPicker
-            tooltip="Text Color"
-            color={textProperties.color}
-            colors={getBrandColors(brand)}
-            onChange={onChangeTextColor}
+          <SvgIcon
+            path={mdiFormatBold}
+            size={muiIconSizes.medium}
+            color={isBold ? theme.palette.secondary.main : '#000'}
           />
-
-          <ColorPicker
-            tooltip="Background Color"
-            color={textProperties.backgroundColor}
-            colors={[...getBrandColors(brand), 'transparent']}
-            onChange={onChangeBackgroundColor}
+        </IconButton>
+        <IconButton
+          disabled={!selectedLabel}
+          size="small"
+          onClick={toggleItalic}
+        >
+          <SvgIcon
+            path={mdiFormatItalic}
+            size={muiIconSizes.medium}
+            color={isItalic ? theme.palette.secondary.main : '#000'}
           />
-        </Box>
-      )}
-      <Divider orientation="vertical" className={classes.divider} />
+        </IconButton>
+        <IconButton
+          disabled={!selectedLabel}
+          size="small"
+          onClick={toggleUnderline}
+        >
+          <SvgIcon
+            path={mdiFormatUnderline}
+            size={muiIconSizes.medium}
+            color={hasUnderline ? theme.palette.secondary.main : '#000'}
+          />
+        </IconButton>
 
-      <Slider
-        min={10}
-        max={200}
-        disabled={!selectedLabel}
-        caption="Size"
-        value={Number(textProperties.fontSize) || DefaultFontSize}
-        onChange={onChangeFontSize}
-      />
+        <Divider orientation="vertical" className={classes.divider} />
+
+        {brand && (
+          <div className={classes.fontFamily}>
+            <FontField
+              type="font-family"
+              label="Font Family"
+              names={[]}
+              brandFonts={getBrandFontFamilies(brand)}
+              value={textProperties.fontFamily}
+              onChange={onChangeFontFamily}
+            />
+          </div>
+        )}
+
+        <Divider orientation="vertical" className={classes.divider} />
+
+        {brand && (
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            width="60px"
+          >
+            <ColorPicker
+              tooltip="Text Color"
+              color={textProperties.color}
+              colors={getBrandColors(brand)}
+              onChange={onChangeTextColor}
+            />
+
+            <ColorPicker
+              tooltip="Background Color"
+              color={textProperties.backgroundColor}
+              colors={[...getBrandColors(brand), 'transparent']}
+              onChange={onChangeBackgroundColor}
+            />
+          </Box>
+        )}
+        <Divider orientation="vertical" className={classes.divider} />
+
+        <Slider
+          min={10}
+          max={200}
+          disabled={!selectedLabel}
+          caption="Size"
+          value={Number(textProperties.fontSize) || DefaultFontSize}
+          onChange={onChangeFontSize}
+        />
+      </Box>
+
+      <Box>
+        {selectedLabel && (
+          <IconButton size="small" onClick={() => selectedLabel.delete()}>
+            <SvgIcon path={mdiDeleteOutline} size={muiIconSizes.medium} />
+          </IconButton>
+        )}
+      </Box>
     </Box>
   )
 }

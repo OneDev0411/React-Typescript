@@ -10,7 +10,7 @@ import {
   Button,
   ClickAwayListener
 } from '@material-ui/core'
-import Pikaso from 'pikaso'
+import Pikaso, { EventListenerCallbackEvent } from 'pikaso'
 
 import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
 
@@ -109,6 +109,35 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
       editor.cropper.stop()
     }
   }, [editor, activeAction])
+
+  useEffect(() => {
+    const onSelectionChange = (e: EventListenerCallbackEvent) => {
+      if ((e.shapes?.length ?? 0) > 1) {
+        editor?.selection.deselectAll()
+        e.shapes?.[0].select()
+      }
+    }
+
+    editor?.on('selection:change', onSelectionChange)
+
+    return () => {
+      editor?.off('selection:change', onSelectionChange)
+    }
+  }, [editor])
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (isFocused && (e.key === 'Backspace' || e.key === 'Delete')) {
+        editor?.selection.list.forEach(shape => shape.delete())
+      }
+    }
+
+    window.addEventListener('keyup', handleKeyPress)
+
+    return () => {
+      window.removeEventListener('keyup', handleKeyPress)
+    }
+  }, [editor, isFocused])
 
   const handleSave = () => {}
 
