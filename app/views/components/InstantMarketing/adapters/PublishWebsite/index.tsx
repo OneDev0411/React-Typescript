@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 
-import { Button, CircularProgress, Tooltip } from '@material-ui/core'
+import {
+  Button,
+  CircularProgress,
+  makeStyles,
+  Tooltip
+} from '@material-ui/core'
 import pluralize from 'pluralize'
 import { useSelector } from 'react-redux'
 
 import useListingsEditorAssets from '@app/hooks/use-listings-editor-assets'
 import useListingsEditorTemplateData from '@app/hooks/use-listings-editor-template-data'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import DomainManagementDrawer from 'components/DomainManagementDrawer'
 import InstantMarketing, {
   IBrandMarketingTemplateWithResult
@@ -29,6 +35,17 @@ interface PublishWebsiteProps {
   onFinish: () => {}
 }
 
+const useStyles = makeStyles(
+  theme => ({
+    editAdjustmentButton: {
+      marginRight: theme.spacing(1)
+    }
+  }),
+  {
+    name: 'InstantMarketingPublishWebsite'
+  }
+)
+
 function PublishWebsite({
   isTriggered,
   isEdit,
@@ -36,6 +53,9 @@ function PublishWebsite({
   onFinish,
   selectedTemplate
 }: PublishWebsiteProps) {
+  const classes = useStyles()
+  const confirmation = useContext(ConfirmationModalContext)
+
   const [isDomainManagementOpen, setIsDomainManagementOpen] = useState(false)
 
   const [selectedListings, setSelectedListings] = useState<
@@ -167,6 +187,20 @@ function PublishWebsite({
     isMultiListing
   )
 
+  const onEditAdjustment = () => {
+    confirmation.setConfirmationModal({
+      message: 'Are you sure you want to edit?',
+      description:
+        'After editing the adjustments, all edits on the website will be lost.      ',
+      cancelLabel: 'Cancel',
+      confirmLabel: 'Yes, Edit',
+      onConfirm: () => {
+        handleOpenAdjustmentModal(selectedListings)
+        setSelectedListings([])
+      }
+    })
+  }
+
   return (
     <>
       {isBuilderOpen && (
@@ -185,14 +219,29 @@ function PublishWebsite({
           assets={assets}
           actionButtonsDisabled={isPublishing}
           customActions={
-            <Button
-              type="button"
-              variant="outlined"
-              disabled={isPublishing || !websiteData}
-              onClick={openDomainManagement}
-            >
-              Manage Domains
-            </Button>
+            <>
+              {isCmaListing && (
+                <Tooltip title="After editing the adjustments, all edits on the website will be lost.">
+                  <Button
+                    type="button"
+                    variant="outlined"
+                    disabled={isPublishing}
+                    onClick={onEditAdjustment}
+                    className={classes.editAdjustmentButton}
+                  >
+                    Edit Adjustments
+                  </Button>
+                </Tooltip>
+              )}
+              <Button
+                type="button"
+                variant="outlined"
+                disabled={isPublishing || !websiteData}
+                onClick={openDomainManagement}
+              >
+                Manage Domains
+              </Button>
+            </>
           }
           saveButtonWrapper={saveButton => (
             <Tooltip
