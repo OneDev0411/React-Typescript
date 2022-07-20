@@ -15,6 +15,7 @@ import SearchListingDrawer from 'components/SearchListingDrawer'
 import usePublishWebsite from 'hooks/use-publish-website'
 import { selectUser } from 'selectors/user'
 
+import { ListingsAdjustmentModal } from '../../components/ListingsAdjustmentModal'
 import getTemplateObject from '../../helpers/get-template-object'
 
 import useLoadListingsData from './use-load-listings-data'
@@ -35,6 +36,7 @@ function PublishWebsite({
   selectedTemplate
 }: PublishWebsiteProps) {
   const [isDomainManagementOpen, setIsDomainManagementOpen] = useState(false)
+
   const [selectedListings, setSelectedListings] = useState<IListing[]>([])
   const [websiteData, setWebsiteData] = useState<IWebsite | null>(null)
   const user = useSelector(selectUser)
@@ -61,6 +63,12 @@ function PublishWebsite({
   const openDomainManagement = () => setIsDomainManagementOpen(true)
 
   const closeDomainManagement = () => setIsDomainManagementOpen(false)
+
+  const [adjustmentModalListings, setAdjustmentModalListings] =
+    useState<Optional<IListing[]>>(undefined)
+
+  const isAdjustmentModalOpen = !!adjustmentModalListings
+  const handleCloseAdjustmentModal = () => setAdjustmentModalListings(undefined)
 
   const { publishWebsite, isPublishing, publishButtonLabel } =
     usePublishWebsite(result => {
@@ -128,13 +136,23 @@ function PublishWebsite({
 
   const handleListingDrawerClose = () => onFinish()
 
+  const handleOpenAdjustmentModal = listings => {
+    setAdjustmentModalListings(listings)
+  }
+
   const handleSelectListings = listings => {
     setSelectedListings(listings)
+    handleCloseAdjustmentModal()
   }
 
   const isMultiListing =
     !!selectedTemplate &&
     getTemplateObject(selectedTemplate).template_type === 'Listings'
+
+  // TODO: Remove this line after testing
+  const isCmaListing = isMultiListing
+  // const isCmaListing =
+  //   getTemplateObject(selectedTemplate).template_type === 'CMA'
 
   const assets = useListingsEditorAssets(selectedListings)
 
@@ -201,7 +219,9 @@ function PublishWebsite({
             }
           ]}
           onClose={handleListingDrawerClose}
-          onSelectListingsCallback={handleSelectListings}
+          onSelectListingsCallback={
+            isCmaListing ? handleOpenAdjustmentModal : handleSelectListings
+          }
           multipleSelection={isMultiListing}
           renderAction={props => (
             <Button
@@ -227,6 +247,13 @@ function PublishWebsite({
           websiteHostnames={websiteData.hostnames}
           onDomainAdd={handleDomainAdd}
           onDomainDelete={handleDomainDelete}
+        />
+      )}
+      {isAdjustmentModalOpen && (
+        <ListingsAdjustmentModal
+          onClose={handleCloseAdjustmentModal}
+          listings={adjustmentModalListings}
+          onSave={handleSelectListings}
         />
       )}
     </>
