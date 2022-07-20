@@ -7,7 +7,17 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { useImageEditor } from '../../../hooks/use-image-editor'
 
 export function Filter() {
-  const { editor, setActiveAction } = useImageEditor()
+  const { activeAction, setActiveAction } = useImageEditor()
+
+  const toggleDrawing = () => {
+    if (activeAction === 'filter') {
+      setActiveAction(null)
+
+      return
+    }
+
+    setActiveAction('filter')
+  }
 
   return (
     <Button
@@ -15,7 +25,7 @@ export function Filter() {
         <SvgIcon path={mdiImageFilterBlackWhite} size={muiIconSizes.small} />
       }
       variant="outlined"
-      onClick={() => {}}
+      onClick={toggleDrawing}
     >
       Filters
     </Button>

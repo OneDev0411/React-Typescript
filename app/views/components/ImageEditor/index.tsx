@@ -10,7 +10,7 @@ import {
   Button,
   ClickAwayListener
 } from '@material-ui/core'
-import Pikaso, { EventListenerCallbackEvent } from 'pikaso'
+import Pikaso, { EventListenerCallbackEvent, Filters } from 'pikaso'
 
 import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
 
@@ -19,12 +19,14 @@ import { CropMenu } from './actions/Crop/Menu'
 import { Draw } from './actions/Draw/Button'
 import { DrawMenu } from './actions/Draw/Menu'
 import { Filter } from './actions/Filter/Button'
+import { FilterMenu } from './actions/Filter/Menu'
 import { Flip } from './actions/Flip'
 import { Image } from './actions/Image/Button'
 import { Rotation } from './actions/Rotation'
 import { Text } from './actions/Text/Button'
 import { TextMenu } from './actions/Text/Menu'
 import { ImageEditorContext } from './context'
+import { useImageFilters } from './hooks/use-image-filters'
 import { Actions } from './types'
 
 const useStyles = makeStyles(
@@ -71,9 +73,15 @@ interface Props {
 export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
   const classes = useStyles()
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
+  const filtersRef = useRef<Nullable<HTMLDivElement>>(null)
+
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
   const [activeAction, setActiveAction] = useState<Actions | null>(null)
   const [isFocused, setIsFocused] = useState(false)
+  const [fileBlob, setFileBlob] = useState<Nullable<File>>(null)
+  const [activeFilter, setActiveFilter] = useState<Nullable<Filters>>(null)
+
+  const filters = useImageFilters(fileBlob, filtersRef)
 
   const setupEditor = () => {
     const editor = new Pikaso({
@@ -98,6 +106,7 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
       const fileBlob =
         typeof file === 'string' ? await convertUrlToImageFile(file) : file
 
+      setFileBlob(fileBlob)
       await editor.loadFromFile(fileBlob)
     }
 
@@ -178,8 +187,16 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
           />
         </ClickAwayListener>
 
+        <div ref={filtersRef} style={{ display: 'none' }} />
+
         <ImageEditorContext.Provider
-          value={{ editor, activeAction, setActiveAction }}
+          value={{
+            editor,
+            activeAction,
+            setActiveAction,
+            activeFilter,
+            setActiveFilter
+          }}
         >
           {activeAction && (
             <Box
@@ -190,6 +207,7 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
               {activeAction === 'crop' && <CropMenu />}
               {activeAction === 'draw' && <DrawMenu />}
               {activeAction === 'text' && <TextMenu />}
+              {activeAction === 'filter' && <FilterMenu filters={filters} />}
             </Box>
           )}
 
@@ -206,40 +224,6 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
               <Text />
               <Image />
               <Filter />
-
-              {/* {dimensions && (
-              <Crop
-                editor={editor}
-                isActive={action === 'crop'}
-                width={dimensions[0]}
-                height={dimensions[1]}
-                onChangeActiveAction={setActiveAction}
-              />
-            )}
-
-            <Rotate editor={editor} onRotate={resizeEditor} />
-
-            <Flip editor={editor} />
-
-            <Draw
-              editor={editor}
-              isActive={action === 'draw'}
-              onChangeActiveAction={setActiveAction}
-            />
-
-            <Text
-              editor={editor}
-              isActive={action === 'text'}
-              onChangeActiveAction={setActiveAction}
-            />
-
-            <Image editor={editor} />
-
-            <Filters
-              editor={editor}
-              isActive={action === 'filter'}
-              onChangeActiveAction={setActiveAction}
-            /> */}
             </Box>
 
             <Box display="flex">
