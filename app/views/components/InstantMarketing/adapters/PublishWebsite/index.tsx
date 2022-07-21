@@ -96,6 +96,10 @@ function PublishWebsite({
   const isAdjustmentModalOpen = !!adjustmentModalListings
   const handleCloseAdjustmentModal = () => setAdjustmentModalListings(undefined)
 
+  const newWebsiteTitle = selectedListings?.length
+    ? selectedListings[0].property.address.full_address
+    : 'New Website Title'
+
   const { publishWebsite, isPublishing, publishButtonLabel } =
     usePublishWebsite(result => {
       setWebsiteData(result.website)
@@ -124,7 +128,7 @@ function PublishWebsite({
             template: websiteData.template
           }
         : {
-            title: 'New Website Title',
+            title: newWebsiteTitle,
             attributes: {},
             template: 'light'
           }

@@ -6,7 +6,6 @@ import { useTitle } from 'react-use'
 import PageLayout from 'components/GlobalPageLayout'
 
 import WebsiteList from '../../components/WebsiteList'
-import { WebsiteTemplateSelector } from '../../components/WebsiteTemplateSelector'
 import {
   PRESENTATION_TEMPLATE_TYPES,
   WEBSITE_TEMPLATE_TYPES
@@ -40,11 +39,9 @@ function Website() {
         <WebsiteList
           title="Website"
           typesBlackList={PRESENTATION_TEMPLATE_TYPES}
-        />
-        <WebsiteTemplateSelector
-          isOpen={isOpenTemplateSelector}
-          templateTypes={WEBSITE_TEMPLATE_TYPES}
-          onClose={onCloseTemplateSelector}
+          templateSelectorTypes={WEBSITE_TEMPLATE_TYPES}
+          isOpenTemplateSelector={isOpenTemplateSelector}
+          onCloseTemplateSelector={onCloseTemplateSelector}
         />
       </PageLayout.Main>
     </PageLayout>
