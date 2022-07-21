@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import { Box, Grid } from '@material-ui/core'
 
@@ -9,16 +9,27 @@ import WebsiteCard from '../WebsiteCard'
 import WebsiteCardProvider from '../WebsiteCardProvider'
 import WebsiteListProvider from '../WebsiteListProvider'
 import WebsiteListState from '../WebsiteListState'
+import { WebsiteTemplateSelector } from '../WebsiteTemplateSelector'
 
 const defaultData: IWebsite[] = []
 
 interface Props {
   title: string
-  typesWhiteList?: IWebsiteTemplateType[]
   typesBlackList?: IWebsiteTemplateType[]
+  isOpenTemplateSelector: boolean
+  templateSelectorTypes: IWebsiteTemplateType[]
+  typesWhiteList?: IWebsiteTemplateType[]
+  onCloseTemplateSelector: () => void
 }
 
-function WebsiteList({ title, typesWhiteList, typesBlackList }: Props) {
+function WebsiteList({
+  title,
+  isOpenTemplateSelector,
+  templateSelectorTypes,
+  typesWhiteList,
+  typesBlackList,
+  onCloseTemplateSelector
+}: Props) {
   const {
     data: instances,
     run,
@@ -30,7 +41,7 @@ function WebsiteList({ title, typesWhiteList, typesBlackList }: Props) {
   })
   const isEmpty = !isLoading && instances.length === 0
 
-  useEffect(() => {
+  const loadWebsites = useCallback(() => {
     run(async () => {
       const websites = await getWebsiteList()
 
@@ -73,6 +84,10 @@ function WebsiteList({ title, typesWhiteList, typesBlackList }: Props) {
     })
   }, [run, typesBlackList, typesWhiteList])
 
+  useEffect(() => {
+    loadWebsites()
+  }, [loadWebsites])
+
   if (isLoading || isEmpty) {
     return (
       <WebsiteListState title={title} isLoading={isLoading} isEmpty={isEmpty} />
@@ -80,17 +95,30 @@ function WebsiteList({ title, typesWhiteList, typesBlackList }: Props) {
   }
 
   return (
-    <Box paddingLeft={2} paddingRight={2} paddingTop={3}>
-      <Grid container spacing={2}>
-        <WebsiteListProvider setData={setData}>
-          {instances.map(instance => (
-            <WebsiteCardProvider key={instance.id} website={instance}>
-              <WebsiteCard {...instance} />
-            </WebsiteCardProvider>
-          ))}
-        </WebsiteListProvider>
-      </Grid>
-    </Box>
+    <>
+      <Box paddingLeft={2} paddingRight={2} paddingTop={3}>
+        <Grid container spacing={2}>
+          <WebsiteListProvider setData={setData}>
+            {instances.map(instance => (
+              <WebsiteCardProvider key={instance.id} website={instance}>
+                <WebsiteCard {...instance} />
+              </WebsiteCardProvider>
+            ))}
+          </WebsiteListProvider>
+        </Grid>
+      </Box>
+
+      <WebsiteTemplateSelector
+        isOpen={isOpenTemplateSelector}
+        templateTypes={templateSelectorTypes}
+        onClose={onCloseTemplateSelector}
+        onSetTriggered={state => {
+          if (!state) {
+            loadWebsites()
+          }
+        }}
+      />
+    </>
   )
 }
 

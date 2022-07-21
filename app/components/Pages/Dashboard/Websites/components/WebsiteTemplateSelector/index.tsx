@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { useSelector } from 'react-redux'
 
+import { noop } from '@app/utils/helpers'
 import TemplateAction from '@app/views/components/TemplatesList/TemplateAction'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
 import { IAppState } from 'reducers'
@@ -11,12 +12,14 @@ interface Props {
   isOpen: boolean
   templateTypes: IWebsiteTemplateType[]
   onClose: () => void
+  onSetTriggered?: (state: boolean) => void
 }
 
 export const WebsiteTemplateSelector = ({
   isOpen,
   templateTypes,
-  onClose
+  onClose,
+  onSetTriggered = noop
 }: Props) => {
   const user = useSelector<IAppState, IUser>(selectUser)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
@@ -52,13 +55,15 @@ export const WebsiteTemplateSelector = ({
           medium="Website"
           isEdit={false}
           isTriggered={isBuilderOpen}
-          setTriggered={(value: boolean) => {
-            setIsBuilderOpen(value)
+          setTriggered={(state: boolean) => {
+            setIsBuilderOpen(state)
             setSelectedTemplate(null)
+            onSetTriggered(state)
           }}
           setEditActionTriggered={(state: boolean) => {
-            setSelectedTemplate(null)
             setIsBuilderOpen(state)
+            setSelectedTemplate(null)
+            onSetTriggered(state)
           }}
           selectedTemplate={selectedTemplate}
         />
