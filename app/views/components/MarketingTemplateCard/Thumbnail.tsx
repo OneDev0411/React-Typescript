@@ -8,7 +8,10 @@ import { PdfThumbnail } from 'components/PdfThumbnail'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import TemplateThumbnail from 'components/TemplateThumbnail'
 import { getFileType } from 'utils/file-utils/get-file-type'
-import { getTemplateImage } from 'utils/marketing-center/helpers'
+import {
+  getTemplateImageOrVideo,
+  isVideoThumb
+} from 'utils/marketing-center/helpers'
 
 const useStyles = makeStyles(
   () => ({
@@ -92,9 +95,9 @@ export function Thumbnail({
   }
 
   if (useStaticImage) {
-    const { thumbnail } = getTemplateImage(template)
+    const { thumbnail } = getTemplateImageOrVideo(template)
 
-    return template.template.video ? (
+    return isVideoThumb(template) ? (
       <div className={classes.videoThumbWrapper} ref={ref}>
         {shouldRender && (
           <video

@@ -7,7 +7,10 @@ import _ from 'underscore'
 import { selectActiveBrandIdUnsafe } from '@app/selectors/brand'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
-import { getTemplateImage } from 'utils/marketing-center/helpers'
+import {
+  getTemplateImageOrVideo,
+  isVideoThumb
+} from 'utils/marketing-center/helpers'
 
 import { SAVED_TEMPLATE_VARIANT } from '../Builder/AddToMarketingCenterButton/constants'
 
@@ -177,20 +180,20 @@ class Templates extends React.Component {
                 onClick={() => this.handleSelectTemplate(template)}
                 isSelected={this.state.selectedTemplate === template.id}
               >
-                {template.template.video && template.thumbnail?.url ? (
+                {isVideoThumb(template) ? (
                   <Video
                     autoPlay="true"
                     muted
                     loop="true"
                     type="video/mp4"
                     width="97%"
-                    src={template.thumbnail.url}
+                    src={getTemplateImageOrVideo(template).thumbnail}
                   />
                 ) : (
                   <Image
                     alt={template.template.name}
                     title={template.template.name}
-                    src={getTemplateImage(template).original}
+                    src={getTemplateImageOrVideo(template).original}
                     width="97%"
                   />
                 )}

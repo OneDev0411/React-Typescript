@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 
-import { Button, CircularProgress, Tooltip } from '@material-ui/core'
+import {
+  Button,
+  CircularProgress,
+  makeStyles,
+  Tooltip
+} from '@material-ui/core'
 import pluralize from 'pluralize'
 import { useSelector } from 'react-redux'
 
 import useListingsEditorAssets from '@app/hooks/use-listings-editor-assets'
 import useListingsEditorTemplateData from '@app/hooks/use-listings-editor-template-data'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import DomainManagementDrawer from 'components/DomainManagementDrawer'
 import InstantMarketing, {
   IBrandMarketingTemplateWithResult
@@ -16,6 +22,7 @@ import usePublishWebsite from 'hooks/use-publish-website'
 import { selectUser } from 'selectors/user'
 
 import { ListingsAdjustmentModal } from '../../components/ListingsAdjustmentModal'
+import { MULTI_LISTINGS_TEMPLATE_TYPES_LIST } from '../../constants'
 import getTemplateObject from '../../helpers/get-template-object'
 
 import useLoadListingsData from './use-load-listings-data'
@@ -28,6 +35,17 @@ interface PublishWebsiteProps {
   onFinish: () => {}
 }
 
+const useStyles = makeStyles(
+  theme => ({
+    editAdjustmentButton: {
+      marginRight: theme.spacing(1)
+    }
+  }),
+  {
+    name: 'InstantMarketingPublishWebsite'
+  }
+)
+
 function PublishWebsite({
   isTriggered,
   isEdit,
@@ -35,9 +53,14 @@ function PublishWebsite({
   onFinish,
   selectedTemplate
 }: PublishWebsiteProps) {
+  const classes = useStyles()
+  const confirmation = useContext(ConfirmationModalContext)
+
   const [isDomainManagementOpen, setIsDomainManagementOpen] = useState(false)
 
-  const [selectedListings, setSelectedListings] = useState<IListing[]>([])
+  const [selectedListings, setSelectedListings] = useState<
+    WithMock<IListing>[]
+  >([])
   const [websiteData, setWebsiteData] = useState<IWebsite | null>(null)
   const user = useSelector(selectUser)
 
@@ -52,7 +75,7 @@ function PublishWebsite({
    * I didn't refactor that because we are planning to refactor the builder to use
    * `template.variables` instead of having these flows.
    */
-  const isListing = ['Listing', 'Listings'].includes(templateType)
+  const isListing = ['Listing', 'Listings', 'CMA'].includes(templateType)
   const isListingTriggered = !isEdit && isTriggered && isListing
 
   const isBuilderOpen =
@@ -86,7 +109,9 @@ function PublishWebsite({
       websiteData?.id,
       template,
       {
-        listings: selectedListings?.map(listing => listing.id),
+        listings: selectedListings
+          ?.filter(listing => !listing?.isMock) // We should never send our mock listing id to API
+          .map(listing => listing.id),
         html: template.result
       },
       websiteData
@@ -147,12 +172,13 @@ function PublishWebsite({
 
   const isMultiListing =
     !!selectedTemplate &&
-    getTemplateObject(selectedTemplate).template_type === 'Listings'
+    MULTI_LISTINGS_TEMPLATE_TYPES_LIST.includes(
+      getTemplateObject(selectedTemplate).template_type
+    )
 
-  // TODO: Remove this line after testing
-  const isCmaListing = isMultiListing
-  // const isCmaListing =
-  //   getTemplateObject(selectedTemplate).template_type === 'CMA'
+  const isCmaListing =
+    !!selectedTemplate &&
+    getTemplateObject(selectedTemplate).template_type === 'CMA'
 
   const assets = useListingsEditorAssets(selectedListings)
 
@@ -160,6 +186,20 @@ function PublishWebsite({
     selectedListings,
     isMultiListing
   )
+
+  const onEditAdjustment = () => {
+    confirmation.setConfirmationModal({
+      message: 'Are you sure you want to edit?',
+      description:
+        'After editing the adjustments, all edits on the website will be lost.      ',
+      cancelLabel: 'Cancel',
+      confirmLabel: 'Yes, Edit',
+      onConfirm: () => {
+        handleOpenAdjustmentModal(selectedListings)
+        setSelectedListings([])
+      }
+    })
+  }
 
   return (
     <>
@@ -179,14 +219,29 @@ function PublishWebsite({
           assets={assets}
           actionButtonsDisabled={isPublishing}
           customActions={
-            <Button
-              type="button"
-              variant="outlined"
-              disabled={isPublishing || !websiteData}
-              onClick={openDomainManagement}
-            >
-              Manage Domains
-            </Button>
+            <>
+              {isCmaListing && (
+                <Tooltip title="After editing the adjustments, all edits on the website will be lost.">
+                  <Button
+                    type="button"
+                    variant="outlined"
+                    disabled={isPublishing}
+                    onClick={onEditAdjustment}
+                    className={classes.editAdjustmentButton}
+                  >
+                    Edit Adjustments
+                  </Button>
+                </Tooltip>
+              )}
+              <Button
+                type="button"
+                variant="outlined"
+                disabled={isPublishing || !websiteData}
+                onClick={openDomainManagement}
+              >
+                Manage Domains
+              </Button>
+            </>
           }
           saveButtonWrapper={saveButton => (
             <Tooltip

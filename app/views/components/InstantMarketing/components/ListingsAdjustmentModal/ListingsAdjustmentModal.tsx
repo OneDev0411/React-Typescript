@@ -93,7 +93,6 @@ export function ListingsAdjustmentModal({ listings, onSave, onClose }: Props) {
   )
 
   const handleSave = () => {
-    console.log(addAdjustmentToListings(listings, adjustments))
     onSave(addAdjustmentToListings(listings, adjustments))
   }
 

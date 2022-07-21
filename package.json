@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "91.1.1",
+  "version": "91.2.7",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -256,6 +256,7 @@
     "text-mask-addons": "^3.7.2",
     "throng": "^5.0.0",
     "timeago.js": "^3.0.2",
+    "to-words": "^3.2.0",
     "ts-node": "^9.1.1",
     "tui-image-editor": "3.15.0",
     "underscore": "^1.12.1",

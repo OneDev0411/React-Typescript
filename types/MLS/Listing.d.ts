@@ -330,3 +330,7 @@ declare type IListing<Associations extends IListingAssociation = ''> = {
   user_listing_notification_setting: null
 } & Association<'proposed_agent', ProposedAgent, Associations> &
   Association<'mls_info', MlsInfo, Associations>
+
+declare type WithMock<T extends IListing | ICompactListing> = T & {
+  isMock?: boolean
+}

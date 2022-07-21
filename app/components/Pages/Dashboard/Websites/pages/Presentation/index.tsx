@@ -7,13 +7,10 @@ import PageLayout from 'components/GlobalPageLayout'
 
 import WebsiteList from '../../components/WebsiteList'
 import { WebsiteTemplateSelector } from '../../components/WebsiteTemplateSelector'
-import {
-  PRESENTATION_TEMPLATE_TYPES,
-  WEBSITE_TEMPLATE_TYPES
-} from '../../constants'
+import { PRESENTATION_TEMPLATE_TYPES } from '../../constants'
 
-function Website() {
-  useTitle('Websites | Rechat')
+function Presentation() {
+  useTitle('Presentation | Rechat')
 
   const [isOpenTemplateSelector, setIsOpenTemplateSelector] =
     useState<boolean>(false)
@@ -27,23 +24,24 @@ function Website() {
 
   return (
     <PageLayout position="relative" overflow="hidden">
-      <PageLayout.Header title="Websites">
+      <PageLayout.Header title="Presentation">
         <Button
           onClick={onOpenTemplateSelector}
           variant="outlined"
           color="default"
         >
-          Create Website
+          Create Presentation
         </Button>
       </PageLayout.Header>
       <PageLayout.Main>
         <WebsiteList
-          title="Website"
-          typesBlackList={PRESENTATION_TEMPLATE_TYPES}
+          title="Presentation"
+          typesWhiteList={PRESENTATION_TEMPLATE_TYPES}
         />
+
         <WebsiteTemplateSelector
           isOpen={isOpenTemplateSelector}
-          templateTypes={WEBSITE_TEMPLATE_TYPES}
+          templateTypes={PRESENTATION_TEMPLATE_TYPES}
           onClose={onCloseTemplateSelector}
         />
       </PageLayout.Main>
@@ -51,4 +49,4 @@ function Website() {
   )
 }
 
-export default memo(Website)
+export default memo(Presentation)

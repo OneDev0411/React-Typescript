@@ -13,7 +13,6 @@ import {
 import Fuse from 'fuse.js'
 import usePromise from 'react-use-promise'
 
-import { InlineEditableString } from 'components/inline-editable-fields/InlineEditableString'
 import SearchDrawer from 'components/SearchDrawer'
 import SplitButton from 'components/SplitButton'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
@@ -58,7 +57,6 @@ export function ChecklistHeader({
   addGenericTask,
   addFormTask,
   addSplitterTask,
-  renameChecklist,
   checklist,
   forms,
   formsState,
@@ -93,13 +91,7 @@ export function ChecklistHeader({
   }
 
   return (
-    <Box display="flex" alignItems="center">
-      <Box flexGrow={1}>
-        <InlineEditableString
-          value={checklist.title}
-          onSave={renameChecklist}
-        />
-      </Box>
+    <Box display="flex" alignItems="center" justifyContent="flex-end">
       <FormControlLabel
         control={
           <Checkbox

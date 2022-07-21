@@ -13,6 +13,7 @@ export default function MarketingTemplateAndTemplateInstancePicker({
   templateTypes,
   selectedTab: passedSelectedTab,
   onSelectTab,
+  shouldShowMyDesigns = true,
   ...props
 }: MarketingTemplateAndTemplateInstancePickerProps) {
   const [selectedTab, setSelectedTab] = useControllableState(
@@ -33,7 +34,7 @@ export default function MarketingTemplateAndTemplateInstancePicker({
             setSelectedTab(newValue)
           }
         >
-          <Tab value="MyDesigns" label="My Designs" />
+          {shouldShowMyDesigns && <Tab value="MyDesigns" label="My Designs" />}
           {templateTypes.map(templateType => (
             <Tab
               key={templateType}
@@ -44,7 +45,7 @@ export default function MarketingTemplateAndTemplateInstancePicker({
         </Tabs>
       </Grid>
       <Grid container item>
-        {selectedTab === 'MyDesigns' && (
+        {shouldShowMyDesigns && selectedTab === 'MyDesigns' && (
           <MarketingTemplateInstancePicker
             {...props}
             templateTypes={templateTypes}
