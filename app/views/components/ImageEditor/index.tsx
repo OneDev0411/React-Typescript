@@ -176,7 +176,21 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
     }
   }, [editor, isFocused])
 
-  const handleSave = () => {}
+  const handleSave = async () => {
+    if (activeAction === 'crop') {
+      editor?.cropper.crop()
+      setActiveAction(null)
+    }
+
+    const file = await convertUrlToImageFile(
+      editor!.export.toImage({
+        quality: 2
+      })
+    )
+
+    onSave(file)
+    onClose()
+  }
 
   return (
     <Dialog

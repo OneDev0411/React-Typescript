@@ -9,10 +9,6 @@ import { useImageEditor } from '../../../hooks/use-image-editor'
 export function Undo() {
   const { editor, history } = useImageEditor()
 
-  if (!editor) {
-    return null
-  }
-
   return (
     <Button
       disabled={history?.canUndo === false}
