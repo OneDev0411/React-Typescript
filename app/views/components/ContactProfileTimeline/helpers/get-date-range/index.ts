@@ -15,7 +15,7 @@ export function getDateRange(
   timestamp: number = new Date().getTime(),
   format: Format = Format.Middle,
   days: number = DAYS
-): NumberRange {
+): ICalendarRange {
   const day = new Date(timestamp)
 
   const start =
@@ -60,5 +60,5 @@ export function getDateRange(
           999
         )
 
-  return [start / 1000, end / 1000]
+  return { low: start / 1000, high: end / 1000 }
 }

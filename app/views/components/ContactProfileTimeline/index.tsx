@@ -28,9 +28,9 @@ interface Props {
   contact?: IContact
   associations?: string[]
   calendarRef?: RefObject<CalendarRef>
-  initialRange?: NumberRange
+  initialRange?: ICalendarRange
   contrariwise?: boolean
-  onLoadEvents?: (events: ICalendarEventsList, range: NumberRange) => void
+  onLoadEvents?: (events: ICalendarEventsList, range: ICalendarRange) => void
 }
 
 export function Calendar({
@@ -46,7 +46,7 @@ export function Calendar({
   const [isLoading, setIsLoading] = useState(false)
   const [events, setEvents] = useState<ICalendarEvent[]>([])
   const [listRows, setListRows] = useState<ICalendarListRow[]>([])
-  const [calendarRange, setCalendarRange] = useState<NumberRange>(
+  const [calendarRange, setCalendarRange] = useState<ICalendarRange>(
     getDateRange()
   )
   const [isReachedStart, setIsReachedStart] = useState(false)
@@ -71,9 +71,9 @@ export function Calendar({
         setIsLoading(true)
         console.log(
           `[ + ] Fetching Calendar with range of %c${new Date(
-            apiOptions.range[0] * 1000
+            apiOptions.range.low * 1000
           ).toUTCString()} %c${new Date(
-            apiOptions.range[1] * 1000
+            apiOptions.range.high * 1000
           ).toUTCString()}`,
           'color: green',
           'color: blue'
@@ -126,9 +126,9 @@ export function Calendar({
 
   const handleLoadEvents = async (
     date: Date,
-    range: NumberRange | null = null
+    range: Nullable<ICalendarRange> = null
   ) => {
-    const query: NumberRange =
+    const query: ICalendarRange =
       range || getDateRange(date.getTime(), Format.Middle)
 
     // reset calendar range
@@ -149,8 +149,8 @@ export function Calendar({
     (
       direction: Format
     ): {
-      query: NumberRange
-      calendar: NumberRange
+      query: ICalendarRange
+      calendar: ICalendarRange
     } => {
       let actualDirection = direction
 
@@ -162,14 +162,14 @@ export function Calendar({
         actualDirection = Format.Next
       }
 
-      const query: NumberRange =
+      const query: ICalendarRange =
         actualDirection === Format.Next
-          ? getDateRange(calendarRange[1] * 1000, Format.Next)
-          : getDateRange(calendarRange[0] * 1000, Format.Previous)
-      const calendar: NumberRange =
+          ? getDateRange(calendarRange.high * 1000, Format.Next)
+          : getDateRange(calendarRange.low * 1000, Format.Previous)
+      const calendar: ICalendarRange =
         actualDirection === Format.Next
-          ? [calendarRange[0], query[1]]
-          : [query[0], calendarRange[1]]
+          ? { low: calendarRange.low, high: query.high }
+          : { low: query.low, high: calendarRange.high }
 
       return {
         query,

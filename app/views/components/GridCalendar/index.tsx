@@ -74,7 +74,7 @@ const useStyles = makeStyles(
 
 interface Props {
   contrariwise?: boolean
-  initialRange?: NumberRange
+  initialRange?: ICalendarRange
   associations?: string[]
   actionRef?: RefObject<ActionRef>
 }
@@ -104,7 +104,7 @@ export const GridCalendarPresentation = ({
   const [isLoading, setIsLoading] = useState(false)
 
   // current range of fetched events
-  const [calendarRange, setCalendarRange] = useState<NumberRange>(
+  const [calendarRange, setCalendarRange] = useState<ICalendarRange>(
     getDateRange()
   )
 
@@ -144,9 +144,9 @@ export const GridCalendarPresentation = ({
 
         console.log(
           `[ + ] Fetching Calendar with range of %c${new Date(
-            apiOptions.range[0] * 1000
+            apiOptions.range.low * 1000
           ).toUTCString()} %c${new Date(
-            apiOptions.range[1] * 1000
+            apiOptions.range.high * 1000
           ).toUTCString()}`,
           'color: green',
           'color: blue'
@@ -194,8 +194,8 @@ export const GridCalendarPresentation = ({
     [viewAsUsers, associations, rowEvents, updateEvents]
   )
 
-  const handleLoadEvents = async (range: NumberRange | null = null) => {
-    const query: NumberRange = range || calendarRange
+  const handleLoadEvents = async (range: Nullable<ICalendarRange> = null) => {
+    const query: ICalendarRange = range || calendarRange
 
     // reset calendar range
     setCalendarRange(query)
@@ -218,8 +218,8 @@ export const GridCalendarPresentation = ({
     (
       direction: Format
     ): {
-      query: NumberRange
-      calendar: NumberRange
+      query: ICalendarRange
+      calendar: ICalendarRange
     } => {
       let actualDirection = direction
 
@@ -231,15 +231,15 @@ export const GridCalendarPresentation = ({
         actualDirection = Format.Next
       }
 
-      const query: NumberRange =
+      const query: ICalendarRange =
         actualDirection === Format.Next
-          ? getDateRange(calendarRange[1] * 1000, Format.Next)
-          : getDateRange(calendarRange[0] * 1000, Format.Previous)
+          ? getDateRange(calendarRange.high * 1000, Format.Next)
+          : getDateRange(calendarRange.low * 1000, Format.Previous)
 
-      const calendar: NumberRange =
+      const calendar: ICalendarRange =
         actualDirection === Format.Next
-          ? [calendarRange[0], query[1]]
-          : [query[0], calendarRange[1]]
+          ? { low: calendarRange.low, high: query.high }
+          : { low: query.low, high: calendarRange.high }
 
       return {
         query,
@@ -274,13 +274,13 @@ export const GridCalendarPresentation = ({
    */
   const handleDatesRender = (e: DatesSetArg) => {
     const { view } = e
-    const [start, end] = calendarRange
+    const { low, high } = calendarRange
 
-    if (shouldRecreateRange(start * 1000, view.currentStart.getTime())) {
+    if (shouldRecreateRange(low * 1000, view.currentStart.getTime())) {
       handleLoadMoreEvents(Format.Previous)
     }
 
-    if (shouldRecreateRange(end * 1000, view.currentEnd.getTime())) {
+    if (shouldRecreateRange(high * 1000, view.currentEnd.getTime())) {
       handleLoadMoreEvents(Format.Next)
     }
   }
