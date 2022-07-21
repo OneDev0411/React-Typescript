@@ -21,7 +21,10 @@ import SearchListingDrawer from 'components/SearchListingDrawer'
 import usePublishWebsite from 'hooks/use-publish-website'
 import { selectUser } from 'selectors/user'
 
-import { ListingsAdjustmentModal } from '../../components/ListingsAdjustmentModal'
+import {
+  IListingWithAdjustment,
+  ListingsAdjustmentModal
+} from '../../components/ListingsAdjustmentModal'
 import { MULTI_LISTINGS_TEMPLATE_TYPES_LIST } from '../../constants'
 import getTemplateObject from '../../helpers/get-template-object'
 
@@ -161,11 +164,11 @@ function PublishWebsite({
 
   const handleListingDrawerClose = () => onFinish()
 
-  const handleOpenAdjustmentModal = listings => {
+  const handleOpenAdjustmentModal = (listings: IListingWithAdjustment[]) => {
     setAdjustmentModalListings(listings)
   }
 
-  const handleSelectListings = listings => {
+  const handleSelectListings = (listings: IListingWithAdjustment[]) => {
     setSelectedListings(listings)
     handleCloseAdjustmentModal()
   }
