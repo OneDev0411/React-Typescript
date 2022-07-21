@@ -21,13 +21,15 @@ import { DrawMenu } from './actions/Draw/Menu'
 import { Filter } from './actions/Filter/Button'
 import { FilterMenu } from './actions/Filter/Menu'
 import { Flip } from './actions/Flip'
+import { Redo } from './actions/History/Redo'
+import { Undo } from './actions/History/Undo'
 import { Image } from './actions/Image/Button'
 import { Rotation } from './actions/Rotation'
 import { Text } from './actions/Text/Button'
 import { TextMenu } from './actions/Text/Menu'
 import { ImageEditorContext } from './context'
 import { useImageFilters } from './hooks/use-image-filters'
-import { Actions } from './types'
+import { Actions, HistoryEvent } from './types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -80,6 +82,12 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
   const [isFocused, setIsFocused] = useState(false)
   const [fileBlob, setFileBlob] = useState<Nullable<File>>(null)
   const [activeFilter, setActiveFilter] = useState<Nullable<Filters>>(null)
+  const [history, setHistory] = useState<Nullable<HistoryEvent['data']>>({
+    canRedo: false,
+    canUndo: false,
+    step: 1,
+    total: 1
+  })
 
   const filters = useImageFilters(fileBlob, filtersRef)
 
@@ -127,10 +135,30 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
       }
     }
 
+    const updateHistory = (e: HistoryEvent) =>
+      setHistory({
+        ...e.data,
+        canUndo: e.data.step > 1
+      })
+
+    const onHistoryChange = (e: EventListenerCallbackEvent) => {
+      setHistory({
+        canRedo:
+          editor!.history.getStep() < editor!.history.getList().length - 1,
+        canUndo: editor!.history.getStep() > 1,
+        total: editor!.history.getList().length,
+        step: editor!.history.getStep()
+      })
+    }
+
     editor?.on('selection:change', onSelectionChange)
+    editor?.on(['history:undo', 'history:redo'], updateHistory)
+    editor?.on('*', onHistoryChange)
 
     return () => {
       editor?.off('selection:change', onSelectionChange)
+      editor?.off(['history:undo', 'history:redo'], updateHistory)
+      editor?.off('*', onHistoryChange)
     }
   }, [editor])
 
@@ -193,6 +221,7 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
           value={{
             editor,
             activeAction,
+            history,
             setActiveAction,
             activeFilter,
             setActiveFilter
@@ -227,10 +256,8 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
             </Box>
 
             <Box display="flex">
-              {/* <Redo editor={editor} onRedo={resizeEditor} />
-            <Undo editor={editor} onUndo={resizeEditor} />
-            <Delete editor={editor} /> */}
-              +++
+              <Redo />
+              <Undo />
             </Box>
           </Box>
         </ImageEditorContext.Provider>

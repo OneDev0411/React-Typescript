@@ -11,3 +11,13 @@ export type FilterType = {
 export type ImageFilter = FilterType & {
   dataUrl: string
 }
+
+export interface HistoryEvent {
+  name: string
+  data: {
+    canRedo: boolean
+    canUndo: boolean
+    step: number
+    total: number
+  }
+}
