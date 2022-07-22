@@ -88,9 +88,29 @@ function WebsiteList({
     loadWebsites()
   }, [loadWebsites])
 
+  const renderTemplateSelector = (
+    <WebsiteTemplateSelector
+      isOpen={isOpenTemplateSelector}
+      templateTypes={templateSelectorTypes}
+      onClose={onCloseTemplateSelector}
+      onSetTriggered={state => {
+        if (!state) {
+          loadWebsites()
+        }
+      }}
+    />
+  )
+
   if (isLoading || isEmpty) {
     return (
-      <WebsiteListState title={title} isLoading={isLoading} isEmpty={isEmpty} />
+      <>
+        <WebsiteListState
+          title={title}
+          isLoading={isLoading}
+          isEmpty={isEmpty}
+        />
+        {renderTemplateSelector}
+      </>
     )
   }
 
@@ -107,17 +127,7 @@ function WebsiteList({
           </WebsiteListProvider>
         </Grid>
       </Box>
-
-      <WebsiteTemplateSelector
-        isOpen={isOpenTemplateSelector}
-        templateTypes={templateSelectorTypes}
-        onClose={onCloseTemplateSelector}
-        onSetTriggered={state => {
-          if (!state) {
-            loadWebsites()
-          }
-        }}
-      />
+      {renderTemplateSelector}
     </>
   )
 }
