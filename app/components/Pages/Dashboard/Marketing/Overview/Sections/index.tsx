@@ -9,6 +9,11 @@ import SuperCampaignsSection from './SuperCampaignsSection'
 import UpcomingBirthdaysAndAnniversariesSection from './UpcomingBirthdaysAndAnniversariesSection'
 import WhatsNewInMCSection from './WhatsNewInMCSection'
 
+// Temporary remove this section until we have better ones
+// https://gitlab.com/rechat/web/-/issues/6607
+const SHOULD_SHOW_WHATS_NEW_SECTION = false
+const SHOULD_SHOW_SOMETHING_TO_SHARE_SECTION = false
+
 export default function Sections() {
   return (
     <Grid container item direction="column">
@@ -25,8 +30,8 @@ export default function Sections() {
         <UpcomingBirthdaysAndAnniversariesSection />
         <PromoteListingsSection />
         <NewsletterBannerSection />
-        <WhatsNewInMCSection />
-        <SomethingToShareSection />
+        {SHOULD_SHOW_WHATS_NEW_SECTION && <WhatsNewInMCSection />}
+        {SHOULD_SHOW_SOMETHING_TO_SHARE_SECTION && <SomethingToShareSection />}
       </Grid>
     </Grid>
   )
