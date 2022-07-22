@@ -17,7 +17,7 @@ function WebsiteListStateEmpty({ title }: Props) {
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
-      height="100vh"
+      height="75vh"
     >
       <Box marginBottom={1.5}>
         <Image />
