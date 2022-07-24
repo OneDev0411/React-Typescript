@@ -6,7 +6,13 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { useImageEditor } from '../../../hooks/use-image-editor'
 
-export function Cropper() {
+interface Props {
+  options?: {
+    circular?: boolean
+  }
+}
+
+export function Cropper({ options }: Props) {
   const { editor, setActiveAction } = useImageEditor()
 
   const toggleCrop = () => {
@@ -18,7 +24,7 @@ export function Cropper() {
     }
 
     editor?.cropper.start({
-      circular: false,
+      circular: options?.circular ?? false,
       fixed: false
     })
 

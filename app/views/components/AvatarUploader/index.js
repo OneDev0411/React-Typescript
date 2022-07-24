@@ -60,6 +60,7 @@ export class AvatarUploader extends Component {
                 accept: ['image/jpeg', 'image/png']
               }}
               editorOptions={{
+                circularCropper: true,
                 dimensions: [300, 300]
               }}
             >

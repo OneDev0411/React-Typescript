@@ -68,11 +68,20 @@ const useStyles = makeStyles(
 interface Props {
   file: File | string
   dimensions?: [number, number]
+  cropperOptions?: {
+    circular?: boolean
+  }
   onClose: () => void
   onSave: (image: File) => void
 }
 
-export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
+export function EditorDialog({
+  file,
+  dimensions,
+  cropperOptions,
+  onClose,
+  onSave
+}: Props) {
   const classes = useStyles()
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
   const filtersRef = useRef<Nullable<HTMLDivElement>>(null)
@@ -260,7 +269,7 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
             className={classes.actionsContainer}
           >
             <Box display="flex" className={classes.actions}>
-              <Cropper />
+              <Cropper options={cropperOptions} />
               <Rotation />
               <Flip />
               <Draw />
