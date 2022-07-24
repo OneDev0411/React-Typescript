@@ -5,10 +5,6 @@ export function Pixelate() {
   const { editor, updateImage } = useContext()
 
   const handleChange = (value: number) => {
-    if (value <= 0) {
-      return
-    }
-
     editor?.board.background.image.addFilter({
       name: 'Pixelate',
       options: {
