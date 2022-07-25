@@ -9,7 +9,10 @@ import { useImageEditor } from '../../../hooks/use-image-editor'
 export function CropMenu() {
   const { editor, setActiveAction } = useImageEditor()
 
-  const handleCrop = () => editor?.cropper.crop()
+  const handleCrop = () => {
+    editor?.cropper.crop()
+    setActiveAction(null)
+  }
 
   const handleCancel = () => {
     editor?.cropper.stop()

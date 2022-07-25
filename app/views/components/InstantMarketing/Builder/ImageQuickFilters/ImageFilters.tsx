@@ -54,7 +54,7 @@ export function ImageFilters({ image, isOpen, onChange }: Props) {
 
     onChange(
       editor.export.toImage({
-        pixelRatio: 0.5
+        pixelRatio: 1
       })
     )
   }

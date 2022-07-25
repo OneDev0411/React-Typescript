@@ -7,11 +7,11 @@ import { useLoadScript } from './use-load-script'
 export interface Filter {
   name: string
   label: string
-  customFn: Nullable<(imageData: ImageData) => void>
+  customFn: (imageData: ImageData) => void
   imageData: string
 }
 
-const ORIGINAL_IMAGE = 'no-filter'
+const ORIGINAL_IMAGE = 'No-Filter'
 
 export const Filters: Pick<Filter, 'name' | 'label'>[] = [
   {
@@ -32,7 +32,7 @@ export const Filters: Pick<Filter, 'name' | 'label'>[] = [
   },
   {
     name: 'extreme_offset_blue',
-    label: 'Extreme Offset Blue'
+    label: 'Offset Blue'
   },
   {
     name: 'zapt',
@@ -65,8 +65,9 @@ export const Filters: Pick<Filter, 'name' | 'label'>[] = [
 ]
 
 export function useImageFilters(
-  image: File | string
-): [typeof filtersList, typeof resetFilters] {
+  image: File | string,
+  pixelRatio = 0.5
+): [Record<string, Filter>, () => void] {
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
   const [filtersList, setFiltersList] = useState<Record<string, Filter>>({})
 
@@ -80,7 +81,7 @@ export function useImageFilters(
         ...filter,
         customFn:
           filter.name === ORIGINAL_IMAGE
-            ? null
+            ? () => {}
             : (imageData: ImageData) => {
                 // eslint-disable-next-line
           const pixelsJS = window['pixelsJS']
@@ -133,7 +134,7 @@ export function useImageFilters(
       }
 
       const data = editor.export.toImage({
-        pixelRatio: 0.5
+        pixelRatio
       })
 
       if (filter.customFn) {
@@ -152,7 +153,7 @@ export function useImageFilters(
         }))
       }, 0)
     })
-  }, [filters, editor, isPixelJsLoaded])
+  }, [filters, editor, pixelRatio, isPixelJsLoaded])
 
   const resetFilters = useCallback(() => {
     setFiltersList({})

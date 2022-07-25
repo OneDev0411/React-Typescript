@@ -71,7 +71,7 @@ interface Props {
   cropperOptions?: {
     circular?: boolean
   }
-  onClose: () => void
+  onClose: (isSaving?: boolean) => void
   onSave: (image: File) => void
 }
 
@@ -193,7 +193,7 @@ export function EditorDialog({
     )
 
     onSave(file)
-    onClose()
+    onClose(true)
   }
 
   return (
@@ -208,7 +208,7 @@ export function EditorDialog({
         <Box display="flex" alignItems="center" justifyContent="space-between">
           Edit Photo
           <div>
-            <Button variant="text" onClick={onClose}>
+            <Button variant="text" onClick={() => onClose(false)}>
               Cancel
             </Button>
 

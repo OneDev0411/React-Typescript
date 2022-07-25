@@ -1791,11 +1791,6 @@ class Builder extends React.Component {
             <ImageQuickFilters
               isOpen={this.state.showImageQuickFilters}
               image={this.state.imageToEdit}
-              onUpdate={image => {
-                this.editor.runCommand('set-image', {
-                  value: image
-                })
-              }}
               onClose={async image => {
                 this.setState({
                   imageToEdit: null,

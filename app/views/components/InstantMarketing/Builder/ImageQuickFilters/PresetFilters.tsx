@@ -51,7 +51,7 @@ export function PresetFilters({ isOpen, image, onSelect }: Props) {
 
   const [selectedFilter, setSelectedFilter] = useState<Nullable<string>>(null)
 
-  const [filters, resetFilters] = useImageFilters(image)
+  const [filters, resetFilters] = useImageFilters(image, 1)
 
   const handleSelect = (filter: string) => {
     setSelectedFilter(filter)

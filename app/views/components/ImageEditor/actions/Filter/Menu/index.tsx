@@ -49,12 +49,10 @@ export function FilterMenu({ file }: Props) {
   const { editor, activeFilter, setActiveFilter } = useImageEditor()
   const [filters] = useImageFilters(file)
 
-  const applyFilter = async (filter: Nullable<Filter> = null) => {
+  const applyFilter = async (filter: Filter) => {
     if (!editor) {
       return
     }
-
-    setActiveFilter(filter)
 
     if (activeFilter) {
       editor.board.background.image.removeFilter(
@@ -67,6 +65,8 @@ export function FilterMenu({ file }: Props) {
         customFn: filter?.customFn
       })
     }
+
+    setActiveFilter(filter)
   }
 
   return (
