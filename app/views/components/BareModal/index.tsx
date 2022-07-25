@@ -11,6 +11,7 @@ interface Props extends ReactModalProps {
   autoHeight?: boolean
   offOverflow?: boolean
   large?: boolean
+  xLarge?: boolean
   children: ReactNode
   className?: string
   overlayClassName?: string
@@ -23,6 +24,7 @@ export default function BareModal({
   className,
   overlayClassName,
   large,
+  xLarge,
   ...modalProps
 }: Props) {
   if (process.env.DISABLE_MODAL) {
@@ -33,10 +35,12 @@ export default function BareModal({
   const autoHeightClassName = `${baseClassName}--height-auto`
   const offOverflowClassName = `${baseClassName}--off-overflow`
   const largeClassName = `${baseClassName}--large`
+  const xLargeClassName = `${baseClassName}--xLarge`
   const classes = cn(baseClassName, className, {
     [offOverflowClassName]: offOverflow,
     [autoHeightClassName]: autoHeight,
-    [largeClassName]: large
+    [largeClassName]: large,
+    [xLargeClassName]: xLarge
   })
 
   return (
