@@ -38,17 +38,7 @@ export function CropMenu({ options }: Props) {
     editor?.cropper.start({
       ...options,
       fixed: false,
-      keepRatio: checked,
-      transformer: {
-        enabledAnchors: [
-          'top-left',
-          'top-right',
-          'bottom-left',
-          'bottom-right',
-          'top-center',
-          'bottom-center'
-        ]
-      }
+      keepRatio: checked
     })
   }
 
