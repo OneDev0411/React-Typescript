@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-import Pikaso, { Filters } from 'pikaso'
+import Pikaso from 'pikaso'
 
 import type { Filter } from '@app/hooks/use-image-filters'
 
@@ -12,7 +12,7 @@ interface Context {
   activeAction: Nullable<Actions>
   activeFilter: Nullable<Filter>
   setActiveAction: (action: Nullable<Actions>) => void
-  setActiveFilter: (filter: Nullable<Filters>) => void
+  setActiveFilter: (filter: Nullable<Filter>) => void
 }
 
 export const ImageEditorContext = createContext<Context>({
