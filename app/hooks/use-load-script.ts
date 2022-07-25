@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { useEffectOnce } from 'react-use'
 
-export function useLoadPixelJs() {
+export function useLoadScript(src: string) {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffectOnce(() => {
@@ -10,8 +10,7 @@ export function useLoadPixelJs() {
 
     script.onload = () => setIsLoaded(true)
 
-    script.src =
-      'https://cdn.jsdelivr.net/gh/silvia-odwyer/pixels.js/dist/Pixels.js'
+    script.src = src
     script.async = true
     document.body.appendChild(script)
 

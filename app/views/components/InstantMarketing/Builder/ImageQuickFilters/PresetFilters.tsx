@@ -3,10 +3,8 @@ import { useEffect, useState, useRef } from 'react'
 import { Box, makeStyles, Theme, Typography } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import cn from 'classnames'
-import Pikaso from 'pikaso'
 
-import { useFilters, Filters } from './use-filters'
-import { useLoadPixelJs } from './use-pixel-js'
+import { useImageFilters, Filters } from '@app/hooks/use-image-filters'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -51,12 +49,9 @@ export function PresetFilters({ isOpen, image, onSelect }: Props) {
   const classes = useStyles()
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
 
-  const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
-  const [isEditorLoaded, setIsEditorLoaded] = useState(false)
   const [selectedFilter, setSelectedFilter] = useState<Nullable<string>>(null)
 
-  const isPixelJsLoaded = useLoadPixelJs()
-  const [filters, resetFilters] = useFilters(editor, isEditorLoaded)
+  const [filters, resetFilters] = useImageFilters(image)
 
   const handleSelect = (filter: string) => {
     setSelectedFilter(filter)
@@ -68,28 +63,8 @@ export function PresetFilters({ isOpen, image, onSelect }: Props) {
       return
     }
 
-    setEditor(null)
-    setIsEditorLoaded(false)
     resetFilters()
   }, [isOpen, resetFilters])
-
-  useEffect(() => {
-    if (!isOpen || !isPixelJsLoaded) {
-      return
-    }
-
-    ;(async () => {
-      const editor = new Pikaso({
-        container: editorRef.current as HTMLDivElement,
-        height: 400
-      })
-
-      await editor.loadFromUrl(image)
-
-      setEditor(editor)
-      setIsEditorLoaded(true)
-    })()
-  }, [isOpen, isPixelJsLoaded, image])
 
   return (
     <Box display="flex" width="100%" overflow="auto" pb={2} pt={5}>

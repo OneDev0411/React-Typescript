@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import Pikaso from 'pikaso'
 
+import { useLoadScript } from './use-load-script'
+
 export interface Filter {
   name: string
   label: string
@@ -62,11 +64,15 @@ export const Filters: Pick<Filter, 'name' | 'label'>[] = [
   }
 ]
 
-export function useFilters(
-  editor: Nullable<Pikaso>,
-  isLoaded: boolean
+export function useImageFilters(
+  image: File | string
 ): [typeof filtersList, typeof resetFilters] {
+  const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
   const [filtersList, setFiltersList] = useState<Record<string, Filter>>({})
+
+  const isPixelJsLoaded = useLoadScript(
+    'https://cdn.jsdelivr.net/gh/silvia-odwyer/pixels.js/dist/Pixels.js'
+  )
 
   const filters = useMemo(
     () =>
@@ -86,7 +92,36 @@ export function useFilters(
   )
 
   useEffect(() => {
-    if (!editor || !isLoaded) {
+    const container = document.createElement('div')
+
+    container.style.height = '400px'
+    document.body.append(container)
+
+    const init = async () => {
+      const editor = new Pikaso({
+        container: container as HTMLDivElement
+      })
+
+      if (image instanceof File) {
+        await editor?.loadFromFile(image)
+      }
+
+      if (typeof image === 'string') {
+        await editor?.loadFromUrl(image)
+      }
+
+      setEditor(editor)
+    }
+
+    init()
+
+    return () => {
+      container.remove()
+    }
+  }, [image])
+
+  useEffect(() => {
+    if (!editor || !isPixelJsLoaded) {
       return
     }
 
@@ -117,7 +152,7 @@ export function useFilters(
         }))
       }, 0)
     })
-  }, [filters, editor, isLoaded])
+  }, [filters, editor, isPixelJsLoaded])
 
   const resetFilters = useCallback(() => {
     setFiltersList({})

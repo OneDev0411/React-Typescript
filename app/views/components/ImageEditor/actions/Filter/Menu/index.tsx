@@ -1,11 +1,10 @@
 import { Box, makeStyles, Theme, Typography } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import cn from 'classnames'
-import { Filters } from 'pikaso'
+
+import { useImageFilters, Filters, Filter } from '@app/hooks/use-image-filters'
 
 import { useImageEditor } from '../../../hooks/use-image-editor'
-import { FILTERS } from '../../../hooks/use-image-filters'
-import { FilterType, ImageFilter } from '../../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -42,14 +41,15 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  filters: Partial<Record<keyof FilterType[], ImageFilter>>
+  file: File | string
 }
 
-export function FilterMenu({ filters }: Props) {
+export function FilterMenu({ file }: Props) {
   const classes = useStyles()
   const { editor, activeFilter, setActiveFilter } = useImageEditor()
+  const [filters] = useImageFilters(file)
 
-  const applyFilter = async (filter: Filters | null = null) => {
+  const applyFilter = async (filter: Nullable<Filter> = null) => {
     if (!editor) {
       return
     }
@@ -57,11 +57,15 @@ export function FilterMenu({ filters }: Props) {
     setActiveFilter(filter)
 
     if (activeFilter) {
-      editor.board.background.image.removeFilter(activeFilter)
+      editor.board.background.image.removeFilter(
+        editor.board.background.image.filters
+      )
     }
 
-    if (filter) {
-      editor.board.background.image.addFilter(filter)
+    if (filter?.customFn) {
+      editor.board.background.image.addFilter({
+        customFn: filter?.customFn
+      })
     }
   }
 
@@ -72,24 +76,23 @@ export function FilterMenu({ filters }: Props) {
       width="100%"
       className={classes.root}
     >
-      {FILTERS.map(filter => (
+      {Filters.map(({ name, label }) => (
         <>
-          {filters[filter.name] ? (
-            <div key={filter.name}>
+          {filters[name] ? (
+            <div key={name}>
               <img
-                src={filters[filter.name]}
-                alt={filter.name}
+                src={filters[name].imageData}
+                alt={name}
                 className={cn(classes.imageFilter, {
                   active:
-                    (activeFilter as Nullable<{ name: string }>)?.name ===
-                    filter.name
+                    (activeFilter as Nullable<{ name: string }>)?.name === name
                 })}
-                onClick={() => applyFilter(filter.js)}
+                onClick={() => applyFilter(filters[name])}
               />
 
               <Box textAlign="center">
                 <Typography variant="caption" className={classes.caption}>
-                  {filter.name}
+                  {label}
                 </Typography>
               </Box>
             </div>

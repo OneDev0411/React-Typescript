@@ -2,13 +2,15 @@ import { createContext } from 'react'
 
 import Pikaso, { Filters } from 'pikaso'
 
+import type { Filter } from '@app/hooks/use-image-filters'
+
 import type { Actions, HistoryEvent } from '../types'
 
 interface Context {
   editor: Pikaso | null
   history: Nullable<HistoryEvent['data']>
   activeAction: Nullable<Actions>
-  activeFilter: Nullable<Filters>
+  activeFilter: Nullable<Filter>
   setActiveAction: (action: Nullable<Actions>) => void
   setActiveFilter: (filter: Nullable<Filters>) => void
 }

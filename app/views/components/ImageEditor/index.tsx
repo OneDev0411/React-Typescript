@@ -10,8 +10,9 @@ import {
   Button,
   ClickAwayListener
 } from '@material-ui/core'
-import Pikaso, { EventListenerCallbackEvent, Filters } from 'pikaso'
+import Pikaso, { EventListenerCallbackEvent } from 'pikaso'
 
+import type { Filter as ImageFilter } from '@app/hooks/use-image-filters'
 import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
 
 import { Cropper } from './actions/Crop/Button'
@@ -28,7 +29,6 @@ import { Rotation } from './actions/Rotation'
 import { Text } from './actions/Text/Button'
 import { TextMenu } from './actions/Text/Menu'
 import { ImageEditorContext } from './context'
-import { useImageFilters } from './hooks/use-image-filters'
 import { Actions, HistoryEvent } from './types'
 
 const useStyles = makeStyles(
@@ -84,21 +84,17 @@ export function EditorDialog({
 }: Props) {
   const classes = useStyles()
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
-  const filtersRef = useRef<Nullable<HTMLDivElement>>(null)
 
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
   const [activeAction, setActiveAction] = useState<Actions | null>(null)
   const [isFocused, setIsFocused] = useState(false)
-  const [fileBlob, setFileBlob] = useState<Nullable<File>>(null)
-  const [activeFilter, setActiveFilter] = useState<Nullable<Filters>>(null)
+  const [activeFilter, setActiveFilter] = useState<Nullable<ImageFilter>>(null)
   const [history, setHistory] = useState<Nullable<HistoryEvent['data']>>({
     canRedo: false,
     canUndo: false,
     step: 1,
     total: 1
   })
-
-  const filters = useImageFilters(fileBlob, filtersRef)
 
   const setupEditor = () => {
     const editor = new Pikaso({
@@ -123,7 +119,6 @@ export function EditorDialog({
       const fileBlob =
         typeof file === 'string' ? await convertUrlToImageFile(file) : file
 
-      setFileBlob(fileBlob)
       await editor.loadFromFile(fileBlob)
     }
 
@@ -238,8 +233,6 @@ export function EditorDialog({
           />
         </ClickAwayListener>
 
-        <div ref={filtersRef} style={{ display: 'none' }} />
-
         <ImageEditorContext.Provider
           value={{
             editor,
@@ -259,7 +252,7 @@ export function EditorDialog({
               {activeAction === 'crop' && <CropMenu />}
               {activeAction === 'draw' && <DrawMenu />}
               {activeAction === 'text' && <TextMenu />}
-              {activeAction === 'filter' && <FilterMenu filters={filters} />}
+              {activeAction === 'filter' && <FilterMenu file={file} />}
             </Box>
           )}
 
