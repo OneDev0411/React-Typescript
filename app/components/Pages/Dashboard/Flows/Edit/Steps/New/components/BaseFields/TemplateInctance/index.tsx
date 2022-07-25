@@ -46,7 +46,18 @@ const allMarketingTemplateType: IMarketingTemplateType[] = [
   'Valentines',
   'VeteransDay',
   'WeddingAnniversary',
-  'WomansDay'
+  'WomansDay',
+  'JuneTeenth',
+  'FirstDayOfSummer',
+  'Pride',
+  'AsianAmericanAndPacificIslanderHeritageMonth',
+  'BlackHistoryMonth',
+  'EarthDay',
+  'FirstDayOfSpring',
+  'CincoDeMayo',
+  'FirstDayOfFall',
+  'FirstDayOfWinter',
+  'YomKippur'
 ]
 
 interface Props {

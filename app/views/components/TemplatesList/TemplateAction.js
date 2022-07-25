@@ -46,7 +46,18 @@ const HOLIDAY_TYPES = [
   'Thanksgiving',
   'Valentines',
   'VeteransDay',
-  'WomansDay'
+  'WomansDay',
+  'JuneTeenth',
+  'FirstDayOfSummer',
+  'Pride',
+  'AsianAmericanAndPacificIslanderHeritageMonth',
+  'BlackHistoryMonth',
+  'EarthDay',
+  'FirstDayOfSpring',
+  'CincoDeMayo',
+  'FirstDayOfFall',
+  'FirstDayOfWinter',
+  'YomKippur'
 ]
 
 const GENERAL_FLOW_TYPES = [

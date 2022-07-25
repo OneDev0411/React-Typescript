@@ -57,7 +57,18 @@ export const TEMPLATE_TYPES: IMarketingTemplateType[] = [
   'Valentines',
   'VeteransDay',
   'WeddingAnniversary',
-  'WomansDay'
+  'WomansDay',
+  'JuneTeenth',
+  'FirstDayOfSummer',
+  'Pride',
+  'AsianAmericanAndPacificIslanderHeritageMonth',
+  'BlackHistoryMonth',
+  'EarthDay',
+  'FirstDayOfSpring',
+  'CincoDeMayo',
+  'FirstDayOfFall',
+  'FirstDayOfWinter',
+  'YomKippur'
 ]
 
 export const SORTED_TEMPLATE_TYPES_BY_LABEL: IMarketingTemplateType[] =
