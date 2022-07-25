@@ -74,6 +74,7 @@ function ShowingPropertyList({
       id: 'approved',
       width: '100px',
       sortable: false,
+      align: 'center',
       render: ({ row }) => (
         <ShowingLabeledColumn>
           <Box textAlign="center">{row.confirmed}</Box>
@@ -85,6 +86,7 @@ function ShowingPropertyList({
       id: 'total-visits',
       width: '220px',
       sortable: false,
+      align: 'center',
       render: ({ row }) => (
         <ShowingLabeledColumn>
           <Box textAlign="center">{row.visits}</Box>
