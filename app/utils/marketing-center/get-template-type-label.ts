@@ -64,14 +64,14 @@ const TEMPLATE_TYPE_LABEL_MAP: {
   FirstDayOfSummer: 'Summer',
   Pride: 'Pride',
   AsianAmericanAndPacificIslanderHeritageMonth:
-    ' Asian American & Pacific Islander Heritage Month',
-  BlackHistoryMonth: ' Black History Month',
+    'Asian American & Pacific Islander Heritage Month',
+  BlackHistoryMonth: 'Black History Month',
   EarthDay: 'Earth Day',
   FirstDayOfSpring: 'Spring',
-  CincoDeMayo: ' Cinco De Mayo',
+  CincoDeMayo: 'Cinco De Mayo',
   FirstDayOfFall: 'Fall',
   FirstDayOfWinter: 'Winter',
-  YomKippur: ' Yom Kippur'
+  YomKippur: 'Yom Kippur'
 }
 
 export function getTemplateTypeLabel(
