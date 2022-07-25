@@ -97,9 +97,13 @@ export function EditorDialog({
   })
 
   const setupEditor = () => {
+    const size = dimensions
+      ? { width: dimensions[0], height: dimensions[1] }
+      : { height: 500 }
+
     const editor = new Pikaso({
       container: editorRef.current as HTMLDivElement,
-      height: 500,
+      ...size,
       selection: {
         keyboard: {
           enabled: false
@@ -249,7 +253,7 @@ export function EditorDialog({
               justifyContent="space-between"
               className={classes.actionMenu}
             >
-              {activeAction === 'crop' && <CropMenu />}
+              {activeAction === 'crop' && <CropMenu options={cropperOptions} />}
               {activeAction === 'draw' && <DrawMenu />}
               {activeAction === 'text' && <TextMenu />}
               {activeAction === 'filter' && <FilterMenu file={file} />}
