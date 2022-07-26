@@ -2,8 +2,8 @@ const MEDIUM_LABEL_MAP: {
   [key in IMarketingTemplateMedium]: string
 } = {
   Social: 'Social',
-  FacebookCover: 'Facebook Covers',
   InstagramStory: 'Stories',
+  FacebookCover: 'Facebook Covers',
   LinkedInCover: 'LinkedIn Covers',
   TwitterCover: 'Twitter Covers',
   RealtorCover: 'Realtor.com Covers',
