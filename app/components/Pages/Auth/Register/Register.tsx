@@ -3,10 +3,12 @@ import React from 'react'
 import { Box, Theme, makeStyles, Typography, Tooltip } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
-import { Form } from 'react-final-form'
+import { Form, Field } from 'react-final-form'
 import { useDispatch } from 'react-redux'
 import { browserHistory, WithRouterProps, Link } from 'react-router'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
+
+import { PasswordTextField } from '@app/views/components/PasswordTextField'
 
 import updatePassword from '../../../../models/auth/password/update'
 import { editUser } from '../../../../models/user/edit'
@@ -38,8 +40,28 @@ const useStyles = makeStyles(
   { name: 'RegisterForm' }
 )
 
+const useInputStyles = makeStyles(
+  (theme: Theme) => ({
+    root: {
+      width: '100%',
+      marginBottom: theme.spacing(3),
+
+      [theme.breakpoints.up(300)]: {
+        width: 280
+      },
+      [theme.breakpoints.up('sm')]: {
+        width: 400
+      }
+    }
+  }),
+  {
+    name: 'RegisterForm-TextField'
+  }
+)
+
 export function Register(props: WithRouterProps) {
   const classes = useStyles()
+  const inputClasses = useInputStyles()
   const dispatch = useDispatch()
 
   const paramsFromURI: {
@@ -174,30 +196,48 @@ export function Register(props: WithRouterProps) {
                       InputProps={{
                         readOnly: true
                       }}
+                      classes={inputClasses}
                     />
                   </Tooltip>
                 )}
 
-                <TextField name="first_name" label="First Name" />
-
-                <TextField name="last_name" label="Last Name" />
-
-                {paramsFromURI.phone_number && (
-                  <TextField name="email" type="email" label="Email Address" />
-                )}
-
                 <TextField
-                  name="password"
-                  type="password"
-                  label="Password"
-                  autoComplete="new-password"
+                  name="first_name"
+                  label="First Name"
+                  classes={inputClasses}
                 />
 
                 <TextField
-                  name="repeatedPassword"
-                  type="password"
-                  label="Repeat Password"
-                  autoComplete="repeated-password"
+                  name="last_name"
+                  label="Last Name"
+                  classes={inputClasses}
+                />
+
+                {paramsFromURI.phone_number && (
+                  <TextField
+                    name="email"
+                    type="email"
+                    label="Email Address"
+                    classes={inputClasses}
+                  />
+                )}
+
+                <Field
+                  name="password"
+                  render={({ meta, input }) => (
+                    <PasswordTextField
+                      variant="filled"
+                      label="Password"
+                      classes={inputClasses}
+                      error={Boolean(meta.submitFailed && meta.error)}
+                      helperText={
+                        meta.submitFailed && meta.error
+                          ? meta.error || meta.submitError
+                          : undefined
+                      }
+                      {...input}
+                    />
+                  )}
                 />
 
                 <UserTypeField />
