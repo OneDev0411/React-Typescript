@@ -76,7 +76,7 @@ function ShowingPropertyList({
       sortable: false,
       align: 'center',
       render: ({ row }) => (
-        <ShowingLabeledColumn>
+        <ShowingLabeledColumn margin="auto">
           <Box textAlign="center">{row.confirmed}</Box>
         </ShowingLabeledColumn>
       )
@@ -88,7 +88,7 @@ function ShowingPropertyList({
       sortable: false,
       align: 'center',
       render: ({ row }) => (
-        <ShowingLabeledColumn>
+        <ShowingLabeledColumn margin="auto">
           <Box textAlign="center">{row.visits}</Box>
         </ShowingLabeledColumn>
       )
