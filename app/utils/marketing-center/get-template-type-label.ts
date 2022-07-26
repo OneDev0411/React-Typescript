@@ -71,7 +71,8 @@ const TEMPLATE_TYPE_LABEL_MAP: {
   CincoDeMayo: 'Cinco De Mayo',
   FirstDayOfFall: 'Fall',
   FirstDayOfWinter: 'Winter',
-  YomKippur: 'Yom Kippur'
+  YomKippur: 'Yom Kippur',
+  Announcements: 'Announcements'
 }
 
 export function getTemplateTypeLabel(

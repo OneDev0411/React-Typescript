@@ -57,7 +57,8 @@ const allMarketingTemplateType: IMarketingTemplateType[] = [
   'CincoDeMayo',
   'FirstDayOfFall',
   'FirstDayOfWinter',
-  'YomKippur'
+  'YomKippur',
+  'Announcements'
 ]
 
 interface Props {
