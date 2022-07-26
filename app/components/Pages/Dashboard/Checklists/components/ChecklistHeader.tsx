@@ -67,6 +67,9 @@ export function ChecklistHeader({
     useDictionary<boolean>()
   const [isTerminableChanging, setTerminableChanging] = useDictionary<boolean>()
   const [formPickerOpen, setFormPickerOpen] = useState(false)
+  const [selectedItems, setSelectedItems] = useState<Record<UUID, IDealForm>>(
+    {}
+  )
 
   const classes = useChecklistHeaderStyles()
 
@@ -74,6 +77,10 @@ export function ChecklistHeader({
     () => new Fuse<IDealForm, {}>(forms || [], { keys: ['name'] }),
     [forms]
   )
+
+  const onChangeSelectedItems = (newItems: Record<UUID, IDealForm>) => {
+    setSelectedItems(newItems)
+  }
 
   const openFormPickerDrawer = () => {
     setFormPickerOpen(true)
@@ -186,6 +193,8 @@ export function ChecklistHeader({
           // little different and probably needs better components for
           // rendering items
           multipleSelection={false}
+          onChangeSelectedItems={onChangeSelectedItems}
+          selectedItems={selectedItems}
           normalizeSelectedItem={i => i}
           defaultLists={[
             {

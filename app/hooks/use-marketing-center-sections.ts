@@ -255,6 +255,63 @@ const ALL_SECTIONS: SectionCollection = {
         title: getTemplateTypeLabel('VeteransDay'),
         value: 'VeteransDay',
         link: urlGenerator('/VeteransDay')
+      },
+      {
+        title: getTemplateTypeLabel('JuneTeenth'),
+        value: 'JuneTeenth',
+        link: urlGenerator('/JuneTeenth')
+      },
+      {
+        title: getTemplateTypeLabel('FirstDayOfSummer'),
+        value: 'FirstDayOfSummer',
+        link: urlGenerator('/FirstDayOfSummer')
+      },
+      {
+        title: getTemplateTypeLabel('Pride'),
+        value: 'Pride',
+        link: urlGenerator('/Pride')
+      },
+      {
+        title: getTemplateTypeLabel(
+          'AsianAmericanAndPacificIslanderHeritageMonth'
+        ),
+        value: 'AsianAmericanAndPacificIslanderHeritageMonth',
+        link: urlGenerator('/AsianAmericanAndPacificIslanderHeritageMonth')
+      },
+      {
+        title: getTemplateTypeLabel('BlackHistoryMonth'),
+        value: 'BlackHistoryMonth',
+        link: urlGenerator('/BlackHistoryMonth')
+      },
+      {
+        title: getTemplateTypeLabel('EarthDay'),
+        value: 'EarthDay',
+        link: urlGenerator('/EarthDay')
+      },
+      {
+        title: getTemplateTypeLabel('FirstDayOfSpring'),
+        value: 'FirstDayOfSpring',
+        link: urlGenerator('/FirstDayOfSpring')
+      },
+      {
+        title: getTemplateTypeLabel('CincoDeMayo'),
+        value: 'CincoDeMayo',
+        link: urlGenerator('/CincoDeMayo')
+      },
+      {
+        title: getTemplateTypeLabel('FirstDayOfFall'),
+        value: 'FirstDayOfFall',
+        link: urlGenerator('/FirstDayOfFall')
+      },
+      {
+        title: getTemplateTypeLabel('FirstDayOfWinter'),
+        value: 'FirstDayOfWinter',
+        link: urlGenerator('/FirstDayOfWinter')
+      },
+      {
+        title: getTemplateTypeLabel('YomKippur'),
+        value: 'YomKippur',
+        link: urlGenerator('/YomKippur')
       }
     ]
   },

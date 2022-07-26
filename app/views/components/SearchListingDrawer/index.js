@@ -33,6 +33,7 @@ class SearchListingDrawer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      selectedItems: props.defaultSelectedItems || {},
       isWorking: false,
       isHipPocketListingDrawerOpen: false,
       isMlsDisclaimerOpen: true
@@ -142,8 +143,24 @@ class SearchListingDrawer extends React.Component {
   handleSaveHipPocketListing = async data => {
     const listingData = convertHipPocketListingToListing(data)
 
+    if (this.props.multipleSelection) {
+      this.setState(oldState => ({
+        selectedItems: {
+          ...oldState.selectedItems,
+          [listingData.id]: listingData
+        }
+      }))
+    } else {
+      this.handleSelectListings([listingData])
+    }
+
     this.closeHipPocketListingDrawer()
-    this.handleSelectListings([listingData])
+  }
+
+  onChangeSelectedItems = newItems => {
+    this.setState({
+      selectedItems: newItems
+    })
   }
 
   render() {
@@ -159,7 +176,9 @@ class SearchListingDrawer extends React.Component {
             debounceTime: 700,
             minimumLength: 3
           }}
-          defaultSelectedItems={this.props.defaultSelectedItems}
+          onChangeSelectedItems={this.onChangeSelectedItems}
+          selectedItems={this.state.selectedItems}
+          defaultLists={this.props.defaultLists}
           ItemRow={ListingItem}
           normalizeSelectedItem={this.normalizeSelectedItem}
           searchFunction={this.searchListing}
