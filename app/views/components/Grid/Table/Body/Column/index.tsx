@@ -64,11 +64,7 @@ export function Column<Row>({
         row
       })}
     >
-      <div
-        className={classes.root}
-        onClick={inlineEditRef.current?.handleOpen}
-        style={{ justifyContent: column.align }}
-      >
+      <div className={classes.root} onClick={inlineEditRef.current?.handleOpen}>
         {getCell(column, row, rowIndex, columnIndex, totalRows)}
       </div>
 

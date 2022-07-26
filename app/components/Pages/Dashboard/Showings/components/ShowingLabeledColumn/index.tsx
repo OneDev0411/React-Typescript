@@ -5,9 +5,14 @@ import { Box, Typography } from '@material-ui/core'
 interface ShowingLabeledColumnProps {
   label?: string
   children: ReactNode
+  margin?: string
 }
 
-function ShowingLabeledColumn({ label, children }: ShowingLabeledColumnProps) {
+function ShowingLabeledColumn({
+  label,
+  children,
+  margin
+}: ShowingLabeledColumnProps) {
   return (
     <>
       {label && (
@@ -17,7 +22,11 @@ function ShowingLabeledColumn({ label, children }: ShowingLabeledColumnProps) {
           </Box>
         </Typography>
       )}
-      <Typography variant="body2" component="span">
+      <Typography
+        variant="body2"
+        component="span"
+        style={{ margin: margin || 0 }}
+      >
         {children}
       </Typography>
     </>
