@@ -122,6 +122,7 @@ declare type IMarketingTemplateType =
   | 'FirstDayOfFall'
   | 'FirstDayOfWinter'
   | 'YomKippur'
+  | 'Announcements'
 
 declare type IMarketingTemplatePurpose =
   | 'ForMySelf'
