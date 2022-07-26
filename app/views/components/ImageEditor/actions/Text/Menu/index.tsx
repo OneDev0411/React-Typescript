@@ -114,14 +114,15 @@ export function TextMenu() {
           y
         },
         tag: {
-          fill: '#000'
+          fill: '#000',
+          cornerRadius: 5
         },
         text: {
           text: 'Untitled Text',
           fill: '#fff',
           fontSize: DefaultFontSize,
           fontFamily: 'Tahoma',
-          padding: 5,
+          padding: 10,
           fontStyle: ''
         }
       })
