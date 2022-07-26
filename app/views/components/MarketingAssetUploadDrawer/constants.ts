@@ -68,7 +68,8 @@ export const TEMPLATE_TYPES: IMarketingTemplateType[] = [
   'CincoDeMayo',
   'FirstDayOfFall',
   'FirstDayOfWinter',
-  'YomKippur'
+  'YomKippur',
+  'Announcements'
 ]
 
 export const SORTED_TEMPLATE_TYPES_BY_LABEL: IMarketingTemplateType[] =
