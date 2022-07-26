@@ -19,8 +19,7 @@ import {
   getFormattedUrl,
   validateListingUrl,
   getListingUrlTypeLabel,
-  getListingUrlTypeFieldPlaceholder,
-  getListingFullAddress
+  getListingUrlTypeFieldPlaceholder
 } from '../helpers'
 import {
   HipPocketListingField,
@@ -160,14 +159,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
                     size: 'small'
                   }}
                   searchTypes={['listing', 'place']}
-                  onSelect={async result => {
-                    const address =
-                      result.type === 'place'
-                        ? result.place.formatted_address
-                        : result.type === 'listing'
-                        ? await getListingFullAddress(result.listing)
-                        : ''
-
+                  onInput={address => {
                     onChange(address)
                   }}
                 />
