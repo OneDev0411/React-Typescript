@@ -66,15 +66,17 @@ export function RowItem({
         alignItems="flex-end"
         justifyContent="center"
       >
-        <Typography
-          className={classes.status}
-          style={{
-            backgroundColor: getStatusColorClass(status) || '#262626'
-          }}
-          variant="caption"
-        >
-          {status}
-        </Typography>
+        {status && (
+          <Typography
+            className={classes.status}
+            style={{
+              backgroundColor: getStatusColorClass(status) || '#262626'
+            }}
+            variant="caption"
+          >
+            {status}
+          </Typography>
+        )}
 
         {mlsName && (
           <Box display="flex" alignItems="center" mt={0.5}>
