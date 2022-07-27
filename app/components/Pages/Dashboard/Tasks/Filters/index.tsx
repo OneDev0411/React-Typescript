@@ -21,8 +21,8 @@ export function TasksFilters() {
         userFilters={filter}
         onChange={data =>
           setFilter({
-            ...filter,
-            ...data
+            ...data,
+            q: filter.q
           })
         }
       >
