@@ -19,7 +19,12 @@ export function TasksFilters() {
       <Filters<TasksListFilters>
         systemDefaultFilters={{}}
         userFilters={filter}
-        onChange={setFilter}
+        onChange={data =>
+          setFilter({
+            ...filter,
+            ...data
+          })
+        }
       >
         {(currentFilters, updateFilters, resetFilters) => {
           const hasActiveFilter = Object.values(omit(currentFilters, 'q')).some(
