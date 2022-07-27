@@ -1,4 +1,4 @@
-import { Avatar, makeStyles, Theme } from '@material-ui/core'
+import { Avatar, makeStyles, Theme, Tooltip } from '@material-ui/core'
 import { AvatarGroup } from '@material-ui/lab'
 
 const useStyles = makeStyles(
@@ -39,13 +39,14 @@ export function AssigneeCell({ assignees }: Props) {
         }}
       >
         {assignees?.map(assignee => (
-          <Avatar
-            key={assignee.id}
-            className={classes.avatar}
-            src={assignee.profile_image_url ?? ''}
-          >
-            {assignee.display_name[0]}
-          </Avatar>
+          <Tooltip key={assignee.id} title={assignee.display_name}>
+            <Avatar
+              className={classes.avatar}
+              src={assignee.profile_image_url ?? ''}
+            >
+              {assignee.display_name[0]}
+            </Avatar>
+          </Tooltip>
         ))}
       </AvatarGroup>
     </div>
