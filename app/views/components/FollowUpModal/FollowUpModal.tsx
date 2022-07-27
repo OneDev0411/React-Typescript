@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 
 import { Button, makeStyles, Theme, Typography } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
 
+import { DateTimePicker } from '@app/views/components/DateTimePicker'
 import Dialog from 'components/Dialog'
-import { EventDrawer } from 'components/EventDrawer'
 import { preSaveFormat } from 'components/EventDrawer/helpers/pre-save-format'
 import { addNotification as notify } from 'components/notification'
 import { createTask } from 'models/tasks/create-task'
@@ -13,6 +13,7 @@ import { noop } from 'utils/helpers'
 
 import { getFollowUpCrmTask } from './helper/get-follow-up-crm-task'
 import { getInitialDate } from './helper/get-initial-date'
+import { useFollowUpTask } from './hooks/useFollowUpTask'
 import { FollowUpEmail } from './types'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -49,19 +50,19 @@ export default function FollowUpModal({
   const classes = useStyles()
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
-  const [creatingFollowUp, setCreatingFollowUp] = useState(false)
-  const [isEventDrawerOpen, setIsEventDrawerOpen] = useState(false)
+  const [isCreatingFollowUp, setIsCreatingFollowUp] = useState(false)
+  const a = useFollowUpTask({})
   const { oneDayTimestamp, todayTimestamp, tomorrowTimestamp } = useMemo(
     () => getInitialDate(baseDate),
     [baseDate]
   )
-  const crmTask = useMemo(
-    () =>
-      getFollowUpCrmTask(email, new Date(tomorrowTimestamp), user, dictionary),
-    [dictionary, email, tomorrowTimestamp, user]
-  )
+  // const crmTask = useMemo(
+  //   () =>
+  //     getFollowUpCrmTask(email, new Date(tomorrowTimestamp), user, dictionary),
+  //   [dictionary, email, tomorrowTimestamp, user]
+  // )
 
-  const disabled = isEventDrawerOpen || creatingFollowUp
+  const disabled = isCreatingFollowUp
 
   const handleClose = () => {
     onClose()
@@ -87,9 +88,9 @@ export default function FollowUpModal({
     }
 
     if (dueDateType === 'custom') {
-      setIsEventDrawerOpen(true)
+      // setIsEventDrawerOpen(true)
     } else {
-      setCreatingFollowUp(true)
+      setIsCreatingFollowUp(true)
 
       const task = await preSaveFormat(
         getFollowUpCrmTask(email, new Date(dueDate), user, dictionary)
@@ -99,7 +100,7 @@ export default function FollowUpModal({
 
       callback(followUpTask)
       onClose()
-      setCreatingFollowUp(false)
+      setIsCreatingFollowUp(false)
 
       dispatch(
         notify({
@@ -111,66 +112,61 @@ export default function FollowUpModal({
   }
 
   return (
-    <>
-      <Dialog
-        id="email-follow-up-dialog"
-        open={isOpen}
-        onClose={handleClose}
-        title={dictionary?.title || 'Set a follow up?'}
-        maxWidth="xs"
-      >
-        <Typography gutterBottom className={classes.description}>
-          {dictionary?.description ||
-            `Growing sales is all about setting the next follow up, put a reminder
+    <Dialog
+      id="email-follow-up-dialog"
+      open={isOpen}
+      onClose={handleClose}
+      title={dictionary?.title || 'Set a follow up?'}
+      maxWidth="xs"
+    >
+      <Typography gutterBottom className={classes.description}>
+        {dictionary?.description ||
+          `Growing sales is all about setting the next follow up, put a reminder
           on your calendar now!`}
-        </Typography>
-        <Button
-          fullWidth
-          variant="outlined"
-          color="secondary"
-          disabled={disabled}
-          onClick={setFollowUp}
-          data-due-date-type="day"
-          className={classes.optionButton}
-        >
-          Tomorrow
-        </Button>
-        <Button
-          fullWidth
-          variant="outlined"
-          color="secondary"
-          disabled={disabled}
-          onClick={setFollowUp}
-          data-due-date-type="week"
-          className={classes.optionButton}
-        >
-          Next Week
-        </Button>
-        <Button
-          fullWidth
-          variant="outlined"
-          color="secondary"
-          disabled={disabled}
-          onClick={setFollowUp}
-          data-due-date-type="custom"
-          className={classes.optionButton}
-        >
-          Custom
-        </Button>
-      </Dialog>
-      {isEventDrawerOpen && (
-        <EventDrawer
-          isOpen
-          initialValues={crmTask}
-          title="Add a follow up"
-          submitCallback={(event, action) => {
-            callback(event)
-            setIsEventDrawerOpen(false)
-            onClose()
-          }}
-          onClose={() => setIsEventDrawerOpen(false)}
-        />
-      )}
-    </>
+      </Typography>
+      <Button
+        fullWidth
+        variant="outlined"
+        color="secondary"
+        disabled={disabled}
+        onClick={setFollowUp}
+        data-due-date-type="day"
+        className={classes.optionButton}
+      >
+        Tomorrow
+      </Button>
+      <Button
+        fullWidth
+        variant="outlined"
+        color="secondary"
+        disabled={disabled}
+        onClick={setFollowUp}
+        data-due-date-type="week"
+        className={classes.optionButton}
+      >
+        Next Week
+      </Button>
+
+      <DateTimePicker
+        selectedDate={new Date()}
+        showTimePicker
+        onClose={date => console.log(date)}
+        saveCaption="Set FollowUp"
+      >
+        {({ handleOpen }) => (
+          <Button
+            fullWidth
+            variant="outlined"
+            color="secondary"
+            disabled={disabled}
+            onClick={handleOpen}
+            data-due-date-type="custom"
+            className={classes.optionButton}
+          >
+            Custom
+          </Button>
+        )}
+      </DateTimePicker>
+    </Dialog>
   )
 }
