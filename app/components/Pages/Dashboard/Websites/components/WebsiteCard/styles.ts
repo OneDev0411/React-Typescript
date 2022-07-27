@@ -5,6 +5,7 @@ export default makeStyles(
     root: {
       padding: theme.spacing(1),
       borderRadius: theme.shape.borderRadius,
+      border: `1px solid ${theme.palette.action.hover}`,
       transition: theme.transitions.create('background-color'),
       '&:hover': {
         backgroundColor: theme.palette.action.hover

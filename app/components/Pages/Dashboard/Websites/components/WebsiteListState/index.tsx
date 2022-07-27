@@ -6,11 +6,13 @@ import WebsiteListStateEmpty from '../WebsiteListStateEmpty'
 import WebsiteListStateLoading from '../WebsiteListStateLoading'
 
 interface WebsiteListStateProps {
+  title: string
   isLoading?: boolean
   isEmpty?: boolean
 }
 
 function WebsiteListState({
+  title,
   isLoading = false,
   isEmpty = false
 }: WebsiteListStateProps) {
@@ -20,7 +22,11 @@ function WebsiteListState({
 
   return (
     <Grid item xs={12}>
-      {isLoading ? <WebsiteListStateLoading /> : <WebsiteListStateEmpty />}
+      {isLoading ? (
+        <WebsiteListStateLoading />
+      ) : (
+        <WebsiteListStateEmpty title={title} />
+      )}
     </Grid>
   )
 }

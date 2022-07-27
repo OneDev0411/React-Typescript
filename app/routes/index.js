@@ -744,6 +744,19 @@ const AsyncWebsitesList = withAcl.websites(
 )
 
 /* ==================================== */
+//  Presentation
+/* ==================================== */
+
+const AsyncPresentationsList = withAcl.beta(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Websites/pages/Presentation' /* webpackChunkName: "presentations_list" */
+      )
+  })
+)
+
+/* ==================================== */
 //  Showings
 /* ==================================== */
 
@@ -1104,8 +1117,12 @@ export default (
           <IndexRoute component={AsyncBrandSettings} />
         </Route>
 
-        <Route path="websites(/templates/:type)">
+        <Route path="websites">
           <IndexRoute component={AsyncWebsitesList} />
+        </Route>
+
+        <Route path="presentations">
+          <IndexRoute component={AsyncPresentationsList} />
         </Route>
 
         <Route path="showings">
