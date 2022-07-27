@@ -111,6 +111,18 @@ declare type IMarketingTemplateType =
   | 'VeteransDay'
   | 'WeddingAnniversary'
   | 'WomansDay'
+  | 'JuneTeenth'
+  | 'FirstDayOfSummer'
+  | 'Pride'
+  | 'AsianAmericanAndPacificIslanderHeritageMonth'
+  | 'BlackHistoryMonth'
+  | 'EarthDay'
+  | 'FirstDayOfSpring'
+  | 'CincoDeMayo'
+  | 'FirstDayOfFall'
+  | 'FirstDayOfWinter'
+  | 'YomKippur'
+  | 'Announcements'
 
 declare type IMarketingTemplatePurpose =
   | 'ForMySelf'

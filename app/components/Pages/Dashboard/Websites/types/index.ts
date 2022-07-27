@@ -14,3 +14,5 @@ export type WebsiteTabWithTemplatesCollection = Record<
   string,
   WebsiteTabWithTemplates
 >
+
+export type WebsitesRouteRoots = 'websites' | 'presentations'

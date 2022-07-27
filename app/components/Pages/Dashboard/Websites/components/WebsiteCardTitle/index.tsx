@@ -78,6 +78,7 @@ function WebsiteCardTitle({
     <Box marginTop={1}>
       {editable || isSaving ? (
         <TextField
+          fullWidth
           inputRef={inputRef}
           label="Site Title"
           placeholder="Please enter a title"
@@ -88,7 +89,7 @@ function WebsiteCardTitle({
           disabled={isSaving}
         />
       ) : (
-        <Typography variant="subtitle2" onClick={handleEditStart}>
+        <Typography noWrap variant="subtitle2" onClick={handleEditStart}>
           {title || emptyTitle}
         </Typography>
       )}

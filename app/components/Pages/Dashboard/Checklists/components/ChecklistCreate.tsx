@@ -5,6 +5,8 @@ import { Button } from '@material-ui/core'
 import useNotify from '@app/hooks/use-notify'
 import { addBrandChecklist } from '@app/models/BrandConsole/Checklists'
 
+import { TabNames } from '../constants'
+
 interface Props {
   brandId: UUID
   propertyTypeId: UUID
@@ -58,6 +60,8 @@ export function ChecklistCreate({
     setIsCreating(false)
   }
 
+  const checklistName = TabNames.find(tab => tab.type === checklistType)?.title
+
   return (
     <Button
       variant="contained"
@@ -65,7 +69,7 @@ export function ChecklistCreate({
       disabled={isCreating}
       onClick={createChecklist}
     >
-      Create {checklistType} Checklist
+      Create {checklistName} Checklist
     </Button>
   )
 }

@@ -6,13 +6,10 @@ import { useTitle } from 'react-use'
 import PageLayout from 'components/GlobalPageLayout'
 
 import WebsiteList from '../../components/WebsiteList'
-import {
-  PRESENTATION_TEMPLATE_TYPES,
-  WEBSITE_TEMPLATE_TYPES
-} from '../../constants'
+import { PRESENTATION_TEMPLATE_TYPES } from '../../constants'
 
-function Website() {
-  useTitle('Websites | Rechat')
+function Presentation() {
+  useTitle('Presentation | Rechat')
 
   const [isOpenTemplateSelector, setIsOpenTemplateSelector] =
     useState<boolean>(false)
@@ -26,20 +23,20 @@ function Website() {
 
   return (
     <PageLayout position="relative" overflow="hidden">
-      <PageLayout.Header title="Websites">
+      <PageLayout.Header title="Presentation">
         <Button
           onClick={onOpenTemplateSelector}
           variant="outlined"
           color="default"
         >
-          Create Website
+          Create Presentation
         </Button>
       </PageLayout.Header>
       <PageLayout.Main>
         <WebsiteList
-          title="Website"
-          typesBlackList={PRESENTATION_TEMPLATE_TYPES}
-          templateSelectorTypes={WEBSITE_TEMPLATE_TYPES}
+          title="Presentation"
+          typesWhiteList={PRESENTATION_TEMPLATE_TYPES}
+          templateSelectorTypes={PRESENTATION_TEMPLATE_TYPES}
           isOpenTemplateSelector={isOpenTemplateSelector}
           onCloseTemplateSelector={onCloseTemplateSelector}
         />
@@ -48,4 +45,4 @@ function Website() {
   )
 }
 
-export default memo(Website)
+export default memo(Presentation)

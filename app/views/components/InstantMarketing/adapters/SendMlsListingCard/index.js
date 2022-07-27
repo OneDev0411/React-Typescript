@@ -1,6 +1,7 @@
 import { Component, Fragment } from 'react'
 
 import { Button } from '@material-ui/core'
+import pluralize from 'pluralize'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -432,7 +433,12 @@ class SendMlsListingCard extends Component {
               color="secondary"
               {...props.buttonProps}
             >
-              {`Next (${props.selectedItemsCount} Listings Selected)`}
+              Next
+              {this.IsMultiListing &&
+                ` (${props.selectedItemsCount} ${pluralize(
+                  'Listing',
+                  props.selectedItemsCount
+                )} Selected)`}
             </Button>
           )}
         />

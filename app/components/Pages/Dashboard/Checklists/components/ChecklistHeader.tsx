@@ -13,7 +13,6 @@ import {
 import Fuse from 'fuse.js'
 import usePromise from 'react-use-promise'
 
-import { InlineEditableString } from 'components/inline-editable-fields/InlineEditableString'
 import SearchDrawer from 'components/SearchDrawer'
 import SplitButton from 'components/SplitButton'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
@@ -58,7 +57,6 @@ export function ChecklistHeader({
   addGenericTask,
   addFormTask,
   addSplitterTask,
-  renameChecklist,
   checklist,
   forms,
   formsState,
@@ -69,6 +67,9 @@ export function ChecklistHeader({
     useDictionary<boolean>()
   const [isTerminableChanging, setTerminableChanging] = useDictionary<boolean>()
   const [formPickerOpen, setFormPickerOpen] = useState(false)
+  const [selectedItems, setSelectedItems] = useState<Record<UUID, IDealForm>>(
+    {}
+  )
 
   const classes = useChecklistHeaderStyles()
 
@@ -76,6 +77,10 @@ export function ChecklistHeader({
     () => new Fuse<IDealForm, {}>(forms || [], { keys: ['name'] }),
     [forms]
   )
+
+  const onChangeSelectedItems = (newItems: Record<UUID, IDealForm>) => {
+    setSelectedItems(newItems)
+  }
 
   const openFormPickerDrawer = () => {
     setFormPickerOpen(true)
@@ -86,13 +91,7 @@ export function ChecklistHeader({
   }
 
   return (
-    <Box display="flex" alignItems="center">
-      <Box flexGrow={1}>
-        <InlineEditableString
-          value={checklist.title}
-          onSave={renameChecklist}
-        />
-      </Box>
+    <Box display="flex" alignItems="center" justifyContent="flex-end">
       <FormControlLabel
         control={
           <Checkbox
@@ -194,6 +193,8 @@ export function ChecklistHeader({
           // little different and probably needs better components for
           // rendering items
           multipleSelection={false}
+          onChangeSelectedItems={onChangeSelectedItems}
+          selectedItems={selectedItems}
           normalizeSelectedItem={i => i}
           defaultLists={[
             {

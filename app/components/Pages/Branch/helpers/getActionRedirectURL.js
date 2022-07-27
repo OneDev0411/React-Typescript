@@ -39,7 +39,7 @@ const getActionRedirectURL = params => {
     }
   }
 
-  return '/dashboard/mls/'
+  return '/dashboard/overview'
 }
 
 export default getActionRedirectURL
