@@ -26,10 +26,11 @@ import { merge } from 'lodash'
 import { useSelector } from 'react-redux'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { noop } from '@app/utils/helpers'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { IAppState } from 'reducers'
 import { selectDealsList } from 'selectors/deals'
-import { addressTitle } from 'utils/listing'
+import { addressTitle, getListingFullAddress } from 'utils/listing'
 
 import { searchDealsAndListingsAndPlaces } from './helpers'
 import ListingStatus from './ListingStatus'
@@ -89,13 +90,15 @@ interface Props {
   textFieldProps?: TextFieldProps
   searchTypes?: SearchResultType[]
   onSelect: (result: SearchResult) => void
+  onInput: (value: string) => void
 }
 
 export default function DealsAndListingsAndPlacesSearchInput({
   textFieldProps = DEFAULT_TEXT_FIELD_PROPS,
   searchTypes = DEFAULT_SEARCH_TYPES,
-  onSelect
-}: Props) {
+  onSelect = noop,
+  onInput = noop
+}: RequireOnlyOne<Props, 'onSelect' | 'onInput'>) {
   const [inputValue, setInputValue] = useState<string>('')
   const classes = useStyles({ inputValue })
   const hasDealSearchType = searchTypes.includes('deal')
@@ -112,6 +115,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
   const [debouncedHandleInputChange] = useDebouncedCallback(
     (event: unknown, newInputValue: string) => {
       setInputValue(newInputValue)
+      onInput(newInputValue)
     },
     300
   )
@@ -163,7 +167,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
       case 'deal':
         return option.deal.title
       case 'listing':
-        return option.listing.address.street_address
+        return getListingFullAddress(option.listing)
       case 'place':
       default:
         return option.place.formatted_address
