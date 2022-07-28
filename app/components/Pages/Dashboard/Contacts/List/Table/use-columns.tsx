@@ -36,7 +36,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     cell: {
       width: '100%',
-      padding: theme.spacing(0, 1, 0, 2),
+      padding: theme.spacing(0, 1, 0, 0),
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis'
