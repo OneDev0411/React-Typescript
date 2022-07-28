@@ -1,17 +1,9 @@
-import { useState } from 'react'
-
 import { Button, makeStyles, Theme, Typography } from '@material-ui/core'
-import { useSelector, useDispatch } from 'react-redux'
 
 import { DateTimePicker } from '@app/views/components/DateTimePicker'
 import Dialog from 'components/Dialog'
-import { preSaveFormat } from 'components/EventDrawer/helpers/pre-save-format'
-import { addNotification as notify } from 'components/notification'
-import { createTask } from 'models/tasks/create-task'
-import { selectUser } from 'selectors/user'
 import { noop } from 'utils/helpers'
 
-import { getFollowUpCrmTask } from './helper/get-follow-up-crm-task'
 import { useFollowUpTask } from './hooks/useFollowUpTask'
 import { FollowUpEmail } from './types'
 
@@ -50,18 +42,13 @@ export default function FollowUpModal({
   callback = noop
 }: Props) {
   const classes = useStyles()
-  const dispatch = useDispatch()
-  const user = useSelector(selectUser)
-  const [isCreatingFollowUp, setIsCreatingFollowUp] = useState(false)
-  const { validDate } = useFollowUpTask({ event, email, baseDate })
+  const { isCreatingFollowUpTask, createFollowUpTask, validDate } =
+    useFollowUpTask({ event, email, baseDate }, (event: IEvent) => {
+      callback(event)
+      onClose()
+    })
 
-  // const crmTask = useMemo(
-  //   () =>
-  //     getFollowUpCrmTask(email, new Date(tomorrowTimestamp), user, dictionary),
-  //   [dictionary, email, tomorrowTimestamp, user]
-  // )
-
-  const disabled = isCreatingFollowUp
+  const disabled = isCreatingFollowUpTask
 
   const handleClose = () => {
     onClose()
@@ -72,30 +59,9 @@ export default function FollowUpModal({
       return
     }
 
-    return console.log({ dueDate })
+    console.log({ dueDate })
 
-    if (dueDateType === 'custom') {
-      // setIsEventDrawerOpen(true)
-    } else {
-      setIsCreatingFollowUp(true)
-
-      const task = await preSaveFormat(
-        getFollowUpCrmTask(email, new Date(dueDate), user, dictionary)
-      )
-
-      const followUpTask = await createTask(task)
-
-      callback(followUpTask)
-      onClose()
-      setIsCreatingFollowUp(false)
-
-      dispatch(
-        notify({
-          status: 'success',
-          message: 'The follow up task is added!'
-        })
-      )
-    }
+    await createFollowUpTask(dueDate)
   }
 
   return (
