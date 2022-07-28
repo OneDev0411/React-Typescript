@@ -32,7 +32,7 @@ const useAttachmentStyles = makeStyles(
         background: alpha(theme.palette.primary.light, 0.1),
         borderRadius: theme.shape.borderRadius
       },
-      noFlexShrink: {
+      attachmentIcon: {
         flexShrink: 0
       }
     }),
@@ -52,7 +52,7 @@ export function Attachment({ children, onDelete, fullWidth = true }: Props) {
       className={classes.root}
     >
       <SvgIcon
-        className={classes.noFlexShrink}
+        className={classes.attachmentIcon}
         path={mdiAttachment}
         rightMargined
       />
