@@ -4,8 +4,9 @@ import { makeStyles } from '@material-ui/styles'
 export const styles = (theme: Theme) =>
   createStyles({
     row: {
-      '&:first-child .column': {
-        borderTop: `1px solid ${theme.palette.action.disabledBackground}`
+      '& .column.heading': {
+        borderTop: `1px solid ${theme.palette.action.disabledBackground}`,
+        backgroundColor: theme.palette.grey['50']
       },
       '& .column': {
         height: '100%',
