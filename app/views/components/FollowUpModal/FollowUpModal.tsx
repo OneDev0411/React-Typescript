@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 export interface Props {
   email?: FollowUpEmail
   baseDate?: Date
-  event?: any
+  event?: ICalendarEvent
   isOpen: boolean
   dictionary?: {
     title?: string
@@ -58,8 +58,6 @@ export default function FollowUpModal({
     if (disabled) {
       return
     }
-
-    console.log({ dueDate })
 
     await createFollowUpTask(dueDate)
   }

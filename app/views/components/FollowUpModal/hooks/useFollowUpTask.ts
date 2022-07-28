@@ -2,6 +2,7 @@ import { useMemo, useState, useCallback } from 'react'
 
 import useNotify from '@app/hooks/use-notify'
 import { useUser } from '@app/hooks/use-user'
+import { cloneTask } from '@app/models/tasks/clone-task'
 import { createTask } from '@app/models/tasks/create-task'
 import { noop } from '@app/utils/helpers'
 import { preSaveFormat } from 'components/EventDrawer/helpers/pre-save-format'
@@ -14,13 +15,13 @@ import {
 } from '../helper/get-initial-date'
 import { FollowUpEmail } from '../types'
 
-interface BaseData {
-  event?: any
+interface Data {
+  event?: ICalendarEvent
   email?: FollowUpEmail
   baseDate?: Date
   dictionary?: FollowUpModalProps['dictionary']
 }
-type Data = RequireOnlyOne<BaseData, 'email' | 'event'>
+// type Data = RequireOnlyOne<BaseData, 'email' | 'event'>
 
 interface UseFollowUpTaskReturn {
   isCreatingFollowUpTask: boolean
@@ -41,19 +42,41 @@ export function useFollowUpTask(
   /*
     Creating a follow up task based on an existing event
   */
-  // const createFollowUpForEvent = useCallback(async (timestamp: number) => {
-  //   console.log('createFollowUpTask', { timestamp })
-  // }, [])
+  const createFollowUpForEvent = useCallback(
+    async (timestamp: number) => {
+      if (!event) {
+        return
+      }
+
+      const payload = {
+        due_date: timestamp / 1000,
+        end_date: (timestamp + validDate.oneHourTimestamp) / 1000,
+        all_day: false,
+        title: 'cloooone hamed'
+      }
+
+      console.log({
+        event,
+        payload,
+        f: validDate.oneHourTimestamp
+      })
+
+      const followUpTask = await cloneTask(event?.id, payload)
+
+      return followUpTask
+    },
+    [event, validDate.oneHourTimestamp]
+  )
 
   /*
     Creating a follow up task based on an email
   */
   const createFollowUpForEmail = useCallback(
     async (timestamp: number) => {
-      const task = await preSaveFormat(
+      const payload = await preSaveFormat(
         getFollowUpCrmTask(email, new Date(timestamp), user, dictionary)
       )
-      const followUpTask = await createTask(task)
+      const followUpTask = await createTask(payload)
 
       return followUpTask
     },
@@ -62,19 +85,25 @@ export function useFollowUpTask(
 
   const createFollowUpTask = useCallback(
     async (timestamp: number) => {
-      setIsCreatingTask(true)
+      // setIsCreatingTask(true)
 
-      const followUpTask = await createFollowUpForEmail(timestamp)
+      let followUpTask
+
+      if (event) {
+        followUpTask = await createFollowUpForEvent(timestamp)
+      } else {
+        followUpTask = await createFollowUpForEmail(timestamp)
+      }
 
       callback(followUpTask)
 
-      setIsCreatingTask(false)
+      // setIsCreatingTask(false)
       notify({
         status: 'success',
         message: 'The follow up task is added!'
       })
     },
-    [callback, createFollowUpForEmail, notify]
+    [callback, createFollowUpForEmail, createFollowUpForEvent, event, notify]
   )
 
   return {

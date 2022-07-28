@@ -3,6 +3,7 @@ export interface GetInitialDateReturn {
   tomorrow: number
   nextWeek: number
   oneDayTimestamp: number
+  oneHourTimestamp: number
 }
 
 /**
@@ -12,10 +13,11 @@ export interface GetInitialDateReturn {
 export const getInitialDate = (
   initialDate: Date = new Date()
 ): GetInitialDateReturn => {
-  const oneDayTimestamp = 24 * 3600000
+  const oneHourTimestamp = 3600000
+  const oneDayTimestamp = 24 * oneHourTimestamp
   const baseDate = initialDate.getTime()
   const tomorrow = baseDate + oneDayTimestamp
   const nextWeek = baseDate + 7 * oneDayTimestamp
 
-  return { baseDate, tomorrow, nextWeek, oneDayTimestamp }
+  return { baseDate, tomorrow, nextWeek, oneHourTimestamp, oneDayTimestamp }
 }
