@@ -1,6 +1,7 @@
-interface ReturnShape {
-  todayTimestamp: number
-  tomorrowTimestamp: number
+export interface GetInitialDateReturn {
+  baseDate: number
+  tomorrow: number
+  nextWeek: number
   oneDayTimestamp: number
 }
 
@@ -8,10 +9,13 @@ interface ReturnShape {
  * return base date for follow up
  * @param initialDate
  */
-export const getInitialDate = (initialDate: Date = new Date()): ReturnShape => {
+export const getInitialDate = (
+  initialDate: Date = new Date()
+): GetInitialDateReturn => {
   const oneDayTimestamp = 24 * 3600000
-  const todayTimestamp = initialDate.getTime()
-  const tomorrowTimestamp = todayTimestamp + oneDayTimestamp
+  const baseDate = initialDate.getTime()
+  const tomorrow = baseDate + oneDayTimestamp
+  const nextWeek = baseDate + 7 * oneDayTimestamp
 
-  return { todayTimestamp, tomorrowTimestamp, oneDayTimestamp }
+  return { baseDate, tomorrow, nextWeek, oneDayTimestamp }
 }
