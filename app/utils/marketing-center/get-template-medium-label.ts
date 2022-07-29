@@ -1,15 +1,15 @@
 const MEDIUM_LABEL_MAP: {
   [key in IMarketingTemplateMedium]: string
 } = {
-  Email: 'Email',
   Social: 'Social',
-  Letter: 'Print',
+  InstagramStory: 'Stories',
   FacebookCover: 'Facebook Covers',
-  InstagramStory: 'Instagram Stories',
   LinkedInCover: 'LinkedIn Covers',
   TwitterCover: 'Twitter Covers',
   RealtorCover: 'Realtor.com Covers',
   YouTubeCover: 'YouTube Covers',
+  Email: 'Email',
+  Letter: 'Print',
   Website: 'Website'
 }
 
