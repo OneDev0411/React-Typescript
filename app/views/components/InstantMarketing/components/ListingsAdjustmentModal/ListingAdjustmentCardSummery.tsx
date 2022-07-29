@@ -69,7 +69,7 @@ const ListingAdjustmentCardSummery = ({ listing }: Props) => {
   const squareFeet = Math.round(metersToFeet(squareMeters)).toLocaleString()
   const fullAddress = addressTitle(address)
   const baths = halfBathroomCount
-    ? `${bathroomCount || fullBathroomCount || 0}.${halfBathroomCount}`
+    ? `${fullBathroomCount || 0}.${halfBathroomCount}`
     : bathroomCount || fullBathroomCount || 0
   const bedrooms = bedroomCount ?? 0
 

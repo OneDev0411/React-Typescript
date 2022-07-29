@@ -50,11 +50,9 @@ export function createAmenitiesList(
     {
       title: 'BATHROOMS',
       value: listing.property.half_bathroom_count
-        ? `${
-            listing.property.bathroom_count ||
-            listing.property.full_bathroom_count ||
-            0
-          }.${listing.property.half_bathroom_count}`
+        ? `${listing.property.full_bathroom_count || 0}.${
+            listing.property.half_bathroom_count
+          }`
         : listing.property.bathroom_count ||
           listing.property.full_bathroom_count ||
           0
