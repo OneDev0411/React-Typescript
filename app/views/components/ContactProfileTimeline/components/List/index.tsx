@@ -69,6 +69,8 @@ export function CalendarList({
       <EventLoader
         rows={rows}
         isLoading={isLoading}
+        isReachedEnd={isReachedEnd}
+        isReachedStart={isReachedStart}
         onLoadPreviousEvents={onLoadPreviousEvents}
         onLoadNextEvents={onLoadNextEvents}
         handleEventChange={handleEventChange}

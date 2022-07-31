@@ -82,6 +82,8 @@ const useStyles = makeStyles(
 interface Props {
   rows: ICalendarListRow[]
   isLoading: boolean
+  isReachedEnd: boolean
+  isReachedStart: boolean
   onLoadPreviousEvents: () => void
   onLoadNextEvents: () => void
   handleEventChange: (event: IEvent, type: CrmEventType) => void
@@ -90,6 +92,8 @@ interface Props {
 export function EventLoader({
   rows,
   isLoading,
+  isReachedEnd,
+  isReachedStart,
   onLoadPreviousEvents,
   handleEventChange,
   onLoadNextEvents
@@ -116,16 +120,18 @@ export function EventLoader({
     <Box className={classes.mainContainer}>
       {Loader()}
       <Box className={classes.calendarContainer}>
-        <Box my={2} textAlign="center">
-          <Button
-            className={classes.loadButton}
-            size="small"
-            disabled={isLoading}
-            onClick={onLoadPreviousEvents}
-          >
-            Load Next Year Events
-          </Button>
-        </Box>
+        {!isReachedEnd && (
+          <Box my={2} textAlign="center">
+            <Button
+              className={classes.loadButton}
+              size="small"
+              disabled={isLoading}
+              onClick={onLoadPreviousEvents}
+            >
+              Load Next Year Events
+            </Button>
+          </Box>
+        )}
         <Box>
           {rows.map((section, index) => (
             <Box
@@ -148,16 +154,18 @@ export function EventLoader({
             </Box>
           ))}
         </Box>
-        <Box my={2} textAlign="center">
-          <Button
-            className={classes.loadButton}
-            size="small"
-            disabled={isLoading}
-            onClick={onLoadNextEvents}
-          >
-            Load Previous Year Events
-          </Button>
-        </Box>
+        {!isReachedStart && (
+          <Box my={2} textAlign="center">
+            <Button
+              className={classes.loadButton}
+              size="small"
+              disabled={isLoading}
+              onClick={onLoadNextEvents}
+            >
+              Load Previous Year Events
+            </Button>
+          </Box>
+        )}
       </Box>
     </Box>
   )
