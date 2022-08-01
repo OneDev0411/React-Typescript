@@ -1,17 +1,18 @@
-import React from 'react'
+import { useContext, useState } from 'react'
 
 import {
+  makeStyles,
   Button,
   Tooltip,
   Box,
   Fade,
-  Typography,
-  withStyles
+  Typography
 } from '@material-ui/core'
 import { Alert, AlertTitle } from '@material-ui/lab'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
 import { HipPocketListingDrawer } from 'components/HipPocketListing'
 import { searchListings } from 'models/Deal/listing'
 import { getMediaGallery } from 'models/Deal/media-manager'
@@ -22,34 +23,49 @@ import SearchDrawer from '../SearchDrawer'
 import { convertHipPocketListingToListing } from './helpers/convert-hip-pocket-listing-to-listing'
 import ListingItem from './ListingItem'
 
-const styles = theme => ({
-  alertAction: {
-    alignItems: 'flex-start',
-    marginTop: theme.spacing(0.5)
-  }
-})
-
-class SearchListingDrawer extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      selectedItems: props.defaultSelectedItems || {},
-      isWorking: false,
-      isHipPocketListingDrawerOpen: false,
-      isMlsDisclaimerOpen: true
+const useStyles = makeStyles(
+  theme => ({
+    alertAction: {
+      alignItems: 'flex-start',
+      marginTop: theme.spacing(0.5)
     }
-  }
+  }),
+  { name: 'SearchListingDrawer' }
+)
 
-  handleSelectListings = async items => {
-    const { onSelect } = this.props
+export default function SearchListingDrawer(props) {
+  const {
+    searchPlaceholder = 'Enter MLS # or address',
+    allowHipPocket = false,
+    withMlsDisclaimer = false,
+    allowedStatuses = [],
+    title = 'Select a Listing',
+    defaultLists = [],
+    multipleSelection = false,
+    defaultSelectedItems = {},
+    renderAction,
+    onSelect,
+    onClose,
+    onHipPocketImageUpload,
+    onSelectListingsCallback
+  } = props
 
+  const classes = useStyles()
+
+  const confirmation = useContext(ConfirmationModalContext)
+  const [state, setState] = useState({
+    selectedItems: defaultSelectedItems,
+    isWorking: false,
+    isHipPocketListingDrawerOpen: false,
+    isMlsDisclaimerOpen: true
+  })
+
+  const handleSelectListings = async items => {
     if (onSelect) {
       return onSelect(Object.values(items))
     }
 
-    this.setState({
-      isWorking: true
-    })
+    setState(oldState => ({ ...oldState, isWorking: true }))
 
     try {
       const listings = await Promise.all(
@@ -86,22 +102,20 @@ class SearchListingDrawer extends React.Component {
         })
       )
 
-      this.props.onSelectListingsCallback(listings)
+      onSelectListingsCallback(listings)
     } catch (e) {
       console.log(e)
     } finally {
-      this.setState({
-        isWorking: false
-      })
+      setState(oldState => ({ ...oldState, isWorking: false }))
     }
   }
 
-  normalizeSelectedItem = item => ({
+  const normalizeSelectedItem = item => ({
     ...item,
     id: item.type === 'deal' && item.listing ? item.listing : item.id
   })
 
-  searchListing = async value => {
+  const searchListing = async value => {
     let response = await searchListings(value)
 
     // Search value consisting of 5-8 numbers represents an MLS#
@@ -120,146 +134,154 @@ class SearchListingDrawer extends React.Component {
     }
 
     return response.filter(item => {
-      if (item.is_mls_search || !this.props.allowedStatuses.length) {
+      if (item.is_mls_search || !allowedStatuses.length) {
         return true
       }
 
-      return this.props.allowedStatuses.includes(item.status)
+      return allowedStatuses.includes(item.status)
     })
   }
 
-  openHipPocketListingDrawer = () => {
-    this.setState({ isHipPocketListingDrawerOpen: true })
+  const openHipPocketListingDrawer = () => {
+    setState(oldState => ({ ...oldState, isHipPocketListingDrawerOpen: true }))
   }
 
-  closeHipPocketListingDrawer = () => {
-    this.setState({ isHipPocketListingDrawerOpen: false })
+  const closeHipPocketListingDrawer = () => {
+    setState(oldState => ({ ...oldState, isHipPocketListingDrawerOpen: false }))
   }
 
-  handleClickInputManually = () => {
-    this.openHipPocketListingDrawer()
-  }
-
-  handleSaveHipPocketListing = async data => {
+  const handleSaveHipPocketListing = async data => {
     const listingData = convertHipPocketListingToListing(data)
 
-    if (this.props.multipleSelection) {
-      this.setState(oldState => ({
+    if (multipleSelection) {
+      setState(oldState => ({
         selectedItems: {
           ...oldState.selectedItems,
           [listingData.id]: listingData
         }
       }))
     } else {
-      this.handleSelectListings([listingData])
+      handleSelectListings([listingData])
     }
 
-    this.closeHipPocketListingDrawer()
+    closeHipPocketListingDrawer()
   }
 
-  onChangeSelectedItems = newItems => {
-    this.setState({
-      selectedItems: newItems
+  const onChangeSelectedItems = newItems => {
+    setState(oldState => ({ ...oldState, selectedItems: newItems }))
+  }
+
+  const onSelectDealWithNoListing = () => {
+    confirmation.setConfirmationModal({
+      message: 'There are no listings connected.',
+      description:
+        'There are no listings associated with this deal in the market (MLS). You can input information manually as an off-market listing or you can cancel and search a listing.',
+      confirmLabel: 'off-market (Input Manually)',
+      needsCancel: true,
+      onConfirm: () => {
+        openHipPocketListingDrawer()
+      }
     })
   }
 
-  render() {
-    return (
-      <>
-        <SearchDrawer
-          forceRenderFooter={this.props.allowHipPocket}
-          title={this.props.title}
-          showLoadingIndicator={this.state.isWorking}
-          multipleSelection={this.props.multipleSelection}
-          searchInputOptions={{
-            placeholder: this.props.searchPlaceholder,
-            debounceTime: 700,
-            minimumLength: 3
-          }}
-          onChangeSelectedItems={this.onChangeSelectedItems}
-          selectedItems={this.state.selectedItems}
-          defaultLists={this.props.defaultLists}
-          ItemRow={ListingItem}
-          normalizeSelectedItem={this.normalizeSelectedItem}
-          searchFunction={this.searchListing}
-          onSelectItems={this.handleSelectListings}
-          {...this.props}
-          onClose={() => {
-            this.props.onClose()
+  return (
+    <>
+      <SearchDrawer
+        forceRenderFooter={allowHipPocket}
+        title={title}
+        showLoadingIndicator={state.isWorking}
+        multipleSelection={multipleSelection}
+        searchInputOptions={{
+          placeholder: searchPlaceholder,
+          debounceTime: 700,
+          minimumLength: 3
+        }}
+        onChangeSelectedItems={onChangeSelectedItems}
+        onSelectDealWithNoListing={onSelectDealWithNoListing}
+        selectedItems={state.selectedItems}
+        defaultLists={defaultLists}
+        ItemRow={ListingItem}
+        normalizeSelectedItem={normalizeSelectedItem}
+        searchFunction={searchListing}
+        onSelectItems={handleSelectListings}
+        {...props}
+        onClose={() => {
+          onClose()
 
-            if (this.props.withMlsDisclaimer) {
-              this.setState({ isMlsDisclaimerOpen: true })
-            }
-          }}
-          renderSearchNotices={
-            this.props.withMlsDisclaimer
-              ? () => (
-                  <Fade unmountOnExit in={this.state.isMlsDisclaimerOpen}>
-                    <Box mb={2}>
-                      <Alert
-                        severity="warning"
-                        variant="outlined"
-                        classes={{
-                          action: this.props.classes.alertAction
-                        }}
-                        onClose={() => {
-                          this.setState({ isMlsDisclaimerOpen: false })
-                        }}
-                      >
-                        <AlertTitle>
-                          <Typography variant="subtitle1">
-                            Important Note
-                          </Typography>
-                        </AlertTitle>
-                        <Typography variant="body2">
-                          Some MLS's do not allow agents to promote other
-                          agent's listings without their permission. Please make
-                          sure you{' '}
-                          <strong>
-                            only market listings that you have permission for
-                          </strong>
-                          .
-                        </Typography>
-                      </Alert>
-                    </Box>
-                  </Fade>
-                )
-              : undefined
+          if (withMlsDisclaimer) {
+            setState(oldState => ({ ...oldState, isMlsDisclaimerOpen: true }))
           }
-          renderAction={
-            this.props.allowHipPocket
-              ? props => (
-                  <Flex>
-                    <Tooltip
-                      placement="left"
-                      title="Input your listing data manually, if you can't find it on MLS."
+        }}
+        renderSearchNotices={
+          withMlsDisclaimer
+            ? () => (
+                <Fade unmountOnExit in={state.isMlsDisclaimerOpen}>
+                  <Box mb={2}>
+                    <Alert
+                      severity="warning"
+                      variant="outlined"
+                      classes={{
+                        action: classes.alertAction
+                      }}
+                      onClose={() => {
+                        setState(oldState => ({
+                          ...oldState,
+                          isMlsDisclaimerOpen: false
+                        }))
+                      }}
                     >
-                      <Button
-                        variant="outlined"
-                        color="default"
-                        style={{
-                          marginRight: '0.5rem'
-                        }}
-                        onClick={this.openHipPocketListingDrawer}
-                      >
-                        Off Market (Input Manually)
-                      </Button>
-                    </Tooltip>
-                    {this.props.renderAction && this.props.renderAction(props)}
-                  </Flex>
-                )
-              : this.props.renderAction
-          }
-        />
-        <HipPocketListingDrawer
-          isOpen={this.state.isHipPocketListingDrawerOpen}
-          onClose={this.closeHipPocketListingDrawer}
-          onSave={this.handleSaveHipPocketListing}
-          onImageUpload={this.props.onHipPocketImageUpload}
-        />
-      </>
-    )
-  }
+                      <AlertTitle>
+                        <Typography variant="subtitle1">
+                          Important Note
+                        </Typography>
+                      </AlertTitle>
+                      <Typography variant="body2">
+                        Some MLS's do not allow agents to promote other agent's
+                        listings without their permission. Please make sure you{' '}
+                        <strong>
+                          only market listings that you have permission for
+                        </strong>
+                        .
+                      </Typography>
+                    </Alert>
+                  </Box>
+                </Fade>
+              )
+            : undefined
+        }
+        renderAction={
+          allowHipPocket
+            ? props => (
+                <Flex>
+                  <Tooltip
+                    placement="left"
+                    title="Input your listing data manually, if you can't find it on MLS."
+                  >
+                    <Button
+                      variant="outlined"
+                      color="default"
+                      style={{
+                        marginRight: '0.5rem'
+                      }}
+                      onClick={openHipPocketListingDrawer}
+                    >
+                      Off Market (Input Manually)
+                    </Button>
+                  </Tooltip>
+                  {renderAction && renderAction(props)}
+                </Flex>
+              )
+            : renderAction
+        }
+      />
+      <HipPocketListingDrawer
+        isOpen={state.isHipPocketListingDrawerOpen}
+        onClose={closeHipPocketListingDrawer}
+        onSave={handleSaveHipPocketListing}
+        onImageUpload={onHipPocketImageUpload}
+      />
+    </>
+  )
 }
 
 SearchListingDrawer.propTypes = {
@@ -282,15 +304,3 @@ SearchListingDrawer.propTypes = {
     })
   )
 }
-
-SearchListingDrawer.defaultProps = {
-  searchPlaceholder: 'Enter MLS # or address',
-  allowHipPocket: false,
-  withMlsDisclaimer: false,
-  allowedStatuses: [],
-  title: 'Select a Listing',
-  defaultLists: [],
-  multipleSelection: false
-}
-
-export default withStyles(styles)(SearchListingDrawer)
