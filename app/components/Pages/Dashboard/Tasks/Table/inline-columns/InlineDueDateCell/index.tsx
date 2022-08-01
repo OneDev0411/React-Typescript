@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import moment from 'moment'
+
 import DatePicker from '@app/views/components/DatePicker'
 
 import { useTaskMutation } from '../../../queries/use-task-mutation'
@@ -15,6 +17,11 @@ export function InlineDueDateCell({ task, closeHandler }: Props) {
   const [date, setDate] = useState(new Date(task.due_date * 1000))
 
   const handleSelectDate = (value: Date, type: string) => {
+    const currentDueDate = moment.unix(task.due_date)
+
+    value.setHours(currentDueDate.hours())
+    value.setMinutes(currentDueDate.minutes())
+
     setDate(value)
 
     if (type === 'day') {
