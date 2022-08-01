@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 import moment from 'moment'
@@ -16,6 +14,7 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
+      fontWeight: 500,
       color: theme.palette.error.main
     },
     date: {
@@ -38,52 +37,25 @@ export function DueDateCell({ task }: Props) {
   const classes = useStyles()
 
   const isTaskDone = task.status === 'DONE'
+  const today = moment()
+  const taskDate = moment.unix(task.due_date)
 
-  const [remainingDays, remainingHours, fromNow] = useMemo(() => {
-    const today = moment()
-    const taskDate = moment.unix(task.due_date)
-
-    return [
-      taskDate.diff(today, 'days'),
-      taskDate.diff(today, 'hours'),
-      taskDate.fromNow(true)
-    ]
-  }, [task.due_date])
-
-  const normalizeMessage = (message: string) => {
-    if (message === 'in a day') {
-      return 'Tomorrow'
-    }
-
-    if (message === 'a day ago') {
-      return 'Yesterday'
-    }
-
-    return message
-  }
-
-  if (remainingDays < 0) {
+  if (taskDate.isAfter(today.clone().add(7, 'days'))) {
     return (
-      <div className={cn(classes.past, { [classes.done]: isTaskDone })}>
-        <span>{normalizeMessage(`${fromNow} ago`)}</span>
-      </div>
-    )
-  }
-
-  if (
-    (remainingDays === 0 && remainingHours < 24) ||
-    (remainingDays > 0 && remainingDays < 7)
-  ) {
-    return (
-      <div className={cn(classes.soon, { [classes.done]: isTaskDone })}>
-        {normalizeMessage(`in ${fromNow}`)}
+      <div className={cn(classes.date, { [classes.done]: isTaskDone })}>
+        {moment.unix(task.due_date).format('ddd, MMM DD, YYYY')}
       </div>
     )
   }
 
   return (
-    <div className={cn(classes.date, { [classes.done]: isTaskDone })}>
-      {moment.unix(task.due_date).format('ddd, MMM DD, YYYY')}
+    <div
+      className={cn(classes.soon, {
+        [classes.past]: taskDate.isBefore(today),
+        [classes.done]: isTaskDone
+      })}
+    >
+      {taskDate.fromNow()}
     </div>
   )
 }
