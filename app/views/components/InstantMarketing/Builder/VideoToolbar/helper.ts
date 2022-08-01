@@ -47,3 +47,15 @@ export function getSlotProgress(
 
   return ((currentTime - currentSlotStartTime) / slotDuration) * 100
 }
+
+export function normalizeKeyframes(
+  keyframes: IKeyframe[],
+  duration: number
+): IKeyframe[] {
+  const normalizedKeyframes = [
+    ...(keyframes[0].at > 0 ? [{ at: 0 }] : []),
+    ...keyframes
+  ]
+
+  return normalizedKeyframes.filter(keyframe => keyframe.at < duration)
+}

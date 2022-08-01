@@ -29,6 +29,7 @@
   @media screen and (min-width: 48em) {
     width: 600px;
     height: 450px;
+    max-width: 99%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -40,6 +41,9 @@
 
     &.c-modal__content--large {
       width: 1000px;
+    }
+    &.c-modal__content--xLarge {
+      width: 1400px;
     }
   }
 

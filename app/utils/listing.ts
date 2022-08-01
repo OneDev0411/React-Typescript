@@ -159,6 +159,12 @@ export const getListingAddressLine2 = (
   return getAddressLine2(address)
 }
 
+export const getListingFullAddress = (
+  listing: IListing | ICompactListing
+): string => {
+  return `${getListingAddress(listing)} ${getListingAddressLine2(listing)}`
+}
+
 export const getDaysOnMarket = (
   listing: IListing | ICompactListing
 ): number => {

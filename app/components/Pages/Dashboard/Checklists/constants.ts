@@ -7,12 +7,12 @@ export const TabNames: {
     title: 'Listing'
   },
   {
-    type: 'Buying',
-    title: 'Contract'
+    type: 'Offer',
+    title: 'Incoming Contract'
   },
   {
-    type: 'Offer',
-    title: 'Offer'
+    type: 'Buying',
+    title: 'Outgoing Contract'
   }
 ]
 

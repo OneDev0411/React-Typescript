@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { normalizeKeyframes } from './helper'
 import { VideoControls } from './VideoControls'
 
 export class VideoToolbar extends React.Component {
@@ -70,13 +71,15 @@ export class VideoToolbar extends React.Component {
   get KeyFrames() {
     const timeline = this.Timeline
 
-    return timeline ? timeline.keyframes : []
+    return timeline
+      ? normalizeKeyframes(timeline.keyframes, timeline.duration)
+      : []
   }
 
   seekTo = frameId => {
     this.handlePause()
 
-    const keyframe = this.Timeline.keyframes[frameId]
+    const keyframe = this.KeyFrames[frameId]
 
     this.setState({
       activeFrame: frameId
