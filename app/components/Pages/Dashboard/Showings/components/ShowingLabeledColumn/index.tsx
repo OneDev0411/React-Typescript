@@ -1,33 +1,13 @@
 import { ReactNode } from 'react'
 
-import { Box, Typography, makeStyles } from '@material-ui/core'
-import cn from 'classnames'
+import { Box, Typography } from '@material-ui/core'
 
 interface ShowingLabeledColumnProps {
   label?: string
   children: ReactNode
-  alignCenter?: boolean
 }
 
-const useStyles = makeStyles(
-  () => ({
-    autoMargin: {
-      margin: 'auto !important'
-    },
-    noneMargin: {
-      margin: 0
-    }
-  }),
-  { name: 'ShowingLabeledColumn' }
-)
-
-function ShowingLabeledColumn({
-  label,
-  children,
-  alignCenter = false
-}: ShowingLabeledColumnProps) {
-  const classes = useStyles()
-
+function ShowingLabeledColumn({ label, children }: ShowingLabeledColumnProps) {
   return (
     <>
       {label && (
@@ -37,13 +17,7 @@ function ShowingLabeledColumn({
           </Box>
         </Typography>
       )}
-      <Typography
-        variant="body2"
-        component="span"
-        className={cn(classes.noneMargin, {
-          [classes.autoMargin]: alignCenter
-        })}
-      >
+      <Typography variant="body2" component="span">
         {children}
       </Typography>
     </>
