@@ -110,7 +110,9 @@ export function PropertyDealCell({ task }: Props) {
           </Avatar>
         </Box>
         <Tooltip title={getCaption()}>
-          <Typography variant="caption">{getCaption()}</Typography>
+          <Typography variant="caption" className="overflow-ellipsis">
+            {getCaption()}
+          </Typography>
         </Tooltip>
       </Box>
 
