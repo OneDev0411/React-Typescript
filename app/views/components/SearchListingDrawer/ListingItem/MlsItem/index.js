@@ -99,19 +99,21 @@ export function MlsItem({ item, onClickRemove, ...props }) {
             >
               {getStatus()}
             </Status>
-            <Typography
-              component="p"
-              variant="caption"
-              color="textSecondary"
-              title="Listing Provider (MLS) Source"
-              className={classes.mlsSource}
-            >
-              <SvgIcon
-                path={mdiDatabaseOutline}
-                className={classes.mlsSourceIcon}
-              />{' '}
-              {item.mls_display_name}
-            </Typography>
+            {item.status && (
+              <Typography
+                component="p"
+                variant="caption"
+                color="textSecondary"
+                title="Listing Provider (MLS) Source"
+                className={classes.mlsSource}
+              >
+                <SvgIcon
+                  path={mdiDatabaseOutline}
+                  className={classes.mlsSourceIcon}
+                />{' '}
+                {item.mls_display_name}
+              </Typography>
+            )}
           </MlsDetailsContainer>
 
           {props.removable && onClickRemove && (
