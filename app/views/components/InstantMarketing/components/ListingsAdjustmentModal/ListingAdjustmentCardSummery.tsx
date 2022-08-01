@@ -25,6 +25,7 @@ const useStyles = makeStyles(
       marginLeft: theme.spacing(-0.5)
     },
     details: {
+      minHeight: 18,
       margin: theme.spacing(1, 0)
     },
     detailItem: {
@@ -56,6 +57,8 @@ const ListingAdjustmentCardSummery = ({ listing }: Props) => {
   const {
     square_meters: squareMeters,
     bathroom_count: bathroomCount,
+    full_bathroom_count: fullBathroomCount,
+    half_bathroom_count: halfBathroomCount,
     bedroom_count: bedroomCount,
     property_type: propertyType,
     address
@@ -65,7 +68,9 @@ const ListingAdjustmentCardSummery = ({ listing }: Props) => {
 
   const squareFeet = Math.round(metersToFeet(squareMeters)).toLocaleString()
   const fullAddress = addressTitle(address)
-  const baths = bathroomCount ?? 0
+  const baths = halfBathroomCount
+    ? `${fullBathroomCount || 0}.${halfBathroomCount}`
+    : bathroomCount || fullBathroomCount || 0
   const bedrooms = bedroomCount ?? 0
 
   return (
@@ -78,23 +83,25 @@ const ListingAdjustmentCardSummery = ({ listing }: Props) => {
         />
         {fullAddress}
       </Typography>
-      {!['Commercial', 'Lots & Acreage'].includes(propertyType) && (
-        <Grid className={classes.details} container>
-          <Grid className={classes.detailItem} item>
-            <SvgIcon path={mdiBedKingOutline} className={classes.icon} />
-            {bedrooms}
-          </Grid>
-          <Grid className={classes.detailItem} item>
-            <SvgIcon path={mdiShower} className={classes.icon} />
-            {baths}
-          </Grid>
-          <Grid className={classes.detailItem} item>
-            <SvgIcon path={mdiVectorSquare} className={classes.icon} />
-            {squareFeet} ft
-            <sup>2</sup>
-          </Grid>
-        </Grid>
-      )}
+      <Grid className={classes.details} container>
+        {!['Commercial', 'Lots & Acreage'].includes(propertyType) && (
+          <>
+            <Grid className={classes.detailItem} item>
+              <SvgIcon path={mdiBedKingOutline} className={classes.icon} />
+              {bedrooms}
+            </Grid>
+            <Grid className={classes.detailItem} item>
+              <SvgIcon path={mdiShower} className={classes.icon} />
+              {baths}
+            </Grid>
+            <Grid className={classes.detailItem} item>
+              <SvgIcon path={mdiVectorSquare} className={classes.icon} />
+              {squareFeet} ft
+              <sup>2</sup>
+            </Grid>
+          </>
+        )}
+      </Grid>
     </div>
   )
 }

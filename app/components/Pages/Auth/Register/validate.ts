@@ -11,7 +11,7 @@ const isEmptyStr = str => {
 }
 
 export function validate(values: Omit<FormValues, 'user_type'>) {
-  const { email, first_name, last_name, password, repeatedPassword } = values
+  const { email, first_name, last_name, password } = values
   const errors: Partial<FormValues> = {}
 
   if (isEmptyStr(first_name)) {
@@ -32,12 +32,6 @@ export function validate(values: Omit<FormValues, 'user_type'>) {
     errors.password = REQUIRED_ERROR
   } else if (password.length < 6) {
     errors.password = 'Must be at least 6 characters.'
-  }
-
-  if (!repeatedPassword) {
-    errors.repeatedPassword = REQUIRED_ERROR
-  } else if (password !== repeatedPassword) {
-    errors.repeatedPassword = 'Must be match with the password.'
   }
 
   return errors

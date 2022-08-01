@@ -15,7 +15,6 @@ const useStyles = makeStyles(
     column: {
       display: 'flex',
       alignItems: 'center',
-      backgroundColor: `${theme.palette.grey['50']} !important`,
       color: theme.palette.grey['90']
     }
   }),
