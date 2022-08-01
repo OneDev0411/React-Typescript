@@ -13,9 +13,9 @@ import { mdiAccountEditOutline, mdiDeleteOutline } from '@mdi/js'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { RoleName } from '../../../components/Roles/RoleName'
-import { getLegalFullName } from '../../../utils/roles'
-import type { IDealFormRole, Address } from '../../types'
+import type { IDealFormRole, Address } from '../../Create/types'
+import { getLegalFullName } from '../../utils/roles'
+import { RoleName } from '../Roles/RoleName'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

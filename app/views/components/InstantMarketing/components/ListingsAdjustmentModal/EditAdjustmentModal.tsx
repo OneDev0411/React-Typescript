@@ -230,18 +230,20 @@ export function EditAdjustmentModal(props: Props) {
 
           <div className={classes.summery}>
             <ListingAdjustmentCardSummery listing={listing} />
-            <div>
-              <Chip
-                label={listing.status}
-                size="small"
-                variant="outlined"
-                classes={{
-                  root: classes.statusChip,
-                  iconSmall: classes.iconSmall
-                }}
-                icon={<Grid className={classes.statusDot} />}
-              />
-            </div>
+            {listing.status && (
+              <div>
+                <Chip
+                  label={listing.status}
+                  size="small"
+                  variant="outlined"
+                  classes={{
+                    root: classes.statusChip,
+                    iconSmall: classes.iconSmall
+                  }}
+                  icon={<Grid className={classes.statusDot} />}
+                />
+              </div>
+            )}
           </div>
         </div>
         <div>

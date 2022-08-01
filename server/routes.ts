@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser'
 import express from 'express'
 
+import loadAppBundleRoute from './app/routes/appz/load-app-url'
 import branchLinkRoute from './app/routes/branch-link'
 import contactsExportOutlookRoute from './app/routes/contacts/export-outlook'
 import corsRoute from './app/routes/cors'
@@ -89,6 +90,11 @@ router.post(
  * open house routes.
  */
 router.get('/openhouse/:id/:brand/register', openHouseRoute)
+
+/**
+ * load Appz url (temporary)
+ */
+router.get('/api/apps', loadAppBundleRoute)
 
 /**
  * branch-link route.

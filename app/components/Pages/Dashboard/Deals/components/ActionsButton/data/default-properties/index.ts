@@ -34,7 +34,8 @@ import {
   APPROVE_TASK,
   DECLINE_TASK,
   SPLIT_PDF,
-  TASK_ACL
+  TASK_ACL,
+  OPEN_APPLICATION
 } from '../action-buttons'
 
 type ActionType = 'Form' | 'Envelope' | 'File'
@@ -155,6 +156,10 @@ export const actionsDefaultProperties = {
   [TASK_ACL]: {
     label: 'Manage Access',
     type: 'task-acl'
+  },
+  [OPEN_APPLICATION]: {
+    label: 'Open App',
+    type: 'application-open'
   }
 }
 

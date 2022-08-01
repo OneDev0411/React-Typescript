@@ -18,7 +18,8 @@ import {
   APPROVE_TASK,
   REQUIRE_TASK,
   DELETE_TASK,
-  TASK_ACL
+  TASK_ACL,
+  OPEN_APPLICATION
 } from '../../../../../components/ActionsButton/data/action-buttons'
 
 interface Props {
@@ -39,6 +40,9 @@ export function getTaskActions({
   const isVoidable =
     envelope && ['Created', 'Delivered', 'Sent'].includes(envelope.status)
   const isDraft = envelope && ['Created'].includes(envelope.status)
+  const isApplicationTask = task?.task_type === 'Application'
+
+  isApplicationTask && actions.push(OPEN_APPLICATION)
 
   envelope && isDraft && actions.push(REVIEW_ENVELOPE)
   envelope && actions.push(VIEW_ENVELOPE)
@@ -74,15 +78,17 @@ export function getTaskActions({
     !actions.includes(VIEW_ENVELOPE) &&
     !actions.includes(VIEW_FORM) &&
     actions.push(VIEW_FILE)
-  actions.push(UPLOAD)
+
+  !isApplicationTask && actions.push(UPLOAD)
 
   actions.push(SHOW_COMMENTS)
-  actions.push(TASK_NOTIFICATION)
-  isBackOffice && actions.push(APPROVE_TASK)
-  isBackOffice && actions.push(DECLINE_TASK)
-  isBackOffice && actions.push(REQUIRE_TASK)
+  !isApplicationTask && actions.push(TASK_NOTIFICATION)
 
-  actions.push(DELETE_TASK)
+  isBackOffice && !isApplicationTask && actions.push(APPROVE_TASK)
+  isBackOffice && !isApplicationTask && actions.push(DECLINE_TASK)
+  isBackOffice && !isApplicationTask && actions.push(REQUIRE_TASK)
+
+  !isApplicationTask && actions.push(DELETE_TASK)
 
   task && isBackOffice && actions.push(TASK_ACL)
 

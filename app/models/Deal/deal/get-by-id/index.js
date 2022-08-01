@@ -18,6 +18,7 @@ export async function getById(id) {
       .query({ 'associations[]': ['user.docusign'] })
       .query({ 'associations[]': ['deal_role.agent'] })
       .query({ 'associations[]': ['agent.office'] })
+      .query({ 'associations[]': ['task.application'] })
 
     return response.body.data
   } catch (e) {
