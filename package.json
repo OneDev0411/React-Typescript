@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "91.3.1",
+  "version": "92.0.0",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -242,6 +242,7 @@
     "rxjs": "^5.5.11",
     "sanitize-html": "^2.3.3",
     "sass-loader": "^11.0.1",
+    "scriptjs": "^2.5.9",
     "serve-static": "^1.14.1",
     "shorti": "^1.2.6",
     "smoothscroll-polyfill": "^0.4.4",

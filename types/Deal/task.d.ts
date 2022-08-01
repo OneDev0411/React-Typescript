@@ -6,6 +6,7 @@ declare type IDealTaskType =
   | 'OpenHouse'
   | 'Media'
   | 'Splitter'
+  | 'Application'
 
 declare interface IDealTaskRoom extends IModel<'room'> {
   attachments: IFile[] | null
@@ -31,12 +32,17 @@ declare interface IDealTaskSubmission extends IModel<'form_submission'> {
   title: string
 }
 
+declare interface IDealTaskApplication extends IModel<'application'> {
+  url: 'string'
+}
+
 declare interface IDealTask extends IModel<'task'> {
   attention_requested: boolean
   attention_requested_at: string | null
   checklist: UUID
   deal: UUID
   form: UUID
+  application: IDealTaskApplication
   is_deletable: boolean
   pdf_url: string
   required: boolean

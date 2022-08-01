@@ -14,8 +14,8 @@ import {
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 
+import { RoleCard } from '../../../components/RoleCard'
 import { AgentsList } from '../../components/AgentsList'
-import { RoleCard } from '../../components/RoleCard'
 import { useCreationContext } from '../../context/use-creation-context'
 import type { IDealFormRole } from '../../types'
 
