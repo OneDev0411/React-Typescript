@@ -1,7 +1,6 @@
 import { ReactNode } from 'react'
 
 import { Box, Typography, makeStyles } from '@material-ui/core'
-
 import cn from 'classnames'
 
 interface ShowingLabeledColumnProps {
