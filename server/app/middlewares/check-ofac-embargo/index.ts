@@ -1,5 +1,5 @@
+import check from '@rechat/ofac'
 import { Request, Response, NextFunction } from 'express'
-import check from 'ofac-embargo-list'
 
 export function checkOFACEmbargo(
   req: Request,
