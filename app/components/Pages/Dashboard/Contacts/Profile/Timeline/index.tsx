@@ -62,7 +62,6 @@ function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
     <>
       {activeFilter === Filters.Events && (
         <List
-          contrariwise
           ref={localTimelineRef}
           contact={contact}
           filter={getFilter()}
