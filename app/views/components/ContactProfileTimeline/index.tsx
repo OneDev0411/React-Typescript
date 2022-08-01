@@ -10,7 +10,7 @@ import {
 import { useSelector } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-// import useNotify from '@app/hooks/use-notify'
+import useNotify from '@app/hooks/use-notify'
 import { getCalendar } from 'models/calendar/get-calendar'
 import { IAppState } from 'reducers/index'
 import { viewAs } from 'utils/user-teams'
@@ -40,7 +40,7 @@ export function Calendar({
   associations = [],
   onLoadEvents = () => null
 }: Props) {
-  // const notify = useNotify()
+  const notify = useNotify()
   const [isLoading, setIsLoading] = useState(false)
   const [events, setEvents] = useState<ICalendarEvent[]>([])
   const [listRows, setListRows] = useState<ICalendarListRow[]>([])
@@ -69,6 +69,52 @@ export function Calendar({
 
   const fetchEvents = useCallback(
     async (
+      range: ICalendarRange,
+      position: ApiOptions['position']
+    ): Promise<[ICalendarEvent[], ICalendarEvent[]]> => {
+      const { low, high } = range
+      const commonParams = {
+        users: viewAsUsers,
+        filter,
+        associations: ['calendar_event.people', ...associations],
+        limit: MAX_LIMIT_EVENT
+      }
+      const loadOldEventsPayload = {
+        ...commonParams,
+        range: { high }
+      }
+      const loadNewEventsPayload = {
+        ...commonParams,
+        range: { low }
+      }
+
+      try {
+        if (position === 'Previous') {
+          const events = await getCalendar(loadOldEventsPayload)
+
+          return [events, []]
+        }
+
+        if (position === 'Next') {
+          const events = await getCalendar(loadNewEventsPayload)
+
+          return [[], events]
+        }
+
+        const events = await Promise.all([
+          await getCalendar(loadOldEventsPayload),
+          await getCalendar(loadNewEventsPayload)
+        ])
+
+        return events
+      } catch (error) {
+        throw error
+      }
+    },
+    [associations, filter, viewAsUsers]
+  )
+  const getEvents = useCallback(
+    async (
       option: Pick<ApiOptions, 'range' | 'position'>,
       reset: boolean = false
     ) => {
@@ -76,28 +122,10 @@ export function Calendar({
         // enable loading flag
         setIsLoading(true)
 
-        const { range } = option
-        const commonParams = {
-          users: viewAsUsers,
-          filter,
-          associations: ['calendar_event.people', ...associations],
-          limit: MAX_LIMIT_EVENT
-        }
-        const { low, high } = range
+        const { range, position } = option
 
         // fetch calendar data from server based on given parameters
-
-        const [prevEvents, nextEvents]: [ICalendarEvent[], ICalendarEvent[]] =
-          await Promise.all([
-            await getCalendar({
-              ...commonParams,
-              range: { high }
-            }),
-            await getCalendar({
-              ...commonParams,
-              range: { low }
-            })
-          ])
+        const [prevEvents, nextEvents] = await fetchEvents(range, position)
 
         if (nextEvents.length < MAX_LIMIT_EVENT) {
           setIsReachedEnd(true)
@@ -109,12 +137,12 @@ export function Calendar({
 
         const fetchedEvents = [...prevEvents, ...nextEvents]
 
-        // if (fetchedEvents.length === 0 && position !== 'Middle') {
-        //   notify({
-        //     status: 'success',
-        //     message: 'There is no more events to load'
-        //   })
-        // }
+        if (fetchedEvents.length === 0 && position !== 'Middle') {
+          notify({
+            status: 'success',
+            message: 'There is no more events to load'
+          })
+        }
 
         const newEvents: ICalendarEvent[] = reset
           ? fetchedEvents
@@ -134,11 +162,11 @@ export function Calendar({
         setIsLoading(false)
       }
     },
-    [viewAsUsers, filter, associations, events, onLoadEvents]
+    [fetchEvents, events, onLoadEvents, notify]
   )
 
   const handleLoadEvents = async () => {
-    await fetchEvents(
+    await getEvents(
       {
         range: calendarRange,
         position: 'Middle'
@@ -204,11 +232,11 @@ export function Calendar({
     const range = createRanges(Format.Next)
 
     setCalendarRange(range)
-    fetchEvents({
+    getEvents({
       range,
       position: 'Next'
     })
-  }, [createRanges, fetchEvents, isLoading, isReachedEnd])
+  }, [createRanges, getEvents, isLoading, isReachedEnd])
 
   const handleLoadPreviousEvents = useCallback((): void => {
     if (isLoading || isReachedStart) {
@@ -218,11 +246,11 @@ export function Calendar({
     const range = createRanges(Format.Previous)
 
     setCalendarRange(range)
-    fetchEvents({
+    getEvents({
       range,
       position: 'Previous'
     })
-  }, [createRanges, fetchEvents, isLoading, isReachedStart])
+  }, [createRanges, getEvents, isLoading, isReachedStart])
 
   /**
    * exposes below methods to be accessible outside of the component

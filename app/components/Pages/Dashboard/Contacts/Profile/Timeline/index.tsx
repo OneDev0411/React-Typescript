@@ -5,7 +5,6 @@ import { CalendarRef } from 'components/ContactProfileTimeline/types'
 
 import { Filters } from '../Tabs'
 
-import { getTimelineInitialRange } from './helpers/get-timeline-range'
 import { Notes } from './Notes'
 
 export interface TimelineRef {
@@ -26,7 +25,7 @@ function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
 
   const handleReload = (filter = activeFilter) => {
     if (filter === Filters.Events) {
-      localTimelineRef.current!.refresh(new Date(), getTimelineInitialRange())
+      localTimelineRef.current!.refresh(new Date(), null)
     }
   }
 
@@ -65,7 +64,6 @@ function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
           ref={localTimelineRef}
           contact={contact}
           filter={getFilter()}
-          // initialRange={getTimelineInitialRange()}
           associations={associations}
         />
       )}
