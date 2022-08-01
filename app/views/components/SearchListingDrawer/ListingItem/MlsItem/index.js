@@ -1,8 +1,10 @@
 import { Typography, makeStyles } from '@material-ui/core'
 import { mdiHomeOutline, mdiDrag, mdiClose, mdiDatabaseOutline } from '@mdi/js'
+import cn from 'classnames'
 import fecha from 'fecha'
 import Flex from 'styled-flex-component'
 
+import { useIconStyles } from '@app/styles/use-icon-styles'
 import {
   addressTitle,
   getAddressLine2,
@@ -44,6 +46,7 @@ export const useStyles = makeStyles(
 )
 
 export function MlsItem({ item, onClickRemove, ...props }) {
+  const iconClasses = useIconStyles()
   const classes = useStyles()
 
   const getStatus = () => {
@@ -109,8 +112,8 @@ export function MlsItem({ item, onClickRemove, ...props }) {
               >
                 <SvgIcon
                   path={mdiDatabaseOutline}
-                  className={classes.mlsSourceIcon}
-                />{' '}
+                  className={cn(classes.mlsSourceIcon, iconClasses.rightMargin)}
+                />
                 {item.mls_display_name}
               </Typography>
             )}
