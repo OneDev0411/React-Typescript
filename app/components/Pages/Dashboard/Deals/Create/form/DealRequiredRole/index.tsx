@@ -11,9 +11,9 @@ import {
   useSectionContext
 } from 'components/QuestionWizard'
 
+import { RoleCard } from '../../../components/RoleCard'
 import { AgentsList } from '../../components/AgentsList'
 import { ContactRoles } from '../../components/ContactRoles'
-import { RoleCard } from '../../components/RoleCard'
 import { useCreationContext } from '../../context/use-creation-context'
 import { useStyles } from '../../hooks/use-styles'
 import type { IDealFormRole } from '../../types'

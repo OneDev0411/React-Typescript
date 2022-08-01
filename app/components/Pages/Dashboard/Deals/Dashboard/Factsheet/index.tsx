@@ -2,6 +2,7 @@ import React from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 
+import { useDealBrandContexts } from '@app/hooks/use-deal-brand-contexts'
 import { upsertContexts, approveContext } from 'actions/deals'
 import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { isRequiredContext } from 'models/Deal/helpers/brand-context/is-required-context'
@@ -14,7 +15,6 @@ import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { DateField } from './DateField'
 import { isContextApproved } from './helpers/is-context-approved'
-import { useFactsheetContexts } from './hooks/use-factsheet-contexts'
 import { ItemsContainer, SectionTitle, TimelineSplitter } from './styled'
 import { TextField } from './TextField'
 
@@ -39,7 +39,7 @@ export default function Factsheet({
 }: Props) {
   const dispatch = useDispatch()
 
-  const contextsList = useFactsheetContexts(deal, section)
+  const contextsList = useDealBrandContexts(deal, section)
   const table = contexts ?? contextsList
 
   const { checklists, brandChecklists } = useSelector(

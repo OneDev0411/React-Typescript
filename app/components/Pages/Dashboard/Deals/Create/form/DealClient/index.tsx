@@ -13,8 +13,8 @@ import {
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 
+import { RoleCard } from '../../../components/RoleCard'
 import { ContactRoles } from '../../components/ContactRoles'
-import { RoleCard } from '../../components/RoleCard'
 import { useCreationContext } from '../../context/use-creation-context'
 import { BUYER_ROLES, SELLER_ROLES } from '../../helpers/roles'
 import type { IDealFormRole } from '../../types'

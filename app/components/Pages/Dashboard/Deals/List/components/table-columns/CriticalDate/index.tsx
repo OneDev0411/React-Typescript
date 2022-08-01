@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 
 import { Paper, makeStyles } from '@material-ui/core'
 
+import { useDealBrandContexts } from '@app/hooks/use-deal-brand-contexts'
 import ContentSizeAwarePopper from 'components/ContentSizeAwarePopper'
 
 import FactsheetSection from '../../../../Dashboard/Factsheet'
-import { useFactsheetContexts } from '../../../../Dashboard/Factsheet/hooks/use-factsheet-contexts'
 
 import { getNextDate, getNextDateValue } from './helpers'
 
@@ -33,7 +33,7 @@ export default function CriticalDate({ deal, brandChecklists }: Props) {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
-  const contexts = useFactsheetContexts(deal, 'Dates', brandChecklists)
+  const contexts = useDealBrandContexts(deal, 'Dates', brandChecklists)
 
   // get next critical date
   const nextDate = getNextDate(deal, contexts)

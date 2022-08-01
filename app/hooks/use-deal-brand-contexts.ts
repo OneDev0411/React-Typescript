@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux'
 import { getField } from 'models/Deal/helpers/context'
 import { IAppState } from 'reducers'
 
-export function useFactsheetContexts(
+export function useDealBrandContexts(
   deal: IDeal,
-  section: string,
+  section?: string,
   brandChecklists?: IBrandChecklist[]
-) {
+): IDealBrandContext[] {
   const contexts = useSelector<
     IAppState,
     IBrandChecklist['required_contexts'] & IBrandChecklist['optional_contexts']
@@ -32,7 +32,7 @@ export function useFactsheetContexts(
           )
         ),
       context => context.key
-    ).filter(context => context.section === section)
+    ).filter(context => (section ? context.section === section : true))
 
     if (section === 'Dates') {
       const fieldsWithValue = contexts

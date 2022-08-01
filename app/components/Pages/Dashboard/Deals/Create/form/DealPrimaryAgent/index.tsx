@@ -14,9 +14,9 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { deleteRole } from 'models/Deal/role'
 
+import { RoleCard } from '../../../components/RoleCard'
 import { AgentsList } from '../../components/AgentsList'
 import { ContactRoles } from '../../components/ContactRoles'
-import { RoleCard } from '../../components/RoleCard'
 import { useCreationContext } from '../../context/use-creation-context'
 import type { IDealFormRole } from '../../types'
 
