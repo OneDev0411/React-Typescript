@@ -65,7 +65,7 @@ function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
           ref={localTimelineRef}
           contact={contact}
           filter={getFilter()}
-          initialRange={getTimelineInitialRange()}
+          // initialRange={getTimelineInitialRange()}
           associations={associations}
         />
       )}
