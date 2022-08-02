@@ -151,8 +151,6 @@ class NewContactDrawer extends React.Component {
     const { isSubmitting, submitError } = this.state
     const initValues = generateInitialValues(this.props.initValues)
 
-    console.log(this.props.attributeDefs)
-
     return (
       <Drawer open={this.props.isOpen} onClose={this.onClose}>
         {this.props.isOpen && (

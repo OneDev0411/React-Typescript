@@ -54,8 +54,6 @@ export function normalizeTeams(
         office: office.name
       }))
 
-      console.log(agents)
-
       return {
         id: office.id,
         name: office.name,

@@ -1,7 +1,7 @@
 /**
  * returns calendar range of timeline events
  */
-export function getTimelineInitialRange(): NumberRange {
+export function getTimelineInitialRange(): ICalendarRange {
   const today = new Date()
 
   const start = Date.UTC(
@@ -25,5 +25,5 @@ export function getTimelineInitialRange(): NumberRange {
       999
     ).getTime() + today.getTimezoneOffset()
 
-  return [start / 1000, end / 1000]
+  return { low: start / 1000, high: end / 1000 }
 }
