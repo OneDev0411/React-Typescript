@@ -78,7 +78,8 @@ export function ContextField(props) {
       <div
         style={{
           ...props.style,
-          backgroundColor: props.value ? 'transparent' : '#d2e5f2'
+          backgroundColor: '#d2e5f2',
+          fontSize: '14px'
         }}
         className="field-unlinkable"
         title={props.annotation.context}
