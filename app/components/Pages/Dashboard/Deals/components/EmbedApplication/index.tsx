@@ -43,7 +43,6 @@ import {
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 import { useSectionErrorContext } from 'components/QuestionWizard/hooks/use-section-error-context'
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
-import config from 'config'
 
 import Message from '../../../Chatroom/Util/message'
 import { ContactRoles } from '../../Create/components/ContactRoles'
@@ -114,7 +113,9 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
 
         const url = development
           ? chunkUrl
-          : `${config.app.share_url ?? ''}/api/apps?url=${chunkUrl}`
+          : `${
+              new URL(window.location.href).origin ?? ''
+            }/api/apps?url=${chunkUrl}`
 
         const module = await import(/* webpackIgnore: true */ url)
 
