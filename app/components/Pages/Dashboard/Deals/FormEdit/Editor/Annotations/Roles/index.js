@@ -54,6 +54,7 @@ export function Roles(props) {
 
   return (
     <AnnotationWrapper
+      deal={props.deal}
       items={props.annotations[props.pageIndex].roles}
       values={props.values}
       render={inputProps => (

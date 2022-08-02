@@ -37,6 +37,7 @@ export function AddressInputs(props) {
 
   return (
     <AnnotationWrapper
+      deal={props.deal}
       items={props.annotations[props.pageIndex].addresses}
       values={props.values}
       render={inputProps => (

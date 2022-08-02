@@ -1,8 +1,17 @@
-import React from 'react'
+import { useSelector } from 'react-redux'
 
+import { searchContext } from '@app/models/Deal/helpers/brand-context/search-context'
+import { getBrandChecklistsById } from '@app/reducers/deals/brand-checklists'
+import { isValidDate } from '@app/utils/date-times'
 import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
 
+import { formatDate } from '../../../../utils/format-date'
+
 export function AnnotationWrapper(props) {
+  const brandChecklists = useSelector(({ deals }) =>
+    getBrandChecklistsById(deals.brandChecklists, props.deal.brand.id)
+  )
+
   return (
     <>
       {Object.entries(props.items).map(([, groups]) =>
@@ -13,9 +22,13 @@ export function AnnotationWrapper(props) {
             .sort((a, b) => a.order - b.order)
             .map(item => item.annotation)
 
+          const context = annotation.context
+            ? searchContext(props.deal, brandChecklists, annotation.context)
+            : null
+
           const { appearance, rects, values, fontSize } = calculateWordWrap(
             annotations,
-            getFormValue(props.values, annotations)
+            getFormValue(props.values, annotations, context, annotation.format)
           )
 
           return rects.map((rect, index) => {
@@ -75,14 +88,18 @@ export function AnnotationWrapper(props) {
   )
 }
 
-function getFormValue(values, annotations) {
+function getFormValue(values, annotations, context, format) {
   const valueList = annotations
-    .map(annotation => values[annotation.fieldName])
+    .map(annotation => {
+      const value = values[annotation.fieldName]
+
+      if (context?.data_type === 'Date' && !!format && !!value) {
+        return isValidDate(new Date(value)) ? formatDate(value, format) : value
+      }
+
+      return value
+    })
     .filter(Boolean)
 
-  if (valueList.length === 0) {
-    return undefined
-  }
-
-  return valueList.join(' ')
+  return valueList.length > 0 ? valueList.join(' ') : undefined
 }
