@@ -176,7 +176,7 @@ export default function SearchListingDrawer(props) {
       message: 'There are no listings connected.',
       description:
         'There are no listings associated with this deal in the market (MLS). You can input information manually as an off-market listing or you can cancel and search a listing.',
-      confirmLabel: 'off-market (Input Manually)',
+      confirmLabel: 'Off Market (Input Manually)',
       needsCancel: true,
       onConfirm: () => {
         openHipPocketListingDrawer()
