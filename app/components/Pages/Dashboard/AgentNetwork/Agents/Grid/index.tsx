@@ -43,14 +43,12 @@ export default function AgentsGrid({
     listing.property.address.location.longitude === null
   ) {
     return (
-      <>
-        <ZeroState
-          imageUrl="/static/images/zero-state/agents-network.png"
-          title="Location Not Found"
-          subTitle="The agent network cannot function on a listing without an
+      <ZeroState
+        imageUrl="/static/images/zero-state/agents-network.png"
+        title="Location Not Found"
+        subTitle="The agent network cannot function on a listing without an
           address, please choose another listing"
-        />
-      </>
+      />
     )
   }
 
