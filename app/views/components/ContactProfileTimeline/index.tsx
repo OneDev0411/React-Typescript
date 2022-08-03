@@ -17,28 +17,26 @@ import { viewAs } from 'utils/user-teams'
 
 import { CalendarList } from './components/List'
 import { createListRows } from './helpers/create-list-rows'
-import { getDateRange, Format } from './helpers/get-date-range'
+import { getDateRangeFromEvent, Format } from './helpers/get-date-range'
 import { normalizeEvents } from './helpers/normalize-events'
 import { updateEmailCampaign } from './helpers/update-email-campaign'
 import { upsertCrmEvents } from './helpers/upsert-crm-events'
-import { CalendarRef, ApiOptions, FetchOptions, CrmEventType } from './types'
+import { CalendarRef, ApiOptions, CrmEventType } from './types'
+
+const MAX_LIMIT_EVENT = 10
 
 interface Props {
   filter?: object
   contact?: IContact
   associations?: string[]
   calendarRef?: RefObject<CalendarRef>
-  initialRange?: NumberRange
-  contrariwise?: boolean
-  onLoadEvents?: (events: ICalendarEventsList, range: NumberRange) => void
+  onLoadEvents?: (events: ICalendarEventsList, range: ICalendarRange) => void
 }
 
 export function Calendar({
   calendarRef,
-  initialRange,
   contact,
   filter = {},
-  contrariwise = false,
   associations = [],
   onLoadEvents = () => null
 }: Props) {
@@ -46,9 +44,14 @@ export function Calendar({
   const [isLoading, setIsLoading] = useState(false)
   const [events, setEvents] = useState<ICalendarEvent[]>([])
   const [listRows, setListRows] = useState<ICalendarListRow[]>([])
-  const [calendarRange, setCalendarRange] = useState<NumberRange>(
-    getDateRange()
-  )
+  const [calendarRange, setCalendarRange] = useState<ICalendarRange>(() => {
+    const current = new Date().getTime() / 1000
+
+    return {
+      low: current,
+      high: current
+    }
+  })
   const [isReachedStart, setIsReachedStart] = useState(false)
   const [isReachedEnd, setIsReachedEnd] = useState(false)
 
@@ -61,56 +64,94 @@ export function Calendar({
   }))
 
   useEffectOnce(() => {
-    handleLoadEvents(new Date(), initialRange)
+    handleLoadEvents()
   })
 
   const fetchEvents = useCallback(
-    async (apiOptions: ApiOptions, options: FetchOptions = {}) => {
+    async (
+      range: ICalendarRange,
+      position: ApiOptions['position']
+    ): Promise<[ICalendarEvent[], ICalendarEvent[]]> => {
+      const { low, high } = range
+      const commonParams = {
+        users: viewAsUsers,
+        filter,
+        associations: ['calendar_event.people', ...associations],
+        limit: MAX_LIMIT_EVENT
+      }
+      const loadOldEventsPayload = {
+        ...commonParams,
+        range: { high }
+      }
+      const loadNewEventsPayload = {
+        ...commonParams,
+        range: { low }
+      }
+
+      try {
+        if (position === 'Previous') {
+          const events = await getCalendar(loadOldEventsPayload)
+
+          return [events, []]
+        }
+
+        if (position === 'Next') {
+          const events = await getCalendar(loadNewEventsPayload)
+
+          return [[], events]
+        }
+
+        const events = await Promise.all([
+          await getCalendar(loadOldEventsPayload),
+          await getCalendar(loadNewEventsPayload)
+        ])
+
+        return events
+      } catch (error) {
+        throw error
+      }
+    },
+    [associations, filter, viewAsUsers]
+  )
+  const getEvents = useCallback(
+    async (
+      option: Pick<ApiOptions, 'range' | 'position'>,
+      reset: boolean = false
+    ) => {
       try {
         // enable loading flag
         setIsLoading(true)
-        console.log(
-          `[ + ] Fetching Calendar with range of %c${new Date(
-            apiOptions.range[0] * 1000
-          ).toUTCString()} %c${new Date(
-            apiOptions.range[1] * 1000
-          ).toUTCString()}`,
-          'color: green',
-          'color: blue'
-        )
+
+        const { range, position } = option
 
         // fetch calendar data from server based on given parameters
-        const fetchedEvents = await getCalendar({
-          users: viewAsUsers,
-          filter,
-          associations: ['calendar_event.people', ...associations],
-          ...apiOptions
-        })
+        const [prevEvents, nextEvents] = await fetchEvents(range, position)
 
-        if (fetchedEvents.length === 0 && apiOptions.position !== 'Middle') {
+        if (nextEvents.length < MAX_LIMIT_EVENT) {
+          setIsReachedEnd(true)
+        }
+
+        if (prevEvents.length < MAX_LIMIT_EVENT) {
+          setIsReachedStart(true)
+        }
+
+        const fetchedEvents = [...prevEvents, ...nextEvents]
+
+        if (fetchedEvents.length === 0 && position !== 'Middle') {
           notify({
             status: 'success',
             message: 'There is no more events to load'
           })
-
-          if (apiOptions.position === 'Next') {
-            setIsReachedEnd(true)
-          }
-
-          if (apiOptions.position === 'Previous') {
-            setIsReachedStart(true)
-          }
         }
 
-        const nextEvents: ICalendarEvent[] = options.reset
+        const newEvents: ICalendarEvent[] = reset
           ? fetchedEvents
           : fetchedEvents.concat(events)
         // get current range of fetched calendar
-        const range = options.calendarRange || apiOptions.range
-        const normalizedEvents = normalizeEvents(nextEvents, range)
+        const normalizedEvents = normalizeEvents(newEvents, range)
 
         // update events list
-        setEvents(nextEvents)
+        setEvents(newEvents)
         // updates virtual list rows
         setListRows(createListRows(normalizedEvents))
 
@@ -121,62 +162,38 @@ export function Calendar({
         setIsLoading(false)
       }
     },
-    [associations, events, filter, viewAsUsers, notify, onLoadEvents]
+    [fetchEvents, events, onLoadEvents, notify]
   )
 
-  const handleLoadEvents = async (
-    date: Date,
-    range: NumberRange | null = null
-  ) => {
-    const query: NumberRange =
-      range || getDateRange(date.getTime(), Format.Middle)
-
-    // reset calendar range
-    setCalendarRange(query)
-
-    await fetchEvents(
+  const handleLoadEvents = async () => {
+    await getEvents(
       {
-        range: query,
+        range: calendarRange,
         position: 'Middle'
       },
-      {
-        reset: true
-      }
+      true
     )
   }
 
   const createRanges = useCallback(
-    (
-      direction: Format
-    ): {
-      query: NumberRange
-      calendar: NumberRange
-    } => {
-      let actualDirection = direction
-
-      if (contrariwise && direction === Format.Next) {
-        actualDirection = Format.Previous
+    (direction: Format = Format.Middle): ICalendarRange => {
+      if (events.length === 0 || direction === Format.Middle) {
+        return calendarRange
       }
 
-      if (contrariwise && direction === Format.Previous) {
-        actualDirection = Format.Next
+      const currentRange = { ...calendarRange }
+
+      if (direction === Format.Next) {
+        currentRange.low = getDateRangeFromEvent(events[events.length - 1])
       }
 
-      const query: NumberRange =
-        actualDirection === Format.Next
-          ? getDateRange(calendarRange[1] * 1000, Format.Next)
-          : getDateRange(calendarRange[0] * 1000, Format.Previous)
-      const calendar: NumberRange =
-        actualDirection === Format.Next
-          ? [calendarRange[0], query[1]]
-          : [query[0], calendarRange[1]]
-
-      return {
-        query,
-        calendar
+      if (direction === Format.Previous) {
+        currentRange.high = getDateRangeFromEvent(events[0])
       }
+
+      return currentRange
     },
-    [calendarRange, contrariwise]
+    [calendarRange, events]
   )
 
   const createListFromEvents = useCallback(
@@ -212,38 +229,28 @@ export function Calendar({
       return
     }
 
-    const { query, calendar: nextCalendarRange } = createRanges(Format.Next)
+    const range = createRanges(Format.Next)
 
-    setCalendarRange(nextCalendarRange)
-    fetchEvents(
-      {
-        range: query,
-        position: 'Next'
-      },
-      {
-        calendarRange: nextCalendarRange
-      }
-    )
-  }, [createRanges, fetchEvents, isLoading, isReachedEnd])
+    setCalendarRange(range)
+    getEvents({
+      range,
+      position: 'Next'
+    })
+  }, [createRanges, getEvents, isLoading, isReachedEnd])
 
   const handleLoadPreviousEvents = useCallback((): void => {
     if (isLoading || isReachedStart) {
       return
     }
 
-    const { query, calendar: nextCalendarRange } = createRanges(Format.Previous)
+    const range = createRanges(Format.Previous)
 
-    setCalendarRange(nextCalendarRange)
-    fetchEvents(
-      {
-        range: query,
-        position: 'Previous'
-      },
-      {
-        calendarRange: nextCalendarRange
-      }
-    )
-  }, [createRanges, fetchEvents, isLoading, isReachedStart])
+    setCalendarRange(range)
+    getEvents({
+      range,
+      position: 'Previous'
+    })
+  }, [createRanges, getEvents, isLoading, isReachedStart])
 
   /**
    * exposes below methods to be accessible outside of the component

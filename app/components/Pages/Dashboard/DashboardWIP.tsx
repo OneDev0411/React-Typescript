@@ -88,8 +88,6 @@ export function Dashboard({ params, children, location }: DashboardProps) {
   )
 
   const handleOnlineEvent = useCallback(() => {
-    console.log('handleOnlineEvent')
-
     // update the number of unread emails in Inbox nav link notification badge
     dispatch(fetchUnreadEmailThreadsCount())
   }, [dispatch])

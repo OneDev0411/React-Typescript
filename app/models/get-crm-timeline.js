@@ -14,7 +14,7 @@ async function getCRMTimeline(query = {}, associations = []) {
 
   try {
     const calendarData = await getCalendar({
-      range: [low, high],
+      range: { low, high },
       filter: {
         ...query,
         object_types: ['crm_association', 'email_campaign']

@@ -28,8 +28,6 @@ export function Logo() {
   )
 
   const logo = useMemo(() => {
-    console.log(getBrandMarketingPalette(brand, hostBrand))
-
     return (
       getBrandMarketingPalette(brand, hostBrand)?.['container-logo-wide'] ||
       null

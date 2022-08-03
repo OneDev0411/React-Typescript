@@ -18,21 +18,30 @@ export interface FilterQuery {
 }
 
 interface ApiOptions {
-  range: NumberRange
+  range?: Partial<ICalendarRange>
   filter?: FilterQuery
   associations?: string[]
   users?: UUID[]
+  limit?: number
 }
 
 export async function getCalendar(options: ApiOptions) {
-  const { range, filter = {}, associations = [], users = [] } = options
+  const {
+    limit,
+    range = {},
+    filter = {},
+    associations = [],
+    users = []
+  } = options
+  const { low, high } = range
 
   try {
     const response = await new Fetch()
       .get('/calendar')
       .query({
-        low: range[0],
-        high: range[1],
+        limit,
+        low,
+        high,
         'associations[]': associations,
         'users[]': users
       })

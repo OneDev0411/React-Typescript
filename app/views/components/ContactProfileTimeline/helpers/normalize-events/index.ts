@@ -9,7 +9,10 @@ import { sortEvents } from '../sort-events'
  * @param range
  * @param events
  */
-export function normalizeEvents(events: ICalendarEvent[], range: NumberRange) {
+export function normalizeEvents(
+  events: ICalendarEvent[],
+  range: ICalendarRange
+) {
   const list = getEvents(range, events)
 
   return Object.entries(list).reduce((acc, [month, daysOfMonth]) => {
@@ -26,7 +29,7 @@ export function normalizeEvents(events: ICalendarEvent[], range: NumberRange) {
  * @param events
  */
 function getEvents(
-  range: NumberRange,
+  range: ICalendarRange,
   events: ICalendarEvent[]
 ): ICalendarEventsList {
   const uniqEvents = uniqBy(events, event =>
@@ -81,20 +84,20 @@ function getSortedEvents(events: ICalendarMonthEvents) {
 }
 
 /**
- * returns days ranges based on start and end dates
+ * returns days ranges based on low and high dates
  * @param range
  */
-function getDaysInRange(range: NumberRange) {
-  const [start, end] = range
+function getDaysInRange(range: ICalendarRange) {
+  const { low, high } = range
 
-  // finds the days cound between the start and end date
-  const daysCount = Math.round(Math.abs(end - start) / 86400)
+  // finds the days cound between the low and high date
+  const daysCount = Math.round(Math.abs(high - low) / 86400)
 
   // creates a array list of days: [0, 1, 2, 3, ...]
   const listOfDays = new Array(daysCount).fill(null).map((_, index) => index)
 
   return listOfDays.reduce((acc, index) => {
-    const date = new Date(start * 1000 + index * 86400000)
+    const date = new Date(low * 1000 + index * 86400000)
     const year = date.getUTCFullYear()
     const month = date.getUTCMonth() + 1
     const day = date.getUTCDate()
@@ -117,11 +120,11 @@ function getDaysInRange(range: NumberRange) {
  * @param event
  * @param range
  */
-function getEventIndex(event: ICalendarEvent, range: NumberRange) {
-  const [start, end] = range
+function getEventIndex(event: ICalendarEvent, range: ICalendarRange) {
+  const { low, high } = range
 
-  const from = new Date(start * 1000)
-  const to = new Date(end * 1000)
+  const from = new Date(low * 1000)
+  const to = new Date(high * 1000)
   const eventTime = new Date(event.timestamp * 1000)
   const isAllDayEvent = event.all_day || false
 
