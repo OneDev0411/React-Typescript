@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme, Tooltip } from '@material-ui/core'
 import { CirclePicker, ColorState } from 'react-color'
 
 import { BaseDropdown } from 'components/BaseDropdown'
@@ -13,7 +13,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: theme.spacing(3),
     height: theme.spacing(3),
     borderRadius: '100%',
-    borderColor: '1px solid #262626',
+    border: '1px solid #262626',
+    display: 'inline-block',
     '&:hover': {
       opacity: 0.8,
       cursor: 'pointer'
@@ -24,10 +25,16 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   color?: string
   colors: string[]
+  tooltip?: string
   onChange: (color: ColorState) => void
 }
 
-export function ColorPicker({ color = '#000', colors, onChange }: Props) {
+export function ColorPicker({
+  color = '#000',
+  tooltip = '',
+  colors,
+  onChange
+}: Props) {
   const classes = useStyles()
 
   return (
@@ -36,13 +43,15 @@ export function ColorPicker({ color = '#000', colors, onChange }: Props) {
         placement: 'top'
       }}
       renderDropdownButton={({ isActive, ...props }) => (
-        <span
-          {...props}
-          className={classes.color}
-          style={{
-            backgroundColor: color
-          }}
-        />
+        <Tooltip title={tooltip}>
+          <span
+            {...props}
+            className={classes.color}
+            style={{
+              backgroundColor: color
+            }}
+          />
+        </Tooltip>
       )}
       renderMenu={({ close }) => (
         <div className={classes.picker}>

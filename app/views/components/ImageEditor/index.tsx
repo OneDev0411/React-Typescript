@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import {
   Box,
@@ -8,68 +8,56 @@ import {
   DialogContent,
   DialogTitle,
   Button,
-  useTheme
+  ClickAwayListener
 } from '@material-ui/core'
+import Pikaso, { EventListenerCallbackEvent } from 'pikaso'
 
-import { convertUrlToImageFile } from 'utils/file-utils/convert-url-to-image-file'
+import type { Filter as ImageFilter } from '@app/hooks/use-image-filters'
+import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
 
-import { Crop } from './plugins/Crop'
-import { CropActions } from './plugins/Crop/CropActions'
-import { Delete } from './plugins/Delete'
-import { Draw } from './plugins/Draw'
-import { DrawActions } from './plugins/Draw/DrawActions'
-import { Filters } from './plugins/Filters'
-import { FilterActions } from './plugins/Filters/FilterActions'
-import { Flip } from './plugins/Flip'
-import { Image } from './plugins/Image'
-import { Redo } from './plugins/Redo'
-import { Rotate } from './plugins/Rotate'
-import { Text } from './plugins/Text'
-import { TextActions } from './plugins/Text/TextActions'
-import { Undo } from './plugins/Undo'
-import type { Actions, ImageEditor } from './types'
+import { Cropper } from './actions/Crop/Button'
+import { CropMenu } from './actions/Crop/Menu'
+import { Draw } from './actions/Draw/Button'
+import { DrawMenu } from './actions/Draw/Menu'
+import { Filter } from './actions/Filter/Button'
+import { FilterMenu } from './actions/Filter/Menu'
+import { Flip } from './actions/Flip'
+import { Redo } from './actions/History/Redo'
+import { Undo } from './actions/History/Undo'
+import { Image } from './actions/Image/Button'
+import { Rotation } from './actions/Rotation'
+import { Text } from './actions/Text/Button'
+import { TextMenu } from './actions/Text/Menu'
+import { ImageEditorContext } from './context'
+import { Actions, HistoryEvent } from './types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    canvas: ({ canvasWidth }: { canvasWidth: number }) => ({
-      overflow: 'auto',
-      height: '60vh',
-      '& .tui-image-editor-canvas-container': {
-        margin: '0 auto',
-        width: `${canvasWidth}px !important`
-      },
-      '& canvas': {
-        borderRadius: theme.shape.borderRadius
-      }
-    }),
-    menuContainer: {
-      marginTop: theme.spacing(1)
+    editor: {
+      border: `1px solid ${theme.palette.action.hover}`,
+      height: '500px',
+      margin: theme.spacing(2)
     },
     dialogContent: {
       padding: 0
     },
-    menu: {
+    saveButton: {
+      marginLeft: theme.spacing(1)
+    },
+    actionsContainer: {
       width: '100%',
       padding: theme.spacing(1, 2),
       borderTop: `1px solid ${theme.palette.divider}`
     },
-    mainMenu: {
+    actionMenu: {
+      width: '100%',
+      padding: theme.spacing(1, 2),
+      borderTop: `1px solid ${theme.palette.divider}`
+    },
+    actions: {
       '& button': {
         marginRight: theme.spacing(1)
       }
-    },
-    iconsRow: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      flexWrap: 'wrap',
-      marginBottom: theme.spacing(1.25)
-    },
-    horizontalDivider: {
-      margin: theme.spacing(1.5, 0)
-    },
-    saveButton: {
-      marginLeft: theme.spacing(1)
     }
   }),
   {
@@ -80,90 +68,136 @@ const useStyles = makeStyles(
 interface Props {
   file: File | string
   dimensions?: [number, number]
-  onClose: () => void
+  cropperOptions?: {
+    circular?: boolean
+  }
+  onClose: (isSaving?: boolean) => void
   onSave: (image: File) => void
 }
 
-export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
-  const theme = useTheme<Theme>()
-  const ref = useRef<HTMLDivElement | null>(null)
-  const [editor, setEditor] = useState<ImageEditor | null>(null)
-  const [action, setAction] = useState<Actions | null>(null)
-  const [blob, setBlob] = useState<File | null>(null)
-  const [canvasWidth, setCanvasWidth] = useState(0)
-  const classes = useStyles({
-    canvasWidth
+export function EditorDialog({
+  file,
+  dimensions,
+  cropperOptions,
+  onClose,
+  onSave
+}: Props) {
+  const classes = useStyles()
+  const editorRef = useRef<Nullable<HTMLDivElement>>(null)
+
+  const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
+  const [activeAction, setActiveAction] = useState<Actions | null>(null)
+  const [isFocused, setIsFocused] = useState(false)
+  const [activeFilter, setActiveFilter] = useState<Nullable<ImageFilter>>(null)
+  const [history, setHistory] = useState<Nullable<HistoryEvent['data']>>({
+    canRedo: false,
+    canUndo: false,
+    step: 1,
+    total: 1
   })
 
-  const setActiveAction = (action: Actions | null) => setAction(action)
+  const setupEditor = () => {
+    const size = dimensions
+      ? { width: dimensions[0], height: dimensions[1] }
+      : { height: 500 }
 
-  const resizeEditor = () => {
-    if (!ref.current) {
+    const editor = new Pikaso({
+      container: editorRef.current as HTMLDivElement,
+      ...size,
+      selection: {
+        keyboard: {
+          enabled: false
+        } as any
+      }
+    })
+
+    setEditor(editor)
+  }
+
+  useEffect(() => {
+    if (!editor) {
       return
     }
 
-    const canvas = ref.current.getElementsByTagName('canvas')[0]!
+    const load = async () => {
+      const fileBlob =
+        typeof file === 'string' ? await convertUrlToImageFile(file) : file
 
-    const maxHeight = ref.current.clientHeight
-    const ratio =
-      Number(canvas.getAttribute('width')!) /
-      Number(canvas.getAttribute('height')!)
-    const width = maxHeight * ratio
+      await editor.loadFromFile(fileBlob)
+    }
 
-    setCanvasWidth(width)
-  }
+    load()
+  }, [editor, file])
 
-  const setupEditor = async () => {
-    const TuiImageEditor = (await import('tui-image-editor')).default
+  useEffect(() => {
+    if (activeAction !== 'crop' && editor?.cropper.isActive) {
+      editor.cropper.stop()
+    }
+  }, [editor, activeAction])
 
-    const editor = new TuiImageEditor(ref.current!, {
-      usageStatistics: false,
-      selectionStyle: {
-        cornerSize: 15,
-        rotatingPointOffset: 35,
-        lineWidth: 5
+  useEffect(() => {
+    const onSelectionChange = (e: EventListenerCallbackEvent) => {
+      if ((e.shapes?.length ?? 0) > 1) {
+        editor?.selection.deselectAll()
+        e.shapes?.[0].select()
       }
-    }) as ImageEditor
+    }
 
-    editor._graphics.setCropSelectionStyle({
-      cornerColor: theme.palette.secondary.main,
-      cornerSize: 15
-    })
+    const updateHistory = (e: HistoryEvent) =>
+      setHistory({
+        ...e.data,
+        canUndo: e.data.step > 1
+      })
 
-    setEditor(editor as ImageEditor)
+    const onHistoryChange = (e: EventListenerCallbackEvent) => {
+      setHistory({
+        canRedo:
+          editor!.history.getStep() < editor!.history.getList().length - 1,
+        canUndo: editor!.history.getStep() > 1,
+        total: editor!.history.getList().length,
+        step: editor!.history.getStep()
+      })
+    }
 
-    const [blob, fileName] =
-      typeof file === 'string'
-        ? [await convertUrlToImageFile(file), undefined]
-        : [file, file.name]
+    editor?.on('selection:change', onSelectionChange)
+    editor?.on(['history:undo', 'history:redo'], updateHistory)
+    editor?.on('*', onHistoryChange)
 
-    setBlob(blob)
+    return () => {
+      editor?.off('selection:change', onSelectionChange)
+      editor?.off(['history:undo', 'history:redo'], updateHistory)
+      editor?.off('*', onHistoryChange)
+    }
+  }, [editor])
 
-    await editor.loadImageFromFile(blob as File, fileName)
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (isFocused && (e.key === 'Backspace' || e.key === 'Delete')) {
+        editor?.selection.list.forEach(shape => shape.delete())
+      }
+    }
 
-    resizeEditor()
+    window.addEventListener('keyup', handleKeyPress)
 
-    editor.clearUndoStack()
-
-    // https://github.com/fabricjs/fabric.js/issues/3695#issuecomment-353360365
-    document
-      .querySelector('#editor-dialog .MuiDialog-container')!
-      .removeAttribute('tabindex')
-  }
+    return () => {
+      window.removeEventListener('keyup', handleKeyPress)
+    }
+  }, [editor, isFocused])
 
   const handleSave = async () => {
-    if (editor && action === 'crop') {
-      await editor.crop(editor.getCropzoneRect())
-      editor.stopDrawingMode()
+    if (activeAction === 'crop') {
+      editor?.cropper.crop()
+      setActiveAction(null)
     }
 
     const file = await convertUrlToImageFile(
-      editor!.toDataURL({
-        quality: 1
+      editor!.export.toImage({
+        quality: 2
       })
     )
 
     onSave(file)
+    onClose(true)
   }
 
   return (
@@ -178,7 +212,7 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
         <Box display="flex" alignItems="center" justifyContent="space-between">
           Edit Photo
           <div>
-            <Button variant="text" onClick={onClose}>
+            <Button variant="text" onClick={() => onClose(false)}>
               Cancel
             </Button>
 
@@ -193,107 +227,60 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
           </div>
         </Box>
       </DialogTitle>
+
       <DialogContent className={classes.dialogContent}>
-        <Box>
-          <div ref={ref} className={classes.canvas} />
+        <ClickAwayListener onClickAway={() => setIsFocused(false)}>
+          <div
+            ref={editorRef}
+            className={classes.editor}
+            onClick={() => setIsFocused(true)}
+          />
+        </ClickAwayListener>
+
+        <ImageEditorContext.Provider
+          value={{
+            editor,
+            activeAction,
+            history,
+            setActiveAction,
+            activeFilter,
+            setActiveFilter
+          }}
+        >
+          {activeAction && (
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              className={classes.actionMenu}
+            >
+              {activeAction === 'crop' && <CropMenu options={cropperOptions} />}
+              {activeAction === 'draw' && <DrawMenu />}
+              {activeAction === 'text' && <TextMenu />}
+              {activeAction === 'filter' && <FilterMenu file={file} />}
+            </Box>
+          )}
 
           <Box
             display="flex"
-            flexDirection="column"
             justifyContent="space-between"
-            className={classes.menuContainer}
+            className={classes.actionsContainer}
           >
-            {editor && (
-              <>
-                {action && (
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    className={classes.menu}
-                  >
-                    {action === 'crop' && (
-                      <CropActions
-                        editor={editor}
-                        onChangeActiveAction={setActiveAction}
-                        onCrop={resizeEditor}
-                      />
-                    )}
+            <Box display="flex" className={classes.actions}>
+              <Cropper options={cropperOptions} />
+              <Rotation />
+              <Flip />
+              <Draw />
+              <Text />
+              <Image />
+              <Filter />
+            </Box>
 
-                    {action === 'draw' && (
-                      <DrawActions
-                        editor={editor}
-                        onChangeActiveAction={setActiveAction}
-                      />
-                    )}
-
-                    {action === 'text' && (
-                      <TextActions
-                        editor={editor}
-                        onChangeActiveAction={setActiveAction}
-                      />
-                    )}
-
-                    {action === 'filter' && blob && (
-                      <FilterActions
-                        editor={editor}
-                        file={blob}
-                        onChangeActiveAction={setActiveAction}
-                      />
-                    )}
-                  </Box>
-                )}
-
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  className={classes.menu}
-                >
-                  <Box display="flex" className={classes.mainMenu}>
-                    {dimensions && (
-                      <Crop
-                        editor={editor}
-                        isActive={action === 'crop'}
-                        width={dimensions[0]}
-                        height={dimensions[1]}
-                        onChangeActiveAction={setActiveAction}
-                      />
-                    )}
-
-                    <Rotate editor={editor} onRotate={resizeEditor} />
-
-                    <Flip editor={editor} />
-
-                    <Draw
-                      editor={editor}
-                      isActive={action === 'draw'}
-                      onChangeActiveAction={setActiveAction}
-                    />
-
-                    <Text
-                      editor={editor}
-                      isActive={action === 'text'}
-                      onChangeActiveAction={setActiveAction}
-                    />
-
-                    <Image editor={editor} />
-
-                    <Filters
-                      editor={editor}
-                      isActive={action === 'filter'}
-                      onChangeActiveAction={setActiveAction}
-                    />
-                  </Box>
-
-                  <Box display="flex">
-                    <Redo editor={editor} onRedo={resizeEditor} />
-                    <Undo editor={editor} onUndo={resizeEditor} />
-                    <Delete editor={editor} />
-                  </Box>
-                </Box>
-              </>
-            )}
+            <Box display="flex">
+              <Redo />
+              <Undo />
+            </Box>
           </Box>
-        </Box>
+        </ImageEditorContext.Provider>
       </DialogContent>
     </Dialog>
   )
