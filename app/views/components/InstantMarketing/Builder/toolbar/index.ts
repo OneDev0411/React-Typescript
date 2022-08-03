@@ -53,11 +53,11 @@ function registerImageToolbarButtons(
   }
 
   toolbar.unshift(
-    {
-      name: EDIT_IMAGE_TOOLBAR_BUTTON_NAME,
-      attributes: { class: 'fa fa-file-image-o image-filter' },
-      command: () => editor.runCommand('call-fn', { fn: onQuickFiltersClick })
-    },
+    // {
+    //   name: EDIT_IMAGE_TOOLBAR_BUTTON_NAME,
+    //   attributes: { class: 'fa fa-file-image-o image-filter' },
+    //   command: () => editor.runCommand('call-fn', { fn: onQuickFiltersClick })
+    // },
     {
       name: EDIT_IMAGE_TOOLBAR_BUTTON_NAME,
       attributes: { class: 'fa fa-pencil image' },
