@@ -9,7 +9,6 @@ import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
 import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
 import { getField } from 'models/Deal/helpers/context/get-field'
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
-import { isValidDate } from 'utils/date-times/is-valid-date'
 
 import { UnlinkFieldButton } from '../../../../components/UnlinkFieldButton'
 import { formatDate } from '../../../../utils/format-date'
@@ -62,12 +61,6 @@ export function ContextField(props) {
   const formatValue = () => {
     if (props.annotation.format === 'NumeralCurrency' && props.value) {
       return toWords.convert(Number(props.value.replace(/[^0-9.-]+/g, '')))
-    }
-
-    if (context.current?.data_type === 'Date' && props.value) {
-      return isValidDate(new Date(props.value))
-        ? formatDate(props.value, props.annotation.format)
-        : props.value
     }
 
     return props.value
