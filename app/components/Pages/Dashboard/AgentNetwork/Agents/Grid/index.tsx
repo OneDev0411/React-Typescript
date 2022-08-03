@@ -38,7 +38,7 @@ export default function AgentsGrid({
     setSelectedSide(side)
   }
 
-  if (agents?.length === 0) {
+  if (agents === null || agents?.length === 0) {
     return (
       <Grid
         container
