@@ -38,7 +38,35 @@ export default function AgentsGrid({
     setSelectedSide(side)
   }
 
-  if (agents === null || agents?.length === 0) {
+  if (
+    listing &&
+    listing.property.address.location.latitude === null &&
+    listing.property.address.location.longitude === null
+  ) {
+    return (
+      <Grid
+        container
+        item
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Box my={2}>
+          <img
+            src="/static/images/contacts/zero-state.svg"
+            alt="houston"
+            style={{ marginBottom: '1rem' }}
+          />
+        </Box>
+        <Typography variant="h5" align="center">
+          The agent network cannot function on a listing <br /> without an
+          address, please choose another listing
+        </Typography>
+      </Grid>
+    )
+  }
+
+  if (agents?.length === 0) {
     return (
       <Grid
         container
