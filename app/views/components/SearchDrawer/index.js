@@ -90,6 +90,17 @@ class SearchDrawer extends React.Component {
   }
 
   handleSelectItem = item => {
+    // if selected item is a deal with no listing
+    if (
+      item.type === 'deal' &&
+      !item.listing &&
+      this.props.onSelectDealWithNoListing
+    ) {
+      this.props.onSelectDealWithNoListing()
+
+      return
+    }
+
     if (this.props.multipleSelection) {
       return this.handleAddNewItem(item)
     }
@@ -262,7 +273,8 @@ SearchDrawer.propTypes = {
   ),
   forceRenderFooter: PropTypes.bool,
   selectedItems: PropTypes.object.isRequired,
-  onChangeSelectedItems: PropTypes.func.isRequired
+  onChangeSelectedItems: PropTypes.func.isRequired,
+  onSelectDealWithNoListing: PropTypes.func
 }
 
 export default SearchDrawer
