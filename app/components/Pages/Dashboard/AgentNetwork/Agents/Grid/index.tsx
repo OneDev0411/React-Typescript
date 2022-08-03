@@ -1,9 +1,8 @@
 import { useState } from 'react'
 
-import { Grid, Box, Typography } from '@material-ui/core'
-
 import { AgentWithStats } from '@app/models/agent-network/get-agents'
 import { GridProvider } from 'components/Grid/Table'
+import { ZeroState } from 'partials/ZeroState'
 
 import { AgentSide, ListingWithProposedAgent } from '../types'
 
@@ -44,49 +43,24 @@ export default function AgentsGrid({
     listing.property.address.location.longitude === null
   ) {
     return (
-      <Grid
-        container
-        item
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Box my={2}>
-          <img
-            src="/static/images/contacts/zero-state.svg"
-            alt="houston"
-            style={{ marginBottom: '1rem' }}
-          />
-        </Box>
-        <Typography variant="h5" align="center">
-          The agent network cannot function on a listing <br /> without an
-          address, please choose another listing
-        </Typography>
-      </Grid>
+      <>
+        <ZeroState
+          imageUrl="/static/images/zero-state/agents-network.png"
+          title="Location Not Found"
+          subTitle="The agent network cannot function on a listing without an
+          address, please choose another listing"
+        />
+      </>
     )
   }
 
   if (agents?.length === 0) {
     return (
-      <Grid
-        container
-        item
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Box my={2}>
-          <img
-            src="/static/images/contacts/zero-state.svg"
-            alt="houston"
-            style={{ marginBottom: '1rem' }}
-          />
-        </Box>
-        <Typography variant="h5" align="center">
-          No matching agents found. <br />
-          You can try and search something else or change the filters.
-        </Typography>
-      </Grid>
+      <ZeroState
+        imageUrl="/static/images/contacts/zero-state.svg"
+        title="No matching agents found."
+        subTitle="You can try and search something else or change the filters."
+      />
     )
   }
 
