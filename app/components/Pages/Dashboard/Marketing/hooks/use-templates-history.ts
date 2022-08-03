@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { deleteTemplateInstance } from 'models/instant-marketing/delete-template-instance'
 import { getHistory } from 'models/instant-marketing/get-history'
 
-const DEFAULT_TEMPLATE_MEDIUMS: IMarketingTemplateMedium[] = [
+export const DEFAULT_TEMPLATE_MEDIUMS: IMarketingTemplateMedium[] = [
   'Email',
   'Social',
   'Letter',
@@ -15,6 +15,16 @@ const DEFAULT_TEMPLATE_MEDIUMS: IMarketingTemplateMedium[] = [
   'YouTubeCover'
 ]
 
+export const DEFAULT_TEMPLATE_ASSOCIATIONS = ['template_instance.template']
+
+export const DEFAULT_TEMPLATE_OMIT = ['template_instance.html']
+
+export const USE_TEMPLATE_HISTORY_DEFAULT_OPTION: TemplatesHistoryOptions = {
+  mediums: DEFAULT_TEMPLATE_MEDIUMS,
+  associations: DEFAULT_TEMPLATE_ASSOCIATIONS,
+  omit: DEFAULT_TEMPLATE_OMIT
+}
+
 interface TemplatesHistory {
   templates: IMarketingTemplateInstance[]
   isLoading: boolean
@@ -25,13 +35,18 @@ interface TemplatesHistory {
 interface TemplatesHistoryOptions {
   mediums?: IMarketingTemplateMedium[]
   templateTypes?: IMarketingTemplateType[]
+  associations: string[]
+  omit?: string[]
+  limit?: number
 }
 
-export function useTemplatesHistory(
-  { mediums, templateTypes }: TemplatesHistoryOptions = {
-    mediums: DEFAULT_TEMPLATE_MEDIUMS
-  }
-): TemplatesHistory {
+export function useTemplatesHistory({
+  mediums,
+  templateTypes,
+  associations,
+  omit,
+  limit
+}: TemplatesHistoryOptions = USE_TEMPLATE_HISTORY_DEFAULT_OPTION): TemplatesHistory {
   const [templates, setTemplates] = useState<IMarketingTemplateInstance[]>([])
   const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -45,14 +60,11 @@ export function useTemplatesHistory(
 
         // get templates history
         const templates = await getHistory({
-          'associations[]': [
-            'template_instance.template',
-            'template_instance.deals',
-            'template_instance.contacts',
-            'template_instance.listings'
-          ],
+          'associations[]': associations,
+          'omit[]': omit,
           'mediums[]': mediums,
-          'templateTypes[]': templateTypes
+          'templateTypes[]': templateTypes,
+          limit
         })
 
         // Setting states
@@ -76,7 +88,7 @@ export function useTemplatesHistory(
     return () => {
       didCancel = true
     }
-  }, [mediums, templateTypes])
+  }, [associations, limit, mediums, omit, templateTypes])
 
   async function deleteTemplate(id: UUID): Promise<void> {
     await deleteTemplateInstance(id)

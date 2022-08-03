@@ -6,7 +6,10 @@ import CardSkeleton from 'components/CardSkeleton'
 import TemplateInstanceCard from 'components/TemplateInstanceCard'
 import TemplateAction from 'components/TemplatesList/TemplateAction'
 
-import { useTemplatesHistory } from '../../../hooks/use-templates-history'
+import {
+  useTemplatesHistory,
+  USE_TEMPLATE_HISTORY_DEFAULT_OPTION
+} from '../../../hooks/use-templates-history'
 import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
 
@@ -23,7 +26,10 @@ const useStyles = makeStyles(
 
 export default function MyDesignsSection() {
   const classes = useStyles()
-  const { templates, isLoading } = useTemplatesHistory()
+  const { templates, isLoading } = useTemplatesHistory({
+    ...USE_TEMPLATE_HISTORY_DEFAULT_OPTION,
+    limit: 2
+  })
   const [isTemplateInstanceClicked, setIsTemplateInstanceClicked] =
     useState<boolean>(false)
 
@@ -84,8 +90,9 @@ export default function MyDesignsSection() {
             ))}
         </>
       </SectionLayout>
-      {selectedTemplateInstance && (
+      {selectedTemplateInstance && isTemplateInstanceClicked && (
         <TemplateAction
+          shouldLoadTemplateInstance
           type={selectedTemplateInstance.template.type}
           medium={selectedTemplateInstance.template.medium}
           isEdit

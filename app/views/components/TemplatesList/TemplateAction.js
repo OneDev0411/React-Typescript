@@ -1,5 +1,9 @@
+import { useState, useEffect, useCallback } from 'react'
+
 import { withRouter } from 'react-router'
 
+import useNotify from '@app/hooks/use-notify'
+import { getTemplateInstance } from '@app/models/instant-marketing/get-template-instance'
 import {
   isBrandAsset,
   convertToTemplate,
@@ -7,6 +11,8 @@ import {
   getTemplateType
 } from '@app/utils/marketing-center/helpers'
 import SocialDrawer from '@app/views/components/InstantMarketing/components/SocialDrawer'
+import LoadingContainer from '@app/views/components/LoadingContainer'
+import Drawer from '@app/views/components/OverlayDrawer'
 import GeneralFlow from 'components/InstantMarketing/adapters/General'
 import PublishWebsiteFlow from 'components/InstantMarketing/adapters/PublishWebsite'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
@@ -82,18 +88,68 @@ const CONTACT_FLOW_TYPES = ['WeddingAnniversary', 'HomeAnniversary']
 const WEBSITE_FLOW_TYPES = ['Listing', 'Agent', 'Listings', 'CMA']
 
 function TemplateAction(props) {
-  const { isEdit } = props
+  const {
+    isEdit,
+    setTriggered,
+    setEditActionTriggered,
+    shouldLoadTemplateInstance
+  } = props
+  const notify = useNotify()
   const medium = getMedium(props)
+  const [templateInstance, setTemplateInstance] = useState(
+    props.selectedTemplate
+  )
+  const [isLoadingTemplateInstance, setIsLoadingTemplateInstance] = useState(
+    shouldLoadTemplateInstance
+  )
+
+  const templateInstanceId = templateInstance?.id
+
+  const handleTrigger = useCallback(() => {
+    setTriggered(false)
+    setEditActionTriggered(false)
+  }, [setEditActionTriggered, setTriggered])
 
   const sharedProps = {
     mediums: medium,
-    selectedTemplate: props.selectedTemplate,
+    selectedTemplate: templateInstance,
     isTriggered: props.isTriggered,
     isEdit,
-    handleTrigger: () => {
-      props.setTriggered(false)
-      props.setEditActionTriggered(false)
+    handleTrigger
+  }
+
+  useEffect(() => {
+    async function loadTemplateInstance() {
+      setIsLoadingTemplateInstance(true)
+
+      try {
+        const templateInstance = await getTemplateInstance(templateInstanceId)
+
+        setTemplateInstance(templateInstance)
+      } catch {
+        notify({
+          status: 'error',
+          message: 'Could not load the template instance. Please try again.'
+        })
+        handleTrigger()
+      } finally {
+        setIsLoadingTemplateInstance(false)
+      }
     }
+
+    if (shouldLoadTemplateInstance && templateInstanceId) {
+      loadTemplateInstance()
+    }
+  }, [templateInstanceId, shouldLoadTemplateInstance, notify, handleTrigger])
+
+  if (isLoadingTemplateInstance) {
+    return (
+      <Drawer open>
+        <Drawer.Body>
+          <LoadingContainer title="Preparing template data..." />
+        </Drawer.Body>
+      </Drawer>
+    )
   }
 
   if (isEdit && !props.isTriggered) {
@@ -101,21 +157,17 @@ function TemplateAction(props) {
   }
 
   if (
-    props.selectedTemplate &&
-    isBrandAsset(props.selectedTemplate) &&
+    templateInstance &&
+    isBrandAsset(templateInstance) &&
     !props.isTriggered
   ) {
     return null
   }
 
-  if (
-    props.selectedTemplate &&
-    isBrandAsset(props.selectedTemplate) &&
-    props.isTriggered
-  ) {
+  if (templateInstance && isBrandAsset(templateInstance) && props.isTriggered) {
     return (
       <SocialDrawer
-        brandAsset={props.selectedTemplate}
+        brandAsset={templateInstance}
         onClose={sharedProps.handleTrigger}
       />
     )
@@ -126,23 +178,23 @@ function TemplateAction(props) {
       <ShareInstance
         {...sharedProps}
         hasExternalTrigger
-        instance={props.selectedTemplate}
+        instance={templateInstance}
       />
     )
   }
 
-  const templateType = getTemplateType(props.type, props.selectedTemplate)
+  const templateType = getTemplateType(props.type, templateInstance)
   const isBirthdaySocial = templateType === 'Birthday' && medium === 'Social'
 
-  sharedProps.selectedTemplate = convertToTemplate(props.selectedTemplate)
+  sharedProps.selectedTemplate = convertToTemplate(templateInstance)
 
   // TODO: Refactor this logic as it's not right and it's fragile!
   // There's a "inputs" (inputs: string[]) key inside the template which we should check it for deciding about the flow!
   // We should check that inputs and use it for showing the proper flow based on template needs.
 
   if (
-    props.selectedTemplate &&
-    getTemplateObject(props.selectedTemplate).variant === SAVED_TEMPLATE_VARIANT
+    templateInstance &&
+    getTemplateObject(templateInstance).variant === SAVED_TEMPLATE_VARIANT
   ) {
     return (
       <GeneralFlow
