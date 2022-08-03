@@ -26,10 +26,22 @@ export function AnnotationWrapper(props) {
             ? searchContext(props.deal, brandChecklists, annotation.context)
             : null
 
-          const { appearance, rects, values, fontSize } = calculateWordWrap(
-            annotations,
-            getFormValue(props.values, annotations, context, annotation.format)
+          const formValue = getFormValue(props.values, annotations)
+          const formattedValue = getFormattedValue(
+            formValue,
+            annotation,
+            context
           )
+
+          const { appearance, rects, values, formValueFontSize } =
+            calculateWordWrap(annotations, formValue)
+
+          let fontSize = formValueFontSize
+
+          // it requires to recalculte font-size for formatted values
+          if (formattedValue && formattedValue !== formValue) {
+            fontSize = calculateWordWrap(annotations, formattedValue).fontSize
+          }
 
           return rects.map((rect, index) => {
             const key = `${annotation.annotation.fieldName}-${index}`
@@ -88,18 +100,24 @@ export function AnnotationWrapper(props) {
   )
 }
 
-function getFormValue(values, annotations, context, format) {
+function getFormValue(values, annotations) {
   const valueList = annotations
-    .map(annotation => {
-      const value = values[annotation.fieldName]
-
-      if (context?.data_type === 'Date' && !!format && !!value) {
-        return isValidDate(new Date(value)) ? formatDate(value, format) : value
-      }
-
-      return value
-    })
+    .map(annotation => values[annotation.fieldName])
     .filter(Boolean)
 
   return valueList.length > 0 ? valueList.join(' ') : undefined
+}
+
+function getFormattedValue(value, annotation, context) {
+  if (!value) {
+    return value
+  }
+
+  if (context?.data_type === 'Date' && !!annotation.format) {
+    return isValidDate(new Date(value))
+      ? formatDate(value, annotation.format)
+      : value
+  }
+
+  return value
 }
