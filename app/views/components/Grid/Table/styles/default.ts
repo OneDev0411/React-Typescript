@@ -35,6 +35,11 @@ export const styles = (theme: Theme) =>
           color: theme.palette.secondary.main
         }
       },
+      '&.has-inline-edit': {
+        '&:hover .column': {
+          backgroundColor: theme.palette.grey[200]
+        }
+      },
       '& .inline-edit': {
         position: 'relative',
         '& .inline-edit-icon': {
@@ -53,7 +58,7 @@ export const styles = (theme: Theme) =>
           visibility: 'visible'
         },
         '&:hover': {
-          boxShadow: `inset 0px 0px 0px 2px ${theme.palette.primary.main} !important`,
+          boxShadow: `inset 0px 0px 0px 1.5px ${theme.palette.primary.main} !important`,
           borderRadius: theme.shape.borderRadius
         }
       }
