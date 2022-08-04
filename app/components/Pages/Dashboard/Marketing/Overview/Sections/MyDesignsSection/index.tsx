@@ -90,7 +90,7 @@ export default function MyDesignsSection() {
             ))}
         </>
       </SectionLayout>
-      {selectedTemplateInstance && isTemplateInstanceClicked && (
+      {selectedTemplateInstance && (
         <TemplateAction
           shouldLoadTemplateInstance
           type={selectedTemplateInstance.template.type}

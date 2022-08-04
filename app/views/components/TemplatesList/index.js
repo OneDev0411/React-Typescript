@@ -312,9 +312,9 @@ function TemplatesList(props) {
         }}
       />
 
-      {selectedTemplate && isActionTriggered && (
+      {selectedTemplate && (
         <TemplateAction
-          shouldLoadTemplateInstance
+          shouldLoadTemplateInstance={props.type === 'history'}
           type={props.type}
           medium={props.medium}
           isEdit={isEditActionTriggered}

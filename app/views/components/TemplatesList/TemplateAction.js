@@ -91,29 +91,30 @@ function TemplateAction(props) {
   const {
     isEdit,
     setTriggered,
+    isTriggered,
+    selectedTemplate,
     setEditActionTriggered,
     shouldLoadTemplateInstance
   } = props
   const notify = useNotify()
   const medium = getMedium(props)
-  const [templateInstance, setTemplateInstance] = useState(
-    props.selectedTemplate
-  )
+  const [templateInstance, setTemplateInstance] = useState(null)
   const [isLoadingTemplateInstance, setIsLoadingTemplateInstance] = useState(
     shouldLoadTemplateInstance
   )
 
-  const templateInstanceId = templateInstance?.id
+  const templateInstanceId = selectedTemplate?.id
 
   const handleTrigger = useCallback(() => {
     setTriggered(false)
     setEditActionTriggered(false)
+    setTemplateInstance(null)
   }, [setEditActionTriggered, setTriggered])
 
   const sharedProps = {
     mediums: medium,
-    selectedTemplate: templateInstance,
-    isTriggered: props.isTriggered,
+    selectedTemplate: templateInstance ?? selectedTemplate,
+    isTriggered,
     isEdit,
     handleTrigger
   }
@@ -123,9 +124,9 @@ function TemplateAction(props) {
       setIsLoadingTemplateInstance(true)
 
       try {
-        const templateInstance = await getTemplateInstance(templateInstanceId)
+        const selectedTemplate = await getTemplateInstance(templateInstanceId)
 
-        setTemplateInstance(templateInstance)
+        setTemplateInstance(selectedTemplate)
       } catch {
         notify({
           status: 'error',
@@ -137,10 +138,16 @@ function TemplateAction(props) {
       }
     }
 
-    if (shouldLoadTemplateInstance && templateInstanceId) {
+    if (isTriggered && shouldLoadTemplateInstance && templateInstanceId) {
       loadTemplateInstance()
     }
-  }, [templateInstanceId, shouldLoadTemplateInstance, notify, handleTrigger])
+  }, [
+    templateInstanceId,
+    shouldLoadTemplateInstance,
+    isTriggered,
+    notify,
+    handleTrigger
+  ])
 
   if (isLoadingTemplateInstance) {
     return (
@@ -152,22 +159,26 @@ function TemplateAction(props) {
     )
   }
 
-  if (isEdit && !props.isTriggered) {
+  if (isEdit && !isTriggered) {
     return null
   }
 
   if (
-    templateInstance &&
-    isBrandAsset(templateInstance) &&
-    !props.isTriggered
+    sharedProps.selectedTemplate &&
+    isBrandAsset(sharedProps.selectedTemplate) &&
+    !isTriggered
   ) {
     return null
   }
 
-  if (templateInstance && isBrandAsset(templateInstance) && props.isTriggered) {
+  if (
+    sharedProps.selectedTemplate &&
+    isBrandAsset(sharedProps.selectedTemplate) &&
+    isTriggered
+  ) {
     return (
       <SocialDrawer
-        brandAsset={templateInstance}
+        brandAsset={sharedProps.selectedTemplate}
         onClose={sharedProps.handleTrigger}
       />
     )
@@ -178,23 +189,24 @@ function TemplateAction(props) {
       <ShareInstance
         {...sharedProps}
         hasExternalTrigger
-        instance={templateInstance}
+        instance={sharedProps.selectedTemplate}
       />
     )
   }
 
-  const templateType = getTemplateType(props.type, templateInstance)
+  const templateType = getTemplateType(props.type, sharedProps.selectedTemplate)
   const isBirthdaySocial = templateType === 'Birthday' && medium === 'Social'
 
-  sharedProps.selectedTemplate = convertToTemplate(templateInstance)
+  sharedProps.selectedTemplate = convertToTemplate(sharedProps.selectedTemplate)
 
   // TODO: Refactor this logic as it's not right and it's fragile!
   // There's a "inputs" (inputs: string[]) key inside the template which we should check it for deciding about the flow!
   // We should check that inputs and use it for showing the proper flow based on template needs.
 
   if (
-    templateInstance &&
-    getTemplateObject(templateInstance).variant === SAVED_TEMPLATE_VARIANT
+    sharedProps.selectedTemplate &&
+    getTemplateObject(sharedProps.selectedTemplate).variant ===
+      SAVED_TEMPLATE_VARIANT
   ) {
     return (
       <GeneralFlow
