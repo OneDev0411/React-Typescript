@@ -36,7 +36,7 @@ export function DealCard({ dealSide, isCreatingDeal }: Props) {
     wizard.setLoading(isCreatingDeal)
   }, [wizard, step, isCreatingDeal])
 
-  if (!deal) {
+  if (!deal?.checklists) {
     return null
   }
 
