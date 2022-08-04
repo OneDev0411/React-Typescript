@@ -33,8 +33,12 @@ export function AnnotationWrapper(props) {
             context
           )
 
-          const { appearance, rects, values, formValueFontSize } =
-            calculateWordWrap(annotations, formValue)
+          const {
+            appearance,
+            rects,
+            values,
+            fontSize: formValueFontSize
+          } = calculateWordWrap(annotations, formValue)
 
           let fontSize = formValueFontSize
 
