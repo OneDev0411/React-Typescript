@@ -16,6 +16,7 @@ const useStyles = makeStyles(
     root: {
       paddingRight: theme.spacing(2),
       overflow: 'hidden',
+      whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
       '-webkit-line-clamp': 2,
       display: '-webkit-box',
@@ -33,11 +34,23 @@ function CalendarListItemText({ event }: Props) {
   const baseTitle = getTitle(event)
   const getEventTitle = () => {
     if (isDealEvent(event)) {
-      return <Link to={`/dashboard/deals/${event.deal}`}>{baseTitle}</Link>
+      return (
+        <Link to={`/dashboard/deals/${event.deal}`}>
+          {baseTitle.length > 20
+            ? `${baseTitle.substring(0, 20)}...`
+            : baseTitle}
+        </Link>
+      )
     }
 
     if (contact) {
-      return <Link to={`/dashboard/contacts/${contact.id}`}>{baseTitle}</Link>
+      return (
+        <Link to={`/dashboard/contacts/${contact.id}`}>
+          {baseTitle.length > 20
+            ? `${baseTitle.substring(0, 20)}...`
+            : baseTitle}
+        </Link>
+      )
     }
 
     return baseTitle
