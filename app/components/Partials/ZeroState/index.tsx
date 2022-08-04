@@ -30,7 +30,7 @@ const useStyles = makeStyles(
     },
     image: {
       flexBasis: '50%',
-      paddingRight: theme.spacing(3)
+      paddingRight: theme.spacing(1)
     },
     message: {
       display: 'flex',
@@ -60,7 +60,7 @@ export function ZeroState({
       <Box className={classes.container}>
         <Box className={classes.main}>
           <Box className={classes.image}>
-            <img src={imageUrl} alt="zero results" width="400" />
+            <img src={imageUrl} alt="zero results" width="300" />
           </Box>
           <Box className={classes.message}>
             <Box>
