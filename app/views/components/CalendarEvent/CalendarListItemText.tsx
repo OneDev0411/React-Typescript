@@ -5,6 +5,7 @@ import { ListItemText, makeStyles, Theme } from '@material-ui/core'
 import { convertTimestampToDate, fromNow } from '@app/utils/date-utils'
 import { isDealEvent } from '@app/views/components/GridCalendar/helpers/normalize-events/helpers/event-checker'
 import { getTitle } from '@app/views/components/GridCalendar/helpers/normalize-events/helpers/get-title'
+import { TextMiddleTruncate } from '@app/views/components/TextMiddleTruncate'
 import Link from 'components/ALink'
 
 interface Props {
@@ -20,7 +21,8 @@ const useStyles = makeStyles(
       textOverflow: 'ellipsis',
       '-webkit-line-clamp': 2,
       display: '-webkit-box',
-      '-webkit-box-orient': 'vertical'
+      '-webkit-box-orient': 'vertical',
+      width: '100%'
     }
   }),
   { name: 'CalendarListItemText' }
@@ -36,9 +38,7 @@ function CalendarListItemText({ event }: Props) {
     if (isDealEvent(event)) {
       return (
         <Link to={`/dashboard/deals/${event.deal}`}>
-          {baseTitle.length > 20
-            ? `${baseTitle.substring(0, 20)}...`
-            : baseTitle}
+          <TextMiddleTruncate text={baseTitle} maxLength={20} />
         </Link>
       )
     }
@@ -46,9 +46,7 @@ function CalendarListItemText({ event }: Props) {
     if (contact) {
       return (
         <Link to={`/dashboard/contacts/${contact.id}`}>
-          {baseTitle.length > 20
-            ? `${baseTitle.substring(0, 20)}...`
-            : baseTitle}
+          <TextMiddleTruncate text={baseTitle} maxLength={20} />
         </Link>
       )
     }
