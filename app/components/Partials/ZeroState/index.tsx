@@ -7,6 +7,7 @@ export interface Props {
   subTitle: React.ReactNode
   ctaNode?: React.ReactNode
   footerNode?: React.ReactNode
+  imageWidth?: string
 }
 
 const useStyles = makeStyles(
@@ -50,7 +51,8 @@ export function ZeroState({
   title,
   subTitle,
   ctaNode,
-  footerNode
+  footerNode,
+  imageWidth
 }: Props) {
   const theme = useTheme<Theme>()
   const classes = useStyles()
@@ -60,7 +62,11 @@ export function ZeroState({
       <Box className={classes.container}>
         <Box className={classes.main}>
           <Box className={classes.image}>
-            <img src={imageUrl} alt="zero results" width="300" />
+            <img
+              src={imageUrl}
+              alt="zero results"
+              width={imageWidth || '400'}
+            />
           </Box>
           <Box className={classes.message}>
             <Box>

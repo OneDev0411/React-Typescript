@@ -43,26 +43,23 @@ export default function AgentsGrid({
     listing.property.address.location.longitude === null
   ) {
     return (
-      <GridProvider>
-        <ZeroState
-          imageUrl="/static/images/zero-state/agents-network.png"
-          title="Location Not Found"
-          subTitle="The agent network cannot function on a listing without an
-          address, please choose another listing"
-        />
-      </GridProvider>
+      <ZeroState
+        imageUrl="/static/images/zero-state/agents-network.png"
+        title="Location Not Found"
+        subTitle="The agent network cannot function on a listing without an
+          address, please choose another listing."
+      />
     )
   }
 
   if (agents?.length === 0) {
     return (
-      <GridProvider>
-        <ZeroState
-          imageUrl="/static/images/contacts/zero-state.svg"
-          title="No matching agents found."
-          subTitle="You can try and search something else or change the filters."
-        />
-      </GridProvider>
+      <ZeroState
+        imageUrl="/static/images/contacts/zero-state.svg"
+        imageWidth="300"
+        title="No matching agents found."
+        subTitle="You can try and search something else or change the filters."
+      />
     )
   }
 
