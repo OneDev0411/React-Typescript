@@ -23,7 +23,7 @@ import { updateEmailCampaign } from './helpers/update-email-campaign'
 import { upsertCrmEvents } from './helpers/upsert-crm-events'
 import { CalendarRef, ApiOptions, CrmEventType } from './types'
 
-const MAX_LIMIT_EVENT = 2
+const MAX_LIMIT_EVENT = 10
 
 interface Props {
   filter?: object
@@ -187,11 +187,14 @@ export function Calendar({
       const currentRange = { ...calendarRange }
 
       if (direction === Format.Next) {
-        currentRange.low = getDateRangeFromEvent(events[events.length - 1])
+        currentRange.low = getDateRangeFromEvent(
+          events[events.length - 1],
+          direction
+        )
       }
 
       if (direction === Format.Previous) {
-        currentRange.high = getDateRangeFromEvent(events[0])
+        currentRange.high = getDateRangeFromEvent(events[0], direction)
       }
 
       return currentRange
