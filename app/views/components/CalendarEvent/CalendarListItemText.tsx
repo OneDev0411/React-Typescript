@@ -1,6 +1,11 @@
 import { memo } from 'react'
 
-import { ListItemText, makeStyles, Theme } from '@material-ui/core'
+import {
+  ListItemText,
+  makeStyles,
+  Theme,
+  useMediaQuery
+} from '@material-ui/core'
 
 import { convertTimestampToDate, fromNow } from '@app/utils/date-utils'
 import { isDealEvent } from '@app/views/components/GridCalendar/helpers/normalize-events/helpers/event-checker'
@@ -30,6 +35,9 @@ const useStyles = makeStyles(
 
 function CalendarListItemText({ event }: Props) {
   const classes = useStyles()
+  const isMobileView = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down('xs')
+  )
 
   const contact = event.people?.[0]?.type === 'contact' ? event.people[0] : null
 
@@ -38,7 +46,7 @@ function CalendarListItemText({ event }: Props) {
     if (isDealEvent(event)) {
       return (
         <Link to={`/dashboard/deals/${event.deal}`}>
-          <TextMiddleTruncate text={baseTitle} maxLength={20} />
+          {isMobileView ? <TextMiddleTruncate text={baseTitle} /> : baseTitle}
         </Link>
       )
     }
@@ -46,7 +54,7 @@ function CalendarListItemText({ event }: Props) {
     if (contact) {
       return (
         <Link to={`/dashboard/contacts/${contact.id}`}>
-          <TextMiddleTruncate text={baseTitle} maxLength={20} />
+          {isMobileView ? <TextMiddleTruncate text={baseTitle} /> : baseTitle}
         </Link>
       )
     }
