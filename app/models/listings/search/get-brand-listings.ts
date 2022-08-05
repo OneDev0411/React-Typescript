@@ -4,6 +4,7 @@ export type GetBrandListingsOptions = Partial<{
   status: IListingStatus[]
   property_types: string[]
   property_subtypes: string[]
+  limit?: number
 }>
 
 const DEFAULT_OPTIONS: GetBrandListingsOptions = {
