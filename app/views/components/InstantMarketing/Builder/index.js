@@ -11,6 +11,7 @@ import {
   selectActiveBrandSettings
 } from '@app/selectors/brand'
 import { selectActiveTeamUnsafe } from '@app/selectors/team'
+import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
 import SearchArticleDrawer from '@app/views/components/SearchArticleDrawer'
 import SearchVideoDrawer from '@app/views/components/SearchVideoDrawer'
 import CarouselDrawer from 'components/CarouselDrawer'
@@ -60,6 +61,7 @@ import DeviceManager from './DeviceManager'
 import { addFallbackSrcToImage } from './extensions/add-fallback-src-to-image'
 import { addFallbackSrcToMjImage } from './extensions/add-fallback-src-to-mj-image'
 import { patchConditionalToolbarButtonsIssue } from './extensions/patch-conditional-toolbar-buttons-issue'
+import { ImageQuickFilters } from './ImageQuickFilters'
 import {
   Container,
   Actions,
@@ -103,7 +105,8 @@ class Builder extends React.Component {
       mapToEdit: null,
       carouselToEdit: null,
       videoToEdit: null,
-      matterportToEdit: null
+      matterportToEdit: null,
+      showImageQuickFilters: false
     }
 
     this.selectedTemplateOptions = null
@@ -512,6 +515,14 @@ class Builder extends React.Component {
         )}`
 
         this.setState({ imageToEdit })
+      },
+      onQuickFiltersClick: () => {
+        this.setState({
+          showImageQuickFilters: true,
+          imageToEdit: `/api/utils/cors/${btoa(
+            this.editor.runCommand('get-image')
+          )}`
+        })
       },
       onChangeThemeClick: this.openMapDrawer,
       onManageCarouselClick: this.openCarouselDrawer
@@ -1529,7 +1540,7 @@ class Builder extends React.Component {
               onUpload={this.uploadFile}
             />
           )}
-          {this.state.imageToEdit && (
+          {this.state.imageToEdit && !this.state.showImageQuickFilters && (
             <EditorDialog
               file={this.state.imageToEdit}
               dimensions={
@@ -1776,6 +1787,29 @@ class Builder extends React.Component {
                   />
                 )}
             </div>
+
+            <ImageQuickFilters
+              isOpen={this.state.showImageQuickFilters}
+              image={this.state.imageToEdit}
+              onClose={async image => {
+                this.setState({
+                  imageToEdit: null,
+                  showImageQuickFilters: false
+                })
+
+                if (image) {
+                  const templateId = this.selectedTemplate.id
+                  const uploadedAsset = await uploadAsset(
+                    templateId,
+                    await convertUrlToImageFile(image)
+                  )
+
+                  this.editor.runCommand('set-image', {
+                    value: uploadedAsset.file.url
+                  })
+                }
+              }}
+            />
           </BuilderContainer>
         </Container>
       </Portal>

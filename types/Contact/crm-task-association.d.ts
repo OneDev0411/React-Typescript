@@ -17,4 +17,4 @@ declare type ICRMTaskAssociation<
 } & Association<'contact', IContact | null, Associations> &
   Association<'deal', IDeal | null, Associations> &
   Association<'email', IEmailCampaign | null, Associations> &
-  Association<'listing', any | null, Associations>
+  Association<'listing', IListing | null, Associations>

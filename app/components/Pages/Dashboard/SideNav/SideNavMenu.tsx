@@ -153,6 +153,13 @@ function SideNavMenu(props: WithRouterProps) {
         },
         {
           access: ['CRM'],
+          id: 'tasks',
+          isHidden: !useAcl(['CRM']),
+          label: 'Tasks',
+          to: '/dashboard/tasks'
+        },
+        {
+          access: ['CRM'],
           id: 'inbox',
           isHidden: !useAcl(['CRM']),
           label: 'Inbox',

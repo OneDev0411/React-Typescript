@@ -6,6 +6,8 @@ declare type CRMTaskAssociation =
   // | 'files' Currently we didn't implement this association on the Web APP
   | 'reminders'
 
+declare type ICRMTaskStatus = 'PENDING' | 'DONE'
+
 declare type ICRMTask<
   Associations extends CRMTaskAssociation = '',
   CRMTaskAssociations extends CRMTaskAssociationType = ''
@@ -18,7 +20,7 @@ declare type ICRMTask<
   description: string
   due_date: number
   end_date: number | null
-  status: 'PENDING' | 'DONE'
+  status: ICRMTaskStatus
   task_type: CRMTaskTypes
   metadata: any
   brand: UUID

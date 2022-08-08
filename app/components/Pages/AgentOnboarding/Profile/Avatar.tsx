@@ -56,6 +56,7 @@ export default function ProfileAvatar({ onChange, data }: Props) {
         <ImageUploader
           onSelectImage={handleOnChange}
           editorOptions={{
+            circularCropper: true,
             dimensions: [300, 300]
           }}
         >

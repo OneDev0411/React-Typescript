@@ -48,6 +48,7 @@ interface Props {
   options?: DropzoneOptions
   disableEditor?: boolean
   editorOptions?: {
+    circularCropper?: boolean
     dimensions?: [number, number]
   }
   onSelectImage: (file: File) => void
@@ -149,6 +150,9 @@ export function ImageUploader({
         <EditorDialog
           file={file}
           dimensions={editorOptions.dimensions}
+          cropperOptions={{
+            circular: editorOptions.circularCropper ?? false
+          }}
           onClose={() => setFile(null)}
           onSave={handleSave}
         />

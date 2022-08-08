@@ -49,6 +49,9 @@ function InlineEdit<Row>({
     handleOpen: openMenu
   }))
 
+  const width = columnRef.current?.clientWidth ?? undefined
+  const height = columnRef.current?.clientHeight ?? undefined
+
   return (
     <>
       <IconButton
@@ -75,13 +78,24 @@ function InlineEdit<Row>({
           vertical: 'top',
           horizontal: 'left'
         }}
+        style={column.inlineEditStyles?.popover?.({
+          width,
+          height
+        })}
+        PaperProps={{
+          style: column.inlineEditStyles?.paper
+        }}
         onClose={closeMenu}
       >
         <div
           style={{
-            minWidth: columnRef.current?.clientWidth ?? undefined,
-            minHeight: columnRef.current?.clientHeight ?? undefined,
-            border: `2px solid ${theme.palette.primary.main}`
+            minWidth: width,
+            minHeight: height,
+            border: `2px solid ${theme.palette.primary.main}`,
+            ...column.inlineEditStyles?.container?.({
+              width,
+              height
+            })
           }}
         >
           {column.renderInlineEdit!(

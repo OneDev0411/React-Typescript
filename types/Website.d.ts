@@ -1,4 +1,4 @@
-declare type IWebsiteTemplateType = 'Agent' | 'Listing' | 'Listings' | 'CMA'
+declare type IWebsiteTemplateType = 'Agent' | 'Listing' | 'CMA'
 
 declare type IWebsiteTemplateMedium = 'Website'
 

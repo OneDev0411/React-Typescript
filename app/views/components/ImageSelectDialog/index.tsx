@@ -68,7 +68,11 @@ export default function ImageSelectDialog({
 
   const isSearchableTabActive = isSearchableTab(selectedTab)
 
-  const handleCloseImageEditor = () => {
+  const handleCloseImageEditor = (isSaving = false) => {
+    if (isSaving) {
+      return
+    }
+
     confirmation.setConfirmationModal({
       message: 'Are you sure about canceling the edit?',
       onConfirm: () => {

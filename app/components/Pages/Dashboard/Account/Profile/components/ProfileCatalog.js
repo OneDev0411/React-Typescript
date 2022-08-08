@@ -85,6 +85,7 @@ class ProfileCatalog extends Component {
             <ImageUploader
               onSelectImage={this.props.handleOnChange}
               editorOptions={{
+                circularCropper: true,
                 dimensions: [300, 300]
               }}
             >
