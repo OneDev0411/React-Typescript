@@ -175,7 +175,6 @@ export default function EmailComposeForm<T>({
     if (marketingTemplate) {
       data = {
         ...data,
-        body: marketingTemplate.html,
         template: marketingTemplate.id
       }
     } else {
