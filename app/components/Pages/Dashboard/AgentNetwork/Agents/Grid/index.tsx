@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { Box } from '@material-ui/core'
+
 import { AgentWithStats } from '@app/models/agent-network/get-agents'
 import { GridProvider } from 'components/Grid/Table'
 import { ZeroState } from 'partials/ZeroState'
@@ -43,23 +45,26 @@ export default function AgentsGrid({
     listing.property.address.location.longitude === null
   ) {
     return (
-      <ZeroState
-        imageUrl="/static/images/zero-state/agents-network.png"
-        title="Location Not Found"
-        subTitle="The agent network cannot function on a listing without an
+      <Box mt={8}>
+        <ZeroState
+          imageUrl="/static/images/zero-state/mls-explore.png"
+          title="Location Not Found"
+          subTitle="The agent network cannot function on a listing without an
           address, please choose another listing."
-      />
+        />
+      </Box>
     )
   }
 
   if (agents?.length === 0) {
     return (
-      <ZeroState
-        imageUrl="/static/images/contacts/zero-state.svg"
-        imageWidth="300"
-        title="No matching agents found."
-        subTitle="You can try and search something else or change the filters."
-      />
+      <Box mt={8}>
+        <ZeroState
+          imageUrl="/static/images/zero-state/agents-network.png"
+          title="No matching agents found."
+          subTitle="You can try and search something else or change the filters."
+        />
+      </Box>
     )
   }
 
