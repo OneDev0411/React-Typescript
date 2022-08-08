@@ -70,8 +70,11 @@ export function getDateRange(
  * NOTE: it consist of some hack (tof) due some api limit
  * @param event - the event
  */
-export function getDateRangeFromEvent(event: ICalendarEvent): number {
-  const date = new Date(event.timestamp)
+export function getDateRangeFromEvent(
+  event: ICalendarEvent,
+  direction: Format
+): number {
+  const date = new Date(event.timestamp * 1000)
 
   if (event.recurring) {
     const nextRecurringDate = new Date(event.next_occurence)
@@ -80,5 +83,11 @@ export function getDateRangeFromEvent(event: ICalendarEvent): number {
     date.setFullYear(year)
   }
 
-  return date.getTime() / 1000
+  const range = date.getTime() / 1000
+
+  if (direction === Format.Next) {
+    return range + 1
+  }
+
+  return range - 1
 }

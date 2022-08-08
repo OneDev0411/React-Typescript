@@ -10,12 +10,12 @@ import {
 import { useSelector } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import useNotify from '@app/hooks/use-notify'
 import { getCalendar } from 'models/calendar/get-calendar'
 import { IAppState } from 'reducers/index'
 import { viewAs } from 'utils/user-teams'
 
 import { CalendarList } from './components/List'
+import { concatEvents } from './helpers/concat-events'
 import { createListRows } from './helpers/create-list-rows'
 import { getDateRangeFromEvent, Format } from './helpers/get-date-range'
 import { normalizeEvents } from './helpers/normalize-events'
@@ -40,7 +40,6 @@ export function Calendar({
   associations = [],
   onLoadEvents = () => null
 }: Props) {
-  const notify = useNotify()
   const [isLoading, setIsLoading] = useState(false)
   const [events, setEvents] = useState<ICalendarEvent[]>([])
   const [listRows, setListRows] = useState<ICalendarListRow[]>([])
@@ -92,11 +91,19 @@ export function Calendar({
         if (position === 'Previous') {
           const events = await getCalendar(loadOldEventsPayload)
 
+          if (MAX_LIMIT_EVENT > events.length) {
+            setIsReachedStart(true)
+          }
+
           return [events, []]
         }
 
         if (position === 'Next') {
           const events = await getCalendar(loadNewEventsPayload)
+
+          if (MAX_LIMIT_EVENT > events.length) {
+            setIsReachedEnd(true)
+          }
 
           return [[], events]
         }
@@ -105,6 +112,14 @@ export function Calendar({
           await getCalendar(loadOldEventsPayload),
           await getCalendar(loadNewEventsPayload)
         ])
+
+        if (MAX_LIMIT_EVENT > events[0]) {
+          setIsReachedStart(true)
+        }
+
+        if (MAX_LIMIT_EVENT > events[1]) {
+          setIsReachedEnd(true)
+        }
 
         return events
       } catch (error) {
@@ -127,26 +142,14 @@ export function Calendar({
         // fetch calendar data from server based on given parameters
         const [prevEvents, nextEvents] = await fetchEvents(range, position)
 
-        if (nextEvents.length < MAX_LIMIT_EVENT) {
-          setIsReachedEnd(true)
-        }
-
-        if (prevEvents.length < MAX_LIMIT_EVENT) {
-          setIsReachedStart(true)
-        }
-
-        const fetchedEvents = [...prevEvents, ...nextEvents]
-
-        if (fetchedEvents.length === 0 && position !== 'Middle') {
-          notify({
-            status: 'success',
-            message: 'There is no more events to load'
-          })
-        }
-
-        const newEvents: ICalendarEvent[] = reset
-          ? fetchedEvents
-          : fetchedEvents.concat(events)
+        const newEvents = concatEvents(
+          {
+            events,
+            prevEvents,
+            nextEvents
+          },
+          reset
+        )
         // get current range of fetched calendar
         const normalizedEvents = normalizeEvents(newEvents, range)
 
@@ -162,7 +165,7 @@ export function Calendar({
         setIsLoading(false)
       }
     },
-    [fetchEvents, events, onLoadEvents, notify]
+    [fetchEvents, events, onLoadEvents]
   )
 
   const handleLoadEvents = async () => {
@@ -184,11 +187,14 @@ export function Calendar({
       const currentRange = { ...calendarRange }
 
       if (direction === Format.Next) {
-        currentRange.low = getDateRangeFromEvent(events[events.length - 1])
+        currentRange.low = getDateRangeFromEvent(
+          events[events.length - 1],
+          direction
+        )
       }
 
       if (direction === Format.Previous) {
-        currentRange.high = getDateRangeFromEvent(events[0])
+        currentRange.high = getDateRangeFromEvent(events[0], direction)
       }
 
       return currentRange

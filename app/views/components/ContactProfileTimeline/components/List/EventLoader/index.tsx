@@ -94,9 +94,9 @@ export function EventLoader({
   isLoading,
   isReachedEnd,
   isReachedStart,
-  onLoadPreviousEvents,
+  onLoadNextEvents,
   handleEventChange,
-  onLoadNextEvents
+  onLoadPreviousEvents
 }: Props) {
   const classes = useStyles()
 
@@ -126,7 +126,7 @@ export function EventLoader({
               className={classes.loadButton}
               size="small"
               disabled={isLoading}
-              onClick={onLoadPreviousEvents}
+              onClick={onLoadNextEvents}
             >
               Load Next Year Events
             </Button>
@@ -160,7 +160,7 @@ export function EventLoader({
               className={classes.loadButton}
               size="small"
               disabled={isLoading}
-              onClick={onLoadNextEvents}
+              onClick={onLoadPreviousEvents}
             >
               Load Previous Year Events
             </Button>
