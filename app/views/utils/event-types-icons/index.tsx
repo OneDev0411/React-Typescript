@@ -31,12 +31,14 @@ import { SvgIcon, Props as SvgIconProps } from 'components/SvgIcons/SvgIcon'
 export interface EventTypeIcon {
   name: string
   color: string
+  iconPath: string
   icon: React.FC<any>
 }
 // @ts-ignore js component
 export const eventTypesIcons = [
   {
     name: 'Call',
+    iconPath: mdiPhoneOutline,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={mdiPhoneOutline} />
     ),
@@ -44,6 +46,7 @@ export const eventTypesIcons = [
   },
   {
     name: 'In-Person Meeting',
+    iconPath: mdiAccountMultipleOutline,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={mdiAccountMultipleOutline} />
     ),
@@ -51,6 +54,7 @@ export const eventTypesIcons = [
   },
   {
     name: 'Text',
+    iconPath: mdiMessageTextOutline,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={mdiMessageTextOutline} />
     ),
@@ -58,6 +62,7 @@ export const eventTypesIcons = [
   },
   {
     name: 'Chat',
+    iconPath: mdiChatProcessingOutline,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={mdiChatProcessingOutline} />
     ),
@@ -65,6 +70,7 @@ export const eventTypesIcons = [
   },
   {
     name: 'Mail',
+    iconPath: mdiCardAccountMailOutline,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={mdiCardAccountMailOutline} />
     ),
@@ -72,6 +78,7 @@ export const eventTypesIcons = [
   },
   {
     name: 'Email',
+    iconPath: mdiEmailOutline,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={mdiEmailOutline} />
     ),
@@ -79,6 +86,7 @@ export const eventTypesIcons = [
   },
   {
     name: 'Open House',
+    iconPath: meetingRoomOutlined,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={meetingRoomOutlined} />
     ),
@@ -86,11 +94,13 @@ export const eventTypesIcons = [
   },
   {
     name: 'Tour',
+    iconPath: mdiShoePrint,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiShoePrint} />,
     color: '#bd10e0'
   },
   {
     name: 'TouchDate',
+    iconPath: mdiClockOutline,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={mdiClockOutline} />
     ),
@@ -98,11 +108,13 @@ export const eventTypesIcons = [
   },
   {
     name: 'Closing',
+    iconPath: mdiKeyOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiKeyOutline} />,
     color: '#287700'
   },
   {
     name: 'Follow Up',
+    iconPath: mdiAccountArrowLeftOutline,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={mdiAccountArrowLeftOutline} />
     ),
@@ -110,6 +122,7 @@ export const eventTypesIcons = [
   },
   {
     name: 'Todo',
+    iconPath: mdiClipboardCheckOutline,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={mdiClipboardCheckOutline} />
     ),
@@ -117,6 +130,7 @@ export const eventTypesIcons = [
   },
   {
     name: 'ListingAppointment',
+    iconPath: mdiHomeImportOutline,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={mdiHomeImportOutline} />
     ),
@@ -124,6 +138,7 @@ export const eventTypesIcons = [
   },
   {
     name: 'Task Critical',
+    iconPath: importantDateIcon,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={importantDateIcon} />
     ),
@@ -131,6 +146,7 @@ export const eventTypesIcons = [
   },
   {
     name: 'Note',
+    iconPath: mdiNoteTextOutline,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={mdiNoteTextOutline} />
     ),
@@ -138,6 +154,7 @@ export const eventTypesIcons = [
   },
   {
     name: 'Other',
+    iconPath: mdiDotsHorizontalCircleOutline,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={mdiDotsHorizontalCircleOutline} />
     ),
@@ -145,91 +162,109 @@ export const eventTypesIcons = [
   },
   {
     name: 'list_date',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'expiration_date',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'contract_date',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'inspection_date',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'option_period',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'hoa_delivery',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'financing_due',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'title_due',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 't47_due',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'closing_date',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'possession_date',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'lease_executed',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'lease_application_date',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'lease_begin',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'lease_end',
+    iconPath: mdiHomeOutline,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
     color: '#7ed321'
   },
   {
     name: 'birthday',
+    iconPath: mdiCakeVariant,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiCakeVariant} />,
     color: '#7ed321'
   },
   {
     name: 'wedding_anniversary',
+    iconPath: mdiRing,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiRing} />,
     color: '#7ed321'
   },
   {
     name: 'work_anniversary',
+    iconPath: mdiBriefcaseOutline,
     icon: (props: SvgIconProps) => (
       <SvgIcon {...props} path={mdiBriefcaseOutline} />
     ),
@@ -237,11 +272,13 @@ export const eventTypesIcons = [
   },
   {
     name: 'home_anniversary',
+    iconPath: mdiHomeHeart,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeHeart} />,
     color: '#7ed321'
   },
   {
     name: 'child_birthday',
+    iconPath: mdiCakeVariant,
     icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiCakeVariant} />,
     color: '#7ed321'
   }

@@ -32,7 +32,7 @@ const TEMPLATE_TYPE_LABEL_MAP: {
   Kwanzaa: 'Kwanzaa',
   LaborDay: 'Labor Day',
   Layout: 'Layout',
-  Listing: 'Blank Layouts',
+  Listing: ' Listing Website',
   ListingLayout: 'Blank Listing Layouts',
   Listings: 'Multi Properties',
   MarketReport: 'Market Reports',

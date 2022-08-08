@@ -1,6 +1,7 @@
-import { CSSProperties, memo } from 'react'
+import { CSSProperties, memo, useMemo } from 'react'
 
 import cn from 'classnames'
+import { areEqual } from 'react-window'
 
 import { StateContext } from '../../context'
 import { Header } from '../../Header'
@@ -40,10 +41,19 @@ function Row<Row>({
     getTdProps = () => ({})
   }
 }: Props<Row & { id?: string }>) {
+  const columnsList = useMemo(
+    () =>
+      columns.filter(
+        (column: TableColumn<Row>) =>
+          (column.render || column.accessor) && column.hidden !== true
+      ),
+    [columns]
+  )
+
   if (headless === false && rowIndex === 0) {
     return (
       <Header<Row>
-        columns={columns}
+        columns={columnsList}
         rows={rows}
         totalRows={totalRows}
         columnsSize={columnsSize}
@@ -65,7 +75,8 @@ function Row<Row>({
       index={rowIndex}
       selected={isRowSelected}
       className={cn(classes.row, {
-        selected: isRowSelected
+        selected: isRowSelected,
+        'has-inline-edit': columnsList.some(col => !!col.renderInlineEdit)
       })}
       style={{
         ...style,
@@ -79,25 +90,20 @@ function Row<Row>({
         selected: isRowSelected
       })}
     >
-      {columns
-        .filter(
-          (column: TableColumn<Row>) =>
-            (column.render || column.accessor) && column.hidden !== true
-        )
-        .map((column: TableColumn<Row>, columnIndex: number) => (
-          <Column<Row>
-            key={columnIndex}
-            column={column}
-            columnIndex={columnIndex}
-            row={row}
-            rowIndex={rowIndex}
-            columnWidth={columnsSize[columnIndex]}
-            totalRows={rows.length}
-            getTdProps={getTdProps}
-          />
-        ))}
+      {columnsList.map((column: TableColumn<Row>, columnIndex: number) => (
+        <Column<Row>
+          key={columnIndex}
+          column={column}
+          columnIndex={columnIndex}
+          row={row}
+          rowIndex={rowIndex}
+          columnWidth={columnsSize[columnIndex]}
+          totalRows={rows.length}
+          getTdProps={getTdProps}
+        />
+      ))}
     </RowContainer>
   )
 }
 
-export default memo(Row)
+export default memo(Row, areEqual)

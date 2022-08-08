@@ -43,7 +43,7 @@ function FilterButton({
   }
 
   const open = Boolean(anchorEl)
-  const id = open ? 'simple-popover' : undefined
+  const id = open ? 'filter-popover' : undefined
 
   return (
     <>
@@ -56,11 +56,11 @@ function FilterButton({
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'right'
+          horizontal: 'left'
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'right'
+          horizontal: 'left'
         }}
         elevation={10}
         {...popoverProps}

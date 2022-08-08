@@ -407,6 +407,12 @@
         }
       }
 
+      .fa-file-image-o.image-filter {
+        &::after {
+          content: 'Quick Filters';
+        }
+      }
+
       .fa-pencil.map {
         &::after {
           content: 'Change Map Theme';
