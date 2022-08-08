@@ -36,9 +36,9 @@ export function Deals({ criteria, onSelect }: Props) {
             <RowItem
               avatarUrl={getField(deal, 'photo')}
               title={deal.title}
-              subtitle={`${deal.deal_type}, ${getFormattedPrice(
-                getPrice(deal)
-              )}`}
+              subtitle={[deal.deal_type, getFormattedPrice(getPrice(deal))]
+                .filter(item => !!item)
+                .join(', ')}
               status={getStatus(deal)}
               mlsName={null}
             />
