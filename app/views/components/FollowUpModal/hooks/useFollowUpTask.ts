@@ -1,5 +1,7 @@
 import { useMemo, useState, useCallback } from 'react'
 
+import fecha from 'fecha'
+
 import useNotify from '@app/hooks/use-notify'
 import { useUser } from '@app/hooks/use-user'
 import { cloneTask } from '@app/models/tasks/clone-task'
@@ -8,7 +10,10 @@ import { noop } from '@app/utils/helpers'
 import { preSaveFormat } from 'components/EventDrawer/helpers/pre-save-format'
 
 import { Props as FollowUpModalProps } from '../FollowUpModal'
-import { getFollowUpCrmTask } from '../helper/get-follow-up-crm-task'
+import {
+  getFollowUpCrmTask,
+  getCrmTaskTitle
+} from '../helper/get-follow-up-crm-task'
 import {
   getInitialDate,
   GetInitialDateReturn
@@ -52,20 +57,20 @@ export function useFollowUpTask(
         due_date: timestamp / 1000,
         end_date: (timestamp + validDate.oneHourTimestamp) / 1000,
         all_day: false,
-        title: 'cloooone hamed'
+        title: getCrmTaskTitle(event.title, dictionary?.taskTitle),
+        description: `This is a follow up reminder ${
+          event.title
+        } set in Rechat, on ${fecha.format(
+          new Date(event.timestamp * 1000),
+          'dddd MMMM Do, YYYY'
+        )}.`
       }
-
-      console.log({
-        event,
-        payload,
-        f: validDate.oneHourTimestamp
-      })
 
       const followUpTask = await cloneTask(event?.id, payload)
 
       return followUpTask
     },
-    [event, validDate.oneHourTimestamp]
+    [validDate.oneHourTimestamp, dictionary?.taskTitle, event]
   )
 
   /*
@@ -85,7 +90,7 @@ export function useFollowUpTask(
 
   const createFollowUpTask = useCallback(
     async (timestamp: number) => {
-      // setIsCreatingTask(true)
+      setIsCreatingTask(true)
 
       let followUpTask
 
@@ -97,7 +102,7 @@ export function useFollowUpTask(
 
       callback(followUpTask)
 
-      // setIsCreatingTask(false)
+      setIsCreatingTask(false)
       notify({
         status: 'success',
         message: 'The follow up task is added!'
