@@ -41,7 +41,7 @@ export const useStyles = makeStyles(
     }
   }),
   {
-    name: 'SeachListingDrawerListingItem'
+    name: 'SearchListingDrawerListingItem'
   }
 )
 
