@@ -19,7 +19,12 @@ import {
 } from '../../constants'
 import { logSearchListings } from '../../helpers/log-search-listings'
 import { stringifyFilters } from '../../helpers/stringifyFilters'
-import { Actions, setListings, setIsLoading } from '../context/actions'
+import {
+  Actions,
+  setListings,
+  setIsLoading,
+  changeResultInfo
+} from '../context/actions'
 import { reducer, initialState, ListingsState } from '../context/reducers'
 
 export type ListingsContext = [
@@ -75,6 +80,15 @@ export default function useFetchListings(
           : []
 
         dispatch(setListings(listings, response.info))
+
+        if (response.info?.count && response.info.count >= QUERY_LIMIT) {
+          const total = await api.getListingsCount.byValert(
+            valertOptions,
+            valertQueryString
+          )
+
+          dispatch(changeResultInfo({ total }))
+        }
       } catch (error) {
         notify({
           message: 'A server error occurred and admin has been notified.',
