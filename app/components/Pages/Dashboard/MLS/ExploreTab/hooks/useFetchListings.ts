@@ -79,9 +79,22 @@ export default function useFetchListings(
           ? Object.values(response.entities.listings)
           : []
 
-        dispatch(setListings(listings, response.info))
+        // Remove the total count from listings info because of a performance issue
+        // But, We can consider count as total if it is less than the query limit
+        // https://gitlab.com/rechat/web/-/issues/6640
+        const isCountLessThanLimit =
+          typeof response.info?.count === 'number' &&
+          response.info.count < QUERY_LIMIT
 
-        if (response.info?.count && response.info.count >= QUERY_LIMIT) {
+        const listingsInfo = {
+          ...response.info,
+          total: isCountLessThanLimit ? response.info.count : undefined
+        }
+
+        dispatch(setListings(listings, listingsInfo))
+
+        // We should call another API to fetch real total count if count >= query limit
+        if (!isCountLessThanLimit) {
           const total = await api.getListingsCount.byValert(
             valertOptions,
             valertQueryString
