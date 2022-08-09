@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function Photo({ listings }: Props) {
-  const avatar = listings?.[0].listing?.cover_image_url
+  const avatar = listings?.[0]?.listing?.cover_image_url
 
   return (
     <Avatar url={avatar ?? ''}>
