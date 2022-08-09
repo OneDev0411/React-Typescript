@@ -25,9 +25,11 @@ async function getListingLatLng(
   ) {
     const place = await getPlace(listing.property.address.full_address)
 
-    return {
-      lat: place.center.lat,
-      lng: place.center.lng
+    if (place) {
+      return {
+        lat: place.center.lat,
+        lng: place.center.lng
+      }
     }
   }
 
