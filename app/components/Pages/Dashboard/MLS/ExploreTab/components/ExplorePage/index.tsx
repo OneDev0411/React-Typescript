@@ -265,7 +265,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   )
 
   const handleSaveSearch = () => {
-    if (state.result.info?.total && state.result.info.total < 400) {
+    if (state.result.info && state.result.info.total < 400) {
       setIsShowAlertModal(true)
     } else {
       reduxDispatch(
