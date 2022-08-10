@@ -9,6 +9,10 @@ export function TextMiddleTruncate(props) {
   const text = sanitizeText(props.text)
 
   const getTooltipCaption = () => {
+    if (props.disableTooltip) {
+      return ''
+    }
+
     if (text.length > props.maxLength) {
       return text
     }
@@ -37,11 +41,13 @@ TextMiddleTruncate.propTypes = {
   text: PropTypes.string.isRequired,
   maxLength: PropTypes.number,
   tooltipPlacement: PropTypes.string,
+  disableTooltip: PropTypes.bool,
   style: PropTypes.object
 }
 
 TextMiddleTruncate.defaultProps = {
   maxLength: 40,
+  disableTooltip: false,
   tooltipPlacement: 'top',
   style: {}
 }
