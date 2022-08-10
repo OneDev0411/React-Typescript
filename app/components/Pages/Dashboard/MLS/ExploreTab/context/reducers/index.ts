@@ -17,7 +17,7 @@ export interface ListingsState {
   pinMarker: Optional<ICoord>
   result: {
     listings: ICompactListing[]
-    info: Nullable<Partial<ICompactListingInfo>>
+    info: Nullable<ICompactListingInfo>
   }
   isLoading: boolean
 }
@@ -131,19 +131,6 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
 
     case 'REMOVE_MAP_DRAWING': {
       return { ...state, search: { ...state.search, drawing: [] } }
-    }
-
-    case 'CHANGE_RESULT_INFO': {
-      return {
-        ...state,
-        result: {
-          ...state.result,
-          info: {
-            ...state.result.info,
-            ...action.payload.info
-          }
-        }
-      }
     }
 
     default:
