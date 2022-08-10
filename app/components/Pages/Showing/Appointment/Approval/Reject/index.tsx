@@ -13,13 +13,13 @@ import { useForm, Controller } from 'react-hook-form'
 import { WithRouterProps, browserHistory } from 'react-router'
 
 import useNotify from '@app/hooks/use-notify'
-import { cancelAppointmentRequest } from '@app/models/showing/cancel-appointment-request'
-import LoadingContainer from 'components/LoadingContainer'
+import { approvalRejectAppointmentRequest } from '@app/models/showing/approval-reject-appointment-request'
+import LoadingContainer from '@app/views/components/LoadingContainer'
 
-import { usePublicShowingAppointment } from '../../hooks'
-import DetailsSection from '../../Sections/DetailsSection'
-import InfoSection from '../../Sections/InfoSection'
-import { getFormattedAppointmentDateTime } from '../utils'
+import { usePublicShowingAppointment } from '../../../hooks'
+import DetailsSection from '../../../Sections/DetailsSection'
+import InfoSection from '../../../Sections/InfoSection'
+import { getFormattedAppointmentDateTime } from '../../utils'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -34,19 +34,19 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'CancelAppointment'
+    name: 'ApprovalRejectAppointment'
   }
 )
 
 interface FormFields {
-  message: string
+  comment: string
 }
 
 interface RouteParams {
   appointmentToken: UUID
 }
 
-export default function ShowingAppointmentCancel({
+export default function ShowingApprovalAppointmentReject({
   params: { appointmentToken }
 }: WithRouterProps<RouteParams>) {
   const classes = useStyles()
@@ -60,15 +60,18 @@ export default function ShowingAppointmentCancel({
   const { isLoading, appointment } =
     usePublicShowingAppointment(appointmentToken)
 
-  const handleSubmitCancelForm = async ({ message }: FormFields) => {
-    const normalizedMessage = message.trim() || undefined
+  const handleSubmitRejectForm = async ({ comment }: FormFields) => {
+    const normalizedMessage = comment.trim() || undefined
 
     try {
-      await cancelAppointmentRequest(appointmentToken, normalizedMessage)
+      await approvalRejectAppointmentRequest(
+        appointmentToken,
+        normalizedMessage
+      )
 
       notify({
         status: 'success',
-        message: 'Appointment request canceled successfully'
+        message: 'Appointment request rejected successfully'
       })
 
       if (appointment) {
@@ -80,7 +83,7 @@ export default function ShowingAppointmentCancel({
       console.error(error)
       notify({
         status: 'error',
-        message: 'Unable to cancel appointment request'
+        message: 'Unable to reject appointment request'
       })
     }
   }
@@ -94,11 +97,11 @@ export default function ShowingAppointmentCancel({
       <Grid container direction="row" className={classes.container}>
         <InfoSection showing={appointment.showing} />
         <DetailsSection>
-          <form onSubmit={handleSubmit(handleSubmitCancelForm)}>
+          <form onSubmit={handleSubmit(handleSubmitRejectForm)}>
             <Grid item xs={12}>
               <Box mt={3}>
                 <Typography variant="h6">
-                  You are canceling your{' '}
+                  You are rejecting your{' '}
                   <span style={{ color: theme.palette.primary.main }}>
                     {getFormattedAppointmentDateTime(appointment)}
                   </span>{' '}
@@ -114,7 +117,7 @@ export default function ShowingAppointmentCancel({
             <Grid item xs={12}>
               <Box mt={3}>
                 <Controller
-                  name="message"
+                  name="comment"
                   control={control}
                   defaultValue=""
                   as={
@@ -138,7 +141,7 @@ export default function ShowingAppointmentCancel({
                   color="primary"
                   disabled={formState.isSubmitting}
                 >
-                  Cancel Appointment
+                  Reject Appointment
                 </Button>
               </Box>
             </Grid>

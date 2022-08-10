@@ -13,13 +13,13 @@ import { useForm, Controller } from 'react-hook-form'
 import { WithRouterProps, browserHistory } from 'react-router'
 
 import useNotify from '@app/hooks/use-notify'
-import { cancelAppointmentRequest } from '@app/models/showing/cancel-appointment-request'
-import LoadingContainer from 'components/LoadingContainer'
+import { approvalCancelAppointmentRequest } from '@app/models/showing/approval-cancel-appointment-request'
+import LoadingContainer from '@app/views/components/LoadingContainer'
 
-import { usePublicShowingAppointment } from '../../hooks'
-import DetailsSection from '../../Sections/DetailsSection'
-import InfoSection from '../../Sections/InfoSection'
-import { getFormattedAppointmentDateTime } from '../utils'
+import { usePublicShowingAppointment } from '../../../hooks'
+import DetailsSection from '../../../Sections/DetailsSection'
+import InfoSection from '../../../Sections/InfoSection'
+import { getFormattedAppointmentDateTime } from '../../utils'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -34,19 +34,19 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'CancelAppointment'
+    name: 'ApprovalCancelAppointment'
   }
 )
 
 interface FormFields {
-  message: string
+  comment: string
 }
 
 interface RouteParams {
   appointmentToken: UUID
 }
 
-export default function ShowingAppointmentCancel({
+export default function ShowingApprovalAppointmentCancel({
   params: { appointmentToken }
 }: WithRouterProps<RouteParams>) {
   const classes = useStyles()
@@ -60,11 +60,14 @@ export default function ShowingAppointmentCancel({
   const { isLoading, appointment } =
     usePublicShowingAppointment(appointmentToken)
 
-  const handleSubmitCancelForm = async ({ message }: FormFields) => {
-    const normalizedMessage = message.trim() || undefined
+  const handleSubmitCancelForm = async ({ comment }: FormFields) => {
+    const normalizedMessage = comment.trim() || undefined
 
     try {
-      await cancelAppointmentRequest(appointmentToken, normalizedMessage)
+      await approvalCancelAppointmentRequest(
+        appointmentToken,
+        normalizedMessage
+      )
 
       notify({
         status: 'success',
@@ -114,7 +117,7 @@ export default function ShowingAppointmentCancel({
             <Grid item xs={12}>
               <Box mt={3}>
                 <Controller
-                  name="message"
+                  name="comment"
                   control={control}
                   defaultValue=""
                   as={
