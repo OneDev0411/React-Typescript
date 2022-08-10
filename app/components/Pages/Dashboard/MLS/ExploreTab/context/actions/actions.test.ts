@@ -13,7 +13,8 @@ import {
   removePinMarker,
   setIsLoading,
   removeMapDrawing,
-  Actions
+  Actions,
+  changeResultInfo
 } from './index'
 
 describe('setListings actions', () => {
@@ -265,6 +266,46 @@ describe('removeMapDrawing actions', () => {
     const expected: Actions = {
       type: 'REMOVE_MAP_DRAWING',
       payload: {}
+    }
+
+    expect(actual).toEqual(expected)
+  })
+})
+
+describe('changeResultInfo actions', () => {
+  it('should work for only total property', () => {
+    const actual = changeResultInfo({ total: 195 })
+    const expected: Actions = {
+      type: 'CHANGE_RESULT_INFO',
+      payload: { info: { total: 195 } }
+    }
+
+    expect(actual).toEqual(expected)
+  })
+  it('should work for only count and total properties', () => {
+    const actual = changeResultInfo({ count: 12, total: 1950 })
+    const expected: Actions = {
+      type: 'CHANGE_RESULT_INFO',
+      payload: { info: { count: 12, total: 1950 } }
+    }
+
+    expect(actual).toEqual(expected)
+  })
+  it('should work for all properties', () => {
+    const actual = changeResultInfo({
+      proposed_title: 'some title',
+      count: 8,
+      total: 200
+    })
+    const expected: Actions = {
+      type: 'CHANGE_RESULT_INFO',
+      payload: {
+        info: {
+          proposed_title: 'some title',
+          count: 8,
+          total: 200
+        }
+      }
     }
 
     expect(actual).toEqual(expected)

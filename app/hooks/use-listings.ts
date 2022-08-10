@@ -8,7 +8,8 @@ import {
 } from '@app/models/listings/search/get-brand-listings'
 
 export function useBrandListings(
-  options?: GetBrandListingsOptions
+  options?: GetBrandListingsOptions,
+  limit?: number
 ): Nullable<ICompactListing[]> {
   const activeBrandId = useUnsafeActiveBrandId()
   const [listings, setListings] = useState<Nullable<ICompactListing[]>>(null)
@@ -20,7 +21,10 @@ export function useBrandListings(
       }
 
       try {
-        const brandListings = await getBrandListings(activeBrandId, options)
+        const brandListings = await getBrandListings(activeBrandId, {
+          ...options,
+          limit
+        })
 
         setListings(brandListings)
       } catch (error) {
@@ -30,13 +34,14 @@ export function useBrandListings(
     }
 
     fetchBrandListings()
-  }, [activeBrandId, options])
+  }, [activeBrandId, options, limit])
 
   return listings
 }
 
 export function useDealsListings(
-  listingIdsToExclude?: UUID[]
+  listingIdsToExclude?: UUID[],
+  dealsLimit?: number
 ): Nullable<IListing[]> {
   const activeBrandId = useUnsafeActiveBrandId()
   const [listings, setListings] = useState<Nullable<IListing[]>>(null)
@@ -48,7 +53,7 @@ export function useDealsListings(
       }
 
       try {
-        const dealsListings = await getDealsListings(activeBrandId)
+        const dealsListings = await getDealsListings(activeBrandId, dealsLimit)
 
         // We're removing duplicate listings that we already have them
         const uniqueDealsListings = dealsListings.filter(
@@ -63,7 +68,7 @@ export function useDealsListings(
     }
 
     fetchDealsListings()
-  }, [listingIdsToExclude, activeBrandId])
+  }, [listingIdsToExclude, activeBrandId, dealsLimit])
 
   return listings
 }

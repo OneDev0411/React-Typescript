@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
 import { getGroupValues } from 'deals/FormEdit/utils/get-group-values'
 import { normalizeContextValue } from 'deals/FormEdit/utils/normalize-context-value'
@@ -44,6 +42,7 @@ function Contexts(props) {
 
   return (
     <AnnotationWrapper
+      deal={props.deal}
       items={props.annotations[props.pageIndex].contexts}
       values={props.values}
       render={inputProps => (

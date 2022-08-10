@@ -78,6 +78,13 @@ export const removeMapDrawing = () => ({
   payload: {}
 })
 
+export const changeResultInfo = (
+  info: Nullable<Partial<ICompactListingInfo>>
+) => ({
+  type: 'CHANGE_RESULT_INFO' as 'CHANGE_RESULT_INFO',
+  payload: { info }
+})
+
 export type Actions = ReturnType<
   | typeof setListings
   | typeof toggleListingFavoriteState
@@ -89,4 +96,5 @@ export type Actions = ReturnType<
   | typeof removePinMarker
   | typeof setIsLoading
   | typeof removeMapDrawing
+  | typeof changeResultInfo
 >
