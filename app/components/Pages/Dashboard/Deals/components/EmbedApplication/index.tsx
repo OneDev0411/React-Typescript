@@ -26,6 +26,7 @@ import { getDealChecklists } from '@app/reducers/deals/checklists'
 import { selectDealRoles } from '@app/reducers/deals/roles'
 import {
   changeNeedsAttention,
+  changeTaskStatus,
   upsertContexts,
   deleteRole
 } from '@app/store_actions/deals'
@@ -209,6 +210,37 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
     [deal, dispatch]
   )
 
+  const updateTaskStatus = useCallback(
+    async (
+      status: 'Approved' | 'Declined' | 'Incomplete',
+      attentionRequest: Nullable<boolean> = null,
+      comment: string = ''
+    ) => {
+      if (comment && user) {
+        Message.postTaskComment(task, {
+          comment,
+          author: user.id,
+          room: task.room.id
+        })
+      }
+
+      try {
+        if (attentionRequest !== null) {
+          await dispatch(
+            changeNeedsAttention(deal.id, task.id, attentionRequest)
+          )
+        }
+
+        if (status) {
+          await dispatch(changeTaskStatus(task.id, status))
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    [task, user, deal.id, dispatch]
+  )
+
   const App = useCallback(
     props => {
       if (!module) {
@@ -278,11 +310,13 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
             }}
             utils={{
               notify,
-              notifyOffice
+              isBackOffice
             }}
             api={{
+              notifyOffice,
               getDealContext,
               updateDealContext,
+              updateTaskStatus,
               deleteRole: deleteDealRole
             }}
           />
