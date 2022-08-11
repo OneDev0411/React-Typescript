@@ -41,7 +41,7 @@ export const useStyles = makeStyles(
     }
   }),
   {
-    name: 'SeachListingDrawerListingItem'
+    name: 'SearchListingDrawerListingItem'
   }
 )
 
@@ -102,7 +102,7 @@ export function MlsItem({ item, onClickRemove, ...props }) {
             >
               {getStatus()}
             </Status>
-            {item.status && (
+            {item.mls_display_name && (
               <Typography
                 component="p"
                 variant="caption"
