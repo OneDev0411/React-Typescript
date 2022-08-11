@@ -144,7 +144,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
   })
 
   const notifyOffice = useCallback(
-    async (comment: string) => {
+    async (attentionRequest: boolean = true, comment: string = '') => {
       if (comment && user) {
         Message.postTaskComment(task, {
           comment,
@@ -153,7 +153,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
         })
       }
 
-      await dispatch(changeNeedsAttention(deal.id, task.id, true))
+      await dispatch(changeNeedsAttention(deal.id, task.id, attentionRequest))
     },
     [deal.id, task, dispatch, user]
   )
