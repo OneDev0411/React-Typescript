@@ -17,7 +17,7 @@ interface Props {
 }
 
 export function FilterEditorFooter({
-  resultCount = 0,
+  resultCount,
   disabledReset = false,
   onClickReset = noop
 }: Props) {
@@ -36,11 +36,13 @@ export function FilterEditorFooter({
           Reset
         </Button>
       </Grid>
-      <Grid item xs={7} container justifyContent="flex-end">
-        <Typography align="right" variant="caption">
-          {resultCount} Results
-        </Typography>
-      </Grid>
+      {typeof resultCount === 'number' && (
+        <Grid item xs={7} container justifyContent="flex-end">
+          <Typography align="right" variant="caption">
+            {resultCount} Results
+          </Typography>
+        </Grid>
+      )}
     </Grid>
   )
 }
