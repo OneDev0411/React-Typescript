@@ -108,6 +108,7 @@ const EventCardComponent = ({
     return (
       <FollowUpModal
         isOpen
+        event={rowEvent}
         dictionary={{
           description:
             'Never forget an event, put a reminder on your calendar now!',
