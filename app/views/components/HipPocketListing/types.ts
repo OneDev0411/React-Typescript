@@ -2,6 +2,7 @@ export interface HipPocketListing {
   images: string[]
   address: string
   price: number
+  status: IListingStatus
   sqft: number
   lot_size_area: number
   bedrooms: number
@@ -29,6 +30,11 @@ export interface HipPocketListingFormProps<T extends HipPocketListingField> {
    * Note that it will affect the `onSave` handler data
    */
   disabledFields?: T[]
+  /**
+   * A typed string array of available listing status options
+   *
+   */
+  statusOptions?: IListingStatus[]
   /**
    * Save button copy/text
    *

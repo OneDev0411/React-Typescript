@@ -129,6 +129,27 @@ const AsyncShowingAppointmentFeedback = Load({
     )
 })
 
+const AsyncShowingApprovalAppointmentCancel = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Approval/Cancel' /* webpackChunkName: "showing_approval_appointment_cancel" */
+    )
+})
+
+const AsyncShowingApprovalAppointmentConfirm = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Approval/Confirm' /* webpackChunkName: "showing_approval_appointment_confirm" */
+    )
+})
+
+const AsyncShowingApprovalAppointmentReject = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Approval/Reject' /* webpackChunkName: "showing_approval_appointment_reject" */
+    )
+})
+
 /* ==================================== */
 //  Agent On-boarding Wizard
 /* ==================================== */
@@ -946,6 +967,19 @@ export default (
       <Route
         path="showings/appointments/:appointmentToken/feedback"
         component={AsyncShowingAppointmentFeedback}
+      />
+
+      <Route
+        path="showings/appointments/approval/:appointmentToken/cancel"
+        component={AsyncShowingApprovalAppointmentCancel}
+      />
+      <Route
+        path="showings/appointments/approval/:appointmentToken/confirm"
+        component={AsyncShowingApprovalAppointmentConfirm}
+      />
+      <Route
+        path="showings/appointments/approval/:appointmentToken/reject"
+        component={AsyncShowingApprovalAppointmentReject}
       />
 
       <Route path="mobile" component={AsyncMobile} />

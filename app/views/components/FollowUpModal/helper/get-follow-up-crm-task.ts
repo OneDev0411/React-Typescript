@@ -118,7 +118,8 @@ function getCrmTaskFromEmailThreadEmail(
   return values
 }
 
-function getCrmTaskTitle(
+// Todo: change this helper to be more general now it just accept email
+export function getCrmTaskTitle(
   item?: string,
   getter?: (item?: string) => string,
   email?: FollowUpEmailCampaign
@@ -156,7 +157,8 @@ function getCrmTaskTitle(
   return title
 }
 
-function getCrmTaskDescription(
+// Todo: change this helper to be more general now it just accept email
+export function getCrmTaskDescription(
   item: string,
   dueDate: Date | number,
   getter?: (item: string, dueDate: Date | number) => string,
