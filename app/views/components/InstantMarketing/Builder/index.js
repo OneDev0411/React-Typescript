@@ -1332,6 +1332,9 @@ class Builder extends React.Component {
         this.refreshEditor(this.state.selectedTemplate)
       }
     )
+
+    // Reset undo after regenerating the template
+    this.editor.UndoManager.clear()
   }
 
   toggleTemplatesColumnVisibility = () => {
