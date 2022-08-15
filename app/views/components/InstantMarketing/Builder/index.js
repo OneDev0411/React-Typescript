@@ -1334,6 +1334,7 @@ class Builder extends React.Component {
     )
 
     // Reset undo after regenerating the template
+    // https://gitlab.com/rechat/web/-/issues/6586
     this.editor.UndoManager.clear()
   }
 
