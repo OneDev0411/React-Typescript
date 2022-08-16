@@ -33,6 +33,7 @@ export class AddFilter extends React.Component {
   }
 
   onSelectFilter = item => {
+    console.log('onSelectFilter', { item })
     this.setState({
       isMenuOpen: false
     })

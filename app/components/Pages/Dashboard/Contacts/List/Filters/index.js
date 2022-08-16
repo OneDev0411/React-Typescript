@@ -1,15 +1,18 @@
 import { Box } from '@material-ui/core'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
+import {
+  selectExistingTags,
+  selectContactAttributeDefs
+} from '@app/selectors/contacts'
 import Filters from 'components/Grid/Filters'
 import { OperatorAndOperandFilter } from 'components/Grid/Filters/FilterTypes/OparatorAndOperand'
 import { SimpleList } from 'components/Grid/Filters/FilterTypes/SimpleList'
 import SaveSegment from 'components/Grid/SavedSegments/Create'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
-import { selectTags } from 'reducers/contacts/tags'
 
-import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID, ORIGINS } from '../constants'
+import { OPEN_HOUSE_FILTER_ID, FLOW_FILTER_ID, ORIGINS } from '../constants'
 import { getPredefinedContactLists } from '../utils/get-predefined-contact-lists'
 
 import createFiltersFromSegment from './helpers/create-filters-from-segment'
@@ -17,20 +20,33 @@ import createSegmentFromFilters from './helpers/create-segment-from-filters'
 import getFlows from './helpers/get-flows'
 import getOpenHouseEvents from './helpers/get-open-house-events'
 import getUniqTags from './helpers/get-uniq-tags'
+import { useGetCustomFilters } from './hooks/use-get-custom-filters'
 
-function ContactFilters(props) {
+export default function ContactFilters(props) {
   const activeBrandId = useActiveBrandId()
+  const { conditionOperator, attributeDefs, tags } = useSelector(state => {
+    return {
+      tags: selectExistingTags(state),
+      conditionOperator: state.contacts?.filterSegments?.conditionOperator,
+      attributeDefs: selectContactAttributeDefs(state)
+    }
+  })
+  const customFilters = useGetCustomFilters(attributeDefs)
+
+  console.log('ContactFilters', { customFilters })
+
+  if (!props?.show) {
+    return null
+  }
 
   const getConfig = () => {
-    const { attributeDefs, tags } = props
-
     const tagDefinition = selectDefinitionByName(attributeDefs, 'tag')
     const sourceDefinition = selectDefinitionByName(
       attributeDefs,
       'source_type'
     )
 
-    return [
+    const baseFilters = [
       {
         id: tagDefinition.id,
         label: 'Tag',
@@ -66,39 +82,25 @@ function ContactFilters(props) {
         tooltip: 'Source type'
       }
     ]
+
+    return baseFilters.concat(customFilters)
   }
 
   return (
     <Box display="flex" alignItems="center">
-      {props?.show && (
-        <Filters
-          name="contacts"
-          plugins={['segments']}
-          config={getConfig()}
-          createFiltersFromSegment={createFiltersFromSegment}
-          getPredefinedLists={getPredefinedContactLists}
-          onChange={() => props.onFilterChange()}
-          disableConditionOperators={props.disableConditionOperators}
-        >
-          <SaveSegment
-            createSegmentFromFilters={createSegmentFromFilters(
-              props.conditionOperator
-            )}
-          />
-        </Filters>
-      )}
+      <Filters
+        name="contacts"
+        plugins={['segments']}
+        config={getConfig()}
+        createFiltersFromSegment={createFiltersFromSegment}
+        getPredefinedLists={getPredefinedContactLists}
+        onChange={() => props.onFilterChange()}
+        disableConditionOperators={props.disableConditionOperators}
+      >
+        <SaveSegment
+          createSegmentFromFilters={createSegmentFromFilters(conditionOperator)}
+        />
+      </Filters>
     </Box>
   )
 }
-
-function mapStateToProps({ contacts }) {
-  const { tags, attributeDefs } = contacts
-
-  return {
-    tags: selectTags(tags),
-    conditionOperator: contacts.filterSegments.conditionOperator,
-    attributeDefs
-  }
-}
-
-export default connect(mapStateToProps)(ContactFilters)

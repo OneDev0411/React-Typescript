@@ -162,6 +162,8 @@ class Filters extends React.Component {
     const { activeFilters } = props
     const activeFiltersList = Object.keys(activeFilters)
 
+    console.log({ activeFiltersList })
+
     return (
       <Container>
         <FiltersOptions>
