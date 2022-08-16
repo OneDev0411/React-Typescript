@@ -97,7 +97,7 @@ export function AgentsPicker({
         return isLoading ? (
           <CircularProgress disableShrink />
         ) : (
-          <div>
+          <Box position="relative">
             <Box className={classes.searchInputContainer}>
               <TextField
                 fullWidth
@@ -108,37 +108,39 @@ export function AgentsPicker({
               />
             </Box>
 
-            {rows.length > 0 && (
-              <Paper
-                style={{
-                  height:
-                    rows.length < 5 ? `${rows.length * 60 + 16}px` : '250px'
-                }}
-              >
-                <AutoSizer>
-                  {({ width, height }) => (
-                    <VirtualList
-                      width={width}
-                      height={height}
-                      itemCount={rows.length}
-                      itemData={
-                        {
-                          rows,
-                          useTeamBrandId,
-                          onSelectAgent
-                        } as React.ComponentProps<typeof Row>['data']
-                      }
-                      threshold={2}
-                      itemSize={() => 60}
-                      overscanCount={3}
-                    >
-                      {Row}
-                    </VirtualList>
-                  )}
-                </AutoSizer>
-              </Paper>
-            )}
-          </div>
+            <Box position="absolute" left={0} right={0}>
+              {rows.length > 0 && (
+                <Paper
+                  style={{
+                    height:
+                      rows.length < 5 ? `${rows.length * 60 + 16}px` : '250px'
+                  }}
+                >
+                  <AutoSizer>
+                    {({ width, height }) => (
+                      <VirtualList
+                        width={width}
+                        height={height}
+                        itemCount={rows.length}
+                        itemData={
+                          {
+                            rows,
+                            useTeamBrandId,
+                            onSelectAgent
+                          } as React.ComponentProps<typeof Row>['data']
+                        }
+                        threshold={2}
+                        itemSize={() => 60}
+                        overscanCount={3}
+                      >
+                        {Row}
+                      </VirtualList>
+                    )}
+                  </AutoSizer>
+                </Paper>
+              )}
+            </Box>
+          </Box>
         )
       }}
     </TeamAgents>
