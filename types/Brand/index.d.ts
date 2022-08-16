@@ -70,6 +70,7 @@ declare type BrandMarketingPaletteKey =
   | 'inverted-container-text-color'
   | 'website'
   | 'phone_number'
+  | 'address'
   | 'name'
 
 declare type BrandMarketingPalette = Record<BrandMarketingPaletteKey, string>

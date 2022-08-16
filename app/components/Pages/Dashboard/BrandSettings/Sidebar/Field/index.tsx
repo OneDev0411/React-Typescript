@@ -4,6 +4,7 @@ import { Grid, FormControl } from '@material-ui/core'
 
 import { ImageUploadHandler } from '../../types'
 
+import AddressField from './Address'
 import BorderField from './Border'
 import ColorField from './Color'
 import FontField from './Font'
@@ -22,6 +23,7 @@ export default function Field({ onImageUpload, ...props }: Props) {
     <Grid container item>
       <FormControl fullWidth>
         {props.type === 'text' && <TextField {...props} />}
+        {props.type === 'address' && <AddressField {...props} />}
         {props.type === 'color' && <ColorField {...props} />}
         {props.type === 'image' && (
           <ImageField {...props} onImageUpload={onImageUpload} />

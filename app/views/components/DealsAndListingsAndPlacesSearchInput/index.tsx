@@ -87,6 +87,7 @@ const DEFAULT_TEXT_FIELD_PROPS: TextFieldProps = {
 }
 
 interface Props {
+  initialValue?: string
   textFieldProps?: TextFieldProps
   searchTypes?: SearchResultType[]
   onSelect: (result: SearchResult) => void
@@ -94,12 +95,13 @@ interface Props {
 }
 
 export default function DealsAndListingsAndPlacesSearchInput({
+  initialValue = '',
   textFieldProps = DEFAULT_TEXT_FIELD_PROPS,
   searchTypes = DEFAULT_SEARCH_TYPES,
   onSelect = noop,
   onInput = noop
 }: RequireOnlyOne<Props, 'onSelect' | 'onInput'>) {
-  const [inputValue, setInputValue] = useState<string>('')
+  const [inputValue, setInputValue] = useState<string>(initialValue)
   const classes = useStyles({ inputValue })
   const hasDealSearchType = searchTypes.includes('deal')
 

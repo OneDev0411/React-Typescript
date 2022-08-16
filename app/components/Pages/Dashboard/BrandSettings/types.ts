@@ -5,6 +5,7 @@ export type FieldType =
   | 'font-family'
   | 'font-weight'
   | 'text'
+  | 'address'
   | 'border'
 
 export interface SidebarSectionField {
