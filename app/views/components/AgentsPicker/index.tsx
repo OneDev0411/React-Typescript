@@ -33,6 +33,12 @@ const useStyles = makeStyles(
       top: 0,
       zIndex: 1,
       marginBottom: theme.spacing(2)
+    },
+    paperContainer: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      zIndex: 1
     }
   }),
   {
@@ -108,7 +114,7 @@ export function AgentsPicker({
               />
             </Box>
 
-            <Box position="absolute" left={0} right={0} zIndex={1}>
+            <Box className={classes.paperContainer}>
               {rows.length > 0 && (
                 <Paper
                   style={{
