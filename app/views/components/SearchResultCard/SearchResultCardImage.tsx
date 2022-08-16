@@ -72,7 +72,11 @@ function SearchResultCardImage({
             </Typography>
           ) : imageUrl?.endsWith('mp4') ||
             imageUrl?.startsWith('data:video/mp4') ? (
-            <VideoThumbnail className={classes.item} url={imageUrl} />
+            <VideoThumbnail
+              shouldHideIndicator
+              className={classes.item}
+              url={imageUrl}
+            />
           ) : (
             <img
               className={classNames(classes.item, classes.image)}
