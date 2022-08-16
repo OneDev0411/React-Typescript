@@ -14,9 +14,8 @@ import { NormalizedBrand } from '@app/views/components/TeamAgents/types'
 import VirtualList from '@app/views/components/VirtualList'
 import TeamAgents from 'components/TeamAgents'
 
-import type { IDealFormRole } from '../../types'
-
 import { Row, RowItem, RowType } from './Row'
+import { BrandedUser } from './types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -45,14 +44,14 @@ interface Props {
   useTeamBrandId: boolean
   isPrimaryAgent: boolean
   flattenTeams: boolean
-  onSelectRole: (role: Partial<IDealFormRole>) => void
+  onSelectAgent: (agent: BrandedUser) => void
 }
 
-export function AgentsList({
+export function AgentsPicker({
   useTeamBrandId,
   flattenTeams,
   isPrimaryAgent,
-  onSelectRole
+  onSelectAgent
 }: Props) {
   const classes = useStyles()
 
@@ -126,7 +125,7 @@ export function AgentsList({
                         {
                           rows,
                           useTeamBrandId,
-                          onSelectRole
+                          onSelectAgent
                         } as React.ComponentProps<typeof Row>['data']
                       }
                       threshold={2}
