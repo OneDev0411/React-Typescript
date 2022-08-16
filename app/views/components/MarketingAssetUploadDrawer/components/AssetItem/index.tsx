@@ -169,7 +169,9 @@ export default function AssetItem({
         {isImage(asset.file.object) && (
           <img src={asset.file.url} alt={asset.label} />
         )}
-        {isVideo(asset.file.object) && <VideoThumbnail url={asset.file.url} />}
+        {isVideo(asset.file.object) && (
+          <VideoThumbnail shouldHideIndicator url={asset.file.url} />
+        )}
       </Grid>
       {uploadProgress === undefined
         ? renderUploadForm()
