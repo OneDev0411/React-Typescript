@@ -1,32 +1,50 @@
-import useDebouncedCallback from 'use-debounce/lib/callback'
+import { useRef } from 'react'
 
-import DealsAndListingsAndPlacesSearchInput from '@app/views/components/DealsAndListingsAndPlacesSearchInput'
+import { TextField } from '@material-ui/core'
+
+import { normalizePostgressStdaddr } from '@app/views/components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/normalize-postgres-stdaddr'
+import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 
 import { FieldProps } from './types'
 
 export default function AddressField({
-  value = '',
+  value,
   names,
-  onChange,
-  ...props
-}: FieldProps) {
-  const [debouncedOnChange] = useDebouncedCallback(onChange, 300)
+  onChange
+}: FieldProps<Partial<IStdAddr>>) {
+  const formRef = useRef<any>(null)
 
-  const handleChange = (newValue: string) => {
-    debouncedOnChange(names, newValue)
+  const handleChange = (newValue: Partial<IStdAddr>) => {
+    formRef.current?.handleClose?.()
+    onChange(names, newValue)
   }
 
   return (
-    <DealsAndListingsAndPlacesSearchInput
-      textFieldProps={{
-        label: 'Address',
-        variant: 'outlined',
-        size: 'small'
+    <InlineAddressField
+      ref={formRef}
+      address={value?.full ?? ''}
+      handleSubmit={handleChange}
+      preSaveFormat={normalizePostgressStdaddr}
+      PopoverProps={{
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: -290 // TODO: fix popover ref problem
+        },
+        transformOrigin: {
+          vertical: 'bottom',
+          horizontal: 'left'
+        }
       }}
-      initialValue={value}
-      {...props}
-      searchTypes={['place']}
-      onInput={handleChange}
+      renderSearchField={({ isLoading, ...otherInputProps }) => (
+        <TextField
+          {...otherInputProps}
+          fullWidth
+          variant="outlined"
+          size="small"
+          label="Address"
+          autoComplete="disable-autocomplete"
+        />
+      )}
     />
   )
 }

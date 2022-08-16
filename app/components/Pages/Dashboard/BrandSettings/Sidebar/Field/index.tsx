@@ -1,8 +1,6 @@
-import React from 'react'
-
 import { Grid, FormControl } from '@material-ui/core'
 
-import { ImageUploadHandler } from '../../types'
+import { FieldType, ImageUploadHandler } from '../../types'
 
 import AddressField from './Address'
 import BorderField from './Border'
@@ -14,24 +12,43 @@ import TextField from './Text'
 import { FieldProps } from './types'
 import WeightField from './Weight'
 
-interface Props extends FieldProps {
+export interface Props<T extends string | Partial<IStdAddr>>
+  extends FieldProps<T> {
   onImageUpload: ImageUploadHandler
 }
 
-export default function Field({ onImageUpload, ...props }: Props) {
+function isAddress(
+  props: FieldProps<string | Partial<IStdAddr>>
+): props is FieldProps<Partial<IStdAddr>> {
+  return props.type === 'address'
+}
+
+function isNoneAddressElement(
+  props: FieldProps<string | Partial<IStdAddr>>,
+  type: Exclude<FieldType, 'address'>
+): props is FieldProps<string> {
+  return props.type === type
+}
+
+export default function Field<T extends string | Partial<IStdAddr>>({
+  onImageUpload,
+  ...props
+}: Props<T>) {
   return (
     <Grid container item>
       <FormControl fullWidth>
-        {props.type === 'text' && <TextField {...props} />}
-        {props.type === 'address' && <AddressField {...props} />}
-        {props.type === 'color' && <ColorField {...props} />}
-        {props.type === 'image' && (
+        {isNoneAddressElement(props, 'text') && <TextField {...props} />}
+        {isAddress(props) && <AddressField {...props} />}
+        {isNoneAddressElement(props, 'color') && <ColorField {...props} />}
+        {isNoneAddressElement(props, 'image') && (
           <ImageField {...props} onImageUpload={onImageUpload} />
         )}
-        {props.type === 'font-family' && <FontField {...props} />}
-        {props.type === 'pixel' && <PixelField {...props} />}
-        {props.type === 'font-weight' && <WeightField {...props} />}
-        {props.type === 'border' && <BorderField {...props} />}
+        {isNoneAddressElement(props, 'font-family') && <FontField {...props} />}
+        {isNoneAddressElement(props, 'pixel') && <PixelField {...props} />}
+        {isNoneAddressElement(props, 'font-weight') && (
+          <WeightField {...props} />
+        )}
+        {isNoneAddressElement(props, 'border') && <BorderField {...props} />}
       </FormControl>
     </Grid>
   )

@@ -56,7 +56,7 @@ export default function Sidebar({
 
   const handleUpdateSettings = (
     key: BrandMarketingPaletteKey | BrandMarketingPaletteKey[],
-    value: string
+    value: string | IStdAddr
   ) => {
     const keys = Array.isArray(key) ? key : [key]
 
