@@ -108,7 +108,7 @@ export function AgentsPicker({
               />
             </Box>
 
-            <Box position="absolute" left={0} right={0}>
+            <Box position="absolute" left={0} right={0} zIndex={1}>
               {rows.length > 0 && (
                 <Paper
                   style={{
