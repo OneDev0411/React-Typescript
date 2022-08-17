@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo, ReactNode } from 'react'
 
 import {
   Popover,
@@ -9,6 +9,8 @@ import {
   makeStyles
 } from '@material-ui/core'
 import { mdiPlus } from '@mdi/js'
+import escapeRegExp from 'lodash/escapeRegExp'
+import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import Search from '@app/views/components/Grid/Search'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -29,12 +31,35 @@ const useStyles = makeStyles(
   }
 )
 
-export function AddFilter({ disabled, config, onNewFilter }) {
+type FilterRow = {
+  id: string
+  label: string
+  renderer: () => ReactNode
+  tooltip: string
+}
+interface Props {
+  disabled: boolean
+  config: FilterRow[]
+  onNewFilter: (item: Partial<FilterRow>) => void
+}
+
+export function AddFilter({ disabled, config, onNewFilter }: Props) {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
-
+  const [query, setQuery] = useState<string>('')
+  const [debouncedSetQuery] = useDebouncedCallback(setQuery, 400)
   const isOpen = Boolean(anchorEl)
   const id = isOpen ? 'contact-add-filter' : undefined
+
+  const filters: FilterRow[] = useMemo(() => {
+    if (!query) {
+      return config
+    }
+
+    const regExp = new RegExp(escapeRegExp(query), 'gi')
+
+    return config.filter(item => item.label.match(regExp))
+  }, [config, query])
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     if (disabled) {
@@ -84,12 +109,10 @@ export function AddFilter({ disabled, config, onNewFilter }) {
           <Search
             autoFocus
             placeholder="Search Filters"
-            onChange={value => {
-              console.log({ value })
-            }}
+            onChange={value => debouncedSetQuery(value)}
           />
           <List>
-            {config.map((item, index) => (
+            {filters.map((item, index) => (
               <FilterItemTooltip key={index} item={item}>
                 <ListItem
                   button
