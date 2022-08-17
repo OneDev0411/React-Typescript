@@ -9,27 +9,28 @@ import FontField from './Font'
 import ImageField from './Image'
 import PixelField from './Pixel'
 import TextField from './Text'
-import { AddressFieldValue, FieldProps, FieldValue } from './types'
+import { FieldProps } from './types'
 import WeightField from './Weight'
 
-export interface Props<T extends FieldValue> extends FieldProps<T> {
+export interface Props<T extends BrandMarketingPaletteValue>
+  extends FieldProps<T> {
   onImageUpload: ImageUploadHandler
 }
 
 function isAddressField(
-  props: FieldProps<FieldValue>
-): props is FieldProps<AddressFieldValue> {
+  props: FieldProps<BrandMarketingPaletteValue>
+): props is FieldProps<BrandMarketingPaletteAddressValue> {
   return props.type === 'address'
 }
 
 function isStringValueField(
-  props: FieldProps<FieldValue>,
+  props: FieldProps<BrandMarketingPaletteValue>,
   type: Exclude<FieldType, 'address'>
 ): props is FieldProps<string> {
   return props.type === type
 }
 
-export default function Field<T extends FieldValue>({
+export default function Field<T extends BrandMarketingPaletteValue>({
   onImageUpload,
   ...props
 }: Props<T>) {

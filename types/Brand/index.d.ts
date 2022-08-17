@@ -21,6 +21,11 @@ declare type IPermission =
   | 'Showings'
   | 'ShareToInstagram'
 
+declare type BrandMarketingPaletteAddressValue = Partial<IStdAddr>
+declare type BrandMarketingPaletteValue =
+  | string
+  | BrandMarketingPaletteAddressValue
+
 declare type BrandMarketingPaletteKey =
   | 'address'
   | 'body-bg-color'
@@ -76,7 +81,7 @@ declare type BrandMarketingPaletteKey =
 declare type BrandMarketingPalette = Record<
   Exclude<BrandMarketingPaletteKey, 'address'>,
   string
-> & { address: Partial<IStdAddr> }
+> & { address: BrandMarketingPaletteAddressValue }
 
 declare interface IBrand extends IModel<'brand'> {
   assets: any | null

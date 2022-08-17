@@ -31,7 +31,7 @@ export function getListingUrl(
 export function get(
   brand: IBrand,
   key: BrandMarketingPaletteKey
-): string | Partial<IStdAddr> {
+): BrandMarketingPaletteValue {
   let currentBrand: Nullable<IBrand> = brand
 
   while (currentBrand) {

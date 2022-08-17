@@ -5,16 +5,16 @@ import { TextField } from '@material-ui/core'
 import { InlineAddressField } from '@app/views/components/inline-editable-fields/InlineAddressField'
 import { normalizePostgressStdaddr } from '@app/views/components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/normalize-postgres-stdaddr'
 
-import { AddressFieldValue, FieldProps } from './types'
+import { FieldProps } from './types'
 
 export default function AddressField({
   value,
   names,
   onChange
-}: FieldProps<AddressFieldValue>) {
+}: FieldProps<BrandMarketingPaletteAddressValue>) {
   const formRef = useRef<any>(null)
 
-  const handleChange = (newValue: AddressFieldValue) => {
+  const handleChange = (newValue: BrandMarketingPaletteAddressValue) => {
     formRef.current?.handleClose?.()
     onChange(names, newValue)
   }
