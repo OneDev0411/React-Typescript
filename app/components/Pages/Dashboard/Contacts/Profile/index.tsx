@@ -34,6 +34,7 @@ import skipEmailThreadChangeEvent from '../../Inbox/helpers/skip-email-thread-ch
 import { Container } from '../components/Container'
 
 import AddressesSection from './Addresses'
+import Assignee from './Assignee'
 import AddEvent from './components/AddEvent'
 import AddNote from './components/AddNote'
 import { ContactInfo } from './ContactInfo'
@@ -41,6 +42,7 @@ import { Dates } from './Dates'
 import Deals from './Deals'
 import Delete from './Delete'
 import { Details } from './Details'
+import Divider from './Divider'
 import Flows from './Flows'
 import { Header } from './Header'
 import { LastTouch } from './LastTouch'
@@ -368,11 +370,11 @@ const ContactProfile = props => {
 
   const updateAttributeSubmitCallback = (
     contact: INormalizedContact,
-    updatedAttribute: IContactAttributeDef
+    updatedAttribute?: IContactAttributeDef
   ) => {
     setNewContact(contact)
 
-    if (updatedAttribute.data_type === 'date') {
+    if (updatedAttribute?.data_type === 'date') {
       fetchTimeline()
     }
   }
@@ -480,6 +482,8 @@ const ContactProfile = props => {
               <Deals contact={contact} />
               <Details {..._props} />
               <Partner {..._props} />
+              <Divider />
+              <Assignee assigned={null} {..._props} />
               <Owner
                 onSelect={onChangeOwner}
                 owner={contact.user}
