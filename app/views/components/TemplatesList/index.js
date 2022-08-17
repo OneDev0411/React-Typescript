@@ -303,8 +303,9 @@ function TemplatesList(props) {
           </Button>
         }
         onClose={() => {
-          setPreviewModalOpen(false)
+          setSelectedTemplate(null)
           onSelect && onSelect(null)
+          setPreviewModalOpen(false)
         }}
         setSelectedTemplate={template => {
           setSelectedTemplate(template)
@@ -312,7 +313,7 @@ function TemplatesList(props) {
         }}
       />
 
-      {selectedTemplate && (
+      {selectedTemplate && !isPreviewModalOpen && (
         <TemplateAction
           shouldLoadTemplateInstance={props.type === 'history'}
           type={props.type}
