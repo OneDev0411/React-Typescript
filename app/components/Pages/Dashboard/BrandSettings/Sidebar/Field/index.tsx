@@ -9,46 +9,43 @@ import FontField from './Font'
 import ImageField from './Image'
 import PixelField from './Pixel'
 import TextField from './Text'
-import { FieldProps } from './types'
+import { AddressFieldValue, FieldProps, FieldValue } from './types'
 import WeightField from './Weight'
 
-export interface Props<T extends string | Partial<IStdAddr>>
-  extends FieldProps<T> {
+export interface Props<T extends FieldValue> extends FieldProps<T> {
   onImageUpload: ImageUploadHandler
 }
 
-function isAddress(
-  props: FieldProps<string | Partial<IStdAddr>>
-): props is FieldProps<Partial<IStdAddr>> {
+function isAddressField(
+  props: FieldProps<FieldValue>
+): props is FieldProps<AddressFieldValue> {
   return props.type === 'address'
 }
 
-function isNoneAddressElement(
-  props: FieldProps<string | Partial<IStdAddr>>,
+function isStringValueField(
+  props: FieldProps<FieldValue>,
   type: Exclude<FieldType, 'address'>
 ): props is FieldProps<string> {
   return props.type === type
 }
 
-export default function Field<T extends string | Partial<IStdAddr>>({
+export default function Field<T extends FieldValue>({
   onImageUpload,
   ...props
 }: Props<T>) {
   return (
     <Grid container item>
       <FormControl fullWidth>
-        {isNoneAddressElement(props, 'text') && <TextField {...props} />}
-        {isAddress(props) && <AddressField {...props} />}
-        {isNoneAddressElement(props, 'color') && <ColorField {...props} />}
-        {isNoneAddressElement(props, 'image') && (
+        {isStringValueField(props, 'text') && <TextField {...props} />}
+        {isAddressField(props) && <AddressField {...props} />}
+        {isStringValueField(props, 'color') && <ColorField {...props} />}
+        {isStringValueField(props, 'image') && (
           <ImageField {...props} onImageUpload={onImageUpload} />
         )}
-        {isNoneAddressElement(props, 'font-family') && <FontField {...props} />}
-        {isNoneAddressElement(props, 'pixel') && <PixelField {...props} />}
-        {isNoneAddressElement(props, 'font-weight') && (
-          <WeightField {...props} />
-        )}
-        {isNoneAddressElement(props, 'border') && <BorderField {...props} />}
+        {isStringValueField(props, 'font-family') && <FontField {...props} />}
+        {isStringValueField(props, 'pixel') && <PixelField {...props} />}
+        {isStringValueField(props, 'font-weight') && <WeightField {...props} />}
+        {isStringValueField(props, 'border') && <BorderField {...props} />}
       </FormControl>
     </Grid>
   )

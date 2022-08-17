@@ -2,19 +2,19 @@ import { useRef } from 'react'
 
 import { TextField } from '@material-ui/core'
 
+import { InlineAddressField } from '@app/views/components/inline-editable-fields/InlineAddressField'
 import { normalizePostgressStdaddr } from '@app/views/components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/normalize-postgres-stdaddr'
-import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 
-import { FieldProps } from './types'
+import { AddressFieldValue, FieldProps } from './types'
 
 export default function AddressField({
   value,
   names,
   onChange
-}: FieldProps<Partial<IStdAddr>>) {
+}: FieldProps<AddressFieldValue>) {
   const formRef = useRef<any>(null)
 
-  const handleChange = (newValue: Partial<IStdAddr>) => {
+  const handleChange = (newValue: AddressFieldValue) => {
     formRef.current?.handleClose?.()
     onChange(names, newValue)
   }
