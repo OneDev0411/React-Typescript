@@ -1,8 +1,7 @@
 import { HTMLAttributes, MouseEvent, FocusEvent } from 'react'
 
-import { makeStyles } from '@material-ui/core'
+import { alpha, makeStyles } from '@material-ui/core'
 import { mdiPlay } from '@mdi/js'
-import cn from 'classnames'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -13,19 +12,9 @@ const useStyles = makeStyles(
       position: 'absolute',
       top: theme.spacing(1),
       right: theme.spacing(1),
-      color: theme.palette.common.white,
-      filter: `drop-shadow(0px 0px 3px ${theme.palette.grey[700]})`,
-      zIndex: 3,
-      '& > path': {
-        stroke: 'currentColor',
-        strokeLinejoin: 'round',
-        strokeWidth: 2
-      }
-    },
-    indicatorIconCenter: {
-      right: '50%',
-      top: '50%',
-      transform: 'translate(50%, -50%)'
+      color: alpha(theme.palette.common.white, 80),
+      filter: `drop-shadow(0px 0px 5px ${theme.palette.grey[700]})`,
+      zIndex: 3
     }
   }),
   {
@@ -46,15 +35,13 @@ function isPlaying(video: HTMLVideoElement): boolean {
 interface Props extends HTMLAttributes<HTMLVideoElement> {
   url: string
   shouldHideIndicator?: boolean
-  indicatorSize?: keyof typeof muiIconSizes
-  indicatorPosition?: 'top-right' | 'center'
+  indicatorIconPath?: string
 }
 
 export function VideoThumbnail({
   url,
   shouldHideIndicator = false,
-  indicatorSize = 'medium',
-  indicatorPosition = 'top-right',
+  indicatorIconPath = mdiPlay,
   ...otherProps
 }: Props) {
   const classes = useStyles()
@@ -88,12 +75,9 @@ export function VideoThumbnail({
     <>
       {!shouldHideIndicator && (
         <SvgIcon
-          path={mdiPlay}
-          className={cn(
-            classes.indicatorIcon,
-            indicatorPosition === 'center' && classes.indicatorIconCenter
-          )}
-          size={muiIconSizes[indicatorSize]}
+          path={indicatorIconPath}
+          className={classes.indicatorIcon}
+          size={muiIconSizes.medium}
         />
       )}
       <video

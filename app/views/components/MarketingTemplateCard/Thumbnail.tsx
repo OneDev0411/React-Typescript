@@ -1,6 +1,7 @@
 import { useState, useEffect, ComponentProps } from 'react'
 
 import { makeStyles } from '@material-ui/core'
+import { mdiPlayBoxMultipleOutline } from '@mdi/js'
 import { useInView } from 'react-intersection-observer'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
@@ -105,8 +106,7 @@ export function Thumbnail({
           <VideoThumbnail
             url={thumbnail}
             className={classes.thumb}
-            indicatorSize="large"
-            indicatorPosition="center"
+            indicatorIconPath={mdiPlayBoxMultipleOutline}
           />
         )}
       </div>
