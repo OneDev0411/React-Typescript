@@ -3,7 +3,6 @@ import React, { Fragment } from 'react'
 import { mdiRadioboxBlank, mdiRadioboxMarked } from '@mdi/js'
 import PropTypes from 'prop-types'
 
-import { DoneButton } from 'components/Grid/Filters/Item/styled'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -15,7 +14,8 @@ import {
   InputContainer,
   Operator,
   Title,
-  MarkedIcon
+  MarkedIcon,
+  DoneButton
 } from './styled'
 
 export const operators = [

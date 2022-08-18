@@ -33,8 +33,6 @@ export default function ContactFilters(props) {
   })
   const customFilters = useGetCustomFilters(attributeDefs)
 
-  console.log('ContactFilters', { customFilters })
-
   if (!props?.show) {
     return null
   }
@@ -87,7 +85,7 @@ export default function ContactFilters(props) {
   }
 
   return (
-    <Box display="flex" alignItems="center">
+    <Box display="flex" alignItems="center" mt={1.5}>
       <Filters
         name="contacts"
         plugins={['segments']}

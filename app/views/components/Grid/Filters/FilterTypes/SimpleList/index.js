@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { List, ListItem } from '@material-ui/core'
+import { Typography, List, ListItem } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import classnames from 'classnames'
 import usePromise from 'react-use-promise'
@@ -14,9 +12,9 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       maxWidth: '100%',
-      width: '18.75rem',
+      overflowX: 'hidden',
       maxHeight: '18.75rem',
-      overflow: 'auto'
+      overflowY: 'auto'
     }
   })
 )
@@ -65,7 +63,7 @@ export function SimpleList({
             }}
             key={index}
           >
-            {item.label}
+            <Typography noWrap>{item.label}</Typography>
           </ListItem>
         ))}
       </List>

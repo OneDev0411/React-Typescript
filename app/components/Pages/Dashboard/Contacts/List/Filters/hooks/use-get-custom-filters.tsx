@@ -1,20 +1,13 @@
-import { useMemo, ReactNode } from 'react'
+import { useMemo } from 'react'
 
 import { IAttributeDefsState } from '@app/reducers/contacts/attributeDefs'
 
-type FilterRow = {
-  id: string
-  label: string
-  renderer: () => ReactNode
-  tooltip: string
-}
-
 export function useGetCustomFilters(
   attributeDef: IAttributeDefsState
-): FilterRow[] {
+): IFilterConfig[] {
   const customFilters = useMemo(() => {
     return Object.values(attributeDef.byId).reduce(
-      (filters: FilterRow[], attribute: IContactAttributeDef) => {
+      (filters: IFilterConfig[], attribute: IContactAttributeDef) => {
         if (attribute.searchable) {
           filters.push({
             id: attribute.id,

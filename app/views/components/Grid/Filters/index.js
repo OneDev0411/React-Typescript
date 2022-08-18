@@ -28,6 +28,8 @@ const Container = styled.div`
   align-items: center;
 `
 const FiltersContainer = styled.div`
+  display: flex;
+  align-items: center;
   flex-grow: 1;
 `
 const FiltersOptions = styled.div`

@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import Button from 'components/Button/ActionButton'
-import IconButton from 'components/Button/IconButton'
 import Card from 'components/Card'
 
 function getItemColor(props) {
@@ -11,12 +9,6 @@ function getItemColor(props) {
 
   return '#000'
 }
-
-export const RemoveButton = styled(IconButton)`
-  height: 1.5em;
-  margin-left: 0.5em;
-  padding: 0;
-`
 
 export const ItemTitle = styled.div`
   overflow: hidden;
@@ -42,16 +34,6 @@ export const Container = styled.div`
     background-color: #fff;
     border: solid 1px ${props => getItemColor(props)};
   }
-
-  &:hover ${RemoveButton} svg {
-    color: ${props => props.theme.palette.grey['600']};
-  }
-`
-
-export const TitleContainer = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0 0.5em;
 `
 
 export const Menu = styled(Card)`
@@ -64,10 +46,4 @@ export const Menu = styled(Card)`
 
 export const Content = styled.div`
   cursor: auto;
-`
-export const DoneButton = styled(Button)`
-  display: block;
-  width: 100%;
-  text-align: center;
-  border-top: 1px solid ${props => props.theme.palette.grey['300']};
 `

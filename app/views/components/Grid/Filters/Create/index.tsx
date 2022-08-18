@@ -1,4 +1,4 @@
-import { useState, useMemo, ReactNode } from 'react'
+import { useState, useMemo } from 'react'
 
 import {
   Popover,
@@ -31,16 +31,10 @@ const useStyles = makeStyles(
   }
 )
 
-type FilterRow = {
-  id: string
-  label: string
-  renderer: () => ReactNode
-  tooltip: string
-}
 interface Props {
   disabled: boolean
-  config: FilterRow[]
-  onNewFilter: (item: Partial<FilterRow>) => void
+  config: IFilterConfig[]
+  onNewFilter: (item: Partial<IFilterConfig>) => void
 }
 
 export function AddFilter({ disabled, config, onNewFilter }: Props) {
@@ -51,7 +45,7 @@ export function AddFilter({ disabled, config, onNewFilter }: Props) {
   const isOpen = Boolean(anchorEl)
   const id = isOpen ? 'contact-add-filter' : undefined
 
-  const filters: FilterRow[] = useMemo(() => {
+  const filters: IFilterConfig[] = useMemo(() => {
     if (!query) {
       return config
     }
