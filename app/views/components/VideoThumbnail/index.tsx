@@ -2,6 +2,7 @@ import { HTMLAttributes, MouseEvent, FocusEvent } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import { mdiPlay } from '@mdi/js'
+import cn from 'classnames'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -20,6 +21,11 @@ const useStyles = makeStyles(
         strokeLinejoin: 'round',
         strokeWidth: 2
       }
+    },
+    indicatorIconCenter: {
+      right: '50%',
+      top: '50%',
+      transform: 'translate(50%, -50%)'
     }
   }),
   {
@@ -40,11 +46,15 @@ function isPlaying(video: HTMLVideoElement): boolean {
 interface Props extends HTMLAttributes<HTMLVideoElement> {
   url: string
   shouldHideIndicator?: boolean
+  indicatorSize?: keyof typeof muiIconSizes
+  indicatorPosition?: 'top-right' | 'center'
 }
 
 export function VideoThumbnail({
   url,
   shouldHideIndicator = false,
+  indicatorSize = 'medium',
+  indicatorPosition = 'top-right',
   ...otherProps
 }: Props) {
   const classes = useStyles()
@@ -79,8 +89,11 @@ export function VideoThumbnail({
       {!shouldHideIndicator && (
         <SvgIcon
           path={mdiPlay}
-          className={classes.indicatorIcon}
-          size={muiIconSizes.medium}
+          className={cn(
+            classes.indicatorIcon,
+            indicatorPosition === 'center' && classes.indicatorIconCenter
+          )}
+          size={muiIconSizes[indicatorSize]}
         />
       )}
       <video

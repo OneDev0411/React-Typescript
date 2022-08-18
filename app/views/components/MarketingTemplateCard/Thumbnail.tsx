@@ -13,6 +13,8 @@ import {
   isVideoThumb
 } from 'utils/marketing-center/helpers'
 
+import { VideoThumbnail } from '../VideoThumbnail'
+
 const useStyles = makeStyles(
   () => ({
     videoThumbWrapper: {
@@ -100,12 +102,11 @@ export function Thumbnail({
     return isVideoThumb(template) ? (
       <div className={classes.videoThumbWrapper} ref={ref}>
         {shouldRender && (
-          <video
-            autoPlay
-            src={thumbnail}
-            muted
-            loop
+          <VideoThumbnail
+            url={thumbnail}
             className={classes.thumb}
+            indicatorSize="large"
+            indicatorPosition="center"
           />
         )}
       </div>
