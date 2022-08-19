@@ -100,6 +100,8 @@ export class OperatorAndOperandFilter extends React.Component {
   }
 
   render() {
+    console.log({ ddd: this.props })
+
     const { allowedOperators, type } = this.props
     const { selectedOperator } = this.state
 

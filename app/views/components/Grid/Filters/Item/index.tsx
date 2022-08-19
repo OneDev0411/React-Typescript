@@ -1,8 +1,8 @@
-import { Chip } from '@material-ui/core'
+import { Chip, Typography } from '@material-ui/core'
+import cn from 'classnames'
 import Downshift from 'downshift'
 
 import { getCurrentValues } from './helper'
-import { ItemTitle } from './styled'
 import { useStyles } from './styles'
 
 interface Props {
@@ -25,7 +25,7 @@ export const FilterItem = (props: Props) => {
   const {
     filterConfig,
     isActive,
-    // isIncomplete,
+    isIncomplete,
     values,
     operator,
     onToggleFilterActive,
@@ -37,13 +37,17 @@ export const FilterItem = (props: Props) => {
     <div className={classes.container}>
       <Chip
         variant="outlined"
+        size="small"
         label={
-          <ItemTitle>
-            <span style={{ fontWeight: 600 }}>{filterConfig.label} </span>
-            {operator && operator.name}&nbsp;
+          <div className={classes.filterChip}>
+            <Typography variant="subtitle2" className={classes.filterLabel}>
+              {filterConfig.label}
+            </Typography>
+            {operator?.name}&nbsp;
             {getCurrentValues(isActive, values)}
-          </ItemTitle>
+          </div>
         }
+        className={cn({ [classes.incomplete]: isIncomplete && !isActive })}
         onDelete={onRemove}
         onClick={onToggleFilterActive}
       />
@@ -63,27 +67,4 @@ export const FilterItem = (props: Props) => {
       </Downshift>
     </div>
   )
-
-  // return (
-  //   <Container isActive={isActive} isIncomplete={isIncomplete}>
-  //     <Downshift isOpen={isActive} onOuterClick={onToggleFilterActive}>
-  //       {({ isOpen }) => (
-  //         <div>
-  //           {isOpen && (
-  //             <Menu depth={3}>
-  //               <Content>
-  //                 {filterConfig.renderer({
-  //                   onFilterChange,
-  //                   onToggleFilterActive,
-  //                   values,
-  //                   operator
-  //                 })}
-  //               </Content>
-  //             </Menu>
-  //           )}
-  //         </div>
-  //       )}
-  //     </Downshift>
-  //   </Container>
-  // )
 }

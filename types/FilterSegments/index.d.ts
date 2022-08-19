@@ -4,15 +4,16 @@ declare interface IFilterOperator {
   default?: boolean
 }
 
+declare interface IFilterConfigRenderer {
+  onFilterChange: (values: ILabelValue[], operator: IFilterOperator) => void
+  onToggleFilterActive: () => void
+  values: ILabelValue[]
+  operator: IFilterOperator
+}
 declare interface IFilterConfig {
   id: string
   label: string
-  renderer: (props: {
-    onFilterChange: (values: ILabelValue[], operator: IFilterOperator) => void
-    onToggleFilterActive: () => void
-    values: ILabelValue[]
-    operator: IFilterOperator
-  }) => ReactNode
+  renderer: (props: IFilterConfigRenderer) => ReactNode
   tooltip: string
 }
 

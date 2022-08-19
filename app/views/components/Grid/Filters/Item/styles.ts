@@ -15,6 +15,17 @@ export const useStyles = makeStyles(
       background: theme.palette.common.white,
       borderRadius: `${theme.shape.borderRadius}px`,
       boxShadow: theme.shadows[3]
+    },
+    incomplete: {
+      background: 'red'
+    },
+    filterChip: {
+      display: 'flex',
+      alignItems: 'center',
+      ...theme.typography.body2
+    },
+    filterLabel: {
+      marginRight: theme.spacing(0.5)
     }
   }),
   { name: 'FilterItem' }

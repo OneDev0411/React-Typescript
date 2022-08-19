@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { IAttributeDefsState } from '@app/reducers/contacts/attributeDefs'
+import { DateFilterType } from '@app/views/components/Grid/Filters/FilterTypes/Date'
 
 export function useGetCustomFilters(
   attributeDef: IAttributeDefsState
@@ -8,11 +9,11 @@ export function useGetCustomFilters(
   const customFilters = useMemo(() => {
     return Object.values(attributeDef.byId).reduce(
       (filters: IFilterConfig[], attribute: IContactAttributeDef) => {
-        if (attribute.searchable) {
+        if (attribute.data_type === 'date') {
           filters.push({
             id: attribute.id,
             label: attribute.label,
-            renderer: () => <span>{attribute.label}</span>,
+            renderer: props => <DateFilterType {...props} />,
             tooltip: attribute.section
           })
         }
