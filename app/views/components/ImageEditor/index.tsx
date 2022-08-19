@@ -84,7 +84,7 @@ export function EditorDialog({
 }: Props) {
   const classes = useStyles()
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
-
+  const [isLoading, setIsLoading] = useState(false)
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
   const [activeAction, setActiveAction] = useState<Actions | null>(null)
   const [isFocused, setIsFocused] = useState(false)
@@ -120,10 +120,14 @@ export function EditorDialog({
     }
 
     const load = async () => {
+      setIsLoading(true)
+
       const fileBlob =
         typeof file === 'string' ? await convertUrlToImageFile(file) : file
 
       await editor.loadFromFile(fileBlob)
+
+      setIsLoading(false)
     }
 
     load()
@@ -267,26 +271,28 @@ export function EditorDialog({
             </Box>
           )}
 
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            className={classes.actionsContainer}
-          >
-            <Box display="flex" className={classes.actions}>
-              <Cropper options={cropperOptions} />
-              <Rotation />
-              <Flip />
-              <Draw />
-              <Text />
-              <Image />
-              <Filter />
-            </Box>
+          {!isLoading && (
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              className={classes.actionsContainer}
+            >
+              <Box display="flex" className={classes.actions}>
+                <Cropper options={cropperOptions} />
+                <Rotation />
+                <Flip />
+                <Draw />
+                <Text />
+                <Image />
+                <Filter />
+              </Box>
 
-            <Box display="flex">
-              <Redo />
-              <Undo />
+              <Box display="flex">
+                <Redo />
+                <Undo />
+              </Box>
             </Box>
-          </Box>
+          )}
         </ImageEditorContext.Provider>
       </DialogContent>
     </Dialog>
