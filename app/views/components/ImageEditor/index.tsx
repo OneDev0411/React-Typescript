@@ -10,6 +10,7 @@ import {
   Button,
   ClickAwayListener
 } from '@material-ui/core'
+import { Skeleton } from '@material-ui/lab'
 import Pikaso, { EventListenerCallbackEvent } from 'pikaso'
 
 import type { Filter as ImageFilter } from '@app/hooks/use-image-filters'
@@ -58,6 +59,9 @@ const useStyles = makeStyles(
       '& button': {
         marginRight: theme.spacing(1)
       }
+    },
+    hidden: {
+      display: 'none'
     }
   }),
   {
@@ -240,38 +244,49 @@ export function EditorDialog({
       </DialogTitle>
 
       <DialogContent className={classes.dialogContent}>
+        {isLoading && (
+          <Box m={3}>
+            <Skeleton variant="rect" width="100%" height="500px" />
+            <Box mt={2}>
+              <Skeleton variant="rect" width="100%" height="50px" />
+            </Box>
+          </Box>
+        )}
+
         <ClickAwayListener onClickAway={() => setIsFocused(false)}>
           <div
             ref={editorRef}
-            className={classes.editor}
+            className={isLoading ? classes.hidden : classes.editor}
             onClick={() => setIsFocused(true)}
           />
         </ClickAwayListener>
 
-        <ImageEditorContext.Provider
-          value={{
-            editor,
-            activeAction,
-            history,
-            setActiveAction,
-            activeFilter,
-            setActiveFilter
-          }}
-        >
-          {activeAction && (
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              className={classes.actionMenu}
-            >
-              {activeAction === 'crop' && <CropMenu options={cropperOptions} />}
-              {activeAction === 'draw' && <DrawMenu />}
-              {activeAction === 'text' && <TextMenu />}
-              {activeAction === 'filter' && <FilterMenu file={file} />}
-            </Box>
-          )}
+        {!isLoading && (
+          <ImageEditorContext.Provider
+            value={{
+              editor,
+              activeAction,
+              history,
+              setActiveAction,
+              activeFilter,
+              setActiveFilter
+            }}
+          >
+            {activeAction && (
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                className={classes.actionMenu}
+              >
+                {activeAction === 'crop' && (
+                  <CropMenu options={cropperOptions} />
+                )}
+                {activeAction === 'draw' && <DrawMenu />}
+                {activeAction === 'text' && <TextMenu />}
+                {activeAction === 'filter' && <FilterMenu file={file} />}
+              </Box>
+            )}
 
-          {!isLoading && (
             <Box
               display="flex"
               justifyContent="space-between"
@@ -292,8 +307,8 @@ export function EditorDialog({
                 <Undo />
               </Box>
             </Box>
-          )}
-        </ImageEditorContext.Provider>
+          </ImageEditorContext.Provider>
+        )}
       </DialogContent>
     </Dialog>
   )
