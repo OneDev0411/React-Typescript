@@ -37,6 +37,7 @@ const useStyles = makeStyles(
     editor: {
       border: `1px solid ${theme.palette.action.hover}`,
       height: '500px',
+      maxHeight: '500px',
       margin: theme.spacing(2)
     },
     dialogContent: {
