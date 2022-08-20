@@ -113,11 +113,11 @@ export function Calendar({
           await getCalendar(loadNewEventsPayload)
         ])
 
-        if (MAX_LIMIT_EVENT > events[0]) {
+        if (MAX_LIMIT_EVENT > events[0].length) {
           setIsReachedStart(true)
         }
 
-        if (MAX_LIMIT_EVENT > events[1]) {
+        if (MAX_LIMIT_EVENT > events[1].length) {
           setIsReachedEnd(true)
         }
 
@@ -168,13 +168,13 @@ export function Calendar({
     [fetchEvents, events, onLoadEvents]
   )
 
-  const handleLoadEvents = async () => {
+  const handleLoadEvents = async (reset: boolean = true) => {
     await getEvents(
       {
         range: calendarRange,
         position: 'Middle'
       },
-      true
+      reset
     )
   }
 
@@ -262,7 +262,7 @@ export function Calendar({
    * exposes below methods to be accessible outside of the component
    */
   useImperativeHandle(calendarRef, () => ({
-    refresh: handleLoadEvents,
+    refresh: () => handleLoadEvents(false),
     updateCrmEvents: handleCrmEventChange
   }))
 

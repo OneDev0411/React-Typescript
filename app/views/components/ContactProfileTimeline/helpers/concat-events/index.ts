@@ -15,6 +15,8 @@ export function concatEvents(
 ): ICalendarEvent[] {
   const { events = [], prevEvents = [], nextEvents = [] } = data
 
+  // console.log({ data, reset })
+
   if (reset) {
     return prevEvents.concat(nextEvents)
   }
