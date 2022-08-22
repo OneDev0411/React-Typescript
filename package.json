@@ -83,6 +83,7 @@
     "branch-sdk-rechat": "^2.59.1",
     "buffer": "^6.0.3",
     "calendar-link": "^2.1.1",
+    "canvas": "^2.9.3",
     "chromath": "^0.0.7",
     "classnames": "^2.2.6",
     "cleave.js": "^1.4.10",
