@@ -93,7 +93,11 @@ export function MarketingTemplateSelector(props: Props) {
     <>
       <ScrollableArea hasThinnerScrollbar shadowHeight={20} shadowColor="white">
         <Box px={2} py={1} className={classes.header}>
-          <Link target="_blank" href="/dashboard/marketing" color="secondary">
+          <Link
+            target="_blank"
+            href="/dashboard/marketing/designs"
+            color="secondary"
+          >
             Open All Designs
           </Link>
         </Box>
