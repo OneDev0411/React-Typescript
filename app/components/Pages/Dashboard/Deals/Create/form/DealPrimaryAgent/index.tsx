@@ -4,6 +4,7 @@ import { Box, Button } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
 // eslint-disable-next-line import/no-named-as-default
+import { AgentsPicker } from '@app/views/components/AgentsPicker'
 import DealRole from 'components/DealRole/Form'
 import {
   QuestionSection,
@@ -15,9 +16,9 @@ import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-con
 import { deleteRole } from 'models/Deal/role'
 
 import { RoleCard } from '../../../components/RoleCard'
-import { AgentsList } from '../../components/AgentsList'
 import { ContactRoles } from '../../components/ContactRoles'
 import { useCreationContext } from '../../context/use-creation-context'
+import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'
 import type { IDealFormRole } from '../../types'
 
 interface Props {
@@ -135,11 +136,13 @@ export function DealPrimaryAgent({
               onSelectRole={setSelectedRole}
             />
           ) : (
-            <AgentsList
+            <AgentsPicker
               flattenTeams={isOfficeDoubleEnded}
               isPrimaryAgent={!isOfficeDoubleEnded}
               useTeamBrandId={!isOfficeDoubleEnded}
-              onSelectRole={setSelectedRole}
+              onSelectAgent={agent =>
+                setSelectedRole(convertUserAgentToRole(agent))
+              }
             />
           )}
         </Box>

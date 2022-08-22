@@ -1,8 +1,7 @@
 import { Box, Typography } from '@material-ui/core'
 
-import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'
-import type { IDealFormRole } from '../../types'
-import { UserRow } from '../UserRow'
+import { BrandedUser } from './types'
+import { UserRow } from './UserRow'
 
 export enum RowType {
   Header,
@@ -27,14 +26,14 @@ interface Props {
   data: {
     rows: RowItem[]
     useTeamBrandId: boolean
-    onSelectRole: (role: Partial<IDealFormRole>) => void
+    onSelectAgent: (agent: BrandedUser) => void
   }
 }
 
 export function Row({
   index,
   style,
-  data: { rows, useTeamBrandId, onSelectRole }
+  data: { rows, useTeamBrandId, onSelectAgent }
 }: Props) {
   const row = rows[index]
 
@@ -60,12 +59,10 @@ export function Row({
         email={row.user.email}
         avatarUrl={row.user.profile_image_url!}
         onClick={() =>
-          onSelectRole(
-            convertUserAgentToRole({
-              ...row.user,
-              brand_id: useTeamBrandId ? row.teamId : null
-            })
-          )
+          onSelectAgent({
+            ...row.user,
+            brand_id: useTeamBrandId ? row.teamId : null
+          })
         }
       />
     </div>

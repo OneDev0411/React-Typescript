@@ -14,9 +14,8 @@ import { NormalizedBrand } from '@app/views/components/TeamAgents/types'
 import VirtualList from '@app/views/components/VirtualList'
 import TeamAgents from 'components/TeamAgents'
 
-import type { IDealFormRole } from '../../types'
-
 import { Row, RowItem, RowType } from './Row'
+import { BrandedUser } from './types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -45,14 +44,14 @@ interface Props {
   useTeamBrandId: boolean
   isPrimaryAgent: boolean
   flattenTeams: boolean
-  onSelectRole: (role: Partial<IDealFormRole>) => void
+  onSelectAgent: (agent: BrandedUser) => void
 }
 
-export function AgentsList({
+export function AgentsPicker({
   useTeamBrandId,
   flattenTeams,
   isPrimaryAgent,
-  onSelectRole
+  onSelectAgent
 }: Props) {
   const classes = useStyles()
 
@@ -98,7 +97,7 @@ export function AgentsList({
         return isLoading ? (
           <CircularProgress disableShrink />
         ) : (
-          <div>
+          <Box position="relative">
             <Box className={classes.searchInputContainer}>
               <TextField
                 fullWidth
@@ -109,37 +108,39 @@ export function AgentsList({
               />
             </Box>
 
-            {rows.length > 0 && (
-              <Paper
-                style={{
-                  height:
-                    rows.length < 5 ? `${rows.length * 60 + 16}px` : '250px'
-                }}
-              >
-                <AutoSizer>
-                  {({ width, height }) => (
-                    <VirtualList
-                      width={width}
-                      height={height}
-                      itemCount={rows.length}
-                      itemData={
-                        {
-                          rows,
-                          useTeamBrandId,
-                          onSelectRole
-                        } as React.ComponentProps<typeof Row>['data']
-                      }
-                      threshold={2}
-                      itemSize={() => 60}
-                      overscanCount={3}
-                    >
-                      {Row}
-                    </VirtualList>
-                  )}
-                </AutoSizer>
-              </Paper>
-            )}
-          </div>
+            <Box>
+              {rows.length > 0 && (
+                <Paper
+                  style={{
+                    height:
+                      rows.length < 5 ? `${rows.length * 60 + 16}px` : '250px'
+                  }}
+                >
+                  <AutoSizer>
+                    {({ width, height }) => (
+                      <VirtualList
+                        width={width}
+                        height={height}
+                        itemCount={rows.length}
+                        itemData={
+                          {
+                            rows,
+                            useTeamBrandId,
+                            onSelectAgent
+                          } as React.ComponentProps<typeof Row>['data']
+                        }
+                        threshold={2}
+                        itemSize={() => 60}
+                        overscanCount={3}
+                      >
+                        {Row}
+                      </VirtualList>
+                    )}
+                  </AutoSizer>
+                </Paper>
+              )}
+            </Box>
+          </Box>
         )
       }}
     </TeamAgents>

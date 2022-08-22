@@ -24,7 +24,7 @@ export const marketingTemplateCardStyles = (theme: Theme) =>
       background: theme.palette.grey['200'],
       overflow: 'hidden',
       boxShadow: theme.shadows[2],
-      '&::after': {
+      '&:not($cardVideo)::after': {
         content: '""',
         position: 'absolute',
         top: 0,
@@ -38,11 +38,11 @@ export const marketingTemplateCardStyles = (theme: Theme) =>
       },
       '&:not($cardLoading):hover': {
         '& $actions': {
-          opacity: 1,
+          opacity: 0.9,
           transform: 'translateY(0)'
         },
 
-        '&::after': {
+        '&:not($cardVideo)::after': {
           opacity: 1
         }
       },
@@ -54,6 +54,9 @@ export const marketingTemplateCardStyles = (theme: Theme) =>
     cardWebsite: {
       display: 'block',
       maxHeight: 450
+    },
+    cardVideo: {
+      display: 'flex'
     },
     cardHasPreview: {
       cursor: 'zoom-in'
