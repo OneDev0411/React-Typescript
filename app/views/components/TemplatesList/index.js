@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useCallback } from 'react'
 
 import { Tooltip, Button, makeStyles } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
@@ -45,6 +45,7 @@ const useStyles = makeStyles(
 )
 
 function TemplatesList(props) {
+  const { onSelect } = props
   const classes = useStyles()
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState(null)
@@ -144,7 +145,7 @@ function TemplatesList(props) {
     setPreviewModalOpen(true)
     setSelectedTemplate(asset)
     setActionTriggered(false)
-    props.onSelect && props.onSelect(asset)
+    onSelect && onSelect(asset)
   }
 
   const handleShareBrandAssetClick = asset => {
@@ -152,6 +153,16 @@ function TemplatesList(props) {
     setSelectedTemplate(asset)
     setActionTriggered(true)
   }
+
+  const handleSetTriggered = useCallback(
+    value => {
+      setActionTriggered(value)
+
+      setPreviewModalOpen(false)
+      onSelect && onSelect(null)
+    },
+    [onSelect]
+  )
 
   const isEmpty = props.items.length === 0 && !props.isLoading
 
@@ -228,7 +239,7 @@ function TemplatesList(props) {
                 handlePreview={() => {
                   setPreviewModalOpen(true)
                   setSelectedTemplate(item)
-                  props.onSelect && props.onSelect(item)
+                  onSelect && onSelect(item)
                 }}
                 actions={
                   isTemplateInstance(item) ? (
@@ -252,7 +263,7 @@ function TemplatesList(props) {
                         setActionTriggered(true)
                         setEditActionTriggered(false)
                         setSelectedTemplate(item)
-                        props.onSelect && props.onSelect(item)
+                        onSelect && onSelect(item)
                       }}
                     />
                   )
@@ -292,29 +303,28 @@ function TemplatesList(props) {
           </Button>
         }
         onClose={() => {
+          setSelectedTemplate(null)
+          onSelect && onSelect(null)
           setPreviewModalOpen(false)
-          props.onSelect && props.onSelect(null)
         }}
         setSelectedTemplate={template => {
           setSelectedTemplate(template)
-          props.onSelect && props.onSelect(template)
+          onSelect && onSelect(template)
         }}
       />
 
-      <TemplateAction
-        type={props.type}
-        medium={props.medium}
-        isEdit={isEditActionTriggered}
-        isTriggered={isActionTriggered}
-        setTriggered={value => {
-          setActionTriggered(value)
-
-          setPreviewModalOpen(false)
-          props.onSelect && props.onSelect(null)
-        }}
-        setEditActionTriggered={setEditActionTriggered}
-        selectedTemplate={selectedTemplate}
-      />
+      {selectedTemplate && (
+        <TemplateAction
+          shouldLoadTemplateInstance={props.type === 'history'}
+          type={props.type}
+          medium={props.medium}
+          isEdit={isEditActionTriggered}
+          isTriggered={isActionTriggered}
+          setTriggered={handleSetTriggered}
+          setEditActionTriggered={setEditActionTriggered}
+          selectedTemplate={selectedTemplate}
+        />
+      )}
     </div>
   )
 }

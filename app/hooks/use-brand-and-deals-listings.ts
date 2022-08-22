@@ -13,14 +13,15 @@ interface UseBrandAndDealsListings {
 }
 
 function useBrandAndDealsListings(
-  options?: GetBrandListingsOptions
+  options?: GetBrandListingsOptions,
+  limit?: number
 ): UseBrandAndDealsListings {
-  const brandListings = useBrandListings(options)
+  const brandListings = useBrandListings(options, limit)
   const brandListingsIds = useMemo(
     () => brandListings?.map(listing => listing.id),
     [brandListings]
   )
-  const dealsListings = useDealsListings(brandListingsIds)
+  const dealsListings = useDealsListings(brandListingsIds, limit)
 
   const listings = useMemo(
     () =>

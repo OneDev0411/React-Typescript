@@ -165,7 +165,6 @@ export default compose(
 
               setSubmitLabelText(SUBMIT_LABEL_TEXT)
             } catch ({ message }) {
-              // console.log(message)
               setCoverImage(null)
               setSubmitLabelText(SUBMIT_LABEL_TEXT)
               setSubmitError(message || UNEXPECTED_ERROR)

@@ -20,7 +20,8 @@ interface UseUserRootTeamsReturnType
 }
 
 export function useUserRootTeams(
-  rootBrandId?: UUID
+  rootBrandId?: UUID,
+  filterFn?: (team: IBrand) => boolean
 ): UseUserRootTeamsReturnType {
   const activeTeam = useUnsafeActiveTeam()
   const {
@@ -30,7 +31,7 @@ export function useUserRootTeams(
     run
   } = useAsync<Nullable<IBrand>>()
   const { searchTerm, handleSearch, filterTeams }: UseFilterTeamsReturnType =
-    useFilterTeams()
+    useFilterTeams(filterFn)
 
   useEffectOnce(() => {
     run(async () => {

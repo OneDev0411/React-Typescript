@@ -1,5 +1,6 @@
 import { Grid, makeStyles, Theme } from '@material-ui/core'
 
+import { compare } from '@app/utils/helpers'
 import { Section, SectionItem } from 'components/PageSideNav/types'
 
 import Item from './components/Item'
@@ -35,9 +36,13 @@ export const SectionMegaMenu = ({ data, mediums, onClose }: Props) => {
     return []
   }
 
+  const sortItemsByTitleAlphabetically = (a: SectionItem, b: SectionItem) => {
+    return compare(a.title.toLowerCase(), b.title.toLowerCase())
+  }
+
   return (
     <Grid container spacing={2} className={classes.container}>
-      {items.map((item, i) => {
+      {items.sort(sortItemsByTitleAlphabetically).map((item, i) => {
         const currentSectionMediums = sanitizeMediums(item)
 
         return (

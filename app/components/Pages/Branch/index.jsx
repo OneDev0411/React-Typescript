@@ -7,13 +7,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { useDeepCompareEffect } from 'react-use'
 
-import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { selectUser } from 'selectors/user'
 
 import publicConfig from '../../../../config/public'
 import { lookUpUserByEmail } from '../../../models/user/lookup-user-by-email'
 import Loading from '../../Partials/Loading'
-import { getBrandInfo } from '../Auth/SignIn/get-brand-info'
 
 import ConflictModal from './components/ConflictModal'
 import NeedsToLoginModal from './components/NeedsToLoginModal'
@@ -25,7 +23,6 @@ const branchKey = publicConfig.branch.key
 const Branch = ({ location }) => {
   const dispatch = useDispatch()
   const loggedInUser = useSelector(selectUser)
-  const activeBrand = useUnsafeActiveBrand()
 
   const [activeModal, setActiveModal] = useState(null)
   const [branchData, setBranchData] = useState(null)
@@ -36,29 +33,20 @@ const Branch = ({ location }) => {
 
   useDeepCompareEffect(() => {
     if (activeModal) {
-      const brandInfo = getBrandInfo(activeBrand)
       const { name, params } = activeModal
 
       switch (name) {
         case 'CONFLICT':
         case 'SHADOW_CONFLICT':
         case 'PROTECTED_RESOURCE':
-          setContent(<ConflictModal params={params} brandInfo={brandInfo} />)
+          setContent(<ConflictModal params={params} />)
           break
         case 'VERIFIED':
         case 'VERIFYING_CONFLICT':
-          setContent(
-            <VerifyRedirectModal
-              type={name}
-              params={params}
-              brandInfo={brandInfo}
-            />
-          )
+          setContent(<VerifyRedirectModal type={name} params={params} />)
           break
         case 'NEEDS_TO_LOGIN':
-          setContent(
-            <NeedsToLoginModal params={params} brandInfo={brandInfo} />
-          )
+          setContent(<NeedsToLoginModal params={params} />)
           break
         default:
           break

@@ -11,6 +11,7 @@ import {
   selectActiveBrandSettings
 } from '@app/selectors/brand'
 import { selectActiveTeamUnsafe } from '@app/selectors/team'
+import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
 import SearchArticleDrawer from '@app/views/components/SearchArticleDrawer'
 import SearchVideoDrawer from '@app/views/components/SearchVideoDrawer'
 import CarouselDrawer from 'components/CarouselDrawer'
@@ -60,6 +61,7 @@ import DeviceManager from './DeviceManager'
 import { addFallbackSrcToImage } from './extensions/add-fallback-src-to-image'
 import { addFallbackSrcToMjImage } from './extensions/add-fallback-src-to-mj-image'
 import { patchConditionalToolbarButtonsIssue } from './extensions/patch-conditional-toolbar-buttons-issue'
+import { ImageQuickFilters } from './ImageQuickFilters'
 import {
   Container,
   Actions,
@@ -103,7 +105,8 @@ class Builder extends React.Component {
       mapToEdit: null,
       carouselToEdit: null,
       videoToEdit: null,
-      matterportToEdit: null
+      matterportToEdit: null,
+      showImageQuickFilters: false
     }
 
     this.selectedTemplateOptions = null
@@ -512,6 +515,14 @@ class Builder extends React.Component {
         )}`
 
         this.setState({ imageToEdit })
+      },
+      onQuickFiltersClick: () => {
+        this.setState({
+          showImageQuickFilters: true,
+          imageToEdit: `/api/utils/cors/${btoa(
+            this.editor.runCommand('get-image')
+          )}`
+        })
       },
       onChangeThemeClick: this.openMapDrawer,
       onManageCarouselClick: this.openCarouselDrawer
@@ -1321,6 +1332,10 @@ class Builder extends React.Component {
         this.refreshEditor(this.state.selectedTemplate)
       }
     )
+
+    // Reset undo after regenerating the template
+    // https://gitlab.com/rechat/web/-/issues/6586
+    this.editor.UndoManager.clear()
   }
 
   toggleTemplatesColumnVisibility = () => {
@@ -1529,7 +1544,7 @@ class Builder extends React.Component {
               onUpload={this.uploadFile}
             />
           )}
-          {this.state.imageToEdit && (
+          {this.state.imageToEdit && !this.state.showImageQuickFilters && (
             <EditorDialog
               file={this.state.imageToEdit}
               dimensions={
@@ -1554,25 +1569,26 @@ class Builder extends React.Component {
               }}
             />
           )}
-          <SearchVideoDrawer
-            isOpen={!!this.state.videoToEdit}
-            model={this.state.videoToEdit}
-            shouldSkipVideoGif={this.props.shouldSkipVideoGif}
-            onClose={() => {
-              this.blocks.video.selectHandler()
-              this.setState({ videoToEdit: null })
-            }}
-            onSelect={video => {
-              this.blocks.video.selectHandler(video)
-              this.setState({ videoToEdit: null })
-            }}
-            uploadThumbnail={async file => {
-              const templateId = this.selectedTemplate.id
-              const uploadedAsset = await uploadAsset(templateId, file)
+          {!!this.state.videoToEdit && (
+            <SearchVideoDrawer
+              model={this.state.videoToEdit}
+              shouldSkipVideoGif={this.props.shouldSkipVideoGif}
+              onClose={() => {
+                this.blocks.video.selectHandler()
+                this.setState({ videoToEdit: null })
+              }}
+              onSelect={video => {
+                this.blocks.video.selectHandler(video)
+                this.setState({ videoToEdit: null })
+              }}
+              uploadThumbnail={async file => {
+                const templateId = this.selectedTemplate.id
+                const uploadedAsset = await uploadAsset(templateId, file)
 
-              return uploadedAsset.file.url
-            }}
-          />
+                return uploadedAsset.file.url
+              }}
+            />
+          )}
           <SearchArticleDrawer
             isOpen={this.state.isArticleDrawerOpen}
             onClose={() => {
@@ -1697,6 +1713,7 @@ class Builder extends React.Component {
                   medium={this.selectedTemplate.medium}
                   inputs={this.selectedTemplate.inputs}
                   originalTemplateId={this.selectedTemplate.id}
+                  video={this.selectedTemplate.video}
                   mjml={this.selectedTemplate.mjml}
                   getTemplateMarkup={this.getTemplateMarkup.bind(this)}
                   disabled={this.props.actionButtonsDisabled}
@@ -1765,13 +1782,38 @@ class Builder extends React.Component {
               ref={ref => (this.grapes = ref)}
               style={{ position: 'relative' }}
             >
-              {this.isVideoTemplate && this.isTemplateLoaded && (
-                <VideoToolbar
-                  onRef={ref => (this.videoToolbar = ref)}
-                  editor={this.editor}
-                />
-              )}
+              {this.isVideoTemplate &&
+                this.editor &&
+                this.editor.DomComponents.getWrapper().view && (
+                  <VideoToolbar
+                    onRef={ref => (this.videoToolbar = ref)}
+                    editor={this.editor}
+                  />
+                )}
             </div>
+
+            <ImageQuickFilters
+              isOpen={this.state.showImageQuickFilters}
+              image={this.state.imageToEdit}
+              onClose={async image => {
+                this.setState({
+                  imageToEdit: null,
+                  showImageQuickFilters: false
+                })
+
+                if (image) {
+                  const templateId = this.selectedTemplate.id
+                  const uploadedAsset = await uploadAsset(
+                    templateId,
+                    await convertUrlToImageFile(image)
+                  )
+
+                  this.editor.runCommand('set-image', {
+                    value: uploadedAsset.file.url
+                  })
+                }
+              }}
+            />
           </BuilderContainer>
         </Container>
       </Portal>

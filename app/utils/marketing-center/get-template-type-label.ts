@@ -11,6 +11,7 @@ const TEMPLATE_TYPE_LABEL_MAP: {
   Brand: 'Brand Campaigns',
   ChineseNewYear: 'Lunar New Year',
   Christmas: 'Christmas',
+  CMA: 'CMA',
   ColumbusDay: 'Columbus Day',
   ComingSoon: 'Coming Soon',
   Contact: 'Contact',
@@ -31,7 +32,7 @@ const TEMPLATE_TYPE_LABEL_MAP: {
   Kwanzaa: 'Kwanzaa',
   LaborDay: 'Labor Day',
   Layout: 'Layout',
-  Listing: 'Blank Layouts',
+  Listing: ' Listing Website',
   ListingLayout: 'Blank Listing Layouts',
   Listings: 'Multi Properties',
   MarketReport: 'Market Reports',
@@ -58,7 +59,20 @@ const TEMPLATE_TYPE_LABEL_MAP: {
   Valentines: "Valentine's Day",
   VeteransDay: 'Veterans Day',
   WeddingAnniversary: 'Wedding Anniversary',
-  WomansDay: "International Women's Day"
+  WomansDay: "International Women's Day",
+  JuneTeenth: 'JuneTeenth',
+  FirstDayOfSummer: 'Summer',
+  Pride: 'Pride',
+  AsianAmericanAndPacificIslanderHeritageMonth:
+    'Asian American & Pacific Islander Heritage Month',
+  BlackHistoryMonth: 'Black History Month',
+  EarthDay: 'Earth Day',
+  FirstDayOfSpring: 'Spring',
+  CincoDeMayo: 'Cinco De Mayo',
+  FirstDayOfFall: 'Fall',
+  FirstDayOfWinter: 'Winter',
+  YomKippur: 'Yom Kippur',
+  Announcements: 'Announcements'
 }
 
 export function getTemplateTypeLabel(

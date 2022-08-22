@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { Box, Button } from '@material-ui/core'
 
+import { AgentsPicker } from '@app/views/components/AgentsPicker'
 import DealRoleForm from 'components/DealRole/Form'
 import {
   QuestionSection,
@@ -11,10 +12,10 @@ import {
   useSectionContext
 } from 'components/QuestionWizard'
 
-import { AgentsList } from '../../components/AgentsList'
+import { RoleCard } from '../../../components/RoleCard'
 import { ContactRoles } from '../../components/ContactRoles'
-import { RoleCard } from '../../components/RoleCard'
 import { useCreationContext } from '../../context/use-creation-context'
+import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'
 import { useStyles } from '../../hooks/use-styles'
 import type { IDealFormRole } from '../../types'
 
@@ -120,11 +121,13 @@ export function DealRequiredRole({
           }}
         >
           {isCoAgentRole && (
-            <AgentsList
+            <AgentsPicker
               flattenTeams
               useTeamBrandId
               isPrimaryAgent={false}
-              onSelectRole={setSelectedRole}
+              onSelectAgent={agent =>
+                setSelectedRole(convertUserAgentToRole(agent))
+              }
             />
           )}
 

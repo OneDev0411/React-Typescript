@@ -15,7 +15,6 @@ const useStyles = makeStyles(
     column: {
       display: 'flex',
       alignItems: 'center',
-      backgroundColor: `${theme.palette.grey['50']} !important`,
       color: theme.palette.grey['90']
     }
   }),
@@ -52,30 +51,28 @@ export function Header<Row>({
       }}
       className={cn(classes.row, headerClasses.root)}
     >
-      {columns
-        .filter(column => column.hidden !== true)
-        .map((column, columnIndex) => (
-          <div
-            key={columnIndex}
-            className={cn('column', headerClasses.column, column.id)}
-            style={{
-              width: columnsSize[columnIndex],
-              textAlign: column.align || 'left',
-              ...(column.headerStyle || {}),
-              ...(column.style || {})
-            }}
-          >
-            {typeof column.header === 'function'
-              ? column.header({
-                  column,
-                  columnIndex,
-                  rows,
-                  totalRows,
-                  width: columnsSize[columnIndex]
-                })
-              : column.header}
-          </div>
-        ))}
+      {columns.map((column, columnIndex) => (
+        <div
+          key={columnIndex}
+          className={cn('column heading', headerClasses.column, column.id)}
+          style={{
+            width: columnsSize[columnIndex],
+            textAlign: column.align || 'left',
+            ...(column.headerStyle || {}),
+            ...(column.style || {})
+          }}
+        >
+          {typeof column.header === 'function'
+            ? column.header({
+                column,
+                columnIndex,
+                rows,
+                totalRows,
+                width: columnsSize[columnIndex]
+              })
+            : column.header}
+        </div>
+      ))}
     </div>
   )
 }

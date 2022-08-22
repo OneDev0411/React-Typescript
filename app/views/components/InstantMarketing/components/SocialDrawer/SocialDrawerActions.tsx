@@ -28,10 +28,12 @@ function SocialDrawerActions({
   const classes = useStyles()
   const setStep = useSetSocialDrawerStep()
 
-  // Currently, we only support Instagram posts for social template instance
-  const hasInstagramButton =
+  const isSocialMedium =
     instance.type === 'template_instance' &&
     instance.template.medium === 'Social'
+
+  // Currently, we only support Instagram posts for social template instance
+  const shouldShowInstagramButton = isSocialMedium
 
   const gotoScheduleStep = () => setStep('Schedule')
 
@@ -43,12 +45,12 @@ function SocialDrawerActions({
     <div className={className}>
       <div className={classes.row}>
         <Grid container spacing={2}>
-          {hasInstagramButton && (
+          {shouldShowInstagramButton && (
             <Grid item sm={6}>
               <SocialDrawerInstagramButton onClick={gotoScheduleStep} />
             </Grid>
           )}
-          <Grid item sm={hasInstagramButton ? 6 : 12}>
+          <Grid item sm={shouldShowInstagramButton ? 6 : 12}>
             <SocialDrawerDownloadButton instance={instance} />
           </Grid>
         </Grid>

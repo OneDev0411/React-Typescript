@@ -49,7 +49,7 @@ export function Body<Row>({
   rows,
   classes,
   virtualize,
-  headless = false,
+  headless = true,
   rowSize = 8,
   totalRows,
   infiniteScrolling,
@@ -138,7 +138,7 @@ export function Body<Row>({
             itemSize={theme.spacing(rowSize)}
             width={width}
             height={windowHeight}
-            overscanCount={8}
+            overscanCount={12}
             itemKey={getItemKey}
             itemData={
               {

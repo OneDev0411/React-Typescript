@@ -74,7 +74,8 @@ const propTypes = {
   submitCallback: PropTypes.func,
   deleteCallback: PropTypes.func,
   user: PropTypes.shape().isRequired,
-  title: PropTypes.string
+  title: PropTypes.string,
+  dateType: PropTypes.oneOf(['range', 'limit'])
 }
 
 const defaultProps = {
@@ -85,7 +86,8 @@ const defaultProps = {
   defaultSelectedDate: new Date(),
   submitCallback: () => {},
   deleteCallback: () => {},
-  title: ''
+  title: '',
+  dateType: 'range'
 }
 
 /**
@@ -233,6 +235,17 @@ class EventDrawerContainer extends Component {
     }))
   }
 
+  postLoadFormatHandler = async (event, user, defaultAssociation) => {
+    const data = await postLoadFormat(event, user, defaultAssociation)
+
+    // set endDate undefined for tasks as they doesn't have end date
+    if (this.props.dateType === 'limit') {
+      data.endDate = undefined
+    }
+
+    return data
+  }
+
   render() {
     const {
       error,
@@ -270,7 +283,7 @@ class EventDrawerContainer extends Component {
                 initialValues={this.props.initialValues}
                 load={this.load}
                 postLoadFormat={event =>
-                  postLoadFormat(event, user, defaultAssociation)
+                  this.postLoadFormatHandler(event, user, defaultAssociation)
                 }
                 preSaveFormat={(values, originalValues) =>
                   preSaveFormat(values, originalValues, user)
@@ -332,39 +345,46 @@ class EventDrawerContainer extends Component {
                               showTimePicker={!values.allDay}
                             />
 
-                            <EndDateTimeField
-                              dueDate={values.dueDate}
-                              endDate={values.endDate}
-                              selectedDate={values.endDate || values.dueDate}
-                              showTimePicker={!values.allDay}
-                            />
-                          </FieldContainer>
-
-                          <Field
-                            name="allDay"
-                            render={({ input }) => (
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={input.value}
-                                    onChange={e =>
-                                      input.onChange(e.target.checked)
-                                    }
-                                    name="allDay"
-                                    color="primary"
-                                  />
-                                }
-                                label="All Day Event"
+                            {this.props.dateType === 'range' && (
+                              <EndDateTimeField
+                                dueDate={values.dueDate}
+                                endDate={values.endDate}
+                                selectedDate={values.endDate || values.dueDate}
+                                showTimePicker={!values.allDay}
                               />
                             )}
-                          />
-                          <FieldError
-                            name="endDate"
-                            style={{
-                              fontSize: '1rem',
-                              marginBottom: '0.5em'
-                            }}
-                          />
+                          </FieldContainer>
+
+                          {this.props.dateType === 'range' && (
+                            <Field
+                              name="allDay"
+                              render={({ input }) => (
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={input.value}
+                                      onChange={e =>
+                                        input.onChange(e.target.checked)
+                                      }
+                                      name="allDay"
+                                      color="primary"
+                                    />
+                                  }
+                                  label="All Day Event"
+                                />
+                              )}
+                            />
+                          )}
+
+                          {this.props.dateType === 'range' && (
+                            <FieldError
+                              name="endDate"
+                              style={{
+                                fontSize: '1rem',
+                                marginBottom: '0.5em'
+                              }}
+                            />
+                          )}
                         </Box>
                       </EventField>
                       <Reminder dueDate={values.dueDate} />

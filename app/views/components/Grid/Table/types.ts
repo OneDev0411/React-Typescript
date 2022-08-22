@@ -29,6 +29,11 @@ export type ColumnHeaderFunction<Row> = (
 
 export type ColumnSortType = 'number' | 'string'
 
+type InlineEditStyle = (data: {
+  width?: number
+  height?: number
+}) => React.CSSProperties
+
 export interface TableColumn<Row> {
   id: string
   header?: string | ColumnHeaderFunction<Row>
@@ -46,6 +51,11 @@ export interface TableColumn<Row> {
   sortFn?: (rows: Row[]) => Row[]
   accessor?: (row: Row) => StringOrNumber | null | undefined
   render?: (data: RenderProps<Row>) => React.ReactNode | string
+  inlineEditStyles?: {
+    popover?: InlineEditStyle
+    paper?: React.CSSProperties
+    container?: InlineEditStyle
+  }
   renderInlineEdit?: (
     data: RenderProps<Row>,
     close: (e?: MouseEvent<HTMLButtonElement>) => void

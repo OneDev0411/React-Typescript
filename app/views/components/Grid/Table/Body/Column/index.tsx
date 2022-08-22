@@ -52,7 +52,8 @@ export function Column<Row>({
         'inline-edit': !!column.renderInlineEdit
       })}
       style={{
-        width: columnWidth,
+        minWidth: columnWidth,
+        maxWidth: columnWidth,
         textAlign: column.align || 'left',
         ...(column.rowStyle || {}),
         ...(column.style || {})
@@ -64,7 +65,12 @@ export function Column<Row>({
         row
       })}
     >
-      <div className={classes.root} onClick={inlineEditRef.current?.handleOpen}>
+      <div
+        className={classes.root}
+        onClick={() => {
+          inlineEditRef.current?.handleOpen()
+        }}
+      >
         {getCell(column, row, rowIndex, columnIndex, totalRows)}
       </div>
 

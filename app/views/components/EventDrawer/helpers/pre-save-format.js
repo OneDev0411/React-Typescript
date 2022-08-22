@@ -31,18 +31,22 @@ export async function preSaveFormat(values, originalValues = null) {
     )
     dueDate.setUTCHours(0, 0, 0, 0)
 
-    endDate.setUTCFullYear(
-      endDate.getFullYear(),
-      endDate.getMonth(),
-      endDate.getDate()
-    )
-    endDate.setUTCHours(24, 0, 0, 0)
+    if (endDate) {
+      endDate.setUTCFullYear(
+        endDate.getFullYear(),
+        endDate.getMonth(),
+        endDate.getDate()
+      )
+      endDate.setUTCHours(24, 0, 0, 0)
+    }
   }
 
   const dueDateTimestamp = dueDate.getTime()
-  const endDateTimestamp = endDate.getTime()
+  const endDateTimestamp = endDate?.getTime()
   const end_date =
-    endDateTimestamp > dueDateTimestamp ? endDateTimestamp / 1000 : null
+    endDate && endDateTimestamp > dueDateTimestamp
+      ? endDateTimestamp / 1000
+      : null
 
   let defaultStatus = values.status ?? PENDING_STATUS
 

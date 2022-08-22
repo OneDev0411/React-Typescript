@@ -1,6 +1,7 @@
 import { Component, Fragment } from 'react'
 
 import { Button } from '@material-ui/core'
+import pluralize from 'pluralize'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -38,7 +39,8 @@ const propTypes = {
   handleTrigger: PropTypes.func,
   disabled: PropTypes.bool,
   buttonRenderer: PropTypes.func,
-  listings: PropTypes.arrayOf(PropTypes.object)
+  listings: PropTypes.arrayOf(PropTypes.object),
+  tags: PropTypes.arrayOf(PropTypes.string)
 }
 
 const defaultProps = {
@@ -431,7 +433,12 @@ class SendMlsListingCard extends Component {
               color="secondary"
               {...props.buttonProps}
             >
-              {`Next (${props.selectedItemsCount} Listings Selected)`}
+              Next
+              {this.IsMultiListing &&
+                ` (${props.selectedItemsCount} ${pluralize(
+                  'Listing',
+                  props.selectedItemsCount
+                )} Selected)`}
             </Button>
           )}
         />
@@ -468,6 +475,7 @@ class SendMlsListingCard extends Component {
             onClose={this.toggleComposeEmail}
             onSent={this.closeMarketing}
             isSubmitDisabled={this.state.isGettingTemplateInstance}
+            tags={this.props.tags}
           />
         )}
 

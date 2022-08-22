@@ -129,6 +129,27 @@ const AsyncShowingAppointmentFeedback = Load({
     )
 })
 
+const AsyncShowingApprovalAppointmentCancel = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Approval/Cancel' /* webpackChunkName: "showing_approval_appointment_cancel" */
+    )
+})
+
+const AsyncShowingApprovalAppointmentConfirm = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Approval/Confirm' /* webpackChunkName: "showing_approval_appointment_confirm" */
+    )
+})
+
+const AsyncShowingApprovalAppointmentReject = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Approval/Reject' /* webpackChunkName: "showing_approval_appointment_reject" */
+    )
+})
+
 /* ==================================== */
 //  Agent On-boarding Wizard
 /* ==================================== */
@@ -453,6 +474,19 @@ const AsyncToursList = withAcl.crm(
 )
 
 /* ==================================== */
+//  CRM Tours List
+/* ==================================== */
+
+const AsyncCrmTasks = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Tasks' /* webpackChunkName: "crm_tasks" */
+      )
+  })
+)
+
+/* ==================================== */
 //  Marketing Center
 /* ==================================== */
 
@@ -744,6 +778,19 @@ const AsyncWebsitesList = withAcl.websites(
 )
 
 /* ==================================== */
+//  Presentation
+/* ==================================== */
+
+const AsyncPresentationsList = withAcl.beta(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Websites/pages/Presentation' /* webpackChunkName: "presentations_list" */
+      )
+  })
+)
+
+/* ==================================== */
 //  Showings
 /* ==================================== */
 
@@ -922,6 +969,19 @@ export default (
         component={AsyncShowingAppointmentFeedback}
       />
 
+      <Route
+        path="showings/appointments/approval/:appointmentToken/cancel"
+        component={AsyncShowingApprovalAppointmentCancel}
+      />
+      <Route
+        path="showings/appointments/approval/:appointmentToken/confirm"
+        component={AsyncShowingApprovalAppointmentConfirm}
+      />
+      <Route
+        path="showings/appointments/approval/:appointmentToken/reject"
+        component={AsyncShowingApprovalAppointmentReject}
+      />
+
       <Route path="mobile" component={AsyncMobile} />
 
       <Route path="widgets" component={WidgetsContainer}>
@@ -981,6 +1041,8 @@ export default (
         <Route path="contacts/duplicates" component={AsyncDuplicateContacts} />
         <Route path="contacts/:id" component={AsyncContactProfile} />
         <Route path="contacts/import/csv" component={AsyncContactsCsvImport} />
+
+        <Route path="tasks" component={AsyncCrmTasks} />
 
         <Route path="marketing" component={AsyncMarketingOverview} />
         <Route path="marketing/designs" component={AsyncMarketingHistory} />
@@ -1104,8 +1166,12 @@ export default (
           <IndexRoute component={AsyncBrandSettings} />
         </Route>
 
-        <Route path="websites(/templates/:type)">
+        <Route path="websites">
           <IndexRoute component={AsyncWebsitesList} />
+        </Route>
+
+        <Route path="presentations">
+          <IndexRoute component={AsyncPresentationsList} />
         </Route>
 
         <Route path="showings">

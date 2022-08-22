@@ -1,5 +1,4 @@
-import React from 'react'
-
+import { useTheme } from '@material-ui/styles'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import compose from 'recompose/compose'
@@ -8,14 +7,15 @@ import withState from 'recompose/withState'
 import { Field, reduxForm } from 'redux-form'
 import isEmail from 'validator/lib/isEmail'
 
+import { Logo } from '@app/views/components/OAuthPageLayout/Logo'
+import { PoweredBy } from '@app/views/components/OAuthPageLayout/PoweredBy'
+
 import resetPassword from '../../../../../models/auth/password/reset'
 import signup from '../../../../../models/auth/signup'
 import Button from '../../../../../views/components/Button/ActionButton'
 import SimpleField from '../../../Dashboard/Account/Profile/components/SimpleField'
-import { getBrandInfo } from '../../SignIn/get-brand-info'
 
 const ForgotForm = ({
-  brand,
   username,
   submitError,
   isSubmitting,
@@ -25,21 +25,16 @@ const ForgotForm = ({
   resetSuccessfully
 }) => {
   const isDisabled = isSubmitting
-  const { siteLogo, siteTitle } = getBrandInfo(brand)
+  const theme = useTheme()
 
   return (
     <div className="signin-page-wrapper">
       <article className="c-auth">
         <header className="c-auth__header">
-          {siteLogo && (
-            <a href="/" tabIndex={-1}>
-              <img
-                src={siteLogo}
-                alt={`${siteTitle} logo`}
-                className="c-auth__logo"
-              />
-            </a>
-          )}
+          <a href="/" tabIndex={-1}>
+            <Logo />
+          </a>
+
           {!resetSuccessfully && (
             <p className="c-auth__subtitle">Forgot your password?</p>
           )}
@@ -67,6 +62,7 @@ const ForgotForm = ({
                 isBlock
                 disabled={isDisabled}
                 style={{ marginBottom: '2em' }}
+                brandColor={theme.palette.primary.main}
               >
                 {isSubmitting ? 'Submitting...' : 'Reset Password'}
               </Button>
@@ -91,6 +87,7 @@ const ForgotForm = ({
           )}
         </main>
       </article>
+      <PoweredBy />
     </div>
   )
 }

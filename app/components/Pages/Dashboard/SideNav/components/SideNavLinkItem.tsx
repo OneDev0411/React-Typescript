@@ -1,10 +1,11 @@
-import { ReactNode, useEffect } from 'react'
+import { useContext, useEffect, ReactNode } from 'react'
 
-import { makeStyles } from '@material-ui/core'
+import { Theme, useMediaQuery, makeStyles } from '@material-ui/core'
 import { alpha } from '@material-ui/core/styles'
 import cn from 'classnames'
 import { Link as RouterLink, withRouter, WithRouterProps } from 'react-router'
 
+import { SideNavContext } from '../../DashboardLayout'
 import { BaseAccordionMenu, ExpandedMenu } from '../types'
 
 const useStyles = makeStyles(
@@ -76,6 +77,10 @@ function SideNavLinkItem({
   tourId
 }: Props & WithRouterProps) {
   const classes = useStyles()
+
+  const { onDrawerToggle } = useContext(SideNavContext)
+
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
   const active = subMenu
     ? subMenu
         .map(item => item.to)
@@ -92,6 +97,27 @@ function SideNavLinkItem({
     onExpandMenu(tourId)
   }, [active, onExpandMenu, tourId])
 
+  const generateLink = () => {
+    if (isMobile && subMenu) {
+      return ''
+    }
+
+    return to
+  }
+
+  const handleClick = () => {
+    onTriggerAction && onTriggerAction()
+
+    // In mobile size if the menu has the default link,
+    // should open the link, and hide the SideNav,
+    // else should expand to show sub-menu items
+    if (!isMobile || subMenu || !to) {
+      return
+    }
+
+    onDrawerToggle()
+  }
+
   return isSubmenu ? (
     <RouterLink
       className={cn(
@@ -99,9 +125,9 @@ function SideNavLinkItem({
         classes.sidenavLink,
         active ? classes.activeMenu : ''
       )}
-      to={to}
-      onClick={onTriggerAction}
       data-tour-id={tourId}
+      onClick={handleClick}
+      to={to}
     >
       {children}
     </RouterLink>
@@ -112,9 +138,9 @@ function SideNavLinkItem({
         classes.sidenavLinkSummary,
         active && !subMenu ? classes.activeMenu : ''
       )}
-      to={to}
-      onClick={onTriggerAction}
       data-tour-id={tourId}
+      onClick={handleClick}
+      to={generateLink()}
     >
       {children}
     </RouterLink>

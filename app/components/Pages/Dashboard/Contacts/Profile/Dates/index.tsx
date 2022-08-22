@@ -47,7 +47,10 @@ export function Dates({ contact, submitCallback }: Props) {
         setIsLoading(true)
 
         const homeAnniversaries = await getCalendar({
-          range: [START_DATE, END_DATE],
+          range: {
+            low: START_DATE,
+            high: END_DATE
+          },
           filter: {
             contact: contact.id,
             'event_types[]': ['home_anniversary'],

@@ -1,8 +1,9 @@
 import React, { createContext, useState } from 'react'
 
-import { Box, Theme, makeStyles } from '@material-ui/core'
+import { Hidden, makeStyles } from '@material-ui/core'
 
 import SideNav from './SideNav'
+import { SideNavToggleButton } from './SideNav/components/SideNavToggleButton'
 import { appSidenavWidth } from './SideNav/variables'
 
 interface Props {
@@ -10,42 +11,48 @@ interface Props {
 }
 
 const useStyles = makeStyles(
-  (theme: Theme) => ({
+  () => ({
+    drawerWrapper: {
+      display: 'flex'
+    },
     main: {
-      minHeight: '100vh',
-      flexGrow: 1,
       display: 'flex',
       flexDirection: 'column',
-      // I hate using calc and it's totally wrong.
-      // I'm currently a release blocker and don't have time to
-      // properly fix it.
-      // TODO
+      flexGrow: 1,
+      minHeight: '100vh',
       width: `calc(100% - ${appSidenavWidth}px)`
     }
   }),
-  { name: 'MainWrapper' }
+  { name: 'DashboardLayout' }
 )
 
 export const SideNavContext = createContext({
-  toggle: () => {}
+  isDrawerOpen: false,
+  onDrawerToggle: () => {}
 })
 
 export function DashboardLayout({ children }: Props) {
   const classes = useStyles()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  const handleToggle = () => setIsMenuOpen(state => !state)
+  const handleDrawerToggle = () => setIsDrawerOpen(state => !state)
 
   return (
     <SideNavContext.Provider
       value={{
-        toggle: handleToggle
+        isDrawerOpen,
+        onDrawerToggle: handleDrawerToggle
       }}
     >
-      <Box display="flex">
-        <SideNav isMenuOpen={isMenuOpen} onDrawerToggle={handleToggle} />
-        <main className={classes.main}>{children}</main>
-      </Box>
+      <div>
+        <SideNavToggleButton />
+        <div className={classes.drawerWrapper}>
+          <Hidden smDown={!isDrawerOpen}>
+            <SideNav />
+          </Hidden>
+          <main className={classes.main}>{children}</main>
+        </div>
+      </div>
     </SideNavContext.Provider>
   )
 }

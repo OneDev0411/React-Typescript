@@ -12,6 +12,8 @@ import { useEffectOnce } from 'react-use'
 
 import { useGetGlobalTriggers } from '@app/components/Pages/Dashboard/Account/Triggers/hooks/use-get-global-triggers'
 import useConfirmation from '@app/hooks/use-confirmation'
+import useNotify from '@app/hooks/use-notify'
+import { updateContactTouchReminder } from '@app/models/contacts/update-contact-touch-reminder'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import PageLayout from 'components/GlobalPageLayout'
 import { deleteContacts } from 'models/contacts/delete-contact'
@@ -32,6 +34,8 @@ import skipEmailThreadChangeEvent from '../../Inbox/helpers/skip-email-thread-ch
 import { Container } from '../components/Container'
 
 import AddressesSection from './Addresses'
+import AddEvent from './components/AddEvent'
+import AddNote from './components/AddNote'
 import { ContactInfo } from './ContactInfo'
 import { Dates } from './Dates'
 import Deals from './Deals'
@@ -62,7 +66,27 @@ const useStyles = makeStyles(
     contentContainer: {
       background: theme.palette.background.paper,
       border: `1px solid ${theme.palette.action.disabledBackground}`,
-      borderRadius: `${theme.shape.borderRadius}px`
+      borderRadius: `${theme.shape.borderRadius}px`,
+      width: '100%',
+      height: '100%'
+    },
+    tabContainer: {
+      flex: '1 1 auto',
+      display: 'flex',
+      flexDirection: 'column'
+    },
+    tabHeaderContainer: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start'
+    },
+    timelineContainer: {
+      background: theme.palette.background.paper,
+      border: `1px solid ${theme.palette.action.disabledBackground}`,
+      borderRadius: `${theme.shape.borderRadius}px`,
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%'
     },
     boxContainer: {
       display: 'flex',
@@ -73,9 +97,6 @@ const useStyles = makeStyles(
       minWidth: '350px',
       maxWidth: '450px',
       padding: theme.spacing(2)
-    },
-    timelineContainer: {
-      flex: '1 1 auto'
     },
     warnContainer: {
       marginBottom: theme.spacing(2),
@@ -95,6 +116,8 @@ const useStyles = makeStyles(
 
 const ContactProfile = props => {
   useGetGlobalTriggers()
+
+  const notify = useNotify()
 
   const classes = useStyles()
   const confirmation = useConfirmation()
@@ -197,6 +220,35 @@ const ContactProfile = props => {
     }
   }
 
+  const handleUpdateTouchFreq = (newVal: Nullable<number>) => {
+    if (!contact) {
+      return
+    }
+
+    const oldValue = contact.touch_freq || null
+
+    // optimistic update
+    setContact((prevContact: INormalizedContact) => ({
+      ...prevContact,
+      touch_freq: newVal
+    }))
+
+    fetchTimeline()
+
+    updateContactTouchReminder(contact.id, newVal).catch(e => {
+      console.log(e)
+      notify({
+        status: 'error',
+        message: 'Something went wrong. Please try again or contact support.'
+      })
+      // revert optimistic update if error
+      setContact((prevContact: INormalizedContact) => ({
+        ...prevContact,
+        touch_freq: oldValue
+      }))
+    })
+  }
+
   const handleCreateNote = (contact: INormalizedContact) => {
     setNewContact(contact)
 
@@ -224,6 +276,8 @@ const ContactProfile = props => {
     if (!timelineRef.current?.refresh) {
       return
     }
+
+    console.log('[ + ] Fetching Timeline')
 
     return setTimeout(timelineRef.current.refresh, 500)
   }, [timelineRef])
@@ -322,63 +376,56 @@ const ContactProfile = props => {
       fetchTimeline()
     }
   }
-  const onTouchChange = useCallback(({ contacts }) => {
-    if (Array.isArray(contacts) && contacts.includes(currentContactId)) {
-      updateContact()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const onTouchChange = useCallback(
+    ({ contacts }) => {
+      if (Array.isArray(contacts) && contacts.includes(currentContactId)) {
+        console.log('[ Socket ] Touch Changed')
+        updateContact()
+      }
+    },
+    [currentContactId, updateContact]
+  )
 
   useEffectOnce(() => {
-    const socket: SocketIOClient.Socket = (window as any).socket
-
     detectScreenSize()
     initializeContact()
-
-    window.addEventListener('resize', detectScreenSize)
-
-    if (!socket) {
-      return
-    }
-
-    socket.on('contact:touch', payload => onTouchChange(payload))
-    socket.on('crm_task:create', () => fetchTimeline())
-    socket.on('email_campaign:create', () => fetchTimeline())
-    socket.on('email_campaign:send', () => fetchTimeline())
-    socket.on('email_thread:update', handleEmailThreadChangeEvent)
-    socket.on('email_thread:delete', handleEmailThreadChangeEvent)
   })
 
   useEffect(() => {
+    const socket: SocketIOClient.Socket = (window as any).socket
+
     if (props.params.id !== currentContactId) {
       setCurrentContactId(props.params.id)
       initializeContact(true)
     }
 
+    window.addEventListener('resize', detectScreenSize)
+    socket?.on('contact:touch', onTouchChange)
+    socket?.on('crm_task:create', fetchTimeline)
+    socket?.on('crm_task:delete', fetchTimeline)
+    socket?.on('email_campaign:create', fetchTimeline)
+    socket?.on('email_campaign:send', fetchTimeline)
+    socket?.on('email_thread:update', handleEmailThreadChangeEvent)
+    socket?.on('email_thread:delete', handleEmailThreadChangeEvent)
+
     return () => {
-      const socket: SocketIOClient.Socket = (window as any).socket
-
-      if (!socket) {
-        return
-      }
-
       window.removeEventListener('resize', detectScreenSize)
-      socket.off('contact:touch', onTouchChange)
-      socket.off('crm_task:create', fetchTimeline)
-      socket.off('email_campaign:create', fetchTimeline)
-      socket.off('email_campaign:send', fetchTimeline)
-      socket.off('email_thread:update', handleEmailThreadChangeEvent)
-      socket.off('email_thread:delete', handleEmailThreadChangeEvent)
+      socket?.off('contact:touch', onTouchChange)
+      socket?.off('crm_task:create', fetchTimeline)
+      socket?.off('crm_task:delete', fetchTimeline)
+      socket?.off('email_campaign:create', fetchTimeline)
+      socket?.off('email_campaign:send', fetchTimeline)
+      socket?.off('email_thread:update', handleEmailThreadChangeEvent)
+      socket?.off('email_thread:delete', handleEmailThreadChangeEvent)
     }
   }, [
-    props.params,
-    onTouchChange,
+    props.params.id,
     currentContactId,
     detectScreenSize,
     fetchTimeline,
     handleEmailThreadChangeEvent,
     initializeContact,
-    updateContact
+    onTouchChange
   ])
 
   if (isLoading) {
@@ -408,13 +455,7 @@ const ContactProfile = props => {
           <Header
             contact={contact}
             contactChangeCallback={fetchContact}
-            onCreateNote={handleCreateNote}
-            onCreateEvent={fetchTimeline}
-          />
-          <Tabs
-            contact={contact}
-            activeFilter={activeFilter}
-            onChangeFilter={handleChangeFilter}
+            onUpdateTouchFreq={handleUpdateTouchFreq}
           />
         </div>
 
@@ -448,18 +489,35 @@ const ContactProfile = props => {
               />
               <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
             </div>
-            <div
-              className={cn(
-                classes.contentContainer,
-                classes.timelineContainer
-              )}
-            >
-              <Timeline
-                activeFilter={activeFilter}
-                ref={timelineRef}
-                contact={contact}
-                onChangeNote={setNewContact}
-              />
+
+            <div className={classes.tabContainer}>
+              <div className={classes.tabHeaderContainer}>
+                <Tabs
+                  contact={contact}
+                  activeFilter={activeFilter}
+                  onChangeFilter={handleChangeFilter}
+                />
+                {activeFilter === Filters.Notes && (
+                  <AddNote
+                    contactId={contact.id}
+                    onCreateNote={handleCreateNote}
+                  />
+                )}
+                {activeFilter === Filters.Events && (
+                  <AddEvent contact={contact} callback={fetchTimeline} />
+                )}
+              </div>
+
+              <div className={classes.timelineContainer}>
+                {contact && (
+                  <Timeline
+                    activeFilter={activeFilter}
+                    ref={timelineRef}
+                    contact={contact}
+                    onChangeNote={setNewContact}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>

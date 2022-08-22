@@ -7,7 +7,7 @@ export const ListContainer = styled.div`
     position: absolute;
     padding: 1rem 0;
     max-height: 300px;
-    z-index: 1;
+    z-index: 2;
     right: 0;
     left: 0;
     border-radius: 3px;

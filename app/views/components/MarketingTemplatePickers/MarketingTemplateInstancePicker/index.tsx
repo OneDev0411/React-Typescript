@@ -1,14 +1,19 @@
-import React from 'react'
+import { useState } from 'react'
 
-import { Grid, Box, Typography, makeStyles } from '@material-ui/core'
+import { Grid, Box, makeStyles, Typography } from '@material-ui/core'
 
+import {
+  DEFAULT_TEMPLATE_ASSOCIATIONS,
+  DEFAULT_TEMPLATE_OMIT,
+  useTemplatesHistory
+} from '@app/components/Pages/Dashboard/Marketing/hooks/use-templates-history'
+import useNotify from '@app/hooks/use-notify'
+import { getTemplateInstance } from '@app/models/instant-marketing/get-template-instance'
 import LoadingContainer from 'components/LoadingContainer'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
 import { MarketingTemplateInstancePickerProps } from 'components/MarketingTemplatePickers/types'
 import Masonry from 'components/Masonry'
 import { useInfinitePagination } from 'hooks/use-infinite-pagination'
-
-import { useTemplatesHistory } from '../../../../components/Pages/Dashboard/Marketing/hooks/use-templates-history'
 
 const useStyles = makeStyles(
   () => ({
@@ -28,8 +33,12 @@ export default function MarketingTemplateInstancePicker({
   onSelect
 }: MarketingTemplateInstancePickerProps) {
   const classes = useStyles()
-
+  const notify = useNotify()
+  const [isLoadingTemplateInstance, setIsLoadingTemplateInstance] =
+    useState(false)
   const { templates, isLoading } = useTemplatesHistory({
+    associations: DEFAULT_TEMPLATE_ASSOCIATIONS,
+    omit: DEFAULT_TEMPLATE_OMIT,
     templateTypes,
     mediums
   })
@@ -41,10 +50,41 @@ export default function MarketingTemplateInstancePicker({
     }
   })
 
+  const handleClick = async (id: UUID) => {
+    // load template instance
+
+    setIsLoadingTemplateInstance(true)
+
+    try {
+      const templateInstance = await getTemplateInstance(id)
+
+      onSelect(templateInstance)
+    } catch {
+      notify({
+        status: 'error',
+        message: 'Could not load the template instance. Please try again.'
+      })
+    } finally {
+      setIsLoadingTemplateInstance(false)
+    }
+  }
+
   if (isLoading) {
     return (
       <Grid container justifyContent="center">
         <LoadingContainer style={{ padding: '20%' }} noPaddings />
+      </Grid>
+    )
+  }
+
+  if (isLoadingTemplateInstance) {
+    return (
+      <Grid container justifyContent="center">
+        <LoadingContainer
+          style={{ padding: '20%' }}
+          noPaddings
+          title="Preparing template data..."
+        />
       </Grid>
     )
   }
@@ -79,7 +119,7 @@ export default function MarketingTemplateInstancePicker({
           <div
             key={template.id}
             className={classes.templateItemContainer}
-            onClick={() => onSelect(template)}
+            onClick={() => handleClick(template.id)}
           >
             <MarketingTemplateCard template={template} />
           </div>

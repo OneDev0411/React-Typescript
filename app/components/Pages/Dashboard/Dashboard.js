@@ -94,10 +94,7 @@ class Dashboard extends Component {
         !searchParamValue
       ) {
         dispatch(getDeals(activeTeam))
-        console.log('get deal 1')
       } else {
-        console.log('get deal 2')
-
         dispatch(
           searchParamValue
             ? searchDeals(activeTeam, decodeURIComponent(searchParamValue))

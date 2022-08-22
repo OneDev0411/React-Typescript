@@ -7,12 +7,12 @@ export const TabNames: {
     title: 'Listing'
   },
   {
-    type: 'Buying',
-    title: 'Contract'
+    type: 'Offer',
+    title: 'Incoming Contract'
   },
   {
-    type: 'Offer',
-    title: 'Offer'
+    type: 'Buying',
+    title: 'Outgoing Contract'
   }
 ]
 
@@ -23,5 +23,6 @@ export const dealTaskTypeToString: { [key in IDealTaskType]: string } = {
   YardSign: 'Yard Sign',
   OpenHouse: 'Open House',
   Media: 'Media',
-  Splitter: 'Splitter'
+  Splitter: 'Splitter',
+  Application: 'Application'
 }

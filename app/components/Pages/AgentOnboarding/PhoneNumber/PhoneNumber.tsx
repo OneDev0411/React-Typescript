@@ -1,17 +1,14 @@
-import React from 'react'
-
 import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { browserHistory, WithRouterProps } from 'react-router'
 
 import { updateUser } from 'actions/user'
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { editUser } from 'models/user/edit'
-import { IAppState } from 'reducers'
 import { formatPhoneNumber } from 'utils/format'
 import { isPhoneNumber } from 'utils/validations'
 
@@ -32,7 +29,6 @@ export function PhoneNumber({ location }: WithRouterProps) {
   const dispatch = useDispatch()
   const commonClasses = useCommonStyles()
   const phoneNumber = window.decodeURIComponent(location.query.pn || '')
-  const brand = useSelector((store: IAppState) => store.brand)
 
   const onSubmit = async (values: FormValues) => {
     try {
@@ -81,7 +77,6 @@ export function PhoneNumber({ location }: WithRouterProps) {
     <Container>
       <SkipButton to="/onboarding/oauth-accounts" />
       <Header
-        brand={brand}
         title="Verify Phone Number"
         subtitle="We will not share your number with anyone"
       />

@@ -1,6 +1,7 @@
 import { useState, useEffect, ComponentProps } from 'react'
 
 import { makeStyles } from '@material-ui/core'
+import { mdiPlayBoxMultipleOutline } from '@mdi/js'
 import { useInView } from 'react-intersection-observer'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
@@ -8,11 +9,19 @@ import { PdfThumbnail } from 'components/PdfThumbnail'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import TemplateThumbnail from 'components/TemplateThumbnail'
 import { getFileType } from 'utils/file-utils/get-file-type'
-import { getTemplateImage } from 'utils/marketing-center/helpers'
+import {
+  getTemplateImageOrVideo,
+  isVideoThumb
+} from 'utils/marketing-center/helpers'
+
+import { VideoThumbnail } from '../VideoThumbnail'
 
 const useStyles = makeStyles(
   () => ({
-    image: {
+    videoThumbWrapper: {
+      display: 'flex'
+    },
+    thumb: {
       width: '100%'
     },
     templateThumbnailWrapper: {
@@ -29,7 +38,6 @@ interface Props {
   template: IMarketingTemplateInstance | IBrandMarketingTemplate
   listing?: IListing
   useStaticImage?: boolean
-
   onClick?: ComponentProps<typeof TemplateThumbnail>['onClick']
 }
 
@@ -90,11 +98,17 @@ export function Thumbnail({
   }
 
   if (useStaticImage) {
-    const { thumbnail } = getTemplateImage(template)
+    const { thumbnail } = getTemplateImageOrVideo(template)
 
-    return template.template.video ? (
-      <div ref={ref}>
-        {shouldRender && <video src={thumbnail} muted autoPlay />}
+    return isVideoThumb(template) ? (
+      <div className={classes.videoThumbWrapper} ref={ref}>
+        {shouldRender && (
+          <VideoThumbnail
+            url={thumbnail}
+            className={classes.thumb}
+            indicatorIconPath={mdiPlayBoxMultipleOutline}
+          />
+        )}
       </div>
     ) : (
       <div ref={ref}>
@@ -102,7 +116,7 @@ export function Thumbnail({
           <img
             alt={template.template.name}
             src={thumbnail}
-            className={classes.image}
+            className={classes.thumb}
           />
         )}
       </div>

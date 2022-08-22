@@ -1,4 +1,7 @@
-declare type NumberRange = [number, number]
+declare type ICalendarRange = {
+  low: number
+  high: number
+}
 
 declare type ICalendarEventAssociations = 'full_thread'
 

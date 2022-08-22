@@ -21,7 +21,8 @@ import SectionLayout from '../SectionLayout'
 const BRANDING_TEMPLATE_TYPES: IMarketingTemplateType[] = [
   'Brand',
   'NewAgent',
-  'Recruiting'
+  'Recruiting',
+  'Announcements'
 ]
 const SOCIAL_TEMPLATE_MEDIUMS: IMarketingTemplateMedium[] = [
   'Social',

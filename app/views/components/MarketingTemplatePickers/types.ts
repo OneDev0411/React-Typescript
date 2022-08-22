@@ -28,4 +28,5 @@ export interface MarketingTemplateAndTemplateInstancePickerProps
   onSelect: (
     template: IBrandMarketingTemplate | IMarketingTemplateInstance
   ) => void
+  shouldShowMyDesigns?: boolean
 }

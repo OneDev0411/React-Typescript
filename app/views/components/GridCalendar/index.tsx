@@ -2,7 +2,6 @@ import {
   memo,
   useState,
   RefObject,
-  useEffect,
   useCallback,
   useImperativeHandle
 } from 'react'
@@ -56,7 +55,7 @@ import {
 } from './helpers/get-date-range'
 import { normalizeEventOnEdit } from './helpers/normalize-event-on-edit'
 import { normalizeEvents } from './helpers/normalize-events'
-import { SocketUpdate, ActionRef } from './types'
+import { ActionRef } from './types'
 
 const useStyles = makeStyles(
   () => ({
@@ -75,7 +74,7 @@ const useStyles = makeStyles(
 
 interface Props {
   contrariwise?: boolean
-  initialRange?: NumberRange
+  initialRange?: ICalendarRange
   associations?: string[]
   actionRef?: RefObject<ActionRef>
 }
@@ -105,7 +104,7 @@ export const GridCalendarPresentation = ({
   const [isLoading, setIsLoading] = useState(false)
 
   // current range of fetched events
-  const [calendarRange, setCalendarRange] = useState<NumberRange>(
+  const [calendarRange, setCalendarRange] = useState<ICalendarRange>(
     getDateRange()
   )
 
@@ -145,9 +144,9 @@ export const GridCalendarPresentation = ({
 
         console.log(
           `[ + ] Fetching Calendar with range of %c${new Date(
-            apiOptions.range[0] * 1000
+            apiOptions.range.low * 1000
           ).toUTCString()} %c${new Date(
-            apiOptions.range[1] * 1000
+            apiOptions.range.high * 1000
           ).toUTCString()}`,
           'color: green',
           'color: blue'
@@ -195,8 +194,8 @@ export const GridCalendarPresentation = ({
     [viewAsUsers, associations, rowEvents, updateEvents]
   )
 
-  const handleLoadEvents = async (range: NumberRange | null = null) => {
-    const query: NumberRange = range || calendarRange
+  const handleLoadEvents = async (range: Nullable<ICalendarRange> = null) => {
+    const query: ICalendarRange = range || calendarRange
 
     // reset calendar range
     setCalendarRange(query)
@@ -219,8 +218,8 @@ export const GridCalendarPresentation = ({
     (
       direction: Format
     ): {
-      query: NumberRange
-      calendar: NumberRange
+      query: ICalendarRange
+      calendar: ICalendarRange
     } => {
       let actualDirection = direction
 
@@ -232,15 +231,15 @@ export const GridCalendarPresentation = ({
         actualDirection = Format.Next
       }
 
-      const query: NumberRange =
+      const query: ICalendarRange =
         actualDirection === Format.Next
-          ? getDateRange(calendarRange[1] * 1000, Format.Next)
-          : getDateRange(calendarRange[0] * 1000, Format.Previous)
+          ? getDateRange(calendarRange.high * 1000, Format.Next)
+          : getDateRange(calendarRange.low * 1000, Format.Previous)
 
-      const calendar: NumberRange =
+      const calendar: ICalendarRange =
         actualDirection === Format.Next
-          ? [calendarRange[0], query[1]]
-          : [query[0], calendarRange[1]]
+          ? { low: calendarRange.low, high: query.high }
+          : { low: query.low, high: calendarRange.high }
 
       return {
         query,
@@ -275,13 +274,13 @@ export const GridCalendarPresentation = ({
    */
   const handleDatesRender = (e: DatesSetArg) => {
     const { view } = e
-    const [start, end] = calendarRange
+    const { low, high } = calendarRange
 
-    if (shouldRecreateRange(start * 1000, view.currentStart.getTime())) {
+    if (shouldRecreateRange(low * 1000, view.currentStart.getTime())) {
       handleLoadMoreEvents(Format.Previous)
     }
 
-    if (shouldRecreateRange(end * 1000, view.currentEnd.getTime())) {
+    if (shouldRecreateRange(high * 1000, view.currentEnd.getTime())) {
       handleLoadMoreEvents(Format.Next)
     }
   }
@@ -372,41 +371,24 @@ export const GridCalendarPresentation = ({
   }
 
   /**
-   * Load initia events (behaves as componentDidMount)
+   * Load initial events (behaves as componentDidMount)
    */
   useEffectOnce(() => {
     handleLoadEvents(initialRange)
-  })
 
-  /**
-   * sync with google and out look real-time
-   */
-  useEffect(() => {
-    const socket: SocketIOClient.Socket = (window as any).socket
-
-    if (!socket) {
-      return
+    const reload = () => {
+      console.log('[ Calendar ] Reloading')
+      handleLoadEvents(calendarRange)
     }
 
-    function handleUpdate({ upserted, deleted }: SocketUpdate) {
-      if (upserted.length === 0 && deleted.length === 0) {
-        return
-      }
-
-      const currentEvents: ICalendarEvent[] =
-        deleted.length > 0
-          ? rowEvents.filter(e => !deleted.includes(e.id))
-          : rowEvents
-      const nextEvents =
-        upserted.length > 0 ? [...upserted, ...currentEvents] : currentEvents
-
-      updateEvents(nextEvents)
-    }
-
-    socket.on('Calendar.Updated', handleUpdate)
+    window.socket?.on('crm_task:create', reload)
+    window.socket?.on('crm_task:delete', reload)
+    window.socket?.on('Calendar.Updated', reload)
 
     return () => {
-      socket.off('Calendar.Updated', handleUpdate)
+      window.socket?.off('crm_task:create', reload)
+      window.socket?.off('crm_task:delete', reload)
+      window.socket?.off('Calendar.Updated', reload)
     }
   })
 

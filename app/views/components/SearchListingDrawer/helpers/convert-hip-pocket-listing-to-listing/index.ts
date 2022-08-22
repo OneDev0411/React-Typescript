@@ -6,7 +6,7 @@ import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/co
 import { HipPocketListing } from 'components/HipPocketListing'
 import { feetToMeters } from 'utils/listing'
 
-function getPropertyAddress(address?: string): Partial<Address> {
+export function getPropertyAddress(address?: string): Partial<Address> {
   if (!address) {
     return {
       street_number: '',
@@ -59,8 +59,10 @@ export function convertHipPocketListingToListing(
       hipPocketListing.images || [],
       PLACEHOLDER_IMAGE_URL
     ),
+    cover_image_url: hipPocketListing?.images?.[0] ?? null,
     url: hipPocketListing.url || '',
     price: hipPocketListing.price || 0,
+    status: hipPocketListing.status || 'Temp Off Market',
     property: {
       bedroom_count: hipPocketListing.bedrooms || 0,
       full_bathroom_count: hipPocketListing.full_baths || 0,

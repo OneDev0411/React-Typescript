@@ -61,7 +61,10 @@ const useStyles = makeStyles(
     statusContainer: {
       position: 'absolute',
       top: theme.spacing(1),
-      right: theme.spacing(1)
+      right: theme.spacing(1),
+      '& $iconSmall': {
+        marginLeft: theme.spacing(1)
+      }
     },
     statusChip: {
       fontSize: 12,
@@ -81,9 +84,7 @@ const useStyles = makeStyles(
       display: 'inline-block'
     }),
     iconSmall: {
-      // TODO: there should be better ways to handling this.
-      // https://stackoverflow.com/questions/63880835
-      marginLeft: `${theme.spacing(1)}px !important`
+      opacity: '100%'
     },
     address: {
       fontSize: 13,

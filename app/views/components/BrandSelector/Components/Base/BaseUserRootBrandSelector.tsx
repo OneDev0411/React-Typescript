@@ -9,6 +9,7 @@ export interface BaseUserRootBrandSelectorProps extends BaseBrandSelectorProps {
 
 export function BaseUserRootBrandSelector({
   rootBrandId,
+  filterFn,
   ...props
 }: BaseUserRootBrandSelectorProps) {
   const {
@@ -18,7 +19,7 @@ export function BaseUserRootBrandSelector({
     initialExpandedNodes,
     handleSearch,
     teams
-  } = useUserRootTeams(rootBrandId)
+  } = useUserRootTeams(rootBrandId, filterFn)
 
   return (
     <BaseTreeViewBrandSelector

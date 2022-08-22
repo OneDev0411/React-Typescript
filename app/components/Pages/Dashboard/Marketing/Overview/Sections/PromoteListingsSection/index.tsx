@@ -9,7 +9,7 @@ import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
 
 export default function PromoteListingsSection() {
-  const { listings, isLoading } = useBrandAndDealsListings()
+  const { listings, isLoading } = useBrandAndDealsListings(undefined, 4)
 
   return (
     <SectionLayout
@@ -24,16 +24,16 @@ export default function PromoteListingsSection() {
     >
       {isLoading && (
         <>
-          <Grid item md={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <CardSkeleton style={{ height: '293px' }} />
           </Grid>
-          <Grid item md={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <CardSkeleton style={{ height: '293px' }} />
           </Grid>
-          <Grid item md={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <CardSkeleton style={{ height: '293px' }} />
           </Grid>
-          <Grid item md={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <CardSkeleton style={{ height: '293px' }} />
           </Grid>
         </>
