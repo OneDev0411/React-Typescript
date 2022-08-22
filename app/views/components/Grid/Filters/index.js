@@ -125,6 +125,14 @@ class Filters extends React.Component {
       }
     }
 
+    console.log('onFilterChange', {
+      id,
+      values,
+      operator,
+      nextFilters,
+      name: this.props.name
+    })
+
     if (isValid && this.isFilterChanged(current, { values, operator })) {
       this.onChangeFilters(nextFilters)
     }
@@ -163,8 +171,6 @@ class Filters extends React.Component {
     const { children, ...props } = this.props
     const { activeFilters } = props
     const activeFiltersList = Object.keys(activeFilters)
-
-    console.log({ activeFiltersList })
 
     return (
       <Container>

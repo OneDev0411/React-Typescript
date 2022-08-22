@@ -20,8 +20,6 @@ interface Props {
 export const FilterItem = (props: Props) => {
   const classes = useStyles()
 
-  console.log({ props })
-
   const {
     filterConfig,
     isActive,

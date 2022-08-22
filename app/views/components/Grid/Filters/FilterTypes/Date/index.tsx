@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react'
 import {
   Theme,
   Radio,
+  Button,
   FormLabel,
   RadioGroup,
   makeStyles,
@@ -11,6 +12,7 @@ import {
 } from '@material-ui/core'
 import _groupBy from 'lodash/groupBy'
 
+import { OperatorComponent } from './components/OperatorComponent'
 import { operators } from './constant'
 
 interface Props extends IFilterConfigRenderer {
@@ -41,10 +43,12 @@ const useStyles = makeStyles(
 export const DateFilterType = (props: Props) => {
   // console.log({ groupedOperator })
   const classes = useStyles()
-  const [value, setValue] = useState('female')
+  const [selectedOperator, setSelectedOperator] = useState('female')
 
-  const handleChange = event => {
-    setValue(event.target.value)
+  const handleOperatorChange = event => {
+    // console.log({ value: event.target.value })
+
+    setSelectedOperator(event.target.value)
   }
 
   return (
@@ -58,18 +62,31 @@ export const DateFilterType = (props: Props) => {
           <FormLabel component="legend" className={classes.typeTitle}>
             {type.toUpperCase()}
           </FormLabel>
-          <RadioGroup name="date" value={value} onChange={handleChange}>
+          <RadioGroup
+            name="date"
+            value={selectedOperator}
+            onChange={handleOperatorChange}
+          >
             {operators.map(operator => (
-              <FormControlLabel
-                key={operator.name}
-                value={operator.name}
-                control={<Radio size="small" color="primary" />}
-                label={operator.name}
-              />
+              <>
+                <FormControlLabel
+                  key={operator.name}
+                  value={operator.name}
+                  control={<Radio size="small" color="primary" />}
+                  label={operator.name}
+                />
+                {!['all', 'any'].includes(operator.operator) &&
+                  selectedOperator === operator.name && (
+                    <OperatorComponent operator={operator} />
+                  )}
+              </>
             ))}
           </RadioGroup>
         </FormControl>
       ))}
+      <Button fullWidth variant="contained" color="primary">
+        Done
+      </Button>
     </div>
   )
 }

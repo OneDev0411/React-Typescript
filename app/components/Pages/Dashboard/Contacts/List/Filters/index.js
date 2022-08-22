@@ -33,8 +33,6 @@ export default function ContactFilters(props) {
   })
   const customFilters = useGetCustomFilters(attributeDefs)
 
-  console.log({ attributeDefs })
-
   if (!props?.show) {
     return null
   }

@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 
+import { Button } from '@material-ui/core'
 import { mdiRadioboxBlank, mdiRadioboxMarked } from '@mdi/js'
 import PropTypes from 'prop-types'
 
@@ -14,8 +15,7 @@ import {
   InputContainer,
   Operator,
   Title,
-  MarkedIcon,
-  DoneButton
+  MarkedIcon
 } from './styled'
 
 export const operators = [
@@ -80,7 +80,11 @@ export class OperatorAndOperandFilter extends React.Component {
   getOperatorComponent = type => {
     const props = {
       ...this.props,
-      onFilterChange: this.onFilterChange
+      onFilterChange: (...args) => {
+        console.log('onFilterChange', { args })
+
+        return this.onFilterChange(...args)
+      }
     }
 
     switch (type) {
@@ -100,8 +104,6 @@ export class OperatorAndOperandFilter extends React.Component {
   }
 
   render() {
-    console.log({ ddd: this.props })
-
     const { allowedOperators, type } = this.props
     const { selectedOperator } = this.state
 
@@ -128,15 +130,16 @@ export class OperatorAndOperandFilter extends React.Component {
               </div>
             </Operator>
           ))}
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            disabled={!this.props.values || this.props.values.length === 0}
+            onClick={this.props.onToggleFilterActive}
+          >
+            Done
+          </Button>
         </Container>
-        <DoneButton
-          disabled={!this.props.values || this.props.values.length === 0}
-          appearance="link"
-          onClick={this.props.onToggleFilterActive}
-          data-test="filter-done-button"
-        >
-          Done
-        </DoneButton>
       </Fragment>
     )
   }

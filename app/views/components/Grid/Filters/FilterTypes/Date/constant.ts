@@ -4,34 +4,42 @@ export const operators: DateOperator[] = [
   {
     name: 'exactly',
     type: 'relative',
-    default: true
+    default: true,
+    operator: 'eq'
   },
   {
     name: 'more than',
-    type: 'relative'
+    type: 'relative',
+    operator: 'gte'
   },
   {
     name: 'less than',
-    type: 'relative'
+    type: 'relative',
+    operator: 'lte'
   },
   {
     name: 'after',
-    type: 'absolute'
+    type: 'absolute',
+    operator: 'gte'
   },
   {
     name: 'on',
-    type: 'absolute'
+    type: 'absolute',
+    operator: 'eq'
   },
   {
     name: 'before',
-    type: 'absolute'
+    type: 'absolute',
+    operator: 'lte'
   },
   {
     name: 'is unknown',
-    type: 'absolute'
+    type: 'absolute',
+    operator: 'any'
   },
   {
     name: 'has any value',
-    type: 'absolute'
+    type: 'absolute',
+    operator: 'all'
   }
 ]

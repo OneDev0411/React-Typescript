@@ -1,7 +1,15 @@
+declare type IContactFilterOperator =
+  | 'eq'
+  | 'lte'
+  | 'gte'
+  | 'between'
+  | 'any'
+  | 'all'
 declare interface IFilterOperator {
   name: string
   invert?: boolean
   default?: boolean
+  operator?: IContactFilterOperator
 }
 
 declare interface IFilterConfigRenderer {

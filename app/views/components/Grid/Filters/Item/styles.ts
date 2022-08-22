@@ -17,7 +17,8 @@ export const useStyles = makeStyles(
       boxShadow: theme.shadows[3]
     },
     incomplete: {
-      background: 'red'
+      color: theme.palette.error.main,
+      borderColor: theme.palette.error.main
     },
     filterChip: {
       display: 'flex',
