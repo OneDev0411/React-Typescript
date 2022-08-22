@@ -26,7 +26,7 @@ export default async (req: Request, res: Response) => {
 
     const url: string = req.body.url
 
-    if (!isValidYouTubeUrl) {
+    if (!isValidYouTubeUrl(url)) {
       res.status(400)
       res.json({
         error: 'Invalid URL'
@@ -80,6 +80,8 @@ export default async (req: Request, res: Response) => {
     }
 
     res.json({ url: gifUrl })
+
+    return
   } catch (error) {
     console.error(error)
     res.status(500)
