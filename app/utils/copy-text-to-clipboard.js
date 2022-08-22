@@ -53,7 +53,5 @@ module.exports = input => {
     return
   }
 
-  navigator.clipboard.writeText(input).then(() => {
-    console.log('Copying to clipboard was successful!')
-  })
+  navigator.clipboard.writeText(input)
 }
