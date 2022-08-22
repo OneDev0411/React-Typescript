@@ -136,6 +136,13 @@ export function EditorDialog({
   }, [editor, activeAction])
 
   useEffect(() => {
+    if (activeAction !== 'draw' && editor?.board.activeDrawing) {
+      editor.shapes.line.stopDrawing()
+      editor.shapes.pencil.stopDrawing()
+    }
+  }, [editor, activeAction])
+
+  useEffect(() => {
     const onSelectionChange = (e: EventListenerCallbackEvent) => {
       if ((e.shapes?.length ?? 0) > 1) {
         editor?.selection.deselectAll()

@@ -90,6 +90,12 @@ export function TextMenu() {
     const onSelectionChange = (e: EventListenerCallbackEvent) => {
       const shape = e.shapes?.[0] as Nullable<LabelModel>
 
+      if (shape?.type !== 'label') {
+        setSelectedLabel(null)
+
+        return
+      }
+
       setSelectedLabel(shape ?? null)
     }
 
