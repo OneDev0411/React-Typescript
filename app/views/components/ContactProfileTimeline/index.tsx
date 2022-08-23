@@ -71,7 +71,7 @@ export function Calendar({
       range: ICalendarRange,
       position: ApiOptions['position']
     ): Promise<[ICalendarEvent[], ICalendarEvent[]]> => {
-      const { low, high } = range
+      const { low = calendarRange.low, high = calendarRange.high } = range
       const commonParams = {
         users: viewAsUsers,
         filter,
@@ -126,7 +126,7 @@ export function Calendar({
         throw error
       }
     },
-    [associations, filter, viewAsUsers]
+    [associations, calendarRange.high, calendarRange.low, filter, viewAsUsers]
   )
   const getEvents = useCallback(
     async (
@@ -168,10 +168,18 @@ export function Calendar({
     [fetchEvents, events, onLoadEvents]
   )
 
-  const handleLoadEvents = async (reset: boolean = true) => {
+  const handleLoadEvents = async (
+    reset: boolean = true,
+    range: Nullable<Partial<ICalendarRange>> = {}
+  ) => {
+    const nextRange: ICalendarRange = {
+      high: range?.high ?? calendarRange.high,
+      low: range?.low ?? calendarRange.low
+    }
+
     await getEvents(
       {
-        range: calendarRange,
+        range: nextRange,
         position: 'Middle'
       },
       reset
@@ -262,7 +270,7 @@ export function Calendar({
    * exposes below methods to be accessible outside of the component
    */
   useImperativeHandle(calendarRef, () => ({
-    refresh: () => handleLoadEvents(false),
+    refresh: handleLoadEvents,
     updateCrmEvents: handleCrmEventChange
   }))
 
