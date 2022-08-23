@@ -1,3 +1,7 @@
+import { useDispatch } from 'react-redux'
+
+import useNotify from '@app/hooks/use-notify'
+import { confirmation } from '@app/store_actions/confirmation'
 import { DangerButton } from 'components/Button/DangerButton'
 
 import { useDeleteLeadChannelMutation } from './queries/use-delete-lead-channel-mutation'
@@ -11,14 +15,36 @@ export function DeleteLeadChannelBrandButton({
   channel,
   activeBrandId
 }: Props) {
-  const { mutate } = useDeleteLeadChannelMutation(channel, activeBrandId)
+  const { mutateAsync } = useDeleteLeadChannelMutation(channel, activeBrandId)
+  const notify = useNotify()
+  const dispatch = useDispatch()
 
-  const handleDelete = () => {
-    mutate({})
+  const requestDelete = () => {
+    dispatch(
+      confirmation({
+        message: 'Disconnect Channel',
+        description: `Please confirm that you want to disconnect ${channel.source_type} channel.`,
+        onConfirm: handleDelete
+      })
+    )
+  }
+
+  const handleDelete = async () => {
+    try {
+      await mutateAsync({})
+    } catch (e) {
+      if (e.response.status === 401) {
+        notify({
+          status: 'error',
+          message:
+            'This channel was created by someone else. You cannot delete it.'
+        })
+      }
+    }
   }
 
   return (
-    <DangerButton size="small" variant="outlined" onClick={handleDelete}>
+    <DangerButton size="small" variant="outlined" onClick={requestDelete}>
       Disconnect
     </DangerButton>
   )

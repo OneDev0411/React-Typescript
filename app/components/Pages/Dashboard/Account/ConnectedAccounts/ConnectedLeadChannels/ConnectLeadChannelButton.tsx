@@ -5,7 +5,6 @@ import { Button, CircularProgress } from '@material-ui/core'
 import useNotify from '@app/hooks/use-notify'
 
 import { useCreateLeadChannelMutation } from './queries/use-create-lead-channel-mutation'
-import { useLeadChannels } from './queries/use-lead-channels'
 
 interface Props {
   activeBrandId?: UUID
@@ -15,7 +14,7 @@ interface Props {
 export function ConnectLeadChannelButton({ activeBrandId, isFetching }: Props) {
   const [isWorking, setIsWorking] = useState(false)
   const notify = useNotify()
-  const { data: channels } = useLeadChannels(activeBrandId)
+
   const { mutateAsync } = useCreateLeadChannelMutation(activeBrandId)
 
   const handleConnect = async () => {
@@ -37,11 +36,6 @@ export function ConnectLeadChannelButton({ activeBrandId, isFetching }: Props) {
     } finally {
       setIsWorking(false)
     }
-  }
-
-  // currently, we only support Zillow channel. this line should remove when we support more channels
-  if (channels?.some(channel => channel.source_type === 'Zillow')) {
-    return null
   }
 
   return (

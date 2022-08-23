@@ -40,7 +40,10 @@ export function ChangeLeadChannelBrandButton({
     } catch (e) {
       notify({
         status: 'error',
-        message: 'Something went wrong. Please try again.'
+        message:
+          e.response.status === 401
+            ? 'This channel was created by someone else. You cannot update its brand.'
+            : 'Something went wrong. Please try again.'
       })
     } finally {
       setIsWorking(false)
