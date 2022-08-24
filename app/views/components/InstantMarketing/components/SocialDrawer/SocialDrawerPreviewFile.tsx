@@ -57,7 +57,7 @@ function SocialDrawerPreviewFile({
           <Typography variant="body1" className={classes.loadingText}>
             We are prepping your {isVideoTemplate ? 'video' : 'design'}; This
             could take
-            {isVideoTemplate ? ' few minutes. ' : ' a minute. '}
+            {isVideoTemplate ? ' a few minutes. ' : ' a minute. '}
           </Typography>
           <Typography variant="body1" className={classes.loadingText}>
             Do not close this tab.
