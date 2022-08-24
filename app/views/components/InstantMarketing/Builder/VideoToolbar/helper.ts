@@ -15,37 +15,14 @@ export function msToMinutesAndSeconds(ms: number): string {
   return `${fixLeadingZero(minutes)}:${fixLeadingZero(seconds)}`
 }
 
-export function getSlotWidth(
+export function getMarkerPosition(
   index: number,
   keyframes: IKeyframe[],
   duration: number
-): number {
+): `${number}%` {
   const currentSlotStartTime = keyframes[index].at
-  const nextSlotStartTime = keyframes[index + 1]?.at ?? duration
-  const slotDuration = nextSlotStartTime - currentSlotStartTime
 
-  return (slotDuration / duration) * 100
-}
-
-export function getSlotProgress(
-  index: number,
-  keyframes: IKeyframe[],
-  currentTime: number,
-  duration: number
-): number {
-  const currentSlotStartTime = keyframes[index].at
-  const nextSlotStartTime = keyframes[index + 1]?.at ?? duration
-  const slotDuration = nextSlotStartTime - currentSlotStartTime
-
-  if (currentTime <= currentSlotStartTime) {
-    return 0
-  }
-
-  if (currentTime >= nextSlotStartTime) {
-    return 100
-  }
-
-  return ((currentTime - currentSlotStartTime) / slotDuration) * 100
+  return `${+((currentSlotStartTime * 100) / duration).toFixed(2)}%`
 }
 
 export function normalizeKeyframes(
