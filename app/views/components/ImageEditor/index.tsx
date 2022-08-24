@@ -10,6 +10,7 @@ import {
   Button,
   ClickAwayListener
 } from '@material-ui/core'
+import { Skeleton } from '@material-ui/lab'
 import Pikaso, { EventListenerCallbackEvent } from 'pikaso'
 
 import type { Filter as ImageFilter } from '@app/hooks/use-image-filters'
@@ -36,6 +37,7 @@ const useStyles = makeStyles(
     editor: {
       border: `1px solid ${theme.palette.action.hover}`,
       height: '500px',
+      maxHeight: '500px',
       margin: theme.spacing(2)
     },
     dialogContent: {
@@ -58,6 +60,9 @@ const useStyles = makeStyles(
       '& button': {
         marginRight: theme.spacing(1)
       }
+    },
+    hidden: {
+      display: 'none'
     }
   }),
   {
@@ -84,7 +89,7 @@ export function EditorDialog({
 }: Props) {
   const classes = useStyles()
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
-
+  const [isLoading, setIsLoading] = useState(false)
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
   const [activeAction, setActiveAction] = useState<Actions | null>(null)
   const [isFocused, setIsFocused] = useState(false)
@@ -120,10 +125,14 @@ export function EditorDialog({
     }
 
     const load = async () => {
+      setIsLoading(true)
+
       const fileBlob =
         typeof file === 'string' ? await convertUrlToImageFile(file) : file
 
       await editor.loadFromFile(fileBlob)
+
+      setIsLoading(false)
     }
 
     load()
@@ -236,58 +245,71 @@ export function EditorDialog({
       </DialogTitle>
 
       <DialogContent className={classes.dialogContent}>
+        {isLoading && (
+          <Box m={3}>
+            <Skeleton variant="rect" width="100%" height="500px" />
+            <Box mt={2}>
+              <Skeleton variant="rect" width="100%" height="50px" />
+            </Box>
+          </Box>
+        )}
+
         <ClickAwayListener onClickAway={() => setIsFocused(false)}>
           <div
             ref={editorRef}
-            className={classes.editor}
+            className={isLoading ? classes.hidden : classes.editor}
             onClick={() => setIsFocused(true)}
           />
         </ClickAwayListener>
 
-        <ImageEditorContext.Provider
-          value={{
-            editor,
-            activeAction,
-            history,
-            setActiveAction,
-            activeFilter,
-            setActiveFilter
-          }}
-        >
-          {activeAction && (
+        {!isLoading && (
+          <ImageEditorContext.Provider
+            value={{
+              editor,
+              activeAction,
+              history,
+              setActiveAction,
+              activeFilter,
+              setActiveFilter
+            }}
+          >
+            {activeAction && (
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                className={classes.actionMenu}
+              >
+                {activeAction === 'crop' && (
+                  <CropMenu options={cropperOptions} />
+                )}
+                {activeAction === 'draw' && <DrawMenu />}
+                {activeAction === 'text' && <TextMenu />}
+                {activeAction === 'filter' && <FilterMenu file={file} />}
+              </Box>
+            )}
+
             <Box
               display="flex"
               justifyContent="space-between"
-              className={classes.actionMenu}
+              className={classes.actionsContainer}
             >
-              {activeAction === 'crop' && <CropMenu options={cropperOptions} />}
-              {activeAction === 'draw' && <DrawMenu />}
-              {activeAction === 'text' && <TextMenu />}
-              {activeAction === 'filter' && <FilterMenu file={file} />}
-            </Box>
-          )}
+              <Box display="flex" className={classes.actions}>
+                <Cropper options={cropperOptions} />
+                <Rotation />
+                <Flip />
+                <Draw />
+                <Text />
+                <Image />
+                <Filter />
+              </Box>
 
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            className={classes.actionsContainer}
-          >
-            <Box display="flex" className={classes.actions}>
-              <Cropper options={cropperOptions} />
-              <Rotation />
-              <Flip />
-              <Draw />
-              <Text />
-              <Image />
-              <Filter />
+              <Box display="flex">
+                <Redo />
+                <Undo />
+              </Box>
             </Box>
-
-            <Box display="flex">
-              <Redo />
-              <Undo />
-            </Box>
-          </Box>
-        </ImageEditorContext.Provider>
+          </ImageEditorContext.Provider>
+        )}
       </DialogContent>
     </Dialog>
   )
