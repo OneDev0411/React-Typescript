@@ -27,7 +27,7 @@ function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
     if (filter === Filters.Events) {
       const date = new Date().getTime() / 1000
 
-      localTimelineRef.current!.refresh(false, { high: date, low: date })
+      localTimelineRef.current!.refresh(true, { high: date, low: date })
     }
   }
 

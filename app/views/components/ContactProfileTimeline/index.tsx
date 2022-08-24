@@ -177,6 +177,11 @@ export function Calendar({
       low: range?.low ?? calendarRange.low
     }
 
+    if (reset) {
+      setIsReachedStart(false)
+      setIsReachedEnd(false)
+    }
+
     await getEvents(
       {
         range: nextRange,
