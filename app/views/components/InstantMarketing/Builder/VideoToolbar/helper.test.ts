@@ -163,26 +163,17 @@ describe('normalizeKeyframes', () => {
     expect(normalizeKeyframes(keyframes, duration)).toStrictEqual(expected)
   })
 
-  it('should add first keyframe if its not at 0', () => {
-    const keyframes = [{ at: 2000 }, { at: 8000 }, { at: 15000 }, { at: 23000 }]
-    const duration = 25000
-
-    const expected = [
-      { at: 0 },
+  it('should remove first keyframe and remove last keyframe if its not at 0 and bigger than duration', () => {
+    const keyframes = [
+      { at: -100 },
       { at: 2000 },
       { at: 8000 },
       { at: 15000 },
       { at: 23000 }
     ]
-
-    expect(normalizeKeyframes(keyframes, duration)).toStrictEqual(expected)
-  })
-
-  it('should returns first keyframe and remove last keyframe if its not at 0 and bigger than duration', () => {
-    const keyframes = [{ at: 2000 }, { at: 8000 }, { at: 15000 }, { at: 23000 }]
     const duration = 22800
 
-    const expected = [{ at: 0 }, { at: 2000 }, { at: 8000 }, { at: 15000 }]
+    const expected = [{ at: 2000 }, { at: 8000 }, { at: 15000 }]
 
     expect(normalizeKeyframes(keyframes, duration)).toStrictEqual(expected)
   })
