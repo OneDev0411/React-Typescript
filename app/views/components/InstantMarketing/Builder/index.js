@@ -1397,6 +1397,19 @@ class Builder extends React.Component {
       return false
     }
 
+    /* 
+       We have a problem loading animate.js file of templates
+       after switching a template inside of the builder so for now
+       I Disabled template list for video templates
+       https://gitlab.com/rechat/web/-/issues/6696#note_1077622822
+
+       TODO: remove this line after fixing this problem
+       https://gitlab.com/rechat/web/-/issues/6729
+    */
+    if (this.isVideoTemplate) {
+      return false
+    }
+
     return true
   }
 

@@ -1,8 +1,7 @@
 import {
   fixLeadingZero,
   msToMinutesAndSeconds,
-  getSlotWidth,
-  getSlotProgress,
+  getMarkerPosition,
   normalizeKeyframes
 } from './helper'
 
@@ -100,76 +99,35 @@ describe('msToMinutesAndSeconds', () => {
   })
 })
 
-describe('getSlotWidth', () => {
-  it('should returns 40 when input is 6000 of 15000', () => {
+describe('getMarkerPosition', () => {
+  it('should returns 40% when input is 8000 of 20000', () => {
     const index = 2
-    const keyframes = [{ at: 0 }, { at: 1000 }, { at: 4000 }, { at: 10000 }]
-    const duration = 15000
+    const keyframes = [{ at: 0 }, { at: 1000 }, { at: 8000 }, { at: 10000 }]
+    const duration = 20000
 
-    const expected = 40
+    const expected = '40%'
 
-    expect(getSlotWidth(index, keyframes, duration)).toBe(expected)
+    expect(getMarkerPosition(index, keyframes, duration)).toBe(expected)
   })
 
-  it('should returns 37.5 when input is 500 of 16000', () => {
+  it('should returns 25% when input is 10000 of 25000', () => {
     const index = 3
     const keyframes = [{ at: 0 }, { at: 1000 }, { at: 4000 }, { at: 10000 }]
-    const duration = 16000
+    const duration = 25000
 
-    const expected = 37.5
+    const expected = '40%'
 
-    expect(getSlotWidth(index, keyframes, duration)).toBe(expected)
+    expect(getMarkerPosition(index, keyframes, duration)).toBe(expected)
   })
 
-  it('should returns 25 when input is 4000 of 16000', () => {
+  it('should returns 0% when input is 0 of 16000', () => {
     const index = 0
     const keyframes = [{ at: 0 }, { at: 4000 }, { at: 10000 }]
     const duration = 16000
 
-    const expected = 25
+    const expected = '0%'
 
-    expect(getSlotWidth(index, keyframes, duration)).toBe(expected)
-  })
-})
-
-describe('getSlotProgress', () => {
-  it('should returns 100 when currentTime is passed the current slot', () => {
-    const index = 2
-    const currentTime = 10001
-    const keyframes = [{ at: 0 }, { at: 1000 }, { at: 4000 }, { at: 10000 }]
-    const duration = 15000
-
-    const expected = 100
-
-    expect(getSlotProgress(index, keyframes, currentTime, duration)).toBe(
-      expected
-    )
-  })
-
-  it('should returns 0 when currentTime is not reached to the current slot', () => {
-    const index = 3
-    const currentTime = 100
-    const keyframes = [{ at: 0 }, { at: 1000 }, { at: 4000 }, { at: 10000 }]
-    const duration = 16000
-
-    const expected = 0
-
-    expect(getSlotProgress(index, keyframes, currentTime, duration)).toBe(
-      expected
-    )
-  })
-
-  it('should returns 20 when currentTime is in middle of the current slot', () => {
-    const index = 2
-    const currentTime = 12000
-    const keyframes = [{ at: 0 }, { at: 4000 }, { at: 11000 }]
-    const duration = 16000
-
-    const expected = 20
-
-    expect(getSlotProgress(index, keyframes, currentTime, duration)).toBe(
-      expected
-    )
+    expect(getMarkerPosition(index, keyframes, duration)).toBe(expected)
   })
 })
 
@@ -205,26 +163,17 @@ describe('normalizeKeyframes', () => {
     expect(normalizeKeyframes(keyframes, duration)).toStrictEqual(expected)
   })
 
-  it('should add first keyframe if its not at 0', () => {
-    const keyframes = [{ at: 2000 }, { at: 8000 }, { at: 15000 }, { at: 23000 }]
-    const duration = 25000
-
-    const expected = [
-      { at: 0 },
+  it('should remove first keyframe and remove last keyframe if its not at 0 and bigger than duration', () => {
+    const keyframes = [
+      { at: -100 },
       { at: 2000 },
       { at: 8000 },
       { at: 15000 },
       { at: 23000 }
     ]
-
-    expect(normalizeKeyframes(keyframes, duration)).toStrictEqual(expected)
-  })
-
-  it('should returns first keyframe and remove last keyframe if its not at 0 and bigger than duration', () => {
-    const keyframes = [{ at: 2000 }, { at: 8000 }, { at: 15000 }, { at: 23000 }]
     const duration = 22800
 
-    const expected = [{ at: 0 }, { at: 2000 }, { at: 8000 }, { at: 15000 }]
+    const expected = [{ at: 2000 }, { at: 8000 }, { at: 15000 }]
 
     expect(normalizeKeyframes(keyframes, duration)).toStrictEqual(expected)
   })
