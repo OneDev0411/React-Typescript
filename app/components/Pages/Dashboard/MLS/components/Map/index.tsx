@@ -146,6 +146,14 @@ export const Map = memo(
           if (typeof callback === 'function') {
             const drawingPoints = pointsFromPolygon(drawing)
 
+            if (drawingPoints.length < 4) {
+              setDrawingMode(false)
+              drawingManagerRef?.current?.setDrawingMode(null)
+              drawingRef?.current?.setMap(null)
+
+              return
+            }
+
             callback(drawingPoints)
             setDrawingMode(false)
             drawingManagerRef?.current?.setDrawingMode(null)
