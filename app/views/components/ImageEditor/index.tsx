@@ -46,7 +46,8 @@ const useStyles = makeStyles(
       }
     },
     dialogContent: {
-      padding: 0
+      padding: 0,
+      overflow: 'hidden'
     },
     saveButton: {
       marginLeft: theme.spacing(1)
