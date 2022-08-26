@@ -37,8 +37,7 @@ export class VideoToolbar extends React.Component {
       isLoaded: true
     })
 
-    this.Timeline.pause()
-    this.seekTo(0)
+    this.goTo(0)
 
     this.Timeline.update = t => {
       this.setState({
