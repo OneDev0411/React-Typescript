@@ -37,6 +37,7 @@ export const BuilderContainer = styled.div`
   background: #f2f2f2;
 
   #grapesjs-canvas {
+    background-color: #fff;
     height: 92vh !important;
   }
 `

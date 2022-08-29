@@ -31,8 +31,8 @@ function MarketingTemplateCard(
   const user = useSelector(selectUser)
   const isInstance = template.type === 'template_instance'
 
-  const handlePreview = e => {
-    if (props.handlePreview && e.target.dataset.card === 'true') {
+  const handlePreview = () => {
+    if (props.handlePreview) {
       props.handlePreview()
     }
   }
@@ -53,7 +53,6 @@ function MarketingTemplateCard(
           [classes.cardVideo]: isVideoThumb(props.template)
         })}
         onClick={handlePreview}
-        data-card="true"
         data-test="marketing-template"
       >
         <Thumbnail useStaticImage template={template} user={user} />
