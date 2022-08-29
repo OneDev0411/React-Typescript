@@ -17,6 +17,7 @@ const useStyles = makeStyles(
       display: 'inline-block',
       paddingLeft: theme.spacing(1),
       marginBottom: theme.spacing(0.5),
+      marginTop: (props: Props) => (props.marginTop ? theme.spacing(1) : '0px'),
       color: theme.palette.text.primary,
       ...theme.typography.body1
     }
@@ -27,10 +28,11 @@ const useStyles = makeStyles(
 interface Props {
   title?: string
   children?: ReactNode
+  marginTop?: boolean
 }
 
-export const BasicSection = ({ title, children }: Props) => {
-  const classes = useStyles({ title, children })
+export const BasicSection = ({ title, children, marginTop }: Props) => {
+  const classes = useStyles({ title, children, marginTop })
 
   return (
     <Box className={classes.container}>

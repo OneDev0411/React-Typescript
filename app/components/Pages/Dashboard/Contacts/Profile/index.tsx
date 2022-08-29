@@ -9,6 +9,8 @@ import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { useEffectOnce } from 'react-use'
+// eslint-disable-next-line import/no-unresolved
+import { IContactAttributeDef, INormalizedContact } from 'types/Contact'
 
 import { useGetGlobalTriggers } from '@app/components/Pages/Dashboard/Account/Triggers/hooks/use-get-global-triggers'
 import useConfirmation from '@app/hooks/use-confirmation'
@@ -153,7 +155,10 @@ const ContactProfile = props => {
             'flow_step.crm_task',
             'email_campaign.from',
             'email_campaign.template',
-            'template_instance.template'
+            'template_instance.template',
+            'contact.assignees',
+            'contact_role.user',
+            'contact_role.brand'
           ]
         })
 
@@ -483,7 +488,7 @@ const ContactProfile = props => {
               <Details {..._props} />
               <Partner {..._props} />
               <Divider />
-              <Assignee assigned={null} {..._props} />
+              <Assignee {..._props} />
               <Owner
                 onSelect={onChangeOwner}
                 owner={contact.user}

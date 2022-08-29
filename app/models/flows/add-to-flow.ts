@@ -1,14 +1,13 @@
-import { SuperAgentRequest } from 'superagent'
-
 import Fetch from '../../services/fetch'
 
-/**
- * Adds contacts to a CRM flow
- */
+interface Data {
+  brand: UUID
+  user: UUID
+}
 
-export function addToFlow(data: IFlowEnrollInput): SuperAgentRequest {
+export function addAssignee(id, data: Data[]): Promise<ApiResponseBody<any>> {
   try {
-    return new Fetch().post('/crm/flows').send(data)
+    return new Fetch().put(`/contacts/${id}/assignees`).send(data)
   } catch (error) {
     throw error
   }
