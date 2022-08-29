@@ -16,7 +16,10 @@ const useStyles = makeStyles(
       textAlign: 'center'
     },
     spinner: { marginBottom: theme.spacing(3) },
-    loadingText: { color: theme.palette.grey[600] },
+    loadingText: {
+      color: theme.palette.grey[600],
+      marginBottom: theme.spacing(0.5)
+    },
     error: { color: theme.palette.error.main }
   }),
   { name: 'SocialDrawerPreviewFile' }
@@ -24,12 +27,14 @@ const useStyles = makeStyles(
 
 interface SocialDrawerPreviewFileProps {
   className?: string
+  isVideoTemplate?: boolean
   instance: Optional<IMarketingTemplateInstance | IBrandAsset>
   error: Nullable<string>
 }
 
 function SocialDrawerPreviewFile({
   className,
+  isVideoTemplate = false,
   instance,
   error
 }: SocialDrawerPreviewFileProps) {
@@ -46,9 +51,16 @@ function SocialDrawerPreviewFile({
       {isLoading && (
         <>
           <CircularProgress className={classes.spinner} />
+          <Typography variant="h5" className={classes.loadingText}>
+            Looking good!
+          </Typography>
           <Typography variant="body1" className={classes.loadingText}>
-            Looking good! We are prepping your design to share, this could take
-            a minute...
+            We are prepping your {isVideoTemplate ? 'video' : 'design'}; This
+            could take
+            {isVideoTemplate ? ' a few minutes. ' : ' a minute. '}
+          </Typography>
+          <Typography variant="body1" className={classes.loadingText}>
+            Do not close this tab.
           </Typography>
         </>
       )}

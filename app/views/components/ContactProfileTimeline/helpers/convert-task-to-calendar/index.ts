@@ -30,6 +30,7 @@ export function convertTaskToCalendarEvent(event: IEvent): ICalendarEvent {
     users: [],
     event_type: event.task_type,
     timestamp: event.due_date,
+    sort_timestamp: event.due_date,
     object_type: event.type,
     people,
     people_len: people.length

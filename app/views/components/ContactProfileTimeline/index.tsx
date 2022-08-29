@@ -71,7 +71,7 @@ export function Calendar({
       range: ICalendarRange,
       position: ApiOptions['position']
     ): Promise<[ICalendarEvent[], ICalendarEvent[]]> => {
-      const { low, high } = range
+      const { low = calendarRange.low, high = calendarRange.high } = range
       const commonParams = {
         users: viewAsUsers,
         filter,
@@ -113,11 +113,11 @@ export function Calendar({
           await getCalendar(loadNewEventsPayload)
         ])
 
-        if (MAX_LIMIT_EVENT > events[0]) {
+        if (MAX_LIMIT_EVENT > events[0].length) {
           setIsReachedStart(true)
         }
 
-        if (MAX_LIMIT_EVENT > events[1]) {
+        if (MAX_LIMIT_EVENT > events[1].length) {
           setIsReachedEnd(true)
         }
 
@@ -126,7 +126,7 @@ export function Calendar({
         throw error
       }
     },
-    [associations, filter, viewAsUsers]
+    [associations, calendarRange.high, calendarRange.low, filter, viewAsUsers]
   )
   const getEvents = useCallback(
     async (
@@ -168,13 +168,26 @@ export function Calendar({
     [fetchEvents, events, onLoadEvents]
   )
 
-  const handleLoadEvents = async () => {
+  const handleLoadEvents = async (
+    reset: boolean = true,
+    range: Nullable<Partial<ICalendarRange>> = {}
+  ) => {
+    const nextRange: ICalendarRange = {
+      high: range?.high ?? calendarRange.high,
+      low: range?.low ?? calendarRange.low
+    }
+
+    if (reset) {
+      setIsReachedStart(false)
+      setIsReachedEnd(false)
+    }
+
     await getEvents(
       {
-        range: calendarRange,
+        range: nextRange,
         position: 'Middle'
       },
-      true
+      reset
     )
   }
 
