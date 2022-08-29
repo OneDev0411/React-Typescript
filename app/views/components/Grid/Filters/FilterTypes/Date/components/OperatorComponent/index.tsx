@@ -2,11 +2,9 @@ import { OutlinedInput, Theme, makeStyles } from '@material-ui/core'
 
 import DatePicker from '@app/views/components/DatePicker'
 
-import { DateOperator } from '../../types'
-
 interface Props {
-  operator: DateOperator
-  onChange?: () => void
+  operator: IFilterOperator
+  onChange: (timestamp: number) => void
 }
 
 const useStyles = makeStyles(
@@ -30,18 +28,19 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'OperatorComponent'
+    name: 'DateOperatorComponent'
   }
 )
 
-export const OperatorComponent = ({ operator }: Props) => {
+export const DateOperatorComponent = ({ operator, onChange }: Props) => {
   const classes = useStyles()
 
-  const handleChange = dd => {
-    console.log('handleChange', { dd })
+  const handleChange = (date: Date) => {
+    console.log('handleChange', { dd: date.getTime() / 1000 })
+    onChange(date.getTime() / 1000)
   }
 
-  if (operator.type === 'relative') {
+  if (operator.name === 'relative') {
     return (
       <div className={classes.relativeContainer}>
         <OutlinedInput
@@ -54,20 +53,16 @@ export const OperatorComponent = ({ operator }: Props) => {
             root: classes.inputContainer,
             input: classes.input
           }}
-          onChange={handleChange}
+          // onChange={handleChange}
         />
         <span className={classes.label}>days ago</span>
       </div>
     )
   }
 
-  if (operator.type === 'absolute') {
-    return (
-      <div className={classes.absoluteContainer}>
-        <DatePicker onChange={handleChange} />
-      </div>
-    )
-  }
-
-  return null
+  return (
+    <div className={classes.absoluteContainer}>
+      <DatePicker onChange={handleChange} />
+    </div>
+  )
 }

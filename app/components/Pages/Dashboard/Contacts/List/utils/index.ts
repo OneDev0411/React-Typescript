@@ -10,11 +10,21 @@ export const normalizeAttributeFilters = (
   _.each(filters, filter => {
     if (isAttributeFilter(filter)) {
       _.each(filter.values, ({ value }) => {
-        criteria.push({
-          value,
-          invert: filter.operator.invert === true,
-          attribute_def: filter.id
-        })
+        const nextFilter: IContactAttributeFilter = {
+          attribute_def: filter.id,
+          value
+        }
+        const operator = filter.operator ?? {}
+
+        if (operator.invert !== undefined) {
+          nextFilter.invert = filter.operator.invert === true
+        }
+
+        if (operator.operator !== undefined) {
+          nextFilter.operator = operator.operator
+        }
+
+        criteria.push(nextFilter)
       })
     }
   })

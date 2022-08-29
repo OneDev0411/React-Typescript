@@ -1,25 +1,22 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 
 import {
   Theme,
   Radio,
   Button,
-  FormLabel,
   RadioGroup,
   makeStyles,
-  FormControl,
   FormControlLabel
 } from '@material-ui/core'
-import _groupBy from 'lodash/groupBy'
+import fecha from 'fecha'
 
-import { OperatorComponent } from './components/OperatorComponent'
+import { DateOperatorComponent } from './components/OperatorComponent'
 import { operators } from './constant'
 
 interface Props extends IFilterConfigRenderer {
   tt?: any
 }
 
-const groupedOperator = _groupBy(operators, 'type')
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
@@ -40,51 +37,74 @@ const useStyles = makeStyles(
   }),
   { name: 'DateFilterType' }
 )
-export const DateFilterType = (props: Props) => {
+export const DateFilterType = ({
+  onFilterChange,
+  onToggleFilterActive
+}: Props) => {
   // console.log({ groupedOperator })
   const classes = useStyles()
-  const [selectedOperator, setSelectedOperator] = useState('female')
+  const [selectedOperator, setSelectedOperator] = useState<string>('')
+  const [value, setValue] = useState<Nullable<number>>(null)
 
   const handleOperatorChange = event => {
-    // console.log({ value: event.target.value })
-
     setSelectedOperator(event.target.value)
+  }
+
+  const handleApplyFilter = () => {
+    const selectedOpe = operators.find(i => i.name === selectedOperator)
+
+    if (!selectedOpe || !value) {
+      return
+    }
+
+    const readableValue = new Date(value * 1000)
+
+    onFilterChange(
+      [
+        {
+          label: fecha.format(readableValue, 'MMM DD, YYYY'),
+          value
+        }
+      ],
+      {
+        name: selectedOpe.name,
+        operator: selectedOpe.operator
+      }
+    )
+    onToggleFilterActive()
   }
 
   return (
     <div className={classes.container}>
-      {Object.entries(groupedOperator).map(([type, operators]) => (
-        <FormControl
-          key={type}
-          component="fieldset"
-          className={classes.typeContainer}
-        >
-          <FormLabel component="legend" className={classes.typeTitle}>
-            {type.toUpperCase()}
-          </FormLabel>
-          <RadioGroup
-            name="date"
-            value={selectedOperator}
-            onChange={handleOperatorChange}
-          >
-            {operators.map(operator => (
-              <>
-                <FormControlLabel
-                  key={operator.name}
-                  value={operator.name}
-                  control={<Radio size="small" color="primary" />}
-                  label={operator.name}
+      <RadioGroup
+        name="date"
+        value={selectedOperator}
+        onChange={handleOperatorChange}
+      >
+        {operators.map(operator => (
+          <div key={operator.name}>
+            <FormControlLabel
+              key={operator.name}
+              value={operator.name}
+              control={<Radio size="small" color="primary" />}
+              label={operator.name}
+            />
+            {!['all', 'any'].includes(operator.operator!) &&
+              selectedOperator === operator.name && (
+                <DateOperatorComponent
+                  operator={operator}
+                  onChange={setValue}
                 />
-                {!['all', 'any'].includes(operator.operator) &&
-                  selectedOperator === operator.name && (
-                    <OperatorComponent operator={operator} />
-                  )}
-              </>
-            ))}
-          </RadioGroup>
-        </FormControl>
-      ))}
-      <Button fullWidth variant="contained" color="primary">
+              )}
+          </div>
+        ))}
+      </RadioGroup>
+      <Button
+        fullWidth
+        variant="contained"
+        color="primary"
+        onClick={handleApplyFilter}
+      >
         Done
       </Button>
     </div>
