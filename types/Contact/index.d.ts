@@ -19,6 +19,7 @@ declare interface IContactAttributeDefInput {
   required?: boolean
   singular?: boolean
   searchable?: boolean
+  filterable?: boolean
   has_label?: boolean
   labels?: string[]
   enum_values?: string[]
