@@ -956,7 +956,6 @@ class ContactsList extends React.Component {
                 {isTableMode && this.renderOtherContactsBadge()}
                 {this.renderTabs()}
               </Box>
-              {/*
               <Box
                 mt={2}
                 {...(isBoardMode && {
@@ -1012,7 +1011,6 @@ class ContactsList extends React.Component {
                   />
                 </ViewMode>
               </Box>
-              */}
             </>
           )}
         </PageLayout.Main>

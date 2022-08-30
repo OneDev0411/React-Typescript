@@ -80,11 +80,7 @@ export class OperatorAndOperandFilter extends React.Component {
   getOperatorComponent = type => {
     const props = {
       ...this.props,
-      onFilterChange: (...args) => {
-        console.log('onFilterChange', { args })
-
-        return this.onFilterChange(...args)
-      }
+      onFilterChange: this.onFilterChange
     }
 
     switch (type) {
