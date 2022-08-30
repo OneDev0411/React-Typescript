@@ -41,34 +41,33 @@ export const DateFilterType = ({
   onFilterChange,
   onToggleFilterActive
 }: Props) => {
-  // console.log({ groupedOperator })
   const classes = useStyles()
-  const [selectedOperator, setSelectedOperator] = useState<string>('')
-  const [value, setValue] = useState<Nullable<number>>(null)
+  const [selectedOperator, setSelectedOperator] = useState<string>(
+    () => operators.find(operator => operator.default)?.name ?? ''
+  )
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
 
   const handleOperatorChange = event => {
     setSelectedOperator(event.target.value)
   }
 
   const handleApplyFilter = () => {
-    const selectedOpe = operators.find(i => i.name === selectedOperator)
+    const operator = operators.find(i => i.name === selectedOperator)
 
-    if (!selectedOpe || !value) {
+    if (!operator) {
       return
     }
-
-    const readableValue = new Date(value * 1000)
 
     onFilterChange(
       [
         {
-          label: fecha.format(readableValue, 'MMM DD, YYYY'),
-          value
+          label: fecha.format(selectedDate, 'MMM DD, YYYY'),
+          value: selectedDate.getTime() / 1000
         }
       ],
       {
-        name: selectedOpe.name,
-        operator: selectedOpe.operator
+        name: operator.name,
+        operator: operator.operator
       }
     )
     onToggleFilterActive()
@@ -92,8 +91,8 @@ export const DateFilterType = ({
             {!['all', 'any'].includes(operator.operator!) &&
               selectedOperator === operator.name && (
                 <DateOperatorComponent
-                  operator={operator}
-                  onChange={setValue}
+                  currentValue={selectedDate}
+                  onChange={setSelectedDate}
                 />
               )}
           </div>
