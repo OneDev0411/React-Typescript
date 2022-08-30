@@ -500,7 +500,7 @@ const ContactProfile = props => {
                 contact={contact}
                 disabled={isUpdatingOwner}
               />
-              {activeBrand.id === contact.created_by?.active_brand && (
+              {activeBrand.id === contact.brand && (
                 <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
               )}
             </div>
