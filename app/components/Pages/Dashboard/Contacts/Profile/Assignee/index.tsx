@@ -21,6 +21,7 @@ import { IContactAttributeDef, INormalizedContact } from 'types/Contact'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { addAssignee } from '@app/models/assignees/add-assignee'
+import { SingleEmailComposeDrawer } from '@app/views/components/EmailCompose'
 import { muiIconSizes } from '@app/views/components/SvgIcons'
 import TeamAgents from '@app/views/components/TeamAgents'
 import { BrandedUser } from '@app/views/components/TeamAgents/types'
@@ -89,9 +90,14 @@ const Assignee = ({ contact, submitCallback }: Props) => {
   // Need To Find how this submit callback works
   // Then Refect the Contact after adding the assignee
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const [selectedAgent] = useState<BrandedUser[]>([] as BrandedUser[])
+  const [selectedAgent, setSelectedAgents] = useState<BrandedUser[]>(
+    [] as BrandedUser[]
+  )
+  const [currentAgent, setCurrentAgent] = useState<BrandedUser | null>(null)
   const [showActionId, setShowActionId] = useState<UUID | null>('')
-  // const [showEmailDialog, setShowEmailDialog] = useState<boolean>(false)
+  const [showEmailDialog, setShowEmailDialog] = useState<boolean>(false)
+  const [showEmailDrawer, setShowEmailDrawer] = useState<boolean>(false)
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -123,6 +129,9 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       })
 
       if (data.code === 'OK') {
+        setCurrentAgent(user)
+        setShowEmailDialog(true)
+        setSelectedAgents(data.references.user)
         submitCallback(data?.data, data?.data)
         handleClose()
       }
@@ -149,6 +158,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       })
 
       if (data.code === 'OK') {
+        setSelectedAgents(data.references.user)
         submitCallback(data?.data, data?.data)
         setShowActionId(null)
       }
@@ -160,22 +170,59 @@ const Assignee = ({ contact, submitCallback }: Props) => {
 
   return (
     <>
-      <Dialog fullWidth maxWidth="xs" open>
+      <Dialog fullWidth maxWidth="xs" open={showEmailDialog}>
         <DialogContent className={classes.dialogContainer}>
           <Typography variant="h6" component="h1">
-            Brain is notified about Natalie King
+            {currentAgent?.first_name} is notified about {contact.first_name}
           </Typography>
           <Typography variant="body1" gutterBottom>
-            You can also send an email to introduce Natalie and Brian if you'd
-            like.
+            You can also send an email to introduce {contact.first_name} and{' '}
+            {currentAgent?.first_name} if you'd like.
           </Typography>
         </DialogContent>
 
         <DialogActions>
-          <Button>Skip</Button>
-          <Button>Send Intro Email</Button>
+          <Button onClick={() => setShowEmailDialog(false)}>Skip</Button>
+          <Button
+            onClick={() => {
+              setShowEmailDialog(false)
+              setShowEmailDrawer(true)
+            }}
+          >
+            Send Intro Email
+          </Button>
         </DialogActions>
       </Dialog>
+      {currentAgent && (
+        <SingleEmailComposeDrawer
+          isOpen={showEmailDrawer}
+          onClose={() => setShowEmailDrawer(false)}
+          emailId={currentAgent?.email}
+          initialValues={{
+            subject: 'Would you refer me to friend or family member?',
+            to: [
+              {
+                email: `${currentAgent.display_name} <${currentAgent.email}>`,
+                recipient_type: 'Email'
+              }
+            ],
+            body: `Hi ${currentAgent?.first_name},
+          Can you help me out?
+          As I so often turn to you for advice when it comes to my business, I'd love if you could help in finding me some new Clients.
+  
+          If you could refer anyone in your network that you think would benefit from my help or services, please send them my way.
+
+          I know your good word goes a long way with these things, and because of your insight on my business, you know what a qualified client looks like for me!
+
+          I appreciate it!
+
+          Cheers,
+          ${contact.first_name}
+          `
+          }}
+        />
+      )}
+
       <BasicSection title="Assignee" marginTop>
         <List component="nav">
           {contact.assignees?.map(assignee => (

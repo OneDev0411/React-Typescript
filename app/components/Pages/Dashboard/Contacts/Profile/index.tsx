@@ -13,6 +13,7 @@ import { useEffectOnce } from 'react-use'
 import { IContactAttributeDef, INormalizedContact } from 'types/Contact'
 
 import { useGetGlobalTriggers } from '@app/components/Pages/Dashboard/Account/Triggers/hooks/use-get-global-triggers'
+import { useActiveBrand } from '@app/hooks/brand'
 import useConfirmation from '@app/hooks/use-confirmation'
 import useNotify from '@app/hooks/use-notify'
 import { updateContactTouchReminder } from '@app/models/contacts/update-contact-touch-reminder'
@@ -122,6 +123,7 @@ const ContactProfile = props => {
   useGetGlobalTriggers()
 
   const notify = useNotify()
+  const activeBrand = useActiveBrand()
 
   const classes = useStyles()
   const confirmation = useConfirmation()
@@ -452,6 +454,8 @@ const ContactProfile = props => {
     submitCallback: updateAttributeSubmitCallback
   }
 
+  console.log(activeBrand, contact)
+
   return (
     <>
       <Helmet>
@@ -496,7 +500,9 @@ const ContactProfile = props => {
                 contact={contact}
                 disabled={isUpdatingOwner}
               />
-              <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
+              {activeBrand.id === contact.created_by?.active_brand && (
+                <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
+              )}
             </div>
 
             <div className={classes.tabContainer}>
