@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import _groupBy from 'lodash/groupBy'
 import { useDeepCompareEffect } from 'react-use'
 
+import { getBrandMarketingCategories } from '@app/models/brand/get-brand-marketing-categories'
 import { notNull } from '@app/utils/ts-utils'
 import { compare, onlyUnique } from 'utils/helpers'
+
+import { useActiveBrandId } from './brand'
 
 const MARKETING_TEMPLATE_MEDIUM_PRIORITY: Record<
   IMarketingTemplateMedium,
@@ -44,15 +47,25 @@ function getFormattedUniqueMediums(
     .reverse()
 }
 
-export type TemplateTypeToMediumsMap = {
+export type IMarketingCategories = {
   [key: string]: IMarketingTemplateMedium[]
 }
 
 export function useMarketingCenterMediums(
   templates: IBrandMarketingTemplate[],
   brandAssets: IBrandAsset[] = []
-): TemplateTypeToMediumsMap {
-  const [mediums, setMediums] = useState<TemplateTypeToMediumsMap>({})
+): IMarketingCategories {
+  const [mediums, setMediums] = useState<IMarketingCategories>({})
+  const activeBrandId = useActiveBrandId()
+
+  useEffect(() => {
+    async function getNewCategories() {
+      const newCategories = await getBrandMarketingCategories(activeBrandId)
+
+      console.log({ newCategories })
+    }
+    getNewCategories()
+  }, [activeBrandId])
 
   useDeepCompareEffect(() => {
     if (
@@ -73,7 +86,7 @@ export function useMarketingCenterMediums(
       }
     )
 
-    const newMediums: TemplateTypeToMediumsMap = {}
+    const newMediums: IMarketingCategories = {}
 
     Object.keys(groupedTemplatesAndAssetsByType).forEach(key => {
       newMediums[key] = getFormattedUniqueMediums(
@@ -83,6 +96,8 @@ export function useMarketingCenterMediums(
 
     setMediums(newMediums)
   }, [templates, brandAssets])
+
+  console.log({ oldCategories: mediums })
 
   return mediums
 }

@@ -26,7 +26,7 @@ export function useMarketingTemplateTypesWithMediums(
 
   const mediums = useMarketingCenterMediums(templates, assets)
 
-  return useMemo(
+  const temp = useMemo(
     () =>
       templateTypes.flatMap(templateType => {
         const currentTypeMediums = mediums[templateType]
@@ -43,4 +43,6 @@ export function useMarketingTemplateTypesWithMediums(
       }),
     [mediums, templateTypes]
   )
+
+  return temp
 }
