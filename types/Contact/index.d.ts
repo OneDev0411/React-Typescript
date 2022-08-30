@@ -35,6 +35,7 @@ declare interface IContactAttributeDef {
   editable: boolean
   singular: boolean
   searchable: boolean
+  filterable: boolean
   required: boolean
   has_label: boolean
   labels: Nullable<string[]>

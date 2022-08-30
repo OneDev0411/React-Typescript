@@ -1,19 +1,76 @@
-import { useMemo } from 'react'
+import { ReactNode, useCallback, useMemo } from 'react'
 
-import { IAttributeDefsState } from '@app/reducers/contacts/attributeDefs'
+import {
+  IAttributeDefsState,
+  selectDefinitionByName
+} from '@app/reducers/contacts/attributeDefs'
 import { DateFilterType } from '@app/views/components/Grid/Filters/FilterTypes/Date'
+import { OperatorAndOperandFilter } from '@app/views/components/Grid/Filters/FilterTypes/OparatorAndOperand'
 
 export function useGetCustomFilters(
-  attributeDef: IAttributeDefsState
+  attributeDefs: IAttributeDefsState
 ): IFilterConfig[] {
+  const invalidCustomFilter = useMemo(() => {
+    const tagDefinitionId = selectDefinitionByName(attributeDefs, 'tag')?.id
+    const sourceDefinitionId = selectDefinitionByName(
+      attributeDefs,
+      'source_type'
+    )?.id
+
+    return [tagDefinitionId, sourceDefinitionId]
+  }, [attributeDefs])
+
+  const validateAttribute = useCallback(
+    (attribute: IContactAttributeDef) => {
+      if (!attribute.filterable || invalidCustomFilter.includes(attribute.id)) {
+        return false
+      }
+
+      const isDate = attribute.data_type === 'date'
+      const isEnum =
+        attribute.data_type === 'text' && Array.isArray(attribute.enum_values)
+
+      if (isDate || isEnum) {
+        return true
+      }
+
+      return false
+    },
+    [invalidCustomFilter]
+  )
+
+  const getAttributeComponent = (
+    attribute: IContactAttributeDef,
+    props: IFilterConfigRenderer
+  ): ReactNode => {
+    const isDate = attribute.data_type === 'date'
+    const isEnum =
+      attribute.data_type === 'text' && Array.isArray(attribute.enum_values)
+
+    if (isEnum) {
+      const values = attribute.enum_values!.map(value => ({
+        label: value,
+        value
+      }))
+
+      return <OperatorAndOperandFilter {...props} options={values} />
+    }
+
+    if (isDate) {
+      return <DateFilterType {...props} />
+    }
+
+    return 'Not Found'
+  }
+
   const customFilters = useMemo(() => {
-    return Object.values(attributeDef.byId).reduce(
+    return Object.values(attributeDefs.byId).reduce(
       (filters: IFilterConfig[], attribute: IContactAttributeDef) => {
-        if (attribute.data_type === 'date') {
+        if (validateAttribute(attribute)) {
           filters.push({
             id: attribute.id,
             label: attribute.label,
-            renderer: props => <DateFilterType {...props} />,
+            renderer: props => getAttributeComponent(attribute, props),
             tooltip: attribute.section
           })
         }
@@ -22,7 +79,7 @@ export function useGetCustomFilters(
       },
       []
     )
-  }, [attributeDef])
+  }, [attributeDefs.byId, validateAttribute])
 
   return customFilters
 }
