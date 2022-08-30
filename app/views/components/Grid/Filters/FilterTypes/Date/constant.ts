@@ -14,10 +14,13 @@ export const operators: IFilterOperator[] = [
   },
   {
     name: 'is unknown',
-    operator: 'any'
+    operator: 'eq'
   },
   {
     name: 'has any value',
-    operator: 'all'
+    invert: true,
+    operator: 'eq'
   }
 ]
+
+export const operatorsWithNoValue: string[] = ['is unknown', 'has any value']

@@ -11,11 +11,7 @@ import {
 import fecha from 'fecha'
 
 import { DateOperatorComponent } from './components/OperatorComponent'
-import { operators } from './constant'
-
-interface Props extends IFilterConfigRenderer {
-  tt?: any
-}
+import { operators, operatorsWithNoValue } from './constant'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -38,38 +34,49 @@ const useStyles = makeStyles(
   { name: 'DateFilterType' }
 )
 export const DateFilterType = ({
+  values,
+  operator,
   onFilterChange,
   onToggleFilterActive
-}: Props) => {
+}: IFilterConfigRenderer) => {
   const classes = useStyles()
+
   const [selectedOperator, setSelectedOperator] = useState<string>(
-    () => operators.find(operator => operator.default)?.name ?? ''
+    () =>
+      operator?.name ?? operators.find(operator => operator.default)?.name ?? ''
   )
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
+  const [selectedDate, setSelectedDate] = useState<Date>(() => {
+    if (Array.isArray(values) && values[0].value) {
+      return new Date((values[0].value as number) * 1000)
+    }
+
+    return new Date()
+  })
 
   const handleOperatorChange = event => {
     setSelectedOperator(event.target.value)
   }
 
   const handleApplyFilter = () => {
-    const operator = operators.find(i => i.name === selectedOperator)
+    const currentOperator = operators.find(i => i.name === selectedOperator)
 
-    if (!operator) {
+    if (!currentOperator) {
       return
     }
 
-    onFilterChange(
-      [
-        {
+    selectedDate.setUTCHours(0, 0, 0, 0)
+
+    const payload = operatorsWithNoValue.includes(currentOperator.name)
+      ? {
+          label: '',
+          value: null
+        }
+      : {
           label: fecha.format(selectedDate, 'MMM DD, YYYY'),
           value: selectedDate.getTime() / 1000
         }
-      ],
-      {
-        name: operator.name,
-        operator: operator.operator
-      }
-    )
+
+    onFilterChange([payload], currentOperator)
     onToggleFilterActive()
   }
 
@@ -88,7 +95,7 @@ export const DateFilterType = ({
               control={<Radio size="small" color="primary" />}
               label={operator.name}
             />
-            {!['all', 'any'].includes(operator.operator!) &&
+            {!operatorsWithNoValue.includes(operator.name) &&
               selectedOperator === operator.name && (
                 <DateOperatorComponent
                   currentValue={selectedDate}
