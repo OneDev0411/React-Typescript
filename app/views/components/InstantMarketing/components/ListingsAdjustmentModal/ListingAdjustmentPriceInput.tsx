@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 import { TextField, InputAdornment, TextFieldProps } from '@material-ui/core'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
@@ -26,6 +26,13 @@ export function ListingAdjustmentPriceInput({
   ...rest
 }: Props) {
   const [price, setPrice] = useState<string>(initialValue?.toFixed(0) || '')
+
+  useEffect(() => {
+    // TO fix reset input issue on this uncontrolled input
+    if (typeof initialValue === 'undefined') {
+      setPrice('')
+    }
+  }, [initialValue])
 
   const onChangeMaskValue = (e: ChangeEvent<HTMLInputElement>) => {
     const maskedValue = e.target.value
