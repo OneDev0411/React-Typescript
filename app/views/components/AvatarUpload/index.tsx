@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { Avatar, makeStyles, Theme } from '@material-ui/core'
 import { ClassNameMap } from '@material-ui/styles'
@@ -17,13 +17,19 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  file?: File
   classes: ClassNameMap<'avatar'>
   onSelect: (file: File) => void
 }
 
-export function AvatarUpload({ classes, onSelect }: Props) {
+export function AvatarUpload({ file, classes, onSelect }: Props) {
   const classesList = useStyles()
   const [previewUrl, setPreviewUrl] = useState<Nullable<string>>(null)
+
+  useEffect(() => {
+    file && setPreviewUrl(window.URL.createObjectURL(file))
+  }, [file])
+
   const onDrop = useCallback(
     acceptedFiles => {
       if (acceptedFiles.length === 0) {

@@ -14,7 +14,9 @@ import {
 import { useForm, Controller } from 'react-hook-form'
 import isEmail from 'validator/lib/isEmail'
 
+import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
 import { AvatarUpload } from '@app/views/components/AvatarUpload'
+import { UserAutocomplete } from '@app/views/components/ContactAutocomplete'
 import { DialogTitle } from '@app/views/components/DialogTitle'
 import { MaskedInput } from 'components/MaskedInput'
 
@@ -66,7 +68,7 @@ export function AddTeamMembersModal({
     }
   })
 
-  const onSubmitForm = (data: FormData) => console.log(data)
+  const onSubmitForm = (data: FormData) => onSubmit(data)
 
   return (
     <Dialog open={isOpen} fullWidth maxWidth="sm" onClose={onClose}>
@@ -79,6 +81,7 @@ export function AddTeamMembersModal({
               control={control}
               render={field => (
                 <AvatarUpload
+                  file={field.value}
                   classes={{
                     avatar: classes.avatar
                   }}
@@ -97,16 +100,40 @@ export function AddTeamMembersModal({
               }}
               control={control}
               render={field => (
-                <TextField
-                  size="small"
-                  placeholder="Email"
-                  fullWidth
-                  variant="outlined"
-                  error={!!errors.email}
-                  helperText={
-                    errors.email ? 'You must enter a valid email address' : null
-                  }
-                  {...field}
+                <UserAutocomplete
+                  multiple={false}
+                  onChange={async ({ contacts, emails }) => {
+                    const email = emails[0]
+                    const contact = contacts[0]
+
+                    if (email) {
+                      field.onChange(email)
+                    }
+
+                    if (contact) {
+                      control.setValue('firstName', contact.first_name)
+                      control.setValue('lastName', contact.last_name)
+                      control.setValue('phone', contact.phone_number)
+
+                      if (contact.profile_image_url) {
+                        control.setValue(
+                          'avatar',
+                          await convertUrlToImageFile(contact.profile_image_url)
+                        )
+                      }
+                    }
+                  }}
+                  TextFieldProps={{
+                    size: 'small',
+                    placeholder: 'Email',
+                    fullWidth: true,
+                    variant: 'outlined',
+                    error: !!errors.email,
+                    helperText: errors.email
+                      ? 'You must enter a valid email address'
+                      : null,
+                    ...field
+                  }}
                 />
               )}
             />

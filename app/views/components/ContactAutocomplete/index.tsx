@@ -55,10 +55,13 @@ export function UserAutocomplete<Multi extends boolean | undefined = false>({
 
   const options = useMemo(
     () =>
-      data.filter(
-        contact => Array.isArray(contact.emails) && contact.emails.length > 0
-      ),
-    [data]
+      !multiple && selectedItems.length > 0
+        ? []
+        : data.filter(
+            contact =>
+              Array.isArray(contact.emails) && contact.emails.length > 0
+          ),
+    [data, multiple, selectedItems]
   )
 
   const getOptionLabel = useCallback(
@@ -82,12 +85,16 @@ export function UserAutocomplete<Multi extends boolean | undefined = false>({
     (
       values: typeof selectedItems = selectedItems,
       mapIndex: typeof emailIndexMap = emailIndexMap
-    ) => ({
-      contacts: values.filter(item => !!item.id) as IContact[],
-      emails: values.map(item =>
-        !item.id ? (item.email as string) : item.emails![mapIndex[item.id] ?? 0]
-      )
-    }),
+    ) => {
+      return {
+        contacts: values.filter(item => !!item.id) as IContact[],
+        emails: values.map(item =>
+          !item.id
+            ? (item.email as string)
+            : item.emails![mapIndex[item.id] ?? 0]
+        )
+      }
+    },
     [emailIndexMap, selectedItems]
   )
 
@@ -101,7 +108,7 @@ export function UserAutocomplete<Multi extends boolean | undefined = false>({
 
   return (
     <Autocomplete
-      multiple={multiple}
+      multiple
       filterSelectedOptions
       freeSolo={!isFetching}
       noOptionsText={isFetching ? 'Searching...' : ''}
@@ -172,16 +179,24 @@ export function UserAutocomplete<Multi extends boolean | undefined = false>({
           </>
         ))
       }}
-      renderInput={params => (
-        <TextField
-          {...params}
-          variant="outlined"
-          label="Email"
-          placeholder="Search user"
-          {...TextFieldProps}
-          onChange={e => setCriteria(e.target.value)}
-        />
-      )}
+      renderInput={params => {
+        const disabled = !multiple && selectedItems.length > 0
+
+        return (
+          <TextField
+            {...params}
+            variant="outlined"
+            label="Email"
+            {...TextFieldProps}
+            InputProps={{
+              ...params.InputProps,
+              readOnly: disabled,
+              placeholder: disabled ? '' : 'Search user'
+            }}
+            onChange={e => setCriteria(e.target.value)}
+          />
+        )
+      }}
       filterOptions={(
         options: IContact[],
         params: FilterOptionsState<IContact>

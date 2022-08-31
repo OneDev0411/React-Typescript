@@ -39,7 +39,7 @@ export class AvatarUploader extends Component {
 
   setAvatar = async data => {
     await this.props.handleOnChange(data)
-    this.closeModal()
+    this.closeModal?.()
   }
 
   render() {
