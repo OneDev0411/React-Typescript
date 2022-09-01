@@ -9,7 +9,7 @@ import { withRouter, WithRouterProps } from 'react-router'
 
 import { useActiveTeam } from '@app/hooks/team/use-active-team'
 import { useBrandAssets } from '@app/hooks/use-brand-assets'
-import { useMarketingCenterMediums } from '@app/hooks/use-marketing-center-mediums'
+import { useMarketingCenterCategories } from '@app/hooks/use-marketing-center-categories'
 import { useMarketingCenterSections } from '@app/hooks/use-marketing-center-sections'
 import { useMarketingTemplateTypesWithMediums } from '@app/hooks/use-marketing-template-types-with-mediums'
 import useNotify from '@app/hooks/use-notify'
@@ -90,68 +90,60 @@ export function MarketingLayout({
   const { params, router, location } = props
   const sections = useMarketingCenterSections(params)
 
-  const templateTypes = params.types
+  const templateTypes = useMemo(() => {
+    return (
+      params.types ? params.types.split(',') : []
+    ) as IMarketingTemplateType[]
+  }, [params.types])
+
+  const currentMedium = params.medium
+
+  const shouldFetchTemplatesAndAssets =
+    !!currentMedium || !!templateTypes.length
 
   const {
     templates,
     isLoading: isLoadingTemplates,
     deleteTemplate
-  } = useTemplates(activeBrandId)
+  } = useTemplates(
+    activeBrandId,
+    [currentMedium],
+    templateTypes,
+    shouldFetchTemplatesAndAssets
+  )
 
-  const currentMedium = params.medium
   const {
     assets,
     isLoading: isLoadingBrandAssets,
     refetch: refetchBrandAssets,
     delete: deleteBrandAsset,
     hasDeleteAccess: hasDeleteAccessOnBrandAsset
-  } = useBrandAssets(activeBrandId)
-  const mediums = useMarketingCenterMediums(templates, assets)
-
-  const templateTypesWithMediums = useMarketingTemplateTypesWithMediums(
-    templates,
-    assets
+  } = useBrandAssets(
+    activeBrandId,
+    {
+      mediums: [currentMedium],
+      templateTypes
+    },
+    shouldFetchTemplatesAndAssets
   )
+  const {
+    categories,
+    isLoading: isLoadingCategories,
+    refetch: refetchCategories
+  } = useMarketingCenterCategories(activeBrandId)
+
+  const templateTypesWithMediums =
+    useMarketingTemplateTypesWithMediums(categories)
 
   const isLoading = isLoadingTemplates || isLoadingBrandAssets
 
   const currentPageItems = useMemo(() => {
-    const splittedTemplateTypes = templateTypes ? templateTypes.split(',') : []
-
-    const currentPageTemplates = templates.filter(item => {
-      const mediumMatches = currentMedium
-        ? item.template.medium === currentMedium
-        : true
-      const typeMatches =
-        splittedTemplateTypes.length > 0
-          ? splittedTemplateTypes.includes(item.template.template_type)
-          : true
-
-      return mediumMatches && typeMatches
-    })
-
-    const currentPageAssets = assets.filter(item => {
-      const mediumMatches = currentMedium
-        ? item.medium === currentMedium
-        : !!item.medium
-      const typeMatches =
-        splittedTemplateTypes.length > 0 && item.template_type
-          ? splittedTemplateTypes.includes(item.template_type)
-          : true
-
-      return mediumMatches && typeMatches
-    })
-
     const currentPageTemplatesAndAssets: Array<
       IBrandMarketingTemplate | IBrandAsset
-    > = orderBy(
-      [...currentPageTemplates, ...currentPageAssets],
-      ['created_at'],
-      'desc'
-    )
+    > = orderBy([...templates, ...assets], ['created_at'], 'desc')
 
     return currentPageTemplatesAndAssets
-  }, [currentMedium, templateTypes, templates, assets])
+  }, [templates, assets])
 
   const hasAccessToBrandSettings = hasUserAccessToBrandSettings(activeTeam)
   const hasAccessToUploadBrandAssets =
@@ -212,6 +204,7 @@ export function MarketingLayout({
         )} uploaded successfully`
       })
       refetchBrandAssets()
+      refetchCategories()
     }
 
     setIsMarketingAssetUploadDrawerOpen(false)
@@ -264,8 +257,9 @@ export function MarketingLayout({
         <PageLayout.Main minHeight="100vh">
           <Tabs
             sections={sections}
-            mediums={mediums}
-            templateTypes={templateTypes}
+            categories={categories}
+            templateTypes={params.types}
+            isLoading={isLoadingCategories}
             isOverviewActive={location.pathname === '/dashboard/marketing'}
             isMyDesignsActive={
               location.pathname === '/dashboard/marketing/designs'
@@ -286,9 +280,7 @@ export function MarketingLayout({
           {isMarketingAssetUploadDrawerOpen && (
             <MarketingAssetUploadDrawer
               defaultSelectedTemplateType={
-                templateTypes
-                  ? (templateTypes.split(',')[0] as IMarketingTemplateType)
-                  : undefined
+                templateTypes.length ? templateTypes[0] : undefined
               }
               defaultSelectedMedium={currentMedium}
               onClose={closeUploadMarketingAssetDrawer}

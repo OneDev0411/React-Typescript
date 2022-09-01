@@ -20,9 +20,10 @@ interface UseBrandAssets {
 
 export function useBrandAssets(
   brandId: UUID,
-  options: Options = {}
+  options: Options = {},
+  enabled: boolean = true
 ): UseBrandAssets {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [assets, setAssets] = useState<IBrandAsset[]>([])
 
   const fetchAssets = async () => {
@@ -58,7 +59,9 @@ export function useBrandAssets(
   }
 
   useDeepCompareEffect(() => {
-    fetchAssets()
+    if (enabled) {
+      fetchAssets()
+    }
   }, [brandId, options])
 
   return {

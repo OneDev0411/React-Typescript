@@ -8,7 +8,7 @@ interface Options {
 export async function getBrandMarketingCategories(
   brand: UUID,
   options?: Options
-): Promise<IMarketingCategories[]> {
+): Promise<IMarketingTemplateCategories> {
   const query: {
     'types[]'?: IMarketingTemplateType[]
     'mediums[]'?: IMarketingTemplateMedium[]

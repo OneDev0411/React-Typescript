@@ -40,7 +40,7 @@ declare interface ITemplateAsset extends IModel<'template_asset'> {
   file: IFile
 }
 
-declare type IMarketingCategories = {
+declare type IMarketingTemplateCategories = {
   [key: IMarketingTemplateType]: IMarketingTemplateMedium[]
 }
 
