@@ -12,23 +12,20 @@ async function getMembers(role) {
   }
 }
 
-type IAddTeamMember =
-  | {
-      avatar?: File
-      email: string
-      firstName?: string
-      lastName?: string
-      phone: string
-      roles: UUID[]
-    }
-  | {
-      user?: UUID
-    }
+interface IAddTeamMember {
+  avatar: File
+  email: string
+  firstName: string
+  lastName: string
+  phone: string
+  roles: UUID[]
+  user: UUID
+}
 
 async function addMembers(
   brandId: string,
   roleId: string,
-  member: IAddTeamMember
+  member: Partial<IAddTeamMember>
 ) {
   try {
     const request = new Fetch()
@@ -36,7 +33,7 @@ async function addMembers(
       .set('X-RECHAT-BRAND', brandId)
 
     if (member.user) {
-      request.field('users', member.user)
+      request.field('user', member.user)
     }
 
     if (member.email) {
