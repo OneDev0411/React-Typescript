@@ -45,7 +45,7 @@ export async function validateListingUrl(
   }
 
   if (type === 'tel') {
-    return (await isValidPhoneNumber(value)) ? true : 'Invalid US phone number'
+    return (await isValidPhoneNumber(value)) ? true : 'Invalid phone number'
   }
 
   return isUrl(value) ? true : 'Invalid website address'
