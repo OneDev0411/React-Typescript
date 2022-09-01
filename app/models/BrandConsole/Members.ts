@@ -12,14 +12,18 @@ async function getMembers(role) {
   }
 }
 
-interface IAddTeamMember {
-  avatar?: File
-  email: string
-  firstName?: string
-  lastName?: string
-  phone: string
-  roles: UUID[]
-}
+type IAddTeamMember =
+  | {
+      avatar?: File
+      email: string
+      firstName?: string
+      lastName?: string
+      phone: string
+      roles: UUID[]
+    }
+  | {
+      user?: UUID
+    }
 
 async function addMembers(
   brandId: string,
@@ -30,6 +34,10 @@ async function addMembers(
     const request = new Fetch()
       .upload(`/brands/${brandId}/roles/${roleId}/members`)
       .set('X-RECHAT-BRAND', brandId)
+
+    if (member.user) {
+      request.field('users', member.user)
+    }
 
     if (member.email) {
       request.field('email', member.email)
