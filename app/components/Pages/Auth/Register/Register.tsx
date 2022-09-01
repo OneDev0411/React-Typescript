@@ -158,6 +158,7 @@ export function Register(props: WithRouterProps) {
     const values: FormValues = {
       first_name: paramsFromURI.first_name || '',
       last_name: paramsFromURI.last_name || '',
+      email: paramsFromURI.email || '',
       password: '',
       repeatedPassword: '',
       user_type: 'Agent'
