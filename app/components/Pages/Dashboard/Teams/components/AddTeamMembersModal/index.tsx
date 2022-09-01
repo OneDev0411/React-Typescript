@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import {
   Box,
   Dialog,
@@ -14,6 +16,7 @@ import {
 import { useForm, Controller } from 'react-hook-form'
 import isEmail from 'validator/lib/isEmail'
 
+import useNotify from '@app/hooks/use-notify'
 import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
 import { AvatarUpload } from '@app/views/components/AvatarUpload'
 import { UserAutocomplete } from '@app/views/components/ContactAutocomplete'
@@ -45,7 +48,7 @@ interface Props {
   isOpen: boolean
   team: Nullable<IBrand>
   onClose: () => void
-  onSubmit: (values: any) => void
+  onSubmit: (values: any) => Promise<void>
 }
 
 export function AddTeamMembersModal({
@@ -55,6 +58,8 @@ export function AddTeamMembersModal({
   onSubmit
 }: Props) {
   const classes = useStyles()
+  const [isSaving, setIsSaving] = useState(false)
+  const notify = useNotify()
 
   const { control, errors, handleSubmit } = useForm<FormData>({
     mode: 'all',
@@ -68,7 +73,19 @@ export function AddTeamMembersModal({
     }
   })
 
-  const onSubmitForm = (data: FormData) => onSubmit(data)
+  const onSubmitForm = async (data: FormData) => {
+    try {
+      setIsSaving(true)
+      await onSubmit(data)
+    } catch (e) {
+      notify({
+        status: 'error',
+        message: e?.response?.body?.message ?? e.message
+      })
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   return (
     <Dialog open={isOpen} fullWidth maxWidth="sm" onClose={onClose}>
@@ -96,7 +113,7 @@ export function AddTeamMembersModal({
               name="email"
               rules={{
                 required: true,
-                validate: value => value?.length > 0 && isEmail(value)
+                validate: value => value?.trim().length > 0 && isEmail(value)
               }}
               control={control}
               render={field => (
@@ -111,9 +128,15 @@ export function AddTeamMembersModal({
                     }
 
                     if (contact) {
-                      control.setValue('firstName', contact.first_name)
-                      control.setValue('lastName', contact.last_name)
-                      control.setValue('phone', contact.phone_number)
+                      control.setValue('firstName', contact.first_name, {
+                        shouldValidate: true
+                      })
+                      control.setValue('lastName', contact.last_name, {
+                        shouldValidate: true
+                      })
+                      control.setValue('phone', contact.phone_number, {
+                        shouldValidate: true
+                      })
 
                       if (contact.profile_image_url) {
                         control.setValue(
@@ -219,9 +242,9 @@ export function AddTeamMembersModal({
               }}
               defaultValue={[]}
               render={field => {
-                const onToggle = roleId => {
+                const onToggle = (roleId: UUID) => {
                   const newValue = field.value.includes(roleId)
-                    ? field.value.filter(item => item !== roleId)
+                    ? field.value.filter((item: UUID) => item !== roleId)
                     : [...field.value, roleId]
 
                   field.onChange(newValue)
@@ -270,7 +293,12 @@ export function AddTeamMembersModal({
 
       <DialogActions>
         <Box display="flex" alignItems="center">
-          <Button size="small" variant="contained">
+          <Button
+            disabled={isSaving}
+            size="small"
+            variant="contained"
+            onClick={onClose}
+          >
             Cancel
           </Button>
           <Box ml={1}>
@@ -278,6 +306,7 @@ export function AddTeamMembersModal({
               size="small"
               color="primary"
               variant="contained"
+              disabled={isSaving}
               onClick={handleSubmit(onSubmitForm)}
             >
               Add

@@ -53,7 +53,7 @@ async function addMembers(
 
     return await request
   } catch (error) {
-    return { error }
+    throw error
   }
 }
 

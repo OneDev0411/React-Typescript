@@ -24,7 +24,6 @@ export function useAddMembersModal(
   const open = useCallback((team: IBrand) => setTeam(team), [])
 
   const submit = useCallback(
-    // FIXME: fix types when they are added for MultipleContactSelect output
     async (values: FormData) => {
       if (!team) {
         return

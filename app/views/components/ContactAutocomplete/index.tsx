@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 
 import {
   Box,
@@ -191,8 +191,14 @@ export function UserAutocomplete<Multi extends boolean | undefined = false>({
             InputProps={{
               ...params.InputProps,
               readOnly: disabled,
-              placeholder: disabled ? '' : 'Search user'
+              placeholder: disabled ? '' : 'Search user',
+              onKeyDown: e => {
+                if (e.key === 'Enter') {
+                  e.stopPropagation()
+                }
+              }
             }}
+            value={criteria}
             onChange={e => setCriteria(e.target.value)}
           />
         )
