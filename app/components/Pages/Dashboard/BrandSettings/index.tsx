@@ -149,7 +149,7 @@ Are you sure?`,
         <PageLayout.Main>
           <Divider />
           <Grid container>
-            <Grid container item md={9} direction="row">
+            <Grid container item md={8} direction="row">
               <TemplatePreview
                 template={TEMPLATE}
                 palette={settings}
