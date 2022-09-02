@@ -6,7 +6,7 @@ import { deleteLeadChannel } from '@app/models/lead-capture/delete-lead-channel'
 import { list } from './keys'
 
 export function useDeleteLeadChannelMutation(
-  channel: LeadChannel,
+  channel: LeadChannelSourceType,
   activeBrandId?: UUID
 ) {
   const queryClient = useQueryClient()

@@ -9,11 +9,16 @@ import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 import { useCreateLeadChannelMutation } from './queries/use-create-lead-channel-mutation'
 
 interface Props {
+  sourceType: LeadChannelSourceType
   activeBrandId?: UUID
   isFetching: boolean
 }
 
-export function ConnectLeadChannelButton({ activeBrandId, isFetching }: Props) {
+export function ConnectLeadChannelButton({
+  sourceType,
+  activeBrandId,
+  isFetching
+}: Props) {
   const [isWorking, setIsWorking] = useState(false)
   const notify = useNotify()
 
@@ -28,7 +33,7 @@ export function ConnectLeadChannelButton({ activeBrandId, isFetching }: Props) {
       setIsWorking(true)
 
       await mutateAsync({
-        sourceType: 'Zillow'
+        sourceType
       })
     } catch (e) {
       notify({
@@ -45,13 +50,13 @@ export function ConnectLeadChannelButton({ activeBrandId, isFetching }: Props) {
       <Box mr={1}>
         <Button
           size="small"
-          href="https://help.rechat.com/guides/crm/connect-to-zillow"
+          href={`https://help.rechat.com/guides/crm/connect-to-${sourceType.toLowerCase()}`}
           target="_blank"
           startIcon={
             <SvgIcon path={mdiHelpCircleOutline} size={muiIconSizes.small} />
           }
         >
-          How to connect to Zillow
+          How to connect to {sourceType}
         </Button>
       </Box>
 
@@ -64,7 +69,7 @@ export function ConnectLeadChannelButton({ activeBrandId, isFetching }: Props) {
         }
         disabled={isWorking || isFetching}
       >
-        Connect Zillow account
+        Connect {sourceType} account
       </Button>
     </Box>
   )

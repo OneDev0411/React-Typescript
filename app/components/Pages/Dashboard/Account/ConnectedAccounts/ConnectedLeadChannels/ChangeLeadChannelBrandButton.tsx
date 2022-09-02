@@ -71,7 +71,6 @@ export function ChangeLeadChannelBrandButton({
     <>
       <Button
         size="small"
-        variant="outlined"
         color="secondary"
         onClick={() => setIsBrandSelectorOpen(true)}
         startIcon={
