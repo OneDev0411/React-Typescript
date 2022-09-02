@@ -1,3 +1,5 @@
+import { BrandedUser } from '@app/views/components/TeamAgents/types'
+
 import Fetch from '../../services/fetch'
 
 /**
@@ -12,7 +14,7 @@ interface Data {
 export async function addAssignee(
   id: UUID,
   data: { assignees: Data[] }
-): Promise<ApiResponseBody<any>> {
+): Promise<ApiResponseBody<{ code: string; data: BrandedUser }>> {
   try {
     const response = await new Fetch()
       .put(`/contacts/${id}/assignees`)

@@ -16,7 +16,6 @@ import {
   Typography
 } from '@material-ui/core'
 import { mdiPlus, mdiTrashCanOutline } from '@mdi/js'
-// eslint-disable-next-line import/no-unresolved
 import { IContactAttributeDef, INormalizedContact } from 'types/Contact'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
@@ -31,8 +30,6 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { BasicSection } from '../components/Section/Basic'
 import { SectionButton } from '../components/Section/Button'
-
-import { ViewModeActionBar } from './style'
 
 interface Props {
   contact: INormalizedContact
@@ -57,14 +54,14 @@ const useStyles = makeStyles(
       alignItems: 'center',
       background: theme.palette.background.paper,
       padding: theme.spacing(0.5),
-      borderRadius: `${theme.shape.borderRadius}px`,
+      borderRadius: theme.shape.borderRadius,
       boxShadow:
         '0px 0px 8px rgba(0, 0, 0, 0.25), 0px 16px 16px -8px rgba(0, 0, 0, 0.25)'
     },
     action: {
       padding: theme.spacing(0, 2),
       background: theme.palette.background.paper,
-      borderRadius: `${theme.shape.borderRadius}px`,
+      borderRadius: theme.shape.borderRadius,
       textAlign: 'center',
       color: theme.palette.grey[800],
       '& svg': {
@@ -80,6 +77,12 @@ const useStyles = makeStyles(
       display: 'block',
       color: theme.palette.grey[800],
       ...theme.typography.caption
+    },
+    videoModeActionBar: {
+      position: 'absolute',
+      top: '90%',
+      right: '0%',
+      display: 'flex'
     }
   }),
   { name: 'InlineEditFieldViewMode' }
@@ -89,12 +92,12 @@ const Assignee = ({ contact, submitCallback }: Props) => {
   const classes = useStyles()
   // Need To Find how this submit callback works
   // Then Refect the Contact after adding the assignee
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
+  const [anchorEl, setAnchorEl] = useState<Nullable<HTMLButtonElement>>(null)
   const [selectedAgent, setSelectedAgents] = useState<BrandedUser[]>(
     [] as BrandedUser[]
   )
-  const [currentAgent, setCurrentAgent] = useState<BrandedUser | null>(null)
-  const [showActionId, setShowActionId] = useState<UUID | null>('')
+  const [currentAgent, setCurrentAgent] = useState<Nullable<BrandedUser>>(null)
+  const [showActionId, setShowActionId] = useState<Nullable<UUID>>('')
   const [showEmailDialog, setShowEmailDialog] = useState<boolean>(false)
   const [showEmailDrawer, setShowEmailDrawer] = useState<boolean>(false)
 
@@ -240,7 +243,13 @@ const Assignee = ({ contact, submitCallback }: Props) => {
                 />
               </ListItemIcon>
               <ListItemText primary={assignee.user?.display_name} />
-              <ViewModeActionBar show={showActionId === assignee.id}>
+              <div
+                className={classes.videoModeActionBar}
+                style={{
+                  visibility:
+                    showActionId === assignee.id ? 'visible' : 'hidden'
+                }}
+              >
                 <div className={classes.actionContainer}>
                   <div
                     onClick={() => handleDelete(assignee.id)}
@@ -253,7 +262,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
                     <span className={classes.actionLabel}>Delete</span>
                   </div>
                 </div>
-              </ViewModeActionBar>
+              </div>
             </ListItem>
           ))}
         </List>
