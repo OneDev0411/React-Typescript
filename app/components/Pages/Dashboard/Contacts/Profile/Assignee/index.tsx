@@ -176,10 +176,10 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       <Dialog fullWidth maxWidth="xs" open={showEmailDialog}>
         <DialogContent className={classes.dialogContainer}>
           <Typography variant="h6" component="h1">
-            {currentAgent?.first_name} is notified about {contact.first_name}
+            {currentAgent?.first_name} is notified about {contact?.first_name}
           </Typography>
           <Typography variant="body1" gutterBottom>
-            You can also send an email to introduce {contact.first_name} and{' '}
+            You can also send an email to introduce {contact?.first_name} and{' '}
             {currentAgent?.first_name} if you'd like.
           </Typography>
         </DialogContent>
@@ -196,7 +196,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
           </Button>
         </DialogActions>
       </Dialog>
-      {currentAgent && (
+      {contact && currentAgent && currentAgent.email && (
         <SingleEmailComposeDrawer
           isOpen={showEmailDrawer}
           onClose={() => setShowEmailDrawer(false)}
@@ -220,7 +220,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
           I appreciate it!
 
           Cheers,
-          ${contact.first_name}
+          ${contact?.first_name}
           `
           }}
         />
