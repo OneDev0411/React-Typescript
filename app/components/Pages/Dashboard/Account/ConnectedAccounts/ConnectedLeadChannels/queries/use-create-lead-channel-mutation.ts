@@ -9,7 +9,7 @@ export function useCreateLeadChannelMutation(activeBrandId?: UUID) {
   const queryClient = useQueryClient()
 
   return useMutation(
-    async (data: { sourceType: 'Zillow' }) => {
+    async (data: { sourceType: LeadChannelSourceType }) => {
       if (!activeBrandId) {
         return
       }
