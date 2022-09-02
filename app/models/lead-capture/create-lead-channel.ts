@@ -1,7 +1,7 @@
 import Fetch from '@app/services/fetch'
 
 interface Data {
-  sourceType: 'Zillow'
+  sourceType: LeadChannelSourceType
 }
 
 export async function createLeadChannel(
