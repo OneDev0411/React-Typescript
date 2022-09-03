@@ -66,6 +66,7 @@ export function AddFilter({ disabled, config, onNewFilter }: Props) {
 
   const onSelectFilter = item => {
     console.log('onSelectFilter', { item })
+    setQuery('')
     handleClose()
 
     onNewFilter({
