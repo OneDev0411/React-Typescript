@@ -108,7 +108,7 @@ const useStyles = makeStyles(
       alignItems: 'flex-end',
       justifyContent: 'center',
       paddingBottom: theme.spacing(2),
-      transition: '0.3s 0.1s top ease-in-out'
+      transition: '0.2s 0.1s top ease-in'
     }
   }),
   { name: 'ListingAdjustmentCard' }
@@ -149,7 +149,7 @@ const ListingAdjustmentCard = ({
       <div className={classes.overLayer} style={{ top: overLayerTopPosition }}>
         {!isSubjectProperty && (
           <Button
-            variant="text"
+            variant="contained"
             color="secondary"
             onClick={() => {
               onOpenAddAdjustmentModal(listing.id)

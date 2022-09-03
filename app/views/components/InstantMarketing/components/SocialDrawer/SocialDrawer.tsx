@@ -12,6 +12,7 @@ import getTemplateObject from '@app/views/components/InstantMarketing/helpers/ge
 import { addNotification as notify } from '@app/views/components/notification'
 import Drawer from '@app/views/components/OverlayDrawer'
 
+import { isVideoTemplate } from './helpers'
 import SocialDrawerActions from './SocialDrawerActions'
 import SocialDrawerPreviewFile from './SocialDrawerPreviewFile'
 import SocialDrawerProvider from './SocialDrawerProvider'
@@ -120,6 +121,7 @@ function SocialDrawer({
       <Drawer.Header title={title} />
       <SocialDrawerPreviewFile
         className={classes.preview}
+        isVideoTemplate={isVideoTemplate(template)}
         instance={instance}
         error={errorMessage}
       />

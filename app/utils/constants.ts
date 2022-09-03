@@ -47,5 +47,6 @@ export const DEFAULT_BRAND_PALETTE: BrandMarketingPalette = {
   'inverted-container-text-color': '#fff',
   website: '',
   phone_number: '',
-  name: ''
+  name: '',
+  address: {}
 }

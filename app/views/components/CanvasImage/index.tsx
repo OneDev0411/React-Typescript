@@ -1,38 +1,58 @@
 import { HTMLProps, memo, useEffect, useRef } from 'react'
 
-import { fitImageIntoCanvas } from './helper'
+import Pikaso from 'pikaso'
 
 interface Props {
+  width: number
+  height: number
   src: string
-  alt: string
 }
 
 function CanvasImage({
+  width,
+  height,
   src,
-  alt,
   ...rest
-}: Props & HTMLProps<HTMLCanvasElement>) {
-  const canvasRef = useRef<Nullable<HTMLCanvasElement>>(null)
+}: Props & HTMLProps<HTMLDivElement>) {
+  const containerRef = useRef<Nullable<HTMLDivElement>>(null)
 
   useEffect(() => {
-    const canvas = canvasRef.current
+    const load = async () => {
+      const editor = new Pikaso({
+        container: containerRef.current as HTMLDivElement,
+        selection: {
+          interactive: false
+        }
+      })
 
-    const baseImage = new Image()
+      await editor.loadFromUrl(src, {
+        size: 'cover',
+        x: 0,
+        y: 0
+      })
 
-    baseImage.src = src
-    baseImage.alt = alt
-    baseImage.onload = () => {
-      const context = canvas?.getContext('2d')
+      await editor.cropper.crop({
+        x: 0,
+        y: 0,
+        width,
+        height
+      })
 
-      if (canvas && context) {
-        context.drawImage(
-          ...fitImageIntoCanvas(baseImage, canvas.width, canvas.height)
-        )
-      }
+      editor.export.toImage({
+        quality: 4
+      })
     }
-  }, [alt, src])
 
-  return <canvas {...rest} ref={ref => (canvasRef.current = ref)} />
+    load()
+  }, [height, src, width])
+
+  return (
+    <div
+      style={{ width, height }}
+      {...rest}
+      ref={ref => (containerRef.current = ref)}
+    />
+  )
 }
 
 export default memo(CanvasImage)

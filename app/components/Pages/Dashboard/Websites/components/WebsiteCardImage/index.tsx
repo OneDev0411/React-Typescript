@@ -17,25 +17,20 @@ import useStyles from './styles'
 interface WebsiteCardImageProps {
   className?: string
   src: string
-  alt: string
   children: ReactNode
 }
 
-function WebsiteCardImage({
-  className,
-  src,
-  alt,
-  children
-}: WebsiteCardImageProps) {
+function WebsiteCardImage({ className, src, children }: WebsiteCardImageProps) {
   const classes = useStyles()
 
   return (
     <Box position="relative" overflow="hidden" zIndex={0}>
       <Box paddingTop="75%" />
       <CanvasImage
-        className={classNames(classes.image, className)}
         src={src}
-        alt={alt}
+        height={210}
+        width={280}
+        className={classNames(classes.image, className)}
       />
       {children}
     </Box>

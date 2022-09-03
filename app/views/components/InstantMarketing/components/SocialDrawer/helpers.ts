@@ -13,3 +13,14 @@ export function instagramAccountValidator(
 
   return 'Please select at least an Instagram account'
 }
+
+export function isVideoTemplate(
+  template?: IBrandMarketingTemplate | IMarketingTemplate
+): boolean {
+  return (
+    !!template &&
+    template.type === 'brand_template' &&
+    template.template &&
+    template.template.video
+  )
+}

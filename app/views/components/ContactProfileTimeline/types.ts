@@ -1,7 +1,7 @@
 import { FilterQuery } from 'models/calendar/get-calendar'
 
 export interface CalendarRef {
-  refresh(date: Date, range: Nullable<ICalendarRange>): void
+  refresh(reset: boolean, range: Nullable<Partial<ICalendarRange>>): void
   updateCrmEvents(event: IEvent, type: string): void
 }
 

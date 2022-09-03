@@ -165,7 +165,7 @@ export default function registerNeighborhoodsBlocks(
           ? selectedReport
           : getNeighborhoodsGraphTemplateReport(
               selectedReport,
-              renderData.get('inverted-container-bg-color')
+              renderData.get('inverted-container-bg-color') as string
             )
     }),
     (model, blockId) => {

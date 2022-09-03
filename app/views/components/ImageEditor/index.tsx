@@ -10,6 +10,8 @@ import {
   Button,
   ClickAwayListener
 } from '@material-ui/core'
+import { Skeleton } from '@material-ui/lab'
+import cn from 'classnames'
 import Pikaso, { EventListenerCallbackEvent } from 'pikaso'
 
 import type { Filter as ImageFilter } from '@app/hooks/use-image-filters'
@@ -35,11 +37,17 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     editor: {
       border: `1px solid ${theme.palette.action.hover}`,
+      margin: theme.spacing(2),
+      width: 'auto',
       height: '500px',
-      margin: theme.spacing(2)
+      '&.loading': {
+        position: 'absolute',
+        visibility: 'hidden'
+      }
     },
     dialogContent: {
-      padding: 0
+      padding: 0,
+      overflow: 'hidden'
     },
     saveButton: {
       marginLeft: theme.spacing(1)
@@ -84,7 +92,7 @@ export function EditorDialog({
 }: Props) {
   const classes = useStyles()
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
-
+  const [isLoading, setIsLoading] = useState(true)
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
   const [activeAction, setActiveAction] = useState<Actions | null>(null)
   const [isFocused, setIsFocused] = useState(false)
@@ -97,13 +105,13 @@ export function EditorDialog({
   })
 
   const setupEditor = () => {
-    const size = dimensions
-      ? { width: dimensions[0], height: dimensions[1] }
-      : { height: 500 }
+    // TODO: size is disabled to find a workaround for oversize
+    // const size = dimensions
+    //   ? { width: dimensions[0], height: dimensions[1] }
+    //   : { height: 500 }
 
     const editor = new Pikaso({
       container: editorRef.current as HTMLDivElement,
-      ...size,
       selection: {
         keyboard: {
           enabled: false
@@ -120,10 +128,14 @@ export function EditorDialog({
     }
 
     const load = async () => {
+      setIsLoading(true)
+
       const fileBlob =
         typeof file === 'string' ? await convertUrlToImageFile(file) : file
 
       await editor.loadFromFile(fileBlob)
+
+      setIsLoading(false)
     }
 
     load()
@@ -132,6 +144,13 @@ export function EditorDialog({
   useEffect(() => {
     if (activeAction !== 'crop' && editor?.cropper.isActive) {
       editor.cropper.stop()
+    }
+  }, [editor, activeAction])
+
+  useEffect(() => {
+    if (activeAction !== 'draw' && editor?.board.activeDrawing) {
+      editor.shapes.line.stopDrawing()
+      editor.shapes.pencil.stopDrawing()
     }
   }, [editor, activeAction])
 
@@ -206,7 +225,7 @@ export function EditorDialog({
       id="editor-dialog"
       fullWidth
       maxWidth="lg"
-      onEntered={setupEditor}
+      onEntered={() => setTimeout(setupEditor, 500)}
     >
       <DialogTitle>
         <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -229,58 +248,71 @@ export function EditorDialog({
       </DialogTitle>
 
       <DialogContent className={classes.dialogContent}>
+        {isLoading && (
+          <Box m={3}>
+            <Skeleton variant="rect" width="100%" height="500px" />
+            <Box mt={2}>
+              <Skeleton variant="rect" width="100%" height="50px" />
+            </Box>
+          </Box>
+        )}
+
         <ClickAwayListener onClickAway={() => setIsFocused(false)}>
           <div
             ref={editorRef}
-            className={classes.editor}
+            className={cn(classes.editor, { loading: isLoading })}
             onClick={() => setIsFocused(true)}
           />
         </ClickAwayListener>
 
-        <ImageEditorContext.Provider
-          value={{
-            editor,
-            activeAction,
-            history,
-            setActiveAction,
-            activeFilter,
-            setActiveFilter
-          }}
-        >
-          {activeAction && (
+        {!isLoading && (
+          <ImageEditorContext.Provider
+            value={{
+              editor,
+              activeAction,
+              history,
+              setActiveAction,
+              activeFilter,
+              setActiveFilter
+            }}
+          >
+            {activeAction && (
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                className={classes.actionMenu}
+              >
+                {activeAction === 'crop' && (
+                  <CropMenu options={cropperOptions} />
+                )}
+                {activeAction === 'draw' && <DrawMenu />}
+                {activeAction === 'text' && <TextMenu />}
+                {activeAction === 'filter' && <FilterMenu file={file} />}
+              </Box>
+            )}
+
             <Box
               display="flex"
               justifyContent="space-between"
-              className={classes.actionMenu}
+              className={classes.actionsContainer}
             >
-              {activeAction === 'crop' && <CropMenu options={cropperOptions} />}
-              {activeAction === 'draw' && <DrawMenu />}
-              {activeAction === 'text' && <TextMenu />}
-              {activeAction === 'filter' && <FilterMenu file={file} />}
-            </Box>
-          )}
+              <Box display="flex" className={classes.actions}>
+                <Cropper options={cropperOptions} />
+                <Rotation />
+                <Flip />
+                <Draw />
+                <Text />
+                <Image />
+                <Filter />
+              </Box>
 
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            className={classes.actionsContainer}
-          >
-            <Box display="flex" className={classes.actions}>
-              <Cropper options={cropperOptions} />
-              <Rotation />
-              <Flip />
-              <Draw />
-              <Text />
-              <Image />
-              <Filter />
+              <Box display="flex">
+                <Redo />
+                <Undo />
+              </Box>
             </Box>
-
-            <Box display="flex">
-              <Redo />
-              <Undo />
-            </Box>
-          </Box>
-        </ImageEditorContext.Provider>
+          </ImageEditorContext.Provider>
+        )}
       </DialogContent>
     </Dialog>
   )
