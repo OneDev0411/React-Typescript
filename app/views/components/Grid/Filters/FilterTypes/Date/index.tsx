@@ -10,6 +10,13 @@ import {
 } from '@material-ui/core'
 import fecha from 'fecha'
 
+import {
+  convertDateToTimestamp,
+  convertTimestampToDate
+} from '@app/utils/date-utils'
+import { Values as DateFieldType } from '@app/utils/validations/date-field'
+import { parseDateValues } from '@app/views/components/inline-editable-fields/InlineDateField/helpers'
+
 import { DateOperatorComponent } from './components/OperatorComponent'
 import { operators, operatorsWithNoValue } from './constant'
 
@@ -40,18 +47,26 @@ export const DateFilterType = ({
   onToggleFilterActive
 }: IFilterConfigRenderer) => {
   const classes = useStyles()
-
   const [selectedOperator, setSelectedOperator] = useState<string>(
     () =>
       operator?.name ?? operators.find(operator => operator.default)?.name ?? ''
   )
   const [selectedDate, setSelectedDate] = useState<Date>(() => {
-    if (Array.isArray(values) && values[0].value) {
-      return new Date((values[0].value as number) * 1000)
+    if (Array.isArray(values) && typeof values[0].value === 'number') {
+      return convertTimestampToDate(values[0].value)
     }
 
     return new Date()
   })
+
+  const handleDateChange = (date: DateFieldType) => {
+    const newSelectedDate =
+      convertTimestampToDate(parseDateValues(date)!) ?? selectedDate
+
+    newSelectedDate.setUTCHours(0, 0, 0, 0)
+
+    setSelectedDate(newSelectedDate)
+  }
 
   const handleOperatorChange = event => {
     setSelectedOperator(event.target.value)
@@ -64,8 +79,6 @@ export const DateFilterType = ({
       return
     }
 
-    selectedDate.setUTCHours(0, 0, 0, 0)
-
     const payload = operatorsWithNoValue.includes(currentOperator.name)
       ? {
           label: '',
@@ -73,7 +86,7 @@ export const DateFilterType = ({
         }
       : {
           label: fecha.format(selectedDate, 'MMM DD, YYYY'),
-          value: selectedDate.getTime() / 1000
+          value: convertDateToTimestamp(selectedDate)
         }
 
     onFilterChange([payload], currentOperator)
@@ -98,8 +111,8 @@ export const DateFilterType = ({
             {!operatorsWithNoValue.includes(operator.name) &&
               selectedOperator === operator.name && (
                 <DateOperatorComponent
-                  currentValue={selectedDate}
-                  onChange={setSelectedDate}
+                  currentValue={convertDateToTimestamp(selectedDate)}
+                  onChange={handleDateChange}
                 />
               )}
           </div>

@@ -1,32 +1,11 @@
-import { Theme, makeStyles } from '@material-ui/core'
-
-import DatePicker from '@app/views/components/DatePicker'
+import { DateField } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/EditMode/Value/fields'
+import { Values as DateFieldType } from '@app/utils/validations/date-field'
 
 interface Props {
-  currentValue: Date
-  onChange: (date: Date) => void
+  currentValue: number
+  onChange: (date: DateFieldType) => void
 }
 
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    container: {
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: `${theme.shape.borderRadius}px`
-    }
-  }),
-  {
-    name: 'DateOperatorComponent'
-  }
+export const DateOperatorComponent = ({ currentValue, onChange }: Props) => (
+  <DateField onChange={onChange} value={currentValue} />
 )
-
-export const DateOperatorComponent = ({ currentValue, onChange }: Props) => {
-  const classes = useStyles()
-
-  const handleChange = (date: Date) => onChange(date)
-
-  return (
-    <div className={classes.container}>
-      <DatePicker onChange={handleChange} selectedDate={currentValue} />
-    </div>
-  )
-}
