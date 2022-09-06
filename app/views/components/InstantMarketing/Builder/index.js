@@ -246,24 +246,16 @@ class Builder extends React.Component {
 
   componentWillUnmount() {
     if (this.editor) {
-      const iframeBody = this.editor.Canvas.getBody()
-      const iframeWindow = this.editor.Canvas.getWindow()
-      const gjsToolbar = document.querySelector('.gjs-toolbar')
+      const iframe = this.editor.Canvas.getBody()
 
-      iframeBody.removeEventListener('paste', this.iframePasteHandler)
-      iframeBody.removeEventListener('click', this.iframeClickHandler)
-      iframeWindow.removeEventListener('click', this.deselectAll)
-
-      if (gjsToolbar) {
-        gjsToolbar.removeEventListener('click', this.stopPropagation)
-      }
+      iframe.removeEventListener('paste', this.iframePasteHandler)
+      iframe.removeEventListener('click', this.iframeClickHandler)
 
       // Make the chance for others to cleanup the memory
       this.editor.trigger('editor:unload')
     }
 
     unloadJS('ckeditor')
-    window.removeEventListener('click', this.deselectAll)
   }
 
   evaluateRte = (view, rte) => {
@@ -549,7 +541,7 @@ class Builder extends React.Component {
     this.disableAssetManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
-    this.deselectComponentsOnClickOutside()
+    this.deselectComponentsOnCanvasClick()
     this.disableDefaultDeviceManager()
     this.scrollSidebarToTopOnComponentSelect()
 
@@ -841,12 +833,10 @@ class Builder extends React.Component {
 
       richTextToolbar.style.display = 'none'
 
-      const gjsToolbar = document.querySelector('.gjs-toolbar')
+      const toolbar = document.querySelector('.gjs-toolbar')
 
-      gjsToolbar.addEventListener('click', this.stopPropagation)
-
-      if (gjsToolbar) {
-        gjsToolbar.appendChild(richTextToolbar)
+      if (toolbar) {
+        toolbar.appendChild(richTextToolbar)
       }
 
       richTextToolbar.style.display = 'flex'
@@ -936,15 +926,10 @@ class Builder extends React.Component {
     iframe.addEventListener('paste', this.iframePasteHandler)
   }
 
-  // Deselect component when click outside
-  // https://gitlab.com/rechat/web/-/issues/6116
-  deselectComponentsOnClickOutside = () => {
-    const iframeWindow = this.editor.Canvas.getWindow()
+  deselectComponentsOnCanvasClick = () => {
     const iframeBody = this.editor.Canvas.getBody()
 
-    window.addEventListener('click', this.deselectAll)
-    iframeWindow.addEventListener('click', this.deselectAll)
-    iframeBody.addEventListener('click', this.deselectAll)
+    iframeBody.addEventListener('click', this.iframeClickHandler)
   }
 
   iframePasteHandler = ev => {
@@ -966,8 +951,7 @@ class Builder extends React.Component {
     }
 
     this.deselectAll()
-
-    this.stopPropagation(ev)
+    ev.stopPropagation()
   }
 
   setTraits = model => {
@@ -1152,10 +1136,7 @@ class Builder extends React.Component {
     this.registerComponentExtensions()
   }
 
-  stopPropagation = e => e.stopPropagation()
-
   deselectAll = () => {
-    this.editor.select()
     this.editor.selectRemove(this.editor.getSelectedAll())
   }
 
