@@ -73,7 +73,7 @@ export default function Sidebar({
   }
 
   return (
-    <Grid item md={3} className={classes.wrapper}>
+    <Grid item md={4} className={classes.wrapper}>
       {sections.map(section => (
         <React.Fragment key={section.name}>
           <ExpansionPanel

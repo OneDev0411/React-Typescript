@@ -131,11 +131,7 @@ function WebsiteCard({
     <>
       <Grid item xs={12} sm={6} md={4} xl={3}>
         <Box className={classNames(classes.root, isWorking && classes.busy)}>
-          <WebsiteCardImage
-            className={classes.image}
-            src={thumbnail}
-            alt={`${title} website`}
-          >
+          <WebsiteCardImage className={classes.image} src={thumbnail}>
             <WebsiteCardActions
               className={classes.actions}
               link={link}

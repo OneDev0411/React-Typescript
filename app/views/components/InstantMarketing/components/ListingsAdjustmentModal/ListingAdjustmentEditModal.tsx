@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 import {
   TextField,
-  InputAdornment,
   Button,
   Chip,
   Grid,
@@ -12,7 +11,6 @@ import {
 } from '@material-ui/core'
 import { mdiPlus, mdiClose } from '@mdi/js'
 import cn from 'classnames'
-import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 import {
   getListingFormattedPrice,
@@ -20,7 +18,6 @@ import {
   getStatusColor
 } from '@app/utils/listing'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
-import { MaskedInput } from 'components/MaskedInput'
 import { Modal, ModalHeader, ModalFooter } from 'components/Modal'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -33,6 +30,7 @@ import {
 } from './constants'
 import { fillAdjustmentsWithEmptyItems, sumAdjustmentsPrice } from './helpers'
 import ListingAdjustmentCardSummery from './ListingAdjustmentCardSummery'
+import { ListingAdjustmentPriceInput } from './ListingAdjustmentPriceInput'
 import { IAdjustment, IAdjustmentOptionalValue } from './types'
 
 interface Props {
@@ -140,19 +138,10 @@ const useStyles = makeStyles(
       marginLeft: theme.spacing(2)
     }
   }),
-  { name: 'EditAdjustmentModal' }
+  { name: 'ListingAdjustmentEditModal' }
 )
 
-const priceMask = createNumberMask({
-  prefix: '',
-  includeThousandsSeparator: true,
-  allowNegative: false,
-  allowLeadingZeroes: false,
-  allowDecimal: false,
-  integerLimit: 8
-})
-
-export function EditAdjustmentModal(props: Props) {
+export function ListingAdjustmentEditModal(props: Props) {
   const { listing, onChange, onClose } = props
   const classes = useStyles(props)
 
@@ -203,14 +192,6 @@ export function EditAdjustmentModal(props: Props) {
 
       return fillAdjustmentsWithEmptyItems(newValues, MIN_ADJUSTMENT_SIZE)
     })
-  }
-
-  const onChangeMaskValue = (index: number, maskedValue: string) => {
-    const value = maskedValue
-      ? parseFloat(maskedValue.replace(/\,/gi, ''))
-      : undefined
-
-    onChangeAdjustment(index, 'value', value)
   }
 
   const onAddMore = () => {
@@ -274,25 +255,11 @@ export function EditAdjustmentModal(props: Props) {
                 />
               </div>
               <div className={classes.formRowValue}>
-                <TextField
-                  type="text"
-                  size="small"
-                  color="primary"
-                  value={adjustment.value || ''}
-                  InputProps={{
-                    inputProps: {
-                      'aria-label': 'Value',
-                      mask: priceMask
-                    },
-                    inputComponent: priceMask ? MaskedInput : undefined,
-                    startAdornment: (
-                      <InputAdornment position="start">$</InputAdornment>
-                    )
+                <ListingAdjustmentPriceInput
+                  onChange={value => {
+                    onChangeAdjustment(index, 'value', value)
                   }}
-                  onChange={event => {
-                    onChangeMaskValue(index, event.target.value)
-                  }}
-                  variant="outlined"
+                  initialValue={adjustment.value}
                   className={classes.inputField}
                 />
               </div>
