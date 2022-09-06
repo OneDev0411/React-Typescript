@@ -180,7 +180,10 @@ const Assignee = ({ contact, submitCallback }: Props) => {
           </Typography>
           <Typography variant="body1" gutterBottom>
             You can also send an email to introduce {contact?.first_name} and{' '}
-            {currentAgent?.first_name} if you'd like.
+            {currentAgent?.first_name
+              ? currentAgent.first_name
+              : currentAgent?.display_name}{' '}
+            if you'd like.
           </Typography>
         </DialogContent>
 
