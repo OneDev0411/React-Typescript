@@ -8,17 +8,13 @@ import {
   makeStyles,
   FormControlLabel
 } from '@material-ui/core'
-import fecha from 'fecha'
 
-import {
-  convertDateToTimestamp,
-  convertTimestampToDate
-} from '@app/utils/date-utils'
+import { DateField } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/EditMode/Value/fields'
 import { Values as DateFieldType } from '@app/utils/validations/date-field'
-import { parseDateValues } from '@app/views/components/inline-editable-fields/InlineDateField/helpers'
+import { getDateValues } from '@app/views/components/inline-editable-fields/InlineDateField/helpers'
 
-import { DateOperatorComponent } from './components/OperatorComponent'
 import { operators, operatorsWithNoValue } from './constant'
+import { generatePayload } from './helpers/generate-payload'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -47,25 +43,23 @@ export const DateFilterType = ({
   onToggleFilterActive
 }: IFilterConfigRenderer) => {
   const classes = useStyles()
-  const [selectedOperator, setSelectedOperator] = useState<string>(
-    () =>
+  const [selectedOperator, setSelectedOperator] = useState<string>(() => {
+    return (
       operator?.name ?? operators.find(operator => operator.default)?.name ?? ''
-  )
-  const [selectedDate, setSelectedDate] = useState<Date>(() => {
-    if (Array.isArray(values) && typeof values[0].value === 'number') {
-      return convertTimestampToDate(values[0].value)
-    }
-
-    return new Date()
+    )
   })
+  const [selectedDate, setSelectedDate] = useState<Nullable<DateFieldType>>(
+    () => {
+      if (Array.isArray(values) && typeof values[0].value === 'number') {
+        return getDateValues(values[0].value)
+      }
+
+      return null
+    }
+  )
 
   const handleDateChange = (date: DateFieldType) => {
-    const newSelectedDate =
-      convertTimestampToDate(parseDateValues(date)!) ?? selectedDate
-
-    newSelectedDate.setUTCHours(0, 0, 0, 0)
-
-    setSelectedDate(newSelectedDate)
+    setSelectedDate(date)
   }
 
   const handleOperatorChange = event => {
@@ -75,21 +69,13 @@ export const DateFilterType = ({
   const handleApplyFilter = () => {
     const currentOperator = operators.find(i => i.name === selectedOperator)
 
-    if (!currentOperator) {
+    if (!currentOperator || !selectedDate) {
       return
     }
 
-    const payload = operatorsWithNoValue.includes(currentOperator.name)
-      ? {
-          label: '',
-          value: null
-        }
-      : {
-          label: fecha.format(selectedDate, 'MMM DD, YYYY'),
-          value: convertDateToTimestamp(selectedDate)
-        }
+    const payload = generatePayload(selectedDate, currentOperator)
 
-    onFilterChange([payload], currentOperator)
+    onFilterChange(payload, currentOperator)
     onToggleFilterActive()
   }
 
@@ -110,10 +96,7 @@ export const DateFilterType = ({
             />
             {!operatorsWithNoValue.includes(operator.name) &&
               selectedOperator === operator.name && (
-                <DateOperatorComponent
-                  currentValue={convertDateToTimestamp(selectedDate)}
-                  onChange={handleDateChange}
-                />
+                <DateField onChange={handleDateChange} value={selectedDate} />
               )}
           </div>
         ))}
@@ -122,6 +105,7 @@ export const DateFilterType = ({
         fullWidth
         variant="contained"
         color="primary"
+        disabled={!selectedDate}
         onClick={handleApplyFilter}
       >
         Done
