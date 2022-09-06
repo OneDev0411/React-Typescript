@@ -601,18 +601,6 @@ const AsyncSocialPostList = withAcl(
   }),
   [ACL.MARKETING]
 )
-/* ==================================== */
-//  Chatroom
-/* ==================================== */
-
-const AsyncRecents = withSignedInUser(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Chatroom' /* webpackChunkName: "chat" */
-      )
-  })
-)
 
 // Notifications
 const AsyncNotificationsPage = withSignedInUser(
@@ -1115,10 +1103,6 @@ export default (
         </Route>
 
         <Route path="/dashboard/mls/:id" component={AsyncMLSSinglePage} />
-
-        <Route path="recents(/:roomId)">
-          <IndexRoute component={AsyncRecents} />
-        </Route>
 
         <Route
           path="notifications(/:type/:id)"
