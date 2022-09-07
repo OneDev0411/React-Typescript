@@ -4,8 +4,8 @@ import { Button, Tooltip, IconButton, makeStyles } from '@material-ui/core'
 import { mdiCogOutline, mdiPlus } from '@mdi/js'
 import { orderBy } from 'lodash'
 import pluralize from 'pluralize'
-import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
+import { useTitle } from 'react-use'
 
 import { useActiveTeam } from '@app/hooks/team/use-active-team'
 import { useBrandAssets } from '@app/hooks/use-brand-assets'
@@ -204,12 +204,10 @@ export function MarketingLayout({
     openUploadMarketingAssetDrawer()
   }
 
+  useTitle('Marketing | Rechat')
+
   return (
     <Acl.Marketing fallbackUrl="/dashboard/mls">
-      <Helmet>
-        <title>Marketing | Rechat</title>
-      </Helmet>
-
       <PageLayout position="relative" overflow="hidden">
         <PageLayout.Header title="Marketing Center">
           <div className={classes.headerActionsContainer}>

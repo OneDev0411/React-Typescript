@@ -5,10 +5,9 @@ import { useRef, useState, RefObject, useEffect, useCallback } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
-import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import { useEffectOnce } from 'react-use'
+import { useEffectOnce, useTitle } from 'react-use'
 
 import { useGetGlobalTriggers } from '@app/components/Pages/Dashboard/Account/Triggers/hooks/use-get-global-triggers'
 import useConfirmation from '@app/hooks/use-confirmation'
@@ -113,6 +112,14 @@ const useStyles = makeStyles(
   I don't have the chance to handle it, I just convert itto TS
   in hopes of taking care of the other improvements in future
 */
+
+const DocumentTitle = ({ contact }) => {
+  const title = contact?.display_name || ''
+
+  useTitle(title ? `${title} | Contacts | Rechat` : 'Contact | Rechat')
+
+  return null
+}
 
 const ContactProfile = props => {
   useGetGlobalTriggers()
@@ -296,16 +303,6 @@ const ContactProfile = props => {
     [props.allConnectedAccounts, timelineRef]
   )
 
-  /**
-   * Web page (document) title
-   * @returns {String} Title
-   */
-  const documentTitle = () => {
-    const title = contact?.display_name || ''
-
-    return title ? `${title} | Contacts | Rechat` : 'Contact | Rechat'
-  }
-
   const onChangeOwner = async item => {
     if (!contact) {
       return
@@ -448,9 +445,7 @@ const ContactProfile = props => {
 
   return (
     <>
-      <Helmet>
-        <title>{documentTitle()}</title>
-      </Helmet>
+      <DocumentTitle contact={contact} />
       <PageLayout gutter={0}>
         <div className={classes.header}>
           <Header

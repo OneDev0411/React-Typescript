@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet'
+import { useTitle } from 'react-use'
 
 import { ACL } from '@app/constants/acl'
 import { useAcl } from '@app/views/components/Acl/use-acl'
@@ -9,12 +9,10 @@ import BackOfficeTable from './BackOffice'
 const List = props => {
   const isBackOffice = useAcl(ACL.BACK_OFFICE)
 
+  useTitle('Deals | Rechat')
+
   return (
     <div data-test="deals-list">
-      <Helmet>
-        <title>Deals | Rechat</title>
-      </Helmet>
-
       {isBackOffice ? (
         <BackOfficeTable {...props} />
       ) : (

@@ -16,9 +16,9 @@ import {
 } from '@mdi/js'
 import classNames from 'classnames'
 import pluralize from 'pluralize'
-import { Helmet } from 'react-helmet'
 import { useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
+import { useTitle } from 'react-use'
 
 import { Avatar } from 'components/Avatar'
 import { formatDate } from 'components/DateTimePicker/helpers'
@@ -115,6 +115,14 @@ interface Props {
   params: {
     id: string
   }
+}
+
+const DocumentTitle = ({ item }) => {
+  useTitle(
+    `${item.subject ? `${item.subject} | ` : ''}Marketing Insights | Rechat`
+  )
+
+  return null
 }
 
 function Insight({ location, params: { id } }: Props & WithRouterProps) {
@@ -255,11 +263,7 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
 
   return (
     <>
-      <Helmet>
-        <title>{`${
-          item.subject ? `${item.subject} | ` : ''
-        }Marketing Insights | Rechat`}</title>
-      </Helmet>
+      {item && <DocumentTitle item={item} />}
       <div className={classes.pageContainer}>
         <Header
           backUrl={location.query?.backUrl ?? '/dashboard/insights'}
