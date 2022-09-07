@@ -62,7 +62,8 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
           activeBrandId,
           {
             mediums: pickerProps.mediums,
-            templateTypes: pickerProps.templateTypes
+            templateTypes: pickerProps.templateTypes,
+            filter: 'template'
           }
         )
 
