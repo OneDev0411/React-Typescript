@@ -16,10 +16,12 @@ import {
   Typography
 } from '@material-ui/core'
 import { mdiPlus, mdiTrashCanOutline } from '@mdi/js'
+import { useDispatch } from 'react-redux'
 import { IContactAttributeDef, INormalizedContact } from 'types/Contact'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { addAssignee } from '@app/models/assignees/add-assignee'
+import { confirmation } from '@app/store_actions/confirmation'
 import { SingleEmailComposeDrawer } from '@app/views/components/EmailCompose'
 import { muiIconSizes } from '@app/views/components/SvgIcons'
 import TeamAgents from '@app/views/components/TeamAgents'
@@ -89,6 +91,7 @@ const useStyles = makeStyles(
 )
 
 const Assignee = ({ contact, submitCallback }: Props) => {
+  const dispatch = useDispatch()
   const classes = useStyles()
   // Need To Find how this submit callback works
   // Then Refect the Contact after adding the assignee
@@ -140,8 +143,21 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       }
     }
   }
+  const handleDelete = (id: UUID) => {
+    dispatch(
+      confirmation({
+        message: 'Delete Assignee',
+        description: 'Are your sure about deleting this Assignee?',
+        confirmLabel: 'Yes, I do',
+        appearance: 'danger',
+        onConfirm: () => {
+          deleteAssignee(id)
+        }
+      })
+    )
+  }
 
-  const handleDelete = async (id: UUID) => {
+  const deleteAssignee = async (id: UUID) => {
     if (contact.assignees) {
       let RemovedAssignees = contact?.assignees?.filter(
         assignee => assignee.id !== id
@@ -176,14 +192,12 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       <Dialog fullWidth maxWidth="xs" open={showEmailDialog}>
         <DialogContent className={classes.dialogContainer}>
           <Typography variant="h6" component="h1">
-            {currentAgent?.first_name} is notified about {contact?.first_name}
+            {currentAgent?.display_name} is notified about
+            {contact?.display_name}
           </Typography>
           <Typography variant="body1" gutterBottom>
-            You can also send an email to introduce {contact?.first_name} and{' '}
-            {currentAgent?.first_name
-              ? currentAgent.first_name
-              : currentAgent?.display_name}{' '}
-            if you'd like.
+            You can also send an email to introduce {contact?.display_name} and{' '}
+            {currentAgent?.display_name} if you'd like.
           </Typography>
         </DialogContent>
 
@@ -212,7 +226,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
                 recipient_type: 'Email'
               }
             ],
-            body: `Hi ${currentAgent?.first_name},
+            body: `Hi ${currentAgent?.display_name},
           Can you help me out?
           As I so often turn to you for advice when it comes to my business, I'd love if you could help in finding me some new Clients.
   
@@ -223,7 +237,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
           I appreciate it!
 
           Cheers,
-          ${contact?.first_name}
+          ${contact?.display_name}
           `
           }}
         />
