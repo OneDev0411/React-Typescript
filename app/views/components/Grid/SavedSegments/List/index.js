@@ -52,8 +52,6 @@ class SegmentsList extends React.Component {
   selectItem = async item => {
     const { props } = this
 
-    console.log({ item, props })
-
     await props.changeActiveFilterSegment(props.name, item.id)
 
     if (props.onChange) {

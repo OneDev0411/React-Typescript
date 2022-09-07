@@ -1,33 +1,35 @@
 import { size } from 'lodash'
 
-import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID } from '../../constants'
+import { IAttributeDefsState } from '@app/reducers/contacts/attributeDefs'
 
-import getFilterLabelByValue from './get-filter-label-by-value'
-import getFlowFilter from './get-flow-filter'
-import getOpenHouseFilter from './get-open-house-filter'
+import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID } from '../../../constants'
+import { getAttributeFilter } from '../get-attribute-filter'
+import getFlowFilter from '../get-flow-filter'
+import getOpenHouseFilter from '../get-open-house-filter'
+
+type MetaData = {
+  activeFilters?: any
+  attributeDefs: IAttributeDefsState
+}
 
 const createFiltersFromSegment = (
   segment: Partial<IContactList>,
-  activeFilters?
+  { activeFilters, attributeDefs }: MetaData
 ) => {
   if (size(activeFilters) > 0) {
     return Object.values(activeFilters)
   }
 
-  const attributeFilters = (segment.filters || []).map(filter => ({
-    id: filter.attribute_def,
-    isActive: false,
-    values: [
-      {
-        label: getFilterLabelByValue(filter.value),
-        value: filter.value
-      }
-    ],
-    operator: {
-      name: filter.invert ? 'is not' : 'is',
-      invert: filter.invert
-    }
-  }))
+  const attributeFilters = (segment.filters || []).map(filter =>
+    getAttributeFilter(filter, attributeDefs.byId[filter.attribute_def!])
+  )
+
+  console.log('createFiltersFromSegment', {
+    activeFilters,
+    attributeDefs,
+    fff: segment.filters,
+    attributeFilters
+  })
 
   const { flows, crm_tasks } = segment.args || { flows: [], crm_tasks: [] }
 
