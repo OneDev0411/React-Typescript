@@ -51,7 +51,7 @@ function mapStateToProps(state: IAppState, props: Props) {
 }
 
 export default connect<
-  Pick<Props, 'getOrganizedContactsList'>,
+  Pick<Props, 'getOrganizedContactsList' | 'attributeDefs'>,
   Pick<Props, 'createFilters'>
 >(mapStateToProps, dispatch => ({
   createFilters: filters => dispatch(createActiveFilters('contacts', filters))
