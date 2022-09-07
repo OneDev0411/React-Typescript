@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { browserHistory, WithRouterProps, Link } from 'react-router'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { MaskedInput } from '@app/views/components/MaskedInput'
 import { PasswordTextField } from '@app/views/components/PasswordTextField'
 
 import updatePassword from '../../../../models/auth/password/update'
@@ -80,9 +81,15 @@ export function Register(props: WithRouterProps) {
   })
 
   const onSubmit = async (values: FormValues) => {
-    const { first_name, last_name, email, password, user_type } = values
+    const { first_name, last_name, email, password, phone_number, user_type } =
+      values
 
-    let { token, redirectTo, phone_number, email: emailFromURI } = paramsFromURI
+    let {
+      token,
+      redirectTo,
+      phone_number: phoneNumberFromUri,
+      email: emailFromURI
+    } = paramsFromURI
 
     const userPassword: {
       email?: string
@@ -98,10 +105,12 @@ export function Register(props: WithRouterProps) {
       email?: string
       last_name: string
       first_name: string
+      phone_number?: string
       is_shadow: boolean
     } = {
       last_name,
       first_name,
+      phone_number,
       is_shadow: false
     }
 
@@ -111,9 +120,9 @@ export function Register(props: WithRouterProps) {
       username: emailFromURI
     }
 
-    if (phone_number) {
+    if (phoneNumberFromUri) {
       userInfo.email = email
-      userPassword.phone_number = phone_number
+      userPassword.phone_number = phoneNumberFromUri
     } else if (emailFromURI) {
       userPassword.email = emailFromURI
     }
@@ -155,12 +164,17 @@ export function Register(props: WithRouterProps) {
   }
 
   const getInitialValues = () => {
+    let phoneNumber: string = paramsFromURI.phone_number || ''
+
+    if (phoneNumber.startsWith('+1')) {
+      phoneNumber = phoneNumber.substring(2)
+    }
+
     const values: FormValues = {
       first_name: paramsFromURI.first_name || '',
       last_name: paramsFromURI.last_name || '',
-      email: paramsFromURI.email || '',
+      phone_number: phoneNumber,
       password: '',
-      repeatedPassword: '',
       user_type: 'Agent'
     }
 
@@ -178,7 +192,7 @@ export function Register(props: WithRouterProps) {
         <Form
           initialValues={getInitialValues()}
           onSubmit={onSubmit}
-          validate={validate}
+          validate={async (values: FormValues) => validate(values)}
           render={({ handleSubmit, form }) => {
             const { submitError, submitting } = form.getState()
 
@@ -216,9 +230,30 @@ export function Register(props: WithRouterProps) {
 
                 {paramsFromURI.phone_number && (
                   <TextField
-                    name="email"
-                    type="email"
-                    label="Email Address"
+                    name="phone_number"
+                    type="phone"
+                    label="Phone Number"
+                    InputProps={{
+                      inputProps: {
+                        mask: [
+                          '(',
+                          /[1-9]/,
+                          /\d/,
+                          /\d/,
+                          ')',
+                          ' ',
+                          /\d/,
+                          /\d/,
+                          /\d/,
+                          '-',
+                          /\d/,
+                          /\d/,
+                          /\d/,
+                          /\d/
+                        ]
+                      },
+                      inputComponent: MaskedInput
+                    }}
                     classes={inputClasses}
                   />
                 )}

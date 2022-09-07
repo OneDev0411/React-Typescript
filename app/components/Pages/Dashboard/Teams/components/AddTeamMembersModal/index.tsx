@@ -18,6 +18,7 @@ import isEmail from 'validator/lib/isEmail'
 
 import useNotify from '@app/hooks/use-notify'
 import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
+import { isValidPhoneNumber } from '@app/utils/helpers'
 import { AvatarUpload } from '@app/views/components/AvatarUpload'
 import { UserAutocomplete } from '@app/views/components/ContactAutocomplete'
 import { DialogTitle } from '@app/views/components/DialogTitle'
@@ -61,7 +62,7 @@ export function AddTeamMembersModal({
   const [isSaving, setIsSaving] = useState(false)
   const notify = useNotify()
 
-  const { control, errors, handleSubmit } = useForm<FormData>({
+  const { control, errors, handleSubmit, watch } = useForm<FormData>({
     mode: 'all',
     defaultValues: {
       avatar: null,
@@ -72,6 +73,9 @@ export function AddTeamMembersModal({
       roles: []
     }
   })
+
+  const isEmailRequired = !watch('phone')
+  const isPhoneRequired = !watch('email')
 
   const onSubmitForm = async (data: FormData) => {
     try {
@@ -112,7 +116,7 @@ export function AddTeamMembersModal({
             <Controller
               name="email"
               rules={{
-                required: true,
+                required: isEmailRequired,
                 validate: value => value?.trim().length > 0 && isEmail(value)
               }}
               control={control}
@@ -123,9 +127,7 @@ export function AddTeamMembersModal({
                     const email = emails[0]
                     const contact = contacts[0]
 
-                    if (email) {
-                      field.onChange(email)
-                    }
+                    field.onChange(email ?? '')
 
                     if (contact) {
                       control.setValue('firstName', contact.first_name, {
@@ -151,10 +153,11 @@ export function AddTeamMembersModal({
                     placeholder: 'Email',
                     fullWidth: true,
                     variant: 'outlined',
-                    error: !!errors.email,
-                    helperText: errors.email
-                      ? 'You must enter a valid email address'
-                      : null,
+                    error: isEmailRequired && !!errors.email,
+                    helperText:
+                      isEmailRequired && errors.email
+                        ? 'You must enter a valid email address'
+                        : null,
                     ...field
                   }}
                 />
@@ -199,12 +202,23 @@ export function AddTeamMembersModal({
             <Controller
               name="phone"
               control={control}
+              rules={{
+                required: isPhoneRequired,
+                validate: async value =>
+                  isPhoneRequired ? isValidPhoneNumber(value) : true
+              }}
               render={field => (
                 <TextField
                   fullWidth
                   size="small"
                   variant="outlined"
                   placeholder="Phone"
+                  error={isPhoneRequired && !!errors.phone}
+                  helperText={
+                    isPhoneRequired && errors.phone
+                      ? 'You must enter a valid phone number'
+                      : null
+                  }
                   InputProps={{
                     inputProps: {
                       mask: [
