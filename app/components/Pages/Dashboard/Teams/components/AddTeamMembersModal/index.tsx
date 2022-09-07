@@ -62,17 +62,18 @@ export function AddTeamMembersModal({
   const [isSaving, setIsSaving] = useState(false)
   const notify = useNotify()
 
-  const { control, errors, handleSubmit, watch } = useForm<FormData>({
-    mode: 'all',
-    defaultValues: {
-      avatar: null,
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      roles: []
-    }
-  })
+  const { control, errors, formState, handleSubmit, watch, reset } =
+    useForm<FormData>({
+      mode: 'all',
+      defaultValues: {
+        avatar: null,
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        roles: []
+      }
+    })
 
   const isEmailRequired = !watch('phone')
   const isPhoneRequired = !watch('email')
@@ -91,9 +92,14 @@ export function AddTeamMembersModal({
     }
   }
 
+  const handleClose = () => {
+    reset({}, { isDirty: false })
+    onClose()
+  }
+
   return (
-    <Dialog open={isOpen} fullWidth maxWidth="sm" onClose={onClose}>
-      <DialogTitle onClose={onClose}>Add Member</DialogTitle>
+    <Dialog open={isOpen} fullWidth maxWidth="sm" onClose={handleClose}>
+      <DialogTitle onClose={handleClose}>Add Member</DialogTitle>
       <DialogContent>
         <Box width="100%" my={2}>
           <Box mb={3} display="flex" justifyContent="center">
@@ -311,7 +317,7 @@ export function AddTeamMembersModal({
             disabled={isSaving}
             size="small"
             variant="contained"
-            onClick={onClose}
+            onClick={handleClose}
           >
             Cancel
           </Button>
@@ -320,7 +326,7 @@ export function AddTeamMembersModal({
               size="small"
               color="primary"
               variant="contained"
-              disabled={isSaving}
+              disabled={isSaving || !formState.isDirty}
               onClick={handleSubmit(onSubmitForm)}
             >
               Add
