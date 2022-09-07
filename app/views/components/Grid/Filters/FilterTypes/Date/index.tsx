@@ -105,7 +105,7 @@ export const DateFilterType = ({
         fullWidth
         variant="contained"
         color="primary"
-        disabled={!selectedDate}
+        disabled={!selectedOperator}
         onClick={handleApplyFilter}
       >
         Done

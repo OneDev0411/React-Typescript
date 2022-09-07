@@ -2,10 +2,11 @@ import { size } from 'lodash'
 
 import { IAttributeDefsState } from '@app/reducers/contacts/attributeDefs'
 
-import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID } from '../../../constants'
-import { getAttributeFilter } from '../get-attribute-filter'
-import getFlowFilter from '../get-flow-filter'
-import getOpenHouseFilter from '../get-open-house-filter'
+import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID } from '../../constants'
+
+import { getAttributeFilter } from './get-attribute-filter'
+import getFlowFilter from './get-flow-filter'
+import getOpenHouseFilter from './get-open-house-filter'
 
 type MetaData = {
   activeFilters?: any
@@ -23,13 +24,6 @@ const createFiltersFromSegment = (
   const attributeFilters = (segment.filters || []).map(filter =>
     getAttributeFilter(filter, attributeDefs.byId[filter.attribute_def!])
   )
-
-  console.log('createFiltersFromSegment', {
-    activeFilters,
-    attributeDefs,
-    fff: segment.filters,
-    attributeFilters
-  })
 
   const { flows, crm_tasks } = segment.args || { flows: [], crm_tasks: [] }
 

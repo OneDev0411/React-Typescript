@@ -1,3 +1,8 @@
+import fecha from 'fecha'
+
+import { convertTimestampToDate } from '@app/utils/date-utils'
+import { getDateValues } from '@app/views/components/inline-editable-fields/InlineDateField/helpers'
+
 import { ORIGINS } from '../../../constants'
 
 const payloadGenerator = (value: any, label: string) => [
@@ -6,12 +11,17 @@ const payloadGenerator = (value: any, label: string) => [
     value
   }
 ]
+
 export const getFilterValues = (
   value: any,
   attribute: IContactAttributeDef
-) => {
+): IActiveFilter['values'] => {
   if (attribute.data_type === 'date') {
-    return payloadGenerator('fff', 'fff')
+    const dateValue = getDateValues(value)
+    const dateFormat = dateValue.year ? 'MMM DD, YYYY' : 'MMM DD'
+    const label = fecha.format(convertTimestampToDate(value), dateFormat)
+
+    return payloadGenerator(value, label)
   }
 
   const origins = ORIGINS

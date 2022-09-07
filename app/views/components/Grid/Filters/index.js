@@ -71,6 +71,8 @@ class Filters extends React.Component {
   }
 
   handleCreateFiltersFromSegment = async (segment, activeFilters) => {
+    console.log('handleCreateFiltersFromSegment', { segment })
+
     const filters = this.props.createFiltersFromSegment(segment, {
       activeFilters,
       attributeDefs: this.props.attributeDefs
