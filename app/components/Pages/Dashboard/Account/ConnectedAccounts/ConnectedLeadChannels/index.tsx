@@ -11,7 +11,6 @@ import { TextMiddleTruncate } from '@app/views/components/TextMiddleTruncate'
 
 import ConnectedAccountsLayout from '../ConnectedAccountsLayout'
 
-import { ChangeLeadChannelBrandButton } from './ChangeLeadChannelBrandButton'
 import { ConnectLeadChannelButton } from './ConnectLeadChannelButton'
 import { LeadChannels } from './constants'
 import { DeleteLeadChannelBrandButton } from './DeleteLeadChannelBrandButton'
@@ -122,11 +121,6 @@ export function ConnectedLeadChannels({ className }: Props) {
 
                 <Grid item xs={3}>
                   <Box display="flex" justifyContent="flex-end">
-                    <ChangeLeadChannelBrandButton
-                      channel={channel}
-                      activeBrandId={activeBrand?.id}
-                    />
-
                     <Box ml={1}>
                       <DeleteLeadChannelBrandButton
                         channel={channel}
