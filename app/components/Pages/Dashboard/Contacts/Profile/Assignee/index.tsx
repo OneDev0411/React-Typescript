@@ -20,9 +20,9 @@ import { useDispatch } from 'react-redux'
 import { IContactAttributeDef, INormalizedContact } from 'types/Contact'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
+import { useActiveBrand } from '@app/hooks/brand'
 import { addAssignee } from '@app/models/assignees/add-assignee'
 import { confirmation } from '@app/store_actions/confirmation'
-import { SingleEmailComposeDrawer } from '@app/views/components/EmailCompose'
 import { muiIconSizes } from '@app/views/components/SvgIcons'
 import TeamAgents from '@app/views/components/TeamAgents'
 import { BrandedUser } from '@app/views/components/TeamAgents/types'
@@ -94,6 +94,7 @@ const useStyles = makeStyles(
 const Assignee = ({ contact, submitCallback }: Props) => {
   const dispatch = useDispatch()
   const classes = useStyles()
+  const activeBrand = useActiveBrand()
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLButtonElement>>(null)
   const [selectedAgent, setSelectedAgents] = useState<BrandedUser[]>(
     [] as BrandedUser[]
@@ -117,45 +118,52 @@ const Assignee = ({ contact, submitCallback }: Props) => {
   }
 
   const handleSelectAgent = async (user: BrandedUser) => {
-    let oldAssignees = []
+    if (activeBrand.id === contact.brand) {
+      let oldAssignees = []
 
-    if (contact.assignees) {
-      contact.assignees.map(assignee => {
-        oldAssignees.push({
-          user: assignee?.user?.id,
-          brand: assignee?.brand?.id
+      if (contact.assignees) {
+        contact.assignees.map(assignee => {
+          oldAssignees.push({
+            user: assignee?.user?.id,
+            brand: assignee?.brand?.id
+          })
         })
-      })
-    }
-
-    try {
-      if (user) {
-        const data = await addAssignee(contact.id, {
-          assignees: [...oldAssignees, { brand: user.brand_id, user: user.id }]
-        })
-
-        setCurrentAgent(user)
-        setShowEmailDialog(true)
-        setSelectedAgents(data.references.user)
-        submitCallback(data?.data, data?.data)
-        handleClose()
       }
-    } catch (err) {
-      console.error(err)
+
+      try {
+        if (user) {
+          const data = await addAssignee(contact.id, {
+            assignees: [
+              ...oldAssignees,
+              { brand: user.brand_id, user: user.id }
+            ]
+          })
+
+          setCurrentAgent(user)
+          setShowEmailDialog(true)
+          setSelectedAgents(data.references.user)
+          submitCallback(data?.data, data?.data)
+          handleClose()
+        }
+      } catch (err) {
+        console.error(err)
+      }
     }
   }
   const handleDelete = (id: UUID) => {
-    dispatch(
-      confirmation({
-        message: 'Delete Assignee',
-        description: 'Are your sure about deleting this Assignee?',
-        confirmLabel: 'Yes, I do',
-        appearance: 'danger',
-        onConfirm: () => {
-          deleteAssignee(id)
-        }
-      })
-    )
+    if (activeBrand.id === contact.brand) {
+      dispatch(
+        confirmation({
+          message: 'Delete Assignee',
+          description: 'Are your sure about deleting this Assignee?',
+          confirmLabel: 'Yes, I do',
+          appearance: 'danger',
+          onConfirm: () => {
+            deleteAssignee(id)
+          }
+        })
+      )
+    }
   }
 
   const deleteAssignee = async (id: UUID) => {
