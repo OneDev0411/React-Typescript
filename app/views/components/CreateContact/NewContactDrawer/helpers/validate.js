@@ -15,5 +15,9 @@ export function submitValidate(values) {
     return 'Please fill in any of the contacts profile fields to add your contact.'
   }
 
+  if (Number(values.touch_freq) > 365) {
+    return "The duration of a manage relationship can't be more than 365 days"
+  }
+
   return ''
 }

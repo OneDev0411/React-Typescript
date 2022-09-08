@@ -6,11 +6,9 @@ import PropTypes from 'prop-types'
 import { Form } from 'react-final-form'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 import { getContactsTags } from '@app/store_actions/contacts'
 import { TextField } from 'components/final-form-fields'
-import { MaskedInput } from 'components/MaskedInput'
 import { addNotification as notify } from 'components/notification'
 import Drawer from 'components/OverlayDrawer'
 import { createContacts } from 'models/contacts/create-contacts'
@@ -25,14 +23,6 @@ import { generateInitialValues } from './helpers/generate-initial-values'
 import { Owner } from './Owner'
 import { Phones } from './Phones'
 import { Tags } from './Tags'
-
-const numberMask = createNumberMask({
-  prefix: '',
-  includeThousandsSeparator: false,
-  allowNegative: false,
-  allowLeadingZeroes: false,
-  allowDecimal: false
-})
 
 const propTypes = {
   isOpen: PropTypes.bool,
@@ -189,9 +179,10 @@ class NewContactDrawer extends React.Component {
                       InputProps={{
                         inputProps: {
                           'aria-label': 'Remind to touch every',
-                          mask: numberMask
-                        },
-                        inputComponent: numberMask ? MaskedInput : undefined
+                          type: 'number',
+                          min: 1,
+                          max: 365
+                        }
                       }}
                     />
                     <Emails
