@@ -123,7 +123,10 @@ export function AddTeamMembersModal({
               name="email"
               rules={{
                 required: isEmailRequired,
-                validate: value => value?.trim().length > 0 && isEmail(value)
+                validate: value =>
+                  isEmailRequired
+                    ? value?.trim().length > 0 && isEmail(value)
+                    : true
               }}
               control={control}
               render={field => (
@@ -329,7 +332,7 @@ export function AddTeamMembersModal({
               disabled={isSaving || !formState.isDirty}
               onClick={handleSubmit(onSubmitForm)}
             >
-              Add
+              {isSaving ? 'Saving...' : 'Add'}
             </Button>
           </Box>
         </Box>
