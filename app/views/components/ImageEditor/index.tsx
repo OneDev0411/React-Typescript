@@ -11,6 +11,7 @@ import {
   ClickAwayListener
 } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
+import cn from 'classnames'
 import Pikaso, { EventListenerCallbackEvent } from 'pikaso'
 
 import type { Filter as ImageFilter } from '@app/hooks/use-image-filters'
@@ -36,12 +37,17 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     editor: {
       border: `1px solid ${theme.palette.action.hover}`,
+      margin: theme.spacing(2),
+      width: 'auto',
       height: '500px',
-      maxHeight: '500px',
-      margin: theme.spacing(2)
+      '&.loading': {
+        position: 'absolute',
+        visibility: 'hidden'
+      }
     },
     dialogContent: {
-      padding: 0
+      padding: 0,
+      overflow: 'hidden'
     },
     saveButton: {
       marginLeft: theme.spacing(1)
@@ -60,9 +66,6 @@ const useStyles = makeStyles(
       '& button': {
         marginRight: theme.spacing(1)
       }
-    },
-    hidden: {
-      display: 'none'
     }
   }),
   {
@@ -89,7 +92,7 @@ export function EditorDialog({
 }: Props) {
   const classes = useStyles()
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
   const [activeAction, setActiveAction] = useState<Actions | null>(null)
   const [isFocused, setIsFocused] = useState(false)
@@ -102,13 +105,13 @@ export function EditorDialog({
   })
 
   const setupEditor = () => {
-    const size = dimensions
-      ? { width: dimensions[0], height: dimensions[1] }
-      : { height: 500 }
+    // TODO: size is disabled to find a workaround for oversize
+    // const size = dimensions
+    //   ? { width: dimensions[0], height: dimensions[1] }
+    //   : { height: 500 }
 
     const editor = new Pikaso({
       container: editorRef.current as HTMLDivElement,
-      ...size,
       selection: {
         keyboard: {
           enabled: false
@@ -222,7 +225,7 @@ export function EditorDialog({
       id="editor-dialog"
       fullWidth
       maxWidth="lg"
-      onEntered={setupEditor}
+      onEntered={() => setTimeout(setupEditor, 500)}
     >
       <DialogTitle>
         <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -257,7 +260,7 @@ export function EditorDialog({
         <ClickAwayListener onClickAway={() => setIsFocused(false)}>
           <div
             ref={editorRef}
-            className={isLoading ? classes.hidden : classes.editor}
+            className={cn(classes.editor, { loading: isLoading })}
             onClick={() => setIsFocused(true)}
           />
         </ClickAwayListener>

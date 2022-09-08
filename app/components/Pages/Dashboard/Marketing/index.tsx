@@ -13,6 +13,7 @@ import { useMarketingCenterCategories } from '@app/hooks/use-marketing-center-ca
 import { useMarketingCenterSections } from '@app/hooks/use-marketing-center-sections'
 import { useMarketingTemplateTypesWithMediums } from '@app/hooks/use-marketing-template-types-with-mediums'
 import useNotify from '@app/hooks/use-notify'
+import { useReplaceQueryParam } from '@app/hooks/use-query-param'
 import {
   hasUserAccessToBrandSettings,
   hasUserAccessToUploadBrandAssets
@@ -87,7 +88,7 @@ export function MarketingLayout({
     setIsMarketingAssetUploadDrawerOpen
   ] = useState<boolean>(false)
 
-  const { params, router, location } = props
+  const { params, location } = props
   const sections = useMarketingCenterSections(params)
 
   const templateTypes = useMemo(() => {
@@ -100,6 +101,8 @@ export function MarketingLayout({
 
   const shouldFetchTemplatesAndAssets =
     !!currentMedium || !!templateTypes.length
+  const [, setTemplateIdQueryParam, removeTemplateIdQueryParam] =
+    useReplaceQueryParam('templateId')
 
   const {
     templates,
@@ -152,15 +155,8 @@ export function MarketingLayout({
   const onSelectTemplate = (
     template: IBrandMarketingTemplate | IMarketingTemplateInstance | IBrandAsset
   ) => {
-    const newQuery = { ...location.query }
-
     if (!template || (template && isTemplateInstance(template))) {
-      delete newQuery.templateId
-
-      router.replace({
-        ...location,
-        query: newQuery
-      })
+      removeTemplateIdQueryParam()
 
       return
     }
@@ -170,13 +166,7 @@ export function MarketingLayout({
       : (template as IBrandMarketingTemplate | IMarketingTemplateInstance)
           .template.id
 
-    router.replace({
-      ...location,
-      query: {
-        ...newQuery,
-        templateId
-      }
-    })
+    setTemplateIdQueryParam(templateId)
   }
 
   const handleSelectSearchResult = (result: TemplateTypeWithMedium) => {

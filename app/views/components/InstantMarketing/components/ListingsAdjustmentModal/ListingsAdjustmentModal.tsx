@@ -14,9 +14,9 @@ import {
   XL_MAX_SLIDER_ITEMS_COUNT,
   LG_MAX_SLIDER_ITEMS_COUNT
 } from './constants'
-import { EditAdjustmentModal } from './EditAdjustmentModal'
 import { addAdjustmentToListings, createInitialAdjustments } from './helpers'
 import ListingAdjustmentCard from './ListingAdjustmentCard'
+import { ListingAdjustmentEditModal } from './ListingAdjustmentEditModal'
 import { IListingWithAdjustment, Adjustments, IAdjustment } from './types'
 
 interface Props {
@@ -121,7 +121,7 @@ export function ListingsAdjustmentModal({ listings, onSave, onClose }: Props) {
 
   if (editingMode && selectedListing) {
     return (
-      <EditAdjustmentModal
+      <ListingAdjustmentEditModal
         listing={selectedListing}
         adjustments={adjustments[editingListingId]}
         onChange={onChangeAdjustment}
@@ -207,7 +207,7 @@ export function ListingsAdjustmentModal({ listings, onSave, onClose }: Props) {
         </Swiper>
       </div>
       <ModalFooter>
-        <Button variant="contained" color="primary" onClick={handleSave}>
+        <Button variant="outlined" color="default" onClick={handleSave}>
           Next
         </Button>
       </ModalFooter>

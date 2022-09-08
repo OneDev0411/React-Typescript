@@ -134,7 +134,7 @@ function WebsiteCard({
           <WebsiteCardImage
             className={classes.image}
             src={thumbnail}
-            alt={`${title} website`}
+            alt={title}
           >
             <WebsiteCardActions
               className={classes.actions}

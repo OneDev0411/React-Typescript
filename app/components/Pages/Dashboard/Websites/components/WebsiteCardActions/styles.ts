@@ -5,7 +5,7 @@ export default makeStyles(
     root: {
       display: 'flex',
       justifyContent: 'space-between',
-      padding: theme.spacing(1, 2)
+      padding: theme.spacing(1)
     },
     button: {
       marginRight: theme.spacing(1)

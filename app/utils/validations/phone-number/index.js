@@ -5,7 +5,7 @@ export const isPhoneNumber = async value => {
     return
   }
 
-  const errorMessage = 'Invalid US phone number!'
+  const errorMessage = 'Invalid Phone Number!'
 
   const isValid = await isValidPhoneNumber(value)
 

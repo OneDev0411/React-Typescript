@@ -14,14 +14,12 @@ import {
 } from 'utils/acl'
 import { viewAsEveryoneOnTeam } from 'utils/user-teams'
 
-import asyncComponentLoader from '../../../loader'
 import { isLoadedContactAttrDefs } from '../../../reducers/contacts/attributeDefs'
 import { selectListings } from '../../../reducers/listings'
 import ChatSocket from '../../../services/socket/chat'
 import ContactSocket from '../../../services/socket/contacts'
 import DealSocket from '../../../services/socket/deals'
 import NotificationSocket from '../../../services/socket/Notifications'
-import { getRooms } from '../../../store_actions/chatroom'
 import { getAttributeDefs } from '../../../store_actions/contacts'
 import { getDeals, searchDeals } from '../../../store_actions/deals'
 import { fetchUnreadEmailThreadsCount } from '../../../store_actions/inbox'
@@ -33,10 +31,6 @@ import Intercom from '../../../views/components/Intercom'
 import syncOpenHouseData from '../../helpers/sync-open-house-offline-registers'
 
 import { DashboardLayout } from './DashboardLayout'
-
-const InstantChat = asyncComponentLoader({
-  loader: () => import('./Chatroom/InstantChat')
-})
 
 class Dashboard extends Component {
   UNSAFE_componentWillMount() {
@@ -76,8 +70,6 @@ class Dashboard extends Component {
     this.hasDealsAccess =
       hasUserAccessToDeals(activeTeam) || hasBackOfficeAccess
     this.hasShowingsAccess = hasUserAccessToShowings(activeTeam)
-
-    dispatch(getRooms())
 
     // load deals
     if (
@@ -152,7 +144,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { data, user, rooms, location } = this.props
+    const { data, user, location } = this.props
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
@@ -168,8 +160,6 @@ class Dashboard extends Component {
           {user && !user.email_confirmed && !user.fake_email && (
             <EmailVerificationBanner show email={user.email} />
           )}
-
-          {user && <InstantChat user={user} rooms={rooms} />}
 
           <DashboardLayout>
             {cloneElement(this.props.children, {
