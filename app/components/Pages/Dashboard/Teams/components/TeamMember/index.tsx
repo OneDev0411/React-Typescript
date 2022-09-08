@@ -1,4 +1,4 @@
-import { FlexItem } from 'styled-flex-component'
+import { Box } from '@material-ui/core'
 
 import { BasicMultiSelectDropdown } from 'components/BasicMultiSelectDropdown'
 import { TextWithHighlights } from 'components/TextWithHighlights'
@@ -39,7 +39,7 @@ export function TeamMember({
         name={user.display_name}
         image={user.profile_image_url || ''}
       />
-      <FlexItem grow={1}>
+      <Box flexGrow={1} width="100%">
         <TeamMemberTitle>
           <TextWithHighlights>{user.display_name}</TextWithHighlights>
         </TeamMemberTitle>
@@ -50,7 +50,7 @@ export function TeamMember({
               : user.email}
           </TextWithHighlights>
         </TeamMemberSubTitle>
-      </FlexItem>
+      </Box>
       {user.is_shadow ? (
         <InviteButton team={team} user={user} userRoles={userRoles} />
       ) : (
