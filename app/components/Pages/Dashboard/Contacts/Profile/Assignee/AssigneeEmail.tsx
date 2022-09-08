@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { SingleEmailComposeDrawer } from '@app/views/components/EmailCompose'
 
 type assigneeEmailProps = {
@@ -17,11 +15,12 @@ const AssigneeEmail = ({
   currentAgentName,
   contactName
 }: assigneeEmailProps) => {
+  console.log(currentAgentEmail)
+
   return (
     <SingleEmailComposeDrawer
       isOpen={isOpen}
       onClose={onClose}
-      emailId={currentAgentEmail}
       initialValues={{
         subject: 'Would you refer me to friend or family member?',
         to: [
