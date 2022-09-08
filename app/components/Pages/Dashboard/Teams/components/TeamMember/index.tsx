@@ -44,7 +44,11 @@ export function TeamMember({
           <TextWithHighlights>{user.display_name}</TextWithHighlights>
         </TeamMemberTitle>
         <TeamMemberSubTitle>
-          <TextWithHighlights>{user.email}</TextWithHighlights>
+          <TextWithHighlights>
+            {user.fake_email || user.email.trim() === user.display_name.trim()
+              ? ''
+              : user.email}
+          </TextWithHighlights>
         </TeamMemberSubTitle>
       </FlexItem>
       {user.is_shadow ? (
