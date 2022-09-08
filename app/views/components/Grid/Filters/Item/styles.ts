@@ -4,7 +4,7 @@ export const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       position: 'relative',
-      marginRight: theme.spacing(1)
+      margin: theme.spacing(0.5, 1, 0.5, 0)
     },
     content: {
       position: 'absolute',

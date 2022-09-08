@@ -32,6 +32,7 @@ const FiltersContainer = styled.div`
   display: flex;
   align-items: center;
   flex-grow: 1;
+  flex-wrap: wrap;
 `
 const FiltersOptions = styled.div`
   > * {
@@ -71,8 +72,6 @@ class Filters extends React.Component {
   }
 
   handleCreateFiltersFromSegment = async (segment, activeFilters) => {
-    console.log('handleCreateFiltersFromSegment', { segment })
-
     const filters = this.props.createFiltersFromSegment(segment, {
       activeFilters,
       attributeDefs: this.props.attributeDefs
