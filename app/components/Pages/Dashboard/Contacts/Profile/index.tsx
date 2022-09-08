@@ -113,14 +113,6 @@ const useStyles = makeStyles(
   in hopes of taking care of the other improvements in future
 */
 
-const DocumentTitle = ({ contact }) => {
-  const title = contact?.display_name || ''
-
-  useTitle(title ? `${title} | Contacts | Rechat` : 'Contact | Rechat')
-
-  return null
-}
-
 const ContactProfile = props => {
   useGetGlobalTriggers()
 
@@ -303,6 +295,18 @@ const ContactProfile = props => {
     [props.allConnectedAccounts, timelineRef]
   )
 
+  /**
+   * Web page (document) title
+   * @returns {String} Title
+   */
+  const documentTitle = () => {
+    const title = contact?.display_name || ''
+
+    return title ? `${title} | Contacts | Rechat` : 'Contact | Rechat'
+  }
+
+  useTitle(documentTitle())
+
   const onChangeOwner = async item => {
     if (!contact) {
       return
@@ -445,7 +449,6 @@ const ContactProfile = props => {
 
   return (
     <>
-      <DocumentTitle contact={contact} />
       <PageLayout gutter={0}>
         <div className={classes.header}>
           <Header

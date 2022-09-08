@@ -117,14 +117,6 @@ interface Props {
   }
 }
 
-const DocumentTitle = ({ item }) => {
-  useTitle(
-    `${item.subject ? `${item.subject} | ` : ''}Marketing Insights | Rechat`
-  )
-
-  return null
-}
-
 function Insight({ location, params: { id } }: Props & WithRouterProps) {
   const [sortField, setSortField] = useState<SortFieldType>({
     label: 'Most Opened',
@@ -135,6 +127,14 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
   const { item, isLoading, reload } = useItemData(id)
   const [emailPreview, setEmailPreview] =
     useState<IEmail<IEmailOptionalFields> | null>(null)
+
+  const documentTitle = () => {
+    return item && item.subject
+      ? `${item.subject} | Marketing Insights | Rechat`
+      : 'Marketing Insights | Rechat'
+  }
+
+  useTitle(documentTitle())
 
   const dispatch = useDispatch()
 
@@ -263,7 +263,6 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
 
   return (
     <>
-      {item && <DocumentTitle item={item} />}
       <div className={classes.pageContainer}>
         <Header
           backUrl={location.query?.backUrl ?? '/dashboard/insights'}
