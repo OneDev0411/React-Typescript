@@ -23,7 +23,7 @@ export function useBrandAssets(
   options: Options = {},
   enabled: boolean = true
 ): UseBrandAssets {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(enabled)
   const [assets, setAssets] = useState<IBrandAsset[]>([])
 
   const fetchAssets = async () => {

@@ -72,6 +72,7 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
         ) as IMarketingTemplateType[]
 
         setCategories(loadedCategories)
+        setSelectedTab(loadedCategories[0])
       } catch (e) {
         // use template types as a plan B when we can load accurate categories list
         setCategories(pickerProps.templateTypes)
