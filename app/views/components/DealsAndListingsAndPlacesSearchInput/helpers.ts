@@ -62,3 +62,11 @@ export async function searchDealsAndListingsAndPlaces(
 
   return result
 }
+
+export const sortOptionsBySearchTypesList = (
+  a: SearchResult,
+  b: SearchResult,
+  searchTypes: SearchResultType[]
+): number => {
+  return searchTypes.indexOf(a.type) - searchTypes.indexOf(b.type)
+}

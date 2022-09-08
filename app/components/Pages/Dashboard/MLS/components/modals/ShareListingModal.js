@@ -14,8 +14,6 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 
-import Chatroom from '@app/components/Pages/Dashboard/Chatroom/Util/chatroom'
-
 import createRecommendation from '../../../../../../models/recommendation/create-recs'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
 import { hasRecipients } from '../../../../../../utils/helpers'
@@ -108,7 +106,6 @@ export default compose(
                 onHide()
                 setSuccessModalIsActive(true)
                 setTimeout(() => setSuccessModalIsActive(false), 2000)
-                Chatroom.openChat(room)
               }
             })
             .catch(() => {

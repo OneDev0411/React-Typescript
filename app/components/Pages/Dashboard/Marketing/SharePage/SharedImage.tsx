@@ -46,10 +46,10 @@ export default function SharedImage({ url }: SharedMediaProps) {
         <img className={classes.previewImage} alt="preview" src={url} />
       </div>
       <ol>
-        <li>Press and hold on the image above.</li>
-        <li>Select share option from the pop up menu.</li>
+        <li>Press and hold on the image/video above.</li>
+        <li>Select the share option from the popup menu.</li>
         <li>
-          Select Facebook, Instagram or another app to share the image to.
+          Select Facebook, Instagram, or another app to share the image/video.
         </li>
       </ol>
     </div>
