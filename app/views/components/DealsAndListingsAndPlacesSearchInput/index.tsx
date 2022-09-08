@@ -32,7 +32,10 @@ import { IAppState } from 'reducers'
 import { selectDealsList } from 'selectors/deals'
 import { addressTitle, getListingFullAddress } from 'utils/listing'
 
-import { searchDealsAndListingsAndPlaces } from './helpers'
+import {
+  searchDealsAndListingsAndPlaces,
+  sortOptionsBySearchTypesList
+} from './helpers'
 import ListingStatus from './ListingStatus'
 import { SearchResult, SearchResultType } from './types'
 
@@ -150,7 +153,11 @@ export default function DealsAndListingsAndPlacesSearchInput({
           inputValue
         )
 
-        setOptions(fetchedOptions)
+        const sortedOptions = fetchedOptions.sort((a, b) =>
+          sortOptionsBySearchTypesList(a, b, searchTypes)
+        )
+
+        setOptions(sortedOptions)
       } catch (error) {
         console.error(
           'Something went wrong while searching for place or listing',
