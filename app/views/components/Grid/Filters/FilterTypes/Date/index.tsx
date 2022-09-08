@@ -4,13 +4,17 @@ import {
   Theme,
   Radio,
   Button,
+  Typography,
   RadioGroup,
   makeStyles,
   FormControlLabel
 } from '@material-ui/core'
 
 import { DateField } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/EditMode/Value/fields'
-import { Values as DateFieldType } from '@app/utils/validations/date-field'
+import {
+  validateDateField,
+  Values as DateFieldType
+} from '@app/utils/validations/date-field'
 import { getDateValues } from '@app/views/components/inline-editable-fields/InlineDateField/helpers'
 
 import { operators, operatorsWithNoValue } from './constant'
@@ -32,6 +36,9 @@ const useStyles = makeStyles(
       marginBottom: theme.spacing(1),
       borderBottom: 0,
       ...theme.typography.subtitle2
+    },
+    error: {
+      marginBottom: theme.spacing(1)
     }
   }),
   { name: 'DateFilterType' }
@@ -43,6 +50,7 @@ export const DateFilterType = ({
   onToggleFilterActive
 }: IFilterConfigRenderer) => {
   const classes = useStyles()
+  const [error, setError] = useState<string>('')
   const [selectedOperator, setSelectedOperator] = useState<string>(() => {
     return (
       operator?.name ?? operators.find(operator => operator.default)?.name ?? ''
@@ -59,6 +67,10 @@ export const DateFilterType = ({
   )
 
   const handleDateChange = (date: DateFieldType) => {
+    if (error) {
+      setError('')
+    }
+
     setSelectedDate(date)
   }
 
@@ -69,11 +81,22 @@ export const DateFilterType = ({
   const handleApplyFilter = () => {
     const currentOperator = operators.find(i => i.name === selectedOperator)
 
-    if (!currentOperator || !selectedDate) {
+    if (!currentOperator) {
       return
     }
 
-    const payload = generatePayload(selectedDate, currentOperator)
+    const shouldValidateValue = !operatorsWithNoValue.includes(
+      currentOperator.name
+    )
+    const validateResult = shouldValidateValue
+      ? validateDateField(getDateValues(selectedDate))
+      : ''
+
+    if (validateResult) {
+      return setError(validateResult)
+    }
+
+    const payload = generatePayload(selectedDate!, currentOperator)
 
     onFilterChange(payload, currentOperator)
     onToggleFilterActive()
@@ -101,11 +124,16 @@ export const DateFilterType = ({
           </div>
         ))}
       </RadioGroup>
+      {error && (
+        <Typography color="error" variant="body2" className={classes.error}>
+          {error}
+        </Typography>
+      )}
       <Button
         fullWidth
         variant="contained"
         color="primary"
-        disabled={!selectedOperator}
+        disabled={!!(!selectedOperator || error)}
         onClick={handleApplyFilter}
       >
         Done
