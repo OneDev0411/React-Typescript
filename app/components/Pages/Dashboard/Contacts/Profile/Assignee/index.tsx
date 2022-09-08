@@ -33,6 +33,8 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { BasicSection } from '../components/Section/Basic'
 import { SectionButton } from '../components/Section/Button'
 
+import AssigneeEmail from './AssigneeEmail'
+
 interface Props {
   contact: INormalizedContact
   submitCallback: (
@@ -49,7 +51,7 @@ const useStyles = makeStyles(
     popoverContainer: {
       width: '500px',
       height: '300px',
-      maxHeight: '300px'
+      padding: theme.spacing(1)
     },
     actionContainer: {
       display: 'flex',
@@ -57,8 +59,7 @@ const useStyles = makeStyles(
       background: theme.palette.background.paper,
       padding: theme.spacing(0.5),
       borderRadius: theme.shape.borderRadius,
-      boxShadow:
-        '0px 0px 8px rgba(0, 0, 0, 0.25), 0px 16px 16px -8px rgba(0, 0, 0, 0.25)'
+      boxShadow: theme.shadows[4]
     },
     action: {
       padding: theme.spacing(0, 2),
@@ -87,22 +88,25 @@ const useStyles = makeStyles(
       display: 'flex'
     }
   }),
-  { name: 'InlineEditFieldViewMode' }
+  { name: 'ContactAssigneeModal' }
 )
 
 const Assignee = ({ contact, submitCallback }: Props) => {
   const dispatch = useDispatch()
   const classes = useStyles()
-  // Need To Find how this submit callback works
-  // Then Refect the Contact after adding the assignee
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLButtonElement>>(null)
   const [selectedAgent, setSelectedAgents] = useState<BrandedUser[]>(
     [] as BrandedUser[]
   )
   const [currentAgent, setCurrentAgent] = useState<Nullable<BrandedUser>>(null)
-  const [showActionId, setShowActionId] = useState<Nullable<UUID>>('')
+  const [showActionId, setShowActionId] = useState<Nullable<UUID>>(null)
   const [showEmailDialog, setShowEmailDialog] = useState<boolean>(false)
   const [showEmailDrawer, setShowEmailDrawer] = useState<boolean>(false)
+  const [searchCriteria, setSearchCriteria] = useState<string>('')
+  const [debouncedSetSearchCriteria] = useDebouncedCallback(
+    setSearchCriteria,
+    500
+  )
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -111,11 +115,6 @@ const Assignee = ({ contact, submitCallback }: Props) => {
   const handleClose = () => {
     setAnchorEl(null)
   }
-  const [searchCriteria, setSearchCriteria] = useState<string>('')
-  const [debouncedSetSearchCriteria] = useDebouncedCallback(
-    setSearchCriteria,
-    500
-  )
 
   const handleSelectAgent = async (user: BrandedUser) => {
     let oldAssignees = []
@@ -129,18 +128,20 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       })
     }
 
-    if (user) {
-      const data = await addAssignee(contact.id, {
-        assignees: [...oldAssignees, { brand: user.brand_id, user: user.id }]
-      })
+    try {
+      if (user) {
+        const data = await addAssignee(contact.id, {
+          assignees: [...oldAssignees, { brand: user.brand_id, user: user.id }]
+        })
 
-      if (data.code === 'OK') {
         setCurrentAgent(user)
         setShowEmailDialog(true)
         setSelectedAgents(data.references.user)
         submitCallback(data?.data, data?.data)
         handleClose()
       }
+    } catch (err) {
+      console.error(err)
     }
   }
   const handleDelete = (id: UUID) => {
@@ -159,27 +160,29 @@ const Assignee = ({ contact, submitCallback }: Props) => {
 
   const deleteAssignee = async (id: UUID) => {
     if (contact.assignees) {
-      let RemovedAssignees = contact?.assignees?.filter(
+      let removedAssignees = contact?.assignees?.filter(
         assignee => assignee.id !== id
       )
 
       let newAssignees = []
 
-      RemovedAssignees.map(assignee => {
+      removedAssignees.map(assignee => {
         newAssignees.push({
           user: assignee?.user?.id,
           brand: assignee?.brand?.id
         })
       })
 
-      const data = await addAssignee(contact.id, {
-        assignees: newAssignees
-      })
+      try {
+        const data = await addAssignee(contact.id, {
+          assignees: newAssignees
+        })
 
-      if (data.code === 'OK') {
         setSelectedAgents(data.references.user)
         submitCallback(data?.data, data?.data)
         setShowActionId(null)
+      } catch (err) {
+        console.error(err)
       }
     }
   }
@@ -192,7 +195,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       <Dialog fullWidth maxWidth="xs" open={showEmailDialog}>
         <DialogContent className={classes.dialogContainer}>
           <Typography variant="h6" component="h1">
-            {currentAgent?.display_name} is notified about
+            {currentAgent?.display_name} is notified about{' '}
             {contact?.display_name}
           </Typography>
           <Typography variant="body1" gutterBottom>
@@ -214,32 +217,12 @@ const Assignee = ({ contact, submitCallback }: Props) => {
         </DialogActions>
       </Dialog>
       {contact && currentAgent && currentAgent.email && (
-        <SingleEmailComposeDrawer
+        <AssigneeEmail
           isOpen={showEmailDrawer}
           onClose={() => setShowEmailDrawer(false)}
-          emailId={currentAgent?.email}
-          initialValues={{
-            subject: 'Would you refer me to friend or family member?',
-            to: [
-              {
-                email: `${currentAgent.display_name} <${currentAgent.email}>`,
-                recipient_type: 'Email'
-              }
-            ],
-            body: `Hi ${currentAgent?.display_name},
-          Can you help me out?
-          As I so often turn to you for advice when it comes to my business, I'd love if you could help in finding me some new Clients.
-  
-          If you could refer anyone in your network that you think would benefit from my help or services, please send them my way.
-
-          I know your good word goes a long way with these things, and because of your insight on my business, you know what a qualified client looks like for me!
-
-          I appreciate it!
-
-          Cheers,
-          ${contact?.display_name}
-          `
-          }}
+          currentAgentEmail={currentAgent.email}
+          currentAgentName={currentAgent.display_name}
+          contactName={contact.display_name}
         />
       )}
 

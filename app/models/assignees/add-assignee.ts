@@ -18,9 +18,13 @@ export async function addAssignee(
   try {
     const response = await new Fetch()
       .put(`/contacts/${id}/assignees`)
-      .query({ 'associations[]': 'contact_role.user' })
-      .query({ 'associations[]': 'contact_role.brand' })
-      .query({ 'associations[]': 'contact.assignees' })
+      .query({
+        associations: [
+          'contact_role.user',
+          'contact_role.brand',
+          'contact.assignees'
+        ]
+      })
       .send(data)
 
     return response.body
