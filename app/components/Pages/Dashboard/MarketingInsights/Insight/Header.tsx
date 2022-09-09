@@ -2,9 +2,8 @@ import React from 'react'
 
 import { Button } from '@material-ui/core'
 
+import { TextMiddleTruncate } from '@app/views/components/TextMiddleTruncate'
 import PageHeader from 'components/PageHeader'
-
-import { truncateString } from '../List/helpers'
 
 import Menu from './Menu'
 
@@ -24,7 +23,9 @@ function Header({
   return (
     <PageHeader isFlat style={{ padding: '1.5em 0 0', marginBottom: 0 }}>
       <PageHeader.Title showBackButton={false}>
-        <PageHeader.Heading>{truncateString(title)}</PageHeader.Heading>
+        <PageHeader.Heading>
+          <TextMiddleTruncate text={title} maxLength={80} />
+        </PageHeader.Heading>
       </PageHeader.Title>
       <PageHeader.Menu>
         <Button

@@ -1,8 +1,6 @@
 import _ from 'underscore'
 
 import NotificationService from '..'
-// eslint-disable-next-line import/no-cycle
-import Chatroom from '../../../components/Pages/Dashboard/Chatroom/Util/chatroom'
 import {
   fetchAndCreateExistingRoom,
   addMembersToRoom,
@@ -162,11 +160,6 @@ export default class ChatNotification extends NotificationService {
       if (shouldUpdateRoomNotifications) {
         this.updateRoomNotifications(roomId, message)
       }
-
-      // open chat popup but make it inactive
-      if (!this.isRouterMode() && !isDealTaskRoom && !chatroom.popups[roomId]) {
-        Chatroom.openChat(roomId, false)
-      }
     }
   }
 
@@ -194,18 +187,6 @@ export default class ChatNotification extends NotificationService {
 
     // play sound
     ChatNotification.playSound()
-
-    // send browser notification if tab is not active
-    this.sendBrowserNotification(
-      {
-        title: `New message from ${message.author.display_name}`,
-        image: message.author.profile_image_url,
-        body: message.comment
-      },
-      () => {
-        Chatroom.openChat(roomId)
-      }
-    )
   }
 
   /**
