@@ -42,7 +42,7 @@ export const Filters = () => {
   const [initialFilters, setInitialFilters] =
     useState<Nullable<AlertFilters>>(null)
 
-  const resultsCount = state.result.info?.total || 0
+  const resultsCount = state.result.info?.total
 
   const selectedPropertyType = (
     state.search.filters.property_types as IPropertyType[]

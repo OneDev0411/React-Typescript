@@ -18,19 +18,19 @@ const useStyles = makeStyles(
 
 interface Props {
   data: Section
-  mediums: { [key: string]: IMarketingTemplateMedium[] }
+  categories: IMarketingTemplateCategories
   onClose: () => void
 }
 
-export const SectionMegaMenu = ({ data, mediums, onClose }: Props) => {
+export const SectionMegaMenu = ({ data, categories, onClose }: Props) => {
   const classes = useStyles()
   const { items } = data
 
   const sanitizeMediums = (item: SectionItem) => {
     const mediumKey = Array.isArray(item.value) ? item.title : item.value
 
-    if (mediumKey && mediums[mediumKey]) {
-      return mediums[mediumKey]
+    if (mediumKey && categories[mediumKey]) {
+      return categories[mediumKey]
     }
 
     return []

@@ -111,7 +111,10 @@ export default function WhatsNewInMCSection() {
                           fullWidth
                           variant="contained"
                           className={classes.shareButton}
-                          onClick={() => handleSelectTemplate(template)}
+                          onClick={e => {
+                            e.stopPropagation()
+                            handleSelectTemplate(template)
+                          }}
                         >
                           {isTemplateClicked ? 'Loading' : 'Share'}
                         </Button>

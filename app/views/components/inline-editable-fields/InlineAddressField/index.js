@@ -20,6 +20,7 @@ const propTypes = {
   style: PropTypes.shape(),
   suggestionsStyle: PropTypes.shape(),
   formStyle: PropTypes.shape(),
+  PopoverProps: PropTypes.shape(),
   handleDelete: PropTypes.func,
   handleInputChange: PropTypes.func,
   showDeleteButton: PropTypes.bool,
@@ -265,6 +266,7 @@ export class InlineAddressField extends React.Component {
           isOpen={this.state.isAddressFormOpen}
           address={address}
           formStyle={this.props.formStyle}
+          PopoverProps={this.props.PopoverProps}
           showDeleteButton={this.props.showDeleteButton}
           preSaveFormat={this.props.preSaveFormat}
           postLoadFormat={this.props.postLoadFormat}

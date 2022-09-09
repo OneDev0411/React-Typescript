@@ -1,6 +1,7 @@
 import { useState, useEffect, ComponentProps } from 'react'
 
 import { makeStyles } from '@material-ui/core'
+import { mdiPlayBoxMultipleOutline } from '@mdi/js'
 import { useInView } from 'react-intersection-observer'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
@@ -12,6 +13,8 @@ import {
   getTemplateImageOrVideo,
   isVideoThumb
 } from 'utils/marketing-center/helpers'
+
+import { VideoThumbnail } from '../VideoThumbnail'
 
 const useStyles = makeStyles(
   () => ({
@@ -100,12 +103,10 @@ export function Thumbnail({
     return isVideoThumb(template) ? (
       <div className={classes.videoThumbWrapper} ref={ref}>
         {shouldRender && (
-          <video
-            autoPlay
-            src={thumbnail}
-            muted
-            loop
+          <VideoThumbnail
+            url={thumbnail}
             className={classes.thumb}
+            indicatorIconPath={mdiPlayBoxMultipleOutline}
           />
         )}
       </div>

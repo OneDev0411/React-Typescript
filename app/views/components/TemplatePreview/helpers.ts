@@ -21,6 +21,6 @@ export function getTemplatePreviewRenderData(
 ): TemplateRenderData {
   return {
     getListingUrl: () => '',
-    get: (key: BrandMarketingPaletteKey) => _get(palette, key)
+    get: (key: BrandMarketingPaletteKey) => _get(palette, key) as string
   }
 }

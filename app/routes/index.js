@@ -129,6 +129,27 @@ const AsyncShowingAppointmentFeedback = Load({
     )
 })
 
+const AsyncShowingApprovalAppointmentCancel = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Approval/Cancel' /* webpackChunkName: "showing_approval_appointment_cancel" */
+    )
+})
+
+const AsyncShowingApprovalAppointmentConfirm = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Approval/Confirm' /* webpackChunkName: "showing_approval_appointment_confirm" */
+    )
+})
+
+const AsyncShowingApprovalAppointmentReject = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Approval/Reject' /* webpackChunkName: "showing_approval_appointment_reject" */
+    )
+})
+
 /* ==================================== */
 //  Agent On-boarding Wizard
 /* ==================================== */
@@ -580,18 +601,6 @@ const AsyncSocialPostList = withAcl(
   }),
   [ACL.MARKETING]
 )
-/* ==================================== */
-//  Chatroom
-/* ==================================== */
-
-const AsyncRecents = withSignedInUser(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Chatroom' /* webpackChunkName: "chat" */
-      )
-  })
-)
 
 // Notifications
 const AsyncNotificationsPage = withSignedInUser(
@@ -948,6 +957,19 @@ export default (
         component={AsyncShowingAppointmentFeedback}
       />
 
+      <Route
+        path="showings/appointments/approval/:appointmentToken/cancel"
+        component={AsyncShowingApprovalAppointmentCancel}
+      />
+      <Route
+        path="showings/appointments/approval/:appointmentToken/confirm"
+        component={AsyncShowingApprovalAppointmentConfirm}
+      />
+      <Route
+        path="showings/appointments/approval/:appointmentToken/reject"
+        component={AsyncShowingApprovalAppointmentReject}
+      />
+
       <Route path="mobile" component={AsyncMobile} />
 
       <Route path="widgets" component={WidgetsContainer}>
@@ -1081,10 +1103,6 @@ export default (
         </Route>
 
         <Route path="/dashboard/mls/:id" component={AsyncMLSSinglePage} />
-
-        <Route path="recents(/:roomId)">
-          <IndexRoute component={AsyncRecents} />
-        </Route>
 
         <Route
           path="notifications(/:type/:id)"

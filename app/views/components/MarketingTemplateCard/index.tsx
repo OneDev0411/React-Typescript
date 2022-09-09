@@ -5,7 +5,7 @@ import classNames from 'classnames'
 import { useSelector } from 'react-redux'
 
 import { selectUser } from 'selectors/user'
-import { itemDateText } from 'utils/marketing-center/helpers'
+import { isVideoThumb, itemDateText } from 'utils/marketing-center/helpers'
 import { ClassesProps } from 'utils/ts-utils'
 
 import { marketingTemplateCardStyles } from './styles'
@@ -31,8 +31,8 @@ function MarketingTemplateCard(
   const user = useSelector(selectUser)
   const isInstance = template.type === 'template_instance'
 
-  const handlePreview = e => {
-    if (props.handlePreview && e.target.dataset.card === 'true') {
+  const handlePreview = () => {
+    if (props.handlePreview) {
       props.handlePreview()
     }
   }
@@ -49,10 +49,10 @@ function MarketingTemplateCard(
         className={classNames(classes.card, {
           [classes.cardHasPreview]: !!props.handlePreview,
           [classes.cardLoading]: props.isLoading,
-          [classes.cardWebsite]: props.template.template.medium === 'Website'
+          [classes.cardWebsite]: props.template.template.medium === 'Website',
+          [classes.cardVideo]: isVideoThumb(props.template)
         })}
         onClick={handlePreview}
-        data-card="true"
         data-test="marketing-template"
       >
         <Thumbnail useStaticImage template={template} user={user} />

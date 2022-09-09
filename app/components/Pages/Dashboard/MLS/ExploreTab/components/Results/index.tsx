@@ -213,14 +213,15 @@ export const Results = ({
                   shape="rounded"
                 />
               </Box>
-              {state.result.info && state.result.info.total > QUERY_LIMIT && (
-                <Grid container justifyContent="center">
-                  <Typography variant="caption" component="p">
-                    We only show {QUERY_LIMIT} results for general searches. To
-                    get more specific results please zoom in.
-                  </Typography>
-                </Grid>
-              )}
+              {state.result.info?.total &&
+                state.result.info.total > QUERY_LIMIT && (
+                  <Grid container justifyContent="center">
+                    <Typography variant="caption" component="p">
+                      We only show {QUERY_LIMIT} results for general searches.
+                      To get more specific results please zoom in.
+                    </Typography>
+                  </Grid>
+                )}
             </>
           )}
         </Grid>

@@ -1,5 +1,6 @@
 import getCounties from './get-counties'
 import * as getListings from './get-listings'
+import * as getListingsCount from './get-listings-count'
 import { getMlsAreas } from './get-mls-areas'
 import { getMlsSubAreas } from './get-mls-sub-areas'
 import { getPlace } from './get-place'
@@ -11,6 +12,7 @@ export default {
   getPlace,
   getSchools,
   getListings,
+  getListingsCount,
   getCounties,
   getMlsAreas,
   getMlsSubAreas,

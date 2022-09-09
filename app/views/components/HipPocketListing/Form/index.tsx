@@ -10,6 +10,7 @@ import {
   InputAdornment,
   makeStyles
 } from '@material-ui/core'
+import { Autocomplete } from '@material-ui/lab'
 import { useForm, Controller } from 'react-hook-form'
 
 import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
@@ -30,6 +31,20 @@ import {
 import ImageGallery from './components/ImageGallery'
 import ImageUpload from './components/ImageUpload'
 
+const DEFAULT_STATUS_OPTIONS: IListingStatus[] = [
+  'Active',
+  'Lease',
+  'Coming Soon',
+  'Pending',
+  'Temp Off Market',
+  'Sold',
+  'Leased',
+  'Expired',
+  'Archived',
+  'Cancelled',
+  'Withdrawn'
+]
+
 const useStyles = makeStyles(
   () => ({
     urlTypeSelect: {
@@ -45,6 +60,7 @@ const useStyles = makeStyles(
 
 export default function HipPocketListingForm<T extends HipPocketListingField>({
   disabledFields = [],
+  statusOptions = DEFAULT_STATUS_OPTIONS,
   saveButtonText = 'Save Listing',
   onImageUpload,
   onSave
@@ -57,6 +73,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
         images: [],
         address: '',
         price: undefined,
+        status: undefined,
         lot_size_area: undefined,
         sqft: undefined,
         bedrooms: undefined,
@@ -158,7 +175,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
                     variant: 'outlined',
                     size: 'small'
                   }}
-                  searchTypes={['listing', 'place']}
+                  searchTypes={['place', 'listing']}
                   onInput={address => {
                     onChange(address)
                   }}
@@ -169,7 +186,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
         )}
         <Grid container item direction="row" spacing={2}>
           {isFieldEnabled('price') && (
-            <Grid item xs={12}>
+            <Grid item xs={isFieldEnabled('status') ? 6 : 12}>
               <Controller
                 control={control}
                 name="price"
@@ -186,6 +203,36 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
                 size="small"
                 label="Listing Price"
                 as={<TextField />}
+              />
+            </Grid>
+          )}
+          {isFieldEnabled('status') && (
+            <Grid item xs={isFieldEnabled('price') ? 6 : 12}>
+              <Controller
+                control={control}
+                name="status"
+                fullWidth
+                error={!!errors.status}
+                helperText={errors.status?.message}
+                variant="outlined"
+                size="small"
+                label="Listing status"
+                render={({ onChange, ...props }) => (
+                  <Autocomplete
+                    onChange={(_, data) => onChange(data)}
+                    options={statusOptions}
+                    disableClearable
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        placeholder="Select a status"
+                        variant="outlined"
+                        size="small"
+                      />
+                    )}
+                    {...props}
+                  />
+                )}
               />
             </Grid>
           )}

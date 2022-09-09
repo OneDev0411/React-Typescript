@@ -32,7 +32,10 @@ import { IAppState } from 'reducers'
 import { selectDealsList } from 'selectors/deals'
 import { addressTitle, getListingFullAddress } from 'utils/listing'
 
-import { searchDealsAndListingsAndPlaces } from './helpers'
+import {
+  searchDealsAndListingsAndPlaces,
+  sortOptionsBySearchTypesList
+} from './helpers'
 import ListingStatus from './ListingStatus'
 import { SearchResult, SearchResultType } from './types'
 
@@ -87,6 +90,7 @@ const DEFAULT_TEXT_FIELD_PROPS: TextFieldProps = {
 }
 
 interface Props {
+  initialValue?: string
   textFieldProps?: TextFieldProps
   searchTypes?: SearchResultType[]
   onSelect: (result: SearchResult) => void
@@ -94,12 +98,13 @@ interface Props {
 }
 
 export default function DealsAndListingsAndPlacesSearchInput({
+  initialValue = '',
   textFieldProps = DEFAULT_TEXT_FIELD_PROPS,
   searchTypes = DEFAULT_SEARCH_TYPES,
   onSelect = noop,
   onInput = noop
 }: RequireOnlyOne<Props, 'onSelect' | 'onInput'>) {
-  const [inputValue, setInputValue] = useState<string>('')
+  const [inputValue, setInputValue] = useState<string>(initialValue)
   const classes = useStyles({ inputValue })
   const hasDealSearchType = searchTypes.includes('deal')
 
@@ -148,7 +153,11 @@ export default function DealsAndListingsAndPlacesSearchInput({
           inputValue
         )
 
-        setOptions(fetchedOptions)
+        const sortedOptions = fetchedOptions.sort((a, b) =>
+          sortOptionsBySearchTypesList(a, b, searchTypes)
+        )
+
+        setOptions(sortedOptions)
       } catch (error) {
         console.error(
           'Something went wrong while searching for place or listing',

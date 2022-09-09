@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "93.0.0",
+  "version": "93.0.5",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -83,6 +83,7 @@
     "branch-sdk-rechat": "^2.59.1",
     "buffer": "^6.0.3",
     "calendar-link": "^2.1.1",
+    "canvas": "^2.9.3",
     "chromath": "^0.0.7",
     "classnames": "^2.2.6",
     "cleave.js": "^1.4.10",
@@ -279,7 +280,7 @@
     "webpack-merge": "^5.7.3",
     "webpack-s3-plugin": "^1.2.0-rc.0",
     "xml2js": "^0.4.22",
-    "ytdl-core": "^4.11.0"
+    "ytdl-core": "4.9.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",

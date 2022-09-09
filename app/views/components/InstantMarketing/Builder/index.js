@@ -55,7 +55,10 @@ import {
 } from './Blocks/templateBlocks'
 import { registerWebsiteBlocks, websiteBlocksTraits } from './Blocks/Website'
 import { registerCommands } from './commands'
-import { BASICS_BLOCK_CATEGORY } from './constants'
+import {
+  VIDEO_TEMPLATE_WRAPPER_DEFAULT_HEIGHT,
+  BASICS_BLOCK_CATEGORY
+} from './constants'
 import CreateSuperCampaignButton from './CreateSuperCampaignButton'
 import DeviceManager from './DeviceManager'
 import { addFallbackSrcToImage } from './extensions/add-fallback-src-to-image'
@@ -111,6 +114,7 @@ class Builder extends React.Component {
 
     this.selectedTemplateOptions = null
     this.emailBlocksRegistered = false
+    this.videoToolbarRef = React.createRef(null)
 
     this.keyframe = 0
 
@@ -1332,6 +1336,10 @@ class Builder extends React.Component {
         this.refreshEditor(this.state.selectedTemplate)
       }
     )
+
+    // Reset undo after regenerating the template
+    // https://gitlab.com/rechat/web/-/issues/6586
+    this.editor.UndoManager.clear()
   }
 
   toggleTemplatesColumnVisibility = () => {
@@ -1390,6 +1398,19 @@ class Builder extends React.Component {
       this.selectedTemplate &&
       this.selectedTemplate.variant === SAVED_TEMPLATE_VARIANT
     ) {
+      return false
+    }
+
+    /* 
+       We have a problem loading animate.js file of templates
+       after switching a template inside of the builder so for now
+       I Disabled template list for video templates
+       https://gitlab.com/rechat/web/-/issues/6696#note_1077622822
+
+       TODO: remove this line after fixing this problem
+       https://gitlab.com/rechat/web/-/issues/6729
+    */
+    if (this.isVideoTemplate) {
       return false
     }
 
@@ -1776,13 +1797,24 @@ class Builder extends React.Component {
             <div
               id="grapesjs-canvas"
               ref={ref => (this.grapes = ref)}
-              style={{ position: 'relative' }}
+              style={{
+                position: 'relative',
+                // To fix overlapping problem caused by video toolbar
+                // https://gitlab.com/rechat/web/-/issues/6732
+                paddingBottom:
+                  this.isVideoTemplate && this.videoToolbarRef
+                    ? this.videoToolbarRef?.current?.outerHeight ||
+                      VIDEO_TEMPLATE_WRAPPER_DEFAULT_HEIGHT
+                    : 0
+              }}
             >
               {this.isVideoTemplate &&
                 this.editor &&
                 this.editor.DomComponents.getWrapper().view && (
                   <VideoToolbar
-                    onRef={ref => (this.videoToolbar = ref)}
+                    onRef={ref => {
+                      this.videoToolbarRef = ref
+                    }}
                     editor={this.editor}
                   />
                 )}

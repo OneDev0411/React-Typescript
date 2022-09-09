@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 
-import { useMarketingCenterCategories } from '@app/hooks/use-marketing-center-categories'
-import { useMarketingCenterMediums } from '@app/hooks/use-marketing-center-mediums'
+import { useMarketingCenterSectionItems } from '@app/hooks/use-marketing-center-section-items'
 
 interface TypeWithMedium {
   type: IMarketingTemplateType
@@ -9,27 +8,26 @@ interface TypeWithMedium {
 }
 
 export function useMarketingTemplateTypesWithMediums(
-  templates: IBrandMarketingTemplate[],
-  assets: IBrandAsset[] = []
+  categories: IMarketingTemplateCategories
 ): TypeWithMedium[] {
-  const categories = useMarketingCenterCategories()
+  const sectionItems = useMarketingCenterSectionItems()
 
   const templateTypes = useMemo(() => {
-    const categoriesWithTemplateType = categories.filter(
+    const categoriesWithTemplateType = sectionItems.filter(
       category => !!category.value
     )
 
     return categoriesWithTemplateType.flatMap<IMarketingTemplateType>(
       category => category.value!
     )
-  }, [categories])
-
-  const mediums = useMarketingCenterMediums(templates, assets)
+  }, [sectionItems])
 
   return useMemo(
     () =>
       templateTypes.flatMap(templateType => {
-        const currentTypeMediums = mediums[templateType]
+        const currentTypeMediums = categories[
+          templateType
+        ] as IMarketingTemplateMedium[]
 
         // Only categories with content should be displayed
         if (currentTypeMediums?.length) {
@@ -41,6 +39,6 @@ export function useMarketingTemplateTypesWithMediums(
 
         return []
       }),
-    [mediums, templateTypes]
+    [categories, templateTypes]
   )
 }

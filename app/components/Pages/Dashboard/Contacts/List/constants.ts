@@ -67,7 +67,7 @@ export const ORIGINS = [
   },
   {
     label: 'Zillow',
-    description: 'Created by Zillow',
+    description: 'Imported from Zillow',
     value: 'Zillow'
   }
 ]

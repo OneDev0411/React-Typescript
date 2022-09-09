@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Box, Button } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
+import { AgentsPicker } from '@app/views/components/AgentsPicker'
 import { deleteRole } from 'actions/deals'
 // eslint-disable-next-line import/no-named-as-default
 import DealRole from 'components/DealRole/Form'
@@ -15,8 +16,8 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 
 import { RoleCard } from '../../../components/RoleCard'
-import { AgentsList } from '../../components/AgentsList'
 import { useCreationContext } from '../../context/use-creation-context'
+import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'
 import type { IDealFormRole } from '../../types'
 
 interface Props {
@@ -109,11 +110,13 @@ export function DealCoAgent({
             display: !selectedRole ? 'block' : 'none'
           }}
         >
-          <AgentsList
+          <AgentsPicker
             flattenTeams
             useTeamBrandId
             isPrimaryAgent={false}
-            onSelectRole={setSelectedRole}
+            onSelectAgent={agent =>
+              setSelectedRole(convertUserAgentToRole(agent))
+            }
           />
 
           {!selectedRole && (

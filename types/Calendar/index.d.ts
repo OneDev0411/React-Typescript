@@ -31,6 +31,7 @@ declare type ICalendarEvent<
   all_day: boolean
   end_date: number | string | null // TODO: communicated with Abbas
   timestamp: number
+  sort_timestamp: number
   timestamp_midday: string
   timestamp_readable: string
   title: string

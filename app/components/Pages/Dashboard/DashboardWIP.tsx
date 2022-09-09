@@ -20,7 +20,6 @@ import {
 } from '@app/components/helpers/get-dashboard-access-list'
 import syncOpenHouseData from '@app/components/helpers/sync-open-house-offline-registers'
 import { useLoadUserAndActiveTeam } from '@app/hooks/use-load-user-and-active-team'
-import asyncComponentLoader from '@app/loader'
 import { IAppState } from '@app/reducers'
 import {
   isLoadedContactAttrDefs,
@@ -33,7 +32,6 @@ import ContactSocket from '@app/services/socket/contacts'
 import DealSocket from '@app/services/socket/deals'
 import NotificationSocket from '@app/services/socket/Notifications'
 import ShowingSocket from '@app/services/socket/showings'
-import { getRooms } from '@app/store_actions/chatroom'
 import { getAttributeDefs } from '@app/store_actions/contacts'
 import { getDeals, searchDeals } from '@app/store_actions/deals'
 import { fetchUnreadEmailThreadsCount } from '@app/store_actions/inbox'
@@ -47,10 +45,6 @@ import EmailVerificationBanner from '@app/views/components/EmailVerificationBann
 import Intercom from '@app/views/components/Intercom'
 
 import { DashboardLayout } from './DashboardLayout'
-
-const InstantChat = asyncComponentLoader({
-  loader: () => import('./Chatroom/InstantChat')
-})
 
 // TODO: fix type which is set to unknown
 type DashboardState = {
@@ -120,8 +114,6 @@ export function Dashboard({ params, children, location }: DashboardProps) {
       if (!activeTeam) {
         return
       }
-
-      dispatch(getRooms())
 
       // load deals
       if (
@@ -194,8 +186,6 @@ export function Dashboard({ params, children, location }: DashboardProps) {
         {user && !user.email_confirmed && !user.fake_email && (
           <EmailVerificationBanner show email={user.email} />
         )}
-
-        {user && <InstantChat user={user} />}
 
         <DashboardLayout>
           {cloneElement(children, {

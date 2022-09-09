@@ -149,7 +149,7 @@ function TemplateAction(props) {
     handleTrigger
   ])
 
-  if (isLoadingTemplateInstance) {
+  if (isLoadingTemplateInstance & isTriggered) {
     return (
       <Drawer open>
         <Drawer.Body>
@@ -194,10 +194,18 @@ function TemplateAction(props) {
     )
   }
 
-  const templateType = getTemplateType(props.type, sharedProps.selectedTemplate)
-  const isBirthdaySocial = templateType === 'Birthday' && medium === 'Social'
-
   sharedProps.selectedTemplate = convertToTemplate(sharedProps.selectedTemplate)
+
+  const templateTypeFallback = shouldLoadTemplateInstance
+    ? sharedProps.selectedTemplate.template_type
+    : props.type
+
+  const templateType = getTemplateType(
+    templateTypeFallback || '',
+    sharedProps.selectedTemplate
+  )
+
+  const isBirthdaySocial = templateType === 'Birthday' && medium === 'Social'
 
   // TODO: Refactor this logic as it's not right and it's fragile!
   // There's a "inputs" (inputs: string[]) key inside the template which we should check it for deciding about the flow!
