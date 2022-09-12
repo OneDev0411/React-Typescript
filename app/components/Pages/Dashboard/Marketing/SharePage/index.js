@@ -14,7 +14,7 @@ function Share(props) {
     return window.location.replace(fileUrl)
   }
 
-  return <SharedImage url={fileUrl} />
+  return <SharedImage url={fileUrl} fileType={fileType} />
 }
 
 export default withRouter(Share)
