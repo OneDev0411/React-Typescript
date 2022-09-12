@@ -81,7 +81,7 @@ class EventsList extends Component {
                   <AppendButton
                     onClick={e => {
                       e.preventDefault()
-                      copy(link)
+                      copy(window.location.host + link)
                       this.props.notify({
                         message: 'Link Copied',
                         status: 'success'
