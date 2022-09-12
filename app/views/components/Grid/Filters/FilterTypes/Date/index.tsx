@@ -75,6 +75,10 @@ export const DateFilterType = ({
   }
 
   const handleOperatorChange = event => {
+    if (error) {
+      setError('')
+    }
+
     setSelectedOperator(event.target.value)
   }
 
