@@ -36,7 +36,10 @@ const useStyles = makeStyles(
     tabContainer: {
       width: '100%',
       marginTop: theme.spacing(1),
-      borderBottom: `1px solid ${theme.palette.divider}`
+      borderBottom: `1px solid ${theme.palette.divider}`,
+      '& .MuiTab-root.Mui-selected': {
+        borderBottom: `2px solid ${theme.palette.primary.main}`
+      }
     },
     scroller: {
       position: 'inherit'
@@ -123,7 +126,7 @@ export function PageTabs({
           root: classes.tabContainer,
           scroller: hasMegaMenu ? classes.scroller : ''
         }}
-        TabIndicatorProps={{ children: <div /> }}
+        TabIndicatorProps={{ style: { display: 'none' } }}
       >
         {tabs.map(tab => tab)}
       </Tabs>
@@ -139,7 +142,7 @@ export function PageTabs({
             classes={{
               root: classes.tabContainer
             }}
-            TabIndicatorProps={{ children: <div /> }}
+            TabIndicatorProps={{ style: { display: 'none' } }}
           >
             {actions.map(tab => tab)}
           </Tabs>
