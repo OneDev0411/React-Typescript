@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import {
   List,
@@ -24,8 +24,10 @@ import {
 } from '@mdi/js'
 import { merge } from 'lodash'
 import { useSelector } from 'react-redux'
+import { useDeepCompareEffect } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { useGoogleMapsPlaces } from '@app/hooks/use-google-maps-places'
 import { noop } from '@app/utils/helpers'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { IAppState } from 'reducers'
@@ -132,7 +134,9 @@ export default function DealsAndListingsAndPlacesSearchInput({
     }
   }
 
-  useEffect(() => {
+  useGoogleMapsPlaces()
+
+  useDeepCompareEffect(() => {
     async function fetchListingsAndPlaces() {
       if (inputValue.length === 0) {
         setOptions([])
@@ -179,7 +183,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
         return getListingFullAddress(option.listing)
       case 'place':
       default:
-        return option.place.formatted_address
+        return option.place.description
     }
   }
 
@@ -274,7 +278,10 @@ export default function DealsAndListingsAndPlacesSearchInput({
             <SvgIcon path={mdiMapMarkerOutline} />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary={place.formatted_address} />
+        <ListItemText
+          primary={place.structured_formatting.main_text}
+          secondary={place.structured_formatting.secondary_text}
+        />
       </ListItem>
     )
   }

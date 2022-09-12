@@ -5,7 +5,7 @@ interface BaseSearchResult<T extends SearchResultType> {
 }
 
 export interface PlaceResult extends BaseSearchResult<'place'> {
-  place: google.maps.GeocoderResult
+  place: google.maps.places.AutocompletePrediction
 }
 
 export interface ListingResult extends BaseSearchResult<'listing'> {

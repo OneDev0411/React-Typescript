@@ -1,4 +1,3 @@
-import { getPlaces } from 'models/listings/search/get-places'
 import { searchListings } from 'models/listings/search/search-listings'
 
 import {
@@ -49,7 +48,30 @@ export async function searchDealsAndListingsAndPlaces(
   }
 
   if (hasPlaceSearchType) {
-    const placesResponse = await getPlaces(query)
+    const searchPlaces = (
+      input: string
+    ): Promise<google.maps.places.AutocompletePrediction[]> => {
+      return new Promise(resolve => {
+        const { google } = window
+
+        const service = new google.maps.places.AutocompleteService()
+
+        let request = {
+          input,
+          componentRestrictions: { country: 'us' }
+        }
+
+        service.getPlacePredictions(request, (results, status) => {
+          if (status != google.maps.places.PlacesServiceStatus.OK) {
+            resolve([])
+          } else {
+            resolve(results!)
+          }
+        })
+      })
+    }
+
+    const placesResponse = await searchPlaces(query)
 
     result = [
       ...result,
