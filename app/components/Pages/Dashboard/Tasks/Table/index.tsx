@@ -24,6 +24,14 @@ export const useStyles = makeStyles(
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis'
+      },
+      '& .column.title': {
+        '& .delete-task-button': {
+          visibility: 'hidden'
+        },
+        '&:hover .delete-task-button': {
+          visibility: 'visible'
+        }
       }
     }
   }),
