@@ -52,17 +52,6 @@ function ShowingStepProperty({
       onPropertyChange(result)
       nextStep()
     } else if (result.type === 'place') {
-      console.log({
-        x: addressParser.parseLocation(result.place.description)
-      })
-      console.log({
-        address: {
-          ...normalizePostgressStdaddr(
-            addressParser.parseLocation(result.place.description)
-          ),
-          full: result.place.description
-        }
-      })
       onPropertyChange({
         type: 'place',
         address: {
