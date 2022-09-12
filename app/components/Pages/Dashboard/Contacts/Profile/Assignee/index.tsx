@@ -251,35 +251,39 @@ const Assignee = ({ contact, submitCallback }: Props) => {
                 />
               </ListItemIcon>
               <ListItemText primary={assignee.user?.display_name} />
-              <div
-                className={classes.videoModeActionBar}
-                style={{
-                  visibility:
-                    showActionId === assignee.id ? 'visible' : 'hidden'
-                }}
-              >
-                <div className={classes.actionContainer}>
-                  <div
-                    onClick={() => handleDelete(assignee.id)}
-                    className={classes.action}
-                  >
-                    <SvgIcon
-                      path={mdiTrashCanOutline}
-                      size={muiIconSizes.small}
-                    />
-                    <span className={classes.actionLabel}>Delete</span>
+              {activeBrand.id === contact.brand && (
+                <div
+                  className={classes.videoModeActionBar}
+                  style={{
+                    visibility:
+                      showActionId === assignee.id ? 'visible' : 'hidden'
+                  }}
+                >
+                  <div className={classes.actionContainer}>
+                    <div
+                      onClick={() => handleDelete(assignee.id)}
+                      className={classes.action}
+                    >
+                      <SvgIcon
+                        path={mdiTrashCanOutline}
+                        size={muiIconSizes.small}
+                      />
+                      <span className={classes.actionLabel}>Delete</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </ListItem>
           ))}
         </List>
-        <SectionButton
-          aria-describedby={id}
-          onClick={handleClick}
-          label="Add new assignee"
-          icon={mdiPlus}
-        />
+        {activeBrand.id === contact.brand && (
+          <SectionButton
+            aria-describedby={id}
+            onClick={handleClick}
+            label="Add new assignee"
+            icon={mdiPlus}
+          />
+        )}
         <Popover
           id={id}
           open={open}

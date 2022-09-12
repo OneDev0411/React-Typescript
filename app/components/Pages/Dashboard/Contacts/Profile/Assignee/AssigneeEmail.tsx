@@ -15,8 +15,6 @@ const AssigneeEmail = ({
   currentAgentName,
   contactName
 }: assigneeEmailProps) => {
-  console.log(currentAgentEmail)
-
   return (
     <SingleEmailComposeDrawer
       isOpen={isOpen}
