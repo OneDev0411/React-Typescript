@@ -181,6 +181,8 @@ export default function DealsAndListingsAndPlacesSearchInput({
         return option.deal.title
       case 'listing':
         return getListingFullAddress(option.listing)
+      case 'location':
+        return option.location.formatted_address
       case 'place':
       default:
         return option.place.description
@@ -269,6 +271,21 @@ export default function DealsAndListingsAndPlacesSearchInput({
       )
     }
 
+    if (option.type === 'location') {
+      const location = option.location
+
+      return (
+        <ListItem dense disableGutters component="div">
+          <ListItemAvatar>
+            <Avatar>
+              <SvgIcon path={mdiMapMarkerOutline} />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={location.formatted_address} />
+        </ListItem>
+      )
+    }
+
     const place = option.place
 
     return (
@@ -296,6 +313,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
         return 'Deals'
       case 'listing':
         return 'Listings'
+      case 'location':
       case 'place':
       default:
         return 'Places'

@@ -1,8 +1,10 @@
+import { getPlaces } from '@app/models/listings/search/get-places'
 import { searchListings } from 'models/listings/search/search-listings'
 
 import {
   ListingResult,
   PlaceResult,
+  LocationResult,
   SearchResult,
   DealResult,
   SearchResultType
@@ -16,6 +18,7 @@ export async function searchDealsAndListingsAndPlaces(
   const hasDealSearchType = searchTypes.includes('deal')
   const hasListingSearchType = searchTypes.includes('listing')
   const hasPlaceSearchType = searchTypes.includes('place')
+  const hasLocationSearchType = searchTypes.includes('location')
 
   let result: SearchResult[] = []
 
@@ -78,6 +81,17 @@ export async function searchDealsAndListingsAndPlaces(
       ...placesResponse.slice(0, 10).map<PlaceResult>(place => ({
         type: 'place',
         place
+      }))
+    ]
+    // we can only show one type from location and place
+  } else if (hasLocationSearchType) {
+    const locationResponse = await getPlaces(query)
+
+    result = [
+      ...result,
+      ...locationResponse.slice(0, 10).map<LocationResult>(location => ({
+        type: 'location',
+        location
       }))
     ]
   }

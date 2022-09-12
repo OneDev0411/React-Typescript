@@ -24,7 +24,7 @@ export function openPlacePage(place: google.maps.GeocoderResult): void {
 export function openSearchResultPage(result: SearchResult): void {
   if (result.type === 'listing') {
     openListingPage(result.listing)
-  } else if (result.type === 'place') {
-    openPlacePage(result.place)
+  } else if (result.type === 'location') {
+    openPlacePage(result.location)
   }
 }
