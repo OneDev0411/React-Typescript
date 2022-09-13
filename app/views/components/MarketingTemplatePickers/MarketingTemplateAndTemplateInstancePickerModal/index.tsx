@@ -12,6 +12,7 @@ import {
 
 import { useActiveBrandId } from '@app/hooks/brand'
 import { getBrandMarketingCategories } from '@app/models/brand/get-brand-marketing-categories'
+import { sortAlphabetically } from '@app/utils/helpers'
 import MarketingSearchInput from '@app/views/components/MarketingSearchInput'
 import MarketingTemplateAndTemplateInstancePicker from '@app/views/components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePicker'
 import {
@@ -67,15 +68,15 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
           }
         )
 
-        const loadedCategories = Object.keys(
-          brandMarketingCategories
+        const loadedCategories = Object.keys(brandMarketingCategories).sort(
+          sortAlphabetically
         ) as IMarketingTemplateType[]
 
         setCategories(loadedCategories)
         setSelectedTab(loadedCategories[0])
       } catch (e) {
         // use template types as a plan B when we can load accurate categories list
-        setCategories(pickerProps.templateTypes)
+        setCategories(pickerProps.templateTypes.sort(sortAlphabetically))
         console.log(e)
       }
     }
