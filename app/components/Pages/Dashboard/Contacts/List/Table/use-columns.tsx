@@ -12,7 +12,6 @@ import {
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router'
 
-import { useBreakpoint } from '@app/hooks/use-breakpoint'
 import {
   getAttributeFromSummary,
   updateContactQuery as defaultUpdateContactQuery
@@ -73,7 +72,6 @@ interface Data {
 
 export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
   const classes = useStyles()
-  const breakpoint = useBreakpoint()
   const dispatch = useDispatch()
 
   const handleReloadContact = (contactId: UUID) => {
@@ -103,7 +101,6 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     {
       id: 'email',
       width: '250px',
-      hidden: ['xs'].includes(breakpoint),
       header: () => <HeaderColumn text="Email" iconPath={mdiEmail} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
@@ -130,7 +127,6 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     {
       id: 'tags',
       width: '200px',
-      hidden: ['xs', 'sm'].includes(breakpoint),
       header: () => <HeaderColumn text="Tags" iconPath={mdiTag} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
@@ -148,7 +144,6 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     {
       id: 'last-touch',
       width: '150px',
-      hidden: ['xs'].includes(breakpoint),
       header: () => <HeaderColumn text="Last Touch" iconPath={mdiCalendar} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
@@ -158,7 +153,6 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     },
     {
       id: 'flows',
-      hidden: breakpoint !== 'xl',
       width: '150px',
       header: () => <HeaderColumn text="Flows" iconPath={mdiFlash} />,
       render: ({ row: contact }) => (
@@ -179,7 +173,6 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     {
       id: 'birthday',
       width: '150px',
-      hidden: breakpoint !== 'xl',
       header: () => <HeaderColumn text="Birthday" iconPath={mdiCake} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
@@ -196,7 +189,6 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     },
     {
       id: 'home-anniversary',
-      hidden: breakpoint !== 'xl',
       width: '200px',
       header: () => (
         <HeaderColumn text="Home Anniversary" iconPath={mdiHomeOutline} />
@@ -207,7 +199,6 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     },
     {
       id: 'address',
-      hidden: breakpoint !== 'xl',
       width: '200px',
       header: () => (
         <HeaderColumn text="Address" iconPath={mdiHomeCityOutline} />
