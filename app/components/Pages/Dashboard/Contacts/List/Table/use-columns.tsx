@@ -1,9 +1,11 @@
-import { Typography, makeStyles, Theme } from '@material-ui/core'
+import { Typography, makeStyles, Theme, Tooltip } from '@material-ui/core'
 import {
   mdiCake,
   mdiCalendar,
   mdiEmail,
   mdiFlash,
+  mdiHomeCityOutline,
+  mdiHomeOutline,
   mdiPhone,
   mdiTag
 } from '@mdi/js'
@@ -28,6 +30,7 @@ import { TagsInlineEdit } from './columns-inline-edit/Tags'
 import { BirthdayCell } from './columns/Birthday'
 import { EmailsCell } from './columns/Emails'
 import { FlowsCell } from './columns/Flows'
+import { HomeAnniversary } from './columns/HomeAnniversary'
 import LastTouched from './columns/LastTouched'
 import { PhonesCell } from './columns/Phones'
 import { TagsCell } from './columns/Tags'
@@ -84,6 +87,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
   return [
     {
       id: 'name',
+      width: '250px',
       header: () => <SelectionCount totalRows={totalRows} />,
       render: ({ row: contact }) => (
         <Link
@@ -97,7 +101,22 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       )
     },
     {
+      id: 'email',
+      width: '150px',
+      hidden: ['xs'].includes(breakpoint),
+      header: () => <HeaderColumn text="Email" iconPath={mdiEmail} />,
+      render: ({ row: contact }) => (
+        <div className={classes.cell}>
+          <EmailsCell contact={contact} />
+        </div>
+      ),
+      renderInlineEdit: ({ row: contact }) => (
+        <EmailsInlineEdit contact={contact} callback={handleReloadContact} />
+      )
+    },
+    {
       id: 'tags',
+      width: '200px',
       hidden: ['xs', 'sm'].includes(breakpoint),
       header: () => <HeaderColumn text="Tags" iconPath={mdiTag} />,
       render: ({ row: contact }) => (
@@ -115,6 +134,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     },
     {
       id: 'phone',
+      width: '150px',
       header: () => <HeaderColumn text="Phone" iconPath={mdiPhone} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
@@ -126,20 +146,8 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       )
     },
     {
-      id: 'email',
-      hidden: ['xs'].includes(breakpoint),
-      header: () => <HeaderColumn text="Email" iconPath={mdiEmail} />,
-      render: ({ row: contact }) => (
-        <div className={classes.cell}>
-          <EmailsCell contact={contact} />
-        </div>
-      ),
-      renderInlineEdit: ({ row: contact }) => (
-        <EmailsInlineEdit contact={contact} callback={handleReloadContact} />
-      )
-    },
-    {
       id: 'last-touch',
+      width: '150px',
       hidden: ['xs'].includes(breakpoint),
       header: () => <HeaderColumn text="Last Touch" iconPath={mdiCalendar} />,
       render: ({ row: contact }) => (
@@ -151,6 +159,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     {
       id: 'flows',
       hidden: breakpoint !== 'xl',
+      width: '150px',
       header: () => <HeaderColumn text="Flows" iconPath={mdiFlash} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
@@ -169,6 +178,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     },
     {
       id: 'birthday',
+      width: '150px',
       hidden: breakpoint !== 'xl',
       header: () => <HeaderColumn text="Birthday" iconPath={mdiCake} />,
       render: ({ row: contact }) => (
@@ -183,6 +193,36 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
           close={close}
         />
       )
+    },
+    {
+      id: 'home-anniversary',
+      hidden: breakpoint !== 'xl',
+      width: '200px',
+      header: () => (
+        <HeaderColumn text="Home Anniversary" iconPath={mdiHomeOutline} />
+      ),
+      render: ({ row: contact }) => (
+        <HomeAnniversary contact={contact} className={classes.cell} />
+      )
+    },
+    {
+      id: 'address',
+      hidden: breakpoint !== 'xl',
+      width: '200px',
+      header: () => (
+        <HeaderColumn text="Address" iconPath={mdiHomeCityOutline} />
+      ),
+      render: ({ row: contact }) => {
+        const address = contact.address?.[0].full ?? ''
+
+        return (
+          <div className={classes.cell}>
+            <Tooltip title={address}>
+              <span>{address}</span>
+            </Tooltip>
+          </div>
+        )
+      }
     }
   ]
 }

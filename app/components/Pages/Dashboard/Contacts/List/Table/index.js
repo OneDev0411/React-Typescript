@@ -19,6 +19,10 @@ import { LoadingComponent } from './components/LoadingComponent'
 import { useColumns } from './use-columns'
 
 const useCustomGridStyles = makeStyles(theme => ({
+  tableContainer: {
+    maxWidth: '100%',
+    overflowX: 'auto'
+  },
   row: {
     '& .column:not(.heading)': {
       padding: theme.spacing(0, 1, 0, 2),
@@ -74,54 +78,55 @@ const ContactsList = props => {
   const getColumnProps = () => ({})
 
   return (
-    <>
-      <Table
-        headless={false}
-        rows={props.data}
-        totalRows={props.totalRows}
-        loading={getLoading()}
-        columns={columns}
-        rowSize={5}
-        LoadingStateComponent={LoadingComponent}
-        getTrProps={getRowProps}
-        getTdProps={getColumnProps}
-        selection={{
-          defaultRender: ({ row }) => <Avatar contact={row} />,
-          columnProps: {
-            width: '80px'
-          },
-          showSelectAll: false
-        }}
-        classes={{
-          row: cn(
-            gridClasses.row,
-            customGridClasses.row,
-            gridBorderedClasses.row
-          )
-        }}
-        infiniteScrolling={{
-          onReachEnd: props.onRequestLoadMore,
-          onReachStart: props.onRequestLoadMoreBefore
-        }}
-        TableActions={
-          <TableActions
-            filters={props.filters}
-            isFetching={props.isFetching}
-            totalRowsCount={props.listInfo.total}
-            reloadContacts={props.reloadContacts}
-            onRequestDelete={props.onRequestDelete}
-            activeSegmentId={props.activeSegment?.id ?? ''}
-            handleChangeContactsAttributes={
-              props.handleChangeContactsAttributes
-            }
-          />
-        }
-        EmptyStateComponent={() => (
-          // eslint-disable-next-line max-len
-          <NoSearchResults description="Try typing another name, email, phone or tag." />
-        )}
-      />
-    </>
+    <Table
+      headless={false}
+      rows={props.data}
+      totalRows={props.totalRows}
+      loading={getLoading()}
+      columns={columns}
+      rowSize={5}
+      LoadingStateComponent={LoadingComponent}
+      getTrProps={getRowProps}
+      getTdProps={getColumnProps}
+      selection={{
+        defaultRender: ({ row }) => <Avatar contact={row} />,
+        columnProps: {
+          width: '80px'
+        },
+        showSelectAll: false
+      }}
+      classes={{
+        row: cn(
+          gridClasses.row,
+          gridBorderedClasses.row,
+          customGridClasses.row
+        ),
+        tableContainer: cn(
+          gridClasses.tableContainer,
+          gridBorderedClasses.row,
+          customGridClasses.tableContainer
+        )
+      }}
+      infiniteScrolling={{
+        onReachEnd: props.onRequestLoadMore,
+        onReachStart: props.onRequestLoadMoreBefore
+      }}
+      TableActions={
+        <TableActions
+          filters={props.filters}
+          isFetching={props.isFetching}
+          totalRowsCount={props.listInfo.total}
+          reloadContacts={props.reloadContacts}
+          onRequestDelete={props.onRequestDelete}
+          activeSegmentId={props.activeSegment?.id ?? ''}
+          handleChangeContactsAttributes={props.handleChangeContactsAttributes}
+        />
+      }
+      EmptyStateComponent={() => (
+        // eslint-disable-next-line max-len
+        <NoSearchResults description="Try typing another name, email, phone or tag." />
+      )}
+    />
   )
 }
 
