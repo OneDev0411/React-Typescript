@@ -102,7 +102,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     },
     {
       id: 'email',
-      width: '150px',
+      width: '250px',
       hidden: ['xs'].includes(breakpoint),
       header: () => <HeaderColumn text="Email" iconPath={mdiEmail} />,
       render: ({ row: contact }) => (
@@ -112,6 +112,19 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       ),
       renderInlineEdit: ({ row: contact }) => (
         <EmailsInlineEdit contact={contact} callback={handleReloadContact} />
+      )
+    },
+    {
+      id: 'phone',
+      width: '180px',
+      header: () => <HeaderColumn text="Phone" iconPath={mdiPhone} />,
+      render: ({ row: contact }) => (
+        <div className={classes.cell}>
+          <PhonesCell contact={contact} />
+        </div>
+      ),
+      renderInlineEdit: ({ row: contact }) => (
+        <PhonesInlineEdit contact={contact} callback={handleReloadContact} />
       )
     },
     {
@@ -130,19 +143,6 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
           callback={handleReloadContact}
           close={close}
         />
-      )
-    },
-    {
-      id: 'phone',
-      width: '150px',
-      header: () => <HeaderColumn text="Phone" iconPath={mdiPhone} />,
-      render: ({ row: contact }) => (
-        <div className={classes.cell}>
-          <PhonesCell contact={contact} />
-        </div>
-      ),
-      renderInlineEdit: ({ row: contact }) => (
-        <PhonesInlineEdit contact={contact} callback={handleReloadContact} />
       )
     },
     {
