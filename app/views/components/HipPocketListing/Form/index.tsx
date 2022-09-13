@@ -175,7 +175,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
                     variant: 'outlined',
                     size: 'small'
                   }}
-                  searchTypes={['listing', 'place']}
+                  searchTypes={['place', 'listing']}
                   onInput={address => {
                     onChange(address)
                   }}

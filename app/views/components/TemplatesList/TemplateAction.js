@@ -149,7 +149,7 @@ function TemplateAction(props) {
     handleTrigger
   ])
 
-  if (isLoadingTemplateInstance) {
+  if (isLoadingTemplateInstance & isTriggered) {
     return (
       <Drawer open>
         <Drawer.Body>

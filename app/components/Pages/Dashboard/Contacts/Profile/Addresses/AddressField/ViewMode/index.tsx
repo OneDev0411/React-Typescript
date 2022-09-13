@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: address.id ? theme.palette.grey[600] : theme.palette.text.hint
     }),
     starIcon: {
-      color: theme.palette.grey[600]
+      color: theme.palette.warning.main
     },
     value: ({ address }: Props) => ({
       textAlign: address.id ? 'left' : 'right',
@@ -59,6 +59,7 @@ export function ViewMode(props: Props) {
         <Typography variant="body2" className={classes.label}>
           {label}
         </Typography>
+
         {address.is_primary && address.id && (
           <Tooltip title="Primary Address">
             <SvgIcon

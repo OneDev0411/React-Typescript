@@ -313,7 +313,7 @@ function TemplatesList(props) {
         }}
       />
 
-      {selectedTemplate && !isPreviewModalOpen && (
+      {selectedTemplate && (
         <TemplateAction
           shouldLoadTemplateInstance={props.type === 'history'}
           type={props.type}

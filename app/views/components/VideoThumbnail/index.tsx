@@ -1,6 +1,6 @@
 import { HTMLAttributes, MouseEvent, FocusEvent } from 'react'
 
-import { makeStyles } from '@material-ui/core'
+import { alpha, makeStyles } from '@material-ui/core'
 import { mdiPlay } from '@mdi/js'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -12,14 +12,9 @@ const useStyles = makeStyles(
       position: 'absolute',
       top: theme.spacing(1),
       right: theme.spacing(1),
-      color: theme.palette.common.white,
-      filter: `drop-shadow(0px 0px 3px ${theme.palette.grey[700]})`,
-      zIndex: 3,
-      '& > path': {
-        stroke: 'currentColor',
-        strokeLinejoin: 'round',
-        strokeWidth: 2
-      }
+      color: alpha(theme.palette.common.white, 80),
+      filter: `drop-shadow(0px 0px 5px ${theme.palette.grey[700]})`,
+      zIndex: 3
     }
   }),
   {
@@ -40,11 +35,13 @@ function isPlaying(video: HTMLVideoElement): boolean {
 interface Props extends HTMLAttributes<HTMLVideoElement> {
   url: string
   shouldHideIndicator?: boolean
+  indicatorIconPath?: string
 }
 
 export function VideoThumbnail({
   url,
   shouldHideIndicator = false,
+  indicatorIconPath = mdiPlay,
   ...otherProps
 }: Props) {
   const classes = useStyles()
@@ -78,7 +75,7 @@ export function VideoThumbnail({
     <>
       {!shouldHideIndicator && (
         <SvgIcon
-          path={mdiPlay}
+          path={indicatorIconPath}
           className={classes.indicatorIcon}
           size={muiIconSizes.medium}
         />

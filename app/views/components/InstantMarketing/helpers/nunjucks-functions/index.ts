@@ -28,7 +28,10 @@ export function getListingUrl(
     : `${config.app.url}/dashboard/mls/${listing.id}`
 }
 
-export function get(brand: IBrand, key: BrandMarketingPaletteKey): string {
+export function get(
+  brand: IBrand,
+  key: BrandMarketingPaletteKey
+): BrandMarketingPaletteValue {
   let currentBrand: Nullable<IBrand> = brand
 
   while (currentBrand) {

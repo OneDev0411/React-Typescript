@@ -119,10 +119,7 @@ export default function Upload({
   )
 
   const handleUpdateAsset = useCallback(
-    (updatedAsset: Asset) => {
-      const assetIndex = assets.findIndex(
-        asset => asset.file.url === updatedAsset.file.url
-      )
+    (assetIndex: number, updatedAsset: Asset) => {
       const oldAsset = assets[assetIndex]
       const newAsset = {
         ...oldAsset,
@@ -139,10 +136,10 @@ export default function Upload({
   )
 
   const handleDeleteAsset = useCallback(
-    (asset: Asset) => {
+    (assetIndex: number) => {
       setValue(
         'assets',
-        assets.filter(item => item.file.url !== asset.file.url)
+        assets.filter((_, index) => assetIndex !== index)
       )
     },
     [assets, setValue]
@@ -209,7 +206,8 @@ export default function Upload({
                 return (
                   <AssetItem
                     uploadProgress={currentItemUploadProgress}
-                    key={asset.file.url}
+                    key={index}
+                    assetIndex={index}
                     asset={asset}
                     onDeleteAsset={handleDeleteAsset}
                     onUpdateAsset={handleUpdateAsset}

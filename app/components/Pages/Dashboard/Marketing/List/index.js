@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import { Helmet } from 'react-helmet'
+import { useTitle } from 'react-use'
 
 import TemplatesList from 'components/TemplatesList'
 
@@ -21,11 +21,10 @@ function isGeneratingThumbnails(brandTemplates) {
 }
 
 export const MarketingList = () => {
+  useTitle('Marketing | Rechat')
+
   return (
     <>
-      <Helmet>
-        <title>Marketing | Rechat</title>
-      </Helmet>
       <Layout
         render={({
           items,

@@ -80,7 +80,10 @@ export function MarketingTemplateSelector(props: Props) {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => props.onTemplateSelected(template)}
+                onClick={e => {
+                  e.stopPropagation()
+                  props.onTemplateSelected(template)
+                }}
               >
                 Add
               </Button>

@@ -44,7 +44,9 @@ export default function TemplateCardActions({
     <>
       <div style={handleDelete ? {} : { width: '100%' }}>
         <ActionButton
-          onClick={() => {
+          onClick={e => {
+            e.stopPropagation()
+
             if (handleEdit) {
               handleEdit()
             }
@@ -61,7 +63,8 @@ export default function TemplateCardActions({
             <IconButton
               iconSize="large"
               className={classes.iconButton}
-              onClick={() => {
+              onClick={e => {
+                e.stopPropagation()
                 handleDelete()
               }}
             >
