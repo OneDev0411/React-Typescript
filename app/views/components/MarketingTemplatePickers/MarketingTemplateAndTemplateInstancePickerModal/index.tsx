@@ -70,7 +70,7 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
         )
 
         const loadedCategories = Object.keys(brandMarketingCategories).sort(
-          (a, b) =>
+          (a: IMarketingTemplateType, b: IMarketingTemplateType) =>
             sortAlphabetically(getTemplateTypeLabel(a), getTemplateTypeLabel(b))
         ) as IMarketingTemplateType[]
 
