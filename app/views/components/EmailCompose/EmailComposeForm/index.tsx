@@ -240,41 +240,27 @@ export default function EmailComposeForm<T>({
     }
 
     if (form.cc) {
-      let isInvalid = false
+      if (form?.cc.some(element => !isEmail(element.email))) {
+        dispatch(
+          addNotification({
+            status: 'error',
+            message: 'Invalid CC email address'
+          })
+        )
 
-      form?.cc.forEach(element => {
-        if (!isEmail(element.email)) {
-          isInvalid = true
-          dispatch(
-            addNotification({
-              status: 'error',
-              message: 'Invalid CC email address'
-            })
-          )
-        }
-      })
-
-      if (isInvalid) {
         return null
       }
     }
 
     if (form.bcc) {
-      let isInvalid = false
+      if (form?.bcc.some(element => !isEmail(element.email))) {
+        dispatch(
+          addNotification({
+            status: 'error',
+            message: 'Invalid BCC email address'
+          })
+        )
 
-      form?.bcc.forEach(element => {
-        if (!isEmail(element.email)) {
-          isInvalid = true
-          dispatch(
-            addNotification({
-              status: 'error',
-              message: 'Invalid BCC email address'
-            })
-          )
-        }
-      })
-
-      if (isInvalid) {
         return null
       }
     }
@@ -291,25 +277,6 @@ export default function EmailComposeForm<T>({
         })
       })
     }
-
-    // if (form?.bcc?.length > 0) {
-    //   const isInvalidBCC = form?.bcc.forEach(element => {
-    //     if (!isEmail(element.email)) {
-    //       dispatch(
-    //         addNotification({
-    //           status: 'error',
-    //           message: 'Invalid BCC email address'
-    //         })
-    //       )
-
-    //       return false
-    //     }
-
-    //     return true
-    //   })
-
-    //   return isInvalidBCC
-    // }
 
     return handleSendEmail(form)
   }
