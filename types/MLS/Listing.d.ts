@@ -328,6 +328,11 @@ declare type IListing<Associations extends IListingAssociation = ''> = {
   open_houses: boolean | null
   property: Property
   user_listing_notification_setting: null
+  sub_agency_offered?: string
+  sub_agency_commission?: string
+  transaction_broker_commission?: string
+  compensation_based_on?: string
+  buyers_agency_commission?: string
 } & Association<'proposed_agent', ProposedAgent, Associations> &
   Association<'mls_info', MlsInfo, Associations>
 
