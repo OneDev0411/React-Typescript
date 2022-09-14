@@ -67,6 +67,7 @@ function Notifications({ params }: WithRouterProps) {
         browserHistory.push(`/dashboard/mls/${notification.objects[0].id}`)
         break
       case 'ContactAttributeIsDueContact':
+      case 'UserCapturedContact':
         browserHistory.push(`/dashboard/contacts/${notification.objects[0].id}`)
         break
       case 'DealContextIsDueDeal':

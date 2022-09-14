@@ -5,7 +5,7 @@ import { useDeepCompareEffect } from 'react-use'
 import { deleteBrandTemplate } from 'models/instant-marketing/delete-brand-template'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 
-const ALL_MEDIUMS: IMarketingTemplateMedium[] = [
+export const ALL_MC_MEDIUMS: IMarketingTemplateMedium[] = [
   'Email',
   'Social',
   'Letter',
@@ -26,11 +26,12 @@ interface TemplatesData {
 
 export function useTemplates(
   brandId: Nullable<UUID>,
-  mediums: IMarketingTemplateMedium[] = ALL_MEDIUMS,
-  templateTypes: IMarketingTemplateType[] = []
+  mediums: IMarketingTemplateMedium[] = ALL_MC_MEDIUMS,
+  templateTypes: IMarketingTemplateType[] = [],
+  enabled: boolean = true
 ): TemplatesData {
   const [templates, setTemplates] = useState<IBrandMarketingTemplate[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(enabled)
   const [error, setError] = useState<Error | null>(null)
 
   useDeepCompareEffect(() => {
@@ -60,12 +61,14 @@ export function useTemplates(
       }
     }
 
-    fetchTemplates()
+    if (enabled) {
+      fetchTemplates()
+    }
 
     return () => {
       didCancel = true
     }
-  }, [brandId, mediums, templateTypes])
+  }, [brandId, mediums, templateTypes, enabled])
 
   const deleteTemplate = async (template: IBrandMarketingTemplate) => {
     await deleteBrandTemplate(template.brand, template.id)

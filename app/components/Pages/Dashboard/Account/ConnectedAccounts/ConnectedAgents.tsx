@@ -7,12 +7,11 @@ import {
   Theme,
   makeStyles,
   Typography,
-  Button,
-  Chip
+  Button
 } from '@material-ui/core'
-import cn from 'classnames'
 
 import { useReplaceQueryParam } from '@app/hooks/use-query-param'
+import { StatusChip } from '@app/views/components/StatusChip'
 import { AddMlsAgent } from 'components/AddMlsAgent'
 
 import ConnectedAccountsLayout from './ConnectedAccountsLayout'
@@ -90,15 +89,9 @@ export default function ConnectedAgents({ className, user }: Props) {
                 </div>
 
                 <Box mr={3}>
-                  <Chip
-                    variant="outlined"
-                    size="small"
-                    label={
-                      <Box display="flex" alignItems="center">
-                        <span className={cn(classes.status, agent.status)} />
-                        {agent.status || 'Unknown'}
-                      </Box>
-                    }
+                  <StatusChip
+                    text={agent.status || 'Unknown'}
+                    status={agent.status}
                   />
                 </Box>
               </Box>

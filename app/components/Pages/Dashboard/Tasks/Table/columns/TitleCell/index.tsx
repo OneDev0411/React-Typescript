@@ -1,10 +1,14 @@
 import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 
+import { ITask } from '../../../types'
+import { DeleteCell } from '../DeleteCell'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
       color: 'inherit',
+      width: '100%',
       '&.done': {
         color: theme.palette.grey[400]
       }
@@ -16,20 +20,20 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  title: string
-  status: ICRMTaskStatus
+  task: ITask
 }
 
-export function TitleCell({ title, status }: Props) {
+export function TitleCell({ task }: Props) {
   const classes = useStyles()
 
   return (
     <div
       className={cn(classes.root, 'overflow-ellipsis', {
-        done: status === 'DONE'
+        done: task.status === 'DONE'
       })}
     >
-      {title}
+      <DeleteCell task={task} />
+      {task.title}
     </div>
   )
 }

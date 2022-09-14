@@ -9,16 +9,18 @@ import { TabMarketingSkeleton } from './Skeleton'
 
 interface Props {
   sections: SectionCollection
-  mediums: { [key: string]: IMarketingTemplateMedium[] }
+  categories: IMarketingTemplateCategories
   templateTypes: string
+  isLoading: boolean
   isMyDesignsActive: boolean
   isOverviewActive: boolean
 }
 
 const MarketingTabs = ({
   sections,
-  mediums,
+  categories,
   templateTypes,
+  isLoading,
   isMyDesignsActive,
   isOverviewActive
 }: Props) => {
@@ -54,9 +56,9 @@ const MarketingTabs = ({
     })?.key
   }
 
-  // Do not render menus before getting all mediums
+  // Do not render menus before getting all categories
   // We're doing this to prevent sections/tabs flashing
-  if (Object.keys(mediums).length === 0) {
+  if (isLoading) {
     return <TabMarketingSkeleton />
   }
 
@@ -72,7 +74,7 @@ const MarketingTabs = ({
 
         if (
           currentMegaTabTemplatesMediums.every(
-            item => item && (!mediums[item] || mediums[item].length === 0)
+            item => item && (!categories[item] || categories[item].length === 0)
           )
         ) {
           return null
@@ -98,7 +100,11 @@ const MarketingTabs = ({
             label={section.title}
             data-tour-id={`tab-${section.title?.toLowerCase()}`}
             render={({ close }) => (
-              <MegaMenu data={section} mediums={mediums} onClose={close} />
+              <MegaMenu
+                data={section}
+                categories={categories}
+                onClose={close}
+              />
             )}
           />
         )

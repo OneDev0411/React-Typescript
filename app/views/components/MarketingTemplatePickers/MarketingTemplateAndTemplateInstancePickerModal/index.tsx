@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import {
   Dialog,
@@ -10,6 +10,10 @@ import {
   Typography
 } from '@material-ui/core'
 
+import { useActiveBrandId } from '@app/hooks/brand'
+import { getBrandMarketingCategories } from '@app/models/brand/get-brand-marketing-categories'
+import { sortAlphabetically } from '@app/utils/helpers'
+import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
 import MarketingSearchInput from '@app/views/components/MarketingSearchInput'
 import MarketingTemplateAndTemplateInstancePicker from '@app/views/components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePicker'
 import {
@@ -48,6 +52,43 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
   const [selectedTab, setSelectedTab] =
     useState<Optional<MyDesignsOrTemplateType>>(undefined)
 
+  const activeBrandId = useActiveBrandId()
+  const [categories, setCategories] =
+    useState<Optional<IMarketingTemplateType[]>>(undefined)
+
+  useEffect(() => {
+    // Load accurate (non-empty) categories list
+    async function getCategories() {
+      try {
+        const brandMarketingCategories = await getBrandMarketingCategories(
+          activeBrandId,
+          {
+            mediums: pickerProps.mediums,
+            templateTypes: pickerProps.templateTypes,
+            filter: 'template'
+          }
+        )
+
+        const loadedCategories = Object.keys(brandMarketingCategories).sort(
+          (a: IMarketingTemplateType, b: IMarketingTemplateType) =>
+            sortAlphabetically(getTemplateTypeLabel(a), getTemplateTypeLabel(b))
+        ) as IMarketingTemplateType[]
+
+        setCategories(loadedCategories)
+        setSelectedTab(loadedCategories[0])
+      } catch (e) {
+        // use template types as a plan B when we can load accurate categories list
+        setCategories(
+          pickerProps.templateTypes.sort((a, b) =>
+            sortAlphabetically(getTemplateTypeLabel(a), getTemplateTypeLabel(b))
+          )
+        )
+        console.log(e)
+      }
+    }
+    getCategories()
+  }, [activeBrandId, pickerProps.mediums, pickerProps.templateTypes])
+
   return (
     <Dialog
       open
@@ -65,10 +106,10 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
           <div>
             <Typography variant="h6">{title}</Typography>
           </div>
-          {pickerProps.templateTypes.length > 1 && (
+          {categories && categories.length > 1 && (
             <div className={classes.searchContainer}>
               <MarketingSearchInput
-                types={pickerProps.templateTypes.map(type => ({ type }))}
+                types={categories.map(type => ({ type }))}
                 onSelect={({ type }) => setSelectedTab(type)}
               />
             </div>
@@ -77,6 +118,7 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
       </DialogTitle>
       <DialogContent ref={dialogRef}>
         <MarketingTemplateAndTemplateInstancePicker
+          tabs={categories}
           {...pickerProps}
           selectedTab={selectedTab}
           onSelectTab={setSelectedTab}
