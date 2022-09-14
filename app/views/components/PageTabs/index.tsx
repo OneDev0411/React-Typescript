@@ -36,13 +36,13 @@ const useStyles = makeStyles(
     tabContainer: {
       width: '100%',
       marginTop: theme.spacing(1),
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      '& .MuiTab-root.Mui-selected': {
-        borderBottom: `2px solid ${theme.palette.primary.main}`
-      }
+      borderBottom: `1px solid ${theme.palette.divider}`
     },
     scroller: {
       position: 'inherit'
+    },
+    indicator: {
+      display: 'none'
     }
   }),
   { name: 'PageTabs' }
@@ -117,16 +117,15 @@ export function PageTabs({
     <div className={classes.container} style={containerStyle}>
       <Tabs
         value={value || activeTab || false}
-        indicatorColor="primary"
         textColor="primary"
         variant="scrollable"
         scrollButtons="auto"
         onChange={(e, v) => handleChangeTab(v)}
         classes={{
           root: classes.tabContainer,
-          scroller: hasMegaMenu ? classes.scroller : ''
+          scroller: hasMegaMenu ? classes.scroller : '',
+          indicator: classes.indicator
         }}
-        TabIndicatorProps={{ style: { display: 'none' } }}
       >
         {tabs.map(tab => tab)}
       </Tabs>
@@ -134,15 +133,14 @@ export function PageTabs({
       {actions && (
         <div>
           <Tabs
-            indicatorColor="primary"
             value={actionValue || activeAction || false}
             onChange={(e, v) => handleChangeAction(v)}
             variant="scrollable"
             scrollButtons="auto"
             classes={{
-              root: classes.tabContainer
+              root: classes.tabContainer,
+              indicator: classes.indicator
             }}
-            TabIndicatorProps={{ style: { display: 'none' } }}
           >
             {actions.map(tab => tab)}
           </Tabs>
