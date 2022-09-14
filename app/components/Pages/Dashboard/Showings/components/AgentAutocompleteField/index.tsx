@@ -1,3 +1,4 @@
+import { useUserAgentsMls } from '@app/hooks/use-user-agents-mls'
 import searchAgents from 'models/agent/search'
 
 import AutocompleteField, {
@@ -21,12 +22,14 @@ function AgentAutocompleteField({
   searchFieldLabel = 'full_name',
   ...otherProps
 }: AgentAutocompleteFieldProps) {
+  const userAgentsMls = useUserAgentsMls()
+
   const getOptions = async (value: string) => {
     if (!value || value.length < 3) {
       return []
     }
 
-    const agents = await searchAgents(value, 'q')
+    const agents = await searchAgents({ mls: userAgentsMls, q: value })
 
     return agents.map<AgentOption>(agent => ({
       ...agent,
