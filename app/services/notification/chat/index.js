@@ -101,7 +101,7 @@ export default class ChatNotification extends NotificationService {
     const isDealTaskRoom = !!(
       auxiliary_subject && auxiliary_subject.type === 'deal'
     )
-    const room = chatroom.rooms[roomId]
+    const room = chatroom.rooms?.[roomId]
     let shouldUpdateRoomNotifications = true
 
     // fetch room immediately if room is not exists
