@@ -14,9 +14,9 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import { v4 as uuidv4 } from 'uuid'
 
+import { useMarketingCenterSectionItems } from '@app/hooks/use-marketing-center-section-items'
 import useNotify from '@app/hooks/use-notify'
 import TeamTreeViewDrawer from 'components/TeamTreeView/Drawer'
-import { useMarketingCenterCategories } from 'hooks/use-marketing-center-categories'
 import {
   createTemplate,
   CreateTemplateOptions
@@ -67,7 +67,7 @@ export function AddToMarketingCenterButton({
   const [isTeamsSelectorDrawerOpen, setIsTeamsSelectorDrawerOpen] =
     useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const categories = useMarketingCenterCategories()
+  const sectionItems = useMarketingCenterSectionItems()
   const classes = useStyles()
   const name = uuidv4()
 
@@ -164,7 +164,7 @@ export function AddToMarketingCenterButton({
             <Divider />
           </Box>
           <List disablePadding>
-            {categories.map(category => {
+            {sectionItems.map(category => {
               if (!category.value) {
                 return null
               }
