@@ -1,11 +1,15 @@
-export type SearchResultType = 'place' | 'listing' | 'deal'
+export type SearchResultType = 'place' | 'location' | 'listing' | 'deal'
 
 interface BaseSearchResult<T extends SearchResultType> {
   type: T
 }
 
+export interface LocationResult extends BaseSearchResult<'location'> {
+  location: google.maps.GeocoderResult
+}
+
 export interface PlaceResult extends BaseSearchResult<'place'> {
-  place: google.maps.GeocoderResult
+  place: google.maps.places.AutocompletePrediction
 }
 
 export interface ListingResult extends BaseSearchResult<'listing'> {
@@ -16,4 +20,8 @@ export interface DealResult extends BaseSearchResult<'deal'> {
   deal: IDeal
 }
 
-export type SearchResult = PlaceResult | ListingResult | DealResult
+export type SearchResult =
+  | LocationResult
+  | PlaceResult
+  | ListingResult
+  | DealResult

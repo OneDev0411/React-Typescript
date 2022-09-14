@@ -1,9 +1,10 @@
-import { getPlaces } from 'models/listings/search/get-places'
+import { getPlaces } from '@app/models/listings/search/get-places'
 import { searchListings } from 'models/listings/search/search-listings'
 
 import {
   ListingResult,
   PlaceResult,
+  LocationResult,
   SearchResult,
   DealResult,
   SearchResultType
@@ -17,6 +18,7 @@ export async function searchDealsAndListingsAndPlaces(
   const hasDealSearchType = searchTypes.includes('deal')
   const hasListingSearchType = searchTypes.includes('listing')
   const hasPlaceSearchType = searchTypes.includes('place')
+  const hasLocationSearchType = searchTypes.includes('location')
 
   let result: SearchResult[] = []
 
@@ -49,13 +51,47 @@ export async function searchDealsAndListingsAndPlaces(
   }
 
   if (hasPlaceSearchType) {
-    const placesResponse = await getPlaces(query)
+    const searchPlaces = (
+      input: string
+    ): Promise<google.maps.places.AutocompletePrediction[]> => {
+      return new Promise(resolve => {
+        const { google } = window
+
+        const service = new google.maps.places.AutocompleteService()
+
+        let request = {
+          input,
+          componentRestrictions: { country: 'us' }
+        }
+
+        service.getPlacePredictions(request, (results, status) => {
+          if (status != google.maps.places.PlacesServiceStatus.OK) {
+            resolve([])
+          } else {
+            resolve(results!)
+          }
+        })
+      })
+    }
+
+    const placesResponse = await searchPlaces(query)
 
     result = [
       ...result,
       ...placesResponse.slice(0, 10).map<PlaceResult>(place => ({
         type: 'place',
         place
+      }))
+    ]
+    // we can only show one type from location and place
+  } else if (hasLocationSearchType) {
+    const locationResponse = await getPlaces(query)
+
+    result = [
+      ...result,
+      ...locationResponse.slice(0, 10).map<LocationResult>(location => ({
+        type: 'location',
+        location
       }))
     ]
   }
