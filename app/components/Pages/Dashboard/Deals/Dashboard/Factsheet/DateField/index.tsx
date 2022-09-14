@@ -57,6 +57,13 @@ export function DateField({
   const isPastDate =
     new Date().getTime() / 1000 > (getField(deal, brandContext.key) ?? Infinity)
 
+  const dateTooltip =
+    value && isDisabled
+      ? typeof value === 'string'
+        ? moment(value).format('dddd, MMM DD, YYYY')
+        : ''
+      : ''
+
   const handleSave = async (date: Date): Promise<void> => {
     setIsSaving(true)
 
@@ -79,47 +86,49 @@ export function DateField({
 
   return (
     <>
-      <Tooltip title={tooltip}>
-        <Item disableHover={isDisabled}>
+      <Item disableHover={isDisabled}>
+        <Tooltip title={tooltip}>
           <ItemLabel>
             <CircleStatus checked={isPastDate}>
               {isPastDate && <SvgIcon path={mdiCheck} color="#fff" />}
             </CircleStatus>{' '}
             {brandContext.label}
           </ItemLabel>
+        </Tooltip>
+        <Tooltip title={dateTooltip}>
           <ItemValue>{getFormattedValue(brandContext, value)}</ItemValue>
+        </Tooltip>
 
-          {!isDisabled && (
-            <ItemActions>
-              <DateTimePicker
-                selectedDate={getInitialDate(deal, brandContext)}
-                showTimePicker={false}
-                onClose={handleSave}
-                saveCaption="Save Date"
-              >
-                {({ handleOpen }) => <EditButton onClick={handleOpen} />}
-              </DateTimePicker>
+        {!isDisabled && (
+          <ItemActions>
+            <DateTimePicker
+              selectedDate={getInitialDate(deal, brandContext)}
+              showTimePicker={false}
+              onClose={handleSave}
+              saveCaption="Save Date"
+            >
+              {({ handleOpen }) => <EditButton onClick={handleOpen} />}
+            </DateTimePicker>
 
-              <DeleteButton
-                deal={deal}
-                brandContext={brandContext}
-                value={value}
-                onClick={handleDelete}
-              />
+            <DeleteButton
+              deal={deal}
+              brandContext={brandContext}
+              value={value}
+              onClick={handleDelete}
+            />
 
-              <ApproveButton
-                deal={deal}
-                brandContext={brandContext}
-                dealContext={dealContext}
-                isBackOffice={isBackOffice}
-                onClick={() => onApprove(brandContext)}
-              />
-            </ItemActions>
-          )}
+            <ApproveButton
+              deal={deal}
+              brandContext={brandContext}
+              dealContext={dealContext}
+              isBackOffice={isBackOffice}
+              onClick={() => onApprove(brandContext)}
+            />
+          </ItemActions>
+        )}
 
-          {value && index < total - 1 && isPastDate && <TimelineDateProgress />}
-        </Item>
-      </Tooltip>
+        {value && index < total - 1 && isPastDate && <TimelineDateProgress />}
+      </Item>
     </>
   )
 }
