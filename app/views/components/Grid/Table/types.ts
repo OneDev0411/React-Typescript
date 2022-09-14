@@ -21,6 +21,7 @@ export interface ColumnHeaderProps<Row> {
 
 export interface GridClasses {
   row?: string
+  tableContainer?: string
 }
 
 export type ColumnHeaderFunction<Row> = (
