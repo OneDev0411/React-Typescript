@@ -45,7 +45,9 @@ export default function Actions({ onEdit, reloadList, tour }: Props) {
 
     confirmation.setConfirmationModal({
       message: 'Delete Toursheet',
-      description: `Are you sure about deleting "${tour.title}"?`,
+      description: `Are you sure about deleting "${
+        tour.title.length < 100 ? tour.title : `${tour.title.slice(0, 100)}...`
+      }"?`,
       confirmLabel: 'Yes, I am sure',
       onConfirm: () => handleDelete()
     })
