@@ -81,7 +81,9 @@ class EventsList extends Component {
                   <AppendButton
                     onClick={e => {
                       e.preventDefault()
-                      copy(window.location.host + link)
+                      copy(
+                        `${new URL(window.location.href).origin ?? ''}${link}`
+                      )
                       this.props.notify({
                         message: 'Link Copied',
                         status: 'success'
