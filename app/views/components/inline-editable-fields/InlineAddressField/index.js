@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { IconButton, InputAdornment } from '@material-ui/core'
+import { Close } from '@material-ui/icons'
 import debounce from 'lodash/debounce'
 import PropTypes from 'prop-types'
 
@@ -238,6 +240,11 @@ export class InlineAddressField extends React.Component {
     })
   }
 
+  onDelete = () => {
+    this.setState({ address: '' })
+    this.props.handleSubmit({})
+  }
+
   render() {
     const address = this.state.address
 
@@ -249,7 +256,16 @@ export class InlineAddressField extends React.Component {
           onKeyDown: this.handleInputOnKeyDown,
           value: address,
           onBlur: this.handleInputBlur,
-          autoComplete: 'disabled'
+          autoComplete: 'disabled',
+          InputProps: {
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton aria-label="delete" onClick={this.onDelete}>
+                  <Close />
+                </IconButton>
+              </InputAdornment>
+            )
+          }
         })}
 
         <SuggestionsPopover
