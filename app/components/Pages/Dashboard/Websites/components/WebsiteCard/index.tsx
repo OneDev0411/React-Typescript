@@ -42,8 +42,9 @@ function WebsiteCard({
   hostnames: websiteHostnames,
   template_instance,
   attributes,
-  template
-}: WebsiteCardProps) {
+  template,
+  websiteTypeTitle = 'Website'
+}: WebsiteCardProps & { websiteTypeTitle?: string }) {
   const classes = useStyles()
   const [isEditorOpen, setIsEditorOpen] = useState(false)
   const user = useSelector(selectUser)
@@ -143,6 +144,7 @@ function WebsiteCard({
               onDelete={handleDelete}
             >
               <WebsiteCardMenu
+                websiteTypeTitle={websiteTypeTitle}
                 onEdit={openEditor}
                 onDelete={handleDelete}
                 onManageDomains={openDomainManagement}

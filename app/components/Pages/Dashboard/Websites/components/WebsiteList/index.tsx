@@ -121,7 +121,7 @@ function WebsiteList({
           <WebsiteListProvider setData={setData}>
             {instances.map(instance => (
               <WebsiteCardProvider key={instance.id} website={instance}>
-                <WebsiteCard {...instance} />
+                <WebsiteCard websiteTypeTitle={title} {...instance} />
               </WebsiteCardProvider>
             ))}
           </WebsiteListProvider>

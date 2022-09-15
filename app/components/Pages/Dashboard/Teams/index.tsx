@@ -142,9 +142,9 @@ function TeamsPage(props: Props) {
         team={editRolesModal.team}
       />
       <AddTeamMembersModal
-        close={addMembersModal.close}
+        onClose={addMembersModal.close}
         isOpen={addMembersModal.isOpen}
-        submit={addMembersModal.submit}
+        onSubmit={addMembersModal.submit}
         team={addMembersModal.team}
       />
     </React.Fragment>
