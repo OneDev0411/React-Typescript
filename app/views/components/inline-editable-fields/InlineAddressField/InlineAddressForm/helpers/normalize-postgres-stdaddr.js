@@ -6,7 +6,7 @@ export function normalizePostgressStdaddr(address) {
     name: address.street_name,
     unit: address.unit_number ? `Unit ${address.unit_number}` : '',
     state: address.state,
-    predir: address.street_prefix.value,
+    predir: address.street_prefix?.value,
     suftype: address.street_suffix,
     postcode: address.postal_code,
     house_num: address.street_number,

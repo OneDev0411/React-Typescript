@@ -29,6 +29,7 @@ export default function AgentNetworkLayout({
         <PageLayout.Header title={title}>
           <Box width="100%" maxWidth={360}>
             <DealsAndListingsAndPlacesSearchInput
+              searchTypes={['listing', 'location']}
               onSelect={onSelectSearchResult}
             />
           </Box>

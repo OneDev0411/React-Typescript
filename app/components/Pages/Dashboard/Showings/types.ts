@@ -9,7 +9,7 @@ export interface ShowingPropertyBase<T extends string> {
 }
 
 export interface ShowingPropertyPlace extends ShowingPropertyBase<'place'> {
-  address: IStdAddr
+  address: Partial<IStdAddr>
   gallery: IMediaGallery
 }
 
