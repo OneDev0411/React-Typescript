@@ -13,6 +13,7 @@ import { isValidDate } from 'utils/date-times/is-valid-date'
 
 import { UnlinkFieldButton } from '../../../../components/UnlinkFieldButton'
 import { formatDate } from '../../../../utils/format-date'
+import { isUnlinkEvent } from '../../../../utils/is-unlink-event'
 
 import { Body, Footer } from './styled'
 import { TextInput } from './TextInput'
@@ -40,7 +41,7 @@ export function ContextField(props) {
 
   const contextValue = getField(props.deal, props.annotation.context)
 
-  const [isEditorOpen, setEditorStatus] = useState(false)
+  const [isEditorOpen, setIsEditorOpen] = useState(false)
   const [fieldValue, setFieldValue] = useState(
     Object.values(props.values).join(' ')
   )
@@ -56,7 +57,17 @@ export function ContextField(props) {
 
   const handleSaveValue = (value, updateContext) => {
     props.onSaveValue(context.current, value, updateContext)
-    setEditorStatus(false)
+    setIsEditorOpen(false)
+  }
+
+  const handleClickAnnotation = e => {
+    if (isUnlinkEvent(e)) {
+      props.onToggleUnlink()
+
+      return
+    }
+
+    setIsEditorOpen(true)
   }
 
   const formatValue = () => {
@@ -82,7 +93,7 @@ export function ContextField(props) {
         }}
         className="field-unlinkable"
         title={props.annotation.context}
-        onClick={() => setEditorStatus(true)}
+        onClick={handleClickAnnotation}
       >
         {formatValue()}
       </div>
@@ -100,7 +111,7 @@ export function ContextField(props) {
         isOpen={isEditorOpen}
         bounds={box}
         width={300}
-        onDismiss={() => setEditorStatus(false)}
+        onDismiss={() => setIsEditorOpen(false)}
       >
         <>
           <Body>

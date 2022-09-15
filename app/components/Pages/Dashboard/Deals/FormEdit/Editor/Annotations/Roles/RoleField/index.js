@@ -13,6 +13,7 @@ import { normalizeRoleNames } from 'deals/FormEdit/utils/normalize-role-names'
 import { isPrimaryAgent } from 'deals/utils/roles'
 
 import { UnlinkFieldButton } from '../../../../components/UnlinkFieldButton'
+import { isUnlinkEvent } from '../../../../utils/is-unlink-event'
 import { AddRole } from '../AddRole'
 
 import { RoleItem } from './styled'
@@ -25,6 +26,14 @@ export function RoleField(props) {
   const roles = props.roles.filter(role => allowedRoles.includes(role.role))
   const isEmpty = !Object.values(props.values).join('').length
   const showBrokerageFields = isBrokerageField(props.annotation)
+
+  const handleUnlink = e => {
+    e.stopPropagation()
+
+    if (isUnlinkEvent(e)) {
+      props.onToggleUnlink()
+    }
+  }
 
   const annotationRoles = useMemo(
     () =>
@@ -55,6 +64,7 @@ export function RoleField(props) {
           backgroundColor:
             annotationRoles.length > 0 ? '#d2e5f2' : 'transparent'
         }}
+        onClick={handleUnlink}
       >
         <Tooltip title={tooltip}>
           <div
@@ -69,7 +79,10 @@ export function RoleField(props) {
                   style={{
                     fontSize: `${props.appearance.fontSize}px`
                   }}
-                  onClick={() => setRole(role)}
+                  onClick={e => {
+                    e.stopPropagation()
+                    setRole(role)
+                  }}
                 >
                   {role.value}
                 </RoleItem>
@@ -83,7 +96,10 @@ export function RoleField(props) {
               roles[props.annotation.number] && (
                 <SvgIcon
                   path={mdiPencilOutline}
-                  onClick={() => setRole(roles[props.annotation.number])}
+                  onClick={e => {
+                    e.stopPropagation()
+                    setRole(roles[props.annotation.number])
+                  }}
                   size={props.style.height}
                   color={props.style.color}
                 />
@@ -97,8 +113,8 @@ export function RoleField(props) {
           roles={annotationRoles}
           deal={props.deal}
           showBrokerageFields={showBrokerageFields}
-          onClick={() => setRole(null)}
           onUpsertRole={props.onUpsertRole}
+          onClick={() => setRole(null)}
         />
       </div>
 

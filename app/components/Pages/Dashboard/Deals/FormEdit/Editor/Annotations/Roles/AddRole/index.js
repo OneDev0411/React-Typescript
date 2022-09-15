@@ -44,7 +44,9 @@ export function AddRole(props) {
   const tooltip =
     props.tooltip || `Add new ${props.annotation.role.join(' or ')}`
 
-  const handleClick = () => {
+  const handleClick = e => {
+    e.stopPropagation()
+
     if (!isSingularRole) {
       setShowRoles(!showRolesList)
 
@@ -63,7 +65,6 @@ export function AddRole(props) {
 
   const handleUpsertRole = role => {
     setShowRoles(false)
-
     props.onUpsertRole(role)
   }
 
@@ -72,9 +73,9 @@ export function AddRole(props) {
       <Tooltip title={tooltip || ''} placement="top">
         <SvgIcon
           path={mdiPlusCircleOutline}
-          onClick={handleClick}
           size={props.style.height}
           color={props.style.color}
+          onClick={handleClick}
         />
       </Tooltip>
 
