@@ -8,12 +8,14 @@ import { useIconStyles } from 'views/../styles/use-icon-styles'
 import useStyles from './styles'
 
 export interface WebsiteCardMenuProps {
+  websiteTypeTitle?: string
   onDelete: () => void
   onEdit: () => void
   onManageDomains: () => void
 }
 
 function WebsiteCardMenu({
+  websiteTypeTitle = 'Website',
   onDelete,
   onEdit,
   onManageDomains
@@ -66,8 +68,8 @@ function WebsiteCardMenu({
         onClose={handleClose}
       >
         <MenuItem onClick={handleManageDomains}>Manage Domains</MenuItem>
-        <MenuItem onClick={handleEdit}>Edit Website</MenuItem>
-        <MenuItem onClick={handleDelete}>Delete Website</MenuItem>
+        <MenuItem onClick={handleEdit}>Edit {websiteTypeTitle}</MenuItem>
+        <MenuItem onClick={handleDelete}>Delete {websiteTypeTitle}</MenuItem>
       </Menu>
     </div>
   )

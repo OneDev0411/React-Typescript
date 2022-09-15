@@ -9,7 +9,7 @@ import WebsiteList from '../../components/WebsiteList'
 import { PRESENTATION_TEMPLATE_TYPES } from '../../constants'
 
 function Presentation() {
-  useTitle('Presentation | Rechat')
+  useTitle('Presentations | Rechat')
 
   const [isOpenTemplateSelector, setIsOpenTemplateSelector] =
     useState<boolean>(false)
@@ -23,7 +23,7 @@ function Presentation() {
 
   return (
     <PageLayout position="relative" overflow="hidden">
-      <PageLayout.Header title="Presentation">
+      <PageLayout.Header title="Presentations">
         <Button
           onClick={onOpenTemplateSelector}
           variant="outlined"
