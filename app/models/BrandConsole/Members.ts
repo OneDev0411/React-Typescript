@@ -12,24 +12,53 @@ async function getMembers(role) {
   }
 }
 
-interface IAddTeamMembers {
-  users?: UUID[]
-  emails?: string[]
-  phone_numbers?: string[]
+interface IAddTeamMember {
+  avatar: File
+  email: string
+  firstName: string
+  lastName: string
+  phone: string
+  roles: UUID[]
+  user: UUID
 }
 
 async function addMembers(
   brandId: string,
   roleId: string,
-  members: IAddTeamMembers
+  member: Partial<IAddTeamMember>
 ) {
   try {
-    return await new Fetch()
-      .post(`/brands/${brandId}/roles/${roleId}/members`)
+    const request = new Fetch()
+      .upload(`/brands/${brandId}/roles/${roleId}/members`)
       .set('X-RECHAT-BRAND', brandId)
-      .send(members)
+
+    if (member.user) {
+      request.field('user', member.user)
+    }
+
+    if (member.email) {
+      request.field('email', member.email)
+    }
+
+    if (member.firstName) {
+      request.field('first_name', member.firstName)
+    }
+
+    if (member.lastName) {
+      request.field('last_name', member.lastName)
+    }
+
+    if (member.phone) {
+      request.field('phone_number', member.phone)
+    }
+
+    if (member.avatar) {
+      request.attach('avatar', member.avatar)
+    }
+
+    return await request
   } catch (error) {
-    return { error }
+    throw error
   }
 }
 
