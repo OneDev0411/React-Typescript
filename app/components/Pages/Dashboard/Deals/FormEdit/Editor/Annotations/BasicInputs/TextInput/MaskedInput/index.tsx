@@ -161,6 +161,5 @@ export function MaskedInput({
     )
   }
 
-  // eslint-disable-next-line jsx-a11y/no-autofocus
-  return <input {...sharedProps} autoFocus onClick={handleClick} />
+  return <input {...sharedProps} onClick={handleClick} />
 }
