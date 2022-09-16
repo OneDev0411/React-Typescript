@@ -24,10 +24,10 @@ import { TaskNotifications } from '../Notification'
 import { TaskItems } from '../TaskItems'
 
 import { Activity } from './Activity'
-import { getTaskActions } from './get-task-actions'
 import { useStyles } from './styles'
 import { TaskBadge } from './TaskBadge'
 import { TaskSplitter } from './TaskSplitter'
+import { useTaskActions } from './use-task-actions'
 
 interface Props {
   index: number
@@ -66,7 +66,7 @@ export function TaskRow({
   const { attachments } = task.room
   const file = attachments ? attachments[0] : undefined
 
-  const actions: ActionButtonId[] = getTaskActions({
+  const actions: ActionButtonId[] = useTaskActions({
     task,
     envelope,
     file,

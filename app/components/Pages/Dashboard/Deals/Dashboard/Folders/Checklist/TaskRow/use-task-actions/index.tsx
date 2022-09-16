@@ -19,8 +19,10 @@ import {
   REQUIRE_TASK,
   DELETE_TASK,
   TASK_ACL,
-  OPEN_APPLICATION
+  OPEN_APPLICATION,
+  SELECT_TASK
 } from '../../../../../components/ActionsButton/data/action-buttons'
+import { useChecklistActionsContext } from '../../../../../contexts/actions-context/hooks'
 
 interface Props {
   envelope: IDealEnvelope
@@ -29,12 +31,14 @@ interface Props {
   isBackOffice: boolean
 }
 
-export function getTaskActions({
+export function useTaskActions({
   envelope,
   task,
   file,
   isBackOffice
 }: Props): ActionButtonId[] {
+  const [state] = useChecklistActionsContext()
+
   const actions: ActionButtonId[] = []
 
   const isVoidable =
@@ -91,6 +95,8 @@ export function getTaskActions({
   !isApplicationTask && actions.push(DELETE_TASK)
 
   task && isBackOffice && actions.push(TASK_ACL)
+
+  task && state.actions.includes(SELECT_TASK) && actions.push(SELECT_TASK)
 
   return actions
 }

@@ -12,12 +12,13 @@ import { Portal } from 'components/Portal'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import type {
-  StateContext,
-  DispatchContext
+  DealTaskActionsStateContext,
+  DealTaskActionsDispatchContext
 } from 'deals/contexts/actions-context'
 import {
   ADD_ATTACHMENTS,
   REMOVE_ATTACHMENT,
+  SELECT_TASKS,
   SET_DRAWER_STATUS,
   SET_MODE
 } from 'deals/contexts/actions-context/constants'
@@ -50,7 +51,8 @@ import {
   DOCUSIGN_FILE,
   EMAIL_FORM,
   EMAIL_FILE,
-  EMAIL_ENVELOPE
+  EMAIL_ENVELOPE,
+  SELECT_TASK
 } from './data/action-buttons'
 import { normalizeActions } from './data/normalize-actions'
 import {
@@ -84,8 +86,8 @@ interface Props {
 }
 
 interface ContextProps {
-  actionsState: StateContext
-  actionsDispatch: DispatchContext
+  actionsState: DealTaskActionsStateContext
+  actionsDispatch: DealTaskActionsDispatchContext
 }
 
 interface State {
@@ -158,7 +160,8 @@ class ActionsButton extends React.Component<
       'email-file': this.emailFile,
       'email-envelope': this.emailEnvelope,
       'task-acl': this.handleShowTaskAclDialog,
-      'application-open': this.openApplication
+      'application-open': this.openApplication,
+      'select-task': this.toggleSelectTask
     }
 
     this.handleSelectAction = this.handleSelectAction.bind(this)
@@ -467,6 +470,20 @@ class ActionsButton extends React.Component<
     this.setState({
       isApplicationOpen: true
     })
+
+  toggleSelectTask = () => {
+    this.props.actionsDispatch({
+      type: SELECT_TASKS,
+      tasks: this.props.actionsState.tasks?.find(
+        item => item.id === this.props.task?.id
+      )
+        ? this.props.actionsState.tasks?.filter(
+            item => item.id !== this.props.task?.id
+          )
+        : [...(this.props.actionsState?.tasks ?? []), this.props.task],
+      actions: [SELECT_TASK]
+    })
+  }
 
   render() {
     const isTaskViewActionActive =

@@ -29,3 +29,5 @@ export const DELETE_TASK = 23
 export const TASK_ACL = 24
 
 export const OPEN_APPLICATION = 25
+
+export const SELECT_TASK = 26
