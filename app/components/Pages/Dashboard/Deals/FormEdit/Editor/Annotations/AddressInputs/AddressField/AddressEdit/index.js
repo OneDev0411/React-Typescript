@@ -4,6 +4,7 @@ import { AddressPopover } from 'components/inline-editable-fields/InlineAddressF
 import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
 
 import { UnlinkFieldButton } from '../../../../../components/UnlinkFieldButton'
+import { isUnlinkEvent } from '../../../../../utils/is-unlink-event'
 
 export function AddressEdit({
   rect,
@@ -28,7 +29,13 @@ export function AddressEdit({
     onSave(address)
   }
 
-  const handleEdit = () => {
+  const handleEdit = e => {
+    if (isUnlinkEvent(e)) {
+      onToggleUnlink()
+
+      return
+    }
+
     const addressFields = getAnnotationsByType(annotations, 'addresses').reduce(
       (acc, group) => {
         const value = group
