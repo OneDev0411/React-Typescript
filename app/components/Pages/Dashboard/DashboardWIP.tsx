@@ -59,7 +59,21 @@ interface DashboardProps
 }
 
 export function Dashboard({ params, children, location }: DashboardProps) {
-  useTitle('Rechat | Today')
+  const documentTitle = () => {
+    let title = ''
+
+    switch (location.pathname) {
+      case '/dashboard/contacts':
+        title = 'Contacts | Rechat'
+        break
+      default:
+        title = 'Rechat | Today'
+    }
+
+    return title
+  }
+
+  useTitle(documentTitle())
 
   const { user, activeTeam } = useLoadUserAndActiveTeam()
 
