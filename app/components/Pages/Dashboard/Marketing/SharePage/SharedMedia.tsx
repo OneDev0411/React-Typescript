@@ -28,7 +28,7 @@ const useStyle = makeStyles((theme: Theme) => ({
   }
 }))
 
-export default function SharedImage({ url, fileType }: SharedMediaProps) {
+export default function SharedMedia({ url, fileType }: SharedMediaProps) {
   const classes = useStyle()
 
   return (

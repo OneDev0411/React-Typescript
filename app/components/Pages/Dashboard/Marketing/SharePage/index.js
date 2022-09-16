@@ -4,7 +4,7 @@ import { withRouter } from 'react-router'
 
 import { getFileType } from 'utils/file-utils/get-file-type'
 
-import SharedImage from './SharedImage'
+import SharedMedia from './SharedMedia'
 
 function Share(props) {
   const fileUrl = props.location.state.file.url
@@ -14,7 +14,7 @@ function Share(props) {
     return window.location.replace(fileUrl)
   }
 
-  return <SharedImage url={fileUrl} fileType={fileType} />
+  return <SharedMedia url={fileUrl} fileType={fileType} />
 }
 
 export default withRouter(Share)
