@@ -17,7 +17,10 @@ const useStyles = makeStyles(
       padding: theme.spacing(1, 2)
     },
     adjustmentDescription: {
-      fontWeight: theme.typography.fontWeightThin
+      fontWeight: theme.typography.fontWeightThin,
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      marginRight: theme.spacing(1)
     },
     adjustmentValue: {
       color: theme.palette.grey[900]

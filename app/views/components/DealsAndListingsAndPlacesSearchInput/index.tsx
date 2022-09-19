@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import {
   List,
@@ -24,15 +24,20 @@ import {
 } from '@mdi/js'
 import { merge } from 'lodash'
 import { useSelector } from 'react-redux'
+import { useDeepCompareEffect } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { useGoogleMapsPlaces } from '@app/hooks/use-google-maps-places'
 import { noop } from '@app/utils/helpers'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { IAppState } from 'reducers'
 import { selectDealsList } from 'selectors/deals'
 import { addressTitle, getListingFullAddress } from 'utils/listing'
 
-import { searchDealsAndListingsAndPlaces } from './helpers'
+import {
+  searchDealsAndListingsAndPlaces,
+  sortOptionsBySearchTypesList
+} from './helpers'
 import ListingStatus from './ListingStatus'
 import { SearchResult, SearchResultType } from './types'
 
@@ -129,7 +134,9 @@ export default function DealsAndListingsAndPlacesSearchInput({
     }
   }
 
-  useEffect(() => {
+  useGoogleMapsPlaces()
+
+  useDeepCompareEffect(() => {
     async function fetchListingsAndPlaces() {
       if (inputValue.length === 0) {
         setOptions([])
@@ -150,7 +157,11 @@ export default function DealsAndListingsAndPlacesSearchInput({
           inputValue
         )
 
-        setOptions(fetchedOptions)
+        const sortedOptions = fetchedOptions.sort((a, b) =>
+          sortOptionsBySearchTypesList(a, b, searchTypes)
+        )
+
+        setOptions(sortedOptions)
       } catch (error) {
         console.error(
           'Something went wrong while searching for place or listing',
@@ -170,9 +181,11 @@ export default function DealsAndListingsAndPlacesSearchInput({
         return option.deal.title
       case 'listing':
         return getListingFullAddress(option.listing)
+      case 'location':
+        return option.location.formatted_address
       case 'place':
       default:
-        return option.place.formatted_address
+        return option.place.description
     }
   }
 
@@ -258,6 +271,21 @@ export default function DealsAndListingsAndPlacesSearchInput({
       )
     }
 
+    if (option.type === 'location') {
+      const location = option.location
+
+      return (
+        <ListItem dense disableGutters component="div">
+          <ListItemAvatar>
+            <Avatar>
+              <SvgIcon path={mdiMapMarkerOutline} />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={location.formatted_address} />
+        </ListItem>
+      )
+    }
+
     const place = option.place
 
     return (
@@ -267,7 +295,10 @@ export default function DealsAndListingsAndPlacesSearchInput({
             <SvgIcon path={mdiMapMarkerOutline} />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary={place.formatted_address} />
+        <ListItemText
+          primary={place.structured_formatting.main_text}
+          secondary={place.structured_formatting.secondary_text}
+        />
       </ListItem>
     )
   }
@@ -282,6 +313,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
         return 'Deals'
       case 'listing':
         return 'Listings'
+      case 'location':
       case 'place':
       default:
         return 'Places'

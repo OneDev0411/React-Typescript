@@ -235,6 +235,31 @@ export function getListingFeatures(listing: IListing): Feature[] {
           value: valueToString(property.parking_features)
         }
       ]
+    },
+    {
+      title: 'Compensation',
+      items: [
+        {
+          label: 'Sub-agency Offered',
+          value: valueToString(listing.sub_agency_offered)
+        },
+        {
+          label: 'Sub-agency Commission',
+          value: valueToString(listing.sub_agency_commission)
+        },
+        {
+          label: 'Transaction broker commission',
+          value: valueToString(listing.transaction_broker_commission)
+        },
+        {
+          label: 'Compensation Based on',
+          value: valueToString(listing.compensation_based_on)
+        },
+        {
+          label: 'Buyer Agency Commission',
+          value: valueToString(listing.buyers_agency_commission)
+        }
+      ]
     }
   ]
 }

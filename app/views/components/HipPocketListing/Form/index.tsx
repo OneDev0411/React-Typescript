@@ -167,15 +167,20 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
           <Grid item xs={12}>
             <Controller
               control={control}
+              rules={{ required: true }}
               name="address"
+              error={!!errors.address}
+              helperText={errors.address?.message}
               render={({ onChange }) => (
                 <DealsAndListingsAndPlacesSearchInput
                   textFieldProps={{
+                    error: !!errors.address,
+                    helperText: errors.address?.message,
                     label: 'Address',
                     variant: 'outlined',
                     size: 'small'
                   }}
-                  searchTypes={['listing', 'place']}
+                  searchTypes={['place', 'listing']}
                   onInput={address => {
                     onChange(address)
                   }}
@@ -191,6 +196,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
                 control={control}
                 name="price"
                 rules={{
+                  required: true,
                   valueAsNumber: true,
                   min: 0,
                   max: Number.MAX_SAFE_INTEGER

@@ -1,3 +1,5 @@
+import { isValidPhoneNumber } from '@app/utils/helpers'
+
 import { FormValues } from './types'
 
 const REQUIRED_ERROR = 'Required!'
@@ -10,8 +12,8 @@ const isEmptyStr = str => {
   return str.trim().length === 0
 }
 
-export function validate(values: Omit<FormValues, 'user_type'>) {
-  const { email, first_name, last_name, password } = values
+export async function validate(values: Omit<FormValues, 'user_type'>) {
+  const { email, phone_number, first_name, last_name, password } = values
   const errors: Partial<FormValues> = {}
 
   if (isEmptyStr(first_name)) {
@@ -22,10 +24,19 @@ export function validate(values: Omit<FormValues, 'user_type'>) {
     errors.last_name = REQUIRED_ERROR
   }
 
-  if (isEmptyStr(email)) {
-    errors.email = REQUIRED_ERROR
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email || '')) {
-    errors.email = 'Invalid email address.'
+  if (
+    isEmptyStr(phone_number) === false &&
+    (await isValidPhoneNumber(phone_number)) === false
+  ) {
+    errors.phone_number = 'Invalid phone number.'
+  }
+
+  if (!phone_number) {
+    if (isEmptyStr(email)) {
+      errors.email = REQUIRED_ERROR
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email || '')) {
+      errors.email = 'Invalid email address.'
+    }
   }
 
   if (!password) {

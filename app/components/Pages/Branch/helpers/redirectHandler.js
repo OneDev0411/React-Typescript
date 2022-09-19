@@ -30,7 +30,9 @@ const redirectHandler = async (
     listing,
     phone_number,
     receiving_user,
-    userInfo
+    userInfo,
+    first_name,
+    last_name
   } = branchData
 
   email = email || (userInfo && userInfo.email)
@@ -124,6 +126,8 @@ const redirectHandler = async (
       token,
       email,
       phone_number,
+      first_name,
+      last_name,
       redirectTo: getActionRedirectURL(branchData)
     }
 

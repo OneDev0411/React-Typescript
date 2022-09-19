@@ -136,7 +136,6 @@ export function MlsConnect({ deal }: Props) {
       <SearchListingDrawer
         title="Connect Deal to MLS"
         isOpen={isDrawerOpen}
-        allowedStatuses={['Pending', 'Leased', 'Active']}
         onClose={toggleDrawer}
         onSelectListingsCallback={handleSelectListing}
       />

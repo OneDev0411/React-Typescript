@@ -23,6 +23,7 @@ import ConnectedAccount from './ConnectedAccount'
 import ConnectedAgents from './ConnectedAgents'
 import ConnectedDocusign from './ConnectedDocusign'
 import ConnectedInstagram from './ConnectedInstagram'
+import { ConnectedLeadChannels } from './ConnectedLeadChannels'
 
 const useStyles = makeStyles(
   theme => ({
@@ -106,8 +107,8 @@ function ConnectedAccounts({
       </List>
 
       <ConnectedAgents className={classes.section} user={user} />
-
       <ConnectedInstagram className={classes.section} />
+      <ConnectedLeadChannels className={classes.section} />
 
       {user.docusign && (
         <ConnectedDocusign

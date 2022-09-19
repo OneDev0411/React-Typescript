@@ -56,6 +56,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'title',
+      class: 'title',
       header: () => (
         <HeaderColumn
           text="Task"
@@ -71,9 +72,7 @@ export function useColumns(): TableColumn<ITask>[] {
           boxShadow: 'none'
         }
       },
-      render: ({ row: task }) => (
-        <TitleCell title={task.title} status={task.status} />
-      ),
+      render: ({ row: task }) => <TitleCell task={task} />,
       renderInlineEdit: ({ row: task }, close) => (
         <InlineTitleCell task={task} closeHandler={close} />
       )

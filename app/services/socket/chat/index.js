@@ -1,5 +1,4 @@
 import Socket from '..'
-import Chatroom from '../../../components/Pages/Dashboard/Chatroom/Util/chatroom'
 import Message from '../../../components/Pages/Dashboard/Chatroom/Util/message'
 import {
   addMessageTyping,
@@ -37,11 +36,6 @@ export default class ChatSocket extends Socket {
 
     // get all user states
     socket.on('Users.States', this.onUserStates)
-
-    // on reconnect
-    Rx.Observable.fromEvent(socket, 'reconnect')
-      .throttleTime(20 * 1000)
-      .subscribe(() => this.onReconnected())
 
     Rx.Observable.fromEvent(socket, 'User.State', (state, user_id) => ({
       state,
@@ -112,19 +106,5 @@ export default class ChatSocket extends Socket {
     if (user_id !== this.user.id) {
       store.dispatch(removeMessageTyping(room_id, user_id))
     }
-  }
-
-  /**
-   * on reconnect
-   */
-  onReconnected() {
-    // change socket status
-    // store.dispatch(changeSocketStatus('synchronizing'))
-
-    // synchronize chatroom
-    Chatroom.synchronize()
-
-    // change socket status again
-    // store.dispatch(changeSocketStatus('connected'))
   }
 }

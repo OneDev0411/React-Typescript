@@ -66,8 +66,8 @@ function MapDrawer({
           latitude: location.latitude
         })
       }
-    } else if (result.type === 'place') {
-      const location = result.place.geometry.location
+    } else if (result.type === 'location') {
+      const location = result.location.geometry.location
 
       // @TODO: there is a typescript definition issue here
       // I don't know why the location.lng is a function instead
@@ -102,7 +102,10 @@ function MapDrawer({
       <OverlayDrawer.Body>
         <Box marginTop={3}>
           {hasSearchField && (
-            <DealsAndListingsAndPlacesSearchInput onSelect={handleSearch} />
+            <DealsAndListingsAndPlacesSearchInput
+              searchTypes={['listing', 'location']}
+              onSelect={handleSearch}
+            />
           )}
           <MapThemeList theme={theme} onChange={setTheme} center={center} />
         </Box>

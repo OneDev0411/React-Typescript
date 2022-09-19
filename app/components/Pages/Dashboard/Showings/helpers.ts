@@ -36,7 +36,7 @@ export const splitFullName = (fullName: string) => {
   }
 }
 
-export function getFullAddressFromSrdAddr(stdAddr: IStdAddr): string {
+export function getFullAddressFromSrdAddr(stdAddr: Partial<IStdAddr>): string {
   return [
     stdAddr.house_num,
     stdAddr.name,

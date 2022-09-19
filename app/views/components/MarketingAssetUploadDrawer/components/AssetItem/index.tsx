@@ -49,13 +49,15 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  assetIndex: number
   asset: Asset
   uploadProgress?: number
-  onUpdateAsset: (asset: Asset) => void
-  onDeleteAsset: (asset: Asset) => void
+  onUpdateAsset: (assetIndex: number, asset: Asset) => void
+  onDeleteAsset: (assetIndex: number) => void
 }
 
 export default function AssetItem({
+  assetIndex,
   asset,
   uploadProgress,
   onUpdateAsset,
@@ -89,7 +91,7 @@ export default function AssetItem({
                 label="Label"
                 value={asset.label}
                 onChange={event => {
-                  onUpdateAsset({
+                  onUpdateAsset(assetIndex, {
                     ...asset,
                     label: event.target.value
                   })
@@ -112,7 +114,7 @@ export default function AssetItem({
                   label="Add To"
                   value={asset.templateType ?? ''}
                   onChange={event =>
-                    onUpdateAsset({
+                    onUpdateAsset(assetIndex, {
                       ...asset,
                       templateType: event.target.value as IMarketingTemplateType
                     })
@@ -137,7 +139,7 @@ export default function AssetItem({
                   label="Medium"
                   value={asset.medium ?? ''}
                   onChange={event =>
-                    onUpdateAsset({
+                    onUpdateAsset(assetIndex, {
                       ...asset,
                       medium: event.target.value as IMarketingTemplateMedium
                     })
@@ -154,7 +156,7 @@ export default function AssetItem({
           </Grid>
         </Grid>
         <Grid item className={classes.deleteContainer}>
-          <IconButton onClick={() => onDeleteAsset(asset)}>
+          <IconButton onClick={() => onDeleteAsset(assetIndex)}>
             <SvgIcon size={muiIconSizes.small} path={mdiDeleteOutline} />
           </IconButton>
         </Grid>
