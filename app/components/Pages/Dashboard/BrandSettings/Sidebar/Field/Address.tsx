@@ -16,10 +16,7 @@ export default function AddressField({
 
   const handleChange = (newValue: BrandMarketingPaletteAddressValue) => {
     formRef.current?.handleClose?.()
-    onChange(
-      names,
-      newValue != null && Object.keys(newValue).length === 0 ? null : newValue
-    )
+    onChange(names, newValue)
   }
 
   return (
