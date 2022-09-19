@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { selectUserUnsafe } from '@app/selectors/user'
 import { updateUser } from 'actions/user'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
@@ -47,6 +48,7 @@ export function Profile() {
   const classes = useStyles()
   const dispatch = useDispatch()
   const activeTeam = useUnsafeActiveTeam()
+  const user = useSelector(selectUserUnsafe)
 
   const [editorState, setEditorState, signatureEditor] = useEditorState('')
 
@@ -63,7 +65,11 @@ export function Profile() {
 
   const hasSignature = editorState.getCurrentContent().getPlainText()
 
-  const [avatar, setAvatar] = useState(getOauthAccountAvatar(connectedAccounts))
+  const [avatar, setAvatar] = useState(
+    user?.profile_image_url
+      ? { src: user?.profile_image_url }
+      : getOauthAccountAvatar(connectedAccounts)
+  )
 
   useEffect(() => {
     const REDIRECT_KEY = 'onboarding_redirectAtTheEnd'

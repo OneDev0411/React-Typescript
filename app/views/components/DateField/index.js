@@ -102,9 +102,9 @@ export function DateField(props) {
             key={key}
             button
             onClick={e => {
-              e.stopPropagation()
               close()
               onChange(item)
+              e.stopPropagation()
             }}
           >
             {item.label}

@@ -68,10 +68,18 @@ export const TeamView = React.memo(
 
         <div>
           <Box mb={1} display="flex" justifyContent="flex-end">
-            <Button onClick={onAddMember}>
-              <SvgIcon path={mdiAccountPlusOutline} rightMargined />
-              <TeamMemberTitle>Add New Member</TeamMemberTitle>
-            </Button>
+            <Tooltip
+              title={
+                !team.roles?.length ? 'Roles need to be created first' : ''
+              }
+            >
+              <span>
+                <Button onClick={onAddMember} disabled={!team.roles?.length}>
+                  <SvgIcon path={mdiAccountPlusOutline} rightMargined />
+                  <TeamMemberTitle>Add New Member</TeamMemberTitle>
+                </Button>
+              </span>
+            </Tooltip>
           </Box>
           {teamUsers.map(teamUser => (
             <TeamMember

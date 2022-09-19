@@ -9,6 +9,9 @@ import { getNameInitials } from '../../../utils/helpers'
 
 import { Container, Status, Loading, Trigger, TriggerText } from './styled'
 
+/**
+ * @deprecated for the sake of {@link AvatarUpload}
+ */
 export class AvatarUploader extends Component {
   static propTypes = {
     avatar: PropTypes.shape({
@@ -36,7 +39,7 @@ export class AvatarUploader extends Component {
 
   setAvatar = async data => {
     await this.props.handleOnChange(data)
-    this.closeModal()
+    this.closeModal?.()
   }
 
   render() {
