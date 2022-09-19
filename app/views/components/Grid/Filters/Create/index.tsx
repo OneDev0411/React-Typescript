@@ -29,7 +29,7 @@ const useStyles = makeStyles(
     zeroState: {
       textAlign: 'center',
       margin: theme.spacing(2, 0),
-      color: theme.palette.action.disabled
+      color: theme.palette.grey['400']
     }
   }),
   {
@@ -83,8 +83,8 @@ export function AddFilter({ disabled, config, onNewFilter }: Props) {
   const renderFilter = () => {
     if (filters.length === 0) {
       return (
-        <Typography variant="body2" className={classes.zeroState}>
-          No Filter Found!
+        <Typography variant="body1" className={classes.zeroState}>
+          Nothing to select!
         </Typography>
       )
     }
