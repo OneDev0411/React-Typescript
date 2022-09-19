@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react'
 
 import {
-  Popover,
-  Button,
-  Theme,
   List,
+  Theme,
+  Button,
+  Popover,
   ListItem,
-  makeStyles
+  makeStyles,
+  Typography
 } from '@material-ui/core'
 import { mdiPlus } from '@mdi/js'
 import escapeRegExp from 'lodash/escapeRegExp'
@@ -24,6 +25,11 @@ const useStyles = makeStyles(
       width: '300px',
       maxHeight: '330px',
       overflowY: 'auto'
+    },
+    zeroState: {
+      textAlign: 'center',
+      margin: theme.spacing(2, 0),
+      color: theme.palette.action.disabled
     }
   }),
   {
@@ -74,6 +80,32 @@ export function AddFilter({ disabled, config, onNewFilter }: Props) {
     })
   }
 
+  const renderFilter = () => {
+    if (filters.length === 0) {
+      return (
+        <Typography variant="body2" className={classes.zeroState}>
+          No Filter Found!
+        </Typography>
+      )
+    }
+
+    return (
+      <List>
+        {filters.map((item, index) => (
+          <FilterItemTooltip key={index} item={item}>
+            <ListItem
+              button
+              data-test={`add-filter-item-${item.label}`}
+              onClick={() => onSelectFilter(item)}
+            >
+              {item.label}
+            </ListItem>
+          </FilterItemTooltip>
+        ))}
+      </List>
+    )
+  }
+
   return (
     <>
       <Button
@@ -106,19 +138,7 @@ export function AddFilter({ disabled, config, onNewFilter }: Props) {
             placeholder="Search Filters"
             onChange={value => debouncedSetQuery(value)}
           />
-          <List>
-            {filters.map((item, index) => (
-              <FilterItemTooltip key={index} item={item}>
-                <ListItem
-                  button
-                  data-test={`add-filter-item-${item.label}`}
-                  onClick={() => onSelectFilter(item)}
-                >
-                  {item.label}
-                </ListItem>
-              </FilterItemTooltip>
-            ))}
-          </List>
+          {renderFilter()}
         </div>
       </Popover>
     </>
