@@ -216,6 +216,8 @@ class MasterField extends Component {
   }
 
   handleOutsideClick = () => {
+    console.log('handleOutsideClick Fired')
+
     if (this.state.disabled) {
       return
     }
