@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js/pure'
+
 import { QuestionForm, QuestionTitle } from 'components/QuestionWizard'
 import { IWizardState } from 'components/QuestionWizard/context'
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+import config from 'config'
 import useAsync from 'hooks/use-async'
 import getStripeCustomers from 'models/payments/get-stripe-customers'
 
@@ -60,6 +64,15 @@ function DomainPayment({
     ? customers[customers.length - 1]
     : undefined
 
+  let stripePromise
+  const getStripe = () => {
+    if (!stripePromise) {
+      stripePromise = loadStripe(config.stripe.public_key)
+    }
+
+    return stripePromise
+  }
+
   return (
     <>
       <QuestionTitle>Please add your payment information</QuestionTitle>
@@ -75,13 +88,15 @@ function DomainPayment({
             disabled={disabled}
           />
         ) : (
-          <DomainPaymentForm
-            domainPrice={domainPrice}
-            lastPaymentId={lastPayment?.id}
-            onCancelClick={lastPayment ? handleCancelClick : undefined}
-            onPayClick={handlePayClick}
-            disabled={disabled}
-          />
+          <Elements stripe={getStripe()}>
+            <DomainPaymentForm
+              domainPrice={domainPrice}
+              lastPaymentId={lastPayment?.id}
+              onCancelClick={lastPayment ? handleCancelClick : undefined}
+              onPayClick={handlePayClick}
+              disabled={disabled}
+            />
+          </Elements>
         )}
       </QuestionForm>
     </>
