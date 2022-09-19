@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core'
 import { mdiPlus, mdiTrashCanOutline } from '@mdi/js'
 import { useDispatch } from 'react-redux'
-import { IContactAttributeDef, INormalizedContact } from 'types/Contact'
+import { IAssigneeReturnData, INormalizedContact } from 'types/Contact'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { useActiveBrand } from '@app/hooks/brand'
@@ -37,10 +37,7 @@ import AssigneeEmail from './AssigneeEmail'
 
 interface Props {
   contact: INormalizedContact
-  submitCallback: (
-    newContact: INormalizedContact,
-    updatedAttribute: IContactAttributeDef
-  ) => void
+  submitCallback: (newContact: INormalizedContact) => void
 }
 
 const useStyles = makeStyles(
@@ -49,8 +46,8 @@ const useStyles = makeStyles(
       textAlign: 'center'
     },
     popoverContainer: {
-      width: '500px',
-      height: '300px',
+      width: '400px',
+      height: '400px',
       padding: theme.spacing(1)
     },
     actionContainer: {
@@ -96,9 +93,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
   const classes = useStyles()
   const activeBrand = useActiveBrand()
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLButtonElement>>(null)
-  const [selectedAgent, setSelectedAgents] = useState<BrandedUser[]>(
-    [] as BrandedUser[]
-  )
+  const [selectedAgent] = useState<BrandedUser[]>([] as BrandedUser[])
   const [currentAgent, setCurrentAgent] = useState<Nullable<BrandedUser>>(null)
   const [showActionId, setShowActionId] = useState<Nullable<UUID>>(null)
   const [showEmailDialog, setShowEmailDialog] = useState<boolean>(false)
@@ -119,7 +114,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
 
   const handleSelectAgent = async (user: BrandedUser) => {
     if (activeBrand.id === contact.brand) {
-      let oldAssignees = []
+      let oldAssignees: IAssigneeReturnData[] = []
 
       if (contact.assignees) {
         contact.assignees.map(assignee => {
@@ -132,17 +127,19 @@ const Assignee = ({ contact, submitCallback }: Props) => {
 
       try {
         if (user) {
-          const data = await addAssignee(contact.id, {
+          const { data } = await addAssignee(contact.id, {
             assignees: [
               ...oldAssignees,
               { brand: user.brand_id, user: user.id }
             ]
           })
 
+          console.log()
+
           setCurrentAgent(user)
           setShowEmailDialog(true)
-          setSelectedAgents(data.references.user)
-          submitCallback(data?.data, data?.data)
+          submitCallback(data)
+
           handleClose()
         }
       } catch (err) {
@@ -172,7 +169,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
         assignee => assignee.id !== id
       )
 
-      let newAssignees = []
+      let newAssignees: IAssigneeReturnData[] = []
 
       removedAssignees.map(assignee => {
         newAssignees.push({
@@ -182,12 +179,11 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       })
 
       try {
-        const data = await addAssignee(contact.id, {
+        const { data } = await addAssignee(contact.id, {
           assignees: newAssignees
         })
 
-        setSelectedAgents(data.references.user)
-        submitCallback(data?.data, data?.data)
+        submitCallback(data)
         setShowActionId(null)
       } catch (err) {
         console.error(err)

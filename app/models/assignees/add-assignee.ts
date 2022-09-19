@@ -1,4 +1,4 @@
-import { BrandedUser } from '@app/views/components/TeamAgents/types'
+import { IAssigneeReturnData, INormalizedContact } from 'types/Contact'
 
 import Fetch from '../../services/fetch'
 
@@ -6,15 +6,10 @@ import Fetch from '../../services/fetch'
  * Adds contacts to a CRM flow
  */
 
-interface Data {
-  brand: UUID
-  user: UUID
-}
-
 export async function addAssignee(
   id: UUID,
-  data: { assignees: Data[] }
-): Promise<ApiResponseBody<{ code: string; data: BrandedUser }>> {
+  data: { assignees: IAssigneeReturnData[] }
+): Promise<ApiResponseBody<INormalizedContact>> {
   try {
     const response = await new Fetch()
       .put(`/contacts/${id}/assignees`)

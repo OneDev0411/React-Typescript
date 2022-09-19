@@ -376,7 +376,7 @@ const ContactProfile = props => {
 
   const updateAttributeSubmitCallback = (
     contact: INormalizedContact,
-    updatedAttribute: IContactAttributeDef
+    updatedAttribute?: IContactAttributeDef
   ) => {
     setNewContact(contact)
 
