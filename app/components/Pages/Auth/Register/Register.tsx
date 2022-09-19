@@ -110,8 +110,11 @@ export function Register(props: WithRouterProps) {
     } = {
       last_name,
       first_name,
-      phone_number,
       is_shadow: false
+    }
+
+    if (userInfo.phone_number) {
+      userInfo.phone_number = phone_number
     }
 
     const loginInfo = {
