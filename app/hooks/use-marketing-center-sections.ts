@@ -344,6 +344,11 @@ const ALL_SECTIONS: SectionCollection = {
         title: getTemplateTypeLabel('Announcements'),
         value: 'Announcements',
         link: urlGenerator('/Announcements')
+      },
+      {
+        title: getTemplateTypeLabel('Testimonial'),
+        value: 'Testimonial',
+        link: urlGenerator('/Testimonial')
       }
     ]
   },

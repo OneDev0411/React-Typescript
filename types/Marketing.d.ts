@@ -110,6 +110,7 @@ declare type IMarketingTemplateType =
   | 'September11'
   | 'StPatrick'
   | 'Thanksgiving'
+  | 'Testimonial'
   | 'UnderContract'
   | 'Valentines'
   | 'VeteransDay'
