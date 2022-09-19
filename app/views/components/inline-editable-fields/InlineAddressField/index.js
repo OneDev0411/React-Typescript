@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { IconButton, InputAdornment } from '@material-ui/core'
-import { mdiTrashCan } from '@mdi/js'
 import debounce from 'lodash/debounce'
 import PropTypes from 'prop-types'
 
@@ -9,8 +7,6 @@ import {
   loadMapLibraries,
   isMapLibrariesLoaded
 } from '@app/utils/google-map-api'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/MLS/constants'
 import { TEXAS_LOCATION } from '../../../../constants/listings/defaults'
@@ -242,48 +238,19 @@ export class InlineAddressField extends React.Component {
     })
   }
 
-  onDelete = () => {
-    this.setState({ address: '' })
-    this.props.handleSubmit({})
-  }
-
   render() {
     const address = this.state.address
 
     return (
       <div style={this.props.style}>
-        {this.props.renderSearchField(
-          address != ''
-            ? {
-                isLoading: this.state.isLoading,
-                onChange: this.handleInputOnChange,
-                onKeyDown: this.handleInputOnKeyDown,
-                value: address,
-                onBlur: this.handleInputBlur,
-                autoComplete: 'new-password',
-                InputProps: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        size="small"
-                        aria-label="delete"
-                        onClick={this.onDelete}
-                      >
-                        <SvgIcon path={mdiTrashCan} size={muiIconSizes.small} />
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }
-              }
-            : {
-                isLoading: this.state.isLoading,
-                onChange: this.handleInputOnChange,
-                onKeyDown: this.handleInputOnKeyDown,
-                value: address,
-                onBlur: this.handleInputBlur,
-                autoComplete: 'new-password'
-              }
-        )}
+        {this.props.renderSearchField({
+          isLoading: this.state.isLoading,
+          onChange: this.handleInputOnChange,
+          onKeyDown: this.handleInputOnKeyDown,
+          value: address,
+          onBlur: this.handleInputBlur,
+          autoComplete: 'disabled'
+        })}
 
         <SuggestionsPopover
           isOpen={this.state.isSuggestionsOpen}
