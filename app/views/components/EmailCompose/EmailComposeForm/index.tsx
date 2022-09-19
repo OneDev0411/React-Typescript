@@ -7,7 +7,6 @@ import { TextField } from 'final-form-material-ui'
 import { isEqual } from 'lodash'
 import { Field, Form } from 'react-final-form'
 import { useDispatch, useSelector } from 'react-redux'
-import isEmail from 'validator/lib/isEmail'
 
 import { addNotification } from 'components/notification'
 import {
@@ -237,32 +236,6 @@ export default function EmailComposeForm<T>({
           onCancel: reject
         })
       })
-    }
-
-    if (form.cc) {
-      if (form?.cc.some(element => !isEmail(element.email))) {
-        dispatch(
-          addNotification({
-            status: 'error',
-            message: 'Invalid CC email address'
-          })
-        )
-
-        return null
-      }
-    }
-
-    if (form.bcc) {
-      if (form?.bcc.some(element => !isEmail(element.email))) {
-        dispatch(
-          addNotification({
-            status: 'error',
-            message: 'Invalid BCC email address'
-          })
-        )
-
-        return null
-      }
     }
 
     if ((form.subject || '').trim() === '') {
