@@ -77,6 +77,7 @@ const GENERAL_FLOW_TYPES = [
   'Recruiting',
   'Announcements',
   'News',
+  'Testimonial',
   'Newsletter',
   'Recruitment',
   HOLIDAY_TYPES.join(','),
