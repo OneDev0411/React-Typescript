@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
 import { Tooltip } from '@material-ui/core'
 import { mdiCheck } from '@mdi/js'
@@ -57,12 +57,11 @@ export function DateField({
   const isPastDate =
     new Date().getTime() / 1000 > (getField(deal, brandContext.key) ?? Infinity)
 
-  const dateTooltip =
-    value && isDisabled
-      ? typeof value === 'string'
-        ? moment(value).format('dddd, MMM DD, YYYY')
-        : ''
+  const dateTooltip = useMemo(() => {
+    return value && isDisabled
+      ? moment(value as string).format('dddd, MMM DD, YYYY')
       : ''
+  }, [value, isDisabled])
 
   const handleSave = async (date: Date): Promise<void> => {
     setIsSaving(true)
