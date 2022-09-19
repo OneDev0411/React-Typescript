@@ -26,7 +26,7 @@ export async function updateUserRoles(
   const addPromises = rolesToAdd.map(async role => {
     try {
       await Members.addMembers(role.brand, role.id, {
-        users: [userId]
+        user: userId
       })
     } catch (e) {
       console.error(`Could not add role ${role.id} to user ${userId}`, e)

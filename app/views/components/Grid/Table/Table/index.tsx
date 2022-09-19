@@ -1,4 +1,5 @@
 import { makeStyles, Theme } from '@material-ui/core'
+import cn from 'classnames'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { Props } from '..'
@@ -119,7 +120,7 @@ export function GridTable<Row>({
         <div className={gridClasses.summary}>{summary(totalRows, state)}</div>
       )}
 
-      <div className={gridClasses.tableContainer}>
+      <div className={cn(gridClasses.tableContainer, classes.tableContainer)}>
         {rows && rows.length > 0 && (
           <Body<Row>
             columns={nextColumns}
