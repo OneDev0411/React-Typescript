@@ -117,7 +117,6 @@ export function BaseDropdown({
         transition
         placement={placement}
         disablePortal={disablePortal}
-        container={anchorRef.current}
         {...PopperProps}
       >
         {({ TransitionProps, placement }) => (
