@@ -40,6 +40,9 @@ const useStyles = makeStyles(
     },
     scroller: {
       position: 'inherit'
+    },
+    indicator: {
+      display: 'none'
     }
   }),
   { name: 'PageTabs' }
@@ -114,16 +117,15 @@ export function PageTabs({
     <div className={classes.container} style={containerStyle}>
       <Tabs
         value={value || activeTab || false}
-        indicatorColor="primary"
         textColor="primary"
         variant="scrollable"
         scrollButtons="auto"
         onChange={(e, v) => handleChangeTab(v)}
         classes={{
           root: classes.tabContainer,
-          scroller: hasMegaMenu ? classes.scroller : ''
+          scroller: hasMegaMenu ? classes.scroller : '',
+          indicator: classes.indicator
         }}
-        TabIndicatorProps={{ children: <div /> }}
       >
         {tabs.map(tab => tab)}
       </Tabs>
@@ -131,15 +133,14 @@ export function PageTabs({
       {actions && (
         <div>
           <Tabs
-            indicatorColor="primary"
             value={actionValue || activeAction || false}
             onChange={(e, v) => handleChangeAction(v)}
             variant="scrollable"
             scrollButtons="auto"
             classes={{
-              root: classes.tabContainer
+              root: classes.tabContainer,
+              indicator: classes.indicator
             }}
-            TabIndicatorProps={{ children: <div /> }}
           >
             {actions.map(tab => tab)}
           </Tabs>
