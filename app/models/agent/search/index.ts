@@ -1,10 +1,26 @@
 import Fetch from '../../../services/fetch'
 
-async function search(criteria, field = 'mlsid'): Promise<IAgent[]> {
+interface AgentSearchOptions {
+  q?: string
+  mlsid?: string
+  mls?: string[]
+}
+async function search({
+  mls,
+  ...otherOptions
+}: AgentSearchOptions): Promise<IAgent[]> {
+  const query: Exclude<AgentSearchOptions, 'mls'> & { 'mls[]'?: string[] } = {
+    ...otherOptions
+  }
+
+  if (mls && mls.length) {
+    query['mls[]'] = mls
+  }
+
   try {
     const response = await new Fetch()
       .get('/agents/search')
-      .query({ [field]: criteria })
+      .query(query)
       .query({ 'associations[]': 'agent.office' })
 
     return response.body.data

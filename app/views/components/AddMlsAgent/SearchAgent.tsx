@@ -19,7 +19,7 @@ export function SearchAgent({ user, onComplete }: Props) {
     setIsSearching(true)
 
     try {
-      const agents = await searchAgent(agentNumber.trim())
+      const agents = await searchAgent({ mlsid: agentNumber.trim() })
 
       setIsSearching(false)
 

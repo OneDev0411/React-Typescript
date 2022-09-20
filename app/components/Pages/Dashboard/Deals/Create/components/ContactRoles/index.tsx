@@ -12,6 +12,7 @@ import { parseFullName } from 'parse-full-name'
 import { useAsync, useDebounce } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
+import { useUserAgentsMls } from '@app/hooks/use-user-agents-mls'
 import { isMlsNumber } from '@app/utils/is-mls-number'
 import { isValidNameTitle } from '@app/views/components/DealRole/validators/is-valid-legal-prefix'
 import VirtualList from 'components/VirtualList'
@@ -54,6 +55,7 @@ export function ContactRoles({
   onSelectRole
 }: Props) {
   const classes = useStyles()
+  const userAgentsMls = useUserAgentsMls()
 
   const [searchCriteria, setSearchCriteria] = useState<string>('')
   const [debouncedSearchCriteria, setDebouncedSearchCriteria] =
@@ -90,7 +92,10 @@ export function ContactRoles({
     setIsSearching(true)
 
     if (source === 'MLS') {
-      const agents: IAgent[] = await searchAgents(searchCriteria, 'q')
+      const agents: IAgent[] = await searchAgents({
+        mls: userAgentsMls,
+        q: searchCriteria
+      })
 
       setRows([
         {
