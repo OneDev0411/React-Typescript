@@ -9,7 +9,6 @@ import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { useEffectOnce } from 'react-use'
-import { IContactAttributeDef, INormalizedContact } from 'types/Contact'
 
 import { useGetGlobalTriggers } from '@app/components/Pages/Dashboard/Account/Triggers/hooks/use-get-global-triggers'
 import { useActiveBrand } from '@app/hooks/brand'

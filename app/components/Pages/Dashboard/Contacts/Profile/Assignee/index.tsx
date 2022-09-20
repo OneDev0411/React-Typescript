@@ -17,7 +17,6 @@ import {
 } from '@material-ui/core'
 import { mdiPlus, mdiTrashCanOutline } from '@mdi/js'
 import { useDispatch } from 'react-redux'
-import { IAssigneeReturnData, INormalizedContact } from 'types/Contact'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { useActiveBrand } from '@app/hooks/brand'
@@ -50,6 +49,7 @@ const useStyles = makeStyles(
       height: '400px',
       padding: theme.spacing(1)
     },
+    actionImage: { padding: theme.spacing(2) },
     actionContainer: {
       display: 'flex',
       alignItems: 'center',
@@ -134,8 +134,6 @@ const Assignee = ({ contact, submitCallback }: Props) => {
             ]
           })
 
-          console.log()
-
           setCurrentAgent(user)
           setShowEmailDialog(true)
           submitCallback(data)
@@ -198,19 +196,30 @@ const Assignee = ({ contact, submitCallback }: Props) => {
     <>
       <Dialog fullWidth maxWidth="xs" open={showEmailDialog}>
         <DialogContent className={classes.dialogContainer}>
-          <Typography variant="h6" component="h1">
-            {currentAgent?.display_name} is notified about{' '}
-            {contact?.display_name}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            You can also send an email to introduce {contact?.display_name} and{' '}
-            {currentAgent?.display_name} if you'd like.
-          </Typography>
+          <img
+            className={classes.actionImage}
+            src="/static/images/contacts/assignee.svg"
+            alt="assignee"
+          />
+          <div>
+            <Typography variant="h6" component="h1">
+              {currentAgent?.display_name} is notified about{' '}
+              {contact?.display_name}
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              You can also send an email to introduce {contact?.display_name}{' '}
+              and {currentAgent?.display_name} if you'd like.
+            </Typography>
+          </div>
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => setShowEmailDialog(false)}>Skip</Button>
+          <Button variant="outlined" onClick={() => setShowEmailDialog(false)}>
+            Skip
+          </Button>
           <Button
+            variant="contained"
+            color="primary"
             onClick={() => {
               setShowEmailDialog(false)
               setShowEmailDrawer(true)

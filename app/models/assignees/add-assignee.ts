@@ -1,5 +1,3 @@
-import { IAssigneeReturnData, INormalizedContact } from 'types/Contact'
-
 import Fetch from '../../services/fetch'
 
 /**
