@@ -95,7 +95,7 @@ if (isProduction) {
 
   const setHeaders = (res: Response, path: string) => {
     // prevent caching of index.html
-    if (serveStatic.mime.getType(path) === 'text/html') {
+    if (serveStatic.mime.lookup(path) === 'text/html') {
       res.setHeader('Surrogate-Control', 'no-store')
       res.setHeader(
         'Cache-Control',
