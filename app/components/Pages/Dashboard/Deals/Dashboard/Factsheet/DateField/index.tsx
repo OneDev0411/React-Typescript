@@ -57,11 +57,13 @@ export function DateField({
   const isPastDate =
     new Date().getTime() / 1000 > (getField(deal, brandContext.key) ?? Infinity)
 
-  const dateTooltip = useMemo(() => {
-    return value && isDisabled
-      ? moment(value as string).format('dddd, MMM DD, YYYY')
-      : ''
-  }, [value, isDisabled])
+  const dateTooltip = useMemo(
+    () =>
+      value && isDisabled
+        ? moment(value as string).format('dddd, MMM DD, YYYY')
+        : '',
+    [value, isDisabled]
+  )
 
   const handleSave = async (date: Date): Promise<void> => {
     setIsSaving(true)
