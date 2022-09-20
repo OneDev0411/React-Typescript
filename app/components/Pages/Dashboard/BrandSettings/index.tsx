@@ -2,9 +2,9 @@ import { useState, useCallback, useContext } from 'react'
 
 import { Grid, Button, Divider, Box } from '@material-ui/core'
 import isEqual from 'lodash/isEqual'
-import { Helmet } from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter } from 'react-router'
+import { useTitle } from 'react-use'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
@@ -45,6 +45,8 @@ export function BrandSettings() {
     getPreferredSidebarView(settings)
   )
   const confirmation = useContext(ConfirmationModalContext)
+
+  useTitle('Brand Settings | Rechat')
 
   useEffectOnce(() => {
     async function loadMockLising() {
@@ -116,10 +118,6 @@ Are you sure?`,
 
   return (
     <Acl access={[ACL.ADMIN, ACL.MARKETING]}>
-      <Helmet>
-        <title>Brand Settings | Rechat</title>
-      </Helmet>
-
       <PageLayout>
         <PageLayout.Header title="Brand Settings">
           <Grid container justifyContent="flex-end" spacing={2}>

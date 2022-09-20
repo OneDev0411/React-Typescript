@@ -3,8 +3,7 @@ import { useState } from 'react'
 import { Box, Link, IconButton, Theme, makeStyles } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { mdiClose } from '@mdi/js'
-import { Helmet } from 'react-helmet'
-import { useEffectOnce } from 'react-use'
+import { useTitle, useEffectOnce } from 'react-use'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useActiveBrandSettings } from '@app/hooks/brand/use-active-brand-settings'
@@ -224,12 +223,10 @@ function OpenHousesList() {
     )
   }
 
+  useTitle('Open House Registration Pages | Rechat')
+
   return (
     <>
-      <Helmet>
-        <title>Open House Registration Pages | Rechat</title>
-      </Helmet>
-
       <PageLayout>
         <PageLayout.Header title="Open House Registration Pages" />
         <PageLayout.Main>
