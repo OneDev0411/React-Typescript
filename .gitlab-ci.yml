@@ -56,6 +56,9 @@ deploy_production:
 start_review:
   stage: review
   script:
+    - npm install -g npm@8.1
+    - npm ci
+    - npm run types:check
     - chmod u+x ./dokku.sh
     - ./dokku.sh
   environment:

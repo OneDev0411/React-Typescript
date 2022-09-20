@@ -53,6 +53,7 @@ export const TEMPLATE_TYPES: IMarketingTemplateType[] = [
   'September11',
   'StPatrick',
   'Thanksgiving',
+  'Testimonial',
   'UnderContract',
   'Valentines',
   'VeteransDay',

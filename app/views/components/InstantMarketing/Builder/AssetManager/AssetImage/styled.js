@@ -7,6 +7,16 @@ export const Image = styled.img`
   border-radius: 2px;
   width: 90%;
   cursor: pointer;
+  -moz-user-select: -moz-none;
+  -moz-user-drag: -moz-none;
+  -khtml-user-select: none;
+  -khtml-user-drag: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  -ms-user-select: none;
+  -ms-user-drag: none;
+  user-select: none;
+  user-drag: none;
 `
 
 export const CropButton = styled.div`
