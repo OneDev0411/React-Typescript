@@ -44,6 +44,9 @@ const useStyles = makeStyles(
     dialogContainer: {
       textAlign: 'center'
     },
+    basicSection: {
+      marginTop: theme.spacing(1)
+    },
     popoverContainer: {
       width: '400px',
       height: '400px',
@@ -238,110 +241,111 @@ const Assignee = ({ contact, submitCallback }: Props) => {
           contactName={contact.display_name}
         />
       )}
-
-      <BasicSection title="Assignee" marginTop>
-        <List component="nav">
-          {contact.assignees?.map(assignee => (
-            <ListItem
-              onMouseEnter={() => setShowActionId(assignee.id)}
-              onMouseLeave={() => setShowActionId(null)}
-              key={assignee.id}
-              disableGutters
-              button
-            >
-              <ListItemIcon>
-                <UserAvatar
-                  image={assignee.user?.profile_image_url}
-                  name={assignee.user?.display_name}
-                />
-              </ListItemIcon>
-              <ListItemText primary={assignee.user?.display_name} />
-              {activeBrand.id === contact.brand && (
-                <div
-                  className={classes.videoModeActionBar}
-                  style={{
-                    visibility:
-                      showActionId === assignee.id ? 'visible' : 'hidden'
-                  }}
-                >
-                  <div className={classes.actionContainer}>
-                    <div
-                      onClick={() => handleDelete(assignee.id)}
-                      className={classes.action}
-                    >
-                      <SvgIcon
-                        path={mdiTrashCanOutline}
-                        size={muiIconSizes.small}
-                      />
-                      <span className={classes.actionLabel}>Delete</span>
+      <div className={classes.basicSection}>
+        <BasicSection title="Assignee">
+          <List component="nav">
+            {contact.assignees?.map(assignee => (
+              <ListItem
+                onMouseEnter={() => setShowActionId(assignee.id)}
+                onMouseLeave={() => setShowActionId(null)}
+                key={assignee.id}
+                disableGutters
+                button
+              >
+                <ListItemIcon>
+                  <UserAvatar
+                    image={assignee.user?.profile_image_url}
+                    name={assignee.user?.display_name}
+                  />
+                </ListItemIcon>
+                <ListItemText primary={assignee.user?.display_name} />
+                {activeBrand.id === contact.brand && (
+                  <div
+                    className={classes.videoModeActionBar}
+                    style={{
+                      visibility:
+                        showActionId === assignee.id ? 'visible' : 'hidden'
+                    }}
+                  >
+                    <div className={classes.actionContainer}>
+                      <div
+                        onClick={() => handleDelete(assignee.id)}
+                        className={classes.action}
+                      >
+                        <SvgIcon
+                          path={mdiTrashCanOutline}
+                          size={muiIconSizes.small}
+                        />
+                        <span className={classes.actionLabel}>Delete</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </ListItem>
-          ))}
-        </List>
-        {activeBrand.id === contact.brand && (
-          <SectionButton
-            aria-describedby={id}
-            onClick={handleClick}
-            label="Add new assignee"
-            icon={mdiPlus}
-          />
-        )}
-        <Popover
-          id={id}
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'left'
-          }}
-          transformOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left'
-          }}
-        >
-          <div className={classes.popoverContainer}>
-            <TeamAgents
-              flattenTeams={false}
-              isPrimaryAgent={false}
-              criteria={searchCriteria}
-            >
-              {({ isLoading, isEmptyState, teams }) => (
-                <>
-                  {isLoading && (
-                    <Box
-                      display="flex"
-                      height="100%"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <CircularProgress />
-                    </Box>
-                  )}
-                  {isEmptyState && (
-                    <Box my={2} textAlign="center">
-                      We could not find any agent in your brand
-                    </Box>
-                  )}
-                  {!isEmptyState && !isLoading && (
-                    <AgentsList
-                      teams={teams}
-                      searchCriteria={searchCriteria}
-                      selectedAgents={selectedAgent}
-                      multiSelection={false}
-                      onSelectAgent={handleSelectAgent}
-                      onChangeCriteria={debouncedSetSearchCriteria}
-                    />
-                  )}
-                </>
-              )}
-            </TeamAgents>
-          </div>
-        </Popover>
-      </BasicSection>
+                )}
+              </ListItem>
+            ))}
+          </List>
+          {activeBrand.id === contact.brand && (
+            <SectionButton
+              aria-describedby={id}
+              onClick={handleClick}
+              label="Add new assignee"
+              icon={mdiPlus}
+            />
+          )}
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'left'
+            }}
+            transformOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left'
+            }}
+          >
+            <div className={classes.popoverContainer}>
+              <TeamAgents
+                flattenTeams={false}
+                isPrimaryAgent={false}
+                criteria={searchCriteria}
+              >
+                {({ isLoading, isEmptyState, teams }) => (
+                  <>
+                    {isLoading && (
+                      <Box
+                        display="flex"
+                        height="100%"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <CircularProgress />
+                      </Box>
+                    )}
+                    {isEmptyState && (
+                      <Box my={2} textAlign="center">
+                        We could not find any agent in your brand
+                      </Box>
+                    )}
+                    {!isEmptyState && !isLoading && (
+                      <AgentsList
+                        teams={teams}
+                        searchCriteria={searchCriteria}
+                        selectedAgents={selectedAgent}
+                        multiSelection={false}
+                        onSelectAgent={handleSelectAgent}
+                        onChangeCriteria={debouncedSetSearchCriteria}
+                      />
+                    )}
+                  </>
+                )}
+              </TeamAgents>
+            </div>
+          </Popover>
+        </BasicSection>
+      </div>
     </>
   )
 }
