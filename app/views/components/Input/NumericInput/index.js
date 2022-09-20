@@ -61,7 +61,8 @@ export default props => {
       <Input
         placeholder={placeholder || ''}
         style={{
-          border: isValid ? '' : '1px solid #ec4b35'
+          border: isValid ? '' : '1px solid #ec4b35',
+          height: '100%'
         }}
         value={value}
         mask={createNumberMask({
