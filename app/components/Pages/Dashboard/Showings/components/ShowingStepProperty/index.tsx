@@ -1,5 +1,8 @@
-import React, { memo, useState } from 'react'
+import { memo, useState } from 'react'
 
+import addressParser from 'parse-address'
+
+import { normalizePostgressStdaddr } from '@app/views/components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/normalize-postgres-stdaddr'
 import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
 import {
   SearchResult,
@@ -17,7 +20,6 @@ import { ShowingPropertyType } from '../../types'
 import ListingHipPocketCard from '../ListingHipPocketCard'
 import SmartQuestionForm from '../SmartQuestionForm'
 
-import { getStdAddrFromAddressComponents } from './helpers'
 import ShowingStepPropertyChangeButton from './ShowingStepPropertyChangeButton'
 import ShowingStepPropertyDealListingCard from './ShowingStepPropertyDealListingCard'
 import ShowingStepPropertyForm, {
@@ -53,11 +55,14 @@ function ShowingStepProperty({
       onPropertyChange({
         type: 'place',
         address: {
-          ...getStdAddrFromAddressComponents(result.place.address_components),
-          full: result.place.formatted_address
+          ...normalizePostgressStdaddr(
+            addressParser.parseLocation(result.place.description)
+          ),
+          full: result.place.description
         },
         gallery: []
       })
+
       setIsEditMode(true)
     }
 

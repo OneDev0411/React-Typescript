@@ -388,9 +388,10 @@ const ContactProfile = props => {
       if (Array.isArray(contacts) && contacts.includes(currentContactId)) {
         console.log('[ Socket ] Touch Changed')
         updateContact()
+        fetchTimeline()
       }
     },
-    [currentContactId, updateContact]
+    [currentContactId, updateContact, fetchTimeline]
   )
 
   useEffectOnce(() => {

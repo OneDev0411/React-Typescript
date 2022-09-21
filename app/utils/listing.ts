@@ -145,12 +145,19 @@ export const getListingAddress = (
 }
 
 export const getAddressLine2 = (address: Address | ICompactAddress): string => {
-  const neighborhood = address.neighborhood ? `${address.neighborhood}, ` : ''
   const state = address.type === 'address' ? address.state_code : address.state
 
-  return `${neighborhood}${address.city}, ${state} ${address.postal_code}`
-}
+  const part1 = [address.neighborhood, address.city].filter(
+    item => !!item?.trim()
+  )
 
+  const part2 = [state, address.postal_code].filter(item => !!item?.trim())
+
+  return (
+    (part1.length ? `${part1.join(' ')}, ` : '') +
+    (part2.length ? `${part2.join(' ')}` : '')
+  )
+}
 export const getListingAddressLine2 = (
   listing: IListing | ICompactListing
 ): string => {

@@ -22,7 +22,7 @@ export function AgentConfirm() {
     setMlsId(values.mlsId)
 
     try {
-      const agents = await searchAgent(values.mlsId)
+      const agents = await searchAgent({ mlsid: values.mlsId })
 
       setAgents(agents)
       setIsModalOpen(true)

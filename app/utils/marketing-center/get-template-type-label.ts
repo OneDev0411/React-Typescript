@@ -55,6 +55,7 @@ const TEMPLATE_TYPE_LABEL_MAP: {
   September11: 'September 11',
   StPatrick: "St. Patrick's Day",
   Thanksgiving: 'Thanksgiving',
+  Testimonial: 'Testimonial',
   UnderContract: 'Under Contract',
   Valentines: "Valentine's Day",
   VeteransDay: 'Veterans Day',

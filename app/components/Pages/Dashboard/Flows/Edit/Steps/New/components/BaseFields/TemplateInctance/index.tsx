@@ -43,6 +43,7 @@ const allMarketingTemplateType: IMarketingTemplateType[] = [
   'September11',
   'StPatrick',
   'Thanksgiving',
+  'Testimonial',
   'Valentines',
   'VeteransDay',
   'WeddingAnniversary',

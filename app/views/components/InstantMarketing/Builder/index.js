@@ -256,6 +256,8 @@ class Builder extends React.Component {
     }
 
     unloadJS('ckeditor')
+
+    document.body.style.overflow = 'auto'
   }
 
   evaluateRte = (view, rte) => {
@@ -532,6 +534,8 @@ class Builder extends React.Component {
       onManageCarouselClick: this.openCarouselDrawer
     })
     this.setState({ isEditorLoaded: true })
+
+    document.body.style.overflow = 'hidden'
 
     this.lockIn()
     this.singleClickTextEditing()

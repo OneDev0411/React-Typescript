@@ -3,6 +3,7 @@ import { useRef } from 'react'
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 
 import { UnlinkFieldButton } from '../../../../../components/UnlinkFieldButton'
+import { isUnlinkEvent } from '../../../../../utils/is-unlink-event'
 
 const popoverStyles = {
   marginTop: '1rem'
@@ -24,6 +25,12 @@ export function AddressWithSuggestion({
     onSave(address)
 
     formRef.current.handleClose()
+  }
+
+  const handleClickAnnotation = e => {
+    if (isUnlinkEvent(e)) {
+      onToggleUnlink()
+    }
   }
 
   return (
@@ -53,6 +60,7 @@ export function AddressWithSuggestion({
               ...style,
               ...inputStyles
             }}
+            onClick={handleClickAnnotation}
           />
 
           <UnlinkFieldButton
