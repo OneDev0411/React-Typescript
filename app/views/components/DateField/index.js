@@ -129,6 +129,7 @@ export function DateField(props) {
           disabled: !(Number.isInteger(month.value) && month.value >= 0)
         }}
         renderMenu={({ close }) => renderItems(daysItems, onChangeDay, close)}
+        disablePortal
       />
 
       {props.showYear ? (
