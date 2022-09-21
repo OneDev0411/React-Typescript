@@ -121,6 +121,7 @@ export function DateField(props) {
         renderMenu={({ close }) =>
           renderItems(monthsItems, onChangeMonth, close)
         }
+        disablePortal
       />
       <BaseDropdown
         buttonLabel={day.label}
