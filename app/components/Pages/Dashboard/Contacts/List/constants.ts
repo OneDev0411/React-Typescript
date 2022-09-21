@@ -69,5 +69,10 @@ export const ORIGINS = [
     label: 'Zillow',
     description: 'Imported from Zillow',
     value: 'Zillow'
+  },
+  {
+    label: 'Realtor',
+    description: 'Created by Realtor',
+    value: 'Realtor'
   }
 ]
