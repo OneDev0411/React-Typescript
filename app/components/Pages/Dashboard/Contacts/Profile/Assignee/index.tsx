@@ -1,38 +1,30 @@
 import { useState } from 'react'
 
 import {
-  Popover,
   List,
   ListItemText,
   ListItem,
   ListItemIcon,
-  Box,
-  CircularProgress,
-  makeStyles,
-  Dialog,
-  DialogActions,
-  Button,
-  DialogContent,
-  Typography
+  makeStyles
 } from '@material-ui/core'
 import { mdiPlus, mdiTrashCanOutline } from '@mdi/js'
+import cn from 'classnames'
 import { useDispatch } from 'react-redux'
-import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { useActiveBrand } from '@app/hooks/brand'
 import { addAssignee } from '@app/models/assignees/add-assignee'
 import { confirmation } from '@app/store_actions/confirmation'
 import { muiIconSizes } from '@app/views/components/SvgIcons'
-import TeamAgents from '@app/views/components/TeamAgents'
 import { BrandedUser } from '@app/views/components/TeamAgents/types'
-import { AgentsList } from '@app/views/components/TeamAgentsDrawer/List'
 import UserAvatar from '@app/views/components/UserAvatar'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { BasicSection } from '../components/Section/Basic'
 import { SectionButton } from '../components/Section/Button'
 
+import AssigneeDialog from './AssigneeDialog'
 import AssigneeEmail from './AssigneeEmail'
+import AssigneePopover from './AssigneePopover'
 
 interface Props {
   contact: INormalizedContact
@@ -41,18 +33,10 @@ interface Props {
 
 const useStyles = makeStyles(
   theme => ({
-    dialogContainer: {
-      textAlign: 'center'
-    },
     basicSection: {
       marginTop: theme.spacing(1)
     },
-    popoverContainer: {
-      width: '400px',
-      height: '400px',
-      padding: theme.spacing(1)
-    },
-    actionImage: { padding: theme.spacing(2) },
+
     actionContainer: {
       display: 'flex',
       alignItems: 'center',
@@ -84,8 +68,13 @@ const useStyles = makeStyles(
     videoModeActionBar: {
       position: 'absolute',
       top: '90%',
-      right: '0%',
-      display: 'flex'
+      right: '0',
+      display: 'flex',
+      zIndex: 1,
+      visibility: 'hidden'
+    },
+    videoModeActionBarActive: {
+      visibility: 'visible'
     }
   }),
   { name: 'ContactAssigneeModal' }
@@ -96,72 +85,59 @@ const Assignee = ({ contact, submitCallback }: Props) => {
   const classes = useStyles()
   const activeBrand = useActiveBrand()
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLButtonElement>>(null)
-  const [selectedAgent] = useState<BrandedUser[]>([] as BrandedUser[])
   const [currentAgent, setCurrentAgent] = useState<Nullable<BrandedUser>>(null)
   const [showActionId, setShowActionId] = useState<Nullable<UUID>>(null)
   const [showEmailDialog, setShowEmailDialog] = useState<boolean>(false)
   const [showEmailDrawer, setShowEmailDrawer] = useState<boolean>(false)
-  const [searchCriteria, setSearchCriteria] = useState<string>('')
-  const [debouncedSetSearchCriteria] = useDebouncedCallback(
-    setSearchCriteria,
-    500
-  )
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
 
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
+  const handleClose = () => setAnchorEl(null)
 
   const handleSelectAgent = async (user: BrandedUser) => {
-    if (activeBrand.id === contact.brand) {
-      let oldAssignees: IAssigneeReturnData[] = []
+    if (!user) {
+      return
+    }
 
-      if (contact.assignees) {
-        contact.assignees.map(assignee => {
-          oldAssignees.push({
-            user: assignee?.user?.id,
-            brand: assignee?.brand?.id
-          })
+    let oldAssignees: IAssigneeReturnData[] = []
+
+    if (contact.assignees) {
+      contact.assignees.map(assignee => {
+        oldAssignees.push({
+          user: assignee?.user?.id,
+          brand: assignee?.brand?.id
         })
-      }
+      })
+    }
 
-      try {
-        if (user) {
-          const { data } = await addAssignee(contact.id, {
-            assignees: [
-              ...oldAssignees,
-              { brand: user.brand_id, user: user.id }
-            ]
-          })
+    try {
+      const { data } = await addAssignee(contact.id, {
+        assignees: [...oldAssignees, { brand: user.brand_id, user: user.id }]
+      })
 
-          setCurrentAgent(user)
-          setShowEmailDialog(true)
-          submitCallback(data)
+      setCurrentAgent(user)
+      setShowEmailDialog(true)
+      submitCallback(data)
 
-          handleClose()
-        }
-      } catch (err) {
-        console.error(err)
-      }
+      handleClose()
+    } catch (err) {
+      console.error(err)
     }
   }
   const handleDelete = (id: UUID) => {
-    if (activeBrand.id === contact.brand) {
-      dispatch(
-        confirmation({
-          message: 'Delete Assignee',
-          description: 'Are your sure about deleting this Assignee?',
-          confirmLabel: 'Yes, I do',
-          appearance: 'danger',
-          onConfirm: () => {
-            deleteAssignee(id)
-          }
-        })
-      )
-    }
+    dispatch(
+      confirmation({
+        message: 'Delete Assignee',
+        description: 'Are your sure about deleting this Assignee?',
+        confirmLabel: 'Yes, I do',
+        appearance: 'danger',
+        onConfirm: () => {
+          deleteAssignee(id)
+        }
+      })
+    )
   }
 
   const deleteAssignee = async (id: UUID) => {
@@ -192,46 +168,24 @@ const Assignee = ({ contact, submitCallback }: Props) => {
     }
   }
 
+  const handleCloseDialog = () => setShowEmailDialog(false)
+  const handleSendEmail = () => {
+    setShowEmailDialog(false)
+    setShowEmailDrawer(true)
+  }
+
   const open = Boolean(anchorEl)
   const id = open ? 'assignee-popover' : undefined
 
   return (
     <>
-      <Dialog fullWidth maxWidth="xs" open={showEmailDialog}>
-        <DialogContent className={classes.dialogContainer}>
-          <img
-            className={classes.actionImage}
-            src="/static/images/contacts/assignee.svg"
-            alt="assignee"
-          />
-          <div>
-            <Typography variant="h6" component="h1">
-              {currentAgent?.display_name} is notified about{' '}
-              {contact?.display_name}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              You can also send an email to introduce {contact?.display_name}{' '}
-              and {currentAgent?.display_name} if you'd like.
-            </Typography>
-          </div>
-        </DialogContent>
-
-        <DialogActions>
-          <Button variant="outlined" onClick={() => setShowEmailDialog(false)}>
-            Skip
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              setShowEmailDialog(false)
-              setShowEmailDrawer(true)
-            }}
-          >
-            Send Intro Email
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <AssigneeDialog
+        open={showEmailDialog}
+        currentAgentName={currentAgent?.display_name}
+        currentContactName={contact?.display_name}
+        handleClose={handleCloseDialog}
+        handleConfirm={handleSendEmail}
+      />
       {contact && currentAgent && currentAgent.email && (
         <AssigneeEmail
           isOpen={showEmailDrawer}
@@ -261,11 +215,10 @@ const Assignee = ({ contact, submitCallback }: Props) => {
                 <ListItemText primary={assignee.user?.display_name} />
                 {activeBrand.id === contact.brand && (
                   <div
-                    className={classes.videoModeActionBar}
-                    style={{
-                      visibility:
-                        showActionId === assignee.id ? 'visible' : 'hidden'
-                    }}
+                    className={cn(classes.videoModeActionBar, {
+                      [classes.videoModeActionBarActive]:
+                        showActionId === assignee.id
+                    })}
                   >
                     <div className={classes.actionContainer}>
                       <div
@@ -292,58 +245,13 @@ const Assignee = ({ contact, submitCallback }: Props) => {
               icon={mdiPlus}
             />
           )}
-          <Popover
+          <AssigneePopover
             id={id}
             open={open}
             anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'left'
-            }}
-            transformOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left'
-            }}
-          >
-            <div className={classes.popoverContainer}>
-              <TeamAgents
-                flattenTeams={false}
-                isPrimaryAgent={false}
-                criteria={searchCriteria}
-              >
-                {({ isLoading, isEmptyState, teams }) => (
-                  <>
-                    {isLoading && (
-                      <Box
-                        display="flex"
-                        height="100%"
-                        justifyContent="center"
-                        alignItems="center"
-                      >
-                        <CircularProgress />
-                      </Box>
-                    )}
-                    {isEmptyState && (
-                      <Box my={2} textAlign="center">
-                        We could not find any agent in your brand
-                      </Box>
-                    )}
-                    {!isEmptyState && !isLoading && (
-                      <AgentsList
-                        teams={teams}
-                        searchCriteria={searchCriteria}
-                        selectedAgents={selectedAgent}
-                        multiSelection={false}
-                        onSelectAgent={handleSelectAgent}
-                        onChangeCriteria={debouncedSetSearchCriteria}
-                      />
-                    )}
-                  </>
-                )}
-              </TeamAgents>
-            </div>
-          </Popover>
+            handleClose={handleClose}
+            handleSelect={handleSelectAgent}
+          />
         </BasicSection>
       </div>
     </>
