@@ -25,6 +25,7 @@ import { SectionButton } from '../components/Section/Button'
 import AssigneeDialog from './AssigneeDialog'
 import AssigneeEmail from './AssigneeEmail'
 import AssigneePopover from './AssigneePopover'
+import { IAssigneeApiResponse } from './types'
 
 interface Props {
   contact: INormalizedContact
@@ -101,7 +102,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       return
     }
 
-    let oldAssignees: IAssigneeReturnData[] = []
+    let oldAssignees: IAssigneeApiResponse[] = []
 
     if (contact.assignees) {
       contact.assignees.map(assignee => {
@@ -146,7 +147,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
         assignee => assignee.id !== id
       )
 
-      let newAssignees: IAssigneeReturnData[] = []
+      let newAssignees: IAssigneeApiResponse[] = []
 
       removedAssignees.map(assignee => {
         newAssignees.push({

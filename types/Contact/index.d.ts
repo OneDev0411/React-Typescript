@@ -373,8 +373,3 @@ declare interface IAssignee {
   user?: BrandedUser
   brand?: IBrand
 }
-
-declare interface IAssigneeReturnData {
-  brand: Nullable<UUID> | undefined
-  user: UUID | undefined
-}

@@ -1,3 +1,5 @@
+import { IAssigneeApiResponse } from '@app/components/Pages/Dashboard/Contacts/Profile/Assignee/types'
+
 import Fetch from '../../services/fetch'
 
 /**
@@ -6,7 +8,7 @@ import Fetch from '../../services/fetch'
 
 export async function addAssignee(
   id: UUID,
-  data: { assignees: IAssigneeReturnData[] }
+  data: { assignees: IAssigneeApiResponse[] }
 ): Promise<ApiResponseBody<INormalizedContact>> {
   try {
     const response = await new Fetch()
