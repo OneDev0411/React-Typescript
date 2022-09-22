@@ -11,10 +11,9 @@ import {
   makeStyles
 } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
-import { Helmet } from 'react-helmet'
 import { useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
-import { useEffectOnce } from 'react-use'
+import { useTitle, useEffectOnce } from 'react-use'
 
 import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -82,6 +81,8 @@ function Edit(props: WithRouterProps) {
     () => (flow?.steps || []).map(step => step.order),
     [flow?.steps]
   )
+
+  useTitle(flow ? `${flow.name} | Flows | Rechat` : 'Flow | Rechat')
 
   const modal = useContext(ConfirmationModalContext)
 
@@ -282,11 +283,6 @@ function Edit(props: WithRouterProps) {
 
   return (
     <>
-      <Helmet>
-        <title>
-          {flow ? `${flow.name} | Flows | Rechat` : 'Flow | Rechat'}
-        </title>
-      </Helmet>
       <PageLayout gutter={0}>
         <Box className={classes.headerContainer}>
           {flow && (

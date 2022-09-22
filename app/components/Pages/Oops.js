@@ -1,8 +1,8 @@
 // Oops.js
 import React from 'react'
 
-import { Helmet } from 'react-helmet'
 import { Link } from 'react-router'
+import { useTitle } from 'react-use'
 
 const TITLE = 'Something went wrong!'
 
@@ -14,19 +14,20 @@ const MESSAGE = (
   </p>
 )
 
-const Oops = ({ title = TITLE, message = MESSAGE }) => (
-  <div className="c-oops">
-    <Helmet>
-      <title>Oops! | Rechat</title>
-    </Helmet>
-    <Link to="/" className="c-oops__logo">
-      Rechat
-    </Link>
-    <div className="c-oops__body text-center">
-      <h1 className="c-oops__body__title tk-calluna-sans">{title}</h1>
-      <div className="c-oops__body__message">{message}</div>
+const Oops = ({ title = TITLE, message = MESSAGE }) => {
+  useTitle('Oops! | Rechat')
+
+  return (
+    <div className="c-oops">
+      <Link to="/" className="c-oops__logo">
+        Rechat
+      </Link>
+      <div className="c-oops__body text-center">
+        <h1 className="c-oops__body__title tk-calluna-sans">{title}</h1>
+        <div className="c-oops__body__message">{message}</div>
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default Oops
