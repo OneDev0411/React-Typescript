@@ -28,6 +28,11 @@ interface VideoRenderData {
   url: string
 }
 
+const yt = 'yt'
+const vi = 'vi'
+const ytnc = 'ytnc'
+const so = 'so'
+
 const svgAttrs =
   'xmlns="http://www.w3.org/2000/svg" width="80" viewBox="0 0 24 24" style="fill: rgba(0,0,0,0.15); transform: scale(0.75); margin: 0 auto"'
 
@@ -85,25 +90,15 @@ export default function registerVideoBlock(
         },
         init() {
           this.listenTo(this, 'change:video:info', this.handleChangeVideoInfo)
-          this.listenTo(
-            this,
-            'change:videoId change:provider',
-            this.handleSrcUpdate
-          )
         },
         handleChangeVideoInfo({ url }) {
-          const yt = 'yt'
-          const vi = 'vi'
-          const ytnc = 'ytnc'
-          const so = 'so'
-
           const src = generateEmbedVideoUrl(url)
 
           const isYtProv = /youtube\.com\/embed/.test(src)
           const isYtncProv = /youtube-nocookie\.com\/embed/.test(src)
           const isViProv = /player\.vimeo\.com\/video/.test(src)
 
-          this.set({ src }, { silent: true })
+          this.set({ src, provider: yt })
 
           if (isYtProv) {
             this.set({ provider: yt, videoId: getYouTubeVideoId(url) })
@@ -112,13 +107,33 @@ export default function registerVideoBlock(
           } else if (isViProv) {
             this.set({ provider: vi, videoId: getVimeoVideoId(url) })
           } else {
-            this.set({ provider: so })
+            this.set({ provider: so, videoId: src })
           }
 
           this.parseFromSrc()
         },
-        handleSrcUpdate() {
+        updateSrc() {
           this.set('autoplay', 0)
+
+          const prov = this.get('provider')
+          let src = ''
+
+          switch (prov) {
+            case yt:
+              src = this.getYoutubeSrc()
+              break
+            case ytnc:
+              src = this.getYoutubeNoCookieSrc()
+              break
+            case vi:
+              src = this.getVimeoSrc()
+              break
+            default:
+              src = this.get('videoId')
+              break
+          }
+
+          this.set({ src })
         },
         // Override the updateTraits to prevent displaying the video traits
         updateTraits() {}

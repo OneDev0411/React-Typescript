@@ -8,13 +8,21 @@ import { selectActiveBrandId } from '@app/selectors/brand'
 import { createGalleryVideoObject } from './helpers'
 import { SearchVideoResult } from './types'
 
-export default function useGalleryVideos(): () => SearchVideoResult[] {
+interface UseGalleryVideos {
+  videos: SearchVideoResult[]
+  isLoading: boolean
+}
+
+export default function useGalleryVideos(): () => UseGalleryVideos {
   const brandId = useSelector(selectActiveBrandId)
-  const { assets } = useBrandAssets(brandId)
+  const { isLoading, assets } = useBrandAssets(brandId)
 
   return useCallback(() => {
     const videoAssets = assets.filter(asset => asset.file.name.endsWith('.mp4'))
 
-    return videoAssets.map<SearchVideoResult>(createGalleryVideoObject)
-  }, [assets])
+    return {
+      isLoading,
+      videos: videoAssets.map<SearchVideoResult>(createGalleryVideoObject)
+    }
+  }, [assets, isLoading])
 }
