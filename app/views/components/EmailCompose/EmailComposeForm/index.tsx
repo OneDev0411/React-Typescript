@@ -240,7 +240,12 @@ export default function EmailComposeForm<T>({
     }
 
     if (form?.cc) {
-      if (form.cc.some(element => !isEmail(element.email))) {
+      if (
+        form.cc.some(
+          element =>
+            element.recipient_type === 'Email' && !isEmail(element.email)
+        )
+      ) {
         dispatch(
           addNotification({
             status: 'error',
@@ -253,7 +258,12 @@ export default function EmailComposeForm<T>({
     }
 
     if (form?.bcc) {
-      if (form.bcc.some(element => !isEmail(element.email))) {
+      if (
+        form.bcc.some(
+          element =>
+            element.recipient_type === 'Email' && !isEmail(element.email)
+        )
+      ) {
         dispatch(
           addNotification({
             status: 'error',
