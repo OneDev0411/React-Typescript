@@ -10,9 +10,9 @@ import {
   useTheme
 } from '@material-ui/core'
 import { mdiDotsHorizontal } from '@mdi/js'
-import { Helmet } from 'react-helmet'
 import { connect, useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
+import { useTitle } from 'react-use'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { BaseDropdown } from 'components/BaseDropdown'
@@ -78,6 +78,8 @@ function List(props: WithRouterProps) {
     useGetBrandFlows(activeBrandId)
   const confirmation = useContext(ConfirmationModalContext)
   const theme = useTheme<Theme>()
+
+  useTitle('Marketing | Flows')
 
   async function newFlowSubmitHandler(flowData: IBrandFlowInput) {
     try {
@@ -230,10 +232,6 @@ function List(props: WithRouterProps) {
 
   return (
     <>
-      <Helmet>
-        <title>Marketing | Flows</title>
-      </Helmet>
-
       <PageLayout position="relative" overflow="hidden">
         <PageLayout.Header title="Flows" />
         <PageLayout.Main minHeight="100vh">

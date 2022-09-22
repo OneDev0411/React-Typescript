@@ -35,7 +35,7 @@ export function MlsInput({ label, isVisible, input, mutators }: Props) {
       try {
         setIsSearching(true)
 
-        const agents: IAgent[] = await searchAgents(mls)
+        const agents: IAgent[] = await searchAgents({ mlsid: mls })
 
         setIsSearching(false)
 

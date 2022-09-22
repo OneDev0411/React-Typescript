@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react'
 
 import { FieldInputProps, FieldMetaState } from 'react-final-form'
 
+import { useUserAgentsMls } from '@app/hooks/use-user-agents-mls'
 import searchAgents from 'models/agent/search'
 import { searchContacts } from 'models/contacts/search-contacts'
 
@@ -47,6 +48,7 @@ export function NameInput({
   mutators,
   autoTrim = true
 }: Props) {
+  const userAgentsMls = useUserAgentsMls()
   const [isSearching, setIsSearching] = useState(false)
 
   const handleSelectSuggestion = (option: Option) => {
@@ -84,7 +86,10 @@ export function NameInput({
             }))
         }
 
-        const agents: IAgent[] = await searchAgents(name, 'q')
+        const agents: IAgent[] = await searchAgents({
+          mls: userAgentsMls,
+          q: name
+        })
 
         setIsSearching(false)
 
@@ -100,7 +105,7 @@ export function NameInput({
         return []
       }
     },
-    [crmSearch, searchFieldValue, searchFieldLabel]
+    [crmSearch, userAgentsMls, searchFieldValue, searchFieldLabel]
   )
 
   const getNoOptionsText = () => {

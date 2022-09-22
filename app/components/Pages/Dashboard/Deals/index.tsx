@@ -2,6 +2,7 @@ import { ReactElement, memo } from 'react'
 
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { useTitle } from 'react-use'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
@@ -29,6 +30,8 @@ interface Props {
   children: ReactElement<any>
 }
 function Container(props: Props) {
+  useTitle('Deals | Rechat')
+
   const dispatch = useDispatch()
   const [queryParamValue] = useQueryParam('q')
 

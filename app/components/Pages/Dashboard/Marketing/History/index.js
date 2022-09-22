@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet'
+import { useTitle } from 'react-use'
 
 import TemplatesList from 'components/TemplatesList'
 
@@ -14,12 +14,10 @@ function History() {
     await deleteTemplate(id)
   }
 
+  useTitle('All Designs | Marketing | Rechat')
+
   return (
     <>
-      <Helmet>
-        <title>All Designs | Marketing | Rechat</title>
-      </Helmet>
-
       <Layout
         render={() => (
           <TemplatesList

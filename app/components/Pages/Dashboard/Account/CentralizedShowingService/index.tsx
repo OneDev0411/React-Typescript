@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
-import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
+import { useTitle } from 'react-use'
 import Flex from 'styled-flex-component'
 
 import FormCard from 'components/FormCard'
@@ -47,6 +47,8 @@ interface Props {
 function CentralizedShowingService({ notify }: Props) {
   const [loading, setLoading] = useState<boolean>(true)
   const [cssData, setCSSData] = useState<CSSData | null>(null)
+
+  useTitle('Centralized Showing Service | Settings | Rechat')
 
   useEffect(() => {
     async function fetchData() {
@@ -113,9 +115,6 @@ function CentralizedShowingService({ notify }: Props) {
 
   return (
     <>
-      <Helmet>
-        <title>Centralized Showing Service | Settings | Rechat</title>
-      </Helmet>
       <Header />
       <Description />
       <FormCard title={title}>

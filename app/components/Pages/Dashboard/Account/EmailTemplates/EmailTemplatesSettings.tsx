@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useState } from 'react'
 
-import { Helmet } from 'react-helmet'
+import { useTitle } from 'react-use'
 
 import Drawer from 'components/AddOrEditEmailTemplateDrawer'
 
@@ -14,12 +14,10 @@ function EmailTemplatesSettings() {
   const [selectedTemplate, setSelectedTemplate] =
     useState<Nullable<IBrandEmailTemplate>>(null)
 
+  useTitle('Email Templates | Settings | Rechat')
+
   return (
     <>
-      <Helmet>
-        <title>Email Templates | Settings | Rechat</title>
-      </Helmet>
-
       <CtaBar
         label="Create new email template"
         description=""

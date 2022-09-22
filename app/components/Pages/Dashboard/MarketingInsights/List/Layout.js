@@ -1,10 +1,9 @@
 import { useState } from 'react'
 
 import { Box, Button, Chip, makeStyles } from '@material-ui/core'
-import { Helmet } from 'react-helmet'
 import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { useEffectOnce } from 'react-use'
+import { useTitle, useEffectOnce } from 'react-use'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
@@ -86,11 +85,10 @@ function InsightsLayout({
     setSortField(item)
   }
 
+  useTitle('Insight | Rechat')
+
   return (
     <>
-      <Helmet>
-        <title>Insight | Rechat</title>
-      </Helmet>
       <PageLayout>
         <PageLayout.Header title="Insight" onCreateEmail={onCreateEmail}>
           <Box textAlign="right">

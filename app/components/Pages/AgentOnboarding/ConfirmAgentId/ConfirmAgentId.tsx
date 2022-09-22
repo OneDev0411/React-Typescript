@@ -32,7 +32,7 @@ export default function ConfirmAgentId(props: WithRouterProps) {
     }
 
     try {
-      const agents = await searchAgent(values.mlsId)
+      const agents = await searchAgent({ mlsid: values.mlsId })
 
       if (agents.length === 0) {
         return notFoundError
