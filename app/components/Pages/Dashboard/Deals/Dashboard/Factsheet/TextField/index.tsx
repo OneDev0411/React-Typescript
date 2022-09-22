@@ -118,6 +118,10 @@ export function TextField({
               value={fieldValue}
               mask={getContextInputMask(brandContext)}
               placeholder={properties.placeholder || brandContext.label}
+              style={{
+                display: 'flex',
+                width: '100%'
+              }}
               onKeyPress={handleKeyPress}
               onChange={(
                 e: React.FormEvent<HTMLInputElement>,
