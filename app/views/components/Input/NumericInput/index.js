@@ -57,7 +57,7 @@ export default props => {
   )
 
   return (
-    <div style={{ position: 'relative', display: 'inline' }}>
+    <div style={{ position: 'relative', display: 'inline', ...props.style }}>
       <Input
         placeholder={placeholder || ''}
         style={{
