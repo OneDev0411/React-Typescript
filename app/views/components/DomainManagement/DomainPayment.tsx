@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js/pure'
@@ -64,7 +64,7 @@ function DomainPayment({
     ? customers[customers.length - 1]
     : undefined
 
-  const getStripe = useCallback(() => {
+  const stripe = useMemo(() => {
     return loadStripe(config.stripe.public_key)
   }, [])
 
@@ -83,7 +83,7 @@ function DomainPayment({
             disabled={disabled}
           />
         ) : (
-          <Elements stripe={getStripe()}>
+          <Elements stripe={stripe}>
             <DomainPaymentForm
               domainPrice={domainPrice}
               lastPaymentId={lastPayment?.id}
