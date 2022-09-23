@@ -142,30 +142,32 @@ const Assignee = ({ contact, submitCallback }: Props) => {
   }
 
   const deleteAssignee = async (id: UUID) => {
-    if (contact.assignees) {
-      let removedAssignees = contact?.assignees?.filter(
-        assignee => assignee.id !== id
-      )
+    if (!contact.assignees) {
+      return
+    }
 
-      let newAssignees: IAssigneeApiResponse[] = []
+    let removedAssignees = contact?.assignees?.filter(
+      assignee => assignee.id !== id
+    )
 
-      removedAssignees.map(assignee => {
-        newAssignees.push({
-          user: assignee?.user?.id,
-          brand: assignee?.brand?.id
-        })
+    let newAssignees: IAssigneeApiResponse[] = []
+
+    removedAssignees.map(assignee => {
+      newAssignees.push({
+        user: assignee?.user?.id,
+        brand: assignee?.brand?.id
+      })
+    })
+
+    try {
+      const { data } = await addAssignee(contact.id, {
+        assignees: newAssignees
       })
 
-      try {
-        const { data } = await addAssignee(contact.id, {
-          assignees: newAssignees
-        })
-
-        submitCallback(data)
-        setShowActionId(null)
-      } catch (err) {
-        console.error(err)
-      }
+      submitCallback(data)
+      setShowActionId(null)
+    } catch (err) {
+      console.error(err)
     }
   }
 

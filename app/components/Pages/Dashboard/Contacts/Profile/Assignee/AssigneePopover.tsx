@@ -20,7 +20,8 @@ const useStyles = makeStyles(
     popoverContainer: {
       width: '400px',
       height: '400px',
-      padding: theme.spacing(1)
+      padding: theme.spacing(1),
+      overflow: 'hidden'
     }
   }),
   { name: 'ContactAssigneePopover' }
@@ -41,12 +42,17 @@ const AssigneePopover = ({
     500
   )
 
+  const closePopover = () => {
+    handleClose()
+    setSearchCriteria('')
+  }
+
   return (
     <Popover
       id={id}
       open={open}
       anchorEl={anchorEl}
-      onClose={handleClose}
+      onClose={closePopover}
       anchorOrigin={{
         vertical: 'top',
         horizontal: 'left'

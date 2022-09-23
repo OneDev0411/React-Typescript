@@ -18,9 +18,14 @@ interface Props {
 const useStyles = makeStyles(
   theme => ({
     dialogContainer: {
-      textAlign: 'center'
+      textAlign: 'center',
+      padding: theme.spacing(2),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center'
     },
-    actionImage: { padding: theme.spacing(2) }
+    actionImage: { padding: theme.spacing(4), marginBottom: theme.spacing(4) }
   }),
   { name: 'ContactAssigneeDialog' }
 )
