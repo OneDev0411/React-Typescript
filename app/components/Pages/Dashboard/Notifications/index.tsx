@@ -125,7 +125,9 @@ function Notifications({ params }: WithRouterProps) {
             isOpen
             deleteCallback={closeCRMTaskDrawer}
             onClose={closeCRMTaskDrawer}
-            selectedEvent={selectedEvent}
+            selectedEvent={{
+              id: selectedEvent
+            }}
             submitCallback={closeCRMTaskDrawer}
             user={user}
           />
