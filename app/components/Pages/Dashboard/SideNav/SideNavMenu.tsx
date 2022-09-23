@@ -59,9 +59,9 @@ const useStyles = makeStyles(
   theme => ({
     sidenav: {
       width: appSidenavWidth,
-      height: '100vh',
       position: 'fixed',
       top: 0,
+      bottom: 0,
       left: 0,
       zIndex: theme.zIndex.sideNavDrawer,
       display: 'flex',
