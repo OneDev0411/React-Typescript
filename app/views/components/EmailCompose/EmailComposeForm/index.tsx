@@ -239,40 +239,22 @@ export default function EmailComposeForm<T>({
       })
     }
 
-    if (form?.cc) {
-      if (
-        form.cc.some(
-          element =>
-            element.recipient_type === 'Email' && !isEmail(element.email)
-        )
-      ) {
-        dispatch(
-          addNotification({
-            status: 'error',
-            message: 'Invalid CC email address'
-          })
-        )
+    if (
+      form.cc?.some(
+        element => element.recipient_type === 'Email' && !isEmail(element.email)
+      ) ||
+      form.bcc?.some(
+        element => element.recipient_type === 'Email' && !isEmail(element.email)
+      )
+    ) {
+      dispatch(
+        addNotification({
+          status: 'error',
+          message: 'Invalid CC or BCC email address'
+        })
+      )
 
-        return null
-      }
-    }
-
-    if (form?.bcc) {
-      if (
-        form.bcc.some(
-          element =>
-            element.recipient_type === 'Email' && !isEmail(element.email)
-        )
-      ) {
-        dispatch(
-          addNotification({
-            status: 'error',
-            message: 'Invalid BCC email address'
-          })
-        )
-
-        return null
-      }
+      return null
     }
 
     if ((form.subject || '').trim() === '') {
