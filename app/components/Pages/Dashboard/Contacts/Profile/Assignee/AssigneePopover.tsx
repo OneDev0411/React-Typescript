@@ -8,9 +8,9 @@ import { BrandedUser } from '@app/views/components/TeamAgents/types'
 import { AgentsList } from '@app/views/components/TeamAgentsDrawer/List'
 
 interface Props {
-  id: string | undefined
+  id?: string
   open: boolean
-  anchorEl: HTMLElement | null
+  anchorEl: Nullable<HTMLElement>
   handleClose: () => void
   handleSelect: (user: BrandedUser) => void
 }
@@ -35,8 +35,8 @@ const AssigneePopover = ({
   handleSelect
 }: Props) => {
   const classes = useStyles()
-  const [selectedAgent] = useState<BrandedUser[]>([] as BrandedUser[])
-  const [searchCriteria, setSearchCriteria] = useState<string>('')
+  const [selectedAgent] = useState<BrandedUser[]>([])
+  const [searchCriteria, setSearchCriteria] = useState('')
   const [debouncedSetSearchCriteria] = useDebouncedCallback(
     setSearchCriteria,
     500

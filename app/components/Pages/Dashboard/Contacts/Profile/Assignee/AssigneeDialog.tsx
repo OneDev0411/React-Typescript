@@ -9,8 +9,8 @@ import {
 
 interface Props {
   open: boolean
-  currentAgentName: string | undefined
-  currentContactName: string | undefined
+  currentAgentName?: string
+  currentContactName?: string
   handleClose: () => void
   handleConfirm: () => void
 }

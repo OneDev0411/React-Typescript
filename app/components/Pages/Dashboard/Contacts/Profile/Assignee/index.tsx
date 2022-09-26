@@ -98,20 +98,18 @@ const Assignee = ({ contact, submitCallback }: Props) => {
   const handleClose = () => setAnchorEl(null)
 
   const handleSelectAgent = async (user: BrandedUser) => {
-    if (!user) {
+    if (!user && !contact.assignee) {
       return
     }
 
     let oldAssignees: IAssigneeApiResponse[] = []
 
-    if (contact.assignees) {
-      contact.assignees.map(assignee => {
-        oldAssignees.push({
-          user: assignee?.user?.id,
-          brand: assignee?.brand?.id
-        })
+    contact.assignees.map(assignee => {
+      oldAssignees.push({
+        user: assignee?.user?.id,
+        brand: assignee?.brand?.id
       })
-    }
+    })
 
     try {
       const { data } = await addAssignee(contact.id, {
