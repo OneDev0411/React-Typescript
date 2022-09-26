@@ -30,6 +30,7 @@ import {
   upsertContexts,
   deleteRole
 } from '@app/store_actions/deals'
+import { AgentsPicker } from '@app/views/components/AgentsPicker'
 import { DialogTitle } from '@app/views/components/DialogTitle'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import DatePicker from 'components/DatePicker'
@@ -267,6 +268,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
             RoleForm: DealRoleForm,
             RoleCard,
             ContactRoles,
+            AgentsPicker,
             DatePicker,
             Wizard: {
               QuestionWizard,
