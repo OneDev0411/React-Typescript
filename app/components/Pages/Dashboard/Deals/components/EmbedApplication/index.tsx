@@ -13,6 +13,7 @@ import {
 import { mdiReload } from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
+import * as ReactUse from 'react-use'
 import superagent from 'superagent'
 
 import { useDealBrandContexts } from '@app/hooks/use-deal-brand-contexts'
@@ -136,7 +137,8 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
   useEffectOnce(() => {
     window.libs = {
       React,
-      MaterialUi
+      MaterialUi,
+      ReactUse
     }
 
     return () => {
