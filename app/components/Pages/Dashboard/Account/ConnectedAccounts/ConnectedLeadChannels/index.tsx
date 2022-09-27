@@ -119,15 +119,6 @@ export function ConnectedLeadChannels({ className }: Props) {
                   </Box>
                 </Grid>
 
-                <Grid item xs={2}>
-                  <Box display="flex" alignItems="center">
-                    <Typography variant="body2" color="textSecondary">
-                      Brand: &nbsp;
-                    </Typography>
-                    <Typography variant="body2">{activeBrand?.name}</Typography>
-                  </Box>
-                </Grid>
-
                 <Grid item xs={3}>
                   <Box display="flex" justifyContent="flex-end">
                     <Box ml={1}>
@@ -135,13 +126,6 @@ export function ConnectedLeadChannels({ className }: Props) {
                         channel={channel}
                         activeBrandId={activeBrand?.id}
                       />
-
-                      <Box ml={1}>
-                        <DeleteLeadChannelBrandButton
-                          channel={channel}
-                          activeBrandId={activeBrand?.id}
-                        />
-                      </Box>
                     </Box>
                   </Box>
                 </Grid>
