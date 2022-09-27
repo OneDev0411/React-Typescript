@@ -1,4 +1,5 @@
 export function submitValidate(values) {
+  const DaysOfYear = 365
   const isEmptyTextField = fieldName =>
     !values[fieldName] || !values[fieldName].trim()
   const isEmptyFieldArray = fields =>
@@ -15,7 +16,7 @@ export function submitValidate(values) {
     return 'Please fill in any of the contacts profile fields to add your contact.'
   }
 
-  if (Number(values.touch_freq) > 365) {
+  if (Number(values.touch_freq) > DaysOfYear) {
     return "The duration of a manage relationship can't be more than 365 days"
   }
 
