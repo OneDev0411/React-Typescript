@@ -311,7 +311,7 @@ export default function ListingMarketing({
           hasExternalTrigger
           isTriggered
           isTemplatesColumnHiddenDefault={false}
-          mediums={medium}
+          mediums={selectedTemplate.template?.medium || medium}
           types={templateTypes}
           listing={listing}
           selectedTemplate={selectedTemplate}
