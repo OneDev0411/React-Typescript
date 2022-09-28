@@ -240,10 +240,9 @@ export default function EmailComposeForm<T>({
     }
 
     if (
-      form.cc?.some(
-        element => element.recipient_type === 'Email' && !isEmail(element.email)
-      ) ||
-      form.bcc?.some(
+      form.cc &&
+      form.bcc &&
+      [...form.cc, ...form.bcc].some(
         element => element.recipient_type === 'Email' && !isEmail(element.email)
       )
     ) {
@@ -254,7 +253,7 @@ export default function EmailComposeForm<T>({
         })
       )
 
-      return null
+      return
     }
 
     if ((form.subject || '').trim() === '') {
