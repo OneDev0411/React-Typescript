@@ -15,7 +15,6 @@ import { useActiveBrand } from '@app/hooks/brand'
 import { addAssignee } from '@app/models/assignees/add-assignee'
 import { confirmation } from '@app/store_actions/confirmation'
 import { muiIconSizes } from '@app/views/components/SvgIcons'
-import { BrandedUser } from '@app/views/components/TeamAgents/types'
 import UserAvatar from '@app/views/components/UserAvatar'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -98,18 +97,19 @@ const Assignee = ({ contact, submitCallback }: Props) => {
   const handleClose = () => setAnchorEl(null)
 
   const handleSelectAgent = async (user: BrandedUser) => {
-    if (!user && !contact.assignee) {
+    if (!user && !contact.assignees) {
       return
     }
 
     let oldAssignees: IAssigneeApiResponse[] = []
 
-    contact.assignees.map(assignee => {
-      oldAssignees.push({
-        user: assignee?.user?.id,
-        brand: assignee?.brand?.id
+    contact.assignees &&
+      contact.assignees.map(assignee => {
+        oldAssignees.push({
+          user: assignee?.user?.id,
+          brand: assignee?.brand?.id
+        })
       })
-    })
 
     try {
       const { data } = await addAssignee(contact.id, {

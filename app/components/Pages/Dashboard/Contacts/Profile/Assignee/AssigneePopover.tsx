@@ -4,7 +4,6 @@ import { Popover, Box, CircularProgress, makeStyles } from '@material-ui/core'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
 import TeamAgents from '@app/views/components/TeamAgents'
-import { BrandedUser } from '@app/views/components/TeamAgents/types'
 import { AgentsList } from '@app/views/components/TeamAgentsDrawer/List'
 
 interface Props {

@@ -1,5 +1,3 @@
-import { BrandedUser } from '@app/views/components/TeamAgents/types'
-
 declare interface IContactAddress {
   city: string
   extra: string
