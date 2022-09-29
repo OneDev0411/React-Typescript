@@ -61,13 +61,11 @@ export function SaveSearchButton({ disabled = false, onClick }: Props) {
           >
             Save Search
           </Button>
-          {!disabled && (
-            <ReminderDialog
-              userSettingsKey={SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY}
-              anchorEl={buttonRef.current}
-              title="Save this search and be the first to know about new listings"
-            />
-          )}
+          <ReminderDialog
+            userSettingsKey={SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY}
+            anchorEl={buttonRef.current}
+            title="Save this search and be the first to know about new listings"
+          />
         </>
       )}
     </>
