@@ -41,7 +41,6 @@ declare interface IContactAttributeDef {
   enum_values: Nullable<string[]>
   user: Nullable<UUID>
   brand: Nullable<UUID>
-  assignees: Nullable<IAssignee[]>
 }
 
 type IContactAttributeWithDef = IContactAttribute & {
