@@ -64,7 +64,7 @@ const AssigneePopover = ({
       <div className={classes.popoverContainer}>
         <TeamAgents
           flattenTeams={false}
-          isPrimaryAgent={false}
+          isPrimaryAgent
           criteria={searchCriteria}
         >
           {({ isLoading, isEmptyState, teams }) => (
