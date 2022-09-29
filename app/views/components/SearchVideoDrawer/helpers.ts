@@ -16,7 +16,7 @@ export function makeVimeoDateStandard(date: string): string {
 }
 
 function isYouTubeUrl(urlInfo: URL): boolean {
-  return urlInfo.host === 'www.youtube.com'
+  return urlInfo.host === 'www.youtube.com' || urlInfo.host === 'youtu.be'
 }
 
 export function getYouTubeVideoId(term: string): Nullable<string> {
@@ -27,7 +27,12 @@ export function getYouTubeVideoId(term: string): Nullable<string> {
       return null
     }
 
-    return urlInfo.searchParams.get('v')
+    const regExp =
+      /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(shorts\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/
+
+    const match = urlInfo.toString().match(regExp)
+
+    return match && match[8]?.length == 11 ? match[8] : null
   } catch (_) {
     return null
   }
