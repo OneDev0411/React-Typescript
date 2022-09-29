@@ -68,7 +68,7 @@ export function ReminderPopper({
 }: Props) {
   const classes = useStyles()
 
-  const [dontShow, setDontShow] = useState(false)
+  const [dontShow, setDontShow] = useState(true)
   const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null)
 
   const handleDontShowChange = (event: React.ChangeEvent<HTMLInputElement>) => {
