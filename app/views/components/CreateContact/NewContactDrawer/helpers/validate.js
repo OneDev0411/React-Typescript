@@ -20,5 +20,13 @@ export function submitValidate(values) {
     return "The duration of a manage relationship can't be more than 365 days"
   }
 
+  if (Number(values.touch_freq) < 1) {
+    return "The duration of a manage relationship can't be less than 1 days"
+  }
+
+  if (typeof values.touch_freq != 'number') {
+    return 'The duration of a manage relationship must be a number'
+  }
+
   return ''
 }
