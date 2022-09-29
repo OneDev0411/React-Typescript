@@ -46,7 +46,7 @@ describe('Profile settings', () => {
     cy.getByTestSelector('personal-info-form-submit-button').should(
       'be.disabled'
     )
-    cy.pageShouldContain('Your Information updated.')
+    cy.pageShouldContain('Your information is now updated.')
     cy.get('#first_name').should('have.value', firstName)
     cy.get('#last_name').should('have.value', lastName)
   })
