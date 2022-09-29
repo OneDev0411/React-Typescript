@@ -88,7 +88,7 @@ const ChangePasswordForm = ({
         {submitSuccessfully && (
           <div style={{ textAlign: 'center' }}>
             <p className="c-auth__submit-alert--success">
-              Your password updated.
+              Your Password is now updated.
             </p>
           </div>
         )}
