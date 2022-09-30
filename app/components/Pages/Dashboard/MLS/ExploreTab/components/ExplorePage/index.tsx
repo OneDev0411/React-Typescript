@@ -265,7 +265,11 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   )
 
   const handleSaveSearch = () => {
-    if (state.result.info?.total && state.result.info.total < 400) {
+    if (typeof state.result.info?.total === 'undefined') {
+      return
+    }
+
+    if (state.result.info.total < 400) {
       setIsShowAlertModal(true)
     } else {
       reduxDispatch(
@@ -368,7 +372,10 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
             <Filters />
             {!isWidget && (
               <SaveSearchButton
-                isLoading={state.isLoading}
+                disabled={
+                  state.isLoading ||
+                  typeof state.result.info?.total === 'undefined'
+                }
                 onClick={handleSaveSearch}
               />
             )}
