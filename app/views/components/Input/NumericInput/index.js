@@ -57,11 +57,12 @@ export default props => {
   )
 
   return (
-    <div style={{ position: 'relative', display: 'inline' }}>
+    <div style={{ position: 'relative', display: 'inline', ...props.style }}>
       <Input
         placeholder={placeholder || ''}
         style={{
-          border: isValid ? '' : '1px solid #ec4b35'
+          border: isValid ? '' : '1px solid #ec4b35',
+          height: '100%'
         }}
         value={value}
         mask={createNumberMask({

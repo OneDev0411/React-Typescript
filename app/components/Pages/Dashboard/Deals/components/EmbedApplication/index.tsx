@@ -13,6 +13,7 @@ import {
 import { mdiReload } from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
+import * as ReactUse from 'react-use'
 import superagent from 'superagent'
 
 import { useDealBrandContexts } from '@app/hooks/use-deal-brand-contexts'
@@ -30,6 +31,7 @@ import {
   upsertContexts,
   deleteRole
 } from '@app/store_actions/deals'
+import { AgentsPicker } from '@app/views/components/AgentsPicker'
 import { DialogTitle } from '@app/views/components/DialogTitle'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import DatePicker from 'components/DatePicker'
@@ -135,7 +137,8 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
   useEffectOnce(() => {
     window.libs = {
       React,
-      MaterialUi
+      MaterialUi,
+      ReactUse
     }
 
     return () => {
@@ -267,6 +270,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
             RoleForm: DealRoleForm,
             RoleCard,
             ContactRoles,
+            AgentsPicker,
             DatePicker,
             Wizard: {
               QuestionWizard,

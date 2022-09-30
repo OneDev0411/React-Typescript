@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 
 import { Button } from '@material-ui/core'
-import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
-import { useEffectOnce } from 'react-use'
+import { useTitle, useEffectOnce } from 'react-use'
 
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
@@ -181,12 +180,10 @@ function ToursList(props: { user: IUser }) {
     )
   }
 
+  useTitle('Tours | Rechat')
+
   return (
     <>
-      <Helmet>
-        <title>Tours | Rechat</title>
-      </Helmet>
-
       <PageLayout>
         <PageLayout.Header title="Tours" />
 

@@ -16,9 +16,9 @@ import {
 } from '@mdi/js'
 import classNames from 'classnames'
 import pluralize from 'pluralize'
-import { Helmet } from 'react-helmet'
 import { useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
+import { useTitle } from 'react-use'
 
 import { Avatar } from 'components/Avatar'
 import { formatDate } from 'components/DateTimePicker/helpers'
@@ -127,6 +127,14 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
   const { item, isLoading, reload } = useItemData(id)
   const [emailPreview, setEmailPreview] =
     useState<IEmail<IEmailOptionalFields> | null>(null)
+
+  const documentTitle = () => {
+    return item && item.subject
+      ? `${item.subject} | Marketing Insights | Rechat`
+      : 'Marketing Insights | Rechat'
+  }
+
+  useTitle(documentTitle())
 
   const dispatch = useDispatch()
 
@@ -255,11 +263,6 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
 
   return (
     <>
-      <Helmet>
-        <title>{`${
-          item.subject ? `${item.subject} | ` : ''
-        }Marketing Insights | Rechat`}</title>
-      </Helmet>
       <div className={classes.pageContainer}>
         <Header
           backUrl={location.query?.backUrl ?? '/dashboard/insights'}

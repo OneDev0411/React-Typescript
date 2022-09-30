@@ -1,6 +1,13 @@
 import { memo, useMemo, useState } from 'react'
 
-import { alpha, Box, Grid, makeStyles, Typography } from '@material-ui/core'
+import {
+  alpha,
+  Box,
+  CircularProgress,
+  Grid,
+  makeStyles,
+  Typography
+} from '@material-ui/core'
 
 import { readFileAsDataUrl } from '@app/utils/file-utils/read-file-as-data-url'
 
@@ -39,6 +46,14 @@ const useStyles = makeStyles(
       borderRadius: theme.spacing(0.5),
       zIndex: 3,
       cursor: 'copy'
+    },
+    loading: {
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: theme.spacing(4)
     }
   }),
   { name: 'VideoList' }
@@ -48,9 +63,15 @@ interface Props {
   videos: SearchVideoResult[]
   onSelect: (video: Video) => void
   shouldShowUploader: boolean
+  isLoading: boolean
 }
 
-function VideoList({ videos, onSelect, shouldShowUploader = false }: Props) {
+function VideoList({
+  videos,
+  onSelect,
+  shouldShowUploader = false,
+  isLoading
+}: Props) {
   const classes = useStyles()
 
   const [uploadingVideoPreview, setUploadingVideoPreview] =
@@ -86,6 +107,14 @@ function VideoList({ videos, onSelect, shouldShowUploader = false }: Props) {
 
   const isUploadingState = uploadingVideoPreview !== null
   const isEmptyState = combinedVideos.length === 0 && !isUploadingState
+
+  if (isLoading) {
+    return (
+      <div className={classes.loading}>
+        <CircularProgress />
+      </div>
+    )
+  }
 
   return (
     <>

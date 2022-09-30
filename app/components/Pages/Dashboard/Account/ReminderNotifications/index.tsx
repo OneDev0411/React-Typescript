@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 
 import { Grid, Theme, useTheme } from '@material-ui/core'
-import { Helmet } from 'react-helmet'
 import { useDispatch, useSelector } from 'react-redux'
+import { useTitle } from 'react-use'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { getContextsByBrand } from 'actions/deals'
@@ -41,6 +41,8 @@ export default function ReminderNotifications() {
   const dispatch = useDispatch()
 
   const theme = useTheme<Theme>()
+
+  useTitle('Reminder Notifications | Settings | Rechat')
 
   const handleReminderNotificationChange = async (
     newSettings: readonly ReminderNotificationSetting[]
@@ -123,9 +125,6 @@ export default function ReminderNotifications() {
 
   return (
     <>
-      <Helmet>
-        <title>Reminder Notifications | Settings | Rechat</title>
-      </Helmet>
       <div>
         {RENDER_FORCE_PUSH_BUTTON && (
           <ActionButton

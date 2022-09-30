@@ -75,7 +75,6 @@ function SearchArticleDrawer({
   const classes = useStyles()
   const {
     data: results,
-    setData: setResults,
     run,
     isLoading
   } = useAsync<RSSArticleMetadata[]>({ data: [] })
@@ -215,12 +214,11 @@ function SearchArticleDrawer({
     setSelected(newSelected)
   }
 
-  // Load initial videos using the initial term
   useEffect(() => {
     if (!isArticlesLoading && isOpen) {
-      setResults(allArticles) // Display all articles when the drawer comes up
+      handleSearch('') // Display all articles when the drawer comes up
     }
-  }, [isArticlesLoading, handleSearch, isOpen, setResults, allArticles])
+  }, [isArticlesLoading, handleSearch, isOpen])
 
   const isLoadingState = isLoading || isArticlesLoading
   const isEmptyState = !isLoadingState && results.length === 0
@@ -229,15 +227,17 @@ function SearchArticleDrawer({
     <OverlayDrawer open={isOpen} onClose={handleClose} width="690px">
       <OverlayDrawer.Header title="Search for Articles" />
       <OverlayDrawer.Body className={classes.body}>
-        <Box flex={0} px={3} py={2}>
-          <SearchInput
-            debounceTime={250}
-            isLoading={isLoadingState}
-            onChange={handleSearchChange}
-            placeholder="Search for a subject or paste a link"
-            fullWidth
-          />
-        </Box>
+        {!isArticlesLoading && (
+          <Box flex={0} px={3} py={2}>
+            <SearchInput
+              debounceTime={250}
+              isLoading={isLoadingState}
+              onChange={handleSearchChange}
+              placeholder="Search for a subject or paste a link"
+              fullWidth
+            />
+          </Box>
+        )}
         <Box flex={1} className={classes.results} pl={3}>
           <SearchArticleImageCacheProvider imageCache={imageCache}>
             {isLoadingState ? (

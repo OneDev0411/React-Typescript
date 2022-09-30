@@ -31,6 +31,9 @@ const useAttachmentStyles = makeStyles(
         padding: `${theme.spacing(0.5, 1)}`,
         background: alpha(theme.palette.primary.light, 0.1),
         borderRadius: theme.shape.borderRadius
+      },
+      attachmentIcon: {
+        flexShrink: 0
       }
     }),
   { name: 'Attachment' }
@@ -48,7 +51,11 @@ export function Attachment({ children, onDelete, fullWidth = true }: Props) {
       alignItems="center"
       className={classes.root}
     >
-      <SvgIcon path={mdiAttachment} rightMargined />
+      <SvgIcon
+        className={classes.attachmentIcon}
+        path={mdiAttachment}
+        rightMargined
+      />
       <Box flexGrow={1} className={textClasses.noWrap}>
         {children}
       </Box>

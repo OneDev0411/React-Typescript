@@ -9,6 +9,8 @@ export const IMPORT_TOOLTIP_VISITED_SETTINGS_KEY = 'import_tooltip_visited'
 export const PARKED_CONTACTS_LAST_SEEN_SETTINGS_KEY =
   'parked-contacts-last-seen'
 
+export const RELEVANCE_SORT_KEY = '-last_touch_rank'
+
 export const PARKED_CONTACTS_LIST_ID = 'parked'
 
 export const DUPLICATE_CONTACTS_LIST_ID = 'duplicates'
@@ -69,5 +71,10 @@ export const ORIGINS = [
     label: 'Zillow',
     description: 'Imported from Zillow',
     value: 'Zillow'
+  },
+  {
+    label: 'Realtor',
+    description: 'Created by Realtor',
+    value: 'Realtor'
   }
 ]

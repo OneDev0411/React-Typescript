@@ -12,6 +12,7 @@ import { mdiDotsHorizontal } from '@mdi/js'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { deleteTask } from 'models/tasks/delete-task'
+import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 
 interface Props {
   onEdit: () => void
@@ -45,7 +46,10 @@ export default function Actions({ onEdit, reloadList, tour }: Props) {
 
     confirmation.setConfirmationModal({
       message: 'Delete Toursheet',
-      description: `Are you sure about deleting "${tour.title}"?`,
+      description: `Are you sure about deleting "${truncateTextFromMiddle(
+        tour.title,
+        100
+      )}"?`,
       confirmLabel: 'Yes, I am sure',
       onConfirm: () => handleDelete()
     })

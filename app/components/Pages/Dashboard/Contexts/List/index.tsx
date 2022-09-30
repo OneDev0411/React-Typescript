@@ -4,9 +4,8 @@ import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
-import { Helmet } from 'react-helmet'
 import { connect, useDispatch } from 'react-redux'
-import { useEffectOnce } from 'react-use'
+import { useTitle, useEffectOnce } from 'react-use'
 
 import { selectActiveBrandId } from '@app/selectors/brand'
 import { getContextsByBrand } from 'actions/deals'
@@ -38,6 +37,8 @@ function DealContext({ activeBrandId, isFetching, isEmpty, list }: Props) {
   const [selectedSection, setSelectedSection] = useState<string | null>(null)
   const [selectedContext, setSelectedContext] =
     useState<IDealBrandContext | null>(null)
+
+  useTitle('Deal Context | Rechat')
 
   useEffectOnce(() => {
     dispatch(getContextsByBrand(activeBrandId))
@@ -166,10 +167,6 @@ function DealContext({ activeBrandId, isFetching, isEmpty, list }: Props) {
 
   return (
     <>
-      <Helmet>
-        <title>Deal Context | Rechat</title>
-      </Helmet>
-
       <PageHeader>
         <PageHeader.Title showBackButton={false}>
           <PageHeader.Heading>Deal Context</PageHeader.Heading>

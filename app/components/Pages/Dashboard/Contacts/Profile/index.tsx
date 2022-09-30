@@ -5,10 +5,9 @@ import { useRef, useState, RefObject, useEffect, useCallback } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
-import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import { useEffectOnce } from 'react-use'
+import { useEffectOnce, useTitle } from 'react-use'
 
 import { useGetGlobalTriggers } from '@app/components/Pages/Dashboard/Account/Triggers/hooks/use-get-global-triggers'
 import { useActiveBrand } from '@app/hooks/brand'
@@ -313,6 +312,8 @@ const ContactProfile = props => {
     return title ? `${title} | Contacts | Rechat` : 'Contact | Rechat'
   }
 
+  useTitle(documentTitle())
+
   const onChangeOwner = async item => {
     if (!contact) {
       return
@@ -455,9 +456,6 @@ const ContactProfile = props => {
 
   return (
     <>
-      <Helmet>
-        <title>{documentTitle()}</title>
-      </Helmet>
       <PageLayout gutter={0}>
         <div className={classes.header}>
           <Header
