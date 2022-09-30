@@ -22,7 +22,11 @@ export function RangeDayPicker({
 }: Props) {
   const [range, setRange] = useState<DateRange | undefined>(defaultValue)
 
-  const handleSelectDate = (range: DateRange) => {
+  const handleSelectDate = (range: DateRange | undefined) => {
+    if (!range) {
+      return
+    }
+
     setRange(range)
     onSelect(range)
   }
