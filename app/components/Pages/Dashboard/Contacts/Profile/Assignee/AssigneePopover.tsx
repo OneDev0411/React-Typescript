@@ -90,7 +90,10 @@ const AssigneePopover = ({
                   searchCriteria={searchCriteria}
                   selectedAgents={selectedAgent}
                   multiSelection={false}
-                  onSelectAgent={handleSelect}
+                  onSelectAgent={user => {
+                    setSearchCriteria('')
+                    handleSelect(user)
+                  }}
                   onChangeCriteria={debouncedSetSearchCriteria}
                 />
               )}
