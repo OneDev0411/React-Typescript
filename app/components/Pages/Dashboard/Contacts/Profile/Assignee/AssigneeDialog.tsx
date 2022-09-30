@@ -25,7 +25,8 @@ const useStyles = makeStyles(
       alignItems: 'center',
       justifyContent: 'center'
     },
-    actionImage: { padding: theme.spacing(4), marginBottom: theme.spacing(4) }
+    actionImage: { padding: theme.spacing(4), marginBottom: theme.spacing(4) },
+    dialogAction: { margin: theme.spacing(2) }
   }),
   { name: 'ContactAssigneeDialog' }
 )
@@ -58,7 +59,7 @@ const AssigneeDialog = ({
         </div>
       </DialogContent>
 
-      <DialogActions>
+      <DialogActions className={classes.dialogAction}>
         <Button variant="outlined" onClick={handleClose}>
           Skip
         </Button>
