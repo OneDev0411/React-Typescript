@@ -49,7 +49,7 @@ export const FilterItem = (props: Props) => {
         onDelete={onRemove}
         onClick={onToggleFilterActive}
       />
-      <Downshift isOpen={isActive} /* onOuterClick={onToggleFilterActive} */>
+      <Downshift isOpen={isActive} onOuterClick={onToggleFilterActive}>
         {({ isOpen }) =>
           isOpen && (
             <div className={classes.content}>

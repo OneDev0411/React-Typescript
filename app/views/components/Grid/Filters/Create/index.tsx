@@ -71,7 +71,6 @@ export function AddFilter({ disabled, config, onNewFilter }: Props) {
   const handleClose = () => setAnchorEl(null)
 
   const onSelectFilter = item => {
-    console.log('onSelectFilter', { item })
     setQuery('')
     handleClose()
 
