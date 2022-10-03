@@ -108,7 +108,9 @@ class SectionWithFields extends React.Component {
   toggleMode = ({ order }) =>
     this.setState(state => ({
       orderedAttributes: state.orderedAttributes.map(a =>
-        a.order === order ? { ...a, isActive: !a.isActive } : a
+        a.order === order
+          ? { ...a, isActive: !a.isActive }
+          : { ...a, isActive: false }
       )
     }))
 
