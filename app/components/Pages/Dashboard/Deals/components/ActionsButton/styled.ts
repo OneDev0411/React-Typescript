@@ -50,6 +50,7 @@ export const PrimaryAction = styled.div<{
       }
 
       &.Remove {
+        width: max-content;
         &:before {
           content '× ';
           padding-right: 0.5rem;
