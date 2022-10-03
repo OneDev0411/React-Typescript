@@ -121,7 +121,7 @@ let PersonalInfoForm = ({
         {submitSuccessfully && (
           <div style={{ textAlign: 'center' }}>
             <p className="c-auth__submit-alert--success">
-              Your Information updated.
+              Your information is now updated.
             </p>
           </div>
         )}

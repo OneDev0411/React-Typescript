@@ -1,7 +1,9 @@
+import { mdiTrashCanOutline } from '@mdi/js'
 import { useDispatch } from 'react-redux'
 
 import useNotify from '@app/hooks/use-notify'
 import { confirmation } from '@app/store_actions/confirmation'
+import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 import { DangerButton } from 'components/Button/DangerButton'
 
 import { useDeleteLeadChannelMutation } from './queries/use-delete-lead-channel-mutation'
@@ -44,7 +46,14 @@ export function DeleteLeadChannelBrandButton({
   }
 
   return (
-    <DangerButton size="small" variant="outlined" onClick={requestDelete}>
+    <DangerButton
+      size="small"
+      variant="outlined"
+      startIcon={
+        <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
+      }
+      onClick={requestDelete}
+    >
       Disconnect
     </DangerButton>
   )

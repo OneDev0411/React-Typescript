@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-import { Helmet } from 'react-helmet'
 import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory, withRouter, WithRouterProps } from 'react-router'
+import { useTitle } from 'react-use'
 
 import { markNotificationAsSeen } from 'actions/notifications'
 import PageLayout from 'components/GlobalPageLayout'
@@ -113,11 +113,10 @@ function Notifications({ params }: WithRouterProps) {
     )
   }
 
+  useTitle(documentTitle())
+
   return (
     <PageLayout>
-      <Helmet>
-        <title>{documentTitle()}</title>
-      </Helmet>
       <Header />
       <PageLayout.Main>
         {renderContent()}
@@ -126,7 +125,9 @@ function Notifications({ params }: WithRouterProps) {
             isOpen
             deleteCallback={closeCRMTaskDrawer}
             onClose={closeCRMTaskDrawer}
-            selectedEvent={selectedEvent}
+            selectedEvent={{
+              id: selectedEvent
+            }}
             submitCallback={closeCRMTaskDrawer}
             user={user}
           />

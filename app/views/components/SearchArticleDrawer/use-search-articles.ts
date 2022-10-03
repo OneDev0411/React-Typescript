@@ -27,7 +27,7 @@ export function useSearchArticles(rssSources: RSSSource[]): UseSearchArticles {
       }
 
       return new Fuse(allArticles, {
-        keys: ['title', 'content', 'publisher'],
+        keys: ['title', 'content', 'publisher', 'url'],
         threshold: 0.7
       }).search(term)
     },

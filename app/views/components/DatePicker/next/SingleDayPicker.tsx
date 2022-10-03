@@ -21,7 +21,11 @@ export function SingleDatePicker({
 }: Props) {
   const [selected, setSelected] = useState<Date>()
 
-  const handleSelectDate = (date: Date) => {
+  const handleSelectDate = (date: Date | undefined) => {
+    if (!date) {
+      return
+    }
+
     setSelected(date)
     onSelect(date)
   }

@@ -3,9 +3,9 @@ import React, { useState, useCallback } from 'react'
 import { Grid, Theme, Divider, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
-import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
+import { useTitle } from 'react-use'
 
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import ImportContactsButton from 'components/ImportContactsButton'
@@ -83,15 +83,14 @@ export default function Inbox({ params }: WithRouterProps) {
 
   const classes = useStyles()
 
+  useTitle(
+    `Inbox ${
+      unreadEmailThreadsCount ? `(${unreadEmailThreadsCount}) ` : ''
+    } | Rechat`
+  )
+
   return (
     <GlobalPageLayout className={classes.layout}>
-      <Helmet>
-        <title>
-          Inbox {unreadEmailThreadsCount ? `(${unreadEmailThreadsCount}) ` : ''}
-          | Rechat
-        </title>
-      </Helmet>
-
       <Box paddingLeft={5} flex="0 1 auto">
         {initializing || noConnectedAccounts ? (
           <GlobalPageLayout.Header title="Inbox">

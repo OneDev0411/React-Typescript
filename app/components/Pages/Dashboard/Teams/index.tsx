@@ -2,9 +2,9 @@ import * as React from 'react'
 import { MutableRefObject, useCallback, useRef, useState } from 'react'
 
 import { debounce } from 'lodash'
-import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { RouteComponentProps } from 'react-router'
+import { useTitle } from 'react-use'
 
 import Search from 'components/Grid/Search'
 import { Container, Content, Menu } from 'components/SlideMenu'
@@ -47,6 +47,8 @@ function TeamsPage(props: Props) {
     initialExpandedNodes
   } = useTeamsPage(props.user, searchTerm)
 
+  useTitle('Teams')
+
   const inputRef: MutableRefObject<HTMLInputElement | null> =
     useRef<HTMLInputElement | null>(null)
 
@@ -87,9 +89,6 @@ function TeamsPage(props: Props) {
 
   return (
     <React.Fragment>
-      <Helmet>
-        <title>Teams</title>
-      </Helmet>
       <SearchContext.Provider value={searchTerm}>
         <Container isOpen>
           <Menu isOpen width="25rem">

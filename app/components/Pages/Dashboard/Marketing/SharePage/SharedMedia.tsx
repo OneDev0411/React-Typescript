@@ -28,7 +28,7 @@ const useStyle = makeStyles((theme: Theme) => ({
   }
 }))
 
-export default function SharedImage({ url }: SharedMediaProps) {
+export default function SharedMedia({ url, fileType }: SharedMediaProps) {
   const classes = useStyle()
 
   return (
@@ -43,7 +43,17 @@ export default function SharedImage({ url }: SharedMediaProps) {
         </a>
       </div>
       <div className={classes.previewContainer}>
-        <img className={classes.previewImage} alt="preview" src={url} />
+        {fileType === 'image' ? (
+          <img className={classes.previewImage} alt="preview" src={url} />
+        ) : (
+          <video
+            className={classes.previewImage}
+            muted
+            autoPlay
+            loop
+            src={url}
+          />
+        )}
       </div>
       <ol>
         <li>Press and hold on the image/video above.</li>

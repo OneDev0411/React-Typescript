@@ -37,11 +37,11 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  isLoading: boolean
+  disabled: boolean
   onClick: () => void
 }
 
-export function SaveSearchButton({ isLoading, onClick }: Props) {
+export function SaveSearchButton({ disabled = false, onClick }: Props) {
   const classes = useStyles()
   const buttonRef = useRef<Nullable<HTMLButtonElement>>(null)
   const user = useSelector(selectUserUnsafe)
@@ -55,19 +55,17 @@ export function SaveSearchButton({ isLoading, onClick }: Props) {
             size="small"
             variant="contained"
             color="primary"
-            disabled={isLoading}
+            disabled={disabled}
             onClick={onClick}
             ref={buttonRef}
           >
             Save Search
           </Button>
-          {!isLoading && (
-            <ReminderDialog
-              userSettingsKey={SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY}
-              anchorEl={buttonRef.current}
-              title="Save this search and be the first to know about new listings"
-            />
-          )}
+          <ReminderDialog
+            userSettingsKey={SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY}
+            anchorEl={buttonRef.current}
+            title="Save this search and be the first to know about new listings"
+          />
         </>
       )}
     </>

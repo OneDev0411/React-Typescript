@@ -16,6 +16,7 @@ import {
 import OnlineVideos from './OnlineVideos'
 import { SearchVideoResult, Video, VideoTab } from './types'
 import useGalleryVideos from './use-gallery-videos'
+import { useSearchVideoTabs } from './use-search-video-tabs'
 import useVideoboltVideos from './use-videobolt-videos'
 import { useWatermarkPlayIcon } from './use-watermark-play-icon'
 import VideoList from './VideoList'
@@ -62,15 +63,18 @@ function SearchVideoDrawer({
   const notify = useNotify()
   const classes = useStyles()
   const { isWatermarking, watermarkPlayIcon } = useWatermarkPlayIcon()
-  const [activeTab, setActiveTab] = useState<VideoTab>(VideoTab.Online)
   const [isGeneratingThumbnail, setIsGeneratingThumbnail] =
     useState<boolean>(false)
 
   const getVideoboltVideos = useVideoboltVideos()
   const getGalleryVideos = useGalleryVideos()
 
-  const videoboltVideos = getVideoboltVideos()
-  const galleryVideos = getGalleryVideos()
+  const { videos: videoboltVideos, isLoading: isLoadingVideoboltVideos } =
+    getVideoboltVideos()
+  const { videos: galleryVideos, isLoading: isLoadingGalleryVideos } =
+    getGalleryVideos()
+
+  const [tabs, activeTab, setActiveTab] = useSearchVideoTabs(model)
 
   const handleCloseDrawer = () => {
     if (isGeneratingThumbnail || isWatermarking) {
@@ -170,6 +174,11 @@ function SearchVideoDrawer({
         videos={
           activeTab === VideoTab.Videobolt ? videoboltVideos : galleryVideos
         }
+        isLoading={
+          activeTab === VideoTab.Videobolt
+            ? isLoadingVideoboltVideos
+            : isLoadingGalleryVideos
+        }
         onSelect={handleSelectVideo}
       />
     )
@@ -189,12 +198,9 @@ function SearchVideoDrawer({
               variant="fullWidth"
               indicatorColor="primary"
             >
-              <Tab label="Online Videos" value={VideoTab.Online} />
-              <Tab label="Your Gallery" value={VideoTab.Gallery} />
-
-              {videoboltVideos.length > 0 && (
-                <Tab label="Videobolt" value={VideoTab.Videobolt} />
-              )}
+              {Object.values(tabs).map(tab => (
+                <Tab key={tab.value} label={tab.label} value={tab.value} />
+              ))}
             </Tabs>
             {renderActiveTab()}
           </>
