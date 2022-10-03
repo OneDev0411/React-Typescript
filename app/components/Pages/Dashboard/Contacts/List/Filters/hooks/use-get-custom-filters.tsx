@@ -1,15 +1,19 @@
 import { ReactNode, useCallback, useMemo } from 'react'
 
+import { ACL } from '@app/constants/acl'
 import {
   IAttributeDefsState,
   selectDefinitionByName
 } from '@app/reducers/contacts/attributeDefs'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 import { DateFilterType } from '@app/views/components/Grid/Filters/FilterTypes/Date'
 import { OperatorAndOperandFilter } from '@app/views/components/Grid/Filters/FilterTypes/OparatorAndOperand'
 
 export function useGetCustomFilters(
   attributeDefs: IAttributeDefsState
 ): IFilterConfig[] {
+  const hasBetaAccess = useAcl(ACL.BETA)
+
   const invalidCustomFilter = useMemo(() => {
     const tagDefinitionId = selectDefinitionByName(attributeDefs, 'tag')?.id
     const sourceDefinitionId = selectDefinitionByName(
@@ -80,6 +84,10 @@ export function useGetCustomFilters(
       []
     )
   }, [attributeDefs.byId, validateAttribute])
+
+  if (!hasBetaAccess) {
+    return []
+  }
 
   return customFilters
 }
