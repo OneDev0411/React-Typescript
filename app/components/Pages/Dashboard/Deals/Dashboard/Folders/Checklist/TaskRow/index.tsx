@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { Grid, Box } from '@material-ui/core'
 import { mdiChevronDown, mdiChevronRight } from '@mdi/js'
@@ -6,7 +6,6 @@ import cn from 'classnames'
 import { Draggable, DraggableProvided } from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { useQueryParam } from '@app/hooks/use-query-param'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import {
@@ -29,6 +28,8 @@ import { useStyles } from './styles'
 import { TaskBadge } from './TaskBadge'
 import { TaskSplitter } from './TaskSplitter'
 import { useTaskActions } from './use-task-actions'
+import { useTaskDetails } from './use-task-details'
+import { useTaskSelect } from './use-task-select'
 
 interface Props {
   index: number
@@ -46,7 +47,7 @@ export function TaskRow({
   isBackOffice
 }: Props) {
   const classes = useStyles()
-  const [queryParamTaskId] = useQueryParam<UUID>('task')
+  const queryParamSelectTaskId = useTaskSelect(task)
 
   const dispatch = useDispatch()
   const [checklistBulkActionsContext] = useChecklistActionsContext()
@@ -75,6 +76,16 @@ export function TaskRow({
     isBackOffice
   })
 
+  const handleSelectTask = useCallback(() => {
+    dispatch(setSelectedTask(task))
+
+    if (task.room.new_notifications > 0) {
+      setTimeout(() => {
+        dispatch(updateDealNotifications(deal, task.room))
+      }, 0)
+    }
+  }, [deal, task, dispatch])
+
   const isTaskExpandable = useMemo(() => {
     let count = 0
 
@@ -100,15 +111,7 @@ export function TaskRow({
     }, 0)
   }
 
-  const handleSelectTask = () => {
-    dispatch(setSelectedTask(task))
-
-    if (task.room.new_notifications > 0) {
-      setTimeout(() => {
-        dispatch(updateDealNotifications(deal, task.room))
-      }, 0)
-    }
-  }
+  useTaskDetails(deal, task, handleSelectTask)
 
   return (
     <Draggable
@@ -138,7 +141,7 @@ export function TaskRow({
               <Grid
                 container
                 className={cn(classes.row, {
-                  'selected-by-task-param': task.id === queryParamTaskId
+                  'selected-by-task-param': task.id === queryParamSelectTaskId
                 })}
               >
                 <Box

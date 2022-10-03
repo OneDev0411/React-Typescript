@@ -70,7 +70,7 @@ export function NotifyAgents({ deal }: Props) {
   }
 
   const getTaskLink = (task: IDealTask) =>
-    `${config.app.url}/dashboard/deals/${deal.id}?task=${task.id}`
+    `${config.app.url}/dashboard/deals/${deal.id}?task-detail=${task.id}`
 
   const handleClickAddDealAttachments = (formValues: EmailFormValues) => {
     dispatch({
