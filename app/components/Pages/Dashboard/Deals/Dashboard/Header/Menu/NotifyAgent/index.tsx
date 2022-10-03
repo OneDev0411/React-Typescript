@@ -61,18 +61,22 @@ export function NotifyAgents({ deal }: Props) {
   }
 
   const handleShowEmailDrawer = (state: DealTaskActionsStateContext) => {
-    setSelectedTasks(state.tasks!)
-    setIsEmailDrawerOpen(true)
-
     dispatch({
       type: RESET
     })
+
+    setSelectedTasks(state.tasks!)
+    setIsEmailDrawerOpen(true)
   }
 
   const getTaskLink = (task: IDealTask) =>
     `${config.app.url}/dashboard/deals/${deal.id}?task-detail=${task.id}`
 
   const handleClickAddDealAttachments = (formValues: EmailFormValues) => {
+    dispatch({
+      type: RESET
+    })
+
     dispatch({
       type: ADD_ATTACHMENTS,
       attachments: [],
@@ -100,7 +104,6 @@ export function NotifyAgents({ deal }: Props) {
             subject: `[Important]: Missing documents for your closing of "${deal.title}"`,
             body: [
               'Hello,<br /><br />',
-              'Congratulations on your upcoming closing on [Closing Date]<br />',
               'The following documents are still missing from the company file.<br />',
               'Please be sure to upload them into StudioPro (Rechat)',
               '<ul>',
