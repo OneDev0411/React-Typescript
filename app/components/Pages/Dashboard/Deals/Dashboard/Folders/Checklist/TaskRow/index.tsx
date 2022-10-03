@@ -6,6 +6,7 @@ import cn from 'classnames'
 import { Draggable, DraggableProvided } from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { useQueryParam } from '@app/hooks/use-query-param'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import {
@@ -45,6 +46,7 @@ export function TaskRow({
   isBackOffice
 }: Props) {
   const classes = useStyles()
+  const [queryParamTaskId] = useQueryParam<UUID>('task')
 
   const dispatch = useDispatch()
   const [checklistBulkActionsContext] = useChecklistActionsContext()
@@ -128,8 +130,17 @@ export function TaskRow({
           {task.task_type === 'Splitter' ? (
             <TaskSplitter task={task} />
           ) : (
-            <Grid container className={classes.container}>
-              <Grid container className={classes.row}>
+            <Grid
+              id={`task-${task.id}`}
+              container
+              className={classes.container}
+            >
+              <Grid
+                container
+                className={cn(classes.row, {
+                  'selected-by-task-param': task.id === queryParamTaskId
+                })}
+              >
                 <Box
                   display="flex"
                   alignItems="center"

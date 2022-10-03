@@ -8,6 +8,7 @@ import {
   SingleEmailComposeDrawer
 } from '@app/views/components/EmailCompose'
 import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
+import config from 'config'
 import {
   EMAIL_ENVELOPE,
   EMAIL_FILE,
@@ -68,6 +69,9 @@ export function NotifyAgents({ deal }: Props) {
     })
   }
 
+  const getTaskLink = (task: IDealTask) =>
+    `${config.app.url}/dashboard/deals/${deal.id}?task=${task.id}`
+
   const handleClickAddDealAttachments = (formValues: EmailFormValues) => {
     dispatch({
       type: ADD_ATTACHMENTS,
@@ -101,7 +105,8 @@ export function NotifyAgents({ deal }: Props) {
               'Please be sure to upload them into StudioPro (Rechat)',
               '<ul>',
               ...selectedTasks.map(
-                task => `<li><a href="#">${task.title}</a></li>`
+                task =>
+                  `<li><a href="${getTaskLink(task)}">${task.title}</a></li>`
               ),
               '</ul>',
               '<p>Best Regards</p>'

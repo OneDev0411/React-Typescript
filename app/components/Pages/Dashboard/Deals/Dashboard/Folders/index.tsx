@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react'
 import { Box, Button, Theme } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 import { useSelector } from 'react-redux'
+import { useEffectOnce } from 'react-use'
 import _ from 'underscore'
 
+import { useQueryParam } from '@app/hooks/use-query-param'
 import { useDeepMemo } from 'hooks/use-deep-memo'
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
@@ -24,6 +26,7 @@ interface Props {
 
 export default function FoldersTab({ deal, isBackOffice }: Props) {
   const theme = useTheme<Theme>()
+  const [queryParamTaskId] = useQueryParam<UUID>('task')
 
   const { tasks, checklists } = useSelector<
     IAppState,
@@ -115,6 +118,16 @@ export default function FoldersTab({ deal, isBackOffice }: Props) {
       deactivatedChecklistsCount
     }
   }, [checklists, deal, showDeactivatedFolders, showTerminatedFolders])
+
+  useEffectOnce(() => {
+    if (queryParamTaskId) {
+      const taskElement = document.getElementById(`task-${queryParamTaskId}`)
+
+      taskElement?.scrollIntoView({
+        behavior: 'smooth'
+      })
+    }
+  })
 
   return (
     <Box display="flex" flexDirection="column" mb={10}>
