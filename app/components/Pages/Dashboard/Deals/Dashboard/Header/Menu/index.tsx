@@ -75,7 +75,8 @@ export const Menu = withRouter(
 
         <YardSign deal={deal} />
 
-        <NotifyAgents deal={deal} />
+        {isBackOffice && !deal.is_draft && <NotifyAgents deal={deal} />}
+
         <Email />
 
         {deal.deal_type === 'Selling' && !deal.has_active_offer && (
