@@ -39,6 +39,7 @@ export const PrimaryAction = styled.div<{
       border-radius: ${theme.shape.borderRadius}px;
 
       &.Add {
+        width: max-content;
         &:before {
           content '+';
           padding-right: 0.5rem;
