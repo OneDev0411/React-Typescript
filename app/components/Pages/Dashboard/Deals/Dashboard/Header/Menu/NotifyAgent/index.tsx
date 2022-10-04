@@ -37,6 +37,10 @@ export function NotifyAgents({ deal }: Props) {
 
   const handleNotifyAgents = () => {
     dispatch({
+      type: RESET
+    })
+
+    dispatch({
       type: SELECT_TASKS,
       tasks: [],
       actions: [SELECT_TASK],
