@@ -34,7 +34,9 @@ interface Props {
 const useStyles = makeStyles(
   theme => ({
     basicSection: {
-      marginTop: theme.spacing(1)
+      marginTop: theme.spacing(2),
+      paddingTop: theme.spacing(2),
+      borderTop: `1px solid ${theme.palette.action.disabledBackground}`
     },
 
     actionContainer: {

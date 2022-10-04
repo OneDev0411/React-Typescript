@@ -42,7 +42,6 @@ import { Dates } from './Dates'
 import Deals from './Deals'
 import Delete from './Delete'
 import { Details } from './Details'
-import Divider from './Divider'
 import Flows from './Flows'
 import { Header } from './Header'
 import { LastTouch } from './LastTouch'
@@ -486,7 +485,6 @@ const ContactProfile = props => {
               <Deals contact={contact} />
               <Details {..._props} />
               <Partner {..._props} />
-              <Divider />
               <Assignee {..._props} />
               <Owner
                 onSelect={onChangeOwner}
