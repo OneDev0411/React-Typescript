@@ -7,6 +7,7 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
+import Acl from '@app/views/components/Acl'
 import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
@@ -108,7 +109,10 @@ function ConnectedAccounts({
 
       <ConnectedAgents className={classes.section} user={user} />
       <ConnectedInstagram className={classes.section} />
-      <ConnectedLeadChannels className={classes.section} />
+
+      <Acl.Beta>
+        <ConnectedLeadChannels className={classes.section} />
+      </Acl.Beta>
 
       {user.docusign && (
         <ConnectedDocusign
