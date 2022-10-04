@@ -1,5 +1,5 @@
+const DaysOfYear = 365
 export function submitValidate(values) {
-  const DaysOfYear = 365
   const isEmptyTextField = fieldName =>
     !values[fieldName] || !values[fieldName].trim()
   const isEmptyFieldArray = fields =>
@@ -21,11 +21,7 @@ export function submitValidate(values) {
   }
 
   if (Number(values.touch_freq) < 1) {
-    return "The duration of a manage relationship can't be less than 1 days"
-  }
-
-  if (typeof values.touch_freq != 'number') {
-    return 'The duration of a manage relationship must be a number'
+    return "The duration of a manage relationship can't be less than 1 day"
   }
 
   return ''
