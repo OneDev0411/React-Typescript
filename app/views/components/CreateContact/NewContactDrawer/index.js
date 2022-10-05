@@ -6,8 +6,10 @@ import PropTypes from 'prop-types'
 import { Form } from 'react-final-form'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 import { getContactsTags } from '@app/store_actions/contacts'
+import { MaskedInput } from '@app/views/components/MaskedInput'
 import { TextField } from 'components/final-form-fields'
 import { addNotification as notify } from 'components/notification'
 import Drawer from 'components/OverlayDrawer'
@@ -178,11 +180,15 @@ class NewContactDrawer extends React.Component {
                       placeholder="How frequently do you want to be in touch with this contact (day)"
                       InputProps={{
                         inputProps: {
-                          'aria-label': 'Remind to touch every',
-                          type: 'number',
-                          min: 1,
-                          max: 365
-                        }
+                          mask: createNumberMask({
+                            prefix: '',
+                            includeThousandsSeparator: false,
+                            allowNegative: false,
+                            allowLeadingZeroes: false,
+                            allowDecimal: false
+                          })
+                        },
+                        inputComponent: MaskedInput
                       }}
                     />
                     <Emails
