@@ -21,7 +21,8 @@ const socialImages = {
   Instagram: 'https://i.ibb.co/HC5KTG1/instagram.png',
   LinkedIn: 'https://i.ibb.co/kxjXJ5B/linkedin.png',
   Twitter: 'https://i.ibb.co/7WkrhZV/twitter.png',
-  YouTube: 'https://i.ibb.co/8jd2Jyc/youtube.png'
+  YouTube: 'https://i.ibb.co/8jd2Jyc/youtube.png',
+  Tiktok: 'https://i.ibb.co/42NRgB9/tiktok.png'
 }
 
 export const socialGroupBlockTraits = {
@@ -30,7 +31,14 @@ export const socialGroupBlockTraits = {
       type: 'select',
       label: 'Icon',
       name: 'title',
-      options: ['Facebook', 'Instagram', 'LinkedIn', 'Twitter', 'YouTube']
+      options: [
+        'Facebook',
+        'Instagram',
+        'LinkedIn',
+        'Twitter',
+        'YouTube',
+        'Tiktok'
+      ]
     },
     {
       type: 'text',

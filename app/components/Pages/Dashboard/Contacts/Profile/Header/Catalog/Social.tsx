@@ -9,14 +9,16 @@ import {
 
 import { normalizeContactsForEmailCompose } from '@app/models/email/helpers/normalize-contact'
 import SendEmailButton from '@app/views/components/SendEmailButton'
+import TiktokIcon from '@app/views/components/SvgIcons/Tiktok/iconTiktok.svg'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-const fields = ['website', 'facebook', 'instagram', 'linkedin']
+const fields = ['website', 'facebook', 'instagram', 'linkedin', 'tiktok']
 const fieldsIcon = {
   website: mdiWeb,
   facebook: mdiFacebook,
   linkedin: mdiLinkedin,
-  instagram: mdiInstagram
+  instagram: mdiInstagram,
+  tiktok: TiktokIcon
 }
 
 const useStyles = makeStyles(

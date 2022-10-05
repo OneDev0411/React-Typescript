@@ -114,6 +114,14 @@ let PersonalInfoForm = ({
           required={false}
           placeholder="https://www.twitter.com/<username>"
         />
+        <Field
+          name="tiktok"
+          type="text"
+          label="Tiktok"
+          component={SimpleField}
+          required={false}
+          placeholder="https://www.tiktok.com/<username>"
+        />
 
         {submitError && (
           <div className="c-auth__submit-error-alert">{submitError}</div>
@@ -163,7 +171,8 @@ const validate = values => {
     facebook,
     linkedin,
     youtube,
-    twitter
+    twitter,
+    tiktok
   } = values
 
   const NAME_CHARACTER_LIMIT = 1
@@ -208,7 +217,8 @@ const validate = values => {
     twitter,
     instagram,
     linkedin,
-    youtube
+    youtube,
+    tiktok
   }
 
   Object.entries(socials).forEach(([name, value]) => {
@@ -233,7 +243,8 @@ export default compose(
         facebook,
         linkedin,
         youtube,
-        twitter
+        twitter,
+        tiktok
       } = user
 
       const cleanURL = url => {
@@ -265,7 +276,8 @@ export default compose(
           facebook: cleanURL(facebook),
           linkedin: cleanURL(linkedin),
           youtube: cleanURL(youtube),
-          twitter: cleanURL(twitter)
+          twitter: cleanURL(twitter),
+          tiktok: cleanURL(tiktok)
         }
       }
     },
