@@ -105,13 +105,12 @@ const Assignee = ({ contact, submitCallback }: Props) => {
 
     let oldAssignees: IAssigneeApiResponse[] = []
 
-    contact.assignees &&
-      contact.assignees.map(assignee => {
-        oldAssignees.push({
-          user: assignee?.user?.id,
-          brand: assignee?.brand?.id
-        })
-      })
+    if (contact.assignees) {
+      oldAssignees = contact.assignees.map(assignee => ({
+        user: assignee?.user?.id,
+        brand: assignee?.brand?.id
+      }))
+    }
 
     try {
       const { data } = await addAssignee(contact.id, {
