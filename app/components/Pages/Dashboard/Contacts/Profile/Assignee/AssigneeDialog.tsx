@@ -45,7 +45,7 @@ const AssigneeDialog = ({
       <DialogContent className={classes.dialogContainer}>
         <img
           className={classes.actionImage}
-          src="/static/images/contacts/assignee.svg"
+          src="/static/icons/assignee.svg"
           alt="assignee"
         />
         <div>
