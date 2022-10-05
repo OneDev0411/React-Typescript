@@ -14,6 +14,7 @@ import { useActiveBrand } from '@app/hooks/brand'
 import useConfirmation from '@app/hooks/use-confirmation'
 import useNotify from '@app/hooks/use-notify'
 import { updateContactTouchReminder } from '@app/models/contacts/update-contact-touch-reminder'
+import Acl from '@app/views/components/Acl'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import PageLayout from 'components/GlobalPageLayout'
 import { deleteContacts } from 'models/contacts/delete-contact'
@@ -485,7 +486,9 @@ const ContactProfile = props => {
               <Deals contact={contact} />
               <Details {..._props} />
               <Partner {..._props} />
-              <Assignee {..._props} />
+              <Acl.Beta>
+                <Assignee {..._props} />
+              </Acl.Beta>
               <Owner
                 onSelect={onChangeOwner}
                 owner={contact.user}
