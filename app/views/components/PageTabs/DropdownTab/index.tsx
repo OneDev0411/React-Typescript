@@ -28,6 +28,7 @@ interface Props {
   popoverOptions?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
   tooltipOptions?: Omit<TooltipProps, 'children'>
   children: (renderProps: RenderProps) => React.ReactNode
+  shouldHideIcon?: boolean
   component?: string
 }
 
@@ -59,6 +60,7 @@ export function DropdownTab({
   buttonVariant,
   tooltipOptions,
   popoverOptions,
+  shouldHideIcon,
   component
 }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -85,6 +87,7 @@ export function DropdownTab({
       size="small"
       onClick={toggleMenu}
       component={component}
+      shouldHideIcon={shouldHideIcon}
       variant={buttonVariant}
       className={classnames(classes.button, buttonClassName)}
     >

@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react'
 import { Box, Grid, ListItem, Typography } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
+import { useLeadChannels } from '@app/hooks/lead-channel'
 import { selectActiveBrandUnsafe } from '@app/selectors/brand'
 import { ClipboardCopy } from '@app/views/components/ClipboardCopy'
 import { PageTabs, Tab } from '@app/views/components/PageTabs'
@@ -14,7 +15,6 @@ import ConnectedAccountsLayout from '../ConnectedAccountsLayout'
 import { ConnectLeadChannelButton } from './ConnectLeadChannelButton'
 import { LeadChannels } from './constants'
 import { DeleteLeadChannelBrandButton } from './DeleteLeadChannelBrandButton'
-import { useLeadChannels } from './queries/use-lead-channels'
 
 interface Props {
   className?: string

@@ -3,10 +3,9 @@ import { useState } from 'react'
 import { Box, Button, CircularProgress } from '@material-ui/core'
 import { mdiHelpCircleOutline } from '@mdi/js'
 
+import { useCreateLeadChannelMutation } from '@app/hooks/lead-channel'
 import useNotify from '@app/hooks/use-notify'
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
-
-import { useCreateLeadChannelMutation } from './queries/use-create-lead-channel-mutation'
 
 interface Props {
   sourceType: LeadChannelSourceType
