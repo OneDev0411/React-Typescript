@@ -7,7 +7,11 @@ import config from '../../../config'
 import { request } from '../../libs/request'
 import { getParsedHeaders } from '../../utils/parse-headers'
 
-import { AWS_REGION, TWO_MEGA_BYTES, TRANSCODER_BUCKET_NAME } from './constants'
+import {
+  AWS_REGION,
+  MIN_BYTES_TO_DOWNLOAD,
+  TRANSCODER_BUCKET_NAME
+} from './constants'
 
 const S3_CLIENT = new S3({
   accessKeyId: config.aws_access_key_id,
@@ -35,13 +39,24 @@ function selectYouTubeVideoStreamForDownload(info: videoInfo): videoFormat {
   return video
 }
 
+function getApproximateByteSizeOfEachSecond(video: videoFormat): number {
+  return video.averageBitrate ? video.averageBitrate / 8 : 0
+}
+
 export async function downloadFirstFewSecondsOfYouTubeVideo(
-  info: videoInfo
+  info: videoInfo,
+  seconds: number = 10
 ): Promise<superagent.Response | undefined> {
   try {
     const selectedStream = selectYouTubeVideoStreamForDownload(info)
 
-    const bytesToDownload = TWO_MEGA_BYTES
+    const byteSizeOfEachSecond =
+      getApproximateByteSizeOfEachSecond(selectedStream)
+
+    const bytesToDownload = Math.max(
+      MIN_BYTES_TO_DOWNLOAD,
+      Math.round(byteSizeOfEachSecond * seconds)
+    )
 
     const range = `bytes=0-${bytesToDownload}`
 

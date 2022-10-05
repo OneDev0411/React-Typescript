@@ -25,7 +25,7 @@ const isDevelopment = !isProduction
 
 const app = express()
 
-app.use(timeout('60s'))
+app.use(timeout('30s'))
 app.use(compress())
 
 app.use(
