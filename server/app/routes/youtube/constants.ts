@@ -1,4 +1,4 @@
-export const THREE_MEGA_BYTES = 3 * 1024 * 1024
+export const TWO_MEGA_BYTES = 2 * 1024 * 1024
 
 export const AWS_REGION = 'us-east-1'
 

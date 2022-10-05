@@ -7,11 +7,7 @@ import config from '../../../config'
 import { request } from '../../libs/request'
 import { getParsedHeaders } from '../../utils/parse-headers'
 
-import {
-  AWS_REGION,
-  THREE_MEGA_BYTES,
-  TRANSCODER_BUCKET_NAME
-} from './constants'
+import { AWS_REGION, TWO_MEGA_BYTES, TRANSCODER_BUCKET_NAME } from './constants'
 
 const S3_CLIENT = new S3({
   accessKeyId: config.aws_access_key_id,
@@ -45,7 +41,7 @@ export async function downloadFirstFewSecondsOfYouTubeVideo(
   try {
     const selectedStream = selectYouTubeVideoStreamForDownload(info)
 
-    const bytesToDownload = THREE_MEGA_BYTES
+    const bytesToDownload = TWO_MEGA_BYTES
 
     const range = `bytes=0-${bytesToDownload}`
 
