@@ -29,9 +29,7 @@ export function ConnectLeadChannelButton({
   const containerRef = useRef<Nullable<HTMLDivElement>>(null)
 
   const [queryParamLeadChannel, , queryParamDeleteLeadChannel] =
-    useReplaceQueryParam<LeadChannelSourceType>(
-      ADD_LEAD_CHANNEL_QUERY_PARAM_KEY
-    )
+    useReplaceQueryParam<string>(ADD_LEAD_CHANNEL_QUERY_PARAM_KEY)
   const { mutateAsync, isLoading } = useCreateLeadChannelMutation(activeBrandId)
 
   const handleConnect = async (source: LeadChannelSourceType) => {
