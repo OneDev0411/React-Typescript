@@ -33,10 +33,8 @@ export function ConnectedLeadChannels({ className }: Props) {
     [channels, activeChannel]
   )
 
-  const handleChangeActiveChannel = useCallback(
-    (value: LeadChannelSourceType) => {
-      setActiveChannel(value)
-    },
+  const handleCreateChannel = useCallback(
+    (value: LeadChannelSourceType) => setActiveChannel(value),
     []
   )
 
@@ -52,11 +50,11 @@ export function ConnectedLeadChannels({ className }: Props) {
           defaultValue={activeChannel}
           actions={[
             <ConnectLeadChannelButton
-              key="connect-lead-channel-button"
+              key={0}
               sourceType={activeChannel}
               activeBrandId={activeBrand?.id}
               isFetching={isFetching}
-              onChangeActiveChannel={handleChangeActiveChannel}
+              onCreateChannel={handleCreateChannel}
             />
           ]}
           tabs={LeadChannels.map(channel => (
