@@ -9,7 +9,7 @@ import {
 
 import { normalizeContactsForEmailCompose } from '@app/models/email/helpers/normalize-contact'
 import SendEmailButton from '@app/views/components/SendEmailButton'
-import TiktokIcon from '@app/views/components/SvgIcons/Tiktok/iconTiktok.svg'
+import { mdiTiktokPath } from '@app/views/components/SvgIcons/Tiktok/iconTiktok'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const fields = ['website', 'facebook', 'instagram', 'linkedin', 'tiktok']
@@ -18,7 +18,7 @@ const fieldsIcon = {
   facebook: mdiFacebook,
   linkedin: mdiLinkedin,
   instagram: mdiInstagram,
-  tiktok: TiktokIcon
+  tiktok: mdiTiktokPath
 }
 
 const useStyles = makeStyles(
@@ -57,7 +57,6 @@ interface Props {
 
 export const Social = ({ contact }: Props) => {
   const classes = useStyles()
-
   const getUrl = url => {
     if (!url.match(/^http(s?)?:\/\//i)) {
       return `http://${url}`

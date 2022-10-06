@@ -34,7 +34,7 @@
   ></mj-social-element>
   <mj-social-element
     title="tiktok"
-    src="https://i.ibb.co/42NRgB9/tiktok.png"
+    src="https://cdn-icons-png.flaticon.com/512/3669/3669950.png"
     href="{{user.tiktok}}"
   ></mj-social-element>
 </mj-social>

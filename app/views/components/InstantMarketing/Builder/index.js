@@ -176,7 +176,7 @@ class Builder extends React.Component {
               name: 'Youtube'
             },
             {
-              value: 'https://i.ibb.co/42NRgB9/tiktok.png',
+              value: 'https://cdn-icons-png.flaticon.com/512/3669/3669950.png',
               name: 'Tiktok'
             }
           ]

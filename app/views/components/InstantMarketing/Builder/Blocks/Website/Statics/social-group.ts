@@ -22,7 +22,7 @@ const socialImages = {
   LinkedIn: 'https://i.ibb.co/kxjXJ5B/linkedin.png',
   Twitter: 'https://i.ibb.co/7WkrhZV/twitter.png',
   YouTube: 'https://i.ibb.co/8jd2Jyc/youtube.png',
-  Tiktok: 'https://i.ibb.co/42NRgB9/tiktok.png'
+  Tiktok: 'https://cdn-icons-png.flaticon.com/512/3669/3669950.png'
 }
 
 export const socialGroupBlockTraits = {
