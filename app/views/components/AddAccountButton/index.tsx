@@ -4,6 +4,7 @@ import cn from 'classnames'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
+import { ADD_LEAD_CHANNEL_QUERY_PARAM_KEY } from '@app/components/Pages/Dashboard/Account/ConnectedAccounts/ConnectedLeadChannels/constants'
 import { IMPORT_TOOLTIP_VISITED_SETTINGS_KEY } from '@app/components/Pages/Dashboard/Contacts/List/constants'
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { goTo } from '@app/utils/go-to'
@@ -181,8 +182,9 @@ export function AddAccountButton({
           />
           <AccountMenuItem
             onClick={() => {
-              // TODO: connect to Zillow
-              // https://gitlab.com/rechat/web/-/issues/6850#note_1123996874
+              goTo('/dashboard/account/connected-accounts', null, {
+                [ADD_LEAD_CHANNEL_QUERY_PARAM_KEY]: 'Zillow'
+              })
               toggleMenu()
             }}
             disabled={outlook.connecting}

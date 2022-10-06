@@ -49,6 +49,7 @@ export function ConnectedLeadChannels({ className }: Props) {
               sourceType={activeChannel}
               activeBrandId={activeBrand?.id}
               isFetching={isFetching}
+              setActiveChannel={setActiveChannel}
             />
           ]}
           tabs={LeadChannels.map(channel => (
