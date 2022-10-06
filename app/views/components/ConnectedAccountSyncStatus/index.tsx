@@ -4,6 +4,7 @@ import { Tooltip, Typography, TypographyProps } from '@material-ui/core'
 import pluralize from 'pluralize'
 import timeago from 'timeago.js'
 
+import { isValidLeadChannelSource } from '@app/components/Pages/Dashboard/Account/ConnectedAccounts/ConnectedLeadChannels/helpers/is-valid-lead-channel-source'
 import {
   GOOGLE_CREDENTIAL,
   MICROSOFT_CREDENTIAL
@@ -56,8 +57,7 @@ export function ConnectedAccountSyncStatus({
 
   const status = useMemo(
     () =>
-      (account.type === 'Realtor' || account.type === 'Zillow') &&
-      account.threads_total
+      isValidLeadChannelSource(account.type) && account.threads_total
         ? `${account.threads_total} ${pluralize(
             'lead',
             account.threads_total
@@ -69,26 +69,30 @@ export function ConnectedAccountSyncStatus({
   )
 
   const tooltipTitle = useMemo(() => {
+    const jobsList = [
+      {
+        label: 'Contacts are',
+        job: contactsJob
+      },
+      {
+        label: 'Emails are',
+        job: emailsJob
+      },
+      {
+        label: 'Calendar is',
+        job: calendarJob
+      }
+    ]
+
     return (
       <>
-        {contactsJob && (
-          <div>
-            Contacts are
-            {`${contactsJob?.status === 'success' ? ' synced' : ' syncing'}`}
+        {jobsList.map(item => (
+          <div key={item.label}>
+            {`${item.label} ${
+              item.job?.status === 'success' ? ' synced' : ' syncing'
+            }`}
           </div>
-        )}
-        {emailsJob && (
-          <div>
-            Emails are
-            {emailsJob?.status === 'success' ? ' synced' : ' syncing'}
-          </div>
-        )}
-        {calendarJob && (
-          <div>
-            Calendar is
-            {`${calendarJob?.status === 'success' ? ' synced' : ' syncing'}`}
-          </div>
-        )}
+        ))}
       </>
     )
   }, [calendarJob, contactsJob, emailsJob])

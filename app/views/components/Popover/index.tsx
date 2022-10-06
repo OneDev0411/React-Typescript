@@ -14,7 +14,7 @@ interface Props {
   show?: boolean
   dark?: boolean
   children: ReactNode
-  width?: 'auto' | number
+  width?: React.CSSProperties['width']
   onClose?: () => void
 }
 

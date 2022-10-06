@@ -1,4 +1,4 @@
-import { LeadChannels } from './constants'
+import { LeadChannels } from '../constants'
 
 export const isValidLeadChannelSource = (
   value: string

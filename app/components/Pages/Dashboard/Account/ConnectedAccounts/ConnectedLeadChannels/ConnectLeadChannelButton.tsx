@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState
-} from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { Box, Button, CircularProgress } from '@material-ui/core'
 import { mdiHelpCircleOutline } from '@mdi/js'
@@ -15,20 +9,20 @@ import { useReplaceQueryParam } from '@app/hooks/use-query-param'
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
 import { ADD_LEAD_CHANNEL_QUERY_PARAM_KEY } from './constants'
-import { isValidLeadChannelSource } from './helpers'
+import { isValidLeadChannelSource } from './helpers/is-valid-lead-channel-source'
 
 interface Props {
   sourceType: LeadChannelSourceType
   activeBrandId?: UUID
   isFetching: boolean
-  setActiveChannel: Dispatch<SetStateAction<LeadChannelSourceType>>
+  onChangeActiveChannel: (value: LeadChannelSourceType) => void
 }
 
 export function ConnectLeadChannelButton({
   sourceType,
   activeBrandId,
   isFetching,
-  setActiveChannel
+  onChangeActiveChannel
 }: Props) {
   const notify = useNotify()
   const [buttonRef, setButtonRef] = useState<Nullable<HTMLButtonElement>>(null)
@@ -68,7 +62,7 @@ export function ConnectLeadChannelButton({
       // Connect to the lead channel
       handleConnect(queryParamLeadChannel)
       // Change the tab
-      setActiveChannel(queryParamLeadChannel)
+      onChangeActiveChannel(queryParamLeadChannel)
       queryParamDeleteLeadChannel()
     }
   }, [
@@ -78,7 +72,7 @@ export function ConnectLeadChannelButton({
     mutateAsync,
     queryParamDeleteLeadChannel,
     queryParamLeadChannel,
-    setActiveChannel
+    onChangeActiveChannel
   ])
 
   return (
@@ -105,9 +99,7 @@ export function ConnectLeadChannelButton({
         ref={ref => {
           setButtonRef(ref)
         }}
-        startIcon={
-          isLoading ? <CircularProgress size={20} color="inherit" /> : null
-        }
+        startIcon={isLoading && <CircularProgress size={20} color="inherit" />}
         disabled={isLoading || isFetching}
       >
         Connect {sourceType} account

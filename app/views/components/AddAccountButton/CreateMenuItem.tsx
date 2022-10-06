@@ -14,11 +14,7 @@ export function CreateMenuItem({ iconPath, onClick, title }: Props) {
   const classes = useStyles()
 
   return (
-    <MenuItem
-      onClick={() => {
-        onClick()
-      }}
-    >
+    <MenuItem onClick={onClick}>
       <Grid container className={classes.listItem}>
         <SvgIcon className={classes.listIcon} path={iconPath} />
         {title}

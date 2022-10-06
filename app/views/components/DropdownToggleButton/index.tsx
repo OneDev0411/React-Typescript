@@ -19,7 +19,7 @@ interface Props extends ButtonProps {
   component?: string
   isActive?: boolean
   children?: ReactNode
-  shouldHideIcon?: boolean
+  isIconHidden?: boolean
   iconPath?: string
 }
 
@@ -59,7 +59,7 @@ export const DropdownToggleButton = forwardRef(
       isActive,
       children,
       classes,
-      shouldHideIcon = false,
+      isIconHidden = false,
       iconPath = mdiChevronDown,
       ...buttonProps
     }: Props & ClassesProps<typeof styles>,
@@ -78,7 +78,7 @@ export const DropdownToggleButton = forwardRef(
         ref={ref}
       >
         {children}
-        {!shouldHideIcon && (
+        {!isIconHidden && (
           <SvgIcon
             path={iconPath}
             size={muiIconSizes.small}

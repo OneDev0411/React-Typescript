@@ -12,7 +12,7 @@ export interface Props {
   onClick: () => void
   icon: React.ReactNode
   disabled?: boolean
-  helpLink?: string
+  helperLink?: string
 }
 
 export function AccountMenuItem({
@@ -20,7 +20,7 @@ export function AccountMenuItem({
   title,
   icon,
   disabled,
-  helpLink
+  helperLink
 }: Props) {
   const classes = useStyles()
 
@@ -31,7 +31,7 @@ export function AccountMenuItem({
         <Typography className={classes.listText} variant="body1">
           {title}
         </Typography>
-        {helpLink && (
+        {helperLink && (
           <Grid className={classes.listAction}>
             <IconButton
               edge="end"
@@ -41,7 +41,7 @@ export function AccountMenuItem({
               onClick={e => {
                 e.stopPropagation()
               }}
-              href={helpLink}
+              href={helperLink}
             >
               <SvgIcon
                 className={classes.listActionIcon}

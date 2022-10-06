@@ -17,7 +17,7 @@ export interface Props {
   icon: React.ReactNode
   disabled?: boolean
   tooltipTitle?: string
-  helpLink?: string
+  helperLink?: string
 }
 
 export function AccountMenuItem({
@@ -26,7 +26,7 @@ export function AccountMenuItem({
   icon,
   disabled,
   tooltipTitle = 'Learn how to connect',
-  helpLink
+  helperLink
 }: Props) {
   const classes = useStyles()
 
@@ -37,7 +37,7 @@ export function AccountMenuItem({
         <Typography className={classes.listText} variant="body1">
           {title}
         </Typography>
-        {helpLink && (
+        {helperLink && (
           <Grid className={classes.listAction}>
             <Tooltip title={tooltipTitle}>
               <IconButton
@@ -48,7 +48,7 @@ export function AccountMenuItem({
                 onClick={e => {
                   e.stopPropagation()
                 }}
-                href={helpLink}
+                href={helperLink}
               >
                 <SvgIcon
                   className={classes.listActionIcon}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { Box, Grid, ListItem, Typography } from '@material-ui/core'
 import { useSelector } from 'react-redux'
@@ -33,6 +33,13 @@ export function ConnectedLeadChannels({ className }: Props) {
     [channels, activeChannel]
   )
 
+  const handleChangeActiveChannel = useCallback(
+    (value: LeadChannelSourceType) => {
+      setActiveChannel(value)
+    },
+    []
+  )
+
   return (
     <>
       <ConnectedAccountsLayout
@@ -49,7 +56,7 @@ export function ConnectedLeadChannels({ className }: Props) {
               sourceType={activeChannel}
               activeBrandId={activeBrand?.id}
               isFetching={isFetching}
-              setActiveChannel={setActiveChannel}
+              onChangeActiveChannel={handleChangeActiveChannel}
             />
           ]}
           tabs={LeadChannels.map(channel => (

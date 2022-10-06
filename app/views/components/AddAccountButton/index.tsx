@@ -95,7 +95,7 @@ export function AddAccountButton({
 
   return (
     <DropdownTab
-      shouldHideIcon
+      isIconHidden
       buttonClassName={cn(classes.button, className)}
       buttonVariant="outlined"
       title={
@@ -146,7 +146,7 @@ export function AddAccountButton({
               icon={
                 <CsvIcon size={iconSizes.medium} className={classes.listIcon} />
               }
-              helpLink="https://help.rechat.com/guides/crm/adding-contacts/importing-your-contacts"
+              helperLink="https://help.rechat.com/guides/crm/adding-contacts/importing-your-contacts"
             />
           )}
           {(hasCSVButton || createMenuItemProps) && <Divider />}
@@ -163,7 +163,7 @@ export function AddAccountButton({
                 className={classes.listIcon}
               />
             }
-            helpLink="https://help.rechat.com/guides/crm/connect-to-outlook-google"
+            helperLink="https://help.rechat.com/guides/crm/connect-to-outlook-google"
           />
           <AccountMenuItem
             onClick={() => {
@@ -178,7 +178,7 @@ export function AddAccountButton({
                 className={classes.listIcon}
               />
             }
-            helpLink="https://help.rechat.com/guides/crm/connect-to-outlook-google"
+            helperLink="https://help.rechat.com/guides/crm/connect-to-outlook-google"
           />
           <AccountMenuItem
             onClick={() => {
@@ -195,7 +195,7 @@ export function AddAccountButton({
                 className={classes.listIcon}
               />
             }
-            helpLink="https://help.rechat.com/guides/crm/connect-to-zillow"
+            helperLink="https://help.rechat.com/guides/crm/connect-to-zillow"
           />
           <ConnectedAccounts
             accounts={accounts}
