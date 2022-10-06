@@ -1,3 +1,4 @@
+const DaysOfYear = 365
 export function submitValidate(values) {
   const isEmptyTextField = fieldName =>
     !values[fieldName] || !values[fieldName].trim()
@@ -13,6 +14,15 @@ export function submitValidate(values) {
     isEmptyFieldArray(values.phone_number)
   ) {
     return 'Please fill in any of the contacts profile fields to add your contact.'
+  }
+
+  if (
+    values.touch_freq !== '' &&
+    (Number.isNaN(Number(values.touch_freq)) ||
+      Number(values.touch_freq) > DaysOfYear ||
+      Number(values.touch_freq) < 1)
+  ) {
+    return 'Manage Relationship should have a valid duration between 1 and 365 days'
   }
 
   return ''
