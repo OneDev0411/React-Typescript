@@ -14,11 +14,10 @@ interface Props {
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      display: 'inline-flex',
+      width: '100%',
+      display: 'flex',
       alignItems: 'baseline',
       padding: theme.spacing(1),
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: `${theme.shape.borderRadius}px`,
       cursor: ({ disabled }: Pick<Props, 'disabled'>) =>
         disabled ? 'default' : 'pointer',
       opacity: ({ disabled }: Pick<Props, 'disabled'>) => (disabled ? 0.5 : 1)
