@@ -11,6 +11,7 @@ import {
 import { mdiBellOutline, mdiCheck } from '@mdi/js'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
+import useNotify from '@app/hooks/use-notify'
 import { MaskedInput } from 'components/MaskedInput'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -68,6 +69,7 @@ export function ManageRelationshipCustomItem({
 }: Props) {
   const classes = useStyles()
   const [inputValue, setInputValue] = useState(contactTouchFreq || '')
+  const notify = useNotify()
 
   const handleChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     const maskedValue = e.target.value
@@ -77,9 +79,21 @@ export function ManageRelationshipCustomItem({
   }
 
   const onConfirm = () => {
-    onChangeTouchFreq(
-      inputValue && !Number.isNaN(inputValue) ? Number(inputValue) : null
-    )
+    if (
+      Number.isNaN(inputValue) ||
+      Number(inputValue) < 1 ||
+      Number(inputValue) > 365
+    ) {
+      notify({
+        status: 'error',
+        message:
+          'Manage Relationship should have a valid duration between 1 and 365 days'
+      })
+
+      return
+    }
+
+    onChangeTouchFreq(Number(inputValue))
   }
 
   return (

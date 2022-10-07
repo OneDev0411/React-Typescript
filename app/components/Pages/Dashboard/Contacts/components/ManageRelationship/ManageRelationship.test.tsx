@@ -1,5 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
+import { TestBed } from 'tests/unit/TestBed'
+
 import { frequencyOptions, frequencyToString } from './helper'
 
 import { ManageRelationship } from './index'
@@ -16,7 +18,11 @@ describe('ManageRelationship', () => {
 
   describe('ManageRelationship button text', () => {
     it('should render button default text when touch_freq is null', async () => {
-      render(<ManageRelationship value={value} onChange={onChange} />)
+      render(
+        <TestBed>
+          <ManageRelationship value={value} onChange={onChange} />
+        </TestBed>
+      )
 
       const expectedText = frequencyToString(value)
 
@@ -27,7 +33,11 @@ describe('ManageRelationship', () => {
 
     it('should render monthly when touch_freq is 30', async () => {
       value = 30
-      render(<ManageRelationship value={value} onChange={onChange} />)
+      render(
+        <TestBed>
+          <ManageRelationship value={value} onChange={onChange} />
+        </TestBed>
+      )
 
       const expectedText = frequencyToString(value)
 
@@ -37,7 +47,11 @@ describe('ManageRelationship', () => {
     })
     it('should render exact day when touch_freq is 91', async () => {
       value = 91
-      render(<ManageRelationship value={value} onChange={onChange} />)
+      render(
+        <TestBed>
+          <ManageRelationship value={value} onChange={onChange} />
+        </TestBed>
+      )
 
       const expectedText = frequencyToString(value)
 
@@ -49,7 +63,11 @@ describe('ManageRelationship', () => {
 
   describe('ManageRelationship menu', () => {
     it('should open the menu when user clicks the button', async () => {
-      render(<ManageRelationship value={value} onChange={onChange} />)
+      render(
+        <TestBed>
+          <ManageRelationship value={value} onChange={onChange} />
+        </TestBed>
+      )
 
       fireEvent.click(screen.getByRole('button'))
 
@@ -64,7 +82,11 @@ describe('ManageRelationship', () => {
       })
     })
     it('should change the touch frequency when user clicks on weekly item', async () => {
-      render(<ManageRelationship value={value} onChange={onChange} />)
+      render(
+        <TestBed>
+          <ManageRelationship value={value} onChange={onChange} />
+        </TestBed>
+      )
 
       fireEvent.click(screen.getByRole('button'))
 
@@ -81,7 +103,11 @@ describe('ManageRelationship', () => {
       })
     })
     it('should change the touch frequency when user enter custom value', async () => {
-      render(<ManageRelationship value={value} onChange={onChange} />)
+      render(
+        <TestBed>
+          <ManageRelationship value={value} onChange={onChange} />
+        </TestBed>
+      )
 
       fireEvent.click(screen.getByRole('button'))
 
@@ -112,7 +138,11 @@ describe('ManageRelationship', () => {
       })
     })
     it('should reset the touch frequency when user enter 0 custom value', async () => {
-      render(<ManageRelationship value={value} onChange={onChange} />)
+      render(
+        <TestBed>
+          <ManageRelationship value={value} onChange={onChange} />
+        </TestBed>
+      )
 
       fireEvent.click(screen.getByRole('button'))
 
@@ -135,15 +165,15 @@ describe('ManageRelationship', () => {
       fireEvent.click(screen.getByTitle('Save'))
 
       await waitFor(() => {
-        expect(onChange).toBeCalledTimes(1)
-        expect(onChange).toBeCalledWith(null)
-
-        expect(screen.queryByTitle('Save')).not.toBeInTheDocument()
-        expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+        expect(onChange).toBeCalledTimes(0)
       })
     })
     it('should reset the touch frequency when user enter empty custom value', async () => {
-      render(<ManageRelationship value={value} onChange={onChange} />)
+      render(
+        <TestBed>
+          <ManageRelationship value={value} onChange={onChange} />
+        </TestBed>
+      )
 
       fireEvent.click(screen.getByRole('button'))
 
@@ -166,11 +196,7 @@ describe('ManageRelationship', () => {
       fireEvent.click(screen.getByTitle('Save'))
 
       await waitFor(() => {
-        expect(onChange).toBeCalledTimes(1)
-        expect(onChange).toBeCalledWith(null)
-
-        expect(screen.queryByTitle('Save')).not.toBeInTheDocument()
-        expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+        expect(onChange).toBeCalledTimes(0)
       })
     })
   })
