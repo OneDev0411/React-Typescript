@@ -1,7 +1,7 @@
 import { IconButton } from '@material-ui/core'
 import { mdiFacebook, mdiInstagram, mdiLinkedin } from '@mdi/js'
 
-import TikTokIcon from '@app/views/components/SvgIcons/TikTok/iconTikTok.svg'
+import { mdiTikTokPath } from '@app/views/components/SvgIcons/Tiktok/iconTiktok'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { SocialMediasType, SocialMediasEnum } from './types'
@@ -60,7 +60,7 @@ function MiniContactIcons(props: MiniContactIconsType) {
                 key={social.type}
                 size="small"
               >
-                <SvgIcon path={TikTokIcon} />
+                <SvgIcon path={mdiTikTokPath} />
               </IconButton>
             )
         }

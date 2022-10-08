@@ -9,7 +9,7 @@ import {
 
 import { normalizeContactsForEmailCompose } from '@app/models/email/helpers/normalize-contact'
 import SendEmailButton from '@app/views/components/SendEmailButton'
-import { mdiTikTokPath } from '@app/views/components/SvgIcons/TikTok/iconTikTok'
+import { mdiTikTokPath } from '@app/views/components/SvgIcons/Tiktok/iconTiktok'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const fields = ['website', 'facebook', 'instagram', 'linkedin', 'tiktok']
