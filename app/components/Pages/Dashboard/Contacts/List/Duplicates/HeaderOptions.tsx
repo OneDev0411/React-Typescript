@@ -33,7 +33,7 @@ export default function HeaderOptions({
   }
 
   const getMergeAllButtonCopy = () => {
-    const possiblePluralizedList = pluralize('contacts list', listsLength, true)
+    const possiblePluralizedList = pluralize('contact list', listsLength, true)
 
     if (isMerging) {
       return `Merging ${possiblePluralizedList}`
