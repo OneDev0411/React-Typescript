@@ -111,7 +111,7 @@ let PersonalInfoForm = ({
         <Field
           name="tiktok"
           type="text"
-          label="Tiktok"
+          label="TikTok"
           component={SimpleField}
           placeholder="https://www.tiktok.com/<username>"
         />
