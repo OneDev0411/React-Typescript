@@ -89,7 +89,7 @@ export function ContactsNotification({
     >
       {({ toggleMenu }) => (
         <>
-          {parkedContactCount && (
+          {!!parkedContactCount && (
             <>
               <MenuItem onClick={toggleMenu}>
                 <Grid container>
@@ -104,7 +104,7 @@ export function ContactsNotification({
               <Divider />
             </>
           )}
-          {duplicateClusterCount && (
+          {!!duplicateClusterCount && (
             <MenuItem onClick={toggleMenu}>
               <Grid container>
                 <OtherContactsBadge
