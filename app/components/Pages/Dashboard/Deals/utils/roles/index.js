@@ -39,7 +39,7 @@ export function getLegalFullName(role) {
     name = [role.company_title]
   }
 
-  return name.join(' ').trim()
+  return name.join(' ').trim().replace(/  +/g, ' ')
 }
 
 /**

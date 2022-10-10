@@ -1,4 +1,4 @@
-export const TEN_MEGA_BYTES = 10 * 1024 * 1024
+export const MIN_BYTES_TO_DOWNLOAD = 2 * 1024 * 1024
 
 export const AWS_REGION = 'us-east-1'
 
