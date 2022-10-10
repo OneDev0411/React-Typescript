@@ -152,6 +152,20 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       )
     },
     {
+      id: 'next-touch',
+      width: '150px',
+      header: () => <HeaderColumn text="Next Touch" iconPath={mdiCalendar} />,
+      render: ({ row: contact }) => {
+        console.log(contact.next_touch)
+
+        return (
+          <div className={classes.cell}>
+            <LastTouched contact={contact} />
+          </div>
+        )
+      }
+    },
+    {
       id: 'flows',
       width: '150px',
       header: () => <HeaderColumn text="Flows" iconPath={mdiFlash} />,
