@@ -2,7 +2,7 @@ import { Model } from 'backbone'
 import { Editor } from 'grapesjs'
 
 import { getNameInitialsPlaceholderImage } from '@app/utils/helpers'
-import { Agent, BrandedUser } from '@app/views/components/TeamAgents/types'
+import { Agent } from '@app/views/components/TeamAgents/types'
 import AgentGridIcon from 'assets/images/marketing/editor/blocks/agent-grid.png'
 import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
 

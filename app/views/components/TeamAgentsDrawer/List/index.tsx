@@ -4,7 +4,7 @@ import { Box } from '@material-ui/core'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
 import Search from 'components/Grid/Search'
-import { NormalizedBrand, BrandedUser } from 'components/TeamAgents/types'
+import { NormalizedBrand } from 'components/TeamAgents/types'
 import VirtualList from 'components/VirtualList'
 
 import { ListRow } from '../ListRow'

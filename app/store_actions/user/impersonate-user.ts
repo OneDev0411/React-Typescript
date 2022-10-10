@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux'
 
 import { getImpersonateUser as getImpersonateUserFromLocalStorage } from '@app/utils/impersonate-user'
-import { BrandedUser } from '@app/views/components/TeamAgents/types'
 import { SET_IMPERSONATE_USER } from 'constants/user'
 
 import { IAppState } from '../../reducers'

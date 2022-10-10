@@ -7,7 +7,7 @@ import useDebouncedCallback from 'use-debounce/lib/callback'
 import Drawer, { OverlayDrawerProps } from '@app/views/components/OverlayDrawer'
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
 import TeamAgents, { TeamAgentsProps } from 'components/TeamAgents'
-import { Agent, BrandedUser } from 'components/TeamAgents/types'
+import { Agent } from 'components/TeamAgents/types'
 import { searchContacts } from 'models/contacts/search-contacts'
 
 import { AgentsList } from './List'

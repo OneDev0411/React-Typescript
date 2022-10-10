@@ -132,3 +132,7 @@ declare interface IUserActivity {
   object_class: string
   object?: unknown
 }
+
+declare interface BrandedUser extends IUser {
+  brand_id?: Nullable<UUID>
+}
