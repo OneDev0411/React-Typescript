@@ -3,13 +3,13 @@ import React, { useMemo } from 'react'
 import { Tooltip } from '@material-ui/core'
 import { connect } from 'react-redux'
 
-import { resetActiveFilters as resetActiveFiltersAction } from 'actions/filter-segments/active-filters'
-import { changeActiveFilterSegment as changeActiveFilterSegmentAction } from 'actions/filter-segments/change-active-segment'
 import {
   ListTitle,
   ListItem,
   ListItemName
-} from 'components/Grid/SavedSegments/List/styled'
+} from '@app/components/Pages/Dashboard/Contacts/List/SavedSegments/List/styled'
+import { resetActiveFilters as resetActiveFiltersAction } from 'actions/filter-segments/active-filters'
+import { changeActiveFilterSegment as changeActiveFilterSegmentAction } from 'actions/filter-segments/change-active-segment'
 import { IAppState } from 'reducers'
 import { selectActiveFilters } from 'reducers/filter-segments'
 

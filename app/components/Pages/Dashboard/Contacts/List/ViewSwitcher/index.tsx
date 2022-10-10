@@ -4,7 +4,7 @@ import { MenuItem, Popover, useTheme } from '@material-ui/core'
 import { mdiViewWeekOutline, mdiFormatListText } from '@mdi/js'
 import cn from 'classnames'
 
-import { ViewModeType } from '@app/components/Pages/Dashboard/Contacts/List/Tabs'
+import { ViewModeType } from '@app/components/Pages/Dashboard/Contacts/List/Header'
 import { useIconStyles } from '@app/styles/use-icon-styles'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'

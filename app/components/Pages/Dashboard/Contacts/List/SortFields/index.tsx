@@ -3,7 +3,7 @@ import _findIndex from 'lodash/findIndex'
 
 import { DropdownTab } from 'components/PageTabs'
 
-import { Props } from '../Tabs'
+import { Props } from '../Header'
 
 interface SortableColumnsType {
   label: string

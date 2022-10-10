@@ -56,11 +56,11 @@ import {
   DUPLICATE_CONTACTS_LIST_ID,
   VIEW_MODE_FIELD_SETTING_KEY
 } from './constants'
+import Header from './Header'
 import { OtherContactsBadge } from './OtherContactsBadge'
 import { ViewMode } from './styled'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import Table from './Table'
-import ContactsTabs from './Tabs'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
 import { ContactsZeroState } from './ZeroState'
 
@@ -131,6 +131,7 @@ class ContactsList extends React.Component {
     }
 
     if (fetchTags) {
+      console.log('fetchTags ...')
       getContactsTags()
     }
 
@@ -186,45 +187,6 @@ class ContactsList extends React.Component {
     } else if (flows && flows.length === 1) {
       this.setState({ selectedShortcutFilter: flows })
     }
-  }
-
-  getHeaderTitle = () => {
-    const { activeFilters, activeSegment, filters, flows } = this.props
-
-    if (
-      activeSegment &&
-      activeSegment.name &&
-      activeSegment.id !== 'default' &&
-      this.state.selectedShortcutFilter === null
-    ) {
-      if (activeSegment.id === PARKED_CONTACTS_LIST_ID) {
-        return activeSegment.name
-      }
-
-      return `List: ${activeSegment.name}`
-    }
-
-    if (
-      filters &&
-      filters.length === 1 &&
-      this.state.selectedShortcutFilter !== null
-    ) {
-      if (filters[0].value === null) {
-        return 'Contacts(un-Tagged)'
-      }
-
-      return `Tag: ${filters[0].value}`
-    }
-
-    if (
-      flows &&
-      flows.length === 1 &&
-      this.state.selectedShortcutFilter !== null
-    ) {
-      return `Flow: ${activeFilters[0].values[0].label}`
-    }
-
-    return 'Contacts'
   }
 
   updateSyncState(provider, oAuthAccounts = this.props.oAuthAccounts) {
@@ -786,48 +748,50 @@ class ContactsList extends React.Component {
     this.reloadContacts()
   }
 
-  renderTabs = (props = {}) => {
+  renderHeader = (props = {}) => {
     const { selectedShortcutFilter, searchInputValue, sortOrder, viewMode } =
       this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
 
     return (
-      <ContactsTabs
-        handleFilterChange={this.handleFilterChange}
-        handleChangeSavedSegment={this.handleChangeSavedSegment}
-        handleResetShortcutFilter={this.handleResetShortcutFilter}
-        filter={{
-          show: this.shouldShowFilters()
-        }}
-        tagListProps={{
-          onClick: filters => {
-            this.setState({
-              selectedShortcutFilter: filters.filters
-            })
-            this.handleFilterChange({ ...filters, flows: [] }, true)
-          },
-          isActive: selectedShortcutFilter !== null
-        }}
-        savedListProps={{
-          name: CONTACTS_SEGMENT_NAME,
-          associations: CRM_LIST_DEFAULT_ASSOCIATIONS,
-          getPredefinedLists: () => ({}),
-          onChange: segment => {
-            this.handleChangeSavedSegment(segment)
-          }
-        }}
-        sortProps={{
-          onChange: this.changeSortOrder,
-          currentOrder: sortOrder,
-          searchValue: searchInputValue
-        }}
-        contactCount={listInfo.total || 0}
-        users={viewAsUsers}
-        activeSegment={activeSegment}
-        onChangeView={this.changeViewMode}
-        viewMode={viewMode}
-        {...props}
-      />
+      <>
+        <Header
+          handleFilterChange={this.handleFilterChange}
+          handleChangeSavedSegment={this.handleChangeSavedSegment}
+          handleResetShortcutFilter={this.handleResetShortcutFilter}
+          filter={{
+            show: this.shouldShowFilters()
+          }}
+          tagListProps={{
+            onClick: filters => {
+              this.setState({
+                selectedShortcutFilter: filters.filters
+              })
+              this.handleFilterChange({ ...filters, flows: [] }, true)
+            },
+            isActive: selectedShortcutFilter !== null
+          }}
+          savedListProps={{
+            name: CONTACTS_SEGMENT_NAME,
+            associations: CRM_LIST_DEFAULT_ASSOCIATIONS,
+            getPredefinedLists: () => ({}),
+            onChange: segment => {
+              this.handleChangeSavedSegment(segment)
+            }
+          }}
+          sortProps={{
+            onChange: this.changeSortOrder,
+            currentOrder: sortOrder,
+            searchValue: searchInputValue
+          }}
+          contactCount={listInfo.total || 0}
+          users={viewAsUsers}
+          activeSegment={activeSegment}
+          onChangeView={this.changeViewMode}
+          viewMode={viewMode}
+          {...props}
+        />
+      </>
     )
   }
 
@@ -858,7 +822,6 @@ class ContactsList extends React.Component {
         !activeSegment.filters ||
         activeSegment.filters.length === 0)
 
-    const title = this.getHeaderTitle()
     const showImportAction = this.shouldShowImportAndCreateActions()
     const activeTag = this.getActiveTag()
 
@@ -875,7 +838,7 @@ class ContactsList extends React.Component {
       >
         <PageLayout.HeaderWithSearch
           flex="0 1 auto"
-          title={title}
+          title="Contacts"
           onSearch={this.handleSearch}
           gutter={4}
           noPadding={false}
@@ -954,7 +917,7 @@ class ContactsList extends React.Component {
             <>
               <Box px={isTableMode ? 4 : 0}>
                 {isTableMode && this.renderOtherContactsBadge()}
-                {this.renderTabs()}
+                {this.renderHeader()}
               </Box>
 
               <Box
