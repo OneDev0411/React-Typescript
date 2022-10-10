@@ -300,7 +300,7 @@ export default function Duplicates({
 
   const handleMergeAllClustersClick = async () => {
     confirmation.setConfirmationModal({
-      message: 'Are you sure about merging all duplicate contact lists?',
+      message: 'Are you sure about merging all duplicate contact list?',
       onConfirm: async () => {
         setIsLoading(true)
 
@@ -312,7 +312,7 @@ export default function Duplicates({
               status: 'success',
               message:
                 // eslint-disable-next-line max-len
-                'All duplicate contact lists will be merged. It may take a few minutes.'
+                'All duplicate contact list will be merged. It may take a few minutes.'
             })
           )
         } catch (err) {
@@ -327,7 +327,7 @@ export default function Duplicates({
 
   const handleDismissAllClustersClick = async () => {
     confirmation.setConfirmationModal({
-      message: 'Are you sure about dismissing all duplicate contact lists?',
+      message: 'Are you sure about dismissing all duplicate contact list?',
       onConfirm: async () => {
         setIsLoading(true)
 
@@ -338,7 +338,7 @@ export default function Duplicates({
               status: 'success',
               message:
                 // eslint-disable-next-line max-len
-                'All duplicate contact lists will be dismissed. It may take a few minutes.'
+                'All duplicate contact list will be dismissed. It may take a few minutes.'
             })
           )
           setClusters([])
