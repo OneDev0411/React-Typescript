@@ -742,8 +742,8 @@ class ContactsList extends React.Component {
 
     return (
       <ContactsNotification
-        parkedContactCount={parkedContactCount}
-        duplicateClusterCount={duplicateClusterCount}
+        parkedContactCount={+parkedContactCount}
+        duplicateClusterCount={+duplicateClusterCount}
         onClickParkedContacts={async () => {
           await resetActiveFilters(CONTACTS_SEGMENT_NAME)
           await changeActiveFilterSegment(
