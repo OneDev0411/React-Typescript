@@ -1,6 +1,5 @@
 import { Checkbox, Avatar } from '@material-ui/core'
 
-import { BrandedUser } from 'components/TeamAgents/types'
 import { TextWithHighlights } from 'components/TextWithHighlights'
 import { getContactNameInitials } from 'models/contacts/helpers'
 
