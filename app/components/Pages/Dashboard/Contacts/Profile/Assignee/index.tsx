@@ -128,7 +128,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
     dispatch(
       confirmation({
         message: 'Delete Assignee',
-        description: 'Are your sure about deleting this Assignee?',
+        description: 'Are you sure about deleting this Assignee?',
         confirmLabel: 'Yes, I do',
         appearance: 'danger',
         onConfirm: () => {
