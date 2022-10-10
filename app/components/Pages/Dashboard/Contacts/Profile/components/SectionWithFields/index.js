@@ -107,11 +107,10 @@ class SectionWithFields extends React.Component {
 
   toggleMode = ({ order }) =>
     this.setState(state => ({
-      orderedAttributes: state.orderedAttributes.map(a =>
-        a.order === order
-          ? { ...a, isActive: !a.isActive }
-          : { ...a, isActive: false }
-      )
+      orderedAttributes: state.orderedAttributes.map(attribute => ({
+        ...attribute,
+        isActive: attribute.order === order ? !attribute.isActive : false
+      }))
     }))
 
   shouldUpdateContact = attribute_def => {
