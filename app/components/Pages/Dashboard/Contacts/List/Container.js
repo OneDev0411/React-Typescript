@@ -913,7 +913,6 @@ class ContactsList extends React.Component {
                       }
                     }}
                     hasCSVButton
-                    tooltip="Connect to Google, Outlook or import from a CSV"
                   />
                   <NewContactDrawer
                     isOpen={this.state.isOpenNewContactDrawer}
