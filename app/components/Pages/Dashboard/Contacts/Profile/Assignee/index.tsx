@@ -103,18 +103,16 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       return
     }
 
-    let oldAssignees: IAssigneeApiResponse[] = []
-
-    if (contact.assignees) {
-      oldAssignees = contact.assignees.map(assignee => ({
-        user: assignee?.user?.id,
-        brand: assignee?.brand?.id
-      }))
-    }
+    const assignees = Array.isArray(contact.assignees)
+      ? contact.assignees.map(assignee => ({
+          user: assignee?.user?.id,
+          brand: assignee?.brand?.id
+        }))
+      : []
 
     try {
       const { data } = await addAssignee(contact.id, {
-        assignees: [...oldAssignees, { brand: user.brand_id, user: user.id }]
+        assignees: [...assignees, { brand: user.brand_id, user: user.id }]
       })
 
       setCurrentAgent(user)
