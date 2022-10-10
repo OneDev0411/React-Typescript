@@ -1,15 +1,12 @@
 import React from 'react'
 
-import { ListItem, withStyles } from '@material-ui/core'
 import { connect } from 'react-redux'
 
 import {
-  // eslint-disable-next-line import/named
   changeActiveFilterSegment,
   deleteFilterSegment,
   getSavedSegments
 } from 'actions/filter-segments'
-import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
 import {
   getDefaultList,
   getSegments,
@@ -18,19 +15,6 @@ import {
 } from 'reducers/filter-segments'
 
 import Item from './Item'
-
-const styles = theme => ({
-  dropdownBtn: {
-    ...theme.typography.body1,
-    color: theme.palette.common.black,
-    '&.Mui-disabled': {
-      color: theme.palette.text.disabled,
-      '& svg': {
-        fill: theme.palette.text.disabled
-      }
-    }
-  }
-})
 
 class SegmentsList extends React.Component {
   state = {
@@ -86,47 +70,25 @@ class SegmentsList extends React.Component {
 
   render() {
     const { props } = this
-    const { classes } = props
 
     return (
-      <BaseDropdownWithMore
-        component="div"
-        buttonLabel="Lists"
-        DropdownToggleButtonProps={{
-          disabled: props.isFetching || props.list.length === 0,
-          className: classes.dropdownBtn
-        }}
-        listPlugin={{
-          style: { width: 220 },
-          className: 'u-scrollbar'
-        }}
-        morePlugin={{
-          count: 7,
-          style: {
-            maxHeight: 250
-          },
-          textContainer: ({ children }) => (
-            <ListItem button>{children}</ListItem>
-          )
-        }}
-        renderMenu={({ close }) =>
-          props.list.map(item => {
-            const { id } = item
+      <>
+        {props.list.map(item => {
+          const { id } = item
 
-            return (
-              <Item
-                key={id}
-                isDeleting={this.state.deletingItems.includes(id)}
-                item={item}
-                deleteHandler={this.deleteItem}
-                selectHandler={this.selectItem}
-                closeHandler={close}
-                selected={this.isSelected(id)}
-              />
-            )
-          })
-        }
-      />
+          return (
+            <Item
+              key={id}
+              isDeleting={this.state.deletingItems.includes(id)}
+              item={item}
+              deleteHandler={this.deleteItem}
+              selectHandler={this.selectItem}
+              closeHandler={this.props.onClose}
+              selected={this.isSelected(id)}
+            />
+          )
+        })}
+      </>
     )
   }
 }
@@ -154,4 +116,4 @@ ConnectedSegmentsList.defaultProps = {
   getPredefinedLists: name => ({ default: getDefaultList(name) })
 }
 
-export default withStyles(styles)(ConnectedSegmentsList)
+export default ConnectedSegmentsList
