@@ -1,7 +1,5 @@
 import {
   makeStyles,
-  createStyles,
-  Theme,
   Badge,
   Grid,
   MenuItem,
@@ -15,26 +13,24 @@ import { SvgIcon, muiIconSizes } from 'components/SvgIcons'
 
 import { OtherContactsBadge } from '../OtherContactsBadge'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    button: {
-      height: '42px',
-      width: '42px',
-      minWidth: 'unset',
-      border: 'none',
-      marginRight: theme.spacing(2)
-    },
-    badge: {
-      backgroundColor: theme.palette.error.main,
-      borderRadius: theme.spacing(0.5),
-      right: theme.spacing(0.5)
-    },
-    buttonIcon: { marginTop: theme.spacing(1), color: theme.palette.grey[700] },
-    dropdown: {
-      width: 336
-    }
-  })
-)
+const useStyles = makeStyles(theme => ({
+  button: {
+    height: '42px',
+    width: '42px',
+    minWidth: 'unset',
+    border: 'none',
+    marginRight: theme.spacing(2)
+  },
+  badge: {
+    backgroundColor: theme.palette.error.main,
+    borderRadius: theme.spacing(0.5),
+    right: theme.spacing(0.5)
+  },
+  buttonIcon: { marginTop: theme.spacing(1), color: theme.palette.grey[700] },
+  dropdown: {
+    width: 336
+  }
+}))
 
 interface Props {
   parkedContactCount: number
@@ -54,7 +50,7 @@ export function ContactsNotification({
   disabled = false
 }: Props) {
   const classes = useStyles()
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
 
   return (
     <DropdownTab
