@@ -11,7 +11,7 @@ const contact: any = {
   users: fullContact.users as IUser[]
 }
 
-import TouchValue from './TouchValue'
+import LastTouch from './LastTouch'
 
 describe('Contacts list last touched component', () => {
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe('Contacts list last touched component', () => {
   })
 
   it('renders for contacts with last touch', () => {
-    const wrapper = render(<TouchValue contact={contact} />)
+    const wrapper = render(<LastTouch contact={contact} />)
 
     expect(toJson(wrapper)).toMatchSnapshot()
   })
@@ -31,7 +31,7 @@ describe('Contacts list last touched component', () => {
   it('renders for contacts without last touch', () => {
     contact.last_touch = null
 
-    const wrapper = render(<TouchValue contact={contact} />)
+    const wrapper = render(<LastTouch contact={contact} />)
 
     expect(toJson(wrapper)).toMatchSnapshot()
   })
