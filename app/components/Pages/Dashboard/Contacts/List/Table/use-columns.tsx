@@ -30,9 +30,9 @@ import { BirthdayCell } from './columns/Birthday'
 import { EmailsCell } from './columns/Emails'
 import { FlowsCell } from './columns/Flows'
 import { HomeAnniversary } from './columns/HomeAnniversary'
-import LastTouched from './columns/LastTouched'
 import { PhonesCell } from './columns/Phones'
 import { TagsCell } from './columns/Tags'
+import TouchValue from './columns/TouchValue'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -147,7 +147,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       header: () => <HeaderColumn text="Last Touch" iconPath={mdiCalendar} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
-          <LastTouched contact={contact} />
+          <TouchValue contact={contact} isLastTouch />
         </div>
       )
     },
@@ -156,11 +156,9 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       width: '150px',
       header: () => <HeaderColumn text="Next Touch" iconPath={mdiCalendar} />,
       render: ({ row: contact }) => {
-        console.log(contact.next_touch)
-
         return (
           <div className={classes.cell}>
-            <LastTouched contact={contact} />
+            <TouchValue contact={contact} />
           </div>
         )
       }

@@ -24,7 +24,7 @@ import type { SelectorOption } from 'components/TagSelector'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { getContactNameInitials } from 'models/contacts/helpers'
 
-import LastTouched from '../../../List/Table/columns/LastTouched'
+import TouchValue from '../../../List/Table/columns/TouchValue'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -168,7 +168,7 @@ export function CardItem({
               size={muiIconSizes.xsmall}
             />
             <Typography variant="caption" className={classes.lastTouch}>
-              <LastTouched contact={contact} />
+              <TouchValue contact={contact} />
             </Typography>
           </div>
         </Box>
