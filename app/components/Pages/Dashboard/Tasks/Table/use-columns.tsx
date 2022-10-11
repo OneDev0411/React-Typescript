@@ -55,7 +55,7 @@ export function useColumns(): TableColumn<ITask>[] {
     {
       id: 'title',
       class: 'title',
-      width: '350px',
+      width: '15vw',
       header: () => (
         <HeaderColumn
           text="Task"
@@ -78,7 +78,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'contacts',
-      width: '250px',
+      width: '15vw',
       header: () => (
         <HeaderColumn text="Contacts" iconPath={mdiContactsOutline} />
       ),
@@ -94,7 +94,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'due-date',
-      width: '200px',
+      width: '13vw',
       header: () => (
         <HeaderColumn
           text="Due Date"
@@ -115,7 +115,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'type',
-      width: '200px',
+      width: '15vw',
       header: () => (
         <HeaderColumn text="Type" iconPath={mdiFormatListBulleted} />
       ),
@@ -134,7 +134,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'assignees',
-      width: '200px',
+      width: '15vw',
       header: () => (
         <HeaderColumn text="Assignees" iconPath={mdiAccountArrowLeft} />
       ),
@@ -150,7 +150,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'property-deal',
-      width: '300px',
+      width: '20vw',
       header: () => (
         <HeaderColumn
           text="Property & Deal"
