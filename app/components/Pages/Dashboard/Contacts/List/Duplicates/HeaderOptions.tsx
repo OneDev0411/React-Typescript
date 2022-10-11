@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import { Box, Button, makeStyles, Theme } from '@material-ui/core'
-import pluralize from 'pluralize'
 
 const useStyles = makeStyles((theme: Theme) => ({
   dismissAllButton: {
@@ -33,13 +32,13 @@ export default function HeaderOptions({
   }
 
   const getMergeAllButtonCopy = () => {
-    const possiblePluralizedList = pluralize('contacts list', listsLength, true)
+    const label = `${listsLength} contact list`
 
     if (isMerging) {
-      return `Merging ${possiblePluralizedList}`
+      return `Merging ${label}`
     }
 
-    return `Merge ${possiblePluralizedList}`
+    return `Merge ${label}`
   }
 
   const handleDismissAll = async () => {
