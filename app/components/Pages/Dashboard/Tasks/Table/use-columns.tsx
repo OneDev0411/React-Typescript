@@ -6,7 +6,6 @@ import {
   mdiOfficeBuildingOutline
 } from '@mdi/js'
 
-import { useBreakpoint } from '@app/hooks/use-breakpoint'
 import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderColumn'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
@@ -29,7 +28,6 @@ import { InlineTypeCell } from './inline-columns/InlineTypeCell'
 
 export function useColumns(): TableColumn<ITask>[] {
   const { sortBy, setSortBy } = useTasksListContext()
-  const breakpoint = useBreakpoint()
 
   const getSortOrder = (column: string) =>
     sortBy.includes(column)
@@ -57,6 +55,7 @@ export function useColumns(): TableColumn<ITask>[] {
     {
       id: 'title',
       class: 'title',
+      width: '350px',
       header: () => (
         <HeaderColumn
           text="Task"
@@ -79,8 +78,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'contacts',
-      width: '280px',
-      hidden: ['xs', 'sm'].includes(breakpoint),
+      width: '250px',
       header: () => (
         <HeaderColumn text="Contacts" iconPath={mdiContactsOutline} />
       ),
@@ -96,8 +94,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'due-date',
-      width: '15%',
-      hidden: ['xs'].includes(breakpoint),
+      width: '200px',
       header: () => (
         <HeaderColumn
           text="Due Date"
@@ -118,8 +115,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'type',
-      width: '12%',
-      hidden: ['xs', 'sm'].includes(breakpoint),
+      width: '200px',
       header: () => (
         <HeaderColumn text="Type" iconPath={mdiFormatListBulleted} />
       ),
@@ -138,8 +134,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'assignees',
-      width: '10%',
-      hidden: ['xs', 'sm'].includes(breakpoint),
+      width: '200px',
       header: () => (
         <HeaderColumn text="Assignees" iconPath={mdiAccountArrowLeft} />
       ),
@@ -155,8 +150,7 @@ export function useColumns(): TableColumn<ITask>[] {
     },
     {
       id: 'property-deal',
-      width: '20%',
-      hidden: ['xs', 'sm'].includes(breakpoint),
+      width: '300px',
       header: () => (
         <HeaderColumn
           text="Property & Deal"
