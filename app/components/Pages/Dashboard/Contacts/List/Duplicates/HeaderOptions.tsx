@@ -32,11 +32,13 @@ export default function HeaderOptions({
   }
 
   const getMergeAllButtonCopy = () => {
+    const label = `${listsLength} contact list`
+
     if (isMerging) {
-      return `Merging ${listsLength} contact list`
+      return `Merging ${label}`
     }
 
-    return `Merge ${listsLength} contact list`
+    return `Merge ${label}`
   }
 
   const handleDismissAll = async () => {
