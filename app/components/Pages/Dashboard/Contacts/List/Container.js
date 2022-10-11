@@ -49,6 +49,7 @@ import { CONTACTS_SEGMENT_NAME } from '../constants'
 
 import {
   FLOW_FILTER_ID,
+  RELEVANCE_SORT_KEY,
   CONTACT_CHUNK_COUNT,
   OPEN_HOUSE_FILTER_ID,
   SORT_FIELD_SETTING_KEY,
@@ -56,7 +57,7 @@ import {
   DUPLICATE_CONTACTS_LIST_ID,
   VIEW_MODE_FIELD_SETTING_KEY
 } from './constants'
-import { OtherContactsBadge } from './OtherContactsBadge'
+import { ContactsNotification } from './ContactsNotification'
 import { ViewMode } from './styled'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import Table from './Table'
@@ -96,11 +97,10 @@ class ContactsList extends React.Component {
     const { getSetting, fetchTags, getContactsTags } = this.props
     const { parkedContactsCount, searchInputValue } = this.state
     const sortFieldSetting = getSetting(SORT_FIELD_SETTING_KEY)
-    const relevanceSortKey = '-last_touch_rank'
 
     const order = searchInputValue
-      ? relevanceSortKey
-      : sortFieldSetting && sortFieldSetting !== relevanceSortKey
+      ? RELEVANCE_SORT_KEY
+      : sortFieldSetting && sortFieldSetting !== RELEVANCE_SORT_KEY
       ? sortFieldSetting
       : '-last_touch'
 
@@ -440,12 +440,11 @@ class ContactsList extends React.Component {
   handleSearch = value => {
     const { sortOrder } = this.state
     const { getSetting } = this.props
-    const relevanceSortKey = '-last_touch_rank'
     let order = sortOrder
 
     if (value) {
-      order = relevanceSortKey
-    } else if (order === relevanceSortKey) {
+      order = RELEVANCE_SORT_KEY
+    } else if (order === RELEVANCE_SORT_KEY) {
       order = getSetting(SORT_FIELD_SETTING_KEY, '-last_touch')
     }
 
@@ -471,14 +470,19 @@ class ContactsList extends React.Component {
       return
     }
 
-    const { setActiveTeamSetting } = this.props
-
     this.setState(
       {
         sortOrder: order
       },
       () => this.handleFilterChange({}, true)
     )
+
+    if (order === RELEVANCE_SORT_KEY) {
+      return
+    }
+
+    const { setActiveTeamSetting } = this.props
+
     setActiveTeamSetting(SORT_FIELD_SETTING_KEY, order)
   }
 
@@ -741,34 +745,21 @@ class ContactsList extends React.Component {
     }
 
     return (
-      <Box display="flex" alignItems="center">
-        {parkedContactCount > 0 && (
-          <Box mr={duplicateClusterCount > 0 ? 1 : 0}>
-            <OtherContactsBadge
-              disabled={isFetchingContacts}
-              title="New contacts to review and add"
-              count={parkedContactCount}
-              onClick={async () => {
-                await resetActiveFilters(CONTACTS_SEGMENT_NAME)
-                await changeActiveFilterSegment(
-                  CONTACTS_SEGMENT_NAME,
-                  PARKED_CONTACTS_LIST_ID
-                )
-                this.handleFilterChange({ parked: true }, true)
-                this.handleResetShortcutFilter()
-              }}
-            />
-          </Box>
-        )}
-        {duplicateClusterCount > 0 && (
-          <OtherContactsBadge
-            disabled={isFetchingContacts}
-            title="Duplicate Contacts"
-            count={duplicateClusterCount}
-            onClick={() => goTo('/dashboard/contacts/duplicates')}
-          />
-        )}
-      </Box>
+      <ContactsNotification
+        parkedContactCount={+parkedContactCount}
+        duplicateClusterCount={+duplicateClusterCount}
+        onClickParkedContacts={async () => {
+          await resetActiveFilters(CONTACTS_SEGMENT_NAME)
+          await changeActiveFilterSegment(
+            CONTACTS_SEGMENT_NAME,
+            PARKED_CONTACTS_LIST_ID
+          )
+          this.handleFilterChange({ parked: true }, true)
+          this.handleResetShortcutFilter()
+        }}
+        onClickDuplicateCluster={() => goTo('/dashboard/contacts/duplicates')}
+        disabled={isFetchingContacts}
+      />
     )
   }
 
@@ -900,6 +891,7 @@ class ContactsList extends React.Component {
                   label="Manage Relationships"
                 />
               )}
+              {this.renderOtherContactsBadge()}
               {showImportAction && (
                 <ImportContactsButton
                   hasCSVButton
@@ -952,10 +944,7 @@ class ContactsList extends React.Component {
           {isZeroState && <ContactsZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
-              <Box px={isTableMode ? 4 : 0}>
-                {isTableMode && this.renderOtherContactsBadge()}
-                {this.renderTabs()}
-              </Box>
+              <Box px={isTableMode ? 4 : 0}>{this.renderTabs()}</Box>
 
               <Box
                 mt={2}

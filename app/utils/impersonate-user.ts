@@ -1,5 +1,3 @@
-import { BrandedUser } from '@app/views/components/TeamAgents/types'
-
 const IMPERSOATE_USER_COOKIE_KEY = 'impersonate_user'
 
 export const setImpersonateUser = (user: BrandedUser): void => {
