@@ -4,6 +4,7 @@ export const fieldsNeedUpdateContact = [
   'facebook',
   'instagram',
   'linkedin',
+  'tiktok',
   'phone_number',
   'first_name',
   'last_name',
