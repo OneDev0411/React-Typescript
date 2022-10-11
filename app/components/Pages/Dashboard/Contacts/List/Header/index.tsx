@@ -1,4 +1,4 @@
-import { Grid } from '@material-ui/core'
+import { Box, Grid } from '@material-ui/core'
 
 import ContactsSegments from '../ContactsSegments'
 import ContactFilters from '../Filters'
@@ -70,10 +70,10 @@ export const Header = ({
           viewMode={viewMode}
           users={users}
         />
-        <Grid>
+        <Box display="flex">
           <SortFields {...sortProps} />
           <ViewSwitcher onChangeView={onChangeView} activeView={viewMode} />
-        </Grid>
+        </Box>
       </Grid>
     </Grid>
   )

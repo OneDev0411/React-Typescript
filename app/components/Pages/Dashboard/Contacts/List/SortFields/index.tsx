@@ -1,9 +1,20 @@
-import { MenuItem } from '@material-ui/core'
+import { Box, makeStyles, MenuItem, Theme, Typography } from '@material-ui/core'
 import _findIndex from 'lodash/findIndex'
 
 import { DropdownTab } from 'components/PageTabs'
 
 import { Props } from '../Header'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    title: {
+      ...theme.typography.body3,
+      color: theme.palette.grey[600],
+      marginRight: theme.spacing(1)
+    }
+  }),
+  { name: 'ContactsSortFields' }
+)
 
 interface SortableColumnsType {
   label: string
@@ -33,34 +44,38 @@ export const SortFields = ({
   currentOrder,
   searchValue
 }: Props['sortProps']) => {
+  const classes = useStyles()
   const activeOrder = _findIndex(sortableColumns, o => o.value === currentOrder)
   const buttonLabel =
     activeOrder >= 0 ? sortableColumns[activeOrder].label : 'A - Z'
 
   return (
-    <DropdownTab component="div" title={buttonLabel}>
-      {({ toggleMenu }) => (
-        <>
-          {sortableColumns.map((item, index) => {
-            if (item.shouldShow && !item.shouldShow({ searchValue })) {
-              return null
-            }
+    <Box display="flex" flexWrap="nowrap" alignItems="center">
+      <Typography className={classes.title}>Sorted by:</Typography>
+      <DropdownTab component="div" title={buttonLabel}>
+        {({ toggleMenu }) => (
+          <>
+            {sortableColumns.map((item, index) => {
+              if (item.shouldShow && !item.shouldShow({ searchValue })) {
+                return null
+              }
 
-            return (
-              <MenuItem
-                key={index}
-                value={index}
-                onClick={async () => {
-                  onChange(item)
-                  toggleMenu()
-                }}
-              >
-                {item.label}
-              </MenuItem>
-            )
-          })}
-        </>
-      )}
-    </DropdownTab>
+              return (
+                <MenuItem
+                  key={index}
+                  value={index}
+                  onClick={async () => {
+                    onChange(item)
+                    toggleMenu()
+                  }}
+                >
+                  {item.label}
+                </MenuItem>
+              )
+            })}
+          </>
+        )}
+      </DropdownTab>
+    </Box>
   )
 }
