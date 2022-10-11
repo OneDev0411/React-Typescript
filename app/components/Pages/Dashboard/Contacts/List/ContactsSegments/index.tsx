@@ -1,17 +1,19 @@
 import { useMemo, useState } from 'react'
 
 import {
-  Divider,
   List,
   ListItem,
   ListItemText,
   ListSubheader,
   makeStyles,
   Popover,
+  TextField,
   Theme
 } from '@material-ui/core'
+import { mdiMagnify } from '@mdi/js'
 import { useDispatch, batch } from 'react-redux'
 
+import { SvgIcon, muiIconSizes } from '@app/views/components/SvgIcons'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
@@ -23,12 +25,17 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     root: { marginBottom: theme.spacing(2) },
     list: {
+      maxHeight: '70vh',
       width: 250
     },
     listSubheader: {
       fontSize: theme.typography.h6.fontSize,
       fontWeight: theme.typography.h6.fontWeight,
       color: theme.palette.tertiary.light
+    },
+    searchInput: {
+      padding: theme.spacing(1),
+      borderRadius: 0
     }
   }),
   { name: 'ContactsSegments' }
@@ -59,6 +66,14 @@ export const ContactsSegments = ({
   const dispatch = useDispatch()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const isOpen = Boolean(anchorEl)
+  const [searchCriteria, setSearchCriteria] = useState('')
+
+  const handleChangeSearchCriteria = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchCriteria(e.target.value)
+  }
+
   const handleToggleMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null = null
   ) => {
@@ -117,6 +132,22 @@ export const ContactsSegments = ({
           horizontal: 'left'
         }}
       >
+        <TextField
+          autoFocus
+          fullWidth
+          variant="standard"
+          size="medium"
+          autoComplete="no"
+          placeholder="Search"
+          value={searchCriteria}
+          onChange={handleChangeSearchCriteria}
+          InputProps={{
+            className: classes.searchInput,
+            endAdornment: (
+              <SvgIcon size={muiIconSizes.small} path={mdiMagnify} />
+            )
+          }}
+        />
         <List disablePadding className={classes.list}>
           <ListItem
             button
@@ -128,11 +159,14 @@ export const ContactsSegments = ({
           >
             <ListItemText>All Contacts</ListItemText>
           </ListItem>
-          <Divider />
           <ListSubheader className={classes.listSubheader} disableSticky>
-            Lists
+            Your Lists
           </ListSubheader>
-          <SavedSegments onClose={handleCloseMenu} {...savedListProps} />
+          <SavedSegments
+            onClose={handleCloseMenu}
+            searchCriteria={searchCriteria}
+            {...savedListProps}
+          />
         </List>
       </Popover>
     </div>

@@ -1,7 +1,9 @@
 import React from 'react'
 
+import { ListItem, ListItemText } from '@material-ui/core'
 import { connect } from 'react-redux'
 
+import Loading from '@app/components/Partials/Loading'
 import {
   changeActiveFilterSegment,
   deleteFilterSegment,
@@ -68,23 +70,49 @@ class SegmentsList extends React.Component {
 
   isSelected = id => this.props.activeItem && this.props.activeItem.id === id
 
+  getFilteredList = searchCriteria =>
+    searchCriteria
+      ? this.props.list.filter(item =>
+          item.name
+            .trim()
+            .toLocaleLowerCase()
+            .includes(searchCriteria.trim().toLocaleLowerCase())
+        )
+      : this.props.list
+
   render() {
-    const { props } = this
+    const list = this.getFilteredList(this.props.searchCriteria)
+
+    if (!this.props.areListsFetched) {
+      return (
+        <ListItem>
+          <ListItemText disableTypography>
+            <Loading />
+          </ListItemText>
+        </ListItem>
+      )
+    }
+
+    if (this.props.areListsFetched && list.length === 0) {
+      return (
+        <ListItem disabled>
+          <ListItemText disableTypography>No result!</ListItemText>
+        </ListItem>
+      )
+    }
 
     return (
       <>
-        {props.list.map(item => {
-          const { id } = item
-
+        {list.map(item => {
           return (
             <Item
-              key={id}
-              isDeleting={this.state.deletingItems.includes(id)}
+              key={item.id}
+              isDeleting={this.state.deletingItems.includes(item.id)}
               item={item}
               deleteHandler={this.deleteItem}
               selectHandler={this.selectItem}
               closeHandler={this.props.onClose}
-              selected={this.isSelected(id)}
+              selected={this.isSelected(item.id)}
             />
           )
         })}
@@ -93,7 +121,7 @@ class SegmentsList extends React.Component {
   }
 }
 
-function mapStateToProps(state, { name, getPredefinedLists }) {
+function mapStateToProps(state, { name, getPredefinedLists, searchCriteria }) {
   const { filterSegments } = state[name]
 
   const predefinedLists = getPredefinedLists(name, state, false)
@@ -102,7 +130,8 @@ function mapStateToProps(state, { name, getPredefinedLists }) {
     areListsFetched: areListsFetched(filterSegments),
     isFetching: filterSegments.isFetching,
     list: getSegments(filterSegments, name, predefinedLists),
-    activeItem: selectActiveSavedSegment(filterSegments, name, predefinedLists)
+    activeItem: selectActiveSavedSegment(filterSegments, name, predefinedLists),
+    searchCriteria
   }
 }
 
