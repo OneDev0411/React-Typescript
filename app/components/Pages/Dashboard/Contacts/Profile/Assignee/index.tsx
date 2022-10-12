@@ -116,12 +116,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       })
 
       setCurrentAgent(user)
-
-      // Currently We are disabling the email feature if there is no email for contact.
-      if (contact.email) {
-        setShowEmailDialog(true)
-      }
-
+      setShowEmailDialog(true)
       submitCallback(data)
 
       handleClose()
