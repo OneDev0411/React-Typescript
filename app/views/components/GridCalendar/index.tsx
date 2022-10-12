@@ -3,7 +3,8 @@ import {
   useState,
   RefObject,
   useCallback,
-  useImperativeHandle
+  useImperativeHandle,
+  useRef
 } from 'react'
 
 import FullCalendar, {
@@ -40,6 +41,7 @@ import { updateTask } from 'models/tasks'
 
 import { upsertCrmEvents } from '../ContactProfileTimeline/helpers/upsert-crm-events'
 
+import ChangeView from './components/ChangeView'
 import { Event } from './components/Event'
 import { EventController } from './components/EventController'
 import { FilterEvents } from './components/FilterEvents'
@@ -53,9 +55,10 @@ import {
   shouldRecreateRange,
   Format
 } from './helpers/get-date-range'
+import getViewName from './helpers/get-view-label'
 import { normalizeEventOnEdit } from './helpers/normalize-event-on-edit'
 import { normalizeEvents } from './helpers/normalize-events'
-import { ActionRef } from './types'
+import { ActionRef, ViewType } from './types'
 
 const useStyles = makeStyles(
   () => ({
@@ -71,6 +74,8 @@ const useStyles = makeStyles(
     name: 'GridCalendar'
   }
 )
+
+const INITIAL_VIEW = 'dayGridMonth'
 
 interface Props {
   contrariwise?: boolean
@@ -90,6 +95,7 @@ export const GridCalendarPresentation = ({
   const notify = useNotify()
   const user = useSelector(selectUser)
   const viewAsUsers = useViewAs()
+  const calendarRef = useRef<FullCalendar>(null)
   // list of server events
   const [rowEvents, setRowEvents] = useState<ICalendarEvent[]>([])
   // list of current events
@@ -110,12 +116,20 @@ export const GridCalendarPresentation = ({
 
   // filter events el
   const [filterEl, setFilterEl] = useState<HTMLButtonElement | null>(null)
+
+  // change view events el
+  const [viewEl, setViewEl] = useState<HTMLButtonElement | null>(null)
+
+  const selectedView =
+    (calendarRef.current?.getApi().view.type as ViewType) || INITIAL_VIEW
+
   const activeFilter: FilterShape = useTeamSetting(
     CALENDAR_FILTER_EVENTS_KEY,
     INITIAL_FILTERS
   )
 
   const handleCloseFilterEvents = () => setFilterEl(null)
+  const handleCloseChangeView = () => setViewEl(null)
 
   const updateEvents = useCallback(
     (
@@ -371,6 +385,13 @@ export const GridCalendarPresentation = ({
   }
 
   /**
+   * handle view change
+   */
+  const handleChangeView = (view: ViewType) => {
+    calendarRef.current?.getApi().changeView(view)
+  }
+
+  /**
    * Load initial events (behaves as componentDidMount)
    */
   useEffectOnce(() => {
@@ -404,10 +425,17 @@ export const GridCalendarPresentation = ({
         setFilter={handleFilterEvents}
         onClose={handleCloseFilterEvents}
       />
+      <ChangeView
+        el={viewEl}
+        selectedView={selectedView}
+        onChangeView={handleChangeView}
+        onClose={handleCloseChangeView}
+      />
       <div className={classes.calendarContainer}>
         <FullCalendar
+          ref={calendarRef}
           height="100%"
-          initialView="dayGridMonth"
+          initialView={INITIAL_VIEW}
           dayMaxEventRows={3}
           editable={!isLoading}
           events={events}
@@ -423,11 +451,17 @@ export const GridCalendarPresentation = ({
                 // @ts-ignore
                 setFilterEl(e.currentTarget as HTMLButtonElement)
               }
+            },
+            viewButton: {
+              text: getViewName(selectedView),
+              click: e => {
+                setViewEl(e.currentTarget as HTMLButtonElement)
+              }
             }
           }}
           headerToolbar={{
             left: 'today prev,next title',
-            right: 'filterButton dayGridMonth,timeGridWeek,timeGridDay'
+            right: 'filterButton viewButton'
           }}
           buttonText={{
             today: 'Today',
