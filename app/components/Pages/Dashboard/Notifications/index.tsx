@@ -43,8 +43,8 @@ function Notifications({ params }: WithRouterProps) {
     return `Notifications${counter} | Rechat`
   }
 
-  const openCRMTaskDrawer = selectedEvent => {
-    setSelectedEvent(selectedEvent)
+  const openCRMTaskDrawer = (selectedEvent: ICRMTask) => {
+    setSelectedEvent(selectedEvent.id)
     browserHistory.push(`/dashboard/notifications/crm/${selectedEvent.id}`)
   }
 
