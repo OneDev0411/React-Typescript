@@ -294,8 +294,23 @@
   }
 
   &.pop-over--dark {
-    color: rgba(255, 255, 255, 0.8);
-    fill: #fff;
+    background-color: #6c6d70;
+    color: #fff;
+    &.top {
+      .arrow {
+        border-top-color: #6c6d70;
+        &:after {
+          border-top-color: #6c6d70 !important;
+        }
+      }
+    }
+
+    .arrow {
+      border-bottom-color: #6c6d70 !important;
+      &:after {
+        border-bottom-color: #6c6d70 !important;
+      }
+    }
   }
   border: none;
   min-width: 280px;

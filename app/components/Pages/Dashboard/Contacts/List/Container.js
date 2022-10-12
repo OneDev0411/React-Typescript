@@ -1,12 +1,13 @@
 import React from 'react'
 
 import { Box } from '@material-ui/core'
-import { mdiLoading } from '@mdi/js'
+import { mdiAccountPlus, mdiLoading } from '@mdi/js'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
 
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
+import AddAccountButton from '@app/views/components/AddAccountButton'
 import { confirmation } from 'actions/confirmation'
 import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
@@ -15,12 +16,12 @@ import { updateFilterSegment } from 'actions/filter-segments'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 import { Callout } from 'components/Callout'
+import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
 import PageLayout from 'components/GlobalPageLayout'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import ImportContactsButton from 'components/ImportContactsButton'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ViewAs } from 'components/ViewAs'
 import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
@@ -80,6 +81,7 @@ class ContactsList extends React.Component {
       isFetchingMoreContacts: false,
       isFetchingMoreContactsBefore: false,
       isRowsUpdating: false,
+      isOpenNewContactDrawer: false,
       searchInputValue: props.list.textFilter,
       loadedRanges: [],
       duplicateClusterCount: 0,
@@ -893,10 +895,24 @@ class ContactsList extends React.Component {
               )}
               {this.renderOtherContactsBadge()}
               {showImportAction && (
-                <ImportContactsButton
-                  hasCSVButton
-                  tooltip="Connect to Google, Outlook or import from a CSV"
-                />
+                <>
+                  <AddAccountButton
+                    createMenuItemProps={{
+                      title: 'Add Contact',
+                      iconPath: mdiAccountPlus,
+                      onClick: () => {
+                        this.setState({ isOpenNewContactDrawer: true })
+                      }
+                    }}
+                    hasCSVButton
+                  />
+                  <NewContactDrawer
+                    isOpen={this.state.isOpenNewContactDrawer}
+                    onClose={() => {
+                      this.setState({ isOpenNewContactDrawer: false })
+                    }}
+                  />
+                </>
               )}
             </Box>
           )}

@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { Box, Grid, ListItem, Typography } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
+import { useLeadChannels } from '@app/hooks/lead-channel'
 import { selectActiveBrandUnsafe } from '@app/selectors/brand'
 import { ClipboardCopy } from '@app/views/components/ClipboardCopy'
 import { PageTabs, Tab } from '@app/views/components/PageTabs'
@@ -14,7 +15,6 @@ import ConnectedAccountsLayout from '../ConnectedAccountsLayout'
 import { ConnectLeadChannelButton } from './ConnectLeadChannelButton'
 import { LeadChannels } from './constants'
 import { DeleteLeadChannelBrandButton } from './DeleteLeadChannelBrandButton'
-import { useLeadChannels } from './queries/use-lead-channels'
 
 interface Props {
   className?: string
@@ -33,6 +33,11 @@ export function ConnectedLeadChannels({ className }: Props) {
     [channels, activeChannel]
   )
 
+  const handleCreateChannel = useCallback(
+    (value: LeadChannelSourceType) => setActiveChannel(value),
+    []
+  )
+
   return (
     <>
       <ConnectedAccountsLayout
@@ -45,10 +50,11 @@ export function ConnectedLeadChannels({ className }: Props) {
           defaultValue={activeChannel}
           actions={[
             <ConnectLeadChannelButton
-              key="connect-lead-channel-button"
+              key={0}
               sourceType={activeChannel}
               activeBrandId={activeBrand?.id}
               isFetching={isFetching}
+              onCreateChannel={handleCreateChannel}
             />
           ]}
           tabs={LeadChannels.map(channel => (

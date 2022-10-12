@@ -3,6 +3,8 @@ import React, { CSSProperties, ReactNode, useState, useRef } from 'react'
 import { Popover, makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
 
+import { noop } from '@app/utils/helpers'
+
 interface Props {
   id?: string
   className?: string
@@ -12,7 +14,8 @@ interface Props {
   show?: boolean
   dark?: boolean
   children: ReactNode
-  width?: 'auto' | number
+  width?: React.CSSProperties['width']
+  onClose?: () => void
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -39,7 +42,8 @@ function PopOver({
   className = '',
   show,
   dark,
-  width = 'auto'
+  width = 'auto',
+  onClose = noop
 }: Props) {
   const classes = useStyles({ placement, width })
   const divRev = useRef<HTMLDivElement | null>(null)
@@ -51,6 +55,7 @@ function PopOver({
 
   const handlePopoverClose = () => {
     setOpen(false)
+    onClose()
   }
 
   if (!caption) {
