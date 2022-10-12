@@ -116,7 +116,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       })
 
       setCurrentAgent(user)
-      // setShowEmailDialog(true)
+      setShowEmailDialog(true)
       submitCallback(data)
 
       handleClose()
@@ -186,11 +186,11 @@ const Assignee = ({ contact, submitCallback }: Props) => {
         handleClose={handleCloseDialog}
         handleConfirm={handleSendEmail}
       />
-      {contact && currentAgent && currentAgent.email && (
+      {contact && contact.email && currentAgent && (
         <AssigneeEmail
           isOpen={showEmailDrawer}
           onClose={() => setShowEmailDrawer(false)}
-          currentAgentEmail={currentAgent.email}
+          contactEmail={contact.email}
           currentAgentName={currentAgent.display_name}
           contactName={contact.display_name}
         />
@@ -210,6 +210,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
                   <UserAvatar
                     image={assignee.user?.profile_image_url}
                     name={assignee.user?.display_name}
+                    showStateIndicator={false}
                   />
                 </ListItemIcon>
                 <ListItemText primary={assignee.user?.display_name} />
