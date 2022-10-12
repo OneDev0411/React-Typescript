@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  ComponentProps,
-  useEffect,
-  useMemo
-} from 'react'
+import React, { useState, useRef, ComponentProps, useEffect } from 'react'
 
 import { Theme } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
@@ -19,7 +13,7 @@ import {
 } from 'react-window'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
-import { getColumnsSize } from '../helpers/get-columns-size'
+import { useColumnsSize } from '../helpers/use-columns-size'
 import { useGridContext } from '../hooks/use-grid-context'
 import {
   TableColumn,
@@ -65,7 +59,7 @@ export function Body<Row>({
 
   const listRef = useRef<FixedSizeList>(null)
 
-  const columnsSize = useMemo(() => getColumnsSize<Row>(columns), [columns])
+  const columnsSize = useColumnsSize<Row>(columns)
 
   const [debouncedOnReachStart] = useDebouncedCallback(
     infiniteScrolling ? infiniteScrolling.onReachStart : () => null,
