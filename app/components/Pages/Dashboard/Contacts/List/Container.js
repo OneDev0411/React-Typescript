@@ -56,7 +56,7 @@ import {
   DUPLICATE_CONTACTS_LIST_ID,
   VIEW_MODE_FIELD_SETTING_KEY
 } from './constants'
-import { OtherContactsBadge } from './OtherContactsBadge'
+import { ContactsNotification } from './ContactsNotification'
 import { ViewMode } from './styled'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import Table from './Table'
@@ -741,34 +741,21 @@ class ContactsList extends React.Component {
     }
 
     return (
-      <Box display="flex" alignItems="center">
-        {parkedContactCount > 0 && (
-          <Box mr={duplicateClusterCount > 0 ? 1 : 0}>
-            <OtherContactsBadge
-              disabled={isFetchingContacts}
-              title="New contacts to review and add"
-              count={parkedContactCount}
-              onClick={async () => {
-                await resetActiveFilters(CONTACTS_SEGMENT_NAME)
-                await changeActiveFilterSegment(
-                  CONTACTS_SEGMENT_NAME,
-                  PARKED_CONTACTS_LIST_ID
-                )
-                this.handleFilterChange({ parked: true }, true)
-                this.handleResetShortcutFilter()
-              }}
-            />
-          </Box>
-        )}
-        {duplicateClusterCount > 0 && (
-          <OtherContactsBadge
-            disabled={isFetchingContacts}
-            title="Duplicate Contacts"
-            count={duplicateClusterCount}
-            onClick={() => goTo('/dashboard/contacts/duplicates')}
-          />
-        )}
-      </Box>
+      <ContactsNotification
+        parkedContactCount={+parkedContactCount}
+        duplicateClusterCount={+duplicateClusterCount}
+        onClickParkedContacts={async () => {
+          await resetActiveFilters(CONTACTS_SEGMENT_NAME)
+          await changeActiveFilterSegment(
+            CONTACTS_SEGMENT_NAME,
+            PARKED_CONTACTS_LIST_ID
+          )
+          this.handleFilterChange({ parked: true }, true)
+          this.handleResetShortcutFilter()
+        }}
+        onClickDuplicateCluster={() => goTo('/dashboard/contacts/duplicates')}
+        disabled={isFetchingContacts}
+      />
     )
   }
 
@@ -900,6 +887,7 @@ class ContactsList extends React.Component {
                   label="Manage Relationships"
                 />
               )}
+              {this.renderOtherContactsBadge()}
               {showImportAction && (
                 <ImportContactsButton
                   hasCSVButton
@@ -952,10 +940,7 @@ class ContactsList extends React.Component {
           {isZeroState && <ContactsZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
-              <Box px={isTableMode ? 4 : 0}>
-                {isTableMode && this.renderOtherContactsBadge()}
-                {this.renderTabs()}
-              </Box>
+              <Box px={isTableMode ? 4 : 0}>{this.renderTabs()}</Box>
 
               <Box
                 mt={2}
