@@ -9,3 +9,5 @@ export interface ActionRef {
     type: string
   ): void
 }
+
+export type ViewType = 'timeGridWeek' | 'timeGridDay' | 'dayGridMonth'
