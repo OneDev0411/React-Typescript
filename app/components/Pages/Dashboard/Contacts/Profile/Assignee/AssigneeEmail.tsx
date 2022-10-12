@@ -5,6 +5,7 @@ type assigneeEmailProps = {
   onClose: () => void
   contactEmail: string
   currentAgentName: string
+  currentAgentEmail: string
   contactName: string
 }
 
@@ -13,6 +14,7 @@ const AssigneeEmail = ({
   onClose,
   contactEmail,
   currentAgentName,
+  currentAgentEmail,
   contactName
 }: assigneeEmailProps) => {
   return (
@@ -24,6 +26,10 @@ const AssigneeEmail = ({
         to: [
           {
             email: `${contactName} <${contactEmail}>`,
+            recipient_type: 'Email'
+          },
+          {
+            email: `${currentAgentName} <${currentAgentEmail}>`,
             recipient_type: 'Email'
           }
         ],

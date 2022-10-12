@@ -24,7 +24,6 @@ import { SectionButton } from '../components/Section/Button'
 import AssigneeDialog from './AssigneeDialog'
 import AssigneeEmail from './AssigneeEmail'
 import AssigneePopover from './AssigneePopover'
-import { IAssigneeApiResponse } from './types'
 
 interface Props {
   contact: INormalizedContact
@@ -116,7 +115,12 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       })
 
       setCurrentAgent(user)
-      setShowEmailDialog(true)
+
+      // Email feature is only available if the contact has an email
+      if (contact.email) {
+        setShowEmailDialog(true)
+      }
+
       submitCallback(data)
 
       handleClose()
@@ -147,18 +151,16 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       assignee => assignee.id !== id
     )
 
-    let newAssignees: IAssigneeApiResponse[] = []
-
-    removedAssignees.map(assignee => {
-      newAssignees.push({
-        user: assignee?.user?.id,
-        brand: assignee?.brand?.id
-      })
-    })
+    const assignees = Array.isArray(removedAssignees)
+      ? removedAssignees.map(assignee => ({
+          user: assignee?.user?.id,
+          brand: assignee?.brand?.id
+        }))
+      : []
 
     try {
       const { data } = await addAssignee(contact.id, {
-        assignees: newAssignees
+        assignees
       })
 
       submitCallback(data)
@@ -186,12 +188,13 @@ const Assignee = ({ contact, submitCallback }: Props) => {
         handleClose={handleCloseDialog}
         handleConfirm={handleSendEmail}
       />
-      {contact && contact.email && currentAgent && (
+      {contact && contact.email && currentAgent && currentAgent.email && (
         <AssigneeEmail
           isOpen={showEmailDrawer}
           onClose={() => setShowEmailDrawer(false)}
           contactEmail={contact.email}
           currentAgentName={currentAgent.display_name}
+          currentAgentEmail={currentAgent.email}
           contactName={contact.display_name}
         />
       )}
