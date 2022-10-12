@@ -116,7 +116,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       })
 
       setCurrentAgent(user)
-      // setShowEmailDialog(true)
+      setShowEmailDialog(true)
       submitCallback(data)
 
       handleClose()
