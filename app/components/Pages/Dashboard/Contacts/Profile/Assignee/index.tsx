@@ -151,12 +151,11 @@ const Assignee = ({ contact, submitCallback }: Props) => {
       assignee => assignee.id !== id
     )
 
-    const assignees = Array.isArray(removedAssignees)
-      ? removedAssignees.map(assignee => ({
-          user: assignee?.user?.id,
-          brand: assignee?.brand?.id
-        }))
-      : []
+    const assignees =
+      removedAssignees?.map(assignee => ({
+        user: assignee?.user?.id,
+        brand: assignee?.brand?.id
+      })) ?? []
 
     try {
       const { data } = await addAssignee(contact.id, {
@@ -188,7 +187,7 @@ const Assignee = ({ contact, submitCallback }: Props) => {
         handleClose={handleCloseDialog}
         handleConfirm={handleSendEmail}
       />
-      {contact && contact.email && currentAgent && currentAgent.email && (
+      {contact?.email && currentAgent?.email && (
         <AssigneeEmail
           isOpen={showEmailDrawer}
           onClose={() => setShowEmailDrawer(false)}
