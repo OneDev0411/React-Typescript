@@ -2,13 +2,15 @@ import React, { useState, useCallback } from 'react'
 
 import { Grid, Theme, Divider, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
+import { mdiEmailOutline } from '@mdi/js'
 import classNames from 'classnames'
 import { useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
+import AddAccountButton from '@app/views/components/AddAccountButton'
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import GlobalPageLayout from 'components/GlobalPageLayout'
-import ImportContactsButton from 'components/ImportContactsButton'
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
@@ -44,6 +46,9 @@ const useStyles = makeStyles(
     },
     conversationHidden: {
       display: 'none'
+    },
+    addAccountButton: {
+      marginLeft: theme.spacing(2)
     }
   }),
   { name: 'Inbox' }
@@ -64,6 +69,8 @@ export default function Inbox({ params }: WithRouterProps) {
   const [initializing, setInitializing] = useState(true)
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const [searchStatus, setSearchStatus] = useState(false)
+  const [isOpenEmailComposeDrawer, setIsOpenEmailComposeDrawer] =
+    useState(false)
   const [emailThreadCount, setEmailThreadCount] = useState(0)
 
   const handleEmailThreadsUpdate = useCallback(
@@ -94,9 +101,7 @@ export default function Inbox({ params }: WithRouterProps) {
       <Box paddingLeft={5} flex="0 1 auto">
         {initializing || noConnectedAccounts ? (
           <GlobalPageLayout.Header title="Inbox">
-            <ImportContactsButton
-              onFetchedOAuthAccounts={onFetchedOAuthAccounts}
-            />
+            <AddAccountButton onFetchedOAuthAccounts={onFetchedOAuthAccounts} />
           </GlobalPageLayout.Header>
         ) : (
           <GlobalPageLayout.HeaderWithSearch
@@ -110,9 +115,25 @@ export default function Inbox({ params }: WithRouterProps) {
               isLoading: searchStatus
             }}
           >
-            <ImportContactsButton
+            <AddAccountButton
+              className={classes.addAccountButton}
+              createMenuItemProps={{
+                title: 'Compose an email',
+                iconPath: mdiEmailOutline,
+                onClick: () => {
+                  setIsOpenEmailComposeDrawer(true)
+                }
+              }}
               onFetchedOAuthAccounts={onFetchedOAuthAccounts}
             />
+            {isOpenEmailComposeDrawer && (
+              <SingleEmailComposeDrawer
+                isOpen
+                onClose={() => {
+                  setIsOpenEmailComposeDrawer(false)
+                }}
+              />
+            )}
           </GlobalPageLayout.HeaderWithSearch>
         )}
       </Box>

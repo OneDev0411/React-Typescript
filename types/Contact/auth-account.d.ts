@@ -40,8 +40,14 @@ declare interface IGoogleAccount extends IOAuthAccountBase {
 declare interface IMicrosoftAccount extends IOAuthAccountBase {
   type: 'microsoft_credential'
 }
+declare interface IOAuthLikeLeadChannelAccount extends IOAuthAccountBase {
+  type: LeadChannelSourceType
+}
 
-declare type IOAuthAccount = IGoogleAccount | IMicrosoftAccount
+declare type IOAuthAccount =
+  | IGoogleAccount
+  | IMicrosoftAccount
+  | IOAuthLikeLeadChannelAccount
 
 declare type IGoogleScope =
   | 'contacts.readonly'
@@ -50,7 +56,7 @@ declare type IGoogleScope =
 
 declare interface IOAuthAccountJobs {
   id: UUID
-  job_name: 'calendar' | 'gmail' | 'contacts' | 'outlook'
+  job_name: 'calendar' | 'gmail' | 'contacts' | 'outlook' | 'email'
   start_at: string
   status: any // success means successful, any other values means pending
 }
