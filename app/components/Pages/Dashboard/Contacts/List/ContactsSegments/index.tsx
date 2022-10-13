@@ -11,7 +11,7 @@ import {
   Theme
 } from '@material-ui/core'
 import { mdiMagnify } from '@mdi/js'
-import { useDispatch, batch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { SvgIcon, muiIconSizes } from '@app/views/components/SvgIcons'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
@@ -98,14 +98,15 @@ export const ContactsSegments = ({
     ? 'All Contacts'
     : `List: ${activeSegment.name}`
 
-  const handleSelect = async (type: string) => {
-    batch(() => {
-      dispatch(resetActiveFilters(CONTACTS_SEGMENT_NAME))
-      dispatch(changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, type))
-    })
+  const handleSelectAllContacts = async () => {
+    // Since these dispatches should run sequentially, we cannot batch them
+    // https://gitlab.com/rechat/web/-/issues/6853#note_1133422523
+    await dispatch(resetActiveFilters(CONTACTS_SEGMENT_NAME))
+    await dispatch(changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, 'default'))
 
     handleFilterChange({ filters: [], flows: [] }, true)
     handleResetShortcutFilter()
+    handleCloseMenu()
   }
 
   return (
@@ -154,10 +155,7 @@ export const ContactsSegments = ({
           <ListItem
             button
             selected={isAllContactsActive}
-            onClick={() => {
-              handleSelect('default')
-              handleCloseMenu()
-            }}
+            onClick={handleSelectAllContacts}
           >
             <ListItemText>All Contacts</ListItemText>
           </ListItem>
