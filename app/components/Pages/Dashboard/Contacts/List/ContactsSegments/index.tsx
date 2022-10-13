@@ -23,7 +23,7 @@ import SavedSegments from '../SavedSegments/List'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    root: { marginBottom: theme.spacing(2) },
+    root: { marginBottom: theme.spacing(1) },
     list: {
       maxHeight: '70vh',
       width: 250
@@ -111,6 +111,7 @@ export const ContactsSegments = ({
   return (
     <div className={classes.root}>
       <DropdownToggleButton
+        size="large"
         variant="outlined"
         color="default"
         isActive={isOpen}
