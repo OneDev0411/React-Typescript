@@ -124,6 +124,7 @@ export const ContactsSegments = ({
         open={isOpen}
         anchorEl={anchorEl}
         onClose={handleCloseMenu}
+        classes={{ paper: 'u-scrollbar--thinner--self' }}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left'
