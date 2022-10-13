@@ -1,65 +1,62 @@
 import Fetch from 'services/fetch'
-import { toEntityAssociation } from 'utils/association-utils'
 
-export const DEFAULT_EMAIL_ASSOCIATIONS: IEmailCampaignAssociation[] = [
-  'emails',
-  'template',
-  'from',
-  'recipients',
-  'attachments'
-]
+const DefaultAssociations: {
+  ASSOCIATIONS: IEmailCampaignAssociation[]
+  RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[]
+  EMAIL_ASSOCIATIONS: IEmailCampaignEmailAssociation[]
+} = {
+  ASSOCIATIONS: ['emails', 'template', 'from', 'recipients', 'attachments'],
+  RECIPIENT_ASSOCIATIONS: ['contact', 'list', 'brand', 'agent'],
+  EMAIL_ASSOCIATIONS: ['email']
+}
 
-// eslint-disable-next-line max-len
-export const DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[] =
-  ['contact', 'list', 'brand', 'agent']
-
-// eslint-disable-next-line max-len
-export const DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS: IEmailCampaignEmailAssociation[] =
-  ['email']
-
-export interface GetEmailCampaignsAssociations<
-  A1 extends IEmailCampaignAssociation,
-  A2 extends IEmailCampaignRecipientAssociation,
-  A3 extends IEmailCampaignEmailAssociation
-> {
-  emailCampaignAssociations?: A1[]
-  emailRecipientsAssociations?: A2[]
-  emailCampaignEmailsAssociation?: A3[]
+interface QueryParams {
+  start?: number
+  limit?: number
+  associations: {
+    associations?: string[]
+    recipientsAssociations?: string[]
+    emailsAssociations?: string[]
+  }
+  status: 'any' | 'draft' | 'scheduled' | 'executed'
 }
 
 export async function getEmailCampaigns<
-  A1 extends IEmailCampaignAssociation,
-  A2 extends IEmailCampaignRecipientAssociation,
-  A3 extends IEmailCampaignEmailAssociation
+  T extends IEmailCampaignAssociation,
+  U extends IEmailCampaignRecipientAssociation,
+  V extends IEmailCampaignEmailAssociation
 >(
-  brandId: Nullable<UUID>,
-  associations: GetEmailCampaignsAssociations<A1, A2, A3> = {}
-): Promise<IEmailCampaign<A1, A2, A3, never>[]> {
+  brandId: UUID,
+  query: QueryParams
+): Promise<
+  ApiResponseBody<
+    IEmailCampaign<T, U, V, never>[],
+    {
+      count: number
+      total: number
+    }
+  >
+> {
   const {
-    emailCampaignAssociations = DEFAULT_EMAIL_ASSOCIATIONS as A1[],
-    emailRecipientsAssociations = DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS as A2[],
-    // eslint-disable-next-line max-len
-    emailCampaignEmailsAssociation = DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS as A3[]
-  } = associations
+    associations = DefaultAssociations.ASSOCIATIONS,
+    recipientsAssociations = DefaultAssociations.RECIPIENT_ASSOCIATIONS,
+    emailsAssociations = DefaultAssociations.EMAIL_ASSOCIATIONS
+  }: QueryParams['associations'] = query.associations
 
-  if (!brandId) {
-    throw new Error('the current user does not belong to any brand')
-  }
+  const response = await new Fetch()
+    .get(`/brands/${brandId}/emails/campaigns`)
+    .query({
+      start: query.start,
+      limit: query.limit,
+      'associations[]': [
+        ...associations.map(name => `email_campaign.${name}`),
+        ...recipientsAssociations.map(
+          name => `email_campaign_recipient.${name}`
+        ),
+        ...emailsAssociations.map(name => `email_campaign_email.${name}`)
+      ],
+      'omit[]': ['template_instance.html', 'email_campaign.html']
+    })
 
-  const endpoint = `/brands/${brandId}/emails/campaigns`
-
-  const response = await new Fetch().get(endpoint).query({
-    'associations[]': [
-      ...emailCampaignAssociations.map(toEntityAssociation('email_campaign')),
-      ...emailRecipientsAssociations.map(
-        toEntityAssociation('email_campaign_recipient')
-      ),
-      ...emailCampaignEmailsAssociation.map(
-        toEntityAssociation('email_campaign_email')
-      )
-    ],
-    'omit[]': ['template_instance.html', 'email_campaign.html']
-  })
-
-  return response.body.data
+  return response.body
 }

@@ -8,7 +8,7 @@ import Table from 'components/Grid/Table'
 import { RenderProps } from 'components/Grid/Table/types'
 import MiniContact from 'components/MiniContact'
 
-import { hasPixelTracking } from '../List/helpers'
+import { hasPixelTracking } from '../List.bkp/helpers'
 
 import { contactsList } from './helpers'
 import { SortableColumnsType as SortFieldType } from './SortField'

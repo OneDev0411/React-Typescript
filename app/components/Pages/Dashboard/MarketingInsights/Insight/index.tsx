@@ -34,7 +34,7 @@ import { setEmailNotificationStatus } from 'models/email/set-email-notification-
 
 import Loading from '../../../../Partials/Loading'
 import { Container } from '../../Contacts/components/Container'
-import { hasPixelTracking, valueAndPercent } from '../List/helpers'
+import { hasPixelTracking, valueAndPercent } from '../List.bkp/helpers'
 
 import ContactsTable from './ContactsTable'
 import Header from './Header'

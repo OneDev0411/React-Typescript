@@ -2,7 +2,7 @@ import { memo } from 'react'
 
 import { useTitle } from 'react-use'
 
-import Layout from '../../List/Layout'
+import Layout from '../../List.bkp/Layout'
 
 import SocialPostTable from './SocialPostTable'
 

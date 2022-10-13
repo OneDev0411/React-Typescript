@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 
 import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/Table/components/LoadingComponent'
-import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
+import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List.bkp/ZeroState'
 import { useGetAllSuperCampaigns } from '@app/models/super-campaign'
 import { goTo } from '@app/utils/go-to'
 import Table from '@app/views/components/Grid/Table'
