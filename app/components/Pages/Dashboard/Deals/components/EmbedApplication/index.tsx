@@ -321,7 +321,8 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
               getDealContext,
               updateDealContext,
               updateTaskStatus,
-              deleteRole: deleteDealRole
+              deleteRole: deleteDealRole,
+              close: onClose
             }}
           />
         ) : (
