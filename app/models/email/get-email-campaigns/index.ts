@@ -18,7 +18,7 @@ interface QueryParams {
     recipientsAssociations?: string[]
     emailsAssociations?: string[]
   }
-  status: 'any' | 'draft' | 'scheduled' | 'executed'
+  status?: 'any' | 'draft' | 'scheduled' | 'executed'
 }
 
 export async function getEmailCampaigns<
@@ -46,8 +46,8 @@ export async function getEmailCampaigns<
   const response = await new Fetch()
     .get(`/brands/${brandId}/emails/campaigns`)
     .query({
-      start: query.start,
-      limit: query.limit,
+      start: query.start ?? 0,
+      limit: query.limit ?? 5000,
       'associations[]': [
         ...associations.map(name => `email_campaign.${name}`),
         ...recipientsAssociations.map(

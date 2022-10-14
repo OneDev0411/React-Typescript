@@ -1,26 +1,29 @@
+import { useMemo } from 'react'
+
 import { useActiveBrandId } from '@app/hooks/brand'
 import { useInfiniteQuery } from '@app/hooks/query'
 import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 
-import { all } from './keys'
+import { allLists } from './keys'
 
-const LIMIT = 100
+const LIMIT = 30
 
 export function useInsights() {
   const activeBrandId = useActiveBrandId()
 
   const { data, ...params } = useInfiniteQuery(
-    all(),
-    ({ pageParam = 0 }) =>
-      getEmailCampaigns(activeBrandId, {
-        start: 0,
-        limit: 50,
+    allLists(),
+    ({ pageParam = 0 }) => {
+      return getEmailCampaigns(activeBrandId, {
+        start: pageParam,
+        limit: LIMIT,
         associations: {
-          emailCampaignAssociations: ['template'],
-          emailRecipientsAssociations: [],
-          emailCampaignEmailsAssociation: []
+          associations: ['template'],
+          recipientsAssociations: [],
+          emailsAssociations: []
         }
-      }),
+      })
+    },
     {
       getNextPageParam: (lastPage, pages) => {
         const total = lastPage.info?.total ?? 0
@@ -31,8 +34,14 @@ export function useInsights() {
     }
   )
 
+  const list = useMemo(
+    () =>
+      data?.pages.flatMap(page => page.data) as IEmailCampaign<'template'>[],
+    [data?.pages]
+  )
+
   return {
     ...params,
-    list: data
+    list
   }
 }
