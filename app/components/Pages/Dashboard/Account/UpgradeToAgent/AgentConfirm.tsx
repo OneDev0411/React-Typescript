@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 
 import { Box, Button, Container, Typography } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
 import { useTitle } from 'react-use'
@@ -17,12 +16,21 @@ export function AgentConfirm() {
   const [mlsId, setMlsId] = useState('')
   const [agents, setAgents] = useState<IAgent[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [error, setError] = useState('')
 
-  const onSubmit = async values => {
-    setMlsId(values.mlsId)
+  const onSubmit = async () => {
+    setMlsId(mlsId)
 
     try {
-      const agents = await searchAgent({ mlsid: values.mlsId })
+      const agents = await searchAgent({ mlsid: mlsId.trim() })
+
+      if (agents.length === 0) {
+        setError(
+          `We were not able to find an agent matching MLS ID "${mlsId}".`
+        )
+
+        return
+      }
 
       setAgents(agents)
       setIsModalOpen(true)
@@ -30,7 +38,7 @@ export function AgentConfirm() {
       if (errorCode === 404) {
         return {
           // eslint-disable-next-line max-len
-          [FORM_ERROR]: `Agent corresponding to this MLS ID (${values.mlsId}) not found!`
+          [FORM_ERROR]: `Agent corresponding to this MLS ID (${mlsId}) not found!`
         }
       }
 
@@ -40,14 +48,16 @@ export function AgentConfirm() {
     }
   }
 
-  const validate = ({ mlsId }: { mlsId: string }) => {
-    mlsId = mlsId && mlsId.trim()
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
 
-    if (!mlsId) {
-      return { mlsId: 'Required!' }
+    setMlsId(value)
+
+    if (!value) {
+      setError('Required!')
+    } else if (error) {
+      setError('')
     }
-
-    return {}
   }
 
   return (
@@ -58,16 +68,17 @@ export function AgentConfirm() {
         </Box>
         <Form
           onSubmit={onSubmit}
-          validate={validate}
           render={({ handleSubmit, form }) => {
             const { submitError, submitting } = form.getState()
+            const isError = (submitError && !submitting) || error
 
             return (
               <form onSubmit={handleSubmit}>
-                <Box mb={2}>
+                <Box>
                   <Typography variant="subtitle2">
                     Enter your agent license # to unlock MLS features.
                   </Typography>
+
                   <Field
                     component={MUITextInput}
                     id="mlsId"
@@ -75,21 +86,26 @@ export function AgentConfirm() {
                     placeholder="xxxxxx"
                     name="mlsId"
                     variant="filled"
+                    input={{ onChange, value: mlsId }}
                   />
                 </Box>
-                {submitError && !submitting && (
-                  <Box mt={3}>
-                    <Alert severity="error">{submitError}</Alert>
+                {isError && (
+                  <Box ml={1}>
+                    <Typography color="error" variant="caption">
+                      {submitError || error}
+                    </Typography>
                   </Box>
                 )}
-                <Button
-                  type="submit"
-                  disabled={submitting}
-                  variant="contained"
-                  color="secondary"
-                >
-                  {submitting ? 'Searching...' : 'Search'}
-                </Button>
+                <Box mt={2}>
+                  <Button
+                    type="submit"
+                    disabled={submitting}
+                    variant="contained"
+                    color="secondary"
+                  >
+                    {submitting ? 'Searching...' : 'Search'}
+                  </Button>
+                </Box>
               </form>
             )
           }}
