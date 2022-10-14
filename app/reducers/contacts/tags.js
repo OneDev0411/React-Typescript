@@ -52,7 +52,7 @@ const error = (state = null, action) => {
   }
 }
 
-const contactsList = combineReducers({
+const contactsTag = combineReducers({
   ids,
   byId,
   info,
@@ -60,7 +60,7 @@ const contactsList = combineReducers({
   isFetching
 })
 
-export default contactsList
+export default contactsTag
 
 export const selectTag = (state, id) => state.byId[id]
 
