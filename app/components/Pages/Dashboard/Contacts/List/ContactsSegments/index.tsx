@@ -87,6 +87,7 @@ export const ContactsSegments = ({
   }
 
   const handleCloseMenu = () => {
+    setSearchCriteria('')
     setAnchorEl(null)
   }
 
