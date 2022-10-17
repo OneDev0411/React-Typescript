@@ -46,7 +46,7 @@ export function AddAccountButton({
   createMenuItemProps,
   onFetchedOAuthAccounts,
   hasCSVButton = false,
-  tooltip = 'Connect to Google, Outlook or Zillow',
+  tooltip = 'Connect to Google, Outlook, Zillow or Realtor',
   className = ''
 }: Props) {
   const classes = useStyles()
