@@ -11,7 +11,7 @@ const useStyles = makeStyles(
       color: theme.palette.grey[700],
       ...theme.typography.caption
     },
-    LastTouch: theme.typography.body2
+    lastTouch: theme.typography.body2
   }),
   { name: 'LastTouchedCell' }
 )
@@ -26,9 +26,5 @@ export default function LastTouch({ contact }: Props) {
 
   const formattedLastTouch = timeago().format(lastTouch * 1000)
 
-  return (
-    <div>
-      <span className={classes.LastTouch}>{formattedLastTouch}</span>
-    </div>
-  )
+  return <div className={classes.lastTouch}>{formattedLastTouch}</div>
 }

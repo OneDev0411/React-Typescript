@@ -11,7 +11,7 @@ const useStyles = makeStyles(
       color: theme.palette.grey[700],
       ...theme.typography.caption
     },
-    NextTouch: theme.typography.body2
+    nextTouch: theme.typography.body2
   }),
   { name: 'LastTouchedCell' }
 )
@@ -38,10 +38,10 @@ export default function LastTouch({ contact }: Props) {
             </span>
           }
         >
-          <span className={classes.NextTouch}>{formattedNextTouch}</span>
+          <span className={classes.nextTouch}>{formattedNextTouch}</span>
         </Tooltip>
       ) : (
-        <span className={classes.NextTouch}>{formattedNextTouch}</span>
+        <span className={classes.nextTouch}>{formattedNextTouch}</span>
       )}
     </div>
   )
