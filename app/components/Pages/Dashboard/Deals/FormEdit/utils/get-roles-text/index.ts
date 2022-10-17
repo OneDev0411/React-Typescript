@@ -10,7 +10,7 @@ export function getRoleText(
   const validRoles: string[] = normalizeRoleNames(deal, roleNames)
   const list: IDealRole[] = roles.filter(role => validRoles.includes(role.role))
 
-  if (annotation.attributes?.includes?.('stamp')) {
+  if (annotation.attributes?.includes?.('stamp') && list.length > 0) {
     const role = list[0]
 
     // eslint-disable-next-line max-len
