@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Contacts list last touched component renders for contacts with last touch 1`] = `
-<div
-  class="LastTouchedCell-lastTouch-2"
+<p
+  class="MuiTypography-root MuiTypography-body2"
 >
-  just now
-</div>
+  a few seconds ago
+</p>
 `;
 
 exports[`Contacts list last touched component renders for contacts without last touch 1`] = `
 <span
-  class="LastTouchedCell-noTouch-1"
+  class="MuiTypography-root MuiTypography-caption MuiTypography-colorTextSecondary"
 >
   No Touches
 </span>
