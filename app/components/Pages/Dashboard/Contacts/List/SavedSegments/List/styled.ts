@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
-import { blue, primary } from '../../../../utils/colors'
-import IconButton from '../../../Button/IconButton'
+import IconButton from '@app/views/components/Button/IconButton'
+import { blue, primary } from '@app/views/utils/colors'
 
 export const Container = styled.div`
   padding: 1rem;
