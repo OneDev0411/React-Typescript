@@ -21,6 +21,10 @@ export function ConnectedAccountSyncStatus({
   variant = 'body1',
   className = ''
 }: Props) {
+  const isLeadChannel = useMemo(
+    () => isValidLeadChannelSource(account.type),
+    [account.type]
+  )
   const contactsJob = useMemo(
     () => (account.jobs || []).find(job => job.job_name === 'contacts'),
     [account.jobs]
@@ -55,20 +59,26 @@ export function ConnectedAccountSyncStatus({
     [calendarJob, contactsJob, emailsJob]
   )
 
-  const status = useMemo(
-    () =>
-      isValidLeadChannelSource(account.type) && account.threads_total
+  const status = useMemo(() => {
+    if (isLeadChannel) {
+      return account.threads_total
         ? `${account.threads_total} ${pluralize(
             'lead',
             account.threads_total
           )} captured`
-        : lastSyncAt
-        ? `Synced ${timeago().format(lastSyncAt)}`
-        : 'Not synced yet',
-    [account.threads_total, account.type, lastSyncAt]
-  )
+        : 'Not synced yet'
+    }
+
+    return lastSyncAt
+      ? `Synced ${timeago().format(lastSyncAt)}`
+      : 'Not synced yet'
+  }, [account.threads_total, isLeadChannel, lastSyncAt])
 
   const tooltipTitle = useMemo(() => {
+    if (isLeadChannel) {
+      return account.threads_total ? 'Leads are synced' : 'Not synced yet'
+    }
+
     const jobsList = [
       {
         label: 'Contacts are',
@@ -95,7 +105,13 @@ export function ConnectedAccountSyncStatus({
         ))}
       </>
     )
-  }, [calendarJob, contactsJob, emailsJob])
+  }, [
+    isLeadChannel,
+    contactsJob,
+    emailsJob,
+    calendarJob,
+    account.threads_total
+  ])
 
   return (
     <Tooltip title={tooltipTitle}>
