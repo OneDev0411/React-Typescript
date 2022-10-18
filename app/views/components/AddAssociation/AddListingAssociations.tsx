@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 
 import { mdiMapSearchOutline } from '@mdi/js'
 
-import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
+import { useBrandListings, useDealsListings } from '@app/hooks/use-listings'
 import { GetBrandListingsOptions } from '@app/models/listings/search/get-brand-listings'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -13,8 +13,7 @@ import { AddAssociationButton } from './AddAssociationButton'
 import { AddAssociationProps } from './types'
 
 const OPTIONS: GetBrandListingsOptions = {
-  status: ['Active'],
-  limit: 100
+  status: ['Active']
 }
 
 export function AddListingAssociation({
@@ -26,7 +25,14 @@ export function AddListingAssociation({
   title = 'Attach Property'
 }: AddAssociationProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const { listings } = useBrandAndDealsListings(OPTIONS)
+  // Brand Listings
+  const brandListings = useBrandListings(OPTIONS, 10)
+  const brandListingsIds = useMemo(
+    () => brandListings?.map(listing => listing.id),
+    [brandListings]
+  )
+  // Deals Listings
+  const dealListings = useDealsListings(brandListingsIds, 10)
 
   const onOpen = () => setIsOpen(true)
   const onClose = () => setIsOpen(false)
@@ -53,7 +59,11 @@ export function AddListingAssociation({
           defaultLists={[
             {
               title: 'Add from your MLS listings',
-              items: listings
+              items: brandListings
+            },
+            {
+              title: 'Add from your deals',
+              items: dealListings
             }
           ]}
           onClose={onClose}
