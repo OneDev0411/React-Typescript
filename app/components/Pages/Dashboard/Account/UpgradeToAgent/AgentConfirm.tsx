@@ -1,7 +1,6 @@
-import React, { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 import { Box, Button, Container, Typography } from '@material-ui/core'
-import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
 import { useTitle } from 'react-use'
 
@@ -35,16 +34,7 @@ export function AgentConfirm() {
       setAgents(agents)
       setIsModalOpen(true)
     } catch (errorCode) {
-      if (errorCode === 404) {
-        return {
-          // eslint-disable-next-line max-len
-          [FORM_ERROR]: `Agent corresponding to this MLS ID (${mlsId}) not found!`
-        }
-      }
-
-      return {
-        [FORM_ERROR]: 'There was an error with this request. Please try again.'
-      }
+      setError('There was an error with this request. Please try again.')
     }
   }
 
@@ -53,9 +43,7 @@ export function AgentConfirm() {
 
     setMlsId(value)
 
-    if (!value) {
-      setError('Required!')
-    } else if (error) {
+    if (error) {
       setError('')
     }
   }
@@ -69,8 +57,7 @@ export function AgentConfirm() {
         <Form
           onSubmit={onSubmit}
           render={({ handleSubmit, form }) => {
-            const { submitError, submitting } = form.getState()
-            const isError = (submitError && !submitting) || error
+            const { submitting } = form.getState()
 
             return (
               <form onSubmit={handleSubmit}>
@@ -89,10 +76,10 @@ export function AgentConfirm() {
                     input={{ onChange, value: mlsId }}
                   />
                 </Box>
-                {isError && (
+                {error && (
                   <Box ml={1}>
                     <Typography color="error" variant="caption">
-                      {submitError || error}
+                      {error}
                     </Typography>
                   </Box>
                 )}
