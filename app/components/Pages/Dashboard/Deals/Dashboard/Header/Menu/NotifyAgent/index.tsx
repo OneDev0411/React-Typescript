@@ -129,8 +129,8 @@ export function NotifyAgents({ deal }: Props) {
             to: getEmailRecipients(),
             body: [
               'Hello,<br /><br />',
-              'The following documents are still missing from the company file.<br />',
-              'Please be sure to upload them into StudioPro (Rechat)',
+              'Just a friendly reminder from StudioPro (Rechat) the following documents are still outstanding for your Deal.<br />',
+              'You can visit the below links to upload the missing documents.',
               '<ul>',
               ...selectedTasks.map(
                 task =>
