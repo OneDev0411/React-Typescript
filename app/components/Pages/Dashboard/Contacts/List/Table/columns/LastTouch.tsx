@@ -1,5 +1,5 @@
-import { makeStyles, Theme } from '@material-ui/core'
-import timeago from 'timeago.js'
+import { makeStyles, Theme, Typography } from '@material-ui/core'
+import moment from 'moment'
 
 interface Props {
   contact: IContact
@@ -8,8 +8,7 @@ interface Props {
 const useStyles = makeStyles(
   (theme: Theme) => ({
     noTouch: {
-      color: theme.palette.grey[700],
-      ...theme.typography.caption
+      color: theme.palette.grey[700]
     },
     lastTouch: theme.typography.body2
   }),
@@ -21,10 +20,14 @@ export default function LastTouch({ contact }: Props) {
   const { last_touch: lastTouch } = contact
 
   if (!lastTouch) {
-    return <span className={classes.noTouch}>No Touches</span>
+    return (
+      <Typography variant="caption" component="span">
+        No Touches
+      </Typography>
+    )
   }
 
-  const formattedLastTouch = timeago().format(lastTouch * 1000)
+  const formattedLastTouch = moment.unix(lastTouch).fromNow()
 
   return <div className={classes.lastTouch}>{formattedLastTouch}</div>
 }
