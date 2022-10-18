@@ -3,6 +3,7 @@ import { Box, Button } from '@material-ui/core'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 
 import { InsightsTable } from './InsightsTable'
+import { InsightsPageTabs } from './PageTabs'
 
 export default function InsightsList() {
   return (
@@ -18,7 +19,15 @@ export default function InsightsList() {
       </Box>
 
       <PageLayout.Main>
-        <InsightsTable />
+        <Box mx={4}>
+          <InsightsPageTabs
+            stats={{
+              sent: 0,
+              scheduled: 0
+            }}
+          />
+          <InsightsTable />
+        </Box>
       </PageLayout.Main>
     </PageLayout>
   )

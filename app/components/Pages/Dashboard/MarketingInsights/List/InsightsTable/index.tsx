@@ -4,7 +4,6 @@ import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 
 import Table from '@app/views/components/Grid/Table'
-import { useGridBorderedStyles } from '@app/views/components/Grid/Table/styles/bordered'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import type { LoadingPosition } from '@app/views/components/Grid/Table/types'
 
@@ -16,16 +15,27 @@ import { useColumns } from './use-columns'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    row: {}
+    row: {
+      '& .column:not(.heading)': {
+        padding: theme.spacing(0, 1, 0, 2)
+      },
+      '& .column:not(.heading):first-child': {
+        paddingLeft: `${theme.spacing(2)}px !important`
+      },
+      '& .column:not(.heading) .overflow-ellipsis': {
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+      }
+    }
   }),
-  { name: 'InsightsList' }
+  { name: 'InsightsTable' }
 )
 
 export function InsightsTable() {
   const columns = useColumns()
   const classes = useStyles()
   const gridClasses = useGridStyles()
-  const gridBorderedClasses = useGridBorderedStyles()
 
   const { list, isLoading, fetchNextPage, isFetchingNextPage } = useInsights()
 
@@ -50,7 +60,7 @@ export function InsightsTable() {
         onReachEnd: fetchNextPage
       }}
       classes={{
-        row: cn(gridClasses.row, gridBorderedClasses.row, classes.row)
+        row: cn(gridClasses.row, classes.row)
       }}
       loading={getLoadingPosition()}
       LoadingStateComponent={LoadingState}
