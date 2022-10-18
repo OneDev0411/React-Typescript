@@ -2,7 +2,10 @@ import { useState } from 'react'
 
 import { Button } from '@material-ui/core'
 import { mdiEmailOutline } from '@mdi/js'
+import { useSelector } from 'react-redux'
 
+import { IAppState } from '@app/reducers'
+import { selectDealRoles } from '@app/reducers/deals/roles'
 import {
   EmailFormValues,
   SingleEmailComposeDrawer
@@ -25,6 +28,7 @@ import {
 
 import { DealTaskActionsStateContext } from '../../../../contexts/actions-context'
 import { useChecklistActionsContext } from '../../../../contexts/actions-context/hooks'
+import { getLegalFullName, isPrimaryAgent } from '../../../../utils/roles'
 
 interface Props {
   deal: IDeal
@@ -34,6 +38,9 @@ export function NotifyAgents({ deal }: Props) {
   const [, dispatch] = useChecklistActionsContext()
   const [isEmailDrawerOpen, setIsEmailDrawerOpen] = useState(false)
   const [selectedTasks, setSelectedTasks] = useState<IDealTask[]>([])
+  const roles = useSelector<IAppState, IDealRole[]>(({ deals }) =>
+    selectDealRoles(deals.roles, deal)
+  )
 
   const handleNotifyAgents = () => {
     dispatch({
@@ -95,6 +102,19 @@ export function NotifyAgents({ deal }: Props) {
     setIsEmailDrawerOpen(false)
   }
 
+  const getEmailRecipients = (): IDenormalizedEmailRecipientInput[] => {
+    const agentRole = roles.filter(
+      ({ role }) =>
+        isPrimaryAgent(role, deal.deal_type) ||
+        ['CoBuyerAgent', 'CoSellerAgent'].includes(role)
+    )
+
+    return agentRole.map(role => ({
+      recipient_type: 'Email',
+      email: `${getLegalFullName(role)} <${role.email}>`
+    }))
+  }
+
   return (
     <>
       <Button size="small" variant="outlined" onClick={handleNotifyAgents}>
@@ -106,6 +126,7 @@ export function NotifyAgents({ deal }: Props) {
           isOpen={isEmailDrawerOpen}
           initialValues={{
             subject: `[Important]: Missing documents for your closing of "${deal.title}"`,
+            to: getEmailRecipients(),
             body: [
               'Hello,<br /><br />',
               'The following documents are still missing from the company file.<br />',
