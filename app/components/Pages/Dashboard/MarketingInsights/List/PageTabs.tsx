@@ -24,12 +24,18 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  disableSort: boolean
   stats: PageTabStats
   onChangeSort: (field: SortableColumnsType) => void
   onChangeTab: (tab: string | undefined) => void
 }
 
-export function InsightsPageTabs({ stats, onChangeTab, onChangeSort }: Props) {
+export function InsightsPageTabs({
+  disableSort = false,
+  stats,
+  onChangeTab,
+  onChangeSort
+}: Props) {
   const classes = useStyles()
   const location = useLocation()
   const { sortBy } = useInsightsContext()
@@ -69,12 +75,18 @@ export function InsightsPageTabs({ stats, onChangeTab, onChangeSort }: Props) {
           value={to}
         />
       ))}
-      actions={[
-        <Tab
-          key="sort-field"
-          label={<SortFields label={sortBy.label} onChange={onChangeSort} />}
-        />
-      ]}
+      actions={
+        !disableSort
+          ? [
+              <Tab
+                key="sort-field"
+                label={
+                  <SortFields label={sortBy.label} onChange={onChangeSort} />
+                }
+              />
+            ]
+          : []
+      }
     />
   )
 }

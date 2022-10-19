@@ -14,22 +14,12 @@ function SuperCampaignList() {
   const isAdmin = useAcl(ACL.ADMIN)
 
   return (
-    <InsightsPageLayout>
+    <InsightsPageLayout disableSort={!isAdmin}>
       {({ sortField }) => (
         <SuperCampaignGridView isAdmin={isAdmin} sortBy={sortField} />
       )}
     </InsightsPageLayout>
   )
-  // const renderContent = props => (
-  //   <SuperCampaignGridView {...props} isAdmin={isAdmin} />
-  // )
-
-  // return (
-  //   <Layout
-  //     renderContent={props => renderContent(props)}
-  //     hasSortFilter={isAdmin}
-  //   />
-  // )
 }
 
 export default memo(SuperCampaignList)

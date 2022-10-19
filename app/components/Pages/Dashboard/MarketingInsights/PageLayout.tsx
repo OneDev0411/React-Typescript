@@ -10,10 +10,14 @@ import { InsightsPageTabs } from './List/PageTabs'
 import { SortableColumnsType } from './types'
 
 interface Props {
+  disableSort?: boolean
   children: (renderProps: { sortField: SortableColumnsType }) => React.ReactNode
 }
 
-export default function InsightsPageLayout({ children }: Props) {
+export default function InsightsPageLayout({
+  disableSort = false,
+  children
+}: Props) {
   const [sortField, setSortField] = useState<SortableColumnsType>({
     label: 'Newest',
     value: 'title-date',
@@ -44,6 +48,7 @@ export default function InsightsPageLayout({ children }: Props) {
         <PageLayout.Main>
           <Box mx={4}>
             <InsightsPageTabs
+              disableSort={disableSort}
               stats={{
                 executed: 0,
                 scheduled: 0
