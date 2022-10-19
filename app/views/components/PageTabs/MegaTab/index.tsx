@@ -21,6 +21,9 @@ const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       megaMenuWrapper: {
+        '& .MuiTab-root': {
+          maxWidth : 'inherit'
+        },
         '&:hover': {
           '& $megaMenuContent': {
             visibility: 'visible'
