@@ -17,6 +17,7 @@ declare interface IUserBase extends IModel<'user'> {
   linkedin: Nullable<string>
   youtube: Nullable<string>
   instagram: Nullable<string>
+  tiktok: Nullable<string>
 }
 declare interface IUserInput extends Partial<IUserBase> {
   agent?: UUID
@@ -130,4 +131,8 @@ declare interface IUserActivity {
   action: TUserActivityActions
   object_class: string
   object?: unknown
+}
+
+declare interface BrandedUser extends IUser {
+  brand_id?: Nullable<UUID>
 }

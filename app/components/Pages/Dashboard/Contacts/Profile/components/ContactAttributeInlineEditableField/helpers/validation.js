@@ -13,6 +13,7 @@ const validators = {
   linkedin: isLink,
   facebook: isLink,
   instagram: isLink,
+  tiktok: isLink,
   phone_number: isPhoneNumber
 }
 

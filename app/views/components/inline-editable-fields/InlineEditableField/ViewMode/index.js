@@ -89,7 +89,13 @@ ViewMode.defaultProps = {
   value: '-'
 }
 
-const linkableAttribute = ['website', 'facebook', 'instagram', 'linkedin']
+const linkableAttribute = [
+  'website',
+  'facebook',
+  'instagram',
+  'linkedin',
+  'tiktok'
+]
 const copyAttribute = [
   ...linkableAttribute,
   'email',

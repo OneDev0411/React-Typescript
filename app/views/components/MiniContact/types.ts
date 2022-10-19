@@ -48,5 +48,6 @@ export interface ActionSettingsType {
 export enum SocialMediasEnum {
   instagram = 'instagram',
   facebook = 'facebook',
-  linkedin = 'linkedin'
+  linkedin = 'linkedin',
+  tiktok = 'tiktok'
 }

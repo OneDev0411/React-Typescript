@@ -1,12 +1,13 @@
 import React from 'react'
 
 import { Box } from '@material-ui/core'
-import { mdiLoading } from '@mdi/js'
+import { mdiAccountPlus, mdiLoading } from '@mdi/js'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
 
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
+import AddAccountButton from '@app/views/components/AddAccountButton'
 import { confirmation } from 'actions/confirmation'
 import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
@@ -15,12 +16,12 @@ import { updateFilterSegment } from 'actions/filter-segments'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 import { Callout } from 'components/Callout'
+import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
 import PageLayout from 'components/GlobalPageLayout'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import ImportContactsButton from 'components/ImportContactsButton'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ViewAs } from 'components/ViewAs'
 import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
@@ -57,11 +58,11 @@ import {
   DUPLICATE_CONTACTS_LIST_ID,
   VIEW_MODE_FIELD_SETTING_KEY
 } from './constants'
-import { OtherContactsBadge } from './OtherContactsBadge'
+import { ContactsNotification } from './ContactsNotification'
+import Header from './Header'
 import { ViewMode } from './styled'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import Table from './Table'
-import ContactsTabs from './Tabs'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
 import { ContactsZeroState } from './ZeroState'
 
@@ -80,6 +81,7 @@ class ContactsList extends React.Component {
       isFetchingMoreContacts: false,
       isFetchingMoreContactsBefore: false,
       isRowsUpdating: false,
+      isOpenNewContactDrawer: false,
       searchInputValue: props.list.textFilter,
       loadedRanges: [],
       duplicateClusterCount: 0,
@@ -131,6 +133,7 @@ class ContactsList extends React.Component {
     }
 
     if (fetchTags) {
+      console.log('fetchTags ...')
       getContactsTags()
     }
 
@@ -186,45 +189,6 @@ class ContactsList extends React.Component {
     } else if (flows && flows.length === 1) {
       this.setState({ selectedShortcutFilter: flows })
     }
-  }
-
-  getHeaderTitle = () => {
-    const { activeFilters, activeSegment, filters, flows } = this.props
-
-    if (
-      activeSegment &&
-      activeSegment.name &&
-      activeSegment.id !== 'default' &&
-      this.state.selectedShortcutFilter === null
-    ) {
-      if (activeSegment.id === PARKED_CONTACTS_LIST_ID) {
-        return activeSegment.name
-      }
-
-      return `List: ${activeSegment.name}`
-    }
-
-    if (
-      filters &&
-      filters.length === 1 &&
-      this.state.selectedShortcutFilter !== null
-    ) {
-      if (filters[0].value === null) {
-        return 'Contacts(un-Tagged)'
-      }
-
-      return `Tag: ${filters[0].value}`
-    }
-
-    if (
-      flows &&
-      flows.length === 1 &&
-      this.state.selectedShortcutFilter !== null
-    ) {
-      return `Flow: ${activeFilters[0].values[0].label}`
-    }
-
-    return 'Contacts'
   }
 
   updateSyncState(provider, oAuthAccounts = this.props.oAuthAccounts) {
@@ -570,7 +534,7 @@ class ContactsList extends React.Component {
         isManyContacts ? `these ${selectedRowsLength} contacts` : 'this contact'
       } will remove ${
         isManyContacts ? 'them' : 'it'
-      } from your contacts list, but ${
+      } from your contact list, but ${
         isManyContacts ? 'they' : 'it'
       }  will not be removed from any deals.`
     })
@@ -745,34 +709,21 @@ class ContactsList extends React.Component {
     }
 
     return (
-      <Box display="flex" alignItems="center">
-        {parkedContactCount > 0 && (
-          <Box mr={duplicateClusterCount > 0 ? 1 : 0}>
-            <OtherContactsBadge
-              disabled={isFetchingContacts}
-              title="New contacts to review and add"
-              count={parkedContactCount}
-              onClick={async () => {
-                await resetActiveFilters(CONTACTS_SEGMENT_NAME)
-                await changeActiveFilterSegment(
-                  CONTACTS_SEGMENT_NAME,
-                  PARKED_CONTACTS_LIST_ID
-                )
-                this.handleFilterChange({ parked: true }, true)
-                this.handleResetShortcutFilter()
-              }}
-            />
-          </Box>
-        )}
-        {duplicateClusterCount > 0 && (
-          <OtherContactsBadge
-            disabled={isFetchingContacts}
-            title="Duplicate Contacts"
-            count={duplicateClusterCount}
-            onClick={() => goTo('/dashboard/contacts/duplicates')}
-          />
-        )}
-      </Box>
+      <ContactsNotification
+        parkedContactCount={+parkedContactCount}
+        duplicateClusterCount={+duplicateClusterCount}
+        onClickParkedContacts={async () => {
+          await resetActiveFilters(CONTACTS_SEGMENT_NAME)
+          await changeActiveFilterSegment(
+            CONTACTS_SEGMENT_NAME,
+            PARKED_CONTACTS_LIST_ID
+          )
+          this.handleFilterChange({ parked: true }, true)
+          this.handleResetShortcutFilter()
+        }}
+        onClickDuplicateCluster={() => goTo('/dashboard/contacts/duplicates')}
+        disabled={isFetchingContacts}
+      />
     )
   }
 
@@ -790,48 +741,49 @@ class ContactsList extends React.Component {
     this.reloadContacts()
   }
 
-  renderTabs = (props = {}) => {
+  renderHeader = () => {
     const { selectedShortcutFilter, searchInputValue, sortOrder, viewMode } =
       this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
 
     return (
-      <ContactsTabs
-        handleFilterChange={this.handleFilterChange}
-        handleChangeSavedSegment={this.handleChangeSavedSegment}
-        handleResetShortcutFilter={this.handleResetShortcutFilter}
-        filter={{
-          show: this.shouldShowFilters()
-        }}
-        tagListProps={{
-          onClick: filters => {
-            this.setState({
-              selectedShortcutFilter: filters.filters
-            })
-            this.handleFilterChange({ ...filters, flows: [] }, true)
-          },
-          isActive: selectedShortcutFilter !== null
-        }}
-        savedListProps={{
-          name: CONTACTS_SEGMENT_NAME,
-          associations: CRM_LIST_DEFAULT_ASSOCIATIONS,
-          getPredefinedLists: () => ({}),
-          onChange: segment => {
-            this.handleChangeSavedSegment(segment)
-          }
-        }}
-        sortProps={{
-          onChange: this.changeSortOrder,
-          currentOrder: sortOrder,
-          searchValue: searchInputValue
-        }}
-        contactCount={listInfo.total || 0}
-        users={viewAsUsers}
-        activeSegment={activeSegment}
-        onChangeView={this.changeViewMode}
-        viewMode={viewMode}
-        {...props}
-      />
+      <>
+        <Header
+          handleFilterChange={this.handleFilterChange}
+          handleChangeSavedSegment={this.handleChangeSavedSegment}
+          handleResetShortcutFilter={this.handleResetShortcutFilter}
+          filter={{
+            show: this.shouldShowFilters()
+          }}
+          tagListProps={{
+            onClick: filters => {
+              this.setState({
+                selectedShortcutFilter: filters.filters
+              })
+              this.handleFilterChange({ ...filters, flows: [] }, true)
+            },
+            isActive: selectedShortcutFilter !== null
+          }}
+          savedListProps={{
+            name: CONTACTS_SEGMENT_NAME,
+            associations: CRM_LIST_DEFAULT_ASSOCIATIONS,
+            getPredefinedLists: () => ({}),
+            onChange: segment => {
+              this.handleChangeSavedSegment(segment)
+            }
+          }}
+          sortProps={{
+            onChange: this.changeSortOrder,
+            currentOrder: sortOrder,
+            searchValue: searchInputValue
+          }}
+          contactCount={listInfo.total || 0}
+          users={viewAsUsers}
+          activeSegment={activeSegment}
+          onChangeView={this.changeViewMode}
+          viewMode={viewMode}
+        />
+      </>
     )
   }
 
@@ -862,7 +814,6 @@ class ContactsList extends React.Component {
         !activeSegment.filters ||
         activeSegment.filters.length === 0)
 
-    const title = this.getHeaderTitle()
     const showImportAction = this.shouldShowImportAndCreateActions()
     const activeTag = this.getActiveTag()
 
@@ -879,7 +830,7 @@ class ContactsList extends React.Component {
       >
         <PageLayout.HeaderWithSearch
           flex="0 1 auto"
-          title={title}
+          title="Contacts"
           onSearch={this.handleSearch}
           gutter={4}
           noPadding={false}
@@ -904,11 +855,26 @@ class ContactsList extends React.Component {
                   label="Manage Relationships"
                 />
               )}
+              {this.renderOtherContactsBadge()}
               {showImportAction && (
-                <ImportContactsButton
-                  hasCSVButton
-                  tooltip="Connect to Google, Outlook or import from a CSV"
-                />
+                <>
+                  <AddAccountButton
+                    createMenuItemProps={{
+                      title: 'Add Contact',
+                      iconPath: mdiAccountPlus,
+                      onClick: () => {
+                        this.setState({ isOpenNewContactDrawer: true })
+                      }
+                    }}
+                    hasCSVButton
+                  />
+                  <NewContactDrawer
+                    isOpen={this.state.isOpenNewContactDrawer}
+                    onClose={() => {
+                      this.setState({ isOpenNewContactDrawer: false })
+                    }}
+                  />
+                </>
               )}
             </Box>
           )}
@@ -956,10 +922,7 @@ class ContactsList extends React.Component {
           {isZeroState && <ContactsZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
-              <Box px={isTableMode ? 4 : 0}>
-                {isTableMode && this.renderOtherContactsBadge()}
-                {this.renderTabs()}
-              </Box>
+              <Box px={isTableMode ? 4 : 0}>{this.renderHeader()}</Box>
               <Box
                 mt={2}
                 {...(isBoardMode && {

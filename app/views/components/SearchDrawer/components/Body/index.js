@@ -101,6 +101,7 @@ export class Body extends React.Component {
                   )}
                 </Draggable>
               ))}
+              {droppableProvided.placeholder}
             </div>
           )}
         </Droppable>

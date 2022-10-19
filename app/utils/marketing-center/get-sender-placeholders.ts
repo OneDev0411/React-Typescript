@@ -12,6 +12,7 @@ export function getSenderPlaceholders(): Partial<IUser> {
     twitter: '{{sender.twitter}}',
     linkedin: '{{sender.linkedin}}',
     youtube: '{{sender.youtube}}',
-    instagram: '{{sender.instagram}}'
+    instagram: '{{sender.instagram}}',
+    tiktok: '{{sender.tiktok}}'
   }
 }

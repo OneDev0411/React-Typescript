@@ -71,7 +71,6 @@ let PersonalInfoForm = ({
           type="text"
           label="Website"
           component={SimpleField}
-          required={false}
           placeholder="https://www.example.com"
         />
         <Field
@@ -79,7 +78,6 @@ let PersonalInfoForm = ({
           type="text"
           label="Instagram"
           component={SimpleField}
-          required={false}
           placeholder="https://www.instagram.com/<username>"
         />
         <Field
@@ -87,7 +85,6 @@ let PersonalInfoForm = ({
           type="text"
           label="Facebook"
           component={SimpleField}
-          required={false}
           placeholder="https://www.fb.com/<username>"
         />
         <Field
@@ -95,7 +92,6 @@ let PersonalInfoForm = ({
           type="text"
           label="LinkedIn"
           component={SimpleField}
-          required={false}
           placeholder="https://www.linkedin.com/<username>"
         />
         <Field
@@ -103,7 +99,6 @@ let PersonalInfoForm = ({
           type="text"
           label="Youtube"
           component={SimpleField}
-          required={false}
           placeholder="https://www.youtube.com/<username>"
         />
         <Field
@@ -111,8 +106,14 @@ let PersonalInfoForm = ({
           type="text"
           label="Twitter"
           component={SimpleField}
-          required={false}
           placeholder="https://www.twitter.com/<username>"
+        />
+        <Field
+          name="tiktok"
+          type="text"
+          label="TikTok"
+          component={SimpleField}
+          placeholder="https://www.tiktok.com/<username>"
         />
 
         {submitError && (
@@ -163,7 +164,8 @@ const validate = values => {
     facebook,
     linkedin,
     youtube,
-    twitter
+    twitter,
+    tiktok
   } = values
 
   const NAME_CHARACTER_LIMIT = 1
@@ -208,7 +210,8 @@ const validate = values => {
     twitter,
     instagram,
     linkedin,
-    youtube
+    youtube,
+    tiktok
   }
 
   Object.entries(socials).forEach(([name, value]) => {
@@ -233,7 +236,8 @@ export default compose(
         facebook,
         linkedin,
         youtube,
-        twitter
+        twitter,
+        tiktok
       } = user
 
       const cleanURL = url => {
@@ -265,7 +269,8 @@ export default compose(
           facebook: cleanURL(facebook),
           linkedin: cleanURL(linkedin),
           youtube: cleanURL(youtube),
-          twitter: cleanURL(twitter)
+          twitter: cleanURL(twitter),
+          tiktok: cleanURL(tiktok)
         }
       }
     },

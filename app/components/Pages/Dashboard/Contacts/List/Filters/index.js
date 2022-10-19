@@ -1,6 +1,7 @@
 import { Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
+import SaveSegment from '@app/components/Pages/Dashboard/Contacts/List/SavedSegments/Create'
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import {
   selectExistingTags,
@@ -9,7 +10,6 @@ import {
 import Filters from 'components/Grid/Filters'
 import { OperatorAndOperandFilter } from 'components/Grid/Filters/FilterTypes/OparatorAndOperand'
 import { SimpleList } from 'components/Grid/Filters/FilterTypes/SimpleList'
-import SaveSegment from 'components/Grid/SavedSegments/Create'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
 import { OPEN_HOUSE_FILTER_ID, FLOW_FILTER_ID, ORIGINS } from '../constants'
@@ -21,6 +21,8 @@ import getFlows from './helpers/get-flows'
 import getOpenHouseEvents from './helpers/get-open-house-events'
 import getUniqTags from './helpers/get-uniq-tags'
 import { useGetCustomFilters } from './hooks/use-get-custom-filters'
+
+const CONTAINER_MIN_HEIGHT = 63
 
 export default function ContactFilters(props) {
   const activeBrandId = useActiveBrandId()
@@ -85,7 +87,7 @@ export default function ContactFilters(props) {
   }
 
   return (
-    <Box display="flex" alignItems="center" mt={1.5}>
+    <Box display="flex" alignItems="center" minHeight={CONTAINER_MIN_HEIGHT}>
       <Filters
         name="contacts"
         plugins={['segments']}

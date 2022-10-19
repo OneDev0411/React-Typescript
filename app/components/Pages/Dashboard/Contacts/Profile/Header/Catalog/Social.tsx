@@ -9,14 +9,23 @@ import {
 
 import { normalizeContactsForEmailCompose } from '@app/models/email/helpers/normalize-contact'
 import SendEmailButton from '@app/views/components/SendEmailButton'
+import { mdiTikTokPath } from '@app/views/components/SvgIcons/Tiktok/iconTiktok'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-const fields = ['website', 'facebook', 'instagram', 'linkedin']
+const fields = ['website', 'facebook', 'instagram', 'linkedin', 'tiktok']
+const tooltipTitle = {
+  website: 'Website',
+  facebook: 'Facebook',
+  instagram: 'Instagram',
+  linkedin: 'Linkedin',
+  tiktok: 'TikTok'
+}
 const fieldsIcon = {
   website: mdiWeb,
   facebook: mdiFacebook,
   linkedin: mdiLinkedin,
-  instagram: mdiInstagram
+  instagram: mdiInstagram,
+  tiktok: mdiTikTokPath
 }
 
 const useStyles = makeStyles(
@@ -55,7 +64,6 @@ interface Props {
 
 export const Social = ({ contact }: Props) => {
   const classes = useStyles()
-
   const getUrl = url => {
     if (!url.match(/^http(s?)?:\/\//i)) {
       return `http://${url}`
@@ -75,7 +83,7 @@ export const Social = ({ contact }: Props) => {
           <Tooltip
             key={attr.id || attr.text}
             classes={{ tooltip: classes.tooltip }}
-            title={attr.attribute_def.name || 'Social'}
+            title={tooltipTitle[attr.attribute_def.name!] || 'Social'}
           >
             <a
               href={getUrl(attr.text)}

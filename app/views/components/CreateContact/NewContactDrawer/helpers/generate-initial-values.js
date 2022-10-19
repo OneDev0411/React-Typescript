@@ -3,6 +3,7 @@ const INITIAL_VALUES = {
   last_name: '',
   tags: [],
   source: '',
+  touch_freq: '',
   email: [{ label: { title: 'Personal', value: 'Personal' } }],
   phone_number: [{ label: { title: 'Mobile', value: 'Mobile' } }]
 }

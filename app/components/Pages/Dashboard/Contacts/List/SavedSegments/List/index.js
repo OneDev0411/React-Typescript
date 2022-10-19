@@ -1,15 +1,14 @@
 import React from 'react'
 
-import { ListItem, withStyles } from '@material-ui/core'
+import { ListItem, ListItemText } from '@material-ui/core'
 import { connect } from 'react-redux'
 
+import Loading from '@app/components/Partials/Loading'
 import {
-  // eslint-disable-next-line import/named
   changeActiveFilterSegment,
   deleteFilterSegment,
   getSavedSegments
 } from 'actions/filter-segments'
-import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
 import {
   getDefaultList,
   getSegments,
@@ -18,19 +17,6 @@ import {
 } from 'reducers/filter-segments'
 
 import Item from './Item'
-
-const styles = theme => ({
-  dropdownBtn: {
-    ...theme.typography.body1,
-    color: theme.palette.common.black,
-    '&.Mui-disabled': {
-      color: theme.palette.text.disabled,
-      '& svg': {
-        fill: theme.palette.text.disabled
-      }
-    }
-  }
-})
 
 class SegmentsList extends React.Component {
   state = {
@@ -84,54 +70,58 @@ class SegmentsList extends React.Component {
 
   isSelected = id => this.props.activeItem && this.props.activeItem.id === id
 
+  getFilteredList = searchCriteria =>
+    searchCriteria
+      ? this.props.list.filter(item =>
+          item.name
+            .trim()
+            .toLocaleLowerCase()
+            .includes(searchCriteria.trim().toLocaleLowerCase())
+        )
+      : this.props.list
+
   render() {
-    const { props } = this
-    const { classes } = props
+    const list = this.getFilteredList(this.props.searchCriteria)
+
+    if (!this.props.areListsFetched) {
+      return (
+        <ListItem>
+          <ListItemText disableTypography>
+            <Loading />
+          </ListItemText>
+        </ListItem>
+      )
+    }
+
+    if (this.props.areListsFetched && list.length === 0) {
+      return (
+        <ListItem disabled>
+          <ListItemText disableTypography>No result!</ListItemText>
+        </ListItem>
+      )
+    }
 
     return (
-      <BaseDropdownWithMore
-        component="div"
-        buttonLabel="Lists"
-        DropdownToggleButtonProps={{
-          disabled: props.isFetching || props.list.length === 0,
-          className: classes.dropdownBtn
-        }}
-        listPlugin={{
-          style: { width: 220 },
-          className: 'u-scrollbar'
-        }}
-        morePlugin={{
-          count: 7,
-          style: {
-            maxHeight: 250
-          },
-          textContainer: ({ children }) => (
-            <ListItem button>{children}</ListItem>
+      <>
+        {list.map(item => {
+          return (
+            <Item
+              key={item.id}
+              isDeleting={this.state.deletingItems.includes(item.id)}
+              item={item}
+              deleteHandler={this.deleteItem}
+              selectHandler={this.selectItem}
+              closeHandler={this.props.onClose}
+              selected={this.isSelected(item.id)}
+            />
           )
-        }}
-        renderMenu={({ close }) =>
-          props.list.map(item => {
-            const { id } = item
-
-            return (
-              <Item
-                key={id}
-                isDeleting={this.state.deletingItems.includes(id)}
-                item={item}
-                deleteHandler={this.deleteItem}
-                selectHandler={this.selectItem}
-                closeHandler={close}
-                selected={this.isSelected(id)}
-              />
-            )
-          })
-        }
-      />
+        })}
+      </>
     )
   }
 }
 
-function mapStateToProps(state, { name, getPredefinedLists }) {
+function mapStateToProps(state, { name, getPredefinedLists, searchCriteria }) {
   const { filterSegments } = state[name]
 
   const predefinedLists = getPredefinedLists(name, state, false)
@@ -140,7 +130,8 @@ function mapStateToProps(state, { name, getPredefinedLists }) {
     areListsFetched: areListsFetched(filterSegments),
     isFetching: filterSegments.isFetching,
     list: getSegments(filterSegments, name, predefinedLists),
-    activeItem: selectActiveSavedSegment(filterSegments, name, predefinedLists)
+    activeItem: selectActiveSavedSegment(filterSegments, name, predefinedLists),
+    searchCriteria
   }
 }
 
@@ -154,4 +145,4 @@ ConnectedSegmentsList.defaultProps = {
   getPredefinedLists: name => ({ default: getDefaultList(name) })
 }
 
-export default withStyles(styles)(ConnectedSegmentsList)
+export default ConnectedSegmentsList

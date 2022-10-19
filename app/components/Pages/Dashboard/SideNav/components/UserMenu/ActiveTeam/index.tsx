@@ -17,7 +17,7 @@ import {
   NodeRenderer,
   BrandAvailableToUserSelectorDrawer
 } from '@app/views/components/BrandSelector'
-import { Agent, BrandedUser } from '@app/views/components/TeamAgents/types'
+import { Agent } from '@app/views/components/TeamAgents/types'
 import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
 
 import { TeamSwitchBrandSelectorRenderer as Brand } from './components/TeamSwitchBrandSelectorRenderer'

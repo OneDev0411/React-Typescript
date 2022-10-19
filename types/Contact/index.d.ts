@@ -104,6 +104,7 @@ declare interface IContact extends IContactBase {
   deals?: IDeal[]
   lists?: UUID[]
   flows?: UUID[]
+  assignees?: IAssignee[]
   summary?: IContactSummary
   created_by?: IUser
   updated_by?: IUser
@@ -362,4 +363,12 @@ declare interface IContactActiveFilters {
   isActive: boolean
   operator?: TContactFilterOperator
   values: { label: string; value: string }[]
+}
+
+declare interface IAssignee {
+  id: UUID
+  role: string
+  type: string
+  user?: BrandedUser
+  brand?: IBrand
 }

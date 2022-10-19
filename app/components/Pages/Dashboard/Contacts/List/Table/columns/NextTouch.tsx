@@ -11,37 +11,37 @@ const useStyles = makeStyles(
       color: theme.palette.grey[700],
       ...theme.typography.caption
     },
-    lastTouchValue: theme.typography.body2
+    nextTouch: theme.typography.body2
   }),
   { name: 'LastTouchedCell' }
 )
 
-export default function LastTouched({ contact }: Props) {
+export default function LastTouch({ contact }: Props) {
   const classes = useStyles()
-  const { last_touch: lastTouch, next_touch: nextTouch } = contact
+  const { next_touch: nextTouch, touch_freq: touchFrequency } = contact
 
-  if (!lastTouch) {
+  if (!nextTouch) {
     return <span className={classes.noTouch}>No Touches</span>
   }
 
-  const formattedLastTouch = timeago().format(lastTouch * 1000)
+  const formattedNextTouch = timeago().format(nextTouch * 1000)
 
   return (
     <div>
-      {nextTouch ? (
+      {touchFrequency ? (
         <Tooltip
           title={
             <span>
               You wanted to be in touch
               <br />
-              every {Math.round((nextTouch - lastTouch) / 86400)} days.
+              every {touchFrequency} days.
             </span>
           }
         >
-          <span className={classes.lastTouchValue}>{formattedLastTouch}</span>
+          <span className={classes.nextTouch}>{formattedNextTouch}</span>
         </Tooltip>
       ) : (
-        <span className={classes.lastTouchValue}>{formattedLastTouch}</span>
+        <span className={classes.nextTouch}>{formattedNextTouch}</span>
       )}
     </div>
   )
