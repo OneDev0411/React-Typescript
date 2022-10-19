@@ -22,7 +22,7 @@ const useStyles = makeStyles(
     createStyles({
       megaMenuWrapper: {
         '& .MuiTab-root': {
-          maxWidth : 'inherit'
+          maxWidth: 'inherit'
         },
         '&:hover': {
           '& $megaMenuContent': {
