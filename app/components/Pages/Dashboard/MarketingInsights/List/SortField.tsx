@@ -1,19 +1,13 @@
-import React from 'react'
-
 import { MenuItem } from '@material-ui/core'
 
 import { BaseDropdown } from 'components/BaseDropdown'
+
+import { SortableColumnsType } from '../types'
 
 const sortableColumns: SortableColumnsType[] = [
   { label: 'Newest', value: 'title-date', ascending: false },
   { label: 'Oldest', value: 'title-date', ascending: true }
 ]
-
-interface SortableColumnsType {
-  label: string
-  value: string
-  ascending: boolean
-}
 
 interface Props {
   label: string

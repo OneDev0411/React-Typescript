@@ -7,6 +7,7 @@ import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import type { LoadingPosition } from '@app/views/components/Grid/Table/types'
 
+import { useInsightsContext } from '../../context/use-insights-context'
 import { useInsights } from '../queries/use-insights'
 
 import { LoadingSkeleton } from './LoadingSkeleton'
@@ -36,6 +37,7 @@ export function InsightsTable() {
   const columns = useColumns()
   const classes = useStyles()
   const gridClasses = useGridStyles()
+  const { sortBy } = useInsightsContext()
 
   const { list, isLoading, fetchNextPage, isFetchingNextPage } = useInsights()
 
@@ -61,6 +63,12 @@ export function InsightsTable() {
       }}
       classes={{
         row: cn(gridClasses.row, classes.row)
+      }}
+      sorting={{
+        sortBy: {
+          value: sortBy.value,
+          ascending: sortBy.ascending
+        }
       }}
       loading={getLoadingPosition()}
       LoadingStateComponent={LoadingState}

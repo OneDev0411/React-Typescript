@@ -49,7 +49,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
     {
       id: 'subject',
       primary: true,
-      width: '30%',
+      width: '18vw',
       render: ({ row }) => (
         <SuperCampaignListColumnSubject
           subject={row.subject}
@@ -59,14 +59,14 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
     },
     {
       id: 'userCount',
-      width: '20%',
+      width: '12vw',
       render: ({ row }) => (
         <SuperCampaignAdminListColumnUserCount value={row.enrollments_count} />
       )
     },
     {
       id: 'tags',
-      width: '40%',
+      width: '50vw',
       render: ({ row }) =>
         isSuperCampaignReadOnly(row) ? (
           <SuperCampaignAdminListColumnStats
@@ -82,6 +82,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
     {
       id: 'actions',
       align: 'right',
+      width: '3vw',
       render: ({ row }) => (
         <SuperCampaignAdminMoreActions
           superCampaign={row}

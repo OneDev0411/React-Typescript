@@ -4,6 +4,6 @@ export function all() {
   return [TYPE]
 }
 
-export function allLists() {
-  return [...all(), 'list']
+export function allLists(status: string) {
+  return [...all(), 'list', status]
 }

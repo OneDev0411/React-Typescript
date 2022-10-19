@@ -4,19 +4,23 @@ import { useActiveBrandId } from '@app/hooks/brand'
 import { useInfiniteQuery } from '@app/hooks/query'
 import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 
+import { useInsightsContext } from '../../context/use-insights-context'
+
 import { allLists } from './keys'
 
 const LIMIT = 30
 
 export function useInsights() {
   const activeBrandId = useActiveBrandId()
+  const { status } = useInsightsContext()
 
   const { data, ...params } = useInfiniteQuery(
-    allLists(),
+    allLists(status),
     ({ pageParam = 0 }) => {
       return getEmailCampaigns(activeBrandId, {
         start: pageParam,
         limit: LIMIT,
+        status,
         associations: {
           associations: ['template'],
           recipientsAssociations: [],

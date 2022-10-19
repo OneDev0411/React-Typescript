@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useMemo } from 'react'
 
 import { Chip, makeStyles } from '@material-ui/core'
 import { useLocation } from 'react-use'
 
 import { PageTabs, Tab, TabLink } from '@app/views/components/PageTabs'
 
-import { SortableColumnsType } from '../Insight/SortField'
+import { useHasSuperCampaignAccess } from '../../SuperCampaigns/hooks/use-has-super-campaign-access'
+import { useInsightsContext } from '../context/use-insights-context'
+import { SortableColumnsType } from '../types'
 
 import { SortFields } from './SortField'
 
@@ -26,40 +28,53 @@ interface Props {
     sent: number
     scheduled: number
   }
+  onChangeSort: (field: SortableColumnsType) => void
 }
 
-export function InsightsPageTabs({ stats }: Props) {
+export function InsightsPageTabs({ stats, onChangeSort }: Props) {
   const classes = useStyles()
-
   const location = useLocation()
+  const hasSuperCampaignAccess = useHasSuperCampaignAccess()
+  const { sortBy } = useInsightsContext()
 
-  const [sortField, setSortField] = useState<SortableColumnsType>({
-    label: 'Newest',
-    value: 'title-date',
-    ascending: false
-  })
+  const items = useMemo(() => {
+    let list = [
+      {
+        label: 'Sent',
+        value: 'executed',
+        count: stats?.sent,
+        to: '/dashboard/insights'
+      },
+      {
+        label: 'Scheduled',
+        value: 'scheduled',
+        count: stats?.scheduled,
+        to: '/dashboard/insights/scheduled'
+      },
+      {
+        label: 'Instagram',
+        to: '/dashboard/insights/social-post'
+      }
+    ]
 
-  const items = [
-    {
-      label: 'Sent',
-      count: stats?.sent,
-      to: '/dashboard/insights'
-    },
-    {
-      label: 'Scheduled',
-      count: stats?.scheduled,
-      to: '/dashboard/insights/scheduled'
-    },
-    {
-      label: 'Instagram',
-      to: '/dashboard/insights/scheduled/social-post'
+    if (hasSuperCampaignAccess) {
+      list = [
+        ...list,
+        {
+          label: 'Campaigns',
+          to: '/dashboard/insights/super-campaign'
+        }
+      ]
     }
-  ]
+
+    return list
+  }, [stats, hasSuperCampaignAccess])
 
   return (
     <PageTabs
       defaultValue={location.pathname as string}
-      tabs={items.map(({ label, count, to }) => (
+      onChange={console.log}
+      tabs={items?.map(({ label, value, count, to }) => (
         <TabLink
           key={`Tab-${label}`}
           label={
@@ -82,7 +97,7 @@ export function InsightsPageTabs({ stats }: Props) {
       actions={[
         <Tab
           key="sort-field"
-          label={<SortFields label={sortField.label} onChange={setSortField} />}
+          label={<SortFields label={sortBy.label} onChange={onChangeSort} />}
         />
       ]}
     />

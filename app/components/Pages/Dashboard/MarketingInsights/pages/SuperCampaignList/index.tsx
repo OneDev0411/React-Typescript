@@ -6,23 +6,28 @@ import SuperCampaignGridView from '@app/components/Pages/Dashboard/SuperCampaign
 import { ACL } from '@app/constants/acl'
 import { useAcl } from '@app/views/components/Acl/use-acl'
 
-import Layout from '../../List.bkp/Layout'
+import InsightsPageLayout from '../../PageLayout'
 
 function SuperCampaignList() {
   useTitle('Campaign List | Rechat')
 
   const isAdmin = useAcl(ACL.ADMIN)
 
-  const renderContent = props => (
-    <SuperCampaignGridView {...props} isAdmin={isAdmin} />
-  )
-
   return (
-    <Layout
-      renderContent={props => renderContent(props)}
-      hasSortFilter={isAdmin}
-    />
+    <InsightsPageLayout>
+      <SuperCampaignGridView isAdmin={isAdmin} sortBy="" />
+    </InsightsPageLayout>
   )
+  // const renderContent = props => (
+  //   <SuperCampaignGridView {...props} isAdmin={isAdmin} />
+  // )
+
+  // return (
+  //   <Layout
+  //     renderContent={props => renderContent(props)}
+  //     hasSortFilter={isAdmin}
+  //   />
+  // )
 }
 
 export default memo(SuperCampaignList)
