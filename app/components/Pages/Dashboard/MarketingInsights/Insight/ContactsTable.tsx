@@ -8,17 +8,17 @@ import Table from 'components/Grid/Table'
 import { RenderProps } from 'components/Grid/Table/types'
 import MiniContact from 'components/MiniContact'
 
-import { hasPixelTracking } from '../List.bkp/helpers'
+import { hasPixelTracking } from '../List/helpers/has-pixel-tracking'
+import { SortableColumnsType } from '../types'
 
 import { contactsList } from './helpers'
-import { SortableColumnsType as SortFieldType } from './SortField'
 import { ContactColumn, StyledBadge } from './styled'
-import { ContactsListType } from './types'
+import type { ContactsListType } from './types'
 
 interface ContactsPropsType {
   item: IEmailCampaign<'from' | 'emails' | 'recipients'>
-  sortBy: SortFieldType
-  onChangeSort: (field: SortFieldType) => void
+  sortBy: SortableColumnsType
+  onChangeSort: (field: SortableColumnsType) => void
 }
 
 function ContactsTable({ item, sortBy, onChangeSort }: ContactsPropsType) {

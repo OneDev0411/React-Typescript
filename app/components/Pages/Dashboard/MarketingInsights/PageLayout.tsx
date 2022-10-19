@@ -10,7 +10,7 @@ import { InsightsPageTabs } from './List/PageTabs'
 import { SortableColumnsType } from './types'
 
 interface Props {
-  children: React.ReactNode
+  children: (renderProps: { sortField: SortableColumnsType }) => React.ReactNode
 }
 
 export default function InsightsPageLayout({ children }: Props) {
@@ -51,7 +51,7 @@ export default function InsightsPageLayout({ children }: Props) {
               onChangeSort={setSortField}
               onChangeTab={setStatus}
             />
-            {children}
+            {children({ sortField })}
           </Box>
         </PageLayout.Main>
       </PageLayout>

@@ -8,10 +8,17 @@ import { ClickedColumn } from './columns/ClickedColumn'
 import { DeliveredColumn } from './columns/DeliveredColumn'
 import { OpenedColumn } from './columns/OpenedColumn'
 import { RecipientsColumn } from './columns/Recipients'
+import { ThumbnailColumn } from './columns/ThumbnailColumn'
 import { TitleColumn } from './columns/TitleColumn'
 
 export function useColumns(): TableColumn<IEmailCampaign<'template'>>[] {
   return [
+    {
+      id: 'thumb',
+      header: '',
+      width: '70px',
+      render: ({ row }) => <ThumbnailColumn item={row} />
+    },
     {
       header: () => <HeaderColumn text="Title" />,
       id: 'title-date',

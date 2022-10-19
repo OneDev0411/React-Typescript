@@ -15,7 +15,9 @@ function SuperCampaignList() {
 
   return (
     <InsightsPageLayout>
-      <SuperCampaignGridView isAdmin={isAdmin} sortBy="" />
+      {({ sortField }) => (
+        <SuperCampaignGridView isAdmin={isAdmin} sortBy={sortField} />
+      )}
     </InsightsPageLayout>
   )
   // const renderContent = props => (

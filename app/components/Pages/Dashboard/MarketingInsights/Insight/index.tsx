@@ -34,7 +34,8 @@ import { setEmailNotificationStatus } from 'models/email/set-email-notification-
 
 import Loading from '../../../../Partials/Loading'
 import { Container } from '../../Contacts/components/Container'
-import { hasPixelTracking, valueAndPercent } from '../List.bkp/helpers'
+import { hasPixelTracking } from '../List/helpers/has-pixel-tracking'
+import { getValuePercent } from '../List/InsightsTable/helpers/get-value-percent'
 
 import ContactsTable from './ContactsTable'
 import Header from './Header'
@@ -202,9 +203,9 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
     },
     {
       icon: mdiCheckAll,
-      value: valueAndPercent(item.delivered, item.sent),
+      value: getValuePercent(item.delivered, item.sent),
       label: 'Delivered',
-      tooltip: `${valueAndPercent(item.failed, item.sent)} Bounced`,
+      tooltip: `${getValuePercent(item.failed, item.sent)} Bounced`,
       hidden: pixelTracking
     },
     {
@@ -216,7 +217,7 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
     },
     {
       icon: mdiEyeOutline,
-      value: `${valueAndPercent(item.opened, item.delivered)}`,
+      value: `${getValuePercent(item.opened, item.delivered)}`,
       label: 'Opened',
       tooltip: `${item.opened} People have opened the email`,
       hidden: pixelTracking
@@ -230,7 +231,7 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
     },
     {
       icon: mdiCursorDefaultClickOutline,
-      value: `${valueAndPercent(item.clicked, item.delivered)}`,
+      value: `${getValuePercent(item.clicked, item.delivered)}`,
       label: 'Clicked',
       tooltip: `${item.clicked} People have clicked the email`,
       hidden: pixelTracking

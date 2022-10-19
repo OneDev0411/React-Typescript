@@ -15,8 +15,7 @@ export function useColumnsSize<Row>(columns: TableColumn<Row>[]): string[] {
       .join(' + ')
 
     return renderableColumns.map(
-      col =>
-        col.width || `calc((100vw - (${calc})) / ${sizelessColumns.length})`
+      col => col.width || `calc((100% - (${calc})) / ${sizelessColumns.length})`
     )
   }, [columns])
 }

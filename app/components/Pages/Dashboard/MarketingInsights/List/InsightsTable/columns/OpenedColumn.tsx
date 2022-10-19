@@ -1,7 +1,7 @@
 import pluralize from 'pluralize'
 
-import { valueAndPercent } from '../../../List.bkp/helpers'
 import { hasPixelTracking } from '../../helpers/has-pixel-tracking'
+import { getValuePercent } from '../helpers/get-value-percent'
 
 import { StatsColumn } from './StatsColumn'
 
@@ -25,7 +25,7 @@ export function OpenedColumn({ item }: Props) {
 
   return (
     <StatsColumn
-      title={`Opened: ${valueAndPercent(item.opened, item.delivered)}`}
+      title={`Opened: ${getValuePercent(item.opened, item.delivered)}`}
       tooltip={`${item.opened} People have opened the email`}
     />
   )

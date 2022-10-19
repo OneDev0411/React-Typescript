@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 
 import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/Table/components/LoadingComponent'
-import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List.bkp/ZeroState'
+import { InsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
 import { useGetAllSuperCampaigns } from '@app/models/super-campaign'
 import { goTo } from '@app/utils/go-to'
 import Table from '@app/views/components/Grid/Table'
@@ -117,7 +117,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
         onReachEnd: fetchNextPage
       }}
       EmptyStateComponent={() => (
-        <EmailInsightsZeroState
+        <InsightsZeroState
           title="No campaign to show, yet."
           subTitle="Try creating your first campaign and help your agents"
         />
