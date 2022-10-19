@@ -14,7 +14,13 @@ export const useStyles = makeStyles(
     row: {
       height: 'auto !important',
       '& .column': {
-        padding: theme.spacing(2, 0)
+        padding: theme.spacing(2, 0),
+      },
+      '& [class^="NotificationMessage-badge-"]': {
+        position: 'fixed'
+      },
+      '& [class^="NotificationMessage-text-"]': {
+        padding: '0 24px 0 48px'
       }
     }
   }),
