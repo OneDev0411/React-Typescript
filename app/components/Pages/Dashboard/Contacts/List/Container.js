@@ -741,7 +741,7 @@ class ContactsList extends React.Component {
     this.reloadContacts()
   }
 
-  renderHeader = (props = {}) => {
+  renderHeader = () => {
     const { selectedShortcutFilter, searchInputValue, sortOrder, viewMode } =
       this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
@@ -782,7 +782,6 @@ class ContactsList extends React.Component {
           activeSegment={activeSegment}
           onChangeView={this.changeViewMode}
           viewMode={viewMode}
-          {...props}
         />
       </>
     )

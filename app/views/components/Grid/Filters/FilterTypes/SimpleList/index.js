@@ -1,24 +1,32 @@
-import React from 'react'
+import { useState, useMemo } from 'react'
 
-import { List, ListItem } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { Typography, List, ListItem } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 import classnames from 'classnames'
+import escapeRegExp from 'lodash/escapeRegExp'
 import usePromise from 'react-use-promise'
 import Flex from 'styled-flex-component'
+import useDebouncedCallback from 'use-debounce/lib/callback'
 
+import Search from '@app/views/components/Grid/Search'
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
-import { Placeholder } from './Placeholder'
-
-const useStyles = makeStyles(() =>
-  createStyles({
+const useStyles = makeStyles(
+  theme => ({
     root: {
       maxWidth: '100%',
-      width: '18.75rem',
+      padding: theme.spacing(1),
+      overflowX: 'hidden',
       maxHeight: '18.75rem',
-      overflow: 'auto'
+      overflowY: 'auto'
+    },
+    zeroState: {
+      textAlign: 'center',
+      margin: theme.spacing(2, 0),
+      color: theme.palette.grey['400']
     }
-  })
+  }),
+  { name: 'ContactFilterSimpleList' }
 )
 
 export function SimpleList({
@@ -31,11 +39,27 @@ export function SimpleList({
     () => Promise.resolve(getOptions()),
     []
   )
+  const [query, setQuery] = useState('')
+  const [debouncedSetQuery] = useDebouncedCallback(setQuery, 400)
+
+  const items = useMemo(() => {
+    if (!query) {
+      return resolvedOptions
+    }
+
+    const regExp = new RegExp(escapeRegExp(query), 'gi')
+
+    return resolvedOptions.filter(item => item.label.match(regExp))
+  }, [resolvedOptions, query])
 
   if (error) {
     console.error(error)
 
-    return <Placeholder hasError>Could not fetch items</Placeholder>
+    return (
+      <Typography variant="body1" color="error" className={classes.zeroState}>
+        Could not fetch items
+      </Typography>
+    )
   }
 
   if (state === 'pending') {
@@ -46,14 +70,18 @@ export function SimpleList({
     )
   }
 
-  if (resolvedOptions.length === 0) {
-    return <Placeholder>Nothing to select</Placeholder>
-  }
+  const renderItems = () => {
+    if (items.length === 0) {
+      return (
+        <Typography variant="body1" className={classes.zeroState}>
+          Nothing to select!
+        </Typography>
+      )
+    }
 
-  return (
-    <div className={classnames('u-scrollbar--thinner--self', classes.root)}>
+    return (
       <List>
-        {resolvedOptions.map((item, index) => (
+        {items.map((item, index) => (
           <ListItem
             button
             data-test="filter-item"
@@ -65,10 +93,21 @@ export function SimpleList({
             }}
             key={index}
           >
-            {item.label}
+            <Typography noWrap>{item.label}</Typography>
           </ListItem>
         ))}
       </List>
+    )
+  }
+
+  return (
+    <div className={classnames('u-scrollbar--thinner--self', classes.root)}>
+      <Search
+        autoFocus
+        placeholder="Search"
+        onChange={value => debouncedSetQuery(value)}
+      />
+      {renderItems()}
     </div>
   )
 }

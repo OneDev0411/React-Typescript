@@ -1,10 +1,9 @@
 import React from 'react'
 
-import MUIButton from '@material-ui/core/Button'
+import { Box, Button } from '@material-ui/core'
 import { connect } from 'react-redux'
 
 import Modal from 'components/BasicModal'
-import Button from 'components/Button/ActionButton'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 import RadioButton from 'components/RadioButton'
 import { SWITCH_ACTIVE_SAVED_SEGMENT } from 'constants/filter-segments'
@@ -15,13 +14,7 @@ import {
   changeActiveFilterSegment
 } from 'store_actions/filter-segments'
 
-import {
-  Container,
-  ItemRow,
-  ItemContainer,
-  ItemTitle,
-  TextInput
-} from './styled'
+import { ItemRow, ItemContainer, ItemTitle, TextInput } from './styled'
 
 const DEFAULT_QUERY = {
   associations: CRM_LIST_DEFAULT_ASSOCIATIONS
@@ -166,17 +159,19 @@ class SaveSegment extends React.Component {
     }
 
     return (
-      <Container>
+      <>
         {hasFilters && (
-          <MUIButton
-            variant="outlined"
-            size="small"
-            data-test="save-list-button"
-            onClick={this.toggleShowModal}
-            disabled={!areFiltersValid}
-          >
-            Save List
-          </MUIButton>
+          <Box ml={1}>
+            <Button
+              variant="outlined"
+              size="small"
+              data-test="save-list-button"
+              onClick={this.toggleShowModal}
+              disabled={!areFiltersValid}
+            >
+              Save List
+            </Button>
+          </Box>
         )}
 
         {state.showModal && hasFilters && (
@@ -218,7 +213,6 @@ class SaveSegment extends React.Component {
             <Modal.Footer>
               <Button
                 size="small"
-                appearance="outline"
                 disabled={state.isSaving}
                 onClick={this.cancelInput}
                 style={{ marginRight: '0.5em' }}
@@ -227,6 +221,8 @@ class SaveSegment extends React.Component {
               </Button>
               <Button
                 size="small"
+                color="primary"
+                variant="contained"
                 disabled={!this.canSaveList()}
                 onClick={this.saveList}
                 data-test="save-list-button-modal"
@@ -236,7 +232,7 @@ class SaveSegment extends React.Component {
             </Modal.Footer>
           </Modal>
         )}
-      </Container>
+      </>
     )
   }
 }

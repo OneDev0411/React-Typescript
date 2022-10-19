@@ -19,6 +19,7 @@ declare interface IContactAttributeDefInput {
   required?: boolean
   singular?: boolean
   searchable?: boolean
+  filterable?: boolean
   has_label?: boolean
   labels?: string[]
   enum_values?: string[]
@@ -35,6 +36,7 @@ declare interface IContactAttributeDef {
   editable: boolean
   singular: boolean
   searchable: boolean
+  filterable: boolean
   required: boolean
   has_label: boolean
   labels: Nullable<string[]>

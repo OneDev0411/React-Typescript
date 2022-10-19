@@ -1,11 +1,5 @@
 import styled from 'styled-components'
 
-export const Container = styled.div`
-  display: inline-flex;
-  vertical-align: middle;
-  padding: ${props => props.theme.spacing(2, 2)};
-`
-
 export const ItemRow = styled.div`
   display: flex;
   align-items: start;

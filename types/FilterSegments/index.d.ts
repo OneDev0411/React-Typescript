@@ -1,7 +1,28 @@
+declare type IContactFilterOperator =
+  | 'eq'
+  | 'lte'
+  | 'gte'
+  | 'between'
+  | 'any'
+  | 'all'
 declare interface IFilterOperator {
   name: string
   invert?: boolean
   default?: boolean
+  operator?: IContactFilterOperator
+}
+
+declare interface IFilterConfigRenderer {
+  onFilterChange: (values: ILabelValue[], operator: IFilterOperator) => void
+  onToggleFilterActive: () => void
+  values: ILabelValue[]
+  operator: IFilterOperator
+}
+declare interface IFilterConfig {
+  id: string
+  label: string
+  renderer: (props: IFilterConfigRenderer) => ReactNode
+  tooltip: string
 }
 
 declare interface IActiveFilter {

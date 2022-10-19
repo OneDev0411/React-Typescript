@@ -62,14 +62,16 @@ export const Header = ({
         />
       </Grid>
       <Grid container justifyContent="space-between" alignItems="center">
-        <ContactFilters
-          show={filter?.show}
-          contactCount={contactCount}
-          activeSegment={activeSegment}
-          onFilterChange={() => handleFilterChange({}, true)}
-          viewMode={viewMode}
-          users={users}
-        />
+        {filter?.show && (
+          <ContactFilters
+            contactCount={contactCount}
+            activeSegment={activeSegment}
+            onFilterChange={() => handleFilterChange({}, true)}
+            viewMode={viewMode}
+            users={users}
+          />
+        )}
+
         <Box display="flex">
           <SortFields {...sortProps} />
           <ViewSwitcher onChangeView={onChangeView} activeView={viewMode} />
