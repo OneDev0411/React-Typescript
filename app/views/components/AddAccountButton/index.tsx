@@ -18,6 +18,7 @@ import CsvIcon from 'components/SvgIcons/Csv/IconCsv'
 import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
 import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import OutlookIcon from 'components/SvgIcons/Outlook/IconOutlook'
+import RealtorIcon from 'components/SvgIcons/Realtor/IconRealtor'
 import ZillowIcon from 'components/SvgIcons/Zillow/IconZillow'
 import { OAuthProvider } from 'constants/contacts'
 import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
@@ -45,7 +46,7 @@ export function AddAccountButton({
   createMenuItemProps,
   onFetchedOAuthAccounts,
   hasCSVButton = false,
-  tooltip = 'Connect to Google, Outlook or Zillow',
+  tooltip = 'Connect to Google, Outlook, Zillow or Realtor',
   className = ''
 }: Props) {
   const classes = useStyles()
@@ -187,7 +188,6 @@ export function AddAccountButton({
               })
               toggleMenu()
             }}
-            disabled={outlook.connecting}
             title="Connect to Zillow"
             icon={
               <ZillowIcon
@@ -196,6 +196,22 @@ export function AddAccountButton({
               />
             }
             helperLink="https://help.rechat.com/guides/crm/connect-to-zillow"
+          />
+          <AccountMenuItem
+            onClick={() => {
+              goTo('/dashboard/account/connected-accounts', null, {
+                [ADD_LEAD_CHANNEL_QUERY_PARAM_KEY]: 'Realtor'
+              })
+              toggleMenu()
+            }}
+            title="Connect to Realtor"
+            icon={
+              <RealtorIcon
+                size={iconSizes.medium}
+                className={classes.listIcon}
+              />
+            }
+            helperLink="https://help.rechat.com/guides/crm/connect-to-realtor"
           />
           <ConnectedAccounts
             accounts={accounts}
