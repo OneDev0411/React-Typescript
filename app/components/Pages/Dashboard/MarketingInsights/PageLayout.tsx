@@ -5,6 +5,7 @@ import { Box, Button } from '@material-ui/core'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 
 import { Context } from './context'
+import { usePageTabs } from './hooks/use-page-tabs'
 import { InsightsPageTabs } from './List/PageTabs'
 import { SortableColumnsType } from './types'
 
@@ -19,11 +20,14 @@ export default function InsightsPageLayout({ children }: Props) {
     ascending: false
   })
 
+  const [, activeTab] = usePageTabs()
+  const [status, setStatus] = useState(activeTab)
+
   return (
     <Context.Provider
       value={{
         sortBy: sortField,
-        status: 'executed'
+        status
       }}
     >
       <PageLayout gutter={0}>
@@ -41,10 +45,11 @@ export default function InsightsPageLayout({ children }: Props) {
           <Box mx={4}>
             <InsightsPageTabs
               stats={{
-                sent: 0,
+                executed: 0,
                 scheduled: 0
               }}
               onChangeSort={setSortField}
+              onChangeTab={setStatus}
             />
             {children}
           </Box>

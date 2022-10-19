@@ -48,6 +48,7 @@ export async function getEmailCampaigns<
     .query({
       start: query.start ?? 0,
       limit: query.limit ?? 5000,
+      status: query.status,
       'associations[]': [
         ...associations.map(name => `email_campaign.${name}`),
         ...recipientsAssociations.map(

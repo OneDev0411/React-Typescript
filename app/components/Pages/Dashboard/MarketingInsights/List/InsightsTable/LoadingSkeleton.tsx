@@ -5,7 +5,6 @@ import { ClassNameMap } from '@material-ui/styles'
 import cn from 'classnames'
 
 import { Table } from '@app/views/components/Grid/Table'
-import { useGridBorderedStyles } from '@app/views/components/Grid/Table/styles/bordered'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
@@ -18,7 +17,6 @@ interface Props {
 
 export function LoadingSkeleton({ columns, classes }: Props) {
   const gridClasses = useGridStyles()
-  const gridBorderedClasses = useGridBorderedStyles()
 
   const skeletonColumns = useMemo(
     () =>
@@ -35,7 +33,7 @@ export function LoadingSkeleton({ columns, classes }: Props) {
       headless={false}
       rowSize={5}
       classes={{
-        row: cn(gridClasses.row, gridBorderedClasses.row, classes.row)
+        row: cn(gridClasses.row, classes.row)
       }}
       totalRows={50}
       columns={skeletonColumns}

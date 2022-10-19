@@ -1,13 +1,13 @@
-import { useMemo } from 'react'
+import { useCallback } from 'react'
 
 import { Chip, makeStyles } from '@material-ui/core'
 import { useLocation } from 'react-use'
 
 import { PageTabs, Tab, TabLink } from '@app/views/components/PageTabs'
 
-import { useHasSuperCampaignAccess } from '../../SuperCampaigns/hooks/use-has-super-campaign-access'
 import { useInsightsContext } from '../context/use-insights-context'
-import { SortableColumnsType } from '../types'
+import { usePageTabs } from '../hooks/use-page-tabs'
+import { PageTabStats, SortableColumnsType } from '../types'
 
 import { SortFields } from './SortField'
 
@@ -24,57 +24,32 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  stats: {
-    sent: number
-    scheduled: number
-  }
+  stats: PageTabStats
   onChangeSort: (field: SortableColumnsType) => void
+  onChangeTab: (tab: string | undefined) => void
 }
 
-export function InsightsPageTabs({ stats, onChangeSort }: Props) {
+export function InsightsPageTabs({ stats, onChangeTab, onChangeSort }: Props) {
   const classes = useStyles()
   const location = useLocation()
-  const hasSuperCampaignAccess = useHasSuperCampaignAccess()
   const { sortBy } = useInsightsContext()
 
-  const items = useMemo(() => {
-    let list = [
-      {
-        label: 'Sent',
-        value: 'executed',
-        count: stats?.sent,
-        to: '/dashboard/insights'
-      },
-      {
-        label: 'Scheduled',
-        value: 'scheduled',
-        count: stats?.scheduled,
-        to: '/dashboard/insights/scheduled'
-      },
-      {
-        label: 'Instagram',
-        to: '/dashboard/insights/social-post'
-      }
-    ]
+  const [tabs] = usePageTabs(stats)
 
-    if (hasSuperCampaignAccess) {
-      list = [
-        ...list,
-        {
-          label: 'Campaigns',
-          to: '/dashboard/insights/super-campaign'
-        }
-      ]
-    }
+  const handleChangeTab = useCallback(
+    (value: string) => {
+      const tab = tabs?.find(({ to }) => to === value)?.value
 
-    return list
-  }, [stats, hasSuperCampaignAccess])
+      onChangeTab(tab)
+    },
+    [tabs, onChangeTab]
+  )
 
   return (
     <PageTabs
       defaultValue={location.pathname as string}
-      onChange={console.log}
-      tabs={items?.map(({ label, value, count, to }) => (
+      onChange={handleChangeTab}
+      tabs={tabs?.map(({ label, count, to }) => (
         <TabLink
           key={`Tab-${label}`}
           label={

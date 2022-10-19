@@ -5,5 +5,5 @@ export function all() {
 }
 
 export function allLists(status: string) {
-  return [...all(), 'list', status]
+  return [...all(), 'list', { status }]
 }
