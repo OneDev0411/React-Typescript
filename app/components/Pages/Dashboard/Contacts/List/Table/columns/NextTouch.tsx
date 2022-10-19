@@ -1,30 +1,22 @@
-import { makeStyles, Theme, Tooltip } from '@material-ui/core'
-import timeago from 'timeago.js'
+import { Tooltip, Typography } from '@material-ui/core'
+import moment from 'moment'
 
 interface Props {
   contact: IContact
 }
 
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    noTouch: {
-      color: theme.palette.grey[700],
-      ...theme.typography.caption
-    },
-    nextTouch: theme.typography.body2
-  }),
-  { name: 'LastTouchedCell' }
-)
-
 export default function LastTouch({ contact }: Props) {
-  const classes = useStyles()
   const { next_touch: nextTouch, touch_freq: touchFrequency } = contact
 
   if (!nextTouch) {
-    return <span className={classes.noTouch}>No Touches</span>
+    return (
+      <Typography color="textSecondary" variant="caption" component="span">
+        No Touches
+      </Typography>
+    )
   }
 
-  const formattedNextTouch = timeago().format(nextTouch * 1000)
+  const formattedNextTouch = moment.unix(nextTouch).fromNow()
 
   return (
     <div>
@@ -38,10 +30,10 @@ export default function LastTouch({ contact }: Props) {
             </span>
           }
         >
-          <span className={classes.nextTouch}>{formattedNextTouch}</span>
+          <Typography variant="body2">{formattedNextTouch}</Typography>
         </Tooltip>
       ) : (
-        <span className={classes.nextTouch}>{formattedNextTouch}</span>
+        <Typography variant="body2">{formattedNextTouch}</Typography>
       )}
     </div>
   )
