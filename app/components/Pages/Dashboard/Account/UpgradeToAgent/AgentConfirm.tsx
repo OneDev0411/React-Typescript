@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from 'react'
 
 import { Box, Button, Container, Typography } from '@material-ui/core'
+import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
 import { useTitle } from 'react-use'
 
@@ -18,8 +19,6 @@ export function AgentConfirm() {
   const [error, setError] = useState('')
 
   const onSubmit = async () => {
-    setMlsId(mlsId)
-
     try {
       const agents = await searchAgent({ mlsid: mlsId.trim() })
 
@@ -34,7 +33,16 @@ export function AgentConfirm() {
       setAgents(agents)
       setIsModalOpen(true)
     } catch (errorCode) {
-      setError('There was an error with this request. Please try again.')
+      if (errorCode === 404) {
+        return {
+          // eslint-disable-next-line max-len
+          [FORM_ERROR]: `Agent corresponding to this MLS ID (${mlsId}) not found!`
+        }
+      }
+
+      return {
+        [FORM_ERROR]: 'There was an error with this request. Please try again.'
+      }
     }
   }
 
@@ -86,7 +94,7 @@ export function AgentConfirm() {
                 <Box mt={2}>
                   <Button
                     type="submit"
-                    disabled={submitting}
+                    disabled={submitting || !mlsId}
                     variant="contained"
                     color="secondary"
                   >
