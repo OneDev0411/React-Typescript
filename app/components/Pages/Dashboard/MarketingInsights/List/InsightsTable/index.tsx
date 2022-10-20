@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
+import { useEffectOnce } from 'react-use'
 
 import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
@@ -34,12 +35,12 @@ const useStyles = makeStyles(
 )
 
 export function InsightsTable() {
-  const columns = useColumns()
   const classes = useStyles()
   const gridClasses = useGridStyles()
-  const { sortBy } = useInsightsContext()
+  const { status, sortBy } = useInsightsContext()
 
-  const { list, isLoading, fetchNextPage, isFetchingNextPage } = useInsights()
+  const { list, isLoading, isFetchingNextPage, fetchNextPage, refetch } =
+    useInsights(status)
 
   const getLoadingPosition = useCallback((): LoadingPosition => {
     if (isFetchingNextPage) {
@@ -48,6 +49,16 @@ export function InsightsTable() {
 
     return null
   }, [isFetchingNextPage])
+
+  const columns = useColumns(refetch)
+
+  useEffectOnce(() => {
+    window.socket.on('email_campaign:send', refetch)
+
+    return () => {
+      window.socket.off('email_campaign:send', refetch)
+    }
+  })
 
   return isLoading ? (
     <LoadingSkeleton columns={columns} classes={classes} />

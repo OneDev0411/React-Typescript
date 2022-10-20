@@ -7,8 +7,9 @@ import { PageTabs, Tab, TabLink } from '@app/views/components/PageTabs'
 
 import { useInsightsContext } from '../context/use-insights-context'
 import { usePageTabs } from '../hooks/use-page-tabs'
-import { PageTabStats, SortableColumnsType } from '../types'
+import { EmailCampaignStatus, SortableColumnsType } from '../types'
 
+import { useInsightsCounter } from './queries/use-insights-counter'
 import { SortFields } from './SortField'
 
 const useStyles = makeStyles(
@@ -25,14 +26,12 @@ const useStyles = makeStyles(
 
 interface Props {
   disableSort: boolean
-  stats: PageTabStats
   onChangeSort: (field: SortableColumnsType) => void
-  onChangeTab: (tab: string | undefined) => void
+  onChangeTab: (tab: Nullable<EmailCampaignStatus>) => void
 }
 
 export function InsightsPageTabs({
   disableSort = false,
-  stats,
   onChangeTab,
   onChangeSort
 }: Props) {
@@ -40,13 +39,14 @@ export function InsightsPageTabs({
   const location = useLocation()
   const { sortBy } = useInsightsContext()
 
-  const [tabs] = usePageTabs(stats)
+  const badgeCounters = useInsightsCounter()
+  const [tabs] = usePageTabs(badgeCounters)
 
   const handleChangeTab = useCallback(
     (value: string) => {
       const tab = tabs?.find(({ to }) => to === value)?.value
 
-      onChangeTab(tab)
+      tab && onChangeTab(tab)
     },
     [tabs, onChangeTab]
   )
@@ -55,17 +55,17 @@ export function InsightsPageTabs({
     <PageTabs
       defaultValue={location.pathname as string}
       onChange={handleChangeTab}
-      tabs={tabs?.map(({ label, count, to }) => (
+      tabs={tabs?.map(({ label, badgeCounter, to }) => (
         <TabLink
           key={`Tab-${label}`}
           label={
             <span>
               {label}
-              {Number(count) > 0 && (
+              {Number(badgeCounter) > 0 && (
                 <Chip
                   variant="outlined"
                   size="small"
-                  label={count}
+                  label={badgeCounter}
                   className={classes.emailCount}
                 />
               )}

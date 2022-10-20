@@ -1,10 +1,10 @@
 import { createContext } from 'react'
 
-import { SortableColumnsType } from '../types'
+import type { EmailCampaignStatus, SortableColumnsType } from '../types'
 
 export interface InsightsContext {
   sortBy: SortableColumnsType
-  status: 'any' | 'draft' | 'scheduled' | 'executed'
+  status: EmailCampaignStatus
 }
 
 export const Context = createContext<InsightsContext | undefined>(undefined)

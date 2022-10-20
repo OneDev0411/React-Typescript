@@ -8,3 +8,5 @@ export interface PageTabStats {
   executed: number
   scheduled: number
 }
+
+export type EmailCampaignStatus = 'any' | 'draft' | 'scheduled' | 'executed'

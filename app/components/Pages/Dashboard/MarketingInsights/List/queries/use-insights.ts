@@ -4,22 +4,21 @@ import { useActiveBrandId } from '@app/hooks/brand'
 import { useInfiniteQuery } from '@app/hooks/query'
 import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 
-import { useInsightsContext } from '../../context/use-insights-context'
+import { EmailCampaignStatus } from '../../types'
 
-import { allLists } from './keys'
+import { listStatus } from './keys'
 
-const LIMIT = 30
+const LIMIT = 100
 
-export function useInsights() {
+export function useInsights(status: EmailCampaignStatus, limit = LIMIT) {
   const activeBrandId = useActiveBrandId()
-  const { status } = useInsightsContext()
 
   const { data, ...params } = useInfiniteQuery(
-    allLists(status),
+    listStatus(status),
     ({ pageParam = 0 }) => {
       return getEmailCampaigns(activeBrandId, {
         start: pageParam,
-        limit: LIMIT,
+        limit,
         status,
         associations: {
           associations: ['template'],
@@ -29,6 +28,7 @@ export function useInsights() {
       })
     },
     {
+      enabled: !!status,
       getNextPageParam: (lastPage, pages) => {
         const total = lastPage.info?.total ?? 0
         const nextOffset = pages.length * LIMIT
@@ -46,6 +46,7 @@ export function useInsights() {
 
   return {
     ...params,
+    total: data?.pages[0].info?.total ?? 0,
     list
   }
 }

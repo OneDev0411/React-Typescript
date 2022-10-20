@@ -1,6 +1,6 @@
 import Fetch from 'services/fetch'
 
-const DefaultAssociations: {
+export const DefaultAssociations: {
   ASSOCIATIONS: IEmailCampaignAssociation[]
   RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[]
   EMAIL_ASSOCIATIONS: IEmailCampaignEmailAssociation[]
@@ -14,9 +14,9 @@ interface QueryParams {
   start?: number
   limit?: number
   associations: {
-    associations?: string[]
-    recipientsAssociations?: string[]
-    emailsAssociations?: string[]
+    associations?: IEmailCampaignAssociation[]
+    recipientsAssociations?: IEmailCampaignRecipientAssociation[]
+    emailsAssociations?: IEmailCampaignEmailAssociation[]
   }
   status?: 'any' | 'draft' | 'scheduled' | 'executed'
 }
@@ -26,7 +26,7 @@ export async function getEmailCampaigns<
   U extends IEmailCampaignRecipientAssociation,
   V extends IEmailCampaignEmailAssociation
 >(
-  brandId: UUID,
+  brandId: Nullable<UUID>,
   query: QueryParams
 ): Promise<
   ApiResponseBody<
@@ -37,6 +37,10 @@ export async function getEmailCampaigns<
     }
   >
 > {
+  if (!brandId) {
+    throw new Error('BrandId is null')
+  }
+
   const {
     associations = DefaultAssociations.ASSOCIATIONS,
     recipientsAssociations = DefaultAssociations.RECIPIENT_ASSOCIATIONS,

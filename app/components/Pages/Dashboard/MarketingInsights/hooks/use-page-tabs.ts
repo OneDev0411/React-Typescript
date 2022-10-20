@@ -3,31 +3,36 @@ import { useMemo } from 'react'
 import { useLocation } from 'react-use'
 
 import { useHasSuperCampaignAccess } from '../../SuperCampaigns/hooks/use-has-super-campaign-access'
-import { PageTabStats } from '../types'
+import { EmailCampaignStatus, PageTabStats } from '../types'
 
 export function usePageTabs(
-  stats?: PageTabStats
-): [typeof list, string | undefined] {
+  badgeCounters?: PageTabStats
+): [typeof list, Nullable<EmailCampaignStatus>] {
   const hasSuperCampaignAccess = useHasSuperCampaignAccess()
   const location = useLocation()
 
   const list = useMemo(() => {
-    let list = [
+    let list: {
+      label: string
+      value: Nullable<EmailCampaignStatus>
+      badgeCounter?: number
+      to: string
+    }[] = [
       {
         label: 'Sent',
         value: 'executed',
-        badgeCounter: stats?.executed,
+        badgeCounter: badgeCounters?.executed,
         to: '/dashboard/insights'
       },
       {
         label: 'Scheduled',
         value: 'scheduled',
-        badgeCounter: stats?.scheduled,
+        badgeCounter: badgeCounters?.scheduled,
         to: '/dashboard/insights/scheduled'
       },
       {
         label: 'Instagram',
-        value: 'social-post',
+        value: null,
         to: '/dashboard/insights/social-post'
       }
     ]
@@ -37,17 +42,17 @@ export function usePageTabs(
         ...list,
         {
           label: 'Campaigns',
-          value: 'super-campaign',
+          value: null,
           to: '/dashboard/insights/super-campaign'
         }
       ]
     }
 
     return list
-  }, [stats, hasSuperCampaignAccess])
+  }, [badgeCounters, hasSuperCampaignAccess])
 
   const activeTab = useMemo(() => {
-    return list.find(tab => tab.to === location.pathname)?.value
+    return list.find(tab => tab.to === location.pathname)?.value ?? null
   }, [list, location.pathname])
 
   return [list, activeTab]

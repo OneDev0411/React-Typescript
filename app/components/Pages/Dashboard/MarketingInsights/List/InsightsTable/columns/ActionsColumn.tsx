@@ -11,27 +11,28 @@ import EmailNotificationSetting from 'components/EmailNotificationSetting'
 import { addNotification } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useLabeledSwitchHandlers from 'hooks/use-labeled-switch-handlers'
-import { deleteEmailCampaign } from 'models/email/delete-email-campaign'
-import { setEmailNotificationStatus } from 'models/email/set-email-notification-status'
+
+import { useInsightsDeleteMutation } from '../../queries/use-insights-delete'
+import { useInsightsNotificationMutation } from '../../queries/use-insights-notification-mutate'
 
 interface Props {
   item: IEmailCampaign<'template'>
-  reloadList: () => void
-  reloadItem: (id: UUID) => void
+  refetch: () => void
 }
 
-export function ActionsColumn({ item, reloadList, reloadItem }: Props) {
+export function ActionsColumn({ item, refetch }: Props) {
   const [isEditComposeOpen, setIsEditComposeOpen] = useState(false)
   const isSent = !!item.executed_at
 
   const dispatch = useDispatch()
+  const { mutate: updateNotification } = useInsightsNotificationMutation()
+  const { mutate: deleteCampaign } = useInsightsDeleteMutation()
 
   const emailNotificationSettingHandlers = useLabeledSwitchHandlers(
     item?.notifications_enabled,
     async checked => {
       try {
-        await setEmailNotificationStatus(item.id, checked)
-        reloadItem(item.id)
+        updateNotification({ id: item.id, checked })
       } catch (error) {
         console.error(error)
         dispatch(
@@ -52,7 +53,7 @@ export function ActionsColumn({ item, reloadList, reloadItem }: Props) {
         description:
           "The email will be deleted and you don't have access to it anymore. Are you sure?",
         confirmLabel: 'Yes, Remove it',
-        onConfirm: () => deleteEmailCampaign(item.id).then(reloadList)
+        onConfirm: () => deleteCampaign({ id: item.id })
       })
     )
   }
@@ -108,8 +109,8 @@ export function ActionsColumn({ item, reloadList, reloadItem }: Props) {
         <EditEmailDrawer
           isOpen
           onClose={() => setIsEditComposeOpen(false)}
-          onEdited={reloadList}
-          onDeleted={reloadList}
+          onEdited={refetch}
+          onDeleted={refetch}
           emailId={item.id}
         />
       )}

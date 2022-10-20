@@ -30,7 +30,7 @@ export function SortFields({ sortLabel, onChange }: Props) {
               key={index}
               value={index}
               onClick={async () => {
-                onChange(c)
+                onChange(column)
                 close()
               }}
             >

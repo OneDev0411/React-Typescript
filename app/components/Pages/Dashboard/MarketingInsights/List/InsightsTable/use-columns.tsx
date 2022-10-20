@@ -11,7 +11,9 @@ import { RecipientsColumn } from './columns/Recipients'
 import { ThumbnailColumn } from './columns/ThumbnailColumn'
 import { TitleColumn } from './columns/TitleColumn'
 
-export function useColumns(): TableColumn<IEmailCampaign<'template'>>[] {
+export function useColumns(
+  refetch: () => void
+): TableColumn<IEmailCampaign<'template'>>[] {
   return [
     {
       id: 'thumb',
@@ -57,11 +59,7 @@ export function useColumns(): TableColumn<IEmailCampaign<'template'>>[] {
       width: '5vw',
       render: ({ row }) => (
         <Box width="100%" textAlign="right">
-          <ActionsColumn
-            item={row}
-            reloadItem={() => {}}
-            reloadList={() => {}}
-          />
+          <ActionsColumn item={row} refetch={refetch} />
         </Box>
       )
     }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import {
   Dialog,
@@ -36,10 +36,11 @@ import Loading from '../../../../Partials/Loading'
 import { Container } from '../../Contacts/components/Container'
 import { hasPixelTracking } from '../List/helpers/has-pixel-tracking'
 import { getValuePercent } from '../List/InsightsTable/helpers/get-value-percent'
+import { SortableColumnsType } from '../types'
 
 import ContactsTable from './ContactsTable'
 import Header from './Header'
-import SortField, { SortableColumnsType as SortFieldType } from './SortField'
+import { SortFields } from './SortField'
 import { ContactsListType } from './types'
 import { useItemData } from './useItemData'
 
@@ -119,7 +120,7 @@ interface Props {
 }
 
 function Insight({ location, params: { id } }: Props & WithRouterProps) {
-  const [sortField, setSortField] = useState<SortFieldType>({
+  const [sortField, setSortField] = useState<SortableColumnsType>({
     label: 'Most Opened',
     value: 'opened',
     ascending: false
@@ -242,11 +243,14 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
     try {
       if (!emailPreview) {
         const emailCampaign = await getEmailCampaign(id, {
-          emailCampaignAssociations: ['emails', 'attachments'],
-          emailRecipientsAssociations: [],
+          associations: {
+            associations: ['emails', 'attachments'],
+            recipientsAssociations: []
+          },
           emailFields: ['html', 'text'],
           limit: 1
         })
+
         const email = getEmailCampaignEmail(emailCampaign)
 
         setEmailPreview(email)
@@ -308,7 +312,7 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sortFieldWrapper}>
-              <SortField sortLabel={sortField.label} onChange={setSortField} />
+              <SortFields sortLabel={sortField.label} onChange={setSortField} />
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ import PageLayout from '@app/views/components/GlobalPageLayout'
 import { Context } from './context'
 import { usePageTabs } from './hooks/use-page-tabs'
 import { InsightsPageTabs } from './List/PageTabs'
-import { SortableColumnsType } from './types'
+import { EmailCampaignStatus, SortableColumnsType } from './types'
 
 interface Props {
   disableSort?: boolean
@@ -25,13 +25,13 @@ export default function InsightsPageLayout({
   })
 
   const [, activeTab] = usePageTabs()
-  const [status, setStatus] = useState(activeTab)
+  const [status, setStatus] = useState<Nullable<EmailCampaignStatus>>(activeTab)
 
   return (
     <Context.Provider
       value={{
         sortBy: sortField,
-        status
+        status: status || 'executed'
       }}
     >
       <PageLayout gutter={0}>
@@ -49,10 +49,6 @@ export default function InsightsPageLayout({
           <Box mx={4}>
             <InsightsPageTabs
               disableSort={disableSort}
-              stats={{
-                executed: 0,
-                scheduled: 0
-              }}
               onChangeSort={setSortField}
               onChangeTab={setStatus}
             />
