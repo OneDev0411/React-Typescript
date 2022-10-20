@@ -12,10 +12,12 @@ const useStyles = makeStyles(
       width: theme.spacing(1),
       height: theme.spacing(1),
       borderRadius: '50%',
-      backgroundColor: theme.palette.secondary.main
+      backgroundColor: theme.palette.secondary.main,
+      position: 'fixed'
     },
     text: {
-      paddingLeft: theme.spacing(3)
+      paddingLeft: theme.spacing(6),
+      paddingRight: theme.spacing(3)
     },
     title: {
       marginBottom: theme.spacing(0.5)
