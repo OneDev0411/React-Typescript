@@ -30,12 +30,12 @@ import useLabeledSwitchHandlers from 'hooks/use-labeled-switch-handlers'
 import { getContactNameInitials } from 'models/contacts/helpers'
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
-import { setEmailNotificationStatus } from 'models/email/set-email-notification-status'
 
 import Loading from '../../../../Partials/Loading'
 import { Container } from '../../Contacts/components/Container'
 import { hasPixelTracking } from '../List/helpers/has-pixel-tracking'
 import { getValuePercent } from '../List/InsightsTable/helpers/get-value-percent'
+import { useInsightsNotificationMutation } from '../List/queries/use-insights-notification-mutate'
 import { SortableColumnsType } from '../types'
 
 import ContactsTable from './ContactsTable'
@@ -140,6 +140,11 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
 
   const dispatch = useDispatch()
 
+  const { mutate: setEmailNotificationStatus } =
+    useInsightsNotificationMutation(
+      item?.executed_at ? 'executed' : 'scheduled'
+    )
+
   const emailNotificationSettingHandlers = useLabeledSwitchHandlers(
     item?.notifications_enabled,
     async checked => {
@@ -148,7 +153,7 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
       }
 
       try {
-        await setEmailNotificationStatus(item.id, checked)
+        setEmailNotificationStatus({ id: item.id, checked })
       } catch (error) {
         console.error(error)
         dispatch(

@@ -25,7 +25,9 @@ export function ActionsColumn({ item, refetch }: Props) {
   const isSent = !!item.executed_at
 
   const dispatch = useDispatch()
-  const { mutate: updateNotification } = useInsightsNotificationMutation()
+  const { mutate: updateNotification } = useInsightsNotificationMutation(
+    isSent ? 'executed' : 'scheduled'
+  )
   const { mutate: deleteCampaign } = useInsightsDeleteMutation()
 
   const emailNotificationSettingHandlers = useLabeledSwitchHandlers(

@@ -4,7 +4,7 @@ import { useMutation } from '@app/hooks/query'
 import useNotify from '@app/hooks/use-notify'
 import { setEmailNotificationStatus } from '@app/models/email/set-email-notification-status'
 
-import { useInsightsContext } from '../../context/use-insights-context'
+import { EmailCampaignStatus } from '../../types'
 
 import { listStatus } from './keys'
 
@@ -32,9 +32,8 @@ const getNextPages = (
   }))
 }
 
-export function useInsightsNotificationMutation() {
+export function useInsightsNotificationMutation(status: EmailCampaignStatus) {
   const queryClient = useQueryClient()
-  const { status } = useInsightsContext()
   const notify = useNotify()
 
   return useMutation(
