@@ -1,11 +1,14 @@
 import { ChangeEvent, useState } from 'react'
 
-import { Box, Button, Container, Typography } from '@material-ui/core'
-import { FORM_ERROR } from 'final-form'
-import { Form, Field } from 'react-final-form'
+import {
+  Box,
+  Button,
+  Container,
+  Typography,
+  TextField
+} from '@material-ui/core'
 import { useTitle } from 'react-use'
 
-import { MUITextInput } from 'components/Forms/MUITextInput'
 import searchAgent from 'models/agent/search'
 
 import SecretQuestionModal from './SecretQuestionModal/index'
@@ -13,18 +16,24 @@ import SecretQuestionModal from './SecretQuestionModal/index'
 export function AgentConfirm() {
   useTitle('Upgrade to agent | Settings | Rechat')
 
-  const [mlsId, setMlsId] = useState('')
+  const [agentNumber, setAgentNumber] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
   const [agents, setAgents] = useState<IAgent[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [error, setError] = useState('')
 
-  const onSubmit = async () => {
+  const handleSearch = async () => {
+    setError('')
+    setIsSearching(true)
+
     try {
-      const agents = await searchAgent({ mlsid: mlsId.trim() })
+      const agents = await searchAgent({ mlsid: agentNumber.trim() })
+
+      setIsSearching(false)
 
       if (agents.length === 0) {
         setError(
-          `We were not able to find an agent matching MLS ID "${mlsId}".`
+          `We were not able to find an agent matching MLS ID "${agentNumber}".`
         )
 
         return
@@ -32,24 +41,14 @@ export function AgentConfirm() {
 
       setAgents(agents)
       setIsModalOpen(true)
-    } catch (errorCode) {
-      if (errorCode === 404) {
-        return {
-          // eslint-disable-next-line max-len
-          [FORM_ERROR]: `Agent corresponding to this MLS ID (${mlsId}) not found!`
-        }
-      }
-
-      return {
-        [FORM_ERROR]: 'There was an error with this request. Please try again.'
-      }
+    } catch (e) {
+      setIsSearching(false)
+      setError('There was an error with this request. Please try again.')
     }
   }
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-
-    setMlsId(value)
+    setAgentNumber(e.target.value)
 
     if (error) {
       setError('')
@@ -62,53 +61,37 @@ export function AgentConfirm() {
         <Box textAlign="center" pt={3} pb={6}>
           <Typography variant="h4"> Upgrade to agent account </Typography>
         </Box>
-        <Form
-          onSubmit={onSubmit}
-          render={({ handleSubmit, form }) => {
-            const { submitting } = form.getState()
 
-            return (
-              <form onSubmit={handleSubmit}>
-                <Box>
-                  <Typography variant="subtitle2">
-                    Enter your agent license # to unlock MLS features.
-                  </Typography>
-
-                  <Field
-                    component={MUITextInput}
-                    id="mlsId"
-                    label="Agent Number"
-                    placeholder="xxxxxx"
-                    name="mlsId"
-                    variant="filled"
-                    input={{ onChange, value: mlsId }}
-                  />
-                </Box>
-                {error && (
-                  <Box ml={1}>
-                    <Typography color="error" variant="caption">
-                      {error}
-                    </Typography>
-                  </Box>
-                )}
-                <Box mt={2}>
-                  <Button
-                    type="submit"
-                    disabled={submitting || !mlsId}
-                    variant="contained"
-                    color="secondary"
-                  >
-                    {submitting ? 'Searching...' : 'Search'}
-                  </Button>
-                </Box>
-              </form>
-            )
-          }}
-        />
+        <Typography variant="subtitle2">
+          Enter your agent license # to unlock MLS features.
+        </Typography>
+        <Box mb={2} width="50%">
+          <TextField
+            autoFocus
+            fullWidth
+            value={agentNumber}
+            label="Agent Number"
+            placeholder="xxxxxx"
+            variant="filled"
+            size="small"
+            color="secondary"
+            error={!!error}
+            helperText={error}
+            onChange={onChange}
+          />
+        </Box>
+        <Button
+          disabled={isSearching || agentNumber.trim().length === 0}
+          variant="contained"
+          color="secondary"
+          onClick={handleSearch}
+        >
+          {isSearching ? 'Searching...' : 'Search'}
+        </Button>
       </Container>
       <SecretQuestionModal
         isOpen={isModalOpen}
-        mlsId={mlsId}
+        mlsId={agentNumber}
         agents={agents}
         onHide={() => setIsModalOpen(false)}
       />
