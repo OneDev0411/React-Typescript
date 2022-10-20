@@ -530,7 +530,7 @@ class ContactsList extends React.Component {
         isManyContacts ? `these ${selectedRowsLength} contacts` : 'this contact'
       } will remove ${
         isManyContacts ? 'them' : 'it'
-      } from your contacts list, but ${
+      } from your contact list, but ${
         isManyContacts ? 'they' : 'it'
       }  will not be removed from any deals.`
     })
