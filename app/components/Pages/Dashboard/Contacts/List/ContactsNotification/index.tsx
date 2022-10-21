@@ -13,24 +13,32 @@ import { SvgIcon, muiIconSizes } from 'components/SvgIcons'
 
 import { OtherContactsBadge } from '../OtherContactsBadge'
 
-const useStyles = makeStyles(theme => ({
-  button: {
-    height: '42px',
-    width: '42px',
-    minWidth: 'unset',
-    border: 'none',
-    marginRight: theme.spacing(2)
-  },
-  badge: {
-    backgroundColor: theme.palette.error.main,
-    borderRadius: theme.spacing(0.5),
-    right: theme.spacing(0.5)
-  },
-  buttonIcon: { marginTop: theme.spacing(1), color: theme.palette.grey[700] },
-  dropdown: {
-    width: 336
+const useStyles = makeStyles(
+  theme => ({
+    button: {
+      height: '42px',
+      width: '42px',
+      minWidth: 'unset',
+      border: 'none',
+      margin: theme.spacing(0, 2, 0, 1)
+    },
+    badge: {
+      backgroundColor: theme.palette.error.main,
+      borderRadius: theme.spacing(0.5),
+      right: theme.spacing(0.5)
+    },
+    buttonIcon: {
+      marginTop: theme.spacing(1),
+      color: theme.palette.grey[700]
+    },
+    dropdown: {
+      width: 336
+    }
+  }),
+  {
+    name: 'ContactsNotification'
   }
-}))
+)
 
 interface Props {
   parkedContactCount: number

@@ -141,11 +141,11 @@ export const ContactsSegments = ({
           fullWidth
           variant="standard"
           size="medium"
-          autoComplete="no"
-          placeholder="Search"
+          placeholder="Search List"
           value={searchCriteria}
           onChange={handleChangeSearchCriteria}
           InputProps={{
+            autoComplete: 'off', // disable autocomplete and autofill
             className: classes.searchInput,
             endAdornment: (
               <SvgIcon size={muiIconSizes.small} path={mdiMagnify} />
