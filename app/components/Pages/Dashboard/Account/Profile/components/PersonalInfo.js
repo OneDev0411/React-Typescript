@@ -109,6 +109,13 @@ let PersonalInfoForm = ({
           placeholder="https://www.twitter.com/<username>"
         />
         <Field
+          name="pinterest"
+          type="text"
+          label="Pinterest"
+          component={SimpleField}
+          placeholder="https://www.pinterest.com/<username>"
+        />
+        <Field
           name="tiktok"
           type="text"
           label="TikTok"
@@ -165,6 +172,7 @@ const validate = values => {
     linkedin,
     youtube,
     twitter,
+    pinterest,
     tiktok
   } = values
 
@@ -211,6 +219,7 @@ const validate = values => {
     instagram,
     linkedin,
     youtube,
+    pinterest,
     tiktok
   }
 
@@ -237,6 +246,7 @@ export default compose(
         linkedin,
         youtube,
         twitter,
+        pinterest,
         tiktok
       } = user
 
@@ -270,6 +280,7 @@ export default compose(
           linkedin: cleanURL(linkedin),
           youtube: cleanURL(youtube),
           twitter: cleanURL(twitter),
+          pinterest: cleanURL(pinterest),
           tiktok: cleanURL(tiktok)
         }
       }

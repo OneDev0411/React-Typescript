@@ -17,6 +17,7 @@ declare interface IUserBase extends IModel<'user'> {
   linkedin: Nullable<string>
   youtube: Nullable<string>
   instagram: Nullable<string>
+  pinterest: Nullable<string>
   tiktok: Nullable<string>
 }
 declare interface IUserInput extends Partial<IUserBase> {

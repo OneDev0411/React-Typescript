@@ -93,6 +93,10 @@ export function getWebsiteLabels(attributeDef) {
       name: 'twitter-square',
       color: '#1da1f2'
     },
+    pinterest: {
+      name: 'pinterest-square',
+      color: '#1da1f2'
+    },
     tiktok: {
       name: 'tiktok-square',
       color: '#1da1f2'
