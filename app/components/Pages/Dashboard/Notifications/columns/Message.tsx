@@ -13,7 +13,7 @@ const useStyles = makeStyles(
       height: theme.spacing(1),
       borderRadius: '50%',
       backgroundColor: theme.palette.secondary.main,
-      position: 'fixed'
+      position: 'absolute'
     },
     text: {
       paddingLeft: theme.spacing(6),
