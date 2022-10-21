@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { makeStyles, Theme } from '@material-ui/core'
-
 import Table from 'components/Grid/Table'
 import { RenderProps } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
@@ -34,8 +32,6 @@ export default function List({
   isFetching,
   handleNotifClick
 }: Props) {
-  const classes = useStyles()
-
   const columns = [
     {
       header: 'Message',
@@ -64,15 +60,11 @@ export default function List({
 
   return (
     <Table
-      virtualize={false}
       columns={columns}
       rows={notifications}
       totalRows={(notifications || []).length}
       loading={isFetching ? 'middle' : null}
       LoadingStateComponent={LoadingContainer}
-      classes={{
-        row: classes.row
-      }}
     />
   )
 }

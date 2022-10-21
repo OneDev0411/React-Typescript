@@ -53,7 +53,7 @@ declare type TCallback<T> = ((err: any) => void) | ((err: null, res: T) => void)
 
 interface ILabelValue {
   label: Nullable<string>
-  value: Nullable<string>
+  value: Nullable<string | number>
 }
 
 declare interface ApiResponseBody<

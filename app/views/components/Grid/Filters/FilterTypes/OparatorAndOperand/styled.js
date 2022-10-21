@@ -4,11 +4,12 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 export const Container = styled.div`
   padding: 1em;
-  width: 17.5rem;
+  width: 100%;
 `
 
 export const Operator = styled.div`
   cursor: pointer;
+  margin-bottom: 1em;
 `
 
 export const Title = styled.span`
