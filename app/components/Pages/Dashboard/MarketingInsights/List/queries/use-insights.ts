@@ -8,7 +8,7 @@ import { EmailCampaignStatus } from '../../types'
 
 import { listStatus } from './keys'
 
-const LIMIT = 100
+const LIMIT = 50
 
 export function useInsights(status: EmailCampaignStatus, limit = LIMIT) {
   const activeBrandId = useActiveBrandId()
