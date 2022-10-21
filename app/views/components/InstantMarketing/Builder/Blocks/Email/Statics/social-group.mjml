@@ -34,7 +34,7 @@
   ></mj-social-element>
   <mj-social-element
     title="Pinterest"
-    src="https://i.ibb.co/ygXYqX8/pinterest.png"
+    src="https://i.ibb.co/6430mhS/pinterest.png"
     href="{{user.Pinterest}}"
   ></mj-social-element>
   <mj-social-element
