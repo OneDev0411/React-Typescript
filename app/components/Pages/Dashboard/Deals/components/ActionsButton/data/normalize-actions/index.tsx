@@ -1,6 +1,6 @@
 import sortBy from 'lodash/sortBy'
 
-import { StateContext } from 'deals/contexts/actions-context'
+import { DealTaskActionsStateContext } from 'deals/contexts/actions-context'
 
 import { actionsDefaultProperties } from '../default-properties'
 
@@ -10,7 +10,7 @@ interface TaskActions {
 }
 
 export function normalizeActions(
-  stateActions: StateContext['actions'],
+  stateActions: DealTaskActionsStateContext['actions'],
   actions: ActionButtonId[],
   { isTaskViewActionActive, isTaskDocusignActionActive }: TaskActions
 ): ActionButton[] {

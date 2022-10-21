@@ -2,6 +2,14 @@ import { makeStyles, Theme } from '@material-ui/core'
 
 export const useStyles = makeStyles(
   (theme: Theme) => ({
+    '@keyframes blinkTask': {
+      from: {
+        backgroundColor: theme.palette.info.ultralight
+      },
+      to: {
+        backgroundColor: '#fff'
+      }
+    },
     container: {
       position: 'relative'
     },
@@ -20,6 +28,9 @@ export const useStyles = makeStyles(
       },
       '&:hover': {
         backgroundColor: theme.palette.info.ultralight
+      },
+      '&.selected-by-task-param': {
+        animation: '$blinkTask 0.3s linear 5 alternate'
       }
     },
     divider: {

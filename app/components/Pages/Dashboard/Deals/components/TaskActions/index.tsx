@@ -38,10 +38,10 @@ import {
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import {
-  CANCEL,
   REMOVE_ATTACHMENT,
   SET_DRAWER_STATUS,
-  SET_FORM_META
+  SET_FORM_META,
+  CANCEL
 } from '../../contexts/actions-context/constants'
 import { useChecklistActionsContext } from '../../contexts/actions-context/hooks'
 import GetSignature from '../../Signature'
@@ -145,64 +145,69 @@ export function TaskActions({ deal }: Props) {
               icon={mdiClose}
               onClick={handleCancel}
             />
-            <GridActionButton
-              label={
-                <Box className={classes.summary}>
-                  <span>{pluralize('Document', state.attachments.length)}</span>
-                  <BaseDropdown
-                    renderDropdownButton={props => (
-                      <span
-                        ref={props.ref}
-                        onClick={props.onClick}
-                        className={classes.reviewSelection}
-                      >
-                        View
-                      </span>
-                    )}
-                    renderMenu={() => (
-                      <MenuList>
-                        {state.attachments.map((attachment, index) => (
-                          <MenuItem key={index}>
-                            <Box
-                              display="flex"
-                              alignItems="center"
-                              justifyContent="space-between"
-                              style={{ width: '100%' }}
-                            >
-                              <Box flex={9}>
-                                <a href={attachment.url} target="_blank">
-                                  <TextMiddleTruncate
-                                    text={attachment.name}
-                                    maxLength={50}
-                                  />
-                                </a>
-                              </Box>
-
-                              <IconButton
-                                edge="end"
-                                aria-label="delete"
-                                size="small"
-                                className={iconClasses.leftMargin}
-                                onClick={() =>
-                                  handleRemoveAttachment(attachment)
-                                }
+            {state.attachments.length > 0 && (
+              <GridActionButton
+                label={
+                  <Box className={classes.summary}>
+                    <span>
+                      {pluralize('Document', state.attachments.length)}
+                    </span>
+                    <BaseDropdown
+                      renderDropdownButton={props => (
+                        <span
+                          ref={props.ref}
+                          onClick={props.onClick}
+                          className={classes.reviewSelection}
+                        >
+                          View
+                        </span>
+                      )}
+                      renderMenu={() => (
+                        <MenuList>
+                          {state.attachments.map((attachment, index) => (
+                            <MenuItem key={index}>
+                              <Box
+                                display="flex"
+                                alignItems="center"
+                                justifyContent="space-between"
+                                style={{ width: '100%' }}
                               >
-                                <SvgIcon path={mdiTrashCanOutline} />
-                              </IconButton>
-                            </Box>
-                          </MenuItem>
-                        ))}
-                      </MenuList>
-                    )}
-                  />
-                </Box>
-              }
-              textIcon={
-                <Typography variant="h6" className={classes.selectedCount}>
-                  {state.attachments.length}
-                </Typography>
-              }
-            />
+                                <Box flex={9}>
+                                  <a href={attachment.url} target="_blank">
+                                    <TextMiddleTruncate
+                                      text={attachment.name}
+                                      maxLength={50}
+                                    />
+                                  </a>
+                                </Box>
+
+                                <IconButton
+                                  edge="end"
+                                  aria-label="delete"
+                                  size="small"
+                                  className={iconClasses.leftMargin}
+                                  onClick={() =>
+                                    handleRemoveAttachment(attachment)
+                                  }
+                                >
+                                  <SvgIcon path={mdiTrashCanOutline} />
+                                </IconButton>
+                              </Box>
+                            </MenuItem>
+                          ))}
+                        </MenuList>
+                      )}
+                    />
+                  </Box>
+                }
+                textIcon={
+                  <Typography variant="h6" className={classes.selectedCount}>
+                    {state.attachments.length}
+                  </Typography>
+                }
+              />
+            )}
+
             {state.actions.some(id =>
               [DOCUSIGN_FORM, DOCUSIGN_ENVELOPE, DOCUSIGN_FILE].includes(id)
             ) && (
@@ -214,7 +219,7 @@ export function TaskActions({ deal }: Props) {
             )}
 
             {state.actions.some(id =>
-              [EMAIL_FILE, EMAIL_ENVELOPE, EMAIL_FORM].includes(id)
+              [EMAIL_FORM, EMAIL_ENVELOPE, EMAIL_FILE].includes(id)
             ) && (
               <GridActionButton
                 label="Email"
@@ -222,6 +227,8 @@ export function TaskActions({ deal }: Props) {
                 onClick={handleOpenDrawer}
               />
             )}
+
+            {state.buttons?.(state)}
           </Box>
         </Slide>
       )}
@@ -230,7 +237,7 @@ export function TaskActions({ deal }: Props) {
         isOpen={
           state.isDrawerOpen &&
           state.actions.some(id =>
-            [EMAIL_FORM, EMAIL_ENVELOPE, EMAIL_FORM].includes(id)
+            [EMAIL_FORM, EMAIL_ENVELOPE, EMAIL_FILE].includes(id)
           )
         }
         initialValues={{

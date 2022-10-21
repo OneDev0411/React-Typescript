@@ -1,8 +1,16 @@
 import { useContext } from 'react'
 
-import { StateContext, DispatchContext } from '..'
+import {
+  StateContext,
+  DispatchContext,
+  DealTaskActionsDispatchContext,
+  DealTaskActionsStateContext
+} from '..'
 
-export function useChecklistActionsContext(): [StateContext, DispatchContext] {
+export function useChecklistActionsContext(): [
+  DealTaskActionsStateContext,
+  DealTaskActionsDispatchContext
+] {
   const state = useContext(StateContext)
   const dispatch = useContext(DispatchContext)
 

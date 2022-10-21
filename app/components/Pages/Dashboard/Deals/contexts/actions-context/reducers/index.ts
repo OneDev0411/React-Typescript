@@ -5,31 +5,41 @@ import {
   UrlBasedEmailAttachmentInput
 } from 'components/EmailCompose'
 
-import { StateContext } from '..'
+import { DealTaskActionsStateContext } from '..'
+import { SELECT_TASK } from '../../../components/ActionsButton/data/action-buttons'
 import {
   ADD_ATTACHMENTS,
   CANCEL,
+  RESET,
   REMOVE_ATTACHMENT,
+  SELECT_TASKS,
   SET_DRAWER_STATUS,
   SET_FORM_META,
   SET_MODE
 } from '../constants'
 
-export const initialState: StateContext = {
+export const initialState: DealTaskActionsStateContext = {
+  type: '',
   isDrawerOpen: false,
   actions: [],
   attachments: [],
+  tasks: [],
   form: undefined,
+  buttons: undefined,
   mode: {
     type: null,
     taskId: null
   }
 }
 
-export function reducer(state = initialState, action: any): StateContext {
+export function reducer(
+  state = initialState,
+  action: any
+): DealTaskActionsStateContext {
   switch (action.type) {
     case ADD_ATTACHMENTS:
       return {
+        ...initialState,
         ...state,
         actions: action.actions ?? state.actions,
         attachments: action.attachments
@@ -47,6 +57,13 @@ export function reducer(state = initialState, action: any): StateContext {
               )
             : state.form.attachments
         }
+      }
+
+    case SELECT_TASKS:
+      return {
+        ...state,
+        ...action,
+        actions: [SELECT_TASK]
       }
 
     case REMOVE_ATTACHMENT:
@@ -86,6 +103,7 @@ export function reducer(state = initialState, action: any): StateContext {
       }
 
     case CANCEL:
+    case RESET:
       return {
         ...state,
         ...initialState

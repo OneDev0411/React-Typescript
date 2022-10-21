@@ -2,7 +2,7 @@ export function getEnvelopeAttachments(
   task: IDealTask,
   envelope: IDealEnvelope
 ) {
-  return (envelope.documents || []).filter(document => {
+  return (envelope?.documents ?? []).filter(document => {
     if (document.task === task.id) {
       return true
     }
