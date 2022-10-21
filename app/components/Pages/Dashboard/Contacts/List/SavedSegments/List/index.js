@@ -96,7 +96,11 @@ class SegmentsList extends React.Component {
     if (this.props.areListsFetched && list.length === 0) {
       return (
         <ListItem disabled>
-          <ListItemText disableTypography>No result!</ListItemText>
+          <ListItemText disableTypography>
+            {this.props.list.length === 0
+              ? "You don't have any list!"
+              : 'No result!'}
+          </ListItemText>
         </ListItem>
       )
     }
