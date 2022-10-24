@@ -4,6 +4,7 @@ import { Button } from '@material-ui/core'
 import { mdiEmailOutline } from '@mdi/js'
 import { useSelector } from 'react-redux'
 
+import { useBaseUrl } from '@app/hooks/use-base-url'
 import { IAppState } from '@app/reducers'
 import { selectDealRoles } from '@app/reducers/deals/roles'
 import {
@@ -11,7 +12,6 @@ import {
   SingleEmailComposeDrawer
 } from '@app/views/components/EmailCompose'
 import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
-import config from 'config'
 import {
   EMAIL_ENVELOPE,
   EMAIL_FILE,
@@ -41,6 +41,7 @@ export function NotifyAgents({ deal }: Props) {
   const roles = useSelector<IAppState, IDealRole[]>(({ deals }) =>
     selectDealRoles(deals.roles, deal)
   )
+  const baseUrl = useBaseUrl()
 
   const handleNotifyAgents = () => {
     dispatch({
@@ -81,7 +82,7 @@ export function NotifyAgents({ deal }: Props) {
   }
 
   const getTaskLink = (task: IDealTask) =>
-    `${config.app.url}/dashboard/deals/${deal.id}?task-detail=${task.id}`
+    `${baseUrl}/dashboard/deals/${deal.id}?task-detail=${task.id}`
 
   const handleClickAddDealAttachments = (formValues: EmailFormValues) => {
     dispatch({
