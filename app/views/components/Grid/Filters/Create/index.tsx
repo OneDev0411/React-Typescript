@@ -25,7 +25,6 @@ const useStyles = makeStyles(
       width: '300px'
     },
     filterList: {
-      minHeight: '250px',
       maxHeight: '330px',
       overflowY: 'auto'
     },
