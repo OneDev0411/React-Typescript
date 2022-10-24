@@ -1,4 +1,3 @@
-import { Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import SaveSegment from '@app/components/Pages/Dashboard/Contacts/List/SavedSegments/Create'
@@ -21,8 +20,6 @@ import getFlows from './helpers/get-flows'
 import getOpenHouseEvents from './helpers/get-open-house-events'
 import getUniqTags from './helpers/get-uniq-tags'
 import { useGetCustomFilters } from './hooks/use-get-custom-filters'
-
-const CONTAINER_MIN_HEIGHT = 63
 
 export default function ContactFilters(props) {
   const activeBrandId = useActiveBrandId()
@@ -87,20 +84,18 @@ export default function ContactFilters(props) {
   }
 
   return (
-    <Box display="flex" alignItems="center" minHeight={CONTAINER_MIN_HEIGHT}>
-      <Filters
-        name="contacts"
-        plugins={['segments']}
-        config={getConfig()}
-        createFiltersFromSegment={createFiltersFromSegment}
-        getPredefinedLists={getPredefinedContactLists}
-        onChange={() => props.onFilterChange()}
-        disableConditionOperators={props.disableConditionOperators}
-      >
-        <SaveSegment
-          createSegmentFromFilters={createSegmentFromFilters(conditionOperator)}
-        />
-      </Filters>
-    </Box>
+    <Filters
+      name="contacts"
+      plugins={['segments']}
+      config={getConfig()}
+      createFiltersFromSegment={createFiltersFromSegment}
+      getPredefinedLists={getPredefinedContactLists}
+      onChange={() => props.onFilterChange()}
+      disableConditionOperators={props.disableConditionOperators}
+    >
+      <SaveSegment
+        createSegmentFromFilters={createSegmentFromFilters(conditionOperator)}
+      />
+    </Filters>
   )
 }

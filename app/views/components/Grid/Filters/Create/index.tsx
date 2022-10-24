@@ -22,7 +22,9 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       padding: theme.spacing(1),
-      width: '300px',
+      width: '300px'
+    },
+    filterList: {
       maxHeight: '330px',
       overflowY: 'auto'
     },
@@ -89,7 +91,7 @@ export function AddFilter({ disabled, config, onNewFilter }: Props) {
     }
 
     return (
-      <List>
+      <List className={classes.filterList}>
         {filters.map((item, index) => (
           <FilterItemTooltip key={index} item={item}>
             <ListItem
