@@ -19,7 +19,7 @@ export const PrimaryAction = styled.div<{
     justify-content: center;
     height: 100%;
     ${theme.typography.subtitle2};
-
+    width: max-content;
     width: ${(props: PrimaryActionProps) =>
       props.hasSecondaryActions ? '8.5rem' : 'auto'};
     padding: ${(props: PrimaryActionProps) =>
@@ -38,7 +38,7 @@ export const PrimaryAction = styled.div<{
     `
       border-radius: ${theme.shape.borderRadius}px;
 
-      &.Add {
+      &.Add, &.Select {
         &:before {
           content '+';
           padding-right: 0.5rem;
@@ -49,7 +49,7 @@ export const PrimaryAction = styled.div<{
         background-color: ${theme.palette.secondary.main};
       }
 
-      &.Remove {
+      &.Remove, &.Unselect {
         &:before {
           content '× ';
           padding-right: 0.5rem;

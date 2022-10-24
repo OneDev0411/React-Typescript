@@ -7,6 +7,7 @@ import { SyncedContacts as SyncedContactsTypes } from '../utils/get-synced-conta
 import { ViewSwitcher } from '../ViewSwitcher'
 
 export type ViewModeType = 'table' | 'board'
+const CONTAINER_MIN_HEIGHT = 63 // based the value Alireza provided I just moved it here
 
 export interface Props {
   handleFilterChange: (newFilters: object, resetLoadedRanges: boolean) => void
@@ -61,15 +62,28 @@ export const Header = ({
           tagListProps={tagListProps}
         />
       </Grid>
-      <Grid container justifyContent="space-between" alignItems="center">
-        <ContactFilters
-          show={filter?.show}
-          contactCount={contactCount}
-          activeSegment={activeSegment}
-          onFilterChange={() => handleFilterChange({}, true)}
-          viewMode={viewMode}
-          users={users}
-        />
+      <Grid
+        container
+        wrap="nowrap"
+        alignItems="center"
+        justifyContent="flex-end"
+      >
+        <Box
+          display="flex"
+          alignItems="center"
+          flexGrow={1}
+          minHeight={CONTAINER_MIN_HEIGHT}
+        >
+          <ContactFilters
+            show={filter?.show}
+            contactCount={contactCount}
+            activeSegment={activeSegment}
+            onFilterChange={() => handleFilterChange({}, true)}
+            viewMode={viewMode}
+            users={users}
+          />
+        </Box>
+
         <Box display="flex">
           <SortFields {...sortProps} />
           <ViewSwitcher onChangeView={onChangeView} activeView={viewMode} />

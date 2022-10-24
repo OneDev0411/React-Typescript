@@ -50,6 +50,7 @@ import { CONTACTS_SEGMENT_NAME } from '../constants'
 
 import {
   FLOW_FILTER_ID,
+  RELEVANCE_SORT_KEY,
   CONTACT_CHUNK_COUNT,
   OPEN_HOUSE_FILTER_ID,
   SORT_FIELD_SETTING_KEY,
@@ -98,11 +99,10 @@ class ContactsList extends React.Component {
     const { getSetting, fetchTags, getContactsTags } = this.props
     const { parkedContactsCount, searchInputValue } = this.state
     const sortFieldSetting = getSetting(SORT_FIELD_SETTING_KEY)
-    const relevanceSortKey = '-last_touch_rank'
 
     const order = searchInputValue
-      ? relevanceSortKey
-      : sortFieldSetting && sortFieldSetting !== relevanceSortKey
+      ? RELEVANCE_SORT_KEY
+      : sortFieldSetting && sortFieldSetting !== RELEVANCE_SORT_KEY
       ? sortFieldSetting
       : '-last_touch'
 
@@ -404,12 +404,11 @@ class ContactsList extends React.Component {
   handleSearch = value => {
     const { sortOrder } = this.state
     const { getSetting } = this.props
-    const relevanceSortKey = '-last_touch_rank'
     let order = sortOrder
 
     if (value) {
-      order = relevanceSortKey
-    } else if (order === relevanceSortKey) {
+      order = RELEVANCE_SORT_KEY
+    } else if (order === RELEVANCE_SORT_KEY) {
       order = getSetting(SORT_FIELD_SETTING_KEY, '-last_touch')
     }
 
@@ -435,14 +434,19 @@ class ContactsList extends React.Component {
       return
     }
 
-    const { setActiveTeamSetting } = this.props
-
     this.setState(
       {
         sortOrder: order
       },
       () => this.handleFilterChange({}, true)
     )
+
+    if (order === RELEVANCE_SORT_KEY) {
+      return
+    }
+
+    const { setActiveTeamSetting } = this.props
+
     setActiveTeamSetting(SORT_FIELD_SETTING_KEY, order)
   }
 
@@ -737,7 +741,7 @@ class ContactsList extends React.Component {
     this.reloadContacts()
   }
 
-  renderHeader = (props = {}) => {
+  renderHeader = () => {
     const { selectedShortcutFilter, searchInputValue, sortOrder, viewMode } =
       this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
@@ -778,7 +782,6 @@ class ContactsList extends React.Component {
           activeSegment={activeSegment}
           onChangeView={this.changeViewMode}
           viewMode={viewMode}
-          {...props}
         />
       </>
     )

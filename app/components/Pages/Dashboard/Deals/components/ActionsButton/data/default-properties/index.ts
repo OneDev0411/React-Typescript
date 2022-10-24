@@ -35,10 +35,16 @@ import {
   DECLINE_TASK,
   SPLIT_PDF,
   TASK_ACL,
-  OPEN_APPLICATION
+  OPEN_APPLICATION,
+  SELECT_TASK
 } from '../action-buttons'
 
 type ActionType = 'Form' | 'Envelope' | 'File'
+interface ActionsState {
+  actions: string[]
+  tasks: IDealTask[]
+  attachments: IDealFile[]
+}
 
 export const actionsDefaultProperties = {
   [EDIT_FORM]: {
@@ -160,7 +166,21 @@ export const actionsDefaultProperties = {
   [OPEN_APPLICATION]: {
     label: 'Open App',
     type: 'application-open'
+  },
+  [SELECT_TASK]: {
+    label: getSelectTaskLabel.bind(null),
+    type: 'select-task'
   }
+}
+
+function getSelectTaskLabel({
+  state,
+  task
+}: {
+  state: ActionsState
+  task: IDealTask
+}) {
+  return state.tasks.find(({ id }) => task.id === id) ? 'Unselect' : 'Select'
 }
 
 function getDocusignLabel(
@@ -171,10 +191,7 @@ function getDocusignLabel(
     file,
     envelope
   }: {
-    state: {
-      actions: string[]
-      attachments: IDealFile[]
-    }
+    state: ActionsState
     task: IDealTask
     file: IFile
     envelope: IDealEnvelope

@@ -2,6 +2,8 @@ import React, { ReactNode } from 'react'
 
 import { connect } from 'react-redux'
 
+import { IAttributeDefsState } from '@app/reducers/contacts/attributeDefs'
+import { selectContactAttributeDefs } from '@app/selectors/contacts'
 import { createActiveFilters } from 'actions/filter-segments/active-filters'
 import { OAuthProvider } from 'constants/contacts'
 import { IAppState } from 'reducers'
@@ -15,6 +17,7 @@ interface RenderProps {
 }
 
 interface Props {
+  attributeDefs: IAttributeDefsState
   provider: OAuthProvider
   createFilters: (filters) => any
   getOrganizedContactsList: () => Partial<IContactList>
@@ -25,7 +28,11 @@ function OrganizeSyncedContactsButton(props: Props) {
   function applyFilters() {
     const segment = props.getOrganizedContactsList()
 
-    props.createFilters(createFiltersFromSegment(segment))
+    props.createFilters(
+      createFiltersFromSegment(segment, {
+        attributeDefs: props.attributeDefs
+      })
+    )
 
     return segment.filters || []
   }
@@ -33,15 +40,18 @@ function OrganizeSyncedContactsButton(props: Props) {
   return <>{props.children({ applyFilters })}</>
 }
 
-function mapStateToProps({ contacts }: IAppState, props: Props) {
+function mapStateToProps(state: IAppState, props: Props) {
+  const attributeDefs = selectContactAttributeDefs(state)
+
   return {
+    attributeDefs,
     getOrganizedContactsList: () =>
-      getOrganizeSyncedContactsList(contacts.attributeDefs, props.provider)
+      getOrganizeSyncedContactsList(attributeDefs, props.provider)
   }
 }
 
 export default connect<
-  Pick<Props, 'getOrganizedContactsList'>,
+  Pick<Props, 'getOrganizedContactsList' | 'attributeDefs'>,
   Pick<Props, 'createFilters'>
 >(mapStateToProps, dispatch => ({
   createFilters: filters => dispatch(createActiveFilters('contacts', filters))
