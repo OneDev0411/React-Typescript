@@ -60,6 +60,7 @@ export function setImage(model: Model, url: string): void {
     const elementStyle = { ...model.get('style') }
 
     elementStyle['background-image'] = `url(${url})`
+    elementStyle['background-position'] = 'center'
     model.set('style', elementStyle)
 
     return

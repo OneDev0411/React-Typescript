@@ -1,16 +1,19 @@
-import { createContext } from 'react'
+import React, { createContext } from 'react'
 
 import { EmailFormValues } from 'components/EmailCompose'
 import { FormValues } from 'deals/Signature/types'
 
 import { initialState } from './reducers'
 
-export type DispatchContext = React.Dispatch<any>
+export type DealTaskActionsDispatchContext = React.Dispatch<any>
 
-export interface StateContext {
+export interface DealTaskActionsStateContext {
+  type: string
   actions: ActionButtonId[]
   attachments: IDealFile[]
   form?: EmailFormValues | FormValues
+  tasks?: IDealTask[]
+  buttons?: (state: DealTaskActionsStateContext) => React.ReactNode[]
   isDrawerOpen: boolean
   mode: {
     type: Nullable<'View/Print' | 'Docusign'>
@@ -19,6 +22,9 @@ export interface StateContext {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const StateContext = createContext<StateContext>(initialState)
+export const StateContext =
+  createContext<DealTaskActionsStateContext>(initialState)
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const DispatchContext = createContext<DispatchContext>(() => null)
+export const DispatchContext = createContext<DealTaskActionsDispatchContext>(
+  () => null
+)

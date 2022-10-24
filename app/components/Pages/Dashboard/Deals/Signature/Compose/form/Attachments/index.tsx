@@ -38,7 +38,7 @@ export function Attachments({ isSubmitting, onClickAddAttachments }: Props) {
   const handleAddAttachments = () => {
     actionsDispatch({
       type: SET_DRAWER_STATUS,
-      isDrawerOpen: false
+      isDrawerOpen: true
     })
 
     onClickAddAttachments()

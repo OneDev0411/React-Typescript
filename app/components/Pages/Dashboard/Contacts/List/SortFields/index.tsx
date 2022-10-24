@@ -10,7 +10,8 @@ const useStyles = makeStyles(
     title: {
       ...theme.typography.body3,
       color: theme.palette.grey[600],
-      marginRight: theme.spacing(1)
+      marginRight: theme.spacing(1),
+      whiteSpace: 'nowrap'
     }
   }),
   { name: 'ContactsSortFields' }

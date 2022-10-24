@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react'
 
+import { Button } from '@material-ui/core'
 import { mdiRadioboxBlank, mdiRadioboxMarked } from '@mdi/js'
 import PropTypes from 'prop-types'
 
-import { DoneButton } from 'components/Grid/Filters/Item/styled'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -126,15 +126,16 @@ export class OperatorAndOperandFilter extends React.Component {
               </div>
             </Operator>
           ))}
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            disabled={!this.props.values || this.props.values.length === 0}
+            onClick={this.props.onToggleFilterActive}
+          >
+            Done
+          </Button>
         </Container>
-        <DoneButton
-          disabled={!this.props.values || this.props.values.length === 0}
-          appearance="link"
-          onClick={this.props.onToggleFilterActive}
-          data-test="filter-done-button"
-        >
-          Done
-        </DoneButton>
       </Fragment>
     )
   }
