@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { Grid, Box } from '@material-ui/core'
 import { mdiChevronDown, mdiChevronRight } from '@mdi/js'
@@ -24,10 +24,12 @@ import { TaskNotifications } from '../Notification'
 import { TaskItems } from '../TaskItems'
 
 import { Activity } from './Activity'
-import { getTaskActions } from './get-task-actions'
 import { useStyles } from './styles'
 import { TaskBadge } from './TaskBadge'
 import { TaskSplitter } from './TaskSplitter'
+import { useTaskActions } from './use-task-actions'
+import { useTaskDetails } from './use-task-details'
+import { useTaskSelect } from './use-task-select'
 
 interface Props {
   index: number
@@ -45,6 +47,7 @@ export function TaskRow({
   isBackOffice
 }: Props) {
   const classes = useStyles()
+  const queryParamSelectTaskId = useTaskSelect(task)
 
   const dispatch = useDispatch()
   const [checklistBulkActionsContext] = useChecklistActionsContext()
@@ -66,12 +69,22 @@ export function TaskRow({
   const { attachments } = task.room
   const file = attachments ? attachments[0] : undefined
 
-  const actions: ActionButtonId[] = getTaskActions({
+  const actions: ActionButtonId[] = useTaskActions({
     task,
     envelope,
     file,
     isBackOffice
   })
+
+  const handleSelectTask = useCallback(() => {
+    dispatch(setSelectedTask(task))
+
+    if (task.room.new_notifications > 0) {
+      setTimeout(() => {
+        dispatch(updateDealNotifications(deal, task.room))
+      }, 0)
+    }
+  }, [deal, task, dispatch])
 
   const isTaskExpandable = useMemo(() => {
     let count = 0
@@ -98,15 +111,7 @@ export function TaskRow({
     }, 0)
   }
 
-  const handleSelectTask = () => {
-    dispatch(setSelectedTask(task))
-
-    if (task.room.new_notifications > 0) {
-      setTimeout(() => {
-        dispatch(updateDealNotifications(deal, task.room))
-      }, 0)
-    }
-  }
+  useTaskDetails(deal, task, handleSelectTask)
 
   return (
     <Draggable
@@ -128,8 +133,17 @@ export function TaskRow({
           {task.task_type === 'Splitter' ? (
             <TaskSplitter task={task} />
           ) : (
-            <Grid container className={classes.container}>
-              <Grid container className={classes.row}>
+            <Grid
+              id={`task-${task.id}`}
+              container
+              className={classes.container}
+            >
+              <Grid
+                container
+                className={cn(classes.row, {
+                  'selected-by-task-param': task.id === queryParamSelectTaskId
+                })}
+              >
                 <Box
                   display="flex"
                   alignItems="center"

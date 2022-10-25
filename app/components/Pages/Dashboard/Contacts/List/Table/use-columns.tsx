@@ -30,7 +30,8 @@ import { BirthdayCell } from './columns/Birthday'
 import { EmailsCell } from './columns/Emails'
 import { FlowsCell } from './columns/Flows'
 import { HomeAnniversary } from './columns/HomeAnniversary'
-import LastTouched from './columns/LastTouched'
+import LastTouch from './columns/LastTouch'
+import NextTouch from './columns/NextTouch'
 import { PhonesCell } from './columns/Phones'
 import { TagsCell } from './columns/Tags'
 
@@ -147,9 +148,21 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       header: () => <HeaderColumn text="Last Touch" iconPath={mdiCalendar} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
-          <LastTouched contact={contact} />
+          <LastTouch contact={contact} />
         </div>
       )
+    },
+    {
+      id: 'next-touch',
+      width: '150px',
+      header: () => <HeaderColumn text="Next Touch" iconPath={mdiCalendar} />,
+      render: ({ row: contact }) => {
+        return (
+          <div className={classes.cell}>
+            <NextTouch contact={contact} />
+          </div>
+        )
+      }
     },
     {
       id: 'flows',

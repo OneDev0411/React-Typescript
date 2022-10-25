@@ -9,8 +9,8 @@ import { browserHistory } from 'react-router'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 import { getContactsTags } from '@app/store_actions/contacts'
+import { MaskedInput } from '@app/views/components/MaskedInput'
 import { TextField } from 'components/final-form-fields'
-import { MaskedInput } from 'components/MaskedInput'
 import { addNotification as notify } from 'components/notification'
 import Drawer from 'components/OverlayDrawer'
 import { createContacts } from 'models/contacts/create-contacts'
@@ -25,14 +25,6 @@ import { generateInitialValues } from './helpers/generate-initial-values'
 import { Owner } from './Owner'
 import { Phones } from './Phones'
 import { Tags } from './Tags'
-
-const numberMask = createNumberMask({
-  prefix: '',
-  includeThousandsSeparator: false,
-  allowNegative: false,
-  allowLeadingZeroes: false,
-  allowDecimal: false
-})
 
 const propTypes = {
   isOpen: PropTypes.bool,
@@ -188,10 +180,15 @@ class NewContactDrawer extends React.Component {
                       placeholder="How frequently do you want to be in touch with this contact (day)"
                       InputProps={{
                         inputProps: {
-                          'aria-label': 'Remind to touch every',
-                          mask: numberMask
+                          mask: createNumberMask({
+                            prefix: '',
+                            includeThousandsSeparator: false,
+                            allowNegative: false,
+                            allowLeadingZeroes: false,
+                            allowDecimal: false
+                          })
                         },
-                        inputComponent: numberMask ? MaskedInput : undefined
+                        inputComponent: MaskedInput
                       }}
                     />
                     <Emails

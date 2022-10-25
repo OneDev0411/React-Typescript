@@ -4,7 +4,7 @@ import { Editor } from 'grapesjs'
 import AgentGridIcon from 'assets/images/marketing/editor/blocks/agent-grid.png'
 import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
 import AgentMultiIcon from 'assets/images/marketing/editor/blocks/multi-agent.png'
-import { Agent, BrandedUser } from 'components/TeamAgents/types'
+import { Agent } from 'components/TeamAgents/types'
 import { getNameInitialsPlaceholderImage } from 'utils/helpers'
 
 import { AGENTS_BLOCK_CATEGORY } from '../../../constants'

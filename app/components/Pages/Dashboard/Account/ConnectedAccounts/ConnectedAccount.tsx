@@ -48,7 +48,7 @@ export default function ConnectedAccount({ account, onSync, onDelete }: Props) {
           {getContactNameInitials(account)}
         </Avatar>
       </ListItemAvatar>
-      <Grid container>
+      <Grid container alignItems="center">
         <Grid item xs={4}>
           <ListItemText
             primary={account.email}
@@ -84,9 +84,11 @@ export default function ConnectedAccount({ account, onSync, onDelete }: Props) {
           />
         </Grid>
 
-        <Grid item xs={6} direction="row" alignItems="center">
+        <Grid item xs={7} direction="row" alignItems="center">
           <Box display="flex" alignItems="center">
-            <ConnectedAccountSyncStatus account={account} />
+            <Box marginRight={1}>
+              <ConnectedAccountSyncStatus account={account} />
+            </Box>
             <SyncButton account={account} onSync={onSync} />
           </Box>
         </Grid>

@@ -20,6 +20,7 @@ import { useGetOriginQueryParam } from '../../../hooks/use-get-origin-query-para
 
 import { Email } from './Email'
 import { MakeVisible } from './MakeVisibleToOffice'
+import { NotifyAgents } from './NotifyAgent'
 
 interface Props {
   deal: IDeal
@@ -73,6 +74,8 @@ export const Menu = withRouter(
         )}
 
         <YardSign deal={deal} />
+
+        {isBackOffice && !deal.is_draft && <NotifyAgents deal={deal} />}
 
         <Email />
 

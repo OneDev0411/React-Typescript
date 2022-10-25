@@ -15,6 +15,7 @@ export const Tab = withStyles(theme => ({
   },
   selected: {
     ...theme.typography.subtitle1,
+    borderBottom: `2px solid ${theme.palette.primary.main}`,
     '& button[aria-controls="menu-list-grow"]': {
       ...theme.typography.subtitle1
     }

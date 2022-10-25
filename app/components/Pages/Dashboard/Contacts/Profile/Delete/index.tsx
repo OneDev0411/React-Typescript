@@ -34,7 +34,7 @@ export default function Delete(props: Props) {
       message: 'Delete contact?',
       description:
         // eslint-disable-next-line max-len
-        'Deleting this contact will remove it from your contacts list, but it will not be removed from any deals.',
+        'Deleting this contact will remove it from your contact list, but it will not be removed from any deals.',
       confirmLabel: 'Delete',
       onConfirm: props.handleDelete
     })

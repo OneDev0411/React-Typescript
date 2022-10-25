@@ -19,6 +19,7 @@ declare interface IContactAttributeDefInput {
   required?: boolean
   singular?: boolean
   searchable?: boolean
+  filterable?: boolean
   has_label?: boolean
   labels?: string[]
   enum_values?: string[]
@@ -35,6 +36,7 @@ declare interface IContactAttributeDef {
   editable: boolean
   singular: boolean
   searchable: boolean
+  filterable: boolean
   required: boolean
   has_label: boolean
   labels: Nullable<string[]>
@@ -102,6 +104,7 @@ declare interface IContact extends IContactBase {
   deals?: IDeal[]
   lists?: UUID[]
   flows?: UUID[]
+  assignees?: IAssignee[]
   summary?: IContactSummary
   created_by?: IUser
   updated_by?: IUser
@@ -360,4 +363,12 @@ declare interface IContactActiveFilters {
   isActive: boolean
   operator?: TContactFilterOperator
   values: { label: string; value: string }[]
+}
+
+declare interface IAssignee {
+  id: UUID
+  role: string
+  type: string
+  user?: BrandedUser
+  brand?: IBrand
 }

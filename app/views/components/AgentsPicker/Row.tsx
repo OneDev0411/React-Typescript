@@ -1,6 +1,5 @@
 import { Box, Typography } from '@material-ui/core'
 
-import { BrandedUser } from './types'
 import { UserRow } from './UserRow'
 
 export enum RowType {

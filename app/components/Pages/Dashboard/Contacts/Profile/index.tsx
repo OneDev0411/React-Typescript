@@ -10,9 +10,11 @@ import { withRouter } from 'react-router'
 import { useEffectOnce, useTitle } from 'react-use'
 
 import { useGetGlobalTriggers } from '@app/components/Pages/Dashboard/Account/Triggers/hooks/use-get-global-triggers'
+import { useActiveBrand } from '@app/hooks/brand'
 import useConfirmation from '@app/hooks/use-confirmation'
 import useNotify from '@app/hooks/use-notify'
 import { updateContactTouchReminder } from '@app/models/contacts/update-contact-touch-reminder'
+import Acl from '@app/views/components/Acl'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import PageLayout from 'components/GlobalPageLayout'
 import { deleteContacts } from 'models/contacts/delete-contact'
@@ -33,6 +35,7 @@ import skipEmailThreadChangeEvent from '../../Inbox/helpers/skip-email-thread-ch
 import { Container } from '../components/Container'
 
 import AddressesSection from './Addresses'
+import Assignee from './Assignee'
 import AddEvent from './components/AddEvent'
 import AddNote from './components/AddNote'
 import { ContactInfo } from './ContactInfo'
@@ -117,6 +120,7 @@ const ContactProfile = props => {
   useGetGlobalTriggers()
 
   const notify = useNotify()
+  const activeBrand = useActiveBrand()
 
   const classes = useStyles()
   const confirmation = useConfirmation()
@@ -150,7 +154,10 @@ const ContactProfile = props => {
             'flow_step.crm_task',
             'email_campaign.from',
             'email_campaign.template',
-            'template_instance.template'
+            'template_instance.template',
+            'contact.assignees',
+            'contact_role.user',
+            'contact_role.brand'
           ]
         })
 
@@ -369,11 +376,11 @@ const ContactProfile = props => {
 
   const updateAttributeSubmitCallback = (
     contact: INormalizedContact,
-    updatedAttribute: IContactAttributeDef
+    updatedAttribute?: IContactAttributeDef
   ) => {
     setNewContact(contact)
 
-    if (updatedAttribute.data_type === 'date') {
+    if (updatedAttribute?.data_type === 'date') {
       fetchTimeline()
     }
   }
@@ -479,6 +486,9 @@ const ContactProfile = props => {
               <Deals contact={contact} />
               <Details {..._props} />
               <Partner {..._props} />
+              <Acl.Beta>
+                <Assignee {..._props} />
+              </Acl.Beta>
               <Owner
                 onSelect={onChangeOwner}
                 owner={contact.user}
@@ -486,7 +496,9 @@ const ContactProfile = props => {
                 contact={contact}
                 disabled={isUpdatingOwner}
               />
-              <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
+              {activeBrand.id === contact.brand && (
+                <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
+              )}
             </div>
 
             <div className={classes.tabContainer}>

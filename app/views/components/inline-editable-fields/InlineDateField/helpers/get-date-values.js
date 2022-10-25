@@ -1,7 +1,7 @@
 import { months, addZero } from 'utils/date-times'
 
 export function getDateValues(date) {
-  if (!date) {
+  if (date === null || date === undefined) {
     return {
       day: { label: 'Day', value: null },
       month: { label: 'Month', value: null },

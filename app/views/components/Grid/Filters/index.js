@@ -3,6 +3,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
+import { selectContactAttributeDefs } from '@app/selectors/contacts'
 import {
   addActiveFilter,
   changeConditionOperator,
@@ -28,7 +29,10 @@ const Container = styled.div`
   align-items: center;
 `
 const FiltersContainer = styled.div`
+  display: flex;
+  align-items: center;
   flex-grow: 1;
+  flex-wrap: wrap;
 `
 const FiltersOptions = styled.div`
   > * {
@@ -48,7 +52,7 @@ class Filters extends React.Component {
     const { segment } = this.props
 
     if (segment) {
-      this.createFiltersFromSegment(segment, this.props.activeFilters)
+      this.handleCreateFiltersFromSegment(segment, this.props.activeFilters)
     }
   }
 
@@ -63,12 +67,15 @@ class Filters extends React.Component {
       (!segment && nextSegment) ||
       (segment && nextSegment && segment.id !== nextSegment.id)
     ) {
-      return this.createFiltersFromSegment(nextSegment, activeFilters)
+      return this.handleCreateFiltersFromSegment(nextSegment, activeFilters)
     }
   }
 
-  createFiltersFromSegment = async (segment, activeFilters) => {
-    const filters = this.props.createFiltersFromSegment(segment, activeFilters)
+  handleCreateFiltersFromSegment = async (segment, activeFilters) => {
+    const filters = this.props.createFiltersFromSegment(segment, {
+      activeFilters,
+      attributeDefs: this.props.attributeDefs
+    })
 
     let conditionOperator = 'and'
 
@@ -220,7 +227,8 @@ function mapStateToProps(state, { name, plugins, getPredefinedLists }) {
   let states = {
     name,
     conditionOperator: state[name].filterSegments.conditionOperator,
-    activeFilters: selectActiveFilters(state[name].filterSegments)
+    activeFilters: selectActiveFilters(state[name].filterSegments),
+    attributeDefs: selectContactAttributeDefs(state)
   }
 
   if (plugins.includes('segments')) {
