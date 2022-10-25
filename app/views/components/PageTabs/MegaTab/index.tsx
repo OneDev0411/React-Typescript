@@ -20,10 +20,10 @@ interface Props extends TabProps {
 const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
+      megaMenuTabRoot: {
+        maxWidth: 'inherit'
+      },
       megaMenuWrapper: {
-        '& .MuiTab-root': {
-          maxWidth: 'inherit'
-        },
         '&:hover': {
           '& $megaMenuContent': {
             visibility: 'visible'
@@ -112,7 +112,7 @@ export const MegaTab = ({ render, ...props }: Props) => {
       <div ref={megaMenuContentRef} className={classes.megaMenuContent}>
         {render({ close })}
       </div>
-      <Tab {...props} />
+      <Tab className={classes.megaMenuTabRoot} {...props} />
     </div>
   )
 }
