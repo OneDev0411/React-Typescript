@@ -2,9 +2,11 @@ import { useState, useMemo, ReactNode, CSSProperties, MouseEvent } from 'react'
 
 import { Avatar, Popover, makeStyles, Tooltip, Theme } from '@material-ui/core'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { isEqual } from 'underscore'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { addNotification } from 'components/notification'
 import { getContactNameInitials } from 'models/contacts/helpers'
 import { selectUser } from 'selectors/user'
 import { isBackOffice } from 'utils/acl'
@@ -32,6 +34,7 @@ interface Props {
 
 export const ViewAs = ({ containerStyle }: Props) => {
   const classes = useStyles()
+  const dispatch = useDispatch()
   const user: IUser = useSelector(selectUser)
   const activeTeam: Nullable<IUserTeam> = useUnsafeActiveTeam()
 
@@ -78,7 +81,19 @@ export const ViewAs = ({ containerStyle }: Props) => {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
-    setAnchorEl(null)
+    if (
+      selectedMembers.length &&
+      isEqual(selectedMembers, initialSelectedMembers)
+    ) {
+      setAnchorEl(null)
+    } else {
+      dispatch(
+        addNotification({
+          status: 'error',
+          message: 'Please apply changes'
+        })
+      )
+    }
   }
 
   const renderSelectedAvatar = (): ReactNode => {
