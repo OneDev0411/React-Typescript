@@ -1,6 +1,6 @@
 import React, { useRef, ReactNode } from 'react'
 
-import { TabProps, createStyles, makeStyles, Theme } from '@material-ui/core'
+import { TabProps, makeStyles, Theme } from '@material-ui/core'
 import { alpha } from '@material-ui/core/styles'
 
 import { Tab } from '../Tab'
@@ -18,70 +18,69 @@ interface Props extends TabProps {
 }
 
 const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      megaMenuTabRoot: {
-        maxWidth: 'inherit'
-      },
-      megaMenuWrapper: {
-        '&:hover': {
-          '& $megaMenuContent': {
-            visibility: 'visible'
-          },
-          '& .MuiTab-root': {
-            background: alpha(
-              theme.palette.primary.main,
-              theme.palette.action.hoverOpacity
-            )
-          }
+  (theme: Theme) => ({
+    megaMenuTabRoot: {
+      maxWidth: 'inherit'
+    },
+    megaMenuWrapper: {
+      '&:hover': {
+        '& $megaMenuContent': {
+          visibility: 'visible'
+        },
+        '& .MuiTab-root': {
+          background: alpha(
+            theme.palette.primary.main,
+            theme.palette.action.hoverOpacity
+          )
         }
-      },
-      megaMenuContent: {
-        padding: theme.spacing(2.5, 0),
-        position: 'absolute',
-        top: 56,
-        left: 0,
-        width: '100%',
-        minHeight: 250,
-        zIndex: theme.zIndex.gridAction,
-        background: theme.palette.background.paper,
-        boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.1)',
-        // hack for hanling visibilty bug on safari
-        borderTop: `1px solid ${theme.palette.divider}`,
-        visibility: 'hidden',
-        '&:hover': {
-          visibility: 'visible',
-          '& + .MuiTab-root': {
-            background: alpha(
-              theme.palette.primary.main,
-              theme.palette.action.hoverOpacity
-            ),
-            color: theme.palette.primary.main
-          }
-        },
-        '&::after,&::before': {
-          // hack for having edge to edge megamenu
-          position: 'absolute',
-          content: "''",
-          top: 0,
-          width: '50%',
-          height: '100%',
-          background: theme.palette.background.paper,
-          zIndex: -1
-        },
-        '&::before': {
-          left: '-49%',
-          boxShadow: '-15px 10px 15px rgba(0, 0, 0, 0.1)'
-        },
-        '&::after': {
-          right: '-49%',
-          boxShadow: '15px 10px 15px rgba(0, 0, 0, 0.1)'
-        }
-      },
-      megaMenuContentClosed: {
-        visibility: 'hidden !important' as 'hidden'
       }
-    }),
+    },
+    megaMenuContent: {
+      padding: theme.spacing(2.5, 0),
+      position: 'absolute',
+      top: 56,
+      left: 0,
+      width: '100%',
+      minHeight: 250,
+      zIndex: theme.zIndex.gridAction,
+      background: theme.palette.background.paper,
+      boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.1)',
+      // hack for hanling visibilty bug on safari
+      borderTop: `1px solid ${theme.palette.divider}`,
+      visibility: 'hidden',
+      '&:hover': {
+        visibility: 'visible',
+        '& + .MuiTab-root': {
+          background: alpha(
+            theme.palette.primary.main,
+            theme.palette.action.hoverOpacity
+          ),
+          color: theme.palette.primary.main
+        }
+      },
+      '&::after,&::before': {
+        // hack for having edge to edge megamenu
+        position: 'absolute',
+        content: "''",
+        top: 0,
+        width: '50%',
+        height: '100%',
+        background: theme.palette.background.paper,
+        zIndex: -1
+      },
+      '&::before': {
+        left: '-49%',
+        boxShadow: '-15px 10px 15px rgba(0, 0, 0, 0.1)'
+      },
+      '&::after': {
+        right: '-49%',
+        boxShadow: '15px 10px 15px rgba(0, 0, 0, 0.1)'
+      }
+    },
+    megaMenuContentClosed: {
+      visibility: 'hidden !important' as 'hidden'
+    }
+  }),
   {
     name: 'MegaTab'
   }
