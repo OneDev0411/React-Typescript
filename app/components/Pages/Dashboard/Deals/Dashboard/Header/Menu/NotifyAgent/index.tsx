@@ -130,7 +130,7 @@ export function NotifyAgents({ deal }: Props) {
             to: getEmailRecipients(),
             body: [
               'Hello,<br /><br />',
-              'Just a friendly reminder that the following documents are still outstanding for your Deal.<br />',
+              'Just a friendly reminder that the following documents are still outstanding for your Deal.⏳<br />',
               'You can visit the below links to upload the missing documents.',
               '<ul>',
               ...selectedTasks.map(
