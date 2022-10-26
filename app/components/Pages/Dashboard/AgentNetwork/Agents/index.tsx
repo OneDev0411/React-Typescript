@@ -138,7 +138,7 @@ function Agents(props: WithRouterProps) {
       onSelectSearchResult={openSearchResultPage}
     >
       {listing && DISABLED_MLS_LIST.includes(listing.mls) ? (
-        <Callout type="error" style={{ margin: 0 }}>
+        <Callout type="info" style={{ margin: 0 }}>
           <p>
             Unfortunately Agent Network is now disabled on <b>NTREIS</b> due to
             their policies and guidelines. We at Rechat are trying to find how
