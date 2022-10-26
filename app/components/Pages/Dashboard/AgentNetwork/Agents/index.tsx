@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
 import getAgents, { AgentWithStats } from '@app/models/agent-network/get-agents'
+import { Callout } from '@app/views/components/Callout'
 import ListingAlertFilters from 'components/ListingAlertFilters'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import config from 'config'
@@ -20,6 +21,7 @@ import AgentsGrid from './Grid'
 import { getListingVAlertFilters, getLocationVAlertFilters } from './helpers'
 import { ListingWithProposedAgent } from './types'
 
+const DISABLED_MLS_LIST = ['NTREIS']
 const GOOGLE_MAPS_LIBRARIES: LoadScriptProps['libraries'] = ['geometry']
 
 function Agents(props: WithRouterProps) {
@@ -135,44 +137,59 @@ function Agents(props: WithRouterProps) {
       title="Select Agents"
       onSelectSearchResult={openSearchResultPage}
     >
-      <Grid container direction="column">
-        <Grid
-          container
-          item
-          alignItems="flex-end"
-          justifyContent="space-between"
-        >
-          <Grid item>
-            {props.location.query.title && (
-              <Typography variant="body1">
-                {props.location.query.title}
-              </Typography>
-            )}
+      {listing && DISABLED_MLS_LIST.includes(listing.mls) ? (
+        <Callout type="error" style={{ margin: 0 }}>
+          <p>
+            Unfortunately Agent Network is now disabled on <b>NTREIS</b> due to
+            their policies and guidelines. We at Rechat are trying to find how
+            to provide the functionality back for you.
+          </p>
+          <p>
+            As of right now we don't have a clear timeline, but are hoping it
+            would be a matter of weeks before we have AN activated for North
+            Texas again.
+          </p>
+        </Callout>
+      ) : (
+        <Grid container direction="column">
+          <Grid
+            container
+            item
+            alignItems="flex-end"
+            justifyContent="space-between"
+          >
+            <Grid item>
+              {props.location.query.title && (
+                <Typography variant="body1">
+                  {props.location.query.title}
+                </Typography>
+              )}
+            </Grid>
+            <Grid item>
+              {filters && (
+                <ListingAlertFilters
+                  filters={filters}
+                  onApply={handleApplyFilters}
+                />
+              )}
+            </Grid>
           </Grid>
           <Grid item>
-            {filters && (
-              <ListingAlertFilters
-                filters={filters}
-                onApply={handleApplyFilters}
-              />
-            )}
+            <Box py={1}>
+              <Divider />
+            </Box>
+          </Grid>
+          <Grid item>
+            <AgentsGrid
+              user={user}
+              filters={filters}
+              listing={listing}
+              agents={agents}
+              isLoading={isLoadingAgents}
+            />
           </Grid>
         </Grid>
-        <Grid item>
-          <Box py={1}>
-            <Divider />
-          </Box>
-        </Grid>
-        <Grid item>
-          <AgentsGrid
-            user={user}
-            filters={filters}
-            listing={listing}
-            agents={agents}
-            isLoading={isLoadingAgents}
-          />
-        </Grid>
-      </Grid>
+      )}
     </Layout>
   )
 }
