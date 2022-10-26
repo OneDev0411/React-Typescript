@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 
 import { Box, Divider, Grid, Typography } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { useLoadScript, LoadScriptProps } from '@react-google-maps/api'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
 import getAgents, { AgentWithStats } from '@app/models/agent-network/get-agents'
-import { Callout } from '@app/views/components/Callout'
 import ListingAlertFilters from 'components/ListingAlertFilters'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import config from 'config'
@@ -138,7 +138,7 @@ function Agents(props: WithRouterProps) {
       onSelectSearchResult={openSearchResultPage}
     >
       {listing && DISABLED_MLS_LIST.includes(listing.mls) ? (
-        <Callout type="info" style={{ margin: 0 }}>
+        <Alert severity="info">
           <p>
             Unfortunately Agent Network is now disabled on <b>NTREIS</b> due to
             their policies and guidelines. We at Rechat are trying to find how
@@ -149,7 +149,7 @@ function Agents(props: WithRouterProps) {
             would be a matter of weeks before we have AN activated for North
             Texas again.
           </p>
-        </Callout>
+        </Alert>
       ) : (
         <Grid container direction="column">
           <Grid
