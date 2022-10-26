@@ -8,6 +8,7 @@ import { addAttributes } from '@app/models/contacts/add-attributes'
 import { deleteAttribute } from '@app/models/contacts/delete-attribute'
 import { updateAttribute } from '@app/models/contacts/update-attribute'
 import { IAppState } from '@app/reducers'
+import { uppercaseFirstLetter } from '@app/utils/helpers'
 
 export interface UseAttributeCell {
   list: IContactAttribute[]
@@ -76,13 +77,23 @@ export function useAttributeCell(
         })
         notify({
           status: 'success',
-          message: 'New attribute added!'
+          message: `${uppercaseFirstLetter(
+            attributeDef?.label || attributeDef?.name || 'New attribute'
+          )} added.`
         })
       } finally {
         prependNewValue()
       }
     },
-    [attributeDef?.id, callback, contact.id, notify, prependNewValue]
+    [
+      attributeDef?.id,
+      attributeDef?.label,
+      attributeDef?.name,
+      callback,
+      contact.id,
+      notify,
+      prependNewValue
+    ]
   )
   const update = useCallback(
     async (attributeId: UUID, data: Record<string, unknown>) => {
