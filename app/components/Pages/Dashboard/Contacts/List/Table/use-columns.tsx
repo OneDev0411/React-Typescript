@@ -185,7 +185,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     },
     {
       id: 'birthday',
-      width: '150px',
+      width: '180px',
       header: () => <HeaderColumn text="Birthday" iconPath={mdiCake} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
@@ -203,7 +203,7 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     },
     {
       id: 'home-anniversary',
-      width: '200px',
+      width: '190px',
       header: () => (
         <HeaderColumn text="Home Anniversary" iconPath={mdiHomeOutline} />
       ),
