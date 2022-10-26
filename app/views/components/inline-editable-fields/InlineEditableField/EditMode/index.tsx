@@ -1,4 +1,4 @@
-import React, { ReactNode, CSSProperties } from 'react'
+import { ReactNode, CSSProperties } from 'react'
 
 import {
   Button,
@@ -34,6 +34,7 @@ export interface Props {
   style?: CSSProperties
   viewRef?: Nullable<HTMLElement>
   popoverContainerRef: Nullable<HTMLDivElement>
+  isTransparent?: boolean
 }
 
 const useStyles = makeStyles(
@@ -65,7 +66,8 @@ export const EditMode = (props: Props) => {
     isPopoverMode = false,
     style = {},
     viewRef = null,
-    popoverContainerRef = null
+    popoverContainerRef = null,
+    isTransparent = false
   } = props
   const classes = useStyles()
   const open = Boolean(viewRef)
@@ -138,6 +140,7 @@ export const EditMode = (props: Props) => {
 
   return (
     <EditModeContainer
+      isTransparent={isTransparent}
       hasError={!!error}
       style={style}
       isStatic={isStatic}
