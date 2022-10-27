@@ -1,13 +1,20 @@
 import { useState } from 'react'
 
 import { Box, Button } from '@material-ui/core'
+import { useDispatch } from 'react-redux'
+import { useEffectOnce } from 'react-use'
 
+import { useUnsafeActiveTeam } from '@app/hooks/team'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
+import { getSettingFromTeam } from '@app/utils/user-teams'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 
 import { Context } from './context'
 import { usePageTabs } from './hooks/use-page-tabs'
 import { InsightsPageTabs } from './List/PageTabs'
 import { EmailCampaignStatus, SortableColumnsType } from './types'
+
+const SORT_FIELD_INSIGHT_KEY = 'insight_layout_sort_field'
 
 interface Props {
   disableSort?: boolean
@@ -18,6 +25,9 @@ export default function InsightsPageLayout({
   disableSort = false,
   children
 }: Props) {
+  const dispatch = useDispatch()
+  const activeTeam = useUnsafeActiveTeam()
+
   const [sortField, setSortField] = useState<SortableColumnsType>({
     label: 'Newest',
     value: 'title-date',
@@ -26,6 +36,22 @@ export default function InsightsPageLayout({
 
   const [, activeTab] = usePageTabs()
   const [status, setStatus] = useState<Nullable<EmailCampaignStatus>>(activeTab)
+
+  useEffectOnce(() => {
+    const savedSortField = getSettingFromTeam(
+      activeTeam,
+      SORT_FIELD_INSIGHT_KEY
+    )
+
+    if (savedSortField) {
+      setSortField(savedSortField)
+    }
+  })
+
+  const handleChangeSort = (item: SortableColumnsType) => {
+    dispatch(setActiveTeamSetting(SORT_FIELD_INSIGHT_KEY, item))
+    setSortField(item)
+  }
 
   return (
     <Context.Provider
@@ -49,7 +75,7 @@ export default function InsightsPageLayout({
           <Box mx={4}>
             <InsightsPageTabs
               disableSort={disableSort}
-              onChangeSort={setSortField}
+              onChangeSort={handleChangeSort}
               onChangeTab={setStatus}
             />
             {children({ sortField })}
