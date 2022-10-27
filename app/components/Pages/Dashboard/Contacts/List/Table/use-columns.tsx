@@ -1,5 +1,6 @@
 import { Typography, makeStyles, Theme, Tooltip } from '@material-ui/core'
 import {
+  mdiAccountArrowLeft,
   mdiCake,
   mdiCalendar,
   mdiEmail,
@@ -26,6 +27,7 @@ import { EmailsInlineEdit } from './columns-inline-edit/Emails'
 import { FlowsInlineEdit } from './columns-inline-edit/Flows'
 import { PhonesInlineEdit } from './columns-inline-edit/Phones'
 import { TagsInlineEdit } from './columns-inline-edit/Tags'
+import { AssigneesCell } from './columns/Assignees'
 import { BirthdayCell } from './columns/Birthday'
 import { EmailsCell } from './columns/Emails'
 import { FlowsCell } from './columns/Flows'
@@ -208,6 +210,23 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       ),
       render: ({ row: contact }) => (
         <HomeAnniversary contact={contact} className={classes.cell} />
+      )
+    },
+    {
+      id: 'assignees',
+      width: '160px',
+      header: () => (
+        <HeaderColumn text="Assignees" iconPath={mdiAccountArrowLeft} />
+      ),
+      render: ({ row: contact }) => {
+        return (
+          <div className={classes.cell}>
+            <AssigneesCell assignees={contact.assignees || []} />
+          </div>
+        )
+      },
+      renderInlineEdit: ({ row: contact }, close) => (
+        <div>0</div> // TODO add Assignees inline edit
       )
     },
     {
