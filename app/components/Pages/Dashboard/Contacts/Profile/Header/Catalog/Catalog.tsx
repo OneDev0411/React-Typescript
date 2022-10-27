@@ -17,7 +17,7 @@ const useStyles = makeStyles(
       height: 'min-content',
       width: '100%',
       justifyItems: 'start',
-      alignItems: 'start'
+      alignItems: 'center'
     },
     avatarContainer: {
       height: '72px',

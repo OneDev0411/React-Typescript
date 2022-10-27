@@ -9,17 +9,18 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       display: 'flex',
+      alignItems: 'center',
       padding: theme.spacing(4, 0, 2),
       gap: theme.spacing(3)
     },
     catalogContainer: {
-      flex: '1 1 auto'
+      flex: '1 1'
     },
     actionsContainer: {
       width: 'min-content',
       display: 'flex',
       height: 'auto',
-      alignItems: 'start'
+      alignItems: 'center'
     }
   }),
   { name: 'ContactProfileHeader' }
