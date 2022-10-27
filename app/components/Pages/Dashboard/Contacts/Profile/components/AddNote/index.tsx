@@ -47,8 +47,7 @@ function AddNote({
   return (
     <>
       <Button
-        color="primary"
-        variant="contained"
+        variant="outlined"
         onClick={toggleDrawer}
         data-tour-id="add-note-button"
         startIcon={<SvgIcon path={mdiPlus} />}
