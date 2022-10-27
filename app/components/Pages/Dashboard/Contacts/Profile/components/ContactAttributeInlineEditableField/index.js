@@ -536,7 +536,7 @@ class MasterField extends Component {
     const { disabled, isDirty, label, error } = this.state
 
     if (!this.attribute_def.editable) {
-      return <div style={{ padding: '0.5em' }}>{this.renderViewMode()}</div>
+      return <div style={{ padding: '4px 0px' }}>{this.renderViewMode()}</div>
     }
 
     return (

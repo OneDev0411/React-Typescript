@@ -62,13 +62,11 @@ const useStyles = makeStyles(
       flexDirection: 'column',
       width: '100%',
       height: 'auto',
-      padding: theme.spacing(2, 4, 4),
-      background: theme.palette.grey[50]
+      background: theme.palette.grey[100]
     },
     contentContainer: {
       background: theme.palette.background.paper,
       border: `1px solid ${theme.palette.action.disabledBackground}`,
-      borderRadius: `${theme.shape.borderRadius}px`,
       width: '100%',
       height: '100%'
     },

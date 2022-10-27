@@ -9,7 +9,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       display: 'flex',
-      padding: theme.spacing(3.5, 0, 1),
+      padding: theme.spacing(4, 0, 2),
       gap: theme.spacing(3)
     },
     catalogContainer: {
