@@ -222,16 +222,23 @@ export function TriggerableInlineEdit({
       [attributeDef.data_type]: parseValue(fieldValue, attributeDef)
     }
 
-    if (attribute.id) {
-      // API doesn't like empty string https://gitlab.com/rechat/web/issues/2932
-      if (payload[attributeDef.data_type] === '') {
-        removeAttribute()
-      } else {
-        update(attribute.id, payload)
-      }
-    } else {
+    // we should create the attribute if it's not exist
+    if (!attribute.id) {
       create({ id: attribute.cuid, ...payload })
+
+      return
     }
+
+    // Remove the attribute if there's no data_type
+    if (payload[attributeDef.data_type] === '') {
+      // API doesn't like empty string https://gitlab.com/rechat/web/issues/2932
+      removeAttribute()
+
+      return
+    }
+
+    // Otherwise, Update the attribute
+    update(attribute.id, payload)
   }
 
   const handleValidationBeforeSave = async () => {
