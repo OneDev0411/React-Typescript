@@ -1,3 +1,5 @@
+import { RefObject } from 'react'
+
 import { Typography, makeStyles, Theme, Tooltip } from '@material-ui/core'
 import {
   mdiCake,
@@ -69,9 +71,13 @@ const useStyles = makeStyles(
 
 interface Data {
   totalRows: number
+  tableContainerRef?: RefObject<HTMLDivElement>
 }
 
-export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
+export function useColumns({
+  totalRows,
+  tableContainerRef
+}: Data): TableColumn<IContact>[] {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -192,6 +198,10 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
           <BirthdayCell contact={contact} />
         </div>
       ),
+      inlineEditProps: {
+        disableEnforceFocus: true,
+        container: tableContainerRef?.current
+      },
       renderInlineEdit: ({ row: contact }, close) => (
         <TriggerableInlineEdit
           attributeName="birthday"
@@ -210,6 +220,10 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       render: ({ row: contact }) => (
         <HomeAnniversary contact={contact} className={classes.cell} />
       ),
+      inlineEditProps: {
+        disableEnforceFocus: true,
+        container: tableContainerRef?.current
+      },
       renderInlineEdit: ({ row: contact }, close) => (
         <TriggerableInlineEdit
           attributeName="home_anniversary"

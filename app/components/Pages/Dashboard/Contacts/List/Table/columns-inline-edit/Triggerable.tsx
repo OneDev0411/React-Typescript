@@ -232,8 +232,6 @@ export function TriggerableInlineEdit({
     } else {
       create({ id: attribute.cuid, ...payload })
     }
-
-    return close()
   }
 
   const handleValidationBeforeSave = async () => {
@@ -354,6 +352,7 @@ export function TriggerableInlineEdit({
       setIsDirty(false)
       await handleSaveTrigger()
       handleSaveAttribute()
+      close()
     } catch (error) {
       console.error(error)
       setDisabled(false)
