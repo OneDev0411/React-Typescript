@@ -26,7 +26,7 @@ export function ClickedColumn({ item }: Props) {
   return (
     <StatsColumn
       title={`Clicked: ${getValuePercent(item.clicked, item.delivered)}`}
-      tooltip={`${item.clicked} People have clicked the email`}
+      tooltip={`${item.clicked} people have clicked the email`}
     />
   )
 }

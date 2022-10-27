@@ -26,7 +26,7 @@ export function OpenedColumn({ item }: Props) {
   return (
     <StatsColumn
       title={`Opened: ${getValuePercent(item.opened, item.delivered)}`}
-      tooltip={`${item.opened} People have opened the email`}
+      tooltip={`${item.opened} people have opened the email`}
     />
   )
 }

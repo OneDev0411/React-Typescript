@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface Props {
-  title: string
+  title: string | number
   tooltip: string
 }
 
