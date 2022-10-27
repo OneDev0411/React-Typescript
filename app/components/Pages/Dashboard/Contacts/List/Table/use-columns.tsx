@@ -22,6 +22,7 @@ import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderCo
 import { SelectionCount } from '@app/views/components/Grid/Table/features/Selection/SelectionCount'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
+import { AssigneesInlineEdit } from './columns-inline-edit/Assignees'
 import { BirthdayInlineEdit } from './columns-inline-edit/Birthday'
 import { EmailsInlineEdit } from './columns-inline-edit/Emails'
 import { FlowsInlineEdit } from './columns-inline-edit/Flows'
@@ -226,7 +227,11 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
         )
       },
       renderInlineEdit: ({ row: contact }, close) => (
-        <div>0</div> // TODO add Assignees inline edit
+        <AssigneesInlineEdit
+          contact={contact}
+          callback={handleReloadContact}
+          close={close}
+        />
       )
     },
     {
