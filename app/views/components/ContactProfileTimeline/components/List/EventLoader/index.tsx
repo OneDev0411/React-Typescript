@@ -20,12 +20,9 @@ const useStyles = makeStyles(
     },
     eventsSectionContainer: {
       display: 'flex',
+      flexDirection: 'column',
       letterSpacing: '0.15px',
-      paddingLeft: theme.spacing(2),
-      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
-      '&.isToday': {
-        borderBottom: `1px solid ${theme.palette.error.main}`
-      }
+      marginBottom: theme.spacing(3)
     },
     eventsListContainer: {
       width: '100%'
@@ -34,6 +31,15 @@ const useStyles = makeStyles(
       width: '100%',
       flex: '1 1 auto',
       backgroundColor: '#fff',
+      border: `1px solid ${theme.palette.action.disabledBackground}`,
+      borderBottomWidth: 0,
+      '&:first-child': {
+        borderTopLeftRadius: theme.spacing(0.5)
+      },
+      '&:last-child': {
+        borderBottomWidth: '1px',
+        borderBottomLeftRadius: theme.spacing(0.5)
+      },
       '&:nth-child(even)': {
         backgroundColor: theme.palette.grey['50']
       },
@@ -71,7 +77,10 @@ const useStyles = makeStyles(
       left: '50%'
     },
     loadButton: {
-      minWidth: '12rem'
+      color: theme.palette.secondary.main,
+      '&:hover': {
+        backgroundColor: 'transparent'
+      }
     }
   }),
   {
@@ -121,8 +130,9 @@ export function EventLoader({
       {Loader()}
       <Box className={classes.calendarContainer}>
         {!isReachedEnd && (
-          <Box my={2} textAlign="center">
+          <Box my={2} textAlign="left">
             <Button
+              variant="text"
               className={classes.loadButton}
               size="small"
               disabled={isLoading}
@@ -155,8 +165,9 @@ export function EventLoader({
           ))}
         </Box>
         {!isReachedStart && (
-          <Box my={2} textAlign="center">
+          <Box my={2} textAlign="left">
             <Button
+              variant="text"
               className={classes.loadButton}
               size="small"
               disabled={isLoading}

@@ -4,6 +4,7 @@ import { alpha } from '@material-ui/core/styles'
 export const useStyles = makeStyles(
   (theme: Theme) => ({
     section: {
+      backgroundColor: theme.palette.background.paper,
       paddingLeft: theme.spacing(2),
       borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },

@@ -57,8 +57,8 @@ export function ManageRelationship({
     <>
       <Button
         classes={{ label: classes.buttonLabel }}
-        color="primary"
-        variant="contained"
+        color="default"
+        variant="outlined"
         onClick={handleOpenMenu}
         endIcon={
           <SvgIcon

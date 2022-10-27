@@ -73,18 +73,19 @@ const useStyles = makeStyles(
       height: '100%'
     },
     tabContainer: {
-      flex: '1 1 auto',
+      padding: theme.spacing(2),
+      flex: '1 1',
       display: 'flex',
       flexDirection: 'column'
     },
     tabHeaderContainer: {
       display: 'flex',
       justifyContent: 'space-between',
-      alignItems: 'flex-start'
+      alignItems: 'center',
+      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },
     timelineContainer: {
-      background: theme.palette.background.paper,
-      border: `1px solid ${theme.palette.action.disabledBackground}`,
+      marginTop: theme.spacing(4),
       borderRadius: `${theme.shape.borderRadius}px`,
       display: 'flex',
       flexDirection: 'column',
@@ -134,7 +135,7 @@ const ContactProfile = props => {
   const [isLoading, setIsLoading] = useState(
     !isLoadedContactAttrDefs(props?.attributeDefs) || !props?.contact
   )
-  const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Events)
+  const [activeFilter, setActiveFilter] = useState<Filters>(Filters.History)
 
   const fetchContact = useCallback(
     async (callback = () => {}, showFullScreenLoading = false) => {
@@ -514,7 +515,7 @@ const ContactProfile = props => {
                     onCreateNote={handleCreateNote}
                   />
                 )}
-                {activeFilter === Filters.Events && (
+                {activeFilter === (Filters.History || Filters.Upcoming) && (
                   <AddEvent contact={contact} callback={fetchTimeline} />
                 )}
               </div>
