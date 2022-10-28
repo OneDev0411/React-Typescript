@@ -1,3 +1,5 @@
+import { RefObject } from 'react'
+
 import { Typography, makeStyles, Theme, Tooltip } from '@material-ui/core'
 import {
   mdiCake,
@@ -21,11 +23,11 @@ import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderCo
 import { SelectionCount } from '@app/views/components/Grid/Table/features/Selection/SelectionCount'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
-import { BirthdayInlineEdit } from './columns-inline-edit/Birthday'
 import { EmailsInlineEdit } from './columns-inline-edit/Emails'
 import { FlowsInlineEdit } from './columns-inline-edit/Flows'
 import { PhonesInlineEdit } from './columns-inline-edit/Phones'
 import { TagsInlineEdit } from './columns-inline-edit/Tags'
+import { TriggerableInlineEdit } from './columns-inline-edit/Triggerable'
 import { BirthdayCell } from './columns/Birthday'
 import { EmailsCell } from './columns/Emails'
 import { FlowsCell } from './columns/Flows'
@@ -69,9 +71,13 @@ const useStyles = makeStyles(
 
 interface Data {
   totalRows: number
+  tableContainerRef?: RefObject<HTMLDivElement>
 }
 
-export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
+export function useColumns({
+  totalRows,
+  tableContainerRef
+}: Data): TableColumn<IContact>[] {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -185,15 +191,20 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     },
     {
       id: 'birthday',
-      width: '150px',
+      width: '180px',
       header: () => <HeaderColumn text="Birthday" iconPath={mdiCake} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
           <BirthdayCell contact={contact} />
         </div>
       ),
+      inlineEditProps: {
+        disableEnforceFocus: true,
+        container: tableContainerRef?.current
+      },
       renderInlineEdit: ({ row: contact }, close) => (
-        <BirthdayInlineEdit
+        <TriggerableInlineEdit
+          attributeName="birthday"
           contact={contact}
           callback={handleReloadContact}
           close={close}
@@ -202,12 +213,24 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     },
     {
       id: 'home-anniversary',
-      width: '200px',
+      width: '190px',
       header: () => (
         <HeaderColumn text="Home Anniversary" iconPath={mdiHomeOutline} />
       ),
       render: ({ row: contact }) => (
         <HomeAnniversary contact={contact} className={classes.cell} />
+      ),
+      inlineEditProps: {
+        disableEnforceFocus: true,
+        container: tableContainerRef?.current
+      },
+      renderInlineEdit: ({ row: contact }, close) => (
+        <TriggerableInlineEdit
+          attributeName="home_anniversary"
+          contact={contact}
+          callback={handleReloadContact}
+          close={close}
+        />
       )
     },
     {

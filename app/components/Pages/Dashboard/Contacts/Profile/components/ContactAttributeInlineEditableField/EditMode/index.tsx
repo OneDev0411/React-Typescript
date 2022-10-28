@@ -12,10 +12,10 @@ import { Value } from './Value'
 
 interface Props {
   attribute: IContactAttributeWithDef
-  onEnterKeyPress?: () => void
-  onChangeLabel?: () => void
+  onEnterKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void
+  onChangeLabel?: (value: Nullable<string>) => void
   onChangePrimary?: () => void
-  onChangeValue: () => void
+  onChangeValue: (value: Nullable<string | number>) => void
   placeholder?: string
   error?: string
 }
