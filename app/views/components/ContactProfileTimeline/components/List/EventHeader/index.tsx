@@ -30,7 +30,6 @@ export function EventHeader({ item }: Props) {
   return (
     <Typography className={classes.root} variant="h6">
       {item.isToday && 'TODAY - '}
-      {item.isTomorrow && 'TOMORROW - '}
       {item.isToday
         ? fecha.format(date, 'MMM D, YY')
         : fecha.format(date, 'ddd - MMM D, YY')}

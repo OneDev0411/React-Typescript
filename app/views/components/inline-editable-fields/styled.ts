@@ -43,6 +43,7 @@ export const EditButton = styled(ActionButton as any)`
 export const EditModeContainer = styled.div<
   ThemedStyledProps<Pick<EditModeProps, 'isStatic' | 'hasError'>, Theme>
 >`
+  padding: ${({ theme }) => theme.spacing(1)}px;
   position: relative;
   border-radius: ${({ isStatic, theme }) =>
     isStatic

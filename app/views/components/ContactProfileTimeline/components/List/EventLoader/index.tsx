@@ -96,6 +96,7 @@ interface Props {
   onLoadPreviousEvents: () => void
   onLoadNextEvents: () => void
   handleEventChange: (event: IEvent, type: CrmEventType) => void
+  eventType?: 'upcoming' | 'history'
 }
 
 export function EventLoader({
@@ -105,7 +106,8 @@ export function EventLoader({
   isReachedStart,
   onLoadNextEvents,
   handleEventChange,
-  onLoadPreviousEvents
+  onLoadPreviousEvents,
+  eventType
 }: Props) {
   const classes = useStyles()
 
@@ -129,19 +131,6 @@ export function EventLoader({
     <Box className={classes.mainContainer}>
       {Loader()}
       <Box className={classes.calendarContainer}>
-        {!isReachedEnd && (
-          <Box my={2} textAlign="left">
-            <Button
-              variant="text"
-              className={classes.loadButton}
-              size="small"
-              disabled={isLoading}
-              onClick={onLoadNextEvents}
-            >
-              Load Next Year Events
-            </Button>
-          </Box>
-        )}
         <Box>
           {rows.map((section, index) => (
             <Box
@@ -164,7 +153,7 @@ export function EventLoader({
             </Box>
           ))}
         </Box>
-        {!isReachedStart && (
+        {!isReachedStart && eventType === 'history' && (
           <Box my={2} textAlign="left">
             <Button
               variant="text"
@@ -173,7 +162,20 @@ export function EventLoader({
               disabled={isLoading}
               onClick={onLoadPreviousEvents}
             >
-              Load Previous Year Events
+              Fetch previous events
+            </Button>
+          </Box>
+        )}
+        {!isReachedEnd && eventType === 'upcoming' && (
+          <Box my={2} textAlign="left">
+            <Button
+              variant="text"
+              className={classes.loadButton}
+              size="small"
+              disabled={isLoading}
+              onClick={onLoadNextEvents}
+            >
+              Fetch next events
             </Button>
           </Box>
         )}

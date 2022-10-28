@@ -24,7 +24,7 @@ function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
   const localTimelineRef = useRef<CalendarRef>(null)
 
   const handleReload = (filter = activeFilter) => {
-    if (filter === Filters.History) {
+    if (filter === Filters.History || filter === Filters.Upcoming) {
       const date = new Date().getTime() / 1000
 
       localTimelineRef.current!.refresh(true, { high: date, low: date })
@@ -67,6 +67,16 @@ function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
           contact={contact}
           filter={getFilter()}
           associations={associations}
+          eventType={activeFilter}
+        />
+      )}
+      {activeFilter === Filters.Upcoming && (
+        <List
+          ref={localTimelineRef}
+          contact={contact}
+          filter={getFilter()}
+          associations={associations}
+          eventType={activeFilter}
         />
       )}
 

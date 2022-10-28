@@ -31,9 +31,11 @@ interface Props {
   associations?: string[]
   calendarRef?: RefObject<CalendarRef>
   onLoadEvents?: (events: ICalendarEventsList, range: ICalendarRange) => void
+  eventType?: 'upcoming' | 'history'
 }
 
 export function Calendar({
+  eventType,
   calendarRef,
   contact,
   filter = {},
@@ -142,14 +144,33 @@ export function Calendar({
         // fetch calendar data from server based on given parameters
         const [prevEvents, nextEvents] = await fetchEvents(range, position)
 
-        const newEvents = concatEvents(
-          {
-            events,
-            prevEvents,
-            nextEvents
-          },
-          reset
-        )
+        let newEvents: ICalendarEvent[] = []
+
+        // Event Type is Upcoming
+        if (eventType === 'upcoming') {
+          console.log('nextEvents', nextEvents)
+          newEvents = concatEvents(
+            {
+              events,
+              nextEvents,
+              prevEvents: []
+            },
+            reset
+          )
+        }
+
+        if (eventType === 'history') {
+          console.log('prevEvents', prevEvents)
+          newEvents = concatEvents(
+            {
+              events,
+              prevEvents,
+              nextEvents: []
+            },
+            reset
+          )
+        }
+
         // get current range of fetched calendar
         const normalizedEvents = normalizeEvents(newEvents, range)
 
@@ -165,7 +186,7 @@ export function Calendar({
         setIsLoading(false)
       }
     },
-    [fetchEvents, events, onLoadEvents]
+    [fetchEvents, eventType, onLoadEvents, events]
   )
 
   const handleLoadEvents = async (
@@ -291,6 +312,7 @@ export function Calendar({
       onLoadPreviousEvents={handleLoadPreviousEvents}
       onCrmEventChange={handleCrmEventChange}
       onScheduledEmailChange={handleScheduledEmailChange}
+      eventType={eventType}
     />
   )
 }

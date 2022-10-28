@@ -515,7 +515,8 @@ const ContactProfile = props => {
                     onCreateNote={handleCreateNote}
                   />
                 )}
-                {activeFilter === (Filters.History || Filters.Upcoming) && (
+                {(activeFilter === Filters.History ||
+                  activeFilter === Filters.Upcoming) && (
                   <AddEvent contact={contact} callback={fetchTimeline} />
                 )}
               </div>
