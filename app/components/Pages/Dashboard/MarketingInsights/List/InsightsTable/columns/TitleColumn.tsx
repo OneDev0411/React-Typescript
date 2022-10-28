@@ -39,10 +39,7 @@ export function TitleColumn({ item, reload }: Props) {
 
   const title = (
     <Box pr={2} maxWidth="100%">
-      <TextMiddleTruncate
-        text={item.subject || '(untitled)'}
-        maxLength={isScheduled ? 140 : 55}
-      />
+      <TextMiddleTruncate text={item.subject || '(untitled)'} maxLength={40} />
     </Box>
   )
 
