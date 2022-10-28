@@ -426,9 +426,7 @@ export function TriggerableInlineEdit({
 
       notify({
         status: 'success',
-        message: `${
-          attributeDef?.label || attributeDef?.name
-        } has been deleted.`
+        message: `${attributeDef?.label || attributeDef?.name} deleted.`
       })
     } catch (error) {
       console.log(error)

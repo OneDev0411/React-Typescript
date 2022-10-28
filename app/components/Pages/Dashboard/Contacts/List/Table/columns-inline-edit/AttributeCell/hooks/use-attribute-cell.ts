@@ -62,6 +62,11 @@ export function useAttributeCell(
   const appendNewValue = () => setIsAppending(true)
   const prependNewValue = useCallback(() => setIsAppending(false), [])
 
+  const attributeDisplayName =
+    attributeDef?.label || attributeDef?.name
+      ? uppercaseFirstLetter(attributeDef.label || attributeDef.name)
+      : null
+
   const create = useCallback(
     async (data: Record<string, unknown>) => {
       try {
@@ -77,9 +82,7 @@ export function useAttributeCell(
         })
         notify({
           status: 'success',
-          message: `${uppercaseFirstLetter(
-            attributeDef?.label || attributeDef?.name || 'New attribute'
-          )} added.`
+          message: `${attributeDisplayName || 'New attribute'} added.`
         })
       } finally {
         prependNewValue()
@@ -87,8 +90,7 @@ export function useAttributeCell(
     },
     [
       attributeDef?.id,
-      attributeDef?.label,
-      attributeDef?.name,
+      attributeDisplayName,
       callback,
       contact.id,
       notify,
@@ -116,7 +118,7 @@ export function useAttributeCell(
 
         notify({
           status: 'success',
-          message: 'Updated!'
+          message: `${attributeDisplayName || 'The attribute'} updated.`
         })
       } catch (error) {
         notify({
@@ -125,7 +127,7 @@ export function useAttributeCell(
         })
       }
     },
-    [callback, contact.id, notify]
+    [attributeDisplayName, callback, contact.id, notify]
   )
   const remove = useCallback(
     async (attributeId: UUID) => {
@@ -138,7 +140,7 @@ export function useAttributeCell(
         })
         notify({
           status: 'success',
-          message: 'Deleted!'
+          message: `${attributeDisplayName || 'The attribute'} deleted.`
         })
       } catch (error) {
         notify({
@@ -147,7 +149,7 @@ export function useAttributeCell(
         })
       }
     },
-    [callback, contact.id, notify]
+    [attributeDisplayName, callback, contact.id, notify]
   )
 
   return {
