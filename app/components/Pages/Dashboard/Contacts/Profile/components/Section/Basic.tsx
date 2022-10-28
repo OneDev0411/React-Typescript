@@ -18,7 +18,7 @@ const useStyles = makeStyles(
       paddingLeft: theme.spacing(1),
       marginBottom: theme.spacing(0.5),
       color: theme.palette.text.primary,
-      fontWeight: 800,
+      fontWeight: 600,
       ...theme.typography.body1
     }
   }),
