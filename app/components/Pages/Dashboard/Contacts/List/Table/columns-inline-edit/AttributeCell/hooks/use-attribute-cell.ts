@@ -8,6 +8,7 @@ import { addAttributes } from '@app/models/contacts/add-attributes'
 import { deleteAttribute } from '@app/models/contacts/delete-attribute'
 import { updateAttribute } from '@app/models/contacts/update-attribute'
 import { IAppState } from '@app/reducers'
+import { uppercaseFirstLetter } from '@app/utils/helpers'
 
 export interface UseAttributeCell {
   list: IContactAttribute[]
@@ -61,6 +62,11 @@ export function useAttributeCell(
   const appendNewValue = () => setIsAppending(true)
   const prependNewValue = useCallback(() => setIsAppending(false), [])
 
+  const attributeDisplayName =
+    attributeDef?.label || attributeDef?.name
+      ? uppercaseFirstLetter(attributeDef.label || attributeDef.name)
+      : null
+
   const create = useCallback(
     async (data: Record<string, unknown>) => {
       try {
@@ -76,13 +82,20 @@ export function useAttributeCell(
         })
         notify({
           status: 'success',
-          message: 'New attribute added!'
+          message: `${attributeDisplayName || 'New attribute'} added.`
         })
       } finally {
         prependNewValue()
       }
     },
-    [attributeDef?.id, callback, contact.id, notify, prependNewValue]
+    [
+      attributeDef?.id,
+      attributeDisplayName,
+      callback,
+      contact.id,
+      notify,
+      prependNewValue
+    ]
   )
   const update = useCallback(
     async (attributeId: UUID, data: Record<string, unknown>) => {
@@ -105,7 +118,7 @@ export function useAttributeCell(
 
         notify({
           status: 'success',
-          message: 'Updated!'
+          message: `${attributeDisplayName || 'The attribute'} updated.`
         })
       } catch (error) {
         notify({
@@ -114,7 +127,7 @@ export function useAttributeCell(
         })
       }
     },
-    [callback, contact.id, notify]
+    [attributeDisplayName, callback, contact.id, notify]
   )
   const remove = useCallback(
     async (attributeId: UUID) => {
@@ -127,7 +140,7 @@ export function useAttributeCell(
         })
         notify({
           status: 'success',
-          message: 'Deleted!'
+          message: `${attributeDisplayName || 'The attribute'} deleted.`
         })
       } catch (error) {
         notify({
@@ -136,7 +149,7 @@ export function useAttributeCell(
         })
       }
     },
-    [callback, contact.id, notify]
+    [attributeDisplayName, callback, contact.id, notify]
   )
 
   return {

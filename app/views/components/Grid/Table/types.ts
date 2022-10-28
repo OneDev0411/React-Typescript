@@ -1,5 +1,6 @@
 import { MouseEvent } from 'react'
 
+import { PopoverProps } from '@material-ui/core'
 import { TableCellProps } from '@material-ui/core/TableCell'
 
 type StringOrNumber = string | number
@@ -52,6 +53,7 @@ export interface TableColumn<Row> {
   sortFn?: (rows: Row[]) => Row[]
   accessor?: (row: Row) => StringOrNumber | null | undefined
   render?: (data: RenderProps<Row>) => React.ReactNode | string
+  inlineEditProps?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
   inlineEditStyles?: {
     popover?: InlineEditStyle
     paper?: React.CSSProperties
