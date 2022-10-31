@@ -5,7 +5,7 @@ interface Props {
   subTitle?: string
 }
 
-export function EmailInsightsZeroState({
+export function InsightsZeroState({
   title = 'No insights to show, yet.',
   subTitle = 'Try sending your first campaign using "Create" button and clicking on "Email".'
 }: Props) {

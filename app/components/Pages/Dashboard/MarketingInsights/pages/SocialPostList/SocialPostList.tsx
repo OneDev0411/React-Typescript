@@ -2,16 +2,18 @@ import { memo } from 'react'
 
 import { useTitle } from 'react-use'
 
-import Layout from '../../List/Layout'
+import InsightsPageLayout from '../../PageLayout'
 
 import SocialPostTable from './SocialPostTable'
 
 function SocialPostList() {
   useTitle('Instagram Post List | Rechat')
 
-  const renderContent = props => <SocialPostTable {...props} />
-
-  return <Layout renderContent={props => renderContent(props)} />
+  return (
+    <InsightsPageLayout>
+      {({ sortField }) => <SocialPostTable sortBy={sortField} />}
+    </InsightsPageLayout>
+  )
 }
 
 export default memo(SocialPostList)
