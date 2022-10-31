@@ -116,7 +116,6 @@ export function CheckListTable({
               ref={droppableProvided.innerRef}
               {...droppableProvided.droppableProps}
             >
-              {console.log('All tasks:', checklist.tasks)}
               {(checklist.tasks || []).map((task, index) => (
                 <Draggable key={task.id} draggableId={task.id} index={index}>
                   {(
@@ -236,15 +235,9 @@ export function CheckListTable({
                       >
                         <BaseDropdown
                           buttonLabel={
-                            task.acl ? (
-                              <Typography variant="body1">
-                                {task.acl}
-                              </Typography>
-                            ) : (
-                              <Typography variant="body1">
-                                Please select a type
-                              </Typography>
-                            )
+                            <Typography variant="body1">
+                              {task.acl || 'Please select a type'}
+                            </Typography>
                           }
                           renderMenu={({ close }) => {
                             return (
