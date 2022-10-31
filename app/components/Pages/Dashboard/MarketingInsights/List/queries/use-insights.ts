@@ -4,7 +4,7 @@ import { useActiveBrandId } from '@app/hooks/brand'
 import { useInfiniteQuery } from '@app/hooks/query'
 import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 
-import { EmailCampaignStatus, SortingValue } from '../../types'
+import { EmailCampaignStatus } from '../../types'
 
 import { list } from './keys'
 
@@ -12,7 +12,7 @@ const LIMIT = 50
 
 export function useInsights(
   status: EmailCampaignStatus,
-  sortBy: SortingValue = '-created_at',
+  sortBy = '-created_at',
   limit = LIMIT
 ) {
   const activeBrandId = useActiveBrandId()

@@ -5,8 +5,8 @@ import { BaseDropdown } from 'components/BaseDropdown'
 import { SortableColumnsType } from '../types'
 
 const sortableColumns: SortableColumnsType[] = [
-  { label: 'Newest', value: '-created_at' },
-  { label: 'Oldest', value: 'created_at' }
+  { label: 'Newest', value: '-created_at', ascending: false },
+  { label: 'Oldest', value: 'created_at', ascending: true }
 ]
 
 interface Props {
