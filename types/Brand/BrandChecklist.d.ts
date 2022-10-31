@@ -24,6 +24,8 @@ declare interface IBrandChecklistTask {
   order: number
   required: boolean
   task_type: IDealTaskType
+  acl: ('Agents' | 'BackOffice')[]
+  tab_name: string
 }
 
 declare type IBrandChecklistTaskInput = Pick<IDealTask, 'task_type'> &
