@@ -40,7 +40,7 @@ export function InsightsTable() {
   const { status, sortBy } = useInsightsContext()
 
   const { list, isLoading, isFetchingNextPage, fetchNextPage, refetch } =
-    useInsights(status)
+    useInsights(status, sortBy.value)
 
   const getLoadingPosition = useCallback((): LoadingPosition => {
     if (isFetchingNextPage) {
@@ -74,12 +74,6 @@ export function InsightsTable() {
       }}
       classes={{
         row: cn(gridClasses.row, classes.row)
-      }}
-      sorting={{
-        sortBy: {
-          value: sortBy.value,
-          ascending: sortBy.ascending
-        }
       }}
       loading={getLoadingPosition()}
       LoadingStateComponent={LoadingState}

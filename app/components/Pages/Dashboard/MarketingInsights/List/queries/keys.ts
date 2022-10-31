@@ -1,4 +1,4 @@
-import { EmailCampaignStatus } from '../../types'
+import { EmailCampaignStatus, SortingValue } from '../../types'
 
 const TYPE = ['insights']
 
@@ -10,6 +10,9 @@ export function allLists() {
   return [...all(), 'list']
 }
 
-export function listStatus(status: EmailCampaignStatus) {
-  return [...all(), 'list', { status }]
+export function list(
+  status: EmailCampaignStatus,
+  order: SortingValue = '-created_at'
+) {
+  return [...all(), 'list', { status, order }]
 }

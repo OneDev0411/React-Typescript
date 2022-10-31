@@ -1,7 +1,8 @@
+export type SortingValue = 'created_at' | '-created_at'
+
 export interface SortableColumnsType {
   label: string
-  value: string
-  ascending: boolean
+  value: SortingValue
 }
 
 export interface PageTabStats {

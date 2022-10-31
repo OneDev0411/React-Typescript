@@ -4,22 +4,27 @@ import { useActiveBrandId } from '@app/hooks/brand'
 import { useInfiniteQuery } from '@app/hooks/query'
 import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 
-import { EmailCampaignStatus } from '../../types'
+import { EmailCampaignStatus, SortingValue } from '../../types'
 
-import { listStatus } from './keys'
+import { list } from './keys'
 
 const LIMIT = 50
 
-export function useInsights(status: EmailCampaignStatus, limit = LIMIT) {
+export function useInsights(
+  status: EmailCampaignStatus,
+  sortBy: SortingValue = '-created_at',
+  limit = LIMIT
+) {
   const activeBrandId = useActiveBrandId()
 
   const { data, ...params } = useInfiniteQuery(
-    listStatus(status),
+    list(status, sortBy),
     ({ pageParam = 0 }) => {
       return getEmailCampaigns(activeBrandId, {
         start: pageParam,
         limit,
         status,
+        order: sortBy,
         associations: {
           associations: ['template'],
           recipientsAssociations: [],
@@ -38,7 +43,7 @@ export function useInsights(status: EmailCampaignStatus, limit = LIMIT) {
     }
   )
 
-  const list = useMemo(
+  const flattedList = useMemo(
     () =>
       data?.pages.flatMap(page => page.data) as IEmailCampaign<'template'>[],
     [data?.pages]
@@ -47,6 +52,6 @@ export function useInsights(status: EmailCampaignStatus, limit = LIMIT) {
   return {
     ...params,
     total: data?.pages[0].info?.total ?? 0,
-    list
+    list: flattedList
   }
 }

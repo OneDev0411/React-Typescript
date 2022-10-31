@@ -13,6 +13,7 @@ export const DefaultAssociations: {
 interface QueryParams {
   start?: number
   limit?: number
+  order: string
   associations: {
     associations?: IEmailCampaignAssociation[]
     recipientsAssociations?: IEmailCampaignRecipientAssociation[]
@@ -53,6 +54,7 @@ export async function getEmailCampaigns<
       start: query.start ?? 0,
       limit: query.limit ?? 5000,
       status: query.status,
+      order: query.order,
       'associations[]': [
         ...associations.map(name => `email_campaign.${name}`),
         ...recipientsAssociations.map(

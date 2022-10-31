@@ -6,7 +6,7 @@ import { setEmailNotificationStatus } from '@app/models/email/set-email-notifica
 
 import { EmailCampaignStatus } from '../../types'
 
-import { listStatus } from './keys'
+import { list } from './keys'
 
 interface InsightsQuery {
   pageParams?: string[] | undefined
@@ -41,14 +41,14 @@ export function useInsightsNotificationMutation(status: EmailCampaignStatus) {
       setEmailNotificationStatus(id, checked),
     {
       onMutate: async (data: { id: UUID; checked: boolean }) => {
-        await queryClient.cancelQueries(listStatus(status))
+        await queryClient.cancelQueries(list(status))
 
         const previousList = queryClient.getQueryData<InsightsQuery>(
-          listStatus(status)
+          list(status)
         )
 
         if (previousList) {
-          queryClient.setQueryData<InsightsQuery>(listStatus(status), {
+          queryClient.setQueryData<InsightsQuery>(list(status), {
             ...previousList,
             pages: getNextPages(previousList, data) ?? []
           })
@@ -65,7 +65,7 @@ export function useInsightsNotificationMutation(status: EmailCampaignStatus) {
       ) => {
         if (context?.previousList) {
           queryClient.setQueryData<InsightsQuery>(
-            listStatus(status),
+            list(status),
             context.previousList
           )
         }
@@ -76,7 +76,7 @@ export function useInsightsNotificationMutation(status: EmailCampaignStatus) {
         })
       },
       onSettled: () => {
-        queryClient.invalidateQueries(listStatus(status))
+        queryClient.invalidateQueries(list(status))
       }
     }
   )
