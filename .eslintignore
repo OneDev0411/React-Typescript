@@ -3,6 +3,7 @@ app/src/
 desktop/builds/
 app/styles/vendor
 
+**/*.md
 **/*.mjml
 **/*.njk
 **/*.html
