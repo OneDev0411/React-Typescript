@@ -1,9 +1,5 @@
-import { useState } from 'react'
-
 import { Link, makeStyles, Theme, Typography } from '@material-ui/core'
-import { mdiBookEdit } from '@mdi/js'
-
-import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
+import timeago from 'timeago.js'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -65,44 +61,36 @@ const useStyles = makeStyles(
       padding: theme.spacing(0.5),
       borderRadius: theme.shape.borderRadius,
       boxShadow: theme.shadows[4]
+    },
+    actionsWrapper: {
+      width: '200px',
+      display: 'flex',
+      flexDirection: 'column'
     }
   }),
   { name: 'LatTouchField' }
 )
 
 interface Props {
-  title?: string
-  value?: string
-  isAction?: boolean
+  value?: number
 }
 
-const Fields = ({ title, value, isAction }: Props) => {
+const LastTouchField = ({ value }: Props) => {
   const classes = useStyles()
-  const [showAction, setShowAction] = useState(false)
+  let lastTouchTime
+
+  if (value) {
+    lastTouchTime = timeago().format(value * 1000)
+  }
 
   return (
-    <Link
-      onMouseEnter={() => setShowAction(true)}
-      onMouseLeave={() => setShowAction(false)}
-      className={classes.container}
-      target="_blank"
-    >
-      <Typography variant="body2">{title}</Typography>
+    <Link className={classes.container} target="_blank">
+      <Typography variant="body2">Last Touch</Typography>
       <Typography variant="body2" className={classes.value}>
-        {value}
+        {lastTouchTime}
       </Typography>
-      {isAction && showAction && (
-        <div className={classes.videoModeActionBar}>
-          <div className={classes.actionContainer}>
-            <div className={classes.action}>
-              <SvgIcon path={mdiBookEdit} size={muiIconSizes.small} />
-              <span className={classes.actionLabel}>Edit</span>
-            </div>
-          </div>
-        </div>
-      )}
     </Link>
   )
 }
 
-export default Fields
+export default LastTouchField

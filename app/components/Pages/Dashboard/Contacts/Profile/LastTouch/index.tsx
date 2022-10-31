@@ -1,50 +1,23 @@
-import { Box, makeStyles, Theme } from '@material-ui/core'
-
-import { LastTouched } from '@app/views/components/LastTouched'
-
 import { BasicSection } from '../components/Section/Basic'
+
+import LastTouchField from './LastTouchField'
+import TouchFrequency from './TouchFrequency'
 
 interface Props {
   contact: INormalizedContact
-  submitCallback: (
-    newContact: INormalizedContact,
-    updatedAttribute: IContactAttributeDef
-  ) => void
+  onUpdateTouchFreq(newValue: Nullable<number>): void
 }
 
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    wrapper: {
-      padding: theme.spacing(0, 1)
-    },
-    icon: {
-      position: 'relative',
-      top: theme.spacing(0.5),
-      marginLeft: theme.spacing(1),
-      color: theme.palette.grey[900]
-    }
-  }),
-  { name: 'ContactProfileLastTouch' }
-)
-
-export const LastTouch = ({ contact, submitCallback }: Props) => {
-  const classes = useStyles()
-
+export const LastTouch = ({ contact, onUpdateTouchFreq }: Props) => {
   return (
-    // <BasicSection title="Last Touch">
-    //   <Field title="Last Touch" value={lastTouchTime} />
-    //   <Field
-    //     title="Touch Frequency"
-    //     value={`Every ${contact.touch_freq} ${
-    //       contact.touch_freq === 1 ? 'day' : 'days'
-    //     }`}
-    //     isAction
-    //   />
-    // </BasicSection>
     <BasicSection title="Last Touch">
-      <Box className={classes.wrapper}>
-        <LastTouched contact={contact} />
-      </Box>
+      {contact.last_touch && <LastTouchField value={contact?.last_touch} />}
+      {contact.touch_freq && (
+        <TouchFrequency
+          onUpdateTouchFreq={onUpdateTouchFreq}
+          value={contact.touch_freq}
+        />
+      )}
     </BasicSection>
   )
 }

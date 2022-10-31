@@ -473,7 +473,10 @@ const ContactProfile = props => {
             <div
               className={cn(classes.contentContainer, classes.sidenavContainer)}
             >
-              <LastTouch {..._props} />
+              <LastTouch
+                contact={contact}
+                onUpdateTouchFreq={handleUpdateTouchFreq}
+              />
               <ContactInfo {..._props} />
               <Flows
                 // @ts-ignore
