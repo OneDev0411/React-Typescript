@@ -1,9 +1,8 @@
-import { ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 
 import { merge } from 'lodash'
 import { Provider } from 'react-redux'
 import { browserHistory, Router, WithRouterProps } from 'react-router'
-import { syncHistoryWithStore } from 'react-router-redux'
 import { DeepPartial } from 'redux'
 
 import { AppTheme } from '../../app/AppTheme'
@@ -23,8 +22,6 @@ interface Props {
 
 export function RouterTestBed({ reduxState, children }: Props) {
   merge(store.getState(), { user }, reduxState)
-
-  const history = syncHistoryWithStore(browserHistory, store)
 
   const routerProps: WithRouterProps = {
     params: {},
@@ -47,7 +44,7 @@ export function RouterTestBed({ reduxState, children }: Props) {
   return (
     <Provider store={store}>
       <AppTheme>
-        <Router history={history}>{routes}</Router>
+        <Router history={browserHistory}>{routes}</Router>
         {children(routerProps)}
       </AppTheme>
     </Provider>
