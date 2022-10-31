@@ -2,11 +2,11 @@ import { useState, useMemo, ReactNode, CSSProperties, MouseEvent } from 'react'
 
 import { Avatar, Popover, makeStyles, Tooltip, Theme } from '@material-ui/core'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { isEqual } from 'underscore'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
-import { addNotification } from 'components/notification'
+import useNotify from '@app/hooks/use-notify'
 import { getContactNameInitials } from 'models/contacts/helpers'
 import { selectUser } from 'selectors/user'
 import { isBackOffice } from 'utils/acl'
@@ -34,7 +34,7 @@ interface Props {
 
 export const ViewAs = ({ containerStyle }: Props) => {
   const classes = useStyles()
-  const dispatch = useDispatch()
+  const notify = useNotify()
   const user: IUser = useSelector(selectUser)
   const activeTeam: Nullable<IUserTeam> = useUnsafeActiveTeam()
 
@@ -86,14 +86,14 @@ export const ViewAs = ({ containerStyle }: Props) => {
       isEqual(selectedMembers, initialSelectedMembers)
     ) {
       setAnchorEl(null)
-    } else {
-      dispatch(
-        addNotification({
-          status: 'error',
-          message: 'Please apply changes'
-        })
-      )
+
+      return
     }
+
+    notify({
+      status: 'error',
+      message: 'Please apply changes'
+    })
   }
 
   const renderSelectedAvatar = (): ReactNode => {
