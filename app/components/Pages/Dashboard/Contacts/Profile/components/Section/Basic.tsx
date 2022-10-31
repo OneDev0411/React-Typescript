@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 
-import { Box, makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -14,12 +14,15 @@ const useStyles = makeStyles(
       }
     },
     title: {
-      display: 'inline-block',
+      paddingLeft: theme.spacing(1),
+      marginBottom: theme.spacing(0.2),
+      fontSize: theme.typography.body2.fontSize
+    },
+    subtitle: {
       paddingLeft: theme.spacing(1),
       marginBottom: theme.spacing(0.5),
-      color: theme.palette.text.primary,
-      fontWeight: 600,
-      ...theme.typography.body1
+      color: theme.palette.text.secondary,
+      fontSize: theme.typography.body3.fontSize
     }
   }),
   { name: 'ContactProfileBasicSection' }
@@ -27,15 +30,25 @@ const useStyles = makeStyles(
 
 interface Props {
   title?: string
+  subtitle?: string
   children?: ReactNode
 }
 
-export const BasicSection = ({ title, children }: Props) => {
+export const BasicSection = ({ title, subtitle, children }: Props) => {
   const classes = useStyles({ title, children })
 
   return (
     <Box className={classes.container}>
-      {title && <span className={classes.title}>{title}</span>}
+      {title && (
+        <Typography className={classes.title} variant="h6" gutterBottom>
+          {title}
+        </Typography>
+      )}
+      {subtitle && (
+        <Typography className={classes.subtitle} variant="body2">
+          {subtitle}
+        </Typography>
+      )}
       {children}
     </Box>
   )

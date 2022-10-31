@@ -473,7 +473,7 @@ const ContactProfile = props => {
             <div
               className={cn(classes.contentContainer, classes.sidenavContainer)}
             >
-              <LastTouch contact={contact} />
+              <LastTouch {..._props} />
               <ContactInfo {..._props} />
               <Flows
                 // @ts-ignore

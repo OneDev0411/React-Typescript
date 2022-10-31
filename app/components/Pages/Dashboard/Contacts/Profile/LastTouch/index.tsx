@@ -1,8 +1,16 @@
 import { Box, makeStyles, Theme } from '@material-ui/core'
 
-import { LastTouched } from 'components/LastTouched'
+import { LastTouched } from '@app/views/components/LastTouched'
 
 import { BasicSection } from '../components/Section/Basic'
+
+interface Props {
+  contact: INormalizedContact
+  submitCallback: (
+    newContact: INormalizedContact,
+    updatedAttribute: IContactAttributeDef
+  ) => void
+}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -19,14 +27,20 @@ const useStyles = makeStyles(
   { name: 'ContactProfileLastTouch' }
 )
 
-interface Props {
-  contact: INormalizedContact
-}
-
-export const LastTouch = ({ contact }: Props) => {
+export const LastTouch = ({ contact, submitCallback }: Props) => {
   const classes = useStyles()
 
   return (
+    // <BasicSection title="Last Touch">
+    //   <Field title="Last Touch" value={lastTouchTime} />
+    //   <Field
+    //     title="Touch Frequency"
+    //     value={`Every ${contact.touch_freq} ${
+    //       contact.touch_freq === 1 ? 'day' : 'days'
+    //     }`}
+    //     isAction
+    //   />
+    // </BasicSection>
     <BasicSection title="Last Touch">
       <Box className={classes.wrapper}>
         <LastTouched contact={contact} />

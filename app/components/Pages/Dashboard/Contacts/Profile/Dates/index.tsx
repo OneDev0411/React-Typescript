@@ -78,6 +78,7 @@ export function Dates({ contact, submitCallback }: Props) {
         section="Dates"
         submitCallback={submitCallback}
         title="Touch Dates"
+        subtitle="Birthdays, Anniversaries"
         expandButtonLabel="More"
       >
         {isLoading ? (
