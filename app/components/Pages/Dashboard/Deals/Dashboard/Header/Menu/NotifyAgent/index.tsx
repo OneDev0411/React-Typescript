@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { useBaseUrl } from '@app/hooks/use-base-url'
 import { IAppState } from '@app/reducers'
 import { selectDealRoles } from '@app/reducers/deals/roles'
+import { getEmojiCodePoint } from '@app/utils/get-emoji-codepoint'
 import {
   EmailFormValues,
   SingleEmailComposeDrawer
@@ -33,9 +34,6 @@ import { getLegalFullName, isPrimaryAgent } from '../../../../utils/roles'
 interface Props {
   deal: IDeal
 }
-
-let hex: any = `0x${'⏳'.charCodeAt(0).toString(16)}`
-let emoji = String.fromCodePoint(hex)
 
 export function NotifyAgents({ deal }: Props) {
   const [, dispatch] = useChecklistActionsContext()
@@ -129,7 +127,9 @@ export function NotifyAgents({ deal }: Props) {
         <SingleEmailComposeDrawer
           isOpen={isEmailDrawerOpen}
           initialValues={{
-            subject: `[Important]: Missing documents for your closing of "${deal.title}"${emoji}`,
+            subject: `[Important]: Missing documents for your closing of "${
+              deal.title
+            }"${getEmojiCodePoint('⏳')}`,
             to: getEmailRecipients(),
             body: [
               'Hello,<br /><br />',
