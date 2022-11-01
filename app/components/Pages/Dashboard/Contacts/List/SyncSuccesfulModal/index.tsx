@@ -23,7 +23,7 @@ export function SyncSuccessfulModal({
         <img src="/static/images/congrats.svg" alt="congratulations" />
         <h2>You’re all set!</h2>
         <p>
-          Your Contacts imported successfuly, start tagging them or add them to
+          Your Contacts imported successfully, start tagging them or add them to
           a Flow and let Rechat do the rest for you.
         </p>
         <br />
