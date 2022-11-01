@@ -34,6 +34,9 @@ interface Props {
   deal: IDeal
 }
 
+let hex: any = `0x${'⏳'.charCodeAt(0).toString(16)}`
+let emoji = String.fromCodePoint(hex)
+
 export function NotifyAgents({ deal }: Props) {
   const [, dispatch] = useChecklistActionsContext()
   const [isEmailDrawerOpen, setIsEmailDrawerOpen] = useState(false)
@@ -126,7 +129,7 @@ export function NotifyAgents({ deal }: Props) {
         <SingleEmailComposeDrawer
           isOpen={isEmailDrawerOpen}
           initialValues={{
-            subject: `[Important]: Missing documents for your closing of "${deal.title}"⏳`,
+            subject: `[Important]: Missing documents for your closing of "${deal.title}"${emoji}`,
             to: getEmailRecipients(),
             body: [
               'Hello,<br /><br />',
