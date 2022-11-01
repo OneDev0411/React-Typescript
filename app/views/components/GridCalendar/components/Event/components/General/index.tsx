@@ -29,7 +29,7 @@ const GeneralEventComponent = ({
       })}
       onClick={handleShowDetails}
     >
-      {!all_day && <span data-for="date">{event.timeText}m</span>}
+      {!all_day && <span data-for="date">{event.timeText}</span>}
       <span>{event.event.title}</span>
     </div>
   )
