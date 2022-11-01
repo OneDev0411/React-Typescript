@@ -20,6 +20,7 @@ export const PrimaryAction = styled.div<{
     height: 100%;
     ${theme.typography.subtitle2};
     width: max-content;
+    white-space: nowrap;
     width: ${(props: PrimaryActionProps) =>
       props.hasSecondaryActions ? '8.5rem' : 'auto'};
     padding: ${(props: PrimaryActionProps) =>
