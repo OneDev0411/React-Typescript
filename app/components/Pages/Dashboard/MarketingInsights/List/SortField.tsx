@@ -1,42 +1,36 @@
-import React from 'react'
-
 import { MenuItem } from '@material-ui/core'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 
-interface Props {
-  sortLabel: string
-  onChange: (item) => void
-  component?: string
-}
-interface SortableColumnsType {
-  label: string
-  value: string
-  ascending: boolean
-}
+import { SortableColumnsType } from '../types'
 
 const sortableColumns: SortableColumnsType[] = [
   { label: 'Newest', value: 'title-date', ascending: false },
   { label: 'Oldest', value: 'title-date', ascending: true }
 ]
 
-const SortFields = ({ sortLabel, component, onChange }: Props) => {
+interface Props {
+  label: string
+  onChange: (item: SortableColumnsType) => void
+}
+
+export const SortFields = ({ label, onChange }: Props) => {
   return (
     <BaseDropdown
-      component={component}
-      buttonLabel={sortLabel || 'A - Z'}
+      component="div"
+      buttonLabel={label || 'A - Z'}
       renderMenu={({ close }) => (
         <div>
-          {sortableColumns.map((c, index) => (
+          {sortableColumns.map((column, index) => (
             <MenuItem
               key={index}
               value={index}
-              onClick={async () => {
-                onChange(c)
+              onClick={() => {
                 close()
+                onChange(column)
               }}
             >
-              {c.label}
+              {column.label}
             </MenuItem>
           ))}
         </div>
@@ -44,5 +38,3 @@ const SortFields = ({ sortLabel, component, onChange }: Props) => {
     />
   )
 }
-
-export default SortFields

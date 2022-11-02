@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import {
   Dialog,
@@ -30,15 +30,17 @@ import useLabeledSwitchHandlers from 'hooks/use-labeled-switch-handlers'
 import { getContactNameInitials } from 'models/contacts/helpers'
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
-import { setEmailNotificationStatus } from 'models/email/set-email-notification-status'
 
 import Loading from '../../../../Partials/Loading'
 import { Container } from '../../Contacts/components/Container'
-import { hasPixelTracking, valueAndPercent } from '../List/helpers'
+import { hasPixelTracking } from '../List/helpers/has-pixel-tracking'
+import { getValuePercent } from '../List/InsightsTable/helpers/get-value-percent'
+import { useInsightsNotificationMutation } from '../List/queries/use-insights-notification-mutate'
+import { SortableColumnsType } from '../types'
 
 import ContactsTable from './ContactsTable'
 import Header from './Header'
-import SortField, { SortableColumnsType as SortFieldType } from './SortField'
+import { SortFields } from './SortField'
 import { ContactsListType } from './types'
 import { useItemData } from './useItemData'
 
@@ -118,7 +120,7 @@ interface Props {
 }
 
 function Insight({ location, params: { id } }: Props & WithRouterProps) {
-  const [sortField, setSortField] = useState<SortFieldType>({
+  const [sortField, setSortField] = useState<SortableColumnsType>({
     label: 'Most Opened',
     value: 'opened',
     ascending: false
@@ -138,6 +140,11 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
 
   const dispatch = useDispatch()
 
+  const { mutate: setEmailNotificationStatus } =
+    useInsightsNotificationMutation(
+      item?.executed_at ? 'executed' : 'scheduled'
+    )
+
   const emailNotificationSettingHandlers = useLabeledSwitchHandlers(
     item?.notifications_enabled,
     async checked => {
@@ -146,7 +153,7 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
       }
 
       try {
-        await setEmailNotificationStatus(item.id, checked)
+        setEmailNotificationStatus({ id: item.id, checked })
       } catch (error) {
         console.error(error)
         dispatch(
@@ -202,9 +209,9 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
     },
     {
       icon: mdiCheckAll,
-      value: valueAndPercent(item.delivered, item.sent),
+      value: getValuePercent(item.delivered, item.sent),
       label: 'Delivered',
-      tooltip: `${valueAndPercent(item.failed, item.sent)} Bounced`,
+      tooltip: `${getValuePercent(item.failed, item.sent)} Bounced`,
       hidden: pixelTracking
     },
     {
@@ -216,7 +223,7 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
     },
     {
       icon: mdiEyeOutline,
-      value: `${valueAndPercent(item.opened, item.delivered)}`,
+      value: `${getValuePercent(item.opened, item.delivered)}`,
       label: 'Opened',
       tooltip: `${item.opened} People have opened the email`,
       hidden: pixelTracking
@@ -230,7 +237,7 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
     },
     {
       icon: mdiCursorDefaultClickOutline,
-      value: `${valueAndPercent(item.clicked, item.delivered)}`,
+      value: `${getValuePercent(item.clicked, item.delivered)}`,
       label: 'Clicked',
       tooltip: `${item.clicked} People have clicked the email`,
       hidden: pixelTracking
@@ -241,11 +248,14 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
     try {
       if (!emailPreview) {
         const emailCampaign = await getEmailCampaign(id, {
-          emailCampaignAssociations: ['emails', 'attachments'],
-          emailRecipientsAssociations: [],
+          associations: {
+            associations: ['emails', 'attachments'],
+            recipientsAssociations: []
+          },
           emailFields: ['html', 'text'],
           limit: 1
         })
+
         const email = getEmailCampaignEmail(emailCampaign)
 
         setEmailPreview(email)
@@ -307,7 +317,7 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sortFieldWrapper}>
-              <SortField sortLabel={sortField.label} onChange={setSortField} />
+              <SortFields sortLabel={sortField.label} onChange={setSortField} />
             </div>
           </div>
         </div>
