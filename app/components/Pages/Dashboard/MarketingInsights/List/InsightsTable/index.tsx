@@ -11,6 +11,7 @@ import type { LoadingPosition } from '@app/views/components/Grid/Table/types'
 import { useInsightsContext } from '../../context/use-insights-context'
 import { useInsights } from '../queries/use-insights'
 
+import { EmailInsightsZeroState } from './EmptyState'
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { LoadingState } from './LoadingState'
 import { useColumns } from './use-columns'
@@ -40,7 +41,7 @@ export function InsightsTable() {
   const { status, sortBy } = useInsightsContext()
 
   const { list, isLoading, isFetchingNextPage, fetchNextPage, refetch } =
-    useInsights(status)
+    useInsights(status, sortBy.value)
 
   const getLoadingPosition = useCallback((): LoadingPosition => {
     if (isFetchingNextPage) {
@@ -75,14 +76,9 @@ export function InsightsTable() {
       classes={{
         row: cn(gridClasses.row, classes.row)
       }}
-      sorting={{
-        sortBy: {
-          value: sortBy.value,
-          ascending: sortBy.ascending
-        }
-      }}
       loading={getLoadingPosition()}
       LoadingStateComponent={LoadingState}
+      EmptyStateComponent={() => <EmailInsightsZeroState />}
     />
   )
 }

@@ -6,7 +6,7 @@ import { deleteEmailCampaign } from '@app/models/email/delete-email-campaign'
 
 import { useInsightsContext } from '../../context/use-insights-context'
 
-import { listStatus } from './keys'
+import { list } from './keys'
 
 interface InsightsQuery {
   pageParams?: string[] | undefined
@@ -34,14 +34,12 @@ export function useInsightsDeleteMutation() {
 
   return useMutation(({ id }: { id: UUID }) => deleteEmailCampaign(id), {
     onMutate: async (data: { id: UUID; checked: boolean }) => {
-      await queryClient.cancelQueries(listStatus(status))
+      await queryClient.cancelQueries(list(status))
 
-      const previousList = queryClient.getQueryData<InsightsQuery>(
-        listStatus(status)
-      )
+      const previousList = queryClient.getQueryData<InsightsQuery>(list(status))
 
       if (previousList) {
-        queryClient.setQueryData<InsightsQuery>(listStatus(status), {
+        queryClient.setQueryData<InsightsQuery>(list(status), {
           ...previousList,
           pages: getNextPages(previousList, data) ?? []
         })
@@ -58,7 +56,7 @@ export function useInsightsDeleteMutation() {
     ) => {
       if (context?.previousList) {
         queryClient.setQueryData<InsightsQuery>(
-          listStatus(status),
+          list(status),
           context.previousList
         )
       }
@@ -69,7 +67,7 @@ export function useInsightsDeleteMutation() {
       })
     },
     onSettled: () => {
-      queryClient.invalidateQueries(listStatus(status))
+      queryClient.invalidateQueries(list(status))
     }
   })
 }

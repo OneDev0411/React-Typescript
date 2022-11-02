@@ -10,6 +10,6 @@ export function allLists() {
   return [...all(), 'list']
 }
 
-export function listStatus(status: EmailCampaignStatus) {
-  return [...all(), 'list', { status }]
+export function list(status: EmailCampaignStatus, order = '-created_at') {
+  return [...all(), 'list', { status, order }]
 }

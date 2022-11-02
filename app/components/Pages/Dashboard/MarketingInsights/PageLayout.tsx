@@ -30,7 +30,7 @@ export default function InsightsPageLayout({
 
   const [sortField, setSortField] = useState<SortableColumnsType>({
     label: 'Newest',
-    value: 'title-date',
+    value: '-created_at',
     ascending: false
   })
 
