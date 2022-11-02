@@ -11,6 +11,7 @@ import type { LoadingPosition } from '@app/views/components/Grid/Table/types'
 import { useInsightsContext } from '../../context/use-insights-context'
 import { useInsights } from '../queries/use-insights'
 
+import { EmailInsightsZeroState } from './EmptyState'
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { LoadingState } from './LoadingState'
 import { useColumns } from './use-columns'
@@ -77,6 +78,7 @@ export function InsightsTable() {
       }}
       loading={getLoadingPosition()}
       LoadingStateComponent={LoadingState}
+      EmptyStateComponent={() => <EmailInsightsZeroState />}
     />
   )
 }
