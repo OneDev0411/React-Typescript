@@ -157,6 +157,7 @@ export function Calendar({
             },
             reset
           )
+          newEvents = newEvents.reverse()
         }
 
         if (eventType === 'history') {

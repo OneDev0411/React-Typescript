@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { mdiPlus } from '@mdi/js'
 import { connect } from 'react-redux'
 
 import { addNotification } from 'components/notification'
@@ -9,6 +10,7 @@ import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
 import { BasicSection } from '../components/Section/Basic'
+import { SectionButton } from '../components/Section/Button'
 
 import AddressField from './AddressField'
 import { generateEmptyAddress, getAddresses } from './helpers/get-addresses'
@@ -167,6 +169,11 @@ class Addresses extends React.Component {
             toggleMode={this.toggleAddressActiveMode}
           />
         ))}
+        <SectionButton
+          onClick={this.addNewAddress}
+          label="More"
+          icon={mdiPlus}
+        />
       </BasicSection>
     )
   }

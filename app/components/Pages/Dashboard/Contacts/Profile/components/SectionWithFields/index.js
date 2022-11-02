@@ -485,6 +485,8 @@ class SectionWithFields extends React.Component {
       )
     }
 
+    console.log(orderedAttributes)
+
     return (
       <BasicSection subtitle={subtitle} title={title}>
         {(orderedAttributes || []).map(attr => this.renderField(attr))}

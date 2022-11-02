@@ -85,7 +85,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  value?: number
+  value?: Nullable<number>
   onUpdateTouchFreq(newValue: Nullable<number>): void
 }
 
@@ -117,7 +117,9 @@ const TouchFrequency = ({ value, onUpdateTouchFreq }: Props) => {
     >
       <Typography variant="body2">Touch Frequency</Typography>
       <Typography variant="body2" className={classes.value}>
-        Every {value} {value === 1 ? 'day' : 'days'}
+        {value
+          ? `Every ${value} ${value === 1 ? 'day' : 'days'}`
+          : 'Add Touch Frequency'}
       </Typography>
       {showAction && (
         <div className={classes.videoModeActionBar}>
