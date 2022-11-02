@@ -9,7 +9,6 @@ const fieldsOrder = [
   'facebook',
   'instagram',
   'linkedin',
-  'pinterest',
   'tiktok',
   'social',
   'website',

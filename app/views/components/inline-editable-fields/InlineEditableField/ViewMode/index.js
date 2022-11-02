@@ -94,7 +94,6 @@ const linkableAttribute = [
   'facebook',
   'instagram',
   'linkedin',
-  'pinterest',
   'tiktok'
 ]
 const copyAttribute = [
