@@ -28,7 +28,9 @@ export function viewFile({
     return
   }
 
-  const path = envelope ? `envelope/${envelope.id}` : `attachment/${file.id}`
+  const path = envelope
+    ? `envelope/${envelope.id}?document=${file.id}`
+    : `attachment/${file.id}`
   const url = `/dashboard/deals/${deal.id}/view/${task.id}/${path}`
 
   browserHistory.push(url)
