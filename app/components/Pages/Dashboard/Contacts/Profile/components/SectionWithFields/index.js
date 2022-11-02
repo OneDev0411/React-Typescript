@@ -485,13 +485,15 @@ class SectionWithFields extends React.Component {
       )
     }
 
-    console.log(orderedAttributes)
+    console.log()
 
     return (
       <BasicSection subtitle={subtitle} title={title}>
         {(orderedAttributes || []).map(attr => this.renderField(attr))}
         {this.props.children}
-        {shouldToggleEmptyAttributes && this.renderToggleButton()}
+        {orderedAttributes.find(a => a.text === '') &&
+          shouldToggleEmptyAttributes &&
+          this.renderToggleButton()}
       </BasicSection>
     )
   }
