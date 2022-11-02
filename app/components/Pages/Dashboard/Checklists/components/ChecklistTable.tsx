@@ -1,4 +1,4 @@
-import { RefObject, useContext } from 'react'
+import React, { RefObject, useContext } from 'react'
 
 import {
   Checkbox,
@@ -9,6 +9,7 @@ import {
   TableHead,
   TableRow,
   Typography,
+  makeStyles,
   Theme,
   Tooltip,
   MenuItem,
@@ -35,6 +36,13 @@ import { useDictionary } from 'hooks/use-dictionary'
 import { useTableStyles } from '../../../../../styles/table.style'
 import { dealTaskTypeToString } from '../constants'
 
+const useStyles = makeStyles(
+  theme => ({
+    root: { padding: theme.spacing(0) }
+  }),
+  { name: 'MuiButton' }
+)
+
 interface Props {
   checklist: IBrandChecklist
   updateTask: (task: IBrandChecklistTask) => void
@@ -50,6 +58,8 @@ export function CheckListTable({
   lastTaskNameEditorRef,
   onReorderTasks
 }: Props) {
+  useStyles()
+
   const theme = useTheme<Theme>()
   const [isRemoving, setRemoving] = useDictionary<boolean>()
   const [isRequiredChanging, setRequiredChanging] = useDictionary<boolean>()
@@ -87,8 +97,19 @@ export function CheckListTable({
 
   const aclTypes: AclTypes[] = [
     { label: 'Agents', value: ['Agents'] },
-    { label: 'Back Office', value: ['BackOffice'] }
+    { label: 'Back Office', value: ['BackOffice'] },
+    { label: 'Agents & Back Office', value: ['Agents', 'BackOffice'] }
   ]
+
+  const accessTypes = acl => {
+    const aclType = aclTypes.find(element => {
+      if (JSON.stringify(element.value) == JSON.stringify(acl)) {
+        return element.label
+      }
+    })
+
+    return aclType?.label
+  }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -104,7 +125,7 @@ export function CheckListTable({
             <TableCell />
             <TableCell>Name</TableCell>
             <TableCell>Inbox</TableCell>
-            <TableCell>Type</TableCell>
+            <TableCell>Access</TableCell>
             <TableCell style={{ width: 1 }}>Required?</TableCell>
             <TableCell style={{ width: 1 }} />
           </TableRow>
@@ -222,7 +243,7 @@ export function CheckListTable({
                             </Typography>
                           ) : (
                             <Typography color="textSecondary">
-                              Empty inbox
+                              Default
                             </Typography>
                           )}
                         </InlineEditableString>
@@ -235,8 +256,8 @@ export function CheckListTable({
                       >
                         <BaseDropdown
                           buttonLabel={
-                            <Typography variant="body1">
-                              {task.acl || 'Please select a type'}
+                            <Typography>
+                              {accessTypes(task.acl) || 'Agents & Back Office'}
                             </Typography>
                           }
                           renderMenu={({ close }) => {
