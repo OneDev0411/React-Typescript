@@ -3,7 +3,8 @@ import {
   FormControlLabel,
   RadioGroup,
   makeStyles,
-  Radio
+  Radio,
+  Link
 } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
@@ -66,15 +67,14 @@ function Campaigns() {
           label={
             <>
               Allow admin to send campaigns on my behalf using my tags.
-              {/* TODO: Uncomment this when the doc link provided by Sahar */}
-              {/* <Link
+              <Link
                 className={classes.link}
                 color="primary"
-                href="#"
+                href="https://help.rechat.com/guides/marketing/campaigns/campaigns-for-admins"
                 target="_blank"
               >
                 Learn More...
-              </Link> */}
+              </Link>
             </>
           }
           disabled={isRunning}
