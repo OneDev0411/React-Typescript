@@ -3,6 +3,9 @@ import React from 'react'
 import SectionWithFields from '../components/SectionWithFields'
 
 const fieldsOrder = [
+  'first_name',
+  'middle_name',
+  'last_name',
   'email',
   'phone_number',
   'source',
