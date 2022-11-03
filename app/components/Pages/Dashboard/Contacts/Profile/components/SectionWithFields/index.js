@@ -450,7 +450,7 @@ class SectionWithFields extends React.Component {
   }
 
   render() {
-    const { title, subtitle, contact, renderer, showTitleAnyway } = this.props
+    const { title, subtitle, contact, renderer } = this.props
     const {
       isAllFieldsEmpty,
       orderedAttributes,
@@ -475,23 +475,20 @@ class SectionWithFields extends React.Component {
 
     if (isAllFieldsEmpty && !toggleEmptyAttributes) {
       return (
-        <BasicSection
-          subtitle={subtitle}
-          title={showTitleAnyway ? title : undefined}
-        >
+        <BasicSection subtitle={subtitle} title={title}>
           {this.props.children}
           {this.renderToggleButton()}
         </BasicSection>
       )
     }
 
-    console.log()
+    console.log(title)
 
     return (
       <BasicSection subtitle={subtitle} title={title}>
         {(orderedAttributes || []).map(attr => this.renderField(attr))}
         {this.props.children}
-        {orderedAttributes.find(a => a.text === '') &&
+        {orderedAttributes.find(a => a.text === '' || a.date === '') &&
           shouldToggleEmptyAttributes &&
           this.renderToggleButton()}
       </BasicSection>

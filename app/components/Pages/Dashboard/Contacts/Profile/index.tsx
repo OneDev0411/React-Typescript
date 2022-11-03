@@ -135,7 +135,7 @@ const ContactProfile = props => {
   const [isLoading, setIsLoading] = useState(
     !isLoadedContactAttrDefs(props?.attributeDefs) || !props?.contact
   )
-  const [activeFilter, setActiveFilter] = useState<Filters>(Filters.History)
+  const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Upcoming)
 
   const fetchContact = useCallback(
     async (callback = () => {}, showFullScreenLoading = false) => {

@@ -17,8 +17,8 @@ export function normalizeEvents(
 
   return Object.entries(list).reduce((acc, [month, daysOfMonth]) => {
     return {
-      ...acc,
-      [month]: getSortedEvents(daysOfMonth)
+      [month]: getSortedEvents(daysOfMonth),
+      ...acc
     }
   }, {})
 }

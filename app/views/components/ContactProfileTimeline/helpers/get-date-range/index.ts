@@ -74,6 +74,7 @@ export function getDateRangeFromEvent(
   event: ICalendarEvent,
   direction: Format
 ): number {
+  // TODO (tof) remove this hack when api will be fixed
   const timestamp = event.recurring ? event.sort_timestamp : event.timestamp
   const date = new Date(timestamp * 1000)
 

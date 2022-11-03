@@ -77,7 +77,7 @@ const useStyles = makeStyles(
       left: '50%'
     },
     loadButton: {
-      color: theme.palette.secondary.main,
+      color: theme.palette.grey['800'],
       '&:hover': {
         backgroundColor: 'transparent'
       }

@@ -15,7 +15,6 @@ import { IAppState } from 'reducers/index'
 import { viewAs } from 'utils/user-teams'
 
 import { CalendarList } from './components/List'
-import { concatEvents } from './helpers/concat-events'
 import { createListRows } from './helpers/create-list-rows'
 import { getDateRangeFromEvent, Format } from './helpers/get-date-range'
 import { normalizeEvents } from './helpers/normalize-events'
@@ -72,7 +71,7 @@ export function Calendar({
     async (
       range: ICalendarRange,
       position: ApiOptions['position']
-    ): Promise<[ICalendarEvent[], ICalendarEvent[]]> => {
+    ): Promise<ICalendarEvent[] | undefined> => {
       const { low = calendarRange.low, high = calendarRange.high } = range
       const commonParams = {
         users: viewAsUsers,
@@ -90,45 +89,58 @@ export function Calendar({
       }
 
       try {
-        if (position === 'Previous') {
-          const events = await getCalendar(loadOldEventsPayload)
+        if (position === 'Next') {
+          let newEvents = await getCalendar(loadNewEventsPayload)
 
-          if (MAX_LIMIT_EVENT > events.length) {
+          if (MAX_LIMIT_EVENT > newEvents.length) {
+            setIsReachedEnd(true)
+          }
+
+          return [...events, ...newEvents]
+        }
+
+        if (position === 'Previous') {
+          const oldEvents = await getCalendar(loadOldEventsPayload)
+
+          if (MAX_LIMIT_EVENT > oldEvents.length) {
             setIsReachedStart(true)
           }
 
-          return [events, []]
+          return [...oldEvents, ...events]
         }
 
-        if (position === 'Next') {
+        if (eventType === 'upcoming') {
           const events = await getCalendar(loadNewEventsPayload)
 
           if (MAX_LIMIT_EVENT > events.length) {
             setIsReachedEnd(true)
           }
 
-          return [[], events]
+          return events
         }
 
-        const events = await Promise.all([
-          await getCalendar(loadOldEventsPayload),
-          await getCalendar(loadNewEventsPayload)
-        ])
+        if (eventType === 'history') {
+          const events = await getCalendar(loadOldEventsPayload)
 
-        if (MAX_LIMIT_EVENT > events[0].length) {
-          setIsReachedStart(true)
+          if (MAX_LIMIT_EVENT > events.length) {
+            setIsReachedStart(true)
+          }
+
+          return events
         }
-
-        if (MAX_LIMIT_EVENT > events[1].length) {
-          setIsReachedEnd(true)
-        }
-
-        return events
       } catch (error) {
         throw error
       }
     },
-    [associations, calendarRange.high, calendarRange.low, filter, viewAsUsers]
+    [
+      associations,
+      calendarRange.high,
+      calendarRange.low,
+      eventType,
+      events,
+      filter,
+      viewAsUsers
+    ]
   )
   const getEvents = useCallback(
     async (
@@ -142,52 +154,28 @@ export function Calendar({
         const { range, position } = option
 
         // fetch calendar data from server based on given parameters
-        const [prevEvents, nextEvents] = await fetchEvents(range, position)
+        const events = await fetchEvents(range, position)
 
-        let newEvents: ICalendarEvent[] = []
+        if (events) {
+          // get current range of fetched calendar
+          const normalizedEvents = normalizeEvents(events, range)
 
-        // Event Type is Upcoming
-        if (eventType === 'upcoming') {
-          console.log('nextEvents', nextEvents)
-          newEvents = concatEvents(
-            {
-              events,
-              nextEvents,
-              prevEvents: []
-            },
-            reset
-          )
-          newEvents = newEvents.reverse()
+          // update events list
+          setEvents(events)
+
+          // updates virtual list rows
+          if (normalizedEvents) {
+            setListRows(createListRows(normalizedEvents))
+            onLoadEvents(normalizedEvents, range)
+          }
         }
-
-        if (eventType === 'history') {
-          console.log('prevEvents', prevEvents)
-          newEvents = concatEvents(
-            {
-              events,
-              prevEvents,
-              nextEvents: []
-            },
-            reset
-          )
-        }
-
-        // get current range of fetched calendar
-        const normalizedEvents = normalizeEvents(newEvents, range)
-
-        // update events list
-        setEvents(newEvents)
-        // updates virtual list rows
-        setListRows(createListRows(normalizedEvents))
-
-        onLoadEvents(normalizedEvents, range)
       } catch (e) {
         console.log(e)
       } finally {
         setIsLoading(false)
       }
     },
-    [fetchEvents, eventType, onLoadEvents, events]
+    [fetchEvents, onLoadEvents]
   )
 
   const handleLoadEvents = async (
