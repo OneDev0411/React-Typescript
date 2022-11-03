@@ -83,7 +83,10 @@ class FileViewer extends Component {
       return null
     }
 
-    const file = getEnvelopeFile(envelope, this.props.task)
+    const documentId = this.props.location.query?.document
+    const file = documentId
+      ? envelope.documents?.find(doc => doc.file === documentId)?.pdf
+      : getEnvelopeFile(envelope, this.props.task)
 
     if (!file) {
       this.props.notify({
