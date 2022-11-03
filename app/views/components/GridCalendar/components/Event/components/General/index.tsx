@@ -19,8 +19,6 @@ const GeneralEventComponent = ({
     startDate.getDate() < endDate.getDate() ||
     startDate.getMonth() < endDate.getMonth()
 
-  console.log(event)
-
   return (
     <div
       className={cn(classes.container, classes.general, {
