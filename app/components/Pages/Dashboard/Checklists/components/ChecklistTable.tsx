@@ -121,6 +121,7 @@ export function CheckListTable({
             <TableCell>Name</TableCell>
             <TableCell>Inbox</TableCell>
             <TableCell>Access</TableCell>
+            <TableCell>Type</TableCell>
             <TableCell style={{ width: 1 }}>Required?</TableCell>
             <TableCell style={{ width: 1 }} />
           </TableRow>
