@@ -18,6 +18,7 @@ import {
 import { useTheme } from '@material-ui/styles'
 import { mdiDrag, mdiTrashCanOutline } from '@mdi/js'
 import classNames from 'classnames'
+import { isEqual } from 'lodash'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import type {
   DroppableProvided,
@@ -92,7 +93,7 @@ export function CheckListTable({
 
   interface AclTypes {
     label: string
-    value: ('Agents' | 'BackOffice')[]
+    value: IBrandChecklistTask['acl']
   }
 
   const aclTypes: AclTypes[] = [
@@ -101,14 +102,8 @@ export function CheckListTable({
     { label: 'Agents & Back Office', value: ['Agents', 'BackOffice'] }
   ]
 
-  const accessTypes = acl => {
-    const aclType = aclTypes.find(element => {
-      if (JSON.stringify(element.value) == JSON.stringify(acl)) {
-        return element.label
-      }
-    })
-
-    return aclType?.label
+  const getAccessType = (acl: IBrandChecklistTask['acl']) => {
+    return aclTypes.find(aclType => isEqual(aclType.value, acl))?.label
   }
 
   return (
@@ -257,7 +252,8 @@ export function CheckListTable({
                         <BaseDropdown
                           buttonLabel={
                             <Typography>
-                              {accessTypes(task.acl) || 'Agents & Back Office'}
+                              {getAccessType(task.acl) ||
+                                'Agents & Back Office'}
                             </Typography>
                           }
                           renderMenu={({ close }) => {
