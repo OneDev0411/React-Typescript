@@ -34,7 +34,7 @@
   ></mj-social-element>
   <mj-social-element
     title="TikTok"
-    src="https://i.ibb.co/kGQVQqW/tiktok.png"
+    src="https://i.ibb.co/8b5Lbjm/tiktok.png"
     href="{{user.tiktok}}"
   ></mj-social-element>
 </mj-social>
