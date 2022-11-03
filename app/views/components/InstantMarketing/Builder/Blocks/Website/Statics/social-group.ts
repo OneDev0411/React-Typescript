@@ -22,8 +22,7 @@ const socialImages = {
   LinkedIn: 'https://i.ibb.co/kxjXJ5B/linkedin.png',
   Twitter: 'https://i.ibb.co/7WkrhZV/twitter.png',
   YouTube: 'https://i.ibb.co/8jd2Jyc/youtube.png',
-  TikTok:
-    'https://assets.streamlinehq.com/image/private/w_72,h_72,ar_1/f_auto/v1/icons/videos/tiktok-1-u6gkrgtg5ffc8f8o5zg2av.png/tiktok-1-takk5qacrstzpoih77sr.png'
+  TikTok: 'https://i.ibb.co/kGQVQqW/tiktok.png'
 }
 
 export const socialGroupBlockTraits = {
