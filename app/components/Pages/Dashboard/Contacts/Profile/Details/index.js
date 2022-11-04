@@ -4,9 +4,6 @@ import SectionWithFields from '../components/SectionWithFields'
 
 const fieldsOrder = [
   'title',
-  'first_name',
-  'middle_name',
-  'last_name',
   'nickname',
   'job_title',
   'company',
