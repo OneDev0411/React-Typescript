@@ -1,7 +1,7 @@
 import { memo, useMemo, useState } from 'react'
 
 import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/Table/components/LoadingComponent'
-import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
+import { InsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
 import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
@@ -108,7 +108,7 @@ function SuperCampaignAgentList() {
           }
         })}
         EmptyStateComponent={() => (
-          <EmailInsightsZeroState title="There are no campaigns" />
+          <InsightsZeroState title="There are no campaigns" />
         )}
       />
       {selectedSuperCampaign && (

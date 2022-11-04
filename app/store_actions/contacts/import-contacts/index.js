@@ -20,7 +20,7 @@ export function importDone() {
       notify({
         allowHTML: true,
         title: 'Contact import complete!',
-        message: 'Contacts have been imported successfuly!',
+        message: 'Contacts have been imported successfully!',
         status: 'success'
       })
     )

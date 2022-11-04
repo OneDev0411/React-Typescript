@@ -1,4 +1,4 @@
-import { Box, Chip, makeStyles, Theme } from '@material-ui/core'
+import { Box, Chip, ChipProps, makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 
 const useStyles = makeStyles(
@@ -26,7 +26,7 @@ interface Props {
   status: string
 }
 
-export function StatusChip({ text, status }: Props) {
+export function StatusChip({ text, status, ...rest }: Props & ChipProps) {
   const classes = useStyles()
 
   return (
@@ -39,6 +39,7 @@ export function StatusChip({ text, status }: Props) {
           {text}
         </Box>
       }
+      {...rest}
     />
   )
 }

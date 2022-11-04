@@ -22,6 +22,7 @@ const socialImages = {
   LinkedIn: 'https://i.ibb.co/kxjXJ5B/linkedin.png',
   Twitter: 'https://i.ibb.co/7WkrhZV/twitter.png',
   YouTube: 'https://i.ibb.co/8jd2Jyc/youtube.png',
+  Pinterest: 'https://i.ibb.co/6430mhS/pinterest.png',
   TikTok: 'https://i.ibb.co/8m7dK1J/tiktok.png'
 }
 
@@ -37,6 +38,7 @@ export const socialGroupBlockTraits = {
         'LinkedIn',
         'Twitter',
         'YouTube',
+        'Pinterest',
         'TikTok'
       ]
     },

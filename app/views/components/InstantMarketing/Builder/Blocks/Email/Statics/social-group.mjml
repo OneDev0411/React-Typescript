@@ -33,6 +33,11 @@
     href="{{user.youtube}}"
   ></mj-social-element>
   <mj-social-element
+    title="Pinterest"
+    src="https://i.ibb.co/6430mhS/pinterest.png"
+    href="{{user.Pinterest}}"
+  ></mj-social-element>
+  <mj-social-element
     title="TikTok"
     src="https://i.ibb.co/8m7dK1J/tiktok.png"
     href="{{user.tiktok}}"

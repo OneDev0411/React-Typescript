@@ -164,6 +164,7 @@ declare type IEmailCampaign<
   rejected: number
   delivered: number
   failed: number
+  failed_at: Nullable<number>
   opened: number
   clicked: number
   unsubscribed: number

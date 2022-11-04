@@ -34,7 +34,7 @@ export const UnparkContact = ({ contactId, callback }: Props) => {
       dispatch(
         notify({
           status: 'success',
-          message: 'The parked contacts added to your contacts successfuly.'
+          message: 'The parked contacts added to your contacts successfully.'
         })
       )
     } catch (e) {
