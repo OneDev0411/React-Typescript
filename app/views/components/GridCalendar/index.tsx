@@ -446,6 +446,11 @@ export const GridCalendarPresentation = ({
           dateClick={handleDayClick}
           eventDrop={handleEditEvent}
           eventResize={handleEditEvent}
+          eventTimeFormat={{
+            hour: 'numeric',
+            minute: '2-digit',
+            meridiem: 'short'
+          }}
           moreLinkClick="day"
           customButtons={{
             filterButton: {
