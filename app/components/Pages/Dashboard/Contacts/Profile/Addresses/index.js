@@ -50,13 +50,21 @@ class Addresses extends React.Component {
     this.addressAttributeDefs = addressAttributeDefs
   }
 
-  toggleAddressActiveMode = ({ index }) =>
-    this.setState(state => ({
-      addresses: state.addresses.map(a => ({
-        ...a,
-        isActive: a.index === index ? !a.isActive : a.isActive
+  toggleAddressActiveMode = ({ index }) => {
+    if (this.state.addresses[index]?.label) {
+      this.setState(state => ({
+        addresses: state.addresses.map(a => ({
+          ...a,
+          isActive: a.index === index ? !a.isActive : a.isActive
+        }))
       }))
-    }))
+    }
+
+    addNotification({
+      type: 'error',
+      message: 'Please enter a label for this address'
+    })
+  }
 
   addNewAddress = event => {
     if (event && event.stopPropagation) {
