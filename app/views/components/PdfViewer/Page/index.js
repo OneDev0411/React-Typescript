@@ -13,6 +13,15 @@ export class Page extends React.Component {
       this.props.observer.observe(this.pageContainer)
     }
 
+    /**
+     * This issue is caused by the Konva package, which overrides DOMMatrix
+     * https://github.com/konvajs/konva/blob/master/src/index-node.ts#L7
+     * Until Konva fixes its end or we find a proper workaround, this might be a temporary fix
+     */
+    if (!window.DOMMatrix) {
+      window.DOMMatrix = DOMMatrixReadOnly
+    }
+
     this.renderPage(this.props.isVisible)
   }
 
