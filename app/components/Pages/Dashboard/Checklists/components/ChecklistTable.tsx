@@ -9,7 +9,6 @@ import {
   TableHead,
   TableRow,
   Typography,
-  makeStyles,
   Theme,
   Tooltip,
   MenuItem,
@@ -37,13 +36,6 @@ import { useDictionary } from 'hooks/use-dictionary'
 import { useTableStyles } from '../../../../../styles/table.style'
 import { dealTaskTypeToString } from '../constants'
 
-const useStyles = makeStyles(
-  theme => ({
-    root: { padding: theme.spacing(0) }
-  }),
-  { name: 'MuiButton' }
-)
-
 interface Props {
   checklist: IBrandChecklist
   updateTask: (task: IBrandChecklistTask) => void
@@ -59,8 +51,6 @@ export function CheckListTable({
   lastTaskNameEditorRef,
   onReorderTasks
 }: Props) {
-  useStyles()
-
   const theme = useTheme<Theme>()
   const [isRemoving, setRemoving] = useDictionary<boolean>()
   const [isRequiredChanging, setRequiredChanging] = useDictionary<boolean>()

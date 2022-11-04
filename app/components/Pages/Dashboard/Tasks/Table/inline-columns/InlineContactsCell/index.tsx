@@ -25,6 +25,8 @@ interface Props {
 }
 
 export function InlineContactsCell({ task, closeHandler }: Props) {
+  console.log('task contact', task)
+
   const mutation = useTaskMutation(task)
 
   const [contacts, setContacts] = useState(
