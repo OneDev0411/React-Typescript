@@ -81,8 +81,8 @@ export default class Fetch {
 
     // We currently have problems in using any environment other than development
     // when we want the server to work in development mode (run webpack in
-    // dev mode and in memory). So we use e2e as a workaround.
-    if (process.env.NODE_ENV === 'ci' || process.env.E2E) {
+    // dev mode and in memory).
+    if (process.env.NODE_ENV === 'ci') {
       // Without this header, API is partly broken because background jobs
       // are not handled in the request normally. We need to either run
       // worker process or send this header. Running worker process didn't work

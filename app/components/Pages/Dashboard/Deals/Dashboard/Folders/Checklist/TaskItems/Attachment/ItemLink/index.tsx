@@ -47,7 +47,7 @@ export function ItemLink({
 
   const link =
     documentEnvelopes.length > 0
-      ? `envelope/${documentEnvelopes[0].id}`
+      ? `envelope/${documentEnvelopes[0].id}?document=${file.id}`
       : `attachment/${file.id}`
 
   return (

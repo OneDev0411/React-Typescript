@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="Tests/e2e" pattern="file[web]:tests/e2e/tests//*" />
-</component>

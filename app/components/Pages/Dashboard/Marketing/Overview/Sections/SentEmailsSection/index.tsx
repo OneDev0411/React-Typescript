@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Grid, Typography } from '@material-ui/core'
 
+import { useInsights } from '@app/components/Pages/Dashboard/MarketingInsights/List/queries/use-insights'
 import Link from 'components/ALink'
 import CardSkeleton from 'components/CardSkeleton'
 import EmailInsightCard from 'components/EmailInsightCard'
@@ -9,10 +10,8 @@ import EmailInsightCard from 'components/EmailInsightCard'
 import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
 
-import { useEmailCampaigns } from './hooks'
-
 export default function SentEmailsSection() {
-  const { isLoading, campaigns } = useEmailCampaigns()
+  const { isLoading, list: campaigns } = useInsights('executed')
 
   return (
     <SectionLayout

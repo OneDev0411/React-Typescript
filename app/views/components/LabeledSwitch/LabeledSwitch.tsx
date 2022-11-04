@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   makeStyles,
@@ -58,13 +58,18 @@ export default function LabeledSwitch({
   labelMargin = 2
 }: LabeledSwitchProps) {
   const classes = useStyles({ labelMargin })
+  const [isChecked, setIsChecked] = useState(checked)
 
   const switchInput = (
     <Switch
       {...SwitchProps}
       size="small"
-      checked={checked}
-      onChange={onChange}
+      checked={isChecked}
+      onChange={(event, checked) => {
+        setIsChecked(state => !state)
+
+        onChange?.(event, checked)
+      }}
     />
   )
 

@@ -9,15 +9,24 @@ import {
 
 import { normalizeContactsForEmailCompose } from '@app/models/email/helpers/normalize-contact'
 import SendEmailButton from '@app/views/components/SendEmailButton'
+import { mdiPinterestPath } from '@app/views/components/SvgIcons/Pinterest/iconPinterest'
 import { mdiTikTokPath } from '@app/views/components/SvgIcons/Tiktok/iconTiktok'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-const fields = ['website', 'facebook', 'instagram', 'linkedin', 'tiktok']
+const fields = [
+  'website',
+  'facebook',
+  'instagram',
+  'linkedin',
+  'pinterest',
+  'tiktok'
+]
 const tooltipTitle = {
   website: 'Website',
   facebook: 'Facebook',
   instagram: 'Instagram',
   linkedin: 'Linkedin',
+  pinterest: 'Pinterest',
   tiktok: 'TikTok'
 }
 const fieldsIcon = {
@@ -25,6 +34,7 @@ const fieldsIcon = {
   facebook: mdiFacebook,
   linkedin: mdiLinkedin,
   instagram: mdiInstagram,
+  pinterest: mdiPinterestPath,
   tiktok: mdiTikTokPath
 }
 

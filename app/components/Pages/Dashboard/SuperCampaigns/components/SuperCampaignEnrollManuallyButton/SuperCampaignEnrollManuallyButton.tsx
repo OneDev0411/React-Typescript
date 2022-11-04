@@ -4,7 +4,8 @@ import {
   Button,
   makeStyles,
   Typography,
-  CircularProgress
+  CircularProgress,
+  Link
 } from '@material-ui/core'
 import { mdiPlus } from '@mdi/js'
 import classNames from 'classnames'
@@ -125,22 +126,19 @@ function SuperCampaignEnrollManuallyButton({
   return (
     <>
       <div className={classNames(classes.root, className)}>
-        {
-          <Typography variant="body2">
-            {pluralize('user', availableAgentCount, true)} did not meet the
-            criteria to enroll in this campaign.
-            {/* TODO: Uncomment this when the doc link provided by Sahar */}
-            {/* <Link
-              className={classes.link}
-              color="primary"
-              href="#"
-              target="_blank"
-              rel="noopener"
-            >
-              Learn More
-            </Link> */}
-          </Typography>
-        }
+        <Typography variant="body2">
+          {pluralize('user', availableAgentCount, true)} did not meet the
+          criteria to enroll in this campaign.
+          <Link
+            className={classes.link}
+            color="primary"
+            href="https://help.rechat.com/guides/marketing/campaigns/campaigns-for-admins"
+            target="_blank"
+            rel="noopener"
+          >
+            Learn More
+          </Link>
+        </Typography>
         <Button
           color="primary"
           startIcon={
