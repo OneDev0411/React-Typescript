@@ -1,4 +1,4 @@
-import fecha from 'fecha'
+import { format } from 'fecha'
 
 import {
   convertDateToTimestamp,
@@ -29,7 +29,10 @@ export const generatePayload = (
 
   return [
     {
-      label: fecha.format(newDate, dateFormat),
+      label: format(
+        new Date(newDate.toLocaleString('en-US', { timeZone: 'UTC' })),
+        dateFormat
+      ),
       value: convertDateToTimestamp(newDate)
     }
   ]
