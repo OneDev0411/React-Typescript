@@ -1,4 +1,4 @@
-import { format, parse } from 'fecha'
+import { format } from 'fecha'
 
 import {
   convertDateToTimestamp,
@@ -30,7 +30,7 @@ export const generatePayload = (
   return [
     {
       label: format(
-        parse(newDate.toUTCString(), 'longDate') as Date,
+        new Date(newDate.toLocaleString('en-US', { timeZone: 'UTC' })),
         dateFormat
       ),
       value: convertDateToTimestamp(newDate)

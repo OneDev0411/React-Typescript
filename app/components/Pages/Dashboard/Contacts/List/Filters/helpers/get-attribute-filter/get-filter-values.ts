@@ -1,4 +1,4 @@
-import { format, parse } from 'fecha'
+import { format } from 'fecha'
 
 import { convertTimestampToDate } from '@app/utils/date-utils'
 import { getDateValues } from '@app/views/components/inline-editable-fields/InlineDateField/helpers'
@@ -19,9 +19,12 @@ export const getFilterValues = (
   if (attribute.data_type === 'date') {
     const dateValue = getDateValues(value)
     const dateFormat = dateValue.year ? 'MMM DD, YYYY' : 'MMM DD'
-    const dateStringUTC = convertTimestampToDate(value).toUTCString()
+    const dateStringUTC = convertTimestampToDate(value).toLocaleString(
+      'en-US',
+      { timeZone: 'UTC' }
+    )
 
-    const label = format(parse(dateStringUTC, 'longDate') as Date, dateFormat)
+    const label = format(new Date(dateStringUTC), dateFormat)
 
     return payloadGenerator(value, label)
   }
