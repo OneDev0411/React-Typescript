@@ -15,6 +15,7 @@ import { Avatar } from '@app/views/components/Avatar'
 import { ContactsList } from '@app/views/components/ContactsList'
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
+import { useTaskAssociation } from '../../../hooks/use-task-association'
 import { useTaskMutation } from '../../../queries/use-task-mutation'
 import type { ITask } from '../../../types'
 
@@ -26,6 +27,11 @@ interface Props {
 
 export function InlineContactsCell({ task, closeHandler }: Props) {
   const mutation = useTaskMutation(task)
+  const taskAssociations = useTaskAssociation(
+    task,
+    ({ association_type }) =>
+      ['contact', 'email'].includes(association_type) === false
+  )
 
   const [contacts, setContacts] = useState(
     task.associations?.filter(
@@ -44,28 +50,36 @@ export function InlineContactsCell({ task, closeHandler }: Props) {
   }, [contacts.length])
 
   const handleDelete = (id: UUID) => {
-    const nextAssociations = contacts.filter(item => item.contact?.id !== id)
+    const nextContactAssociations = contacts.filter(
+      item => item.contact?.id !== id
+    )
 
-    setContacts(nextAssociations)
+    setContacts(nextContactAssociations)
 
-    mutation.mutate({
-      associations: nextAssociations.map(association => ({
+    const associations = [
+      ...taskAssociations,
+      ...nextContactAssociations.map(association => ({
         association_type: 'contact',
         id: association.id,
         contact: association.contact
-      })) as unknown as TaskAssociation[]
+      }))
+    ]
+
+    mutation.mutate({
+      associations: associations as TaskAssociation[]
     })
   }
 
   const onChangeContact = (list: IContact[]) => {
     mutation.mutate({
       associations: [
+        ...taskAssociations,
         ...contacts,
-        ...(list.map(contact => ({
+        ...list.map(contact => ({
           association_type: 'contact',
           contact
-        })) as unknown as TaskAssociation[])
-      ]
+        }))
+      ] as TaskAssociation[]
     })
   }
 
