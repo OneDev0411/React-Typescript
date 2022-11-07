@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { AssociationPicker } from '@app/views/components/AssociationPicker'
 
-import { useTaskAssociation } from '../../../hooks/use-task-association'
+import { useTaskAssociation as useTaskAssociations } from '../../../hooks/use-task-associations'
 import { useTaskMutation } from '../../../queries/use-task-mutation'
 import type { ITask } from '../../../types'
 
@@ -12,7 +12,7 @@ interface Props {
 
 export function InlineAssociationCell({ task }: Props) {
   const { mutate } = useTaskMutation(task)
-  const taskAssociations = useTaskAssociation(
+  const taskAssociations = useTaskAssociations(
     task,
     ({ association_type }) =>
       ['deal', 'listing'].includes(association_type) === false
