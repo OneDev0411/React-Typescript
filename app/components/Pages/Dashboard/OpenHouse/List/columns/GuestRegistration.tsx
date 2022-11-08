@@ -6,6 +6,10 @@ interface Props {
 }
 
 export default function GuestRegistration({ activeBrandId, openHouse }: Props) {
+  if (!openHouse.metadata?.template) {
+    return null
+  }
+
   // eslint-disable-next-line max-len
   const registerPageURL = `/openhouse/${openHouse.id}/${activeBrandId}/register`
 
