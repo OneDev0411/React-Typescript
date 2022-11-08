@@ -1,120 +1,196 @@
 import { useState } from 'react'
 
-import { Box, CircularProgress } from '@material-ui/core'
+import {
+  makeStyles,
+  Button,
+  CircularProgress,
+  DialogActions
+} from '@material-ui/core'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
 import { addAssignee } from '@app/models/assignees/add-assignee'
 import TeamAgents from '@app/views/components/TeamAgents'
 import { AgentsList } from '@app/views/components/TeamAgentsDrawer/List'
 
-import AssigneeDialog from './AssigneeDialog'
-import AssigneeEmail from './AssigneeEmail'
+import { assigneesToBrandedUsers } from './helpers/assignees-to-branded-users'
+import IntroduceAssigneesEmailCompose from './IntroduceAssigneesEmailCompose'
+import IntroduceDialog from './IntroduceDialog'
+
+const useStyles = makeStyles(
+  theme => ({
+    root: {
+      width: '400px',
+      height: '430px'
+    },
+    list: {
+      height: '385px'
+    },
+    loading: {
+      display: 'flex',
+      height: '100%',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    emptyState: {
+      margin: theme.spacing(2, 0),
+      textAlign: 'center'
+    }
+  }),
+  { name: 'AssigneesEditMode' }
+)
 
 interface Props {
   contact: INormalizedContact
-  onChange: (newContact: INormalizedContact) => void
+  onSave: (newContact: INormalizedContact) => void
+  onClose: () => void
 }
 
-export function AssigneesEditMode({ contact, onChange }: Props) {
-  const [currentAgent, setCurrentAgent] = useState<Nullable<BrandedUser>>(null)
-  const [showEmailDialog, setShowEmailDialog] = useState<boolean>(false)
-  const [showEmailDrawer, setShowEmailDrawer] = useState<boolean>(false)
-  const [selectedAgent] = useState<BrandedUser[]>([])
+export function AssigneesEditMode({ contact, onClose, onSave }: Props) {
+  const classes = useStyles()
+  const [showIntroduceDialog, setShowIntroduceDialog] = useState<boolean>(false)
+  const [showEmailComposeDrawer, setShowEmailComposeDrawer] =
+    useState<boolean>(false)
+  const [isDirty, setIsDirty] = useState<boolean>(false)
+  const [isSaving, setIsSaving] = useState<boolean>(false)
+  const [selectedAgents, setSelectedAgents] = useState<BrandedUser[]>(
+    assigneesToBrandedUsers(contact.assignees)
+  )
+
   const [searchCriteria, setSearchCriteria] = useState('')
   const [debouncedSetSearchCriteria] = useDebouncedCallback(
     setSearchCriteria,
     500
   )
 
-  const handleSelect = async (agent: BrandedUser) => {
-    if (!agent && !contact.assignees) {
-      return
-    }
-
-    const assignees = Array.isArray(contact.assignees)
-      ? contact.assignees.map(assignee => ({
-          user: assignee?.user?.id,
-          brand: assignee?.brand?.id
-        }))
-      : []
+  const handleSave = async () => {
+    setIsSaving(true)
 
     try {
       const { data } = await addAssignee(contact.id, {
-        assignees: [...assignees, { brand: agent.brand_id, user: agent.id }]
+        assignees: selectedAgents.map(assignee => ({
+          user: assignee.id,
+          brand: assignee.brand_id
+        }))
       })
 
-      setCurrentAgent(agent)
+      onSave(data)
 
       // Email feature is only available if the contact has an email
-      if (contact.email) {
-        setShowEmailDialog(true)
+      if (selectedAgents.length > 0 && contact.email) {
+        setShowIntroduceDialog(true)
+      } else {
+        onClose()
       }
-
-      onChange(data)
     } catch (err) {
       console.error(err)
+    } finally {
+      setIsSaving(false)
+      setIsDirty(false)
     }
   }
 
-  const handleCloseDialog = () => setShowEmailDialog(false)
+  const handleSelectAgent = (agent: BrandedUser) => {
+    setIsDirty(true)
 
-  const handleSendEmail = () => {
-    setShowEmailDialog(false)
-    setShowEmailDrawer(true)
+    const isSelected = selectedAgents.some(
+      assignee =>
+        assignee.id === agent.id && assignee.brand_id === agent.brand_id
+    )
+
+    const newAssignees = isSelected
+      ? selectedAgents.filter(
+          assignee =>
+            assignee.id !== agent.id || assignee.brand_id !== agent.brand_id
+        )
+      : [...selectedAgents, agent]
+
+    setSelectedAgents(newAssignees)
+  }
+
+  const handleOpenIntroduceDialog = () => {
+    setShowIntroduceDialog(false)
+    setShowEmailComposeDrawer(true)
+  }
+
+  const handleCloseIntroduceDialog = () => {
+    setShowIntroduceDialog(false)
+    onClose()
+  }
+
+  const handleCloseIntroduceAssigneesEmailCompose = () => {
+    setShowEmailComposeDrawer(false)
+    onClose()
   }
 
   return (
-    <>
-      <AssigneeDialog
-        open={showEmailDialog}
-        currentAgentName={currentAgent?.display_name}
-        currentContactName={contact?.display_name}
-        handleClose={handleCloseDialog}
-        handleConfirm={handleSendEmail}
-      />
-      {contact?.email && currentAgent?.email && (
-        <AssigneeEmail
-          isOpen={showEmailDrawer}
-          onClose={() => setShowEmailDrawer(false)}
-          contactEmail={contact.email}
-          currentAgentName={currentAgent.display_name}
-          currentAgentEmail={currentAgent.email}
-          contactName={contact.display_name}
-        />
+    <div className={classes.root}>
+      {contact.email && (
+        <>
+          <IntroduceDialog
+            open={showIntroduceDialog}
+            assignees={selectedAgents}
+            contactName={contact?.display_name}
+            onClose={handleCloseIntroduceDialog}
+            onConfirm={handleOpenIntroduceDialog}
+          />
+          <IntroduceAssigneesEmailCompose
+            isOpen={showEmailComposeDrawer}
+            onClose={handleCloseIntroduceAssigneesEmailCompose}
+            contactEmail={contact.email}
+            assignees={selectedAgents}
+            contactName={contact.display_name}
+          />
+        </>
       )}
       <TeamAgents flattenTeams={false} isPrimaryAgent criteria={searchCriteria}>
         {({ isLoading, isEmptyState, teams }) => (
           <>
             {isLoading && (
-              <Box
-                display="flex"
-                height="100%"
-                justifyContent="center"
-                alignItems="center"
-              >
+              <div className={classes.loading}>
                 <CircularProgress />
-              </Box>
+              </div>
             )}
             {isEmptyState && (
-              <Box my={2} textAlign="center">
+              <div className={classes.emptyState}>
                 We could not find any agent in your brand
-              </Box>
+              </div>
             )}
             {!isEmptyState && !isLoading && (
-              <AgentsList
-                teams={teams}
-                searchCriteria={searchCriteria}
-                selectedAgents={selectedAgent}
-                multiSelection={false}
-                onSelectAgent={agent => {
-                  handleSelect(agent)
-                }}
-                onChangeCriteria={debouncedSetSearchCriteria}
-              />
+              <>
+                <div className={classes.list}>
+                  <AgentsList
+                    teams={teams}
+                    searchCriteria={searchCriteria}
+                    selectedAgents={selectedAgents}
+                    multiSelection
+                    onSelectAgent={handleSelectAgent}
+                    onChangeCriteria={debouncedSetSearchCriteria}
+                  />
+                </div>
+                <DialogActions>
+                  <Button
+                    variant="text"
+                    color="default"
+                    disabled={isSaving}
+                    onClick={onClose}
+                  >
+                    Cancel
+                  </Button>
+
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    disabled={!isDirty || isSaving}
+                    onClick={handleSave}
+                  >
+                    {isSaving ? 'Saving...' : 'Save'}
+                  </Button>
+                </DialogActions>
+              </>
             )}
           </>
         )}
       </TeamAgents>
-    </>
+    </div>
   )
 }

@@ -12,8 +12,6 @@ import { InlineEditColumnsProps as AssigneesInlineEditProps } from './type'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      width: '400px',
-      height: '400px',
       padding: theme.spacing(1),
       overflow: 'hidden'
     }
@@ -24,7 +22,8 @@ const useStyles = makeStyles(
 )
 export function AssigneesInlineEdit({
   contact,
-  callback = noop
+  callback = noop,
+  close = noop
 }: AssigneesInlineEditProps) {
   const classes = useStyles()
 
@@ -32,13 +31,17 @@ export function AssigneesInlineEdit({
     return normalizeContact(contact)
   }, [contact])
 
-  const onChange = (newContact: IContact) => {
+  const onSave = (newContact: IContact) => {
     callback(newContact.id)
   }
 
   return (
     <div className={classes.container}>
-      <AssigneesEditMode contact={normalizedContact} onChange={onChange} />
+      <AssigneesEditMode
+        contact={normalizedContact}
+        onSave={onSave}
+        onClose={close}
+      />
     </div>
   )
 }

@@ -36,8 +36,6 @@ const useStyles = makeStyles(
       borderTop: `1px solid ${theme.palette.action.disabledBackground}`
     },
     popoverContainer: {
-      width: '400px',
-      height: '400px',
       padding: theme.spacing(1),
       overflow: 'hidden'
     },
@@ -211,7 +209,11 @@ const Assignee = ({ contact, submitCallback }: Props) => {
         }}
       >
         <div className={classes.popoverContainer}>
-          <AssigneesEditMode contact={contact} onChange={submitCallback} />
+          <AssigneesEditMode
+            contact={contact}
+            onSave={submitCallback}
+            onClose={handleCloseModal}
+          />
         </div>
       </Popover>
     </>
