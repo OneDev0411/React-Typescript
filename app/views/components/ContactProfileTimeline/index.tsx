@@ -74,8 +74,6 @@ export function Calendar({
     ): Promise<ICalendarEvent[] | undefined> => {
       const { low = calendarRange.low, high = calendarRange.high } = range
 
-      console.log('fetchEvents', range, position)
-
       const commonParams = {
         users: viewAsUsers,
         filter,
@@ -99,19 +97,17 @@ export function Calendar({
             setIsReachedEnd(true)
           }
 
-          console.log('next', newEvents)
-
           return [...events, ...newEvents]
         }
 
         if (position === 'Previous') {
           let oldEvents = await getCalendar(loadOldEventsPayload)
 
+          oldEvents = oldEvents.reverse()
+
           if (MAX_LIMIT_EVENT > oldEvents.length) {
             setIsReachedStart(true)
           }
-
-          console.log('Previous', oldEvents)
 
           return [...events, ...oldEvents]
         }
@@ -123,8 +119,6 @@ export function Calendar({
             setIsReachedEnd(true)
           }
 
-          console.log('upcoming', events)
-
           return events
         }
 
@@ -135,9 +129,7 @@ export function Calendar({
             setIsReachedStart(true)
           }
 
-          console.log('history', events)
-
-          return events
+          return events.reverse()
         }
       } catch (error) {
         throw error
@@ -163,8 +155,6 @@ export function Calendar({
         setIsLoading(true)
 
         const { range, position } = option
-
-        console.log('getEvents', range, position)
 
         // fetch calendar data from server based on given parameters
         const events = await fetchEvents(range, position)
@@ -230,7 +220,10 @@ export function Calendar({
       }
 
       if (direction === Format.Previous) {
-        currentRange.high = getDateRangeFromEvent(events[0], direction)
+        currentRange.high = getDateRangeFromEvent(
+          events[events.length - 1],
+          direction
+        )
       }
 
       return currentRange

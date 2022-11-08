@@ -93,11 +93,8 @@ function getSortedEvents(events: ICalendarMonthEvents) {
  * @param range
  */
 function getEventIndex(event: ICalendarEvent, range: ICalendarRange) {
-  const { low, high } = range
+  const eventTime = new Date(event.sort_timestamp * 1000)
 
-  const from = new Date(high * 1000)
-  const to = new Date(low * 1000)
-  const eventTime = new Date(event.timestamp * 1000)
   const isAllDayEvent = event.all_day || false
 
   if (isAllDayEvent) {
@@ -124,19 +121,5 @@ function getEventIndex(event: ICalendarEvent, range: ICalendarRange) {
       'email_campaign_recipient'
     ].includes(event.object_type) === false
 
-  if (!event.recurring) {
-    return createDayId(eventTime, convertToUTC)
-  }
-
-  const year =
-    from.getUTCFullYear() === to.getUTCFullYear() &&
-    eventTime.getUTCMonth() >= from.getUTCMonth()
-      ? from.getUTCFullYear()
-      : to.getUTCFullYear()
-  const month = isAllDayEvent
-    ? eventTime.getMonth() + 1
-    : eventTime.getUTCMonth() + 1
-  const day = isAllDayEvent ? eventTime.getDate() : eventTime.getUTCDate()
-
-  return `${year}/${month}/${day}`
+  return createDayId(eventTime, convertToUTC)
 }

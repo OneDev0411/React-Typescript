@@ -132,6 +132,11 @@ const TouchFrequency = ({ value, onUpdateTouchFreq }: Props) => {
     setAnchorEl(null)
   }
 
+  const handleSelect = (newValue: Nullable<number>) => {
+    onUpdateTouchFreq(newValue)
+    handleClose()
+  }
+
   return (
     <Link
       onMouseEnter={() => setShowAction(true)}
@@ -174,13 +179,13 @@ const TouchFrequency = ({ value, onUpdateTouchFreq }: Props) => {
           {showCustom ? (
             <ManageRelationshipCustomItem
               contactTouchFreq={value || null}
-              onChangeTouchFreq={onUpdateTouchFreq}
+              onChangeTouchFreq={handleSelect}
             />
           ) : (
             <div className={classes.actionsWrapper}>
               {Object.keys(frequencyOptions).map(key => (
                 <div
-                  onClick={() => onUpdateTouchFreq(Number(key))}
+                  onClick={() => handleSelect(Number(key))}
                   key={key}
                   className={classes.action}
                 >
