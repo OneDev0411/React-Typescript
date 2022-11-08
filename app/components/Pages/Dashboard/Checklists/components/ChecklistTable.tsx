@@ -1,4 +1,4 @@
-import { RefObject, useContext } from 'react'
+import React, { RefObject, useContext } from 'react'
 
 import {
   Checkbox,
@@ -10,11 +10,14 @@ import {
   TableRow,
   Typography,
   Theme,
-  Tooltip
+  Tooltip,
+  MenuItem,
+  MenuList
 } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 import { mdiDrag, mdiTrashCanOutline } from '@mdi/js'
 import classNames from 'classnames'
+import { isEqual } from 'lodash'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import type {
   DroppableProvided,
@@ -24,6 +27,7 @@ import type {
 } from 'react-beautiful-dnd'
 
 import { reorder } from '@app/utils/dnd-reorder'
+import { BaseDropdown } from 'components/BaseDropdown'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableString } from 'components/inline-editable-fields/InlineEditableString'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -77,6 +81,21 @@ export function CheckListTable({
     )
   }
 
+  interface AclTypes {
+    label: string
+    value: IBrandChecklistTask['acl']
+  }
+
+  const aclTypes: AclTypes[] = [
+    { label: 'Agents', value: ['Agents'] },
+    { label: 'Back Office', value: ['BackOffice'] },
+    { label: 'Agents & Back Office', value: ['Agents', 'BackOffice'] }
+  ]
+
+  const getAccessType = (acl: IBrandChecklistTask['acl']) => {
+    return aclTypes.find(aclType => isEqual(aclType.value, acl))?.label
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Table
@@ -90,6 +109,8 @@ export function CheckListTable({
           <TableRow>
             <TableCell />
             <TableCell>Name</TableCell>
+            <TableCell>Inbox</TableCell>
+            <TableCell>Access</TableCell>
             <TableCell>Type</TableCell>
             <TableCell style={{ width: 1 }}>Required?</TableCell>
             <TableCell style={{ width: 1 }} />
@@ -138,7 +159,7 @@ export function CheckListTable({
 
                       <TableCell
                         style={{
-                          width: '65%'
+                          width: '26%'
                         }}
                       >
                         <InlineEditableString
@@ -148,10 +169,7 @@ export function CheckListTable({
                             : {})}
                           value={task.title}
                           TextFieldProps={{
-                            fullWidth: true,
-                            style: {
-                              maxWidth: '30rem'
-                            }
+                            fullWidth: true
                           }}
                           onSave={title =>
                             updateTask({
@@ -177,9 +195,86 @@ export function CheckListTable({
                           )}
                         </InlineEditableString>
                       </TableCell>
+
                       <TableCell
                         style={{
-                          width: '15%'
+                          width: '26%'
+                        }}
+                      >
+                        <InlineEditableString
+                          {...(Array.isArray(checklist.tasks) &&
+                          index === checklist.tasks.length - 1
+                            ? { ref: lastTaskNameEditorRef }
+                            : {})}
+                          value={task.tab_name}
+                          TextFieldProps={{
+                            fullWidth: true
+                          }}
+                          onSave={tab_name =>
+                            updateTask({
+                              ...task,
+                              tab_name
+                            })
+                          }
+                        >
+                          {task.tab_name ? (
+                            <Typography
+                              variant={
+                                task.task_type === 'Splitter'
+                                  ? 'subtitle1'
+                                  : 'body1'
+                              }
+                            >
+                              {task.tab_name}
+                            </Typography>
+                          ) : (
+                            <Typography color="textSecondary">
+                              Default
+                            </Typography>
+                          )}
+                        </InlineEditableString>
+                      </TableCell>
+
+                      <TableCell
+                        style={{
+                          width: '21%'
+                        }}
+                      >
+                        <BaseDropdown
+                          buttonLabel={
+                            <Typography>
+                              {getAccessType(task.acl) ||
+                                'Agents & Back Office'}
+                            </Typography>
+                          }
+                          renderMenu={({ close }) => {
+                            return (
+                              <MenuList>
+                                {aclTypes.map((acl, index) => (
+                                  <MenuItem
+                                    key={index}
+                                    onClick={() => {
+                                      updateTask({
+                                        ...task,
+                                        acl: acl.value
+                                      })
+                                      close()
+                                    }}
+                                  >
+                                    <Typography variant="body1">
+                                      {acl.label}
+                                    </Typography>
+                                  </MenuItem>
+                                ))}
+                              </MenuList>
+                            )
+                          }}
+                        />
+                      </TableCell>
+
+                      <TableCell
+                        style={{
+                          width: '10%'
                         }}
                       >
                         {dealTaskTypeToString[task.task_type] || 'Unknown'}
@@ -207,7 +302,7 @@ export function CheckListTable({
                       </TableCell>
                       <TableCell
                         style={{
-                          width: '8%'
+                          width: '5%'
                         }}
                       >
                         <IconButton
