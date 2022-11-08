@@ -13,7 +13,7 @@ export const useStyles = makeStyles(
       flexDirection: 'column',
       minWidth: theme.spacing(12),
       maxWidth: theme.spacing(12),
-      paddingTop: theme.spacing(2),
+      paddingTop: theme.spacing(1),
       color: theme.palette.grey['900'],
       ...theme.typography.caption,
       lineHeight: 2
@@ -30,6 +30,8 @@ export const useStyles = makeStyles(
       padding: theme.spacing(1, 1),
       minHeight: '64px',
       transition: '0.1s ease-in background-color',
+      maxWidth: '100%',
+      overflow: 'hidden',
       '&:hover $actions': {
         opacity: 1
       },

@@ -30,7 +30,7 @@ interface Props {
   associations?: string[]
   calendarRef?: RefObject<CalendarRef>
   onLoadEvents?: (events: ICalendarEventsList, range: ICalendarRange) => void
-  eventType?: 'upcoming' | 'history'
+  eventType?: 'upcoming' | 'history' | undefined
 }
 
 export function Calendar({
