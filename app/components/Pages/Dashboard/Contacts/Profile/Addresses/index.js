@@ -60,9 +60,9 @@ class Addresses extends React.Component {
       }))
     }
 
-    addNotification({
-      type: 'error',
-      message: 'Please enter a label for this address'
+    this.props.notify({
+      message: 'Please enter a label for this address before you can edit it.',
+      status: 'error'
     })
   }
 

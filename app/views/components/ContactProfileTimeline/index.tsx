@@ -73,6 +73,9 @@ export function Calendar({
       position: ApiOptions['position']
     ): Promise<ICalendarEvent[] | undefined> => {
       const { low = calendarRange.low, high = calendarRange.high } = range
+
+      console.log('fetchEvents', range, position)
+
       const commonParams = {
         users: viewAsUsers,
         filter,
@@ -96,17 +99,21 @@ export function Calendar({
             setIsReachedEnd(true)
           }
 
+          console.log('next', newEvents)
+
           return [...events, ...newEvents]
         }
 
         if (position === 'Previous') {
-          const oldEvents = await getCalendar(loadOldEventsPayload)
+          let oldEvents = await getCalendar(loadOldEventsPayload)
 
           if (MAX_LIMIT_EVENT > oldEvents.length) {
             setIsReachedStart(true)
           }
 
-          return [...oldEvents, ...events]
+          console.log('Previous', oldEvents)
+
+          return [...events, ...oldEvents]
         }
 
         if (eventType === 'upcoming') {
@@ -115,6 +122,8 @@ export function Calendar({
           if (MAX_LIMIT_EVENT > events.length) {
             setIsReachedEnd(true)
           }
+
+          console.log('upcoming', events)
 
           return events
         }
@@ -125,6 +134,8 @@ export function Calendar({
           if (MAX_LIMIT_EVENT > events.length) {
             setIsReachedStart(true)
           }
+
+          console.log('history', events)
 
           return events
         }
@@ -152,6 +163,8 @@ export function Calendar({
         setIsLoading(true)
 
         const { range, position } = option
+
+        console.log('getEvents', range, position)
 
         // fetch calendar data from server based on given parameters
         const events = await fetchEvents(range, position)

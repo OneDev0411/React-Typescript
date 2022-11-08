@@ -27,7 +27,8 @@ export const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'flex-start',
       justifyContent: 'space-between',
-      padding: theme.spacing(2, 2),
+      padding: theme.spacing(1, 1),
+      minHeight: '64px',
       transition: '0.1s ease-in background-color',
       '&:hover $actions': {
         opacity: 1

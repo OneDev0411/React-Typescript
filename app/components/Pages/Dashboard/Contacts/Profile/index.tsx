@@ -89,7 +89,10 @@ const useStyles = makeStyles(
       borderRadius: `${theme.shape.borderRadius}px`,
       display: 'flex',
       flexDirection: 'column',
-      height: '100%'
+      height: '100%',
+      '&::webkit-scrollbar': {
+        display: 'none'
+      }
     },
     boxContainer: {
       display: 'flex',

@@ -76,10 +76,17 @@ const useStyles = makeStyles(
       top: '20%',
       left: '50%'
     },
+    loadButtonContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
     loadButton: {
+      padding: theme.spacing(1, 2),
+      textAlign: 'center',
       color: theme.palette.grey['800'],
       '&:hover': {
-        backgroundColor: 'transparent'
+        backgroundColor: theme.palette.grey['200']
       }
     }
   }),
@@ -154,7 +161,7 @@ export function EventLoader({
           ))}
         </Box>
         {!isReachedStart && eventType === 'history' && (
-          <Box my={2} textAlign="left">
+          <Box my={2} textAlign="left" className={classes.loadButtonContainer}>
             <Button
               variant="text"
               className={classes.loadButton}
@@ -162,12 +169,12 @@ export function EventLoader({
               disabled={isLoading}
               onClick={onLoadPreviousEvents}
             >
-              Fetch previous events
+              Load Previous Events
             </Button>
           </Box>
         )}
         {!isReachedEnd && eventType === 'upcoming' && (
-          <Box my={2} textAlign="left">
+          <Box my={2} textAlign="left" className={classes.loadButtonContainer}>
             <Button
               variant="text"
               className={classes.loadButton}
@@ -175,7 +182,7 @@ export function EventLoader({
               disabled={isLoading}
               onClick={onLoadNextEvents}
             >
-              Fetch next events
+              Load Next Events
             </Button>
           </Box>
         )}
