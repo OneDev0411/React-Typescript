@@ -1,45 +1,63 @@
-import { Grid } from '@material-ui/core'
-
-import UserAvatar from '@app/views/components/UserAvatar'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { Avatar, makeStyles, Theme, Tooltip } from '@material-ui/core'
+import { AvatarGroup } from '@material-ui/lab'
 
 interface Props {
   assignees?: Nullable<IAssignee[]>
 }
 
-const MAX_ASSIGNEES_TO_SHOW = 4
+const MAX_ASSIGNEES_TO_SHOW = 5
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    root: {
+      display: 'flex',
+      alignItems: 'center',
+      '& $avatar:not(:first-child)': {
+        border: '1px solid #fff'
+      }
+    },
+    avatar: {
+      width: '24px',
+      height: '24px',
+      fontSize: theme.typography.caption.fontSize
+    }
+  }),
+  {
+    name: 'Contacts-AssigneesCell'
+  }
+)
+
+interface Props {
+  assignees?: Nullable<IAssignee[]>
+}
 
 export function AssigneesCell({ assignees }: Props) {
+  const classes = useStyles()
+
   if (!assignees) {
     return null
   }
 
-  const assigneesToShow =
-    assignees.length === MAX_ASSIGNEES_TO_SHOW
-      ? MAX_ASSIGNEES_TO_SHOW
-      : MAX_ASSIGNEES_TO_SHOW - 1
-
   return (
-    <Grid container spacing={1}>
-      {assignees.slice(0, assigneesToShow).map(assignee => (
-        <Grid item key={assignee.id}>
-          <UserAvatar
-            size={muiIconSizes.medium}
-            image={assignee.user?.profile_image_url}
-            name={assignee.user?.display_name}
-            showStateIndicator={false}
-          />
-        </Grid>
-      ))}
-      {assignees.length > MAX_ASSIGNEES_TO_SHOW && (
-        <Grid item>
-          <UserAvatar
-            size={muiIconSizes.medium}
-            name={`+ ${assignees.length - MAX_ASSIGNEES_TO_SHOW + 1}`}
-            showStateIndicator={false}
-          />
-        </Grid>
-      )}
-    </Grid>
+    <div className={classes.root}>
+      <AvatarGroup
+        max={MAX_ASSIGNEES_TO_SHOW}
+        spacing={5}
+        classes={{
+          avatar: classes.avatar
+        }}
+      >
+        {assignees?.map(({ user }) => (
+          <Tooltip key={user.id} title={user.display_name}>
+            <Avatar
+              className={classes.avatar}
+              src={user.profile_image_url ?? ''}
+            >
+              {user.display_name[0]}
+            </Avatar>
+          </Tooltip>
+        ))}
+      </AvatarGroup>
+    </div>
   )
 }
