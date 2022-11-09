@@ -1,10 +1,11 @@
 import {
   memo,
+  useRef,
+  useMemo,
   useState,
   RefObject,
   useCallback,
-  useImperativeHandle,
-  useRef
+  useImperativeHandle
 } from 'react'
 
 import FullCalendar, {
@@ -120,8 +121,10 @@ export const GridCalendarPresentation = ({
   // change view events el
   const [viewEl, setViewEl] = useState<HTMLButtonElement | null>(null)
 
-  const selectedView =
-    (calendarRef.current?.getApi().view.type as ViewType) || INITIAL_VIEW
+  const selectedView = useMemo(() => {
+    return (calendarRef.current?.getApi().view.type as ViewType) || INITIAL_VIEW
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [calendarRef.current?.getApi().view.type])
 
   const activeFilter: FilterShape = useTeamSetting(
     CALENDAR_FILTER_EVENTS_KEY,
@@ -443,6 +446,11 @@ export const GridCalendarPresentation = ({
           dateClick={handleDayClick}
           eventDrop={handleEditEvent}
           eventResize={handleEditEvent}
+          eventTimeFormat={{
+            hour: 'numeric',
+            minute: '2-digit',
+            meridiem: 'short'
+          }}
           moreLinkClick="day"
           customButtons={{
             filterButton: {
@@ -477,7 +485,7 @@ export const GridCalendarPresentation = ({
             interactionPlugin
           ]}
           views={{
-            timeGrid: {
+            dayGridDay: {
               dayMaxEventRows: false
             }
           }}

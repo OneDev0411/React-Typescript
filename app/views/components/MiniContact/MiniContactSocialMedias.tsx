@@ -1,6 +1,7 @@
 import { IconButton } from '@material-ui/core'
 import { mdiFacebook, mdiInstagram, mdiLinkedin } from '@mdi/js'
 
+import { mdiPinterestPath } from '@app/views/components/SvgIcons/Pinterest/iconPinterest'
 import { mdiTikTokPath } from '@app/views/components/SvgIcons/Tiktok/iconTiktok'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -50,6 +51,17 @@ function MiniContactIcons(props: MiniContactIconsType) {
                 size="small"
               >
                 <SvgIcon path={mdiLinkedin} />
+              </IconButton>
+            )
+          case SocialMediasEnum.pinterest:
+            return (
+              <IconButton
+                href={social.url}
+                target="_blank"
+                key={social.type}
+                size="small"
+              >
+                <SvgIcon path={mdiPinterestPath} />
               </IconButton>
             )
           case SocialMediasEnum.tiktok:

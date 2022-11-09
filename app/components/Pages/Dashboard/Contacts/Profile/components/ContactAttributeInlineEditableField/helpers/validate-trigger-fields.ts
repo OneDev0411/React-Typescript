@@ -1,7 +1,8 @@
 import { TriggerDataInput } from 'models/instant-marketing/triggers/types'
 
-interface Input extends TriggerDataInput {
-  template: IMarketingTemplateInstance
+interface Input
+  extends Pick<TriggerDataInput, 'wait_for' | 'subject' | 'event_type'> {
+  template: Nullable<IMarketingTemplateInstance | IBrandMarketingTemplate>
 }
 
 /**
@@ -11,7 +12,7 @@ interface Input extends TriggerDataInput {
 
 export const validateTriggerFields = (
   trigger: Input,
-  current: ITrigger
+  current: Nullable<ITrigger>
 ): string => {
   if (!trigger) {
     return 'Something wend wrong!'

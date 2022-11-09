@@ -176,8 +176,11 @@ class Builder extends React.Component {
               name: 'Youtube'
             },
             {
-              value:
-                'https://assets.streamlinehq.com/image/private/w_72,h_72,ar_1/f_auto/v1/icons/videos/tiktok-1-u6gkrgtg5ffc8f8o5zg2av.png/tiktok-1-takk5qacrstzpoih77sr.png',
+              value: 'https://i.ibb.co/6430mhS/pinterest.png',
+              name: 'Pinterest'
+            },
+            {
+              value: 'https://i.ibb.co/8m7dK1J/tiktok.png',
               name: 'TikTok'
             }
           ]

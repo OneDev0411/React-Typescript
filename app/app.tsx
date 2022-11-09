@@ -1,6 +1,5 @@
 import { useDispatch } from 'react-redux'
 import { browserHistory, Router } from 'react-router'
-import { syncHistoryWithStore } from 'react-router-redux'
 import { IntercomProvider } from 'react-use-intercom'
 import smoothscroll from 'smoothscroll-polyfill'
 
@@ -22,19 +21,6 @@ import { activateIntercom } from './store_actions/intercom'
 // This is a redux-based confirmation and will be deprecate asap.
 // import styles
 import './styles/main.scss'
-// store
-import store from './stores'
-
-// history
-const history = syncHistoryWithStore(browserHistory, store)
-
-/**
- * We put history on window for e2e tests for
- * {@link Cypress.Chainable.navigate navigate command}
- */
-if ((window as any).Cypress) {
-  ;(window as any).__history = history
-}
 
 // smooth scroll polyfill
 if (typeof window !== 'undefined') {
@@ -55,7 +41,7 @@ const App = () => {
         >
           <GlobalActionsProvider>
             <ConfirmationModalProvider>
-              <Router history={history}>{routes}</Router>
+              <Router history={browserHistory}>{routes}</Router>
               <ConfirmationModal />
             </ConfirmationModalProvider>
 

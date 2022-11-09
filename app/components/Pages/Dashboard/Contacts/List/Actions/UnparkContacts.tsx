@@ -58,7 +58,7 @@ export const UnparkContacts = ({
           status: 'success',
           message: `${
             contacts.length || 'all'
-          } parked contacts added to your contacts successfuly.`
+          } parked contacts added to your contacts successfully.`
         })
       )
     } catch (e) {

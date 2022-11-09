@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { useBaseUrl } from '@app/hooks/use-base-url'
 import { IAppState } from '@app/reducers'
 import { selectDealRoles } from '@app/reducers/deals/roles'
+import { getEmojiCodePoint } from '@app/utils/get-emoji-codepoint'
 import {
   EmailFormValues,
   SingleEmailComposeDrawer
@@ -126,7 +127,9 @@ export function NotifyAgents({ deal }: Props) {
         <SingleEmailComposeDrawer
           isOpen={isEmailDrawerOpen}
           initialValues={{
-            subject: `[Important]: Missing documents for your closing of "${deal.title}"`,
+            subject: `[Important]: Missing documents for your closing of "${
+              deal.title
+            }"${getEmojiCodePoint('⏳')}`,
             to: getEmailRecipients(),
             body: [
               'Hello,<br /><br />',
