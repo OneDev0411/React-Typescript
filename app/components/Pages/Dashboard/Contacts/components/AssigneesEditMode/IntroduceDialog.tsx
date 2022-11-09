@@ -54,7 +54,7 @@ const IntroduceDialog = ({
         />
         <div>
           <Typography variant="h6" component="h1">
-            {`${assigneesName} ${hasOneAssignee ? ' is' : ' are'}`}
+            {`${assigneesName} ${hasOneAssignee ? ' is ' : ' are '}`}
             notified about {contactName}
           </Typography>
           <Typography variant="body1" gutterBottom>
