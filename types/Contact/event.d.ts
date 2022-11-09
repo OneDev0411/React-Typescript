@@ -1,18 +1,14 @@
-interface TaskAssociation {
+interface TaskAssociation extends IModel<'crm_association'> {
   id: string
   association_type: 'contact' | 'deal' | 'listing'
   brand: string
   contact?: IContact
   deal?: IDeal
   listing?: any
-  created_at: string
   created_by: string
   crm_task: string
-  deleted_at: Nullable<string>
   index: Nullable<number>
   metadata: any
-  type: string
-  updated_at: number
 }
 
 declare interface IEvent extends IModel<'crm_task'> {

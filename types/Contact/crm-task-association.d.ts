@@ -6,7 +6,7 @@ declare type ICRMTaskAssociation<
   id: UUID
   created_at: number
   updated_at: number
-  deleted_at: number | null
+  deleted_at?: Nullable<number>
   created_by: UUID
   brand: UUID
   association_type: CRMTaskAssociationType
