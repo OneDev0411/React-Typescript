@@ -19,6 +19,7 @@ const useStyles = makeStyles(
     avatar: {
       width: '24px',
       height: '24px',
+      textTransform: 'capitalize',
       fontSize: theme.typography.caption.fontSize
     }
   }),
