@@ -29,14 +29,12 @@ export function goTo(url, pageTitle = null, query = {}, state = {}) {
     embeddedSearch ? `?${embeddedSearch}` : ''
   )
 
-  const path = {
+  browserHistory.push({
     pathname,
     search,
     state: {
       ...state,
       previousPage
     }
-  }
-
-  browserHistory.push(path)
+  })
 }
