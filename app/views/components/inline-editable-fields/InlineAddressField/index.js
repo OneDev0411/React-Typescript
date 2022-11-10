@@ -46,6 +46,7 @@ export class InlineAddressField extends React.Component {
     isAddressFormOpen: false,
     isDirty: false,
     places: [],
+    isFinal: false,
     // Because the blur default action should be canceled when the mouse is over
     // the suggestion area, and there is a possibility of selecting suggestion
     // items.
@@ -54,7 +55,15 @@ export class InlineAddressField extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     if (!state.address && !state.isDirty && props.address !== state.address) {
-      return { address: props.address, isDirty: true }
+      return { address: props.address, isDirty: true, isFinal: true }
+    }
+
+    if (state.address && !props.address && state.isFinal && !state.isDirty) {
+      return { address: props.address, isDirty: false, isFinal: false }
+    }
+
+    if (state.address && state.isDirty && !props.address) {
+      return { address: state.address, isDirty: false }
     }
 
     if (
@@ -63,7 +72,7 @@ export class InlineAddressField extends React.Component {
       props.address &&
       props.address !== state.address
     ) {
-      return { address: props.address }
+      return { address: props.address, isFinal: true }
     }
 
     return null
@@ -235,6 +244,7 @@ export class InlineAddressField extends React.Component {
       isDirty: false,
       isAddressFormOpen: false,
       isSuggestionsOpen: false
+      // isFinal: true
     })
   }
 
@@ -249,7 +259,8 @@ export class InlineAddressField extends React.Component {
           onKeyDown: this.handleInputOnKeyDown,
           value: address,
           onBlur: this.handleInputBlur,
-          autoComplete: 'disabled'
+          autoComplete: 'disabled',
+          isFinalAddress: this.state.isFinal
         })}
 
         <SuggestionsPopover

@@ -21,7 +21,7 @@ declare type IPermission =
   | 'Showings'
   | 'ShareToInstagram'
 
-declare type BrandMarketingPaletteAddressValue = Partial<IStdAddr>
+declare type BrandMarketingPaletteAddressValue = Nullable<Partial<IStdAddr>>
 declare type BrandMarketingPaletteValue =
   | string
   | BrandMarketingPaletteAddressValue
