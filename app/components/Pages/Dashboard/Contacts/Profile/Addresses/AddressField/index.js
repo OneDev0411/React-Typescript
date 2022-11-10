@@ -75,19 +75,23 @@ class AddressField extends React.Component {
   toggleMode = () => this.props.toggleMode(this.props.address)
 
   cancel = () => {
-    if (this.state.isDisabled) {
-      return
-    }
+    if (this.props.address.label) {
+      if (this.state.isDisabled) {
+        return
+      }
 
-    if (diffAddressStateWithProp(this.props, this.state)) {
-      this.context.setConfirmationModal({
-        confirmLabel: 'Yes, I do',
-        message: 'Heads up!',
-        description: 'You have made changes, do you want to discard them?',
-        onConfirm: this.toggleMode
-      })
+      if (diffAddressStateWithProp(this.props, this.state)) {
+        this.context.setConfirmationModal({
+          confirmLabel: 'Yes, I do',
+          message: 'Heads up!',
+          description: 'You have made changes, do you want to discard them?',
+          onConfirm: this.toggleMode
+        })
+      } else {
+        this.toggleMode()
+      }
     } else {
-      this.toggleMode()
+      this.delete()
     }
   }
 
@@ -208,7 +212,6 @@ class AddressField extends React.Component {
   render() {
     return (
       <InlineEditableField
-        handleAddNew={this.props.handleAddNew}
         handleCancel={this.cancel}
         handleDelete={this.handleDelete}
         handleSave={this.onSubmit}
@@ -217,7 +220,6 @@ class AddressField extends React.Component {
         isEditModeStatic
         renderEditMode={this.renderEditMode}
         renderViewMode={this.renderViewMode}
-        showAdd
         showDelete
         toggleMode={this.toggleMode}
       />

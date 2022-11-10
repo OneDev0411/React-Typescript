@@ -51,19 +51,12 @@ class Addresses extends React.Component {
   }
 
   toggleAddressActiveMode = ({ index }) => {
-    if (this.state.addresses[index]?.label) {
-      this.setState(state => ({
-        addresses: state.addresses.map(a => ({
-          ...a,
-          isActive: a.index === index ? !a.isActive : a.isActive
-        }))
+    this.setState(state => ({
+      addresses: state.addresses.map(a => ({
+        ...a,
+        isActive: a.index === index ? !a.isActive : a.isActive
       }))
-    }
-
-    this.props.notify({
-      message: 'Please enter a label for this address before you can edit it.',
-      status: 'error'
-    })
+    }))
   }
 
   addNewAddress = event => {

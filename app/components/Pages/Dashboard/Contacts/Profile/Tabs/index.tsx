@@ -13,13 +13,14 @@ const useStyles = makeStyles(
       border: 'none'
     },
     tab: {
+      boxSizing: 'border-box',
       border: 'none',
       borderRadius: 0,
       padding: theme.spacing(2, 2),
       backgroundColor: 'transparent',
       fontWeight: 400,
       color: theme.palette.grey[600],
-      borderBottom: `0px solid ${theme.palette.primary.main}`,
+      borderBottom: '1px solid transparent',
       '&$selected, &$selected:hover': {
         fontWeight: 600,
         color: theme.palette.grey[900],

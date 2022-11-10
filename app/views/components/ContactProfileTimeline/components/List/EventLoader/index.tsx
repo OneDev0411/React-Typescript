@@ -40,9 +40,6 @@ const useStyles = makeStyles(
         borderBottomWidth: '1px',
         borderBottomLeftRadius: theme.spacing(0.5)
       },
-      '&:nth-child(even)': {
-        backgroundColor: theme.palette.grey['50']
-      },
       '&:hover': {
         backgroundColor: theme.palette.grey['100']
       }
