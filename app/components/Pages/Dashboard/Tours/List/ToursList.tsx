@@ -34,8 +34,8 @@ export const useStyles = makeStyles(
       },
       '& .column.primary': {
         // whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
+        // textOverflow: 'ellipsis',
+        overflow: 'hidden'
       }
     }
   }),
