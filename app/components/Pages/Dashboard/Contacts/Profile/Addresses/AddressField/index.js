@@ -212,6 +212,7 @@ class AddressField extends React.Component {
   render() {
     return (
       <InlineEditableField
+        handleAddNew={this.props.handleAddNew}
         handleCancel={this.cancel}
         handleDelete={this.handleDelete}
         handleSave={this.onSubmit}
@@ -221,6 +222,7 @@ class AddressField extends React.Component {
         renderEditMode={this.renderEditMode}
         renderViewMode={this.renderViewMode}
         showDelete
+        showAdd
         toggleMode={this.toggleMode}
       />
     )

@@ -26,6 +26,7 @@ interface Props {
   toggleMode: () => void
   handleCancel?: () => void
   handleDelete?: () => void
+  handleAddNew?: () => void
   renderViewMode?: () => void
   handleOutsideClick?: () => void
   handleSave: (callback: () => void) => void
@@ -55,6 +56,7 @@ export const InlineEditableField = (props: Props) => {
     handleCancel: onCancel,
     toggleMode: onToggleMode,
     handleDelete: onDelete = noop,
+    handleAddNew: onAddNew = noop,
     handleOutsideClick: onOutsideClick
   } = props
   const popoverEditContainerRef = useRef<Nullable<HTMLDivElement>>(null)
@@ -69,6 +71,11 @@ export const InlineEditableField = (props: Props) => {
     }
 
     onToggleMode()
+  }
+  const handleAddNew = event => {
+    event.stopPropagation()
+
+    onAddNew()
   }
 
   const handleDelete = event => {
@@ -142,6 +149,7 @@ export const InlineEditableField = (props: Props) => {
       isPartner,
       showDelete,
       attributeName,
+      handleAddNew,
       handleDelete,
       renderBody: renderViewMode,
       toggleMode: handleToggleMode

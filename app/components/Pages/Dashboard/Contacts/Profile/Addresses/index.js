@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { mdiPlus } from '@mdi/js'
+import { mdiPlus, mdiChevronUp } from '@mdi/js'
 import { connect } from 'react-redux'
 
 import { addNotification } from 'components/notification'
@@ -44,7 +44,8 @@ class Addresses extends React.Component {
           defaultLabel,
           defaultIsPrimary
         )
-      ]
+      ],
+      showMore: false
     }
 
     this.addressAttributeDefs = addressAttributeDefs
@@ -157,24 +158,45 @@ class Addresses extends React.Component {
     }
   }
 
+  handleMore = () => {
+    this.setState(prevState => ({
+      showMore: !prevState.showMore
+    }))
+  }
+
   render() {
     return (
       <BasicSection title="Addresses">
-        {this.state.addresses.map((address, index) => (
-          <AddressField
-            key={index}
-            address={address}
-            handleDelete={this.handleDelete}
-            handleSubmit={this.handleSubmit}
-            handleAddNew={this.addNewAddress}
-            toggleMode={this.toggleAddressActiveMode}
+        {this.state.showMore
+          ? this.state.addresses.map((address, index) => (
+              <AddressField
+                key={index}
+                address={address}
+                handleDelete={this.handleDelete}
+                handleSubmit={this.handleSubmit}
+                handleAddNew={this.addNewAddress}
+                toggleMode={this.toggleAddressActiveMode}
+              />
+            ))
+          : this.state.addresses
+              .slice(0, 1)
+              .map((address, index) => (
+                <AddressField
+                  key={index}
+                  address={address}
+                  handleDelete={this.handleDelete}
+                  handleSubmit={this.handleSubmit}
+                  handleAddNew={this.addNewAddress}
+                  toggleMode={this.toggleAddressActiveMode}
+                />
+              ))}
+        {this.state.addresses.length > 1 && (
+          <SectionButton
+            onClick={this.handleMore}
+            label={!this.state.showMore ? 'More' : 'Hide'}
+            icon={!this.state.showMore ? mdiPlus : mdiChevronUp}
           />
-        ))}
-        <SectionButton
-          onClick={this.addNewAddress}
-          label="More"
-          icon={mdiPlus}
-        />
+        )}
       </BasicSection>
     )
   }
