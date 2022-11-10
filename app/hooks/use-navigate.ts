@@ -4,8 +4,6 @@ import { useCallback } from 'react'
 
 import { browserHistory } from 'react-router'
 
-import { goTo } from '@app/utils/go-to'
-
 export interface Path {
   /**
    * A URL pathname, beginning with a /.
@@ -57,13 +55,17 @@ export interface NavigateFunction {
 export function useNavigate(): NavigateFunction {
   const navigate: NavigateFunction = useCallback((to, options) => {
     if (to === -1) {
-      window.history.back()
+      browserHistory.goBack()
 
       return
     }
 
+    const historyAction = options?.replace
+      ? browserHistory.replace
+      : browserHistory.push
+
     if (typeof to === 'string') {
-      goTo(to, null, {}, options?.state || {}, options?.replace || false)
+      historyAction(to)
 
       return
     }
@@ -74,17 +76,20 @@ export function useNavigate(): NavigateFunction {
       ? to.search[0] === '?'
         ? to.search
         : `?${to.search}`
-      : ''
+      : undefined
 
-    const hash = to.hash ? (to.hash[0] === '#' ? to.hash : `#${to.hash}`) : ''
+    const hash = to.hash
+      ? to.hash[0] === '#'
+        ? to.hash
+        : `#${to.hash}`
+      : undefined
 
-    goTo(
-      `${pathname}${search}${hash}`,
-      null,
-      {},
-      options?.state || {},
-      options?.replace || false
-    )
+    historyAction({
+      pathname,
+      search,
+      hash,
+      state: options?.state
+    })
   }, [])
 
   return navigate
