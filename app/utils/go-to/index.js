@@ -6,16 +6,9 @@ import { browserHistory } from 'react-router'
  * @param {string || null} pageTitle Current page title.
  * @param {object} query Query params as an object
  * @param {object} state Additional state params as an object
- * @param {boolean} replace Replace route
  */
 
-export function goTo(
-  url,
-  pageTitle = null,
-  query = {},
-  state = {},
-  replace = false
-) {
+export function goTo(url, pageTitle = null, query = {}, state = {}) {
   const previousPage = pageTitle
     ? {
         previousPage: {
@@ -43,12 +36,6 @@ export function goTo(
       ...state,
       previousPage
     }
-  }
-
-  if (replace) {
-    browserHistory.replace(path)
-
-    return
   }
 
   browserHistory.push(path)
