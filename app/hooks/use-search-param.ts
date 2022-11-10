@@ -2,8 +2,6 @@
 // https://gitlab.com/rechat/web/-/issues/2744#note_1158663484
 import { useCallback, useMemo } from 'react'
 
-import { createSearchParams } from '@app/utils/create-search-params'
-
 import { useNavigate } from './use-navigate'
 
 export type SetURLSearchParams = (
@@ -36,7 +34,7 @@ export function useSearchParams(): [URLSearchParams, SetURLSearchParams] {
     (newSearchParams, navigateOptions) => {
       navigate(
         {
-          search: createSearchParams(newSearchParams)
+          search: new URLSearchParams(newSearchParams).toString()
         },
         navigateOptions
       )
