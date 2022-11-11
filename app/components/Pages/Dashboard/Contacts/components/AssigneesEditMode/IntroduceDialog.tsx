@@ -58,8 +58,9 @@ const IntroduceDialog = ({
             notified about {contactName}
           </Typography>
           <Typography variant="body1" gutterBottom>
-            You can also send an email to introduce {contactName} and{' '}
-            {hasOneAssignee ? assigneesName : 'them'} if you'd like.
+            You can also send an email to introduce{' '}
+            {hasOneAssignee ? assigneesName : 'them'} to {contactName} if you'd
+            like.
           </Typography>
         </div>
       </DialogContent>
