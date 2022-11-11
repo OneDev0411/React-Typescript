@@ -1,4 +1,4 @@
-import { Link, makeStyles, Theme, Typography } from '@material-ui/core'
+import { Button, makeStyles, Theme, Typography } from '@material-ui/core'
 import timeago from 'timeago.js'
 
 const useStyles = makeStyles(
@@ -84,12 +84,12 @@ const LastTouchField = ({ value }: Props) => {
   }
 
   return (
-    <Link className={classes.container} target="_blank">
+    <Button variant="text" className={classes.container}>
       <Typography variant="body2">Last Touch</Typography>
       <Typography variant="body2" className={classes.value}>
         {lastTouchTime}
       </Typography>
-    </Link>
+    </Button>
   )
 }
 

@@ -69,7 +69,8 @@ class Addresses extends React.Component {
       addresses: [
         ...state.addresses,
         generateEmptyAddress(this.addressAttributeDefs, state.addresses, true)
-      ]
+      ],
+      showMore: true
     }))
   }
 
@@ -167,29 +168,34 @@ class Addresses extends React.Component {
   render() {
     return (
       <BasicSection title="Addresses">
-        {this.state.showMore
-          ? this.state.addresses.map((address, index) => (
-              <AddressField
-                key={index}
-                address={address}
-                handleDelete={this.handleDelete}
-                handleSubmit={this.handleSubmit}
-                handleAddNew={this.addNewAddress}
-                toggleMode={this.toggleAddressActiveMode}
-              />
-            ))
-          : this.state.addresses
-              .slice(0, 1)
-              .map((address, index) => (
-                <AddressField
-                  key={index}
-                  address={address}
-                  handleDelete={this.handleDelete}
-                  handleSubmit={this.handleSubmit}
-                  handleAddNew={this.addNewAddress}
-                  toggleMode={this.toggleAddressActiveMode}
-                />
-              ))}
+        {this.state.showMore ? (
+          this.state.addresses.map((address, index) => (
+            <AddressField
+              key={index}
+              address={address}
+              handleDelete={this.handleDelete}
+              handleSubmit={this.handleSubmit}
+              handleAddNew={this.addNewAddress}
+              toggleMode={this.toggleAddressActiveMode}
+            />
+          ))
+        ) : this.state.addresses.some(address => address.is_primary) ? (
+          <AddressField
+            address={this.state.addresses.find(address => address.is_primary)}
+            handleDelete={this.handleDelete}
+            handleSubmit={this.handleSubmit}
+            handleAddNew={this.addNewAddress}
+            toggleMode={this.toggleAddressActiveMode}
+          />
+        ) : (
+          <AddressField
+            address={this.state.addresses[0]}
+            handleDelete={this.handleDelete}
+            handleSubmit={this.handleSubmit}
+            handleAddNew={this.addNewAddress}
+            toggleMode={this.toggleAddressActiveMode}
+          />
+        )}
         {this.state.addresses.length > 1 && (
           <SectionButton
             onClick={this.handleMore}

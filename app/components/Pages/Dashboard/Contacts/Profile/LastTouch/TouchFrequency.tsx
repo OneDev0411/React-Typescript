@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 
 import {
   Divider,
-  Link,
+  Button,
   makeStyles,
   Popover,
   Theme,
@@ -138,13 +138,13 @@ const TouchFrequency = ({ value, onUpdateTouchFreq }: Props) => {
   }
 
   return (
-    <Link
+    <Button
+      variant="text"
       onMouseEnter={() => setShowAction(true)}
       onMouseLeave={() => {
         setShowAction(false)
       }}
       className={classes.container}
-      target="_blank"
     >
       <Typography variant="body2">Touch Frequency</Typography>
       <Typography ref={anchorRef} variant="body2" className={classes.value}>
@@ -203,7 +203,7 @@ const TouchFrequency = ({ value, onUpdateTouchFreq }: Props) => {
           )}
         </div>
       </Popover>
-    </Link>
+    </Button>
   )
 }
 
