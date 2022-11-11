@@ -30,17 +30,15 @@ export const useStyles = makeStyles(
   (theme: Theme) => ({
     row: {
       '& .column': {
-        padding: theme.spacing(1)
+        padding: theme.spacing(0, 1)
       },
       '& .column.primary': {
-        // whiteSpace: 'nowrap',
-        // textOverflow: 'ellipsis',
         overflow: 'hidden'
       }
     }
   }),
   {
-    name: 'Tours-Title-Table'
+    name: 'ToursTitleTable'
   }
 )
 
