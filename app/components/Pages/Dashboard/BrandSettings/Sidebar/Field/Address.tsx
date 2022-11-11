@@ -26,50 +26,48 @@ export default function AddressField({
   }
 
   return (
-    <>
-      <InlineAddressField
-        ref={formRef}
-        address={value?.full ?? ''}
-        handleSubmit={handleChange}
-        preSaveFormat={normalizePostgressStdaddr}
-        PopoverProps={{
-          anchorOrigin: {
-            vertical: 'top',
-            horizontal: -290 // TODO: fix popover ref problem
-          },
-          transformOrigin: {
-            vertical: 'bottom',
-            horizontal: 'left'
-          }
-        }}
-        renderSearchField={({
-          isFinalAddress,
-          isLoading,
-          ...otherInputProps
-        }) => (
-          <TextField
-            {...otherInputProps}
-            fullWidth
-            variant="outlined"
-            size="small"
-            label="Address"
-            autoComplete="disable-autocomplete"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    disabled={!isFinalAddress}
-                    size="small"
-                    onClick={handleDelete}
-                  >
-                    <SvgIcon path={mdiTrashCanOutline} />
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-          />
-        )}
-      />
-    </>
+    <InlineAddressField
+      ref={formRef}
+      address={value?.full ?? ''}
+      handleSubmit={handleChange}
+      preSaveFormat={normalizePostgressStdaddr}
+      PopoverProps={{
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: -290 // TODO: fix popover ref problem
+        },
+        transformOrigin: {
+          vertical: 'bottom',
+          horizontal: 'left'
+        }
+      }}
+      renderSearchField={({
+        isFinalAddress,
+        isLoading,
+        ...otherInputProps
+      }) => (
+        <TextField
+          {...otherInputProps}
+          fullWidth
+          variant="outlined"
+          size="small"
+          label="Address"
+          autoComplete="disable-autocomplete"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  disabled={!isFinalAddress}
+                  size="small"
+                  onClick={handleDelete}
+                >
+                  <SvgIcon path={mdiTrashCanOutline} />
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
+      )}
+    />
   )
 }
