@@ -70,7 +70,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
       render: ({ row }) =>
         isSuperCampaignReadOnly(row) ? (
           <SuperCampaignAdminListColumnStats
-            sent={row.enrollments_count}
+            sent={row.recipients_count}
             delivered={row.delivered}
             opened={row.opened}
             clicked={row.clicked}
