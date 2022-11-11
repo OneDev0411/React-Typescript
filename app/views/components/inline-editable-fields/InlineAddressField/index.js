@@ -58,7 +58,7 @@ export class InlineAddressField extends React.Component {
       return { address: props.address, isDirty: true, isFinal: true }
     }
 
-    if (state.address && !props.address && state.isFinal && !state.isDirty) {
+    if (state.address && !props.address && state.isFinal) {
       return { address: props.address, isDirty: false, isFinal: false }
     }
 
@@ -244,7 +244,6 @@ export class InlineAddressField extends React.Component {
       isDirty: false,
       isAddressFormOpen: false,
       isSuggestionsOpen: false
-      // isFinal: true
     })
   }
 
