@@ -1,15 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+
+import { getTextAlignment } from '@app/components/Pages/Dashboard/Deals/utils/get-text-alignment'
 
 import { AddressEdit } from './AddressEdit'
 import { AddressWithSuggestion } from './AddressWithSuggestion'
 import { NotEditable } from './NotEditable'
-
-const inputStyles = {
-  backgroundColor: '#d2e5f2',
-  border: '1px solid #ccc',
-  top: 0,
-  left: 0
-}
 
 export function AddressField({
   deal,
@@ -25,6 +20,18 @@ export function AddressField({
   useEffect(() => {
     setInputValue(inputProps.value)
   }, [inputProps.value])
+
+  const inputStyles = useMemo(
+    () => ({
+      backgroundColor: '#d2e5f2',
+      border: '1px solid #ccc',
+      top: 0,
+      left: 0,
+      width: '100%',
+      textAlign: getTextAlignment(inputProps.annotation.annotation)
+    }),
+    [inputProps.annotation.annotation]
+  )
 
   if (deal.listing) {
     return <NotEditable style={inputProps.style} value={inputProps.value} />

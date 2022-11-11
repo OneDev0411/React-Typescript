@@ -32,7 +32,7 @@ declare interface IFormAnnotation {
   page: number
   readOnly: boolean
   rect: [number, number, number, number]
-  textAlignment: Nullable<string>
+  textAlignment: Nullable<number>
   subtype: string
   attributes: string[]
   options: {

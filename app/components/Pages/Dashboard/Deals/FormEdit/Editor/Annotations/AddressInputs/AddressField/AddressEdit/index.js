@@ -69,7 +69,7 @@ export function AddressEdit({
         className="field-unlinkable"
         onClick={handleEdit}
       >
-        <span>{inputValue}</span>
+        <span style={{ width: '100%' }}>{inputValue}</span>
 
         <AddressPopover
           isOpen={address !== null}

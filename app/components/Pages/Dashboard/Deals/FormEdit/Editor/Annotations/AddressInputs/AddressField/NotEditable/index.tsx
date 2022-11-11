@@ -17,13 +17,20 @@ export function NotEditable({ style, value }: Props) {
     >
       <Tooltip
         title={
-          <>
-            <img src="/static/images/deals/lock.svg" alt="locked" />
+          <div>
+            <img
+              src="/static/images/deals/lock.svg"
+              alt="locked"
+              style={{
+                display: 'block',
+                margin: '10px auto'
+              }}
+            />
             <div>
               Listing information can only be changed on MLS. Once changed, the
               update will be reflected here.
             </div>
-          </>
+          </div>
         }
       >
         <span>{value}</span>
