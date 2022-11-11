@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
-import { Button } from '@material-ui/core'
+import { Button, makeStyles, Theme } from '@material-ui/core'
+import cn from 'classnames'
 import { connect } from 'react-redux'
 import { useTitle, useEffectOnce } from 'react-use'
 
@@ -24,6 +25,22 @@ import Title from './columns/Title'
 import ViewToursheet from './columns/ViewToursheet'
 
 type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+
+export const useStyles = makeStyles(
+  (theme: Theme) => ({
+    row: {
+      '& .column': {
+        padding: theme.spacing(0, 1)
+      },
+      '& .column.primary': {
+        overflow: 'hidden'
+      }
+    }
+  }),
+  {
+    name: 'ToursTitleTable'
+  }
+)
 
 function ToursList(props: { user: IUser }) {
   const [, dispatch] = useGlobalActionContext()
@@ -61,6 +78,7 @@ function ToursList(props: { user: IUser }) {
     setIsDrawerOpen(true)
   }
 
+  const classes = useStyles()
   const columns = [
     {
       header: 'Title',
@@ -174,7 +192,7 @@ function ToursList(props: { user: IUser }) {
         loading={isFetching ? 'middle' : null}
         LoadingStateComponent={LoadingContainer}
         classes={{
-          row: gridClasses.row
+          row: cn(gridClasses.row, classes.row)
         }}
       />
     )
