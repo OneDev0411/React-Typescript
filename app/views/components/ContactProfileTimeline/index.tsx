@@ -155,13 +155,13 @@ export function Calendar({
         const { range, position } = option
 
         // fetch calendar data from server based on given parameters
-        const fethedEvents = await fetchEvents(range, position)
+        const events = await fetchEvents(range, position)
 
-        console.log('fethedEvents', fethedEvents)
-
-        if (fethedEvents) {
+        if (events) {
           // get current range of fetched calendar
-          const normalizedEvents = normalizeEvents(fethedEvents, range)
+          const normalizedEvents = normalizeEvents(events, range)
+
+          setEvents(events)
 
           // updates virtual list rows
           if (normalizedEvents) {
@@ -203,8 +203,6 @@ export function Calendar({
 
   const createRanges = useCallback(
     (direction: Format = Format.Middle): ICalendarRange => {
-      console.log({ events, second: events[events.length - 1] })
-
       if (events.length === 0 || direction === Format.Middle) {
         return calendarRange
       }
@@ -212,7 +210,6 @@ export function Calendar({
       const currentRange = { ...calendarRange }
 
       if (direction === Format.Next) {
-        console.log('next')
         currentRange.low = getDateRangeFromEvent(
           events[events.length - 1],
           direction
@@ -224,7 +221,6 @@ export function Calendar({
           events[events.length - 1],
           direction
         )
-        console.log('currentRange.high', currentRange.high)
       }
 
       return currentRange
