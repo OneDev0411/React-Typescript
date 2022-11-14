@@ -75,7 +75,8 @@ export function getDateRangeFromEvent(
   direction: Format
 ): number {
   // TODO (tof) remove this hack when api will be fixed
-  const timestamp = event.recurring ? event.sort_timestamp : event.timestamp
+  const timestamp = event.sort_timestamp
+
   const date = new Date(timestamp * 1000)
 
   const range = date.getTime() / 1000

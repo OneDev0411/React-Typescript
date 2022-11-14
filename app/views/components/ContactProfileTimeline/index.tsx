@@ -103,8 +103,6 @@ export function Calendar({
         if (position === 'Previous') {
           let oldEvents = await getCalendar(loadOldEventsPayload)
 
-          oldEvents = oldEvents.reverse()
-
           if (MAX_LIMIT_EVENT > oldEvents.length) {
             setIsReachedStart(true)
           }
@@ -157,14 +155,13 @@ export function Calendar({
         const { range, position } = option
 
         // fetch calendar data from server based on given parameters
-        const events = await fetchEvents(range, position)
+        const fethedEvents = await fetchEvents(range, position)
 
-        if (events) {
+        console.log('fethedEvents', fethedEvents)
+
+        if (fethedEvents) {
           // get current range of fetched calendar
-          const normalizedEvents = normalizeEvents(events, range)
-
-          // update events list
-          setEvents(events)
+          const normalizedEvents = normalizeEvents(fethedEvents, range)
 
           // updates virtual list rows
           if (normalizedEvents) {
@@ -206,6 +203,8 @@ export function Calendar({
 
   const createRanges = useCallback(
     (direction: Format = Format.Middle): ICalendarRange => {
+      console.log({ events, second: events[events.length - 1] })
+
       if (events.length === 0 || direction === Format.Middle) {
         return calendarRange
       }
@@ -213,6 +212,7 @@ export function Calendar({
       const currentRange = { ...calendarRange }
 
       if (direction === Format.Next) {
+        console.log('next')
         currentRange.low = getDateRangeFromEvent(
           events[events.length - 1],
           direction
@@ -224,6 +224,7 @@ export function Calendar({
           events[events.length - 1],
           direction
         )
+        console.log('currentRange.high', currentRange.high)
       }
 
       return currentRange
@@ -267,6 +268,7 @@ export function Calendar({
     const range = createRanges(Format.Next)
 
     setCalendarRange(range)
+
     getEvents({
       range,
       position: 'Next'

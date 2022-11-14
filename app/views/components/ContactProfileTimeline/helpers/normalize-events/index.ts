@@ -81,8 +81,8 @@ function getEvents(
 function getSortedEvents(events: ICalendarMonthEvents) {
   return Object.entries(events).reduce((acc, [day, events]) => {
     return {
-      ...acc,
-      [day]: sortEvents(events)
+      [day]: sortEvents(events),
+      ...acc
     }
   }, {})
 }
@@ -94,6 +94,8 @@ function getSortedEvents(events: ICalendarMonthEvents) {
  */
 function getEventIndex(event: ICalendarEvent, range: ICalendarRange) {
   const eventTime = new Date(event.sort_timestamp * 1000)
+
+  console.log('eventTime', eventTime)
 
   const isAllDayEvent = event.all_day || false
 
@@ -121,5 +123,15 @@ function getEventIndex(event: ICalendarEvent, range: ICalendarRange) {
       'email_campaign_recipient'
     ].includes(event.object_type) === false
 
-  return createDayId(eventTime, convertToUTC)
+  if (!event.recurring) {
+    return createDayId(eventTime, convertToUTC)
+  }
+
+  const year = eventTime.getFullYear()
+  const month = eventTime.getMonth()
+  const day = eventTime.getDate()
+
+  console.log('year', year, 'month', month, 'day', day)
+
+  return `${year}/${month + 1}/${day}`
 }
