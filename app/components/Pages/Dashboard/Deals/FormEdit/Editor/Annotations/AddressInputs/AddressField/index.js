@@ -34,7 +34,13 @@ export function AddressField({
   )
 
   if (deal.listing) {
-    return <NotEditable style={inputProps.style} value={inputProps.value} />
+    return (
+      <NotEditable
+        style={inputProps.style}
+        value={inputProps.value}
+        annotation={inputProps.annotation.annotation}
+      />
+    )
   }
 
   if (

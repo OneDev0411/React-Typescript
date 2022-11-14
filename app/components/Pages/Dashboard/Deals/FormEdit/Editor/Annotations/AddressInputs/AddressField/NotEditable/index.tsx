@@ -2,17 +2,21 @@ import React from 'react'
 
 import { Tooltip } from '@material-ui/core'
 
+import { getTextAlignment } from '@app/components/Pages/Dashboard/Deals/utils/get-text-alignment'
+
 interface Props {
   style: React.CSSProperties
   value: string
+  annotation: IFormAnnotation
 }
 
-export function NotEditable({ style, value }: Props) {
+export function NotEditable({ style, value, annotation }: Props) {
   return (
     <div
       style={{
         ...style,
-        cursor: 'not-allowed'
+        cursor: 'not-allowed',
+        textAlign: getTextAlignment(annotation)
       }}
     >
       <Tooltip
