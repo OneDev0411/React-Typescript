@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
+import { getTextAlignment } from '@app/components/Pages/Dashboard/Deals/utils/get-text-alignment'
 import { EditTemplateButton } from 'deals/FormEdit/components/EditTemplateButton'
 import parseAppearanceString from 'deals/FormEdit/utils/appearance'
 import { Types } from 'deals/FormEdit/utils/types'
@@ -69,7 +70,8 @@ export default React.memo(
       transition: '0.1s ease-in all',
       padding: '0 3px',
       lineHeight: 'normal',
-      fontSize: getFontSize()
+      fontSize: getFontSize(),
+      textAlign: getTextAlignment(props.annotation)
     }
 
     return (
