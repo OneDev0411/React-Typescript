@@ -85,7 +85,7 @@ export function InsightsPageTabs({
                 }
               />
             ]
-          : []
+          : undefined
       }
     />
   )
