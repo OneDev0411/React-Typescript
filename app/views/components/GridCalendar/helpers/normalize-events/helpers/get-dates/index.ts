@@ -1,12 +1,16 @@
 import { addZero } from 'utils/date-times'
 
+const RECURRING_FREQUENCY = 'YEARLY'
+
 interface FullCalendarEventDate {
   start: string
   end?: string
-  rrule?: string
+  rrule?: {
+    dtstart: string
+    freq: string
+    interval: number
+  }
 }
-
-const RECURRING_FREQUENCY = 'YEARLY'
 
 /**
  * return the start and end date of an event
@@ -71,7 +75,11 @@ export const getDates = (event: ICalendarEvent): FullCalendarEventDate => {
       the reason we're doing this is we're using a plugin for fullcalendar
       for showing recurring events which accepts this format.
     */
-    dates.rrule = `DTSTART:${DTSTART}\nRRULE:FREQ=${RECURRING_FREQUENCY};INTERVAL=1;UNTIL=20400601`
+    dates.rrule = {
+      dtstart: DTSTART,
+      freq: RECURRING_FREQUENCY,
+      interval: 1
+    }
   }
 
   return dates
