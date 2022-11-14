@@ -9,10 +9,10 @@ import {
 
 interface Props {
   open: boolean
-  currentAgentName?: string
-  currentContactName?: string
-  handleClose: () => void
-  handleConfirm: () => void
+  assignees: BrandedUser[]
+  contactName: string
+  onClose: () => void
+  onConfirm: () => void
 }
 
 const useStyles = makeStyles(
@@ -28,17 +28,21 @@ const useStyles = makeStyles(
     actionImage: { padding: theme.spacing(4), marginBottom: theme.spacing(4) },
     dialogAction: { margin: theme.spacing(2) }
   }),
-  { name: 'ContactAssigneeDialog' }
+  { name: 'IntroduceDialog' }
 )
 
-const AssigneeDialog = ({
+const IntroduceDialog = ({
   open,
-  currentAgentName,
-  currentContactName,
-  handleClose,
-  handleConfirm
+  assignees,
+  contactName,
+  onClose,
+  onConfirm
 }: Props) => {
   const classes = useStyles()
+  const hasOneAssignee = assignees.length === 1
+  const assigneesName = hasOneAssignee
+    ? assignees[0].display_name
+    : assignees.map(assignee => assignee.display_name).join(', ')
 
   return (
     <Dialog fullWidth maxWidth="xs" open={open}>
@@ -50,20 +54,22 @@ const AssigneeDialog = ({
         />
         <div>
           <Typography variant="h6" component="h1">
-            {currentAgentName} is notified about {currentContactName}
+            {`${assigneesName} ${hasOneAssignee ? ' is ' : ' are '}`}
+            notified about {contactName}
           </Typography>
           <Typography variant="body1" gutterBottom>
-            You can also send an email to introduce {currentContactName} and{' '}
-            {currentAgentName} if you'd like.
+            You can also send an email to introduce{' '}
+            {hasOneAssignee ? assigneesName : 'them'} to {contactName} if you'd
+            like.
           </Typography>
         </div>
       </DialogContent>
 
       <DialogActions className={classes.dialogAction}>
-        <Button variant="outlined" onClick={handleClose}>
+        <Button variant="outlined" onClick={onClose}>
           Skip
         </Button>
-        <Button variant="contained" color="primary" onClick={handleConfirm}>
+        <Button variant="contained" color="primary" onClick={onConfirm}>
           Send Intro Email
         </Button>
       </DialogActions>
@@ -71,4 +77,4 @@ const AssigneeDialog = ({
   )
 }
 
-export default AssigneeDialog
+export default IntroduceDialog
