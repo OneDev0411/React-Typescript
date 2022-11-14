@@ -24,7 +24,7 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'Contacts-AssigneesCell'
+    name: 'ContactsAssigneesCell'
   }
 )
 
