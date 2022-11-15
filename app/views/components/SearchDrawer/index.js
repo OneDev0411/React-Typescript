@@ -159,11 +159,12 @@ class SearchDrawer extends React.Component {
       ?.map(defaultList => {
         return {
           title: defaultList.title,
-          items: defaultList.items.filter(item => {
-            const normalized = this.props.normalizeSelectedItem(item)
+          items:
+            defaultList.items?.filter(item => {
+              const normalized = this.props.normalizeSelectedItem(item)
 
-            return !this.props.selectedItems[normalized.id]
-          })
+              return !this.props.selectedItems[normalized.id]
+            }) || []
         }
       })
       ?.filter(defaultList => defaultList.items.length > 0)
