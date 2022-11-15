@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { mdiPlus, mdiChevronUp } from '@mdi/js'
 import { connect } from 'react-redux'
 
 import { addNotification } from 'components/notification'
@@ -10,7 +9,6 @@ import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
 import { BasicSection } from '../components/Section/Basic'
-import { SectionButton } from '../components/Section/Button'
 
 import AddressField from './AddressField'
 import { generateEmptyAddress, getAddresses } from './helpers/get-addresses'
@@ -168,41 +166,16 @@ class Addresses extends React.Component {
   render() {
     return (
       <BasicSection title="Addresses">
-        {this.state.showMore ? (
-          this.state.addresses.map((address, index) => (
-            <AddressField
-              key={index}
-              address={address}
-              handleDelete={this.handleDelete}
-              handleSubmit={this.handleSubmit}
-              handleAddNew={this.addNewAddress}
-              toggleMode={this.toggleAddressActiveMode}
-            />
-          ))
-        ) : this.state.addresses.some(address => address.is_primary) ? (
+        {this.state.addresses.map((address, index) => (
           <AddressField
-            address={this.state.addresses.find(address => address.is_primary)}
+            key={index}
+            address={address}
             handleDelete={this.handleDelete}
             handleSubmit={this.handleSubmit}
             handleAddNew={this.addNewAddress}
             toggleMode={this.toggleAddressActiveMode}
           />
-        ) : (
-          <AddressField
-            address={this.state.addresses[0]}
-            handleDelete={this.handleDelete}
-            handleSubmit={this.handleSubmit}
-            handleAddNew={this.addNewAddress}
-            toggleMode={this.toggleAddressActiveMode}
-          />
-        )}
-        {this.state.addresses.length > 1 && (
-          <SectionButton
-            onClick={this.handleMore}
-            label={!this.state.showMore ? 'More' : 'Hide'}
-            icon={!this.state.showMore ? mdiPlus : mdiChevronUp}
-          />
-        )}
+        ))}
       </BasicSection>
     )
   }
