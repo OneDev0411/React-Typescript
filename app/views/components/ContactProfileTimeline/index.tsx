@@ -107,6 +107,8 @@ export function Calendar({
             setIsReachedStart(true)
           }
 
+          oldEvents = oldEvents.reverse()
+
           return [...events, ...oldEvents]
         }
 
