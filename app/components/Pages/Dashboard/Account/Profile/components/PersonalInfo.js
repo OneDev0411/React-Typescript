@@ -165,7 +165,6 @@ const validate = values => {
     email,
     first_name,
     last_name,
-    designation,
     website,
     instagram,
     facebook,
@@ -209,12 +208,6 @@ const validate = values => {
 
   if (!isValidEmail(email)) {
     errors.email = 'Invalid email address.'
-  }
-
-  if (!isValidName(designation)) {
-    errors.designation = invalidCharactersError
-  } else if (designation && designation.length < NAME_CHARACTER_LIMIT) {
-    errors.designation = minimumCharactersError(NAME_CHARACTER_LIMIT)
   }
 
   const socials = {
