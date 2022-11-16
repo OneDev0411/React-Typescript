@@ -9,6 +9,7 @@ import {
   Typography
 } from '@material-ui/core'
 import { mdiPencilOutline } from '@mdi/js'
+import pluralize from 'pluralize'
 
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
@@ -61,7 +62,7 @@ const useStyles = makeStyles(
         textDecoration: 'none'
       }
     },
-    PopoverContainer: {
+    popoverContainer: {
       position: 'absolute',
       top: 0,
       left: 0
@@ -137,19 +138,25 @@ const TouchFrequency = ({ value, onUpdateTouchFreq }: Props) => {
     handleClose()
   }
 
+  const handleShowAction = () => {
+    setShowAction(true)
+  }
+
+  const handleRemoveAction = () => {
+    setShowAction(false)
+  }
+
   return (
     <Button
       variant="text"
-      onMouseEnter={() => setShowAction(true)}
-      onMouseLeave={() => {
-        setShowAction(false)
-      }}
+      onMouseEnter={handleShowAction}
+      onMouseLeave={handleRemoveAction}
       className={classes.container}
     >
       <Typography variant="body2">Touch Frequency</Typography>
       <Typography ref={anchorRef} variant="body2" className={classes.value}>
         {value
-          ? `Every ${value} ${value === 1 ? 'day' : 'days'}`
+          ? `Every ${value} ${pluralize('day', value)}`
           : 'Add Touch Frequency'}
       </Typography>
       {showAction && (
@@ -173,7 +180,7 @@ const TouchFrequency = ({ value, onUpdateTouchFreq }: Props) => {
           vertical: 'top',
           horizontal: 'center'
         }}
-        className={classes.PopoverContainer}
+        className={classes.popoverContainer}
       >
         <div className={classes.actionContainer}>
           {showCustom ? (

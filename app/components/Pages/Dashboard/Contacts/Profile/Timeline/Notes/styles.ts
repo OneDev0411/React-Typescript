@@ -5,7 +5,8 @@ export const useStyles = makeStyles(
   (theme: Theme) => ({
     section: {
       backgroundColor: theme.palette.background.paper,
-      paddingLeft: theme.spacing(2),
+      padding: theme.spacing(0, 2),
+      margin: theme.spacing(0, 2),
       borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },
     header: {

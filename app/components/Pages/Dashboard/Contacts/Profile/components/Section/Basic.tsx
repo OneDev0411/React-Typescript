@@ -16,13 +16,12 @@ const useStyles = makeStyles(
     title: {
       paddingLeft: theme.spacing(1),
       marginBottom: theme.spacing(0.2),
-      fontSize: theme.typography.body2.fontSize
+      fontFamily: theme.typography.h6.fontFamily
     },
     subtitle: {
       paddingLeft: theme.spacing(1),
       marginBottom: theme.spacing(0.5),
-      color: theme.palette.text.secondary,
-      fontSize: theme.typography.body3.fontSize
+      ...theme.typography.body3
     }
   }),
   { name: 'ContactProfileBasicSection' }
@@ -40,12 +39,12 @@ export const BasicSection = ({ title, subtitle, children }: Props) => {
   return (
     <Box className={classes.container}>
       {title && (
-        <Typography className={classes.title} variant="h6" gutterBottom>
+        <Typography className={classes.title} variant="body2" gutterBottom>
           {title}
         </Typography>
       )}
       {subtitle && (
-        <Typography className={classes.subtitle} variant="body2">
+        <Typography className={classes.subtitle} variant="body3">
           {subtitle}
         </Typography>
       )}

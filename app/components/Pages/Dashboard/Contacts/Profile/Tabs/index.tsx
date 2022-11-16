@@ -25,7 +25,7 @@ const useStyles = makeStyles(
         fontWeight: 600,
         color: theme.palette.grey[900],
         backgroundColor: 'transparent',
-        borderBottom: `1px solid ${theme.palette.primary.main}`,
+        borderBottomColor: theme.palette.primary.main,
         cursor: 'default'
       }
     },

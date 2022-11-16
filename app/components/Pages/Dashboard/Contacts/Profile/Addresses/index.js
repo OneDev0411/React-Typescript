@@ -42,8 +42,7 @@ class Addresses extends React.Component {
           defaultLabel,
           defaultIsPrimary
         )
-      ],
-      showMore: false
+      ]
     }
 
     this.addressAttributeDefs = addressAttributeDefs
@@ -67,8 +66,7 @@ class Addresses extends React.Component {
       addresses: [
         ...state.addresses,
         generateEmptyAddress(this.addressAttributeDefs, state.addresses, true)
-      ],
-      showMore: true
+      ]
     }))
   }
 
@@ -155,12 +153,6 @@ class Addresses extends React.Component {
         status: 'error'
       })
     }
-  }
-
-  handleMore = () => {
-    this.setState(prevState => ({
-      showMore: !prevState.showMore
-    }))
   }
 
   render() {

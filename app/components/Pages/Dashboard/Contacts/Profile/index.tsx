@@ -82,7 +82,8 @@ const useStyles = makeStyles(
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
+      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
+      padding: theme.spacing(0, 2)
     },
     timelineContainer: {
       marginTop: theme.spacing(4),

@@ -12,9 +12,9 @@ import { mdiBellOutline, mdiCheck } from '@mdi/js'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 import useNotify from '@app/hooks/use-notify'
-import { MaskedInput } from 'components/MaskedInput'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { MaskedInput } from '@app/views/components/MaskedInput'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 interface Props {
   contactTouchFreq: Nullable<number>
@@ -68,7 +68,7 @@ export function ManageRelationshipCustomItem({
   onChangeTouchFreq
 }: Props) {
   const classes = useStyles()
-  const [inputValue, setInputValue] = useState(contactTouchFreq || '')
+  const [inputValue, setInputValue] = useState(contactTouchFreq ?? '')
   const notify = useNotify()
 
   const handleChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,11 +79,9 @@ export function ManageRelationshipCustomItem({
   }
 
   const onConfirm = () => {
-    if (
-      Number.isNaN(inputValue) ||
-      Number(inputValue) < 1 ||
-      Number(inputValue) > 365
-    ) {
+    const value = Number(inputValue)
+
+    if (Number.isNaN(value) || value < 1 || value > 365) {
       notify({
         status: 'error',
         message:
@@ -93,7 +91,7 @@ export function ManageRelationshipCustomItem({
       return
     }
 
-    onChangeTouchFreq(Number(inputValue))
+    onChangeTouchFreq(value)
   }
 
   return (

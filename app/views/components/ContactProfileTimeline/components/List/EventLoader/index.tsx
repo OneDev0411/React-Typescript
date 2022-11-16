@@ -22,7 +22,8 @@ const useStyles = makeStyles(
       display: 'flex',
       flexDirection: 'column',
       letterSpacing: '0.15px',
-      marginBottom: theme.spacing(3)
+      marginBottom: theme.spacing(3),
+      padding: theme.spacing(0, 2)
     },
     eventsListContainer: {
       width: '100%'
@@ -34,11 +35,11 @@ const useStyles = makeStyles(
       border: `1px solid ${theme.palette.action.disabledBackground}`,
       borderBottomWidth: 0,
       '&:first-child': {
-        borderTopLeftRadius: theme.spacing(0.5)
+        borderTopLeftRadius: theme.shape.borderRadius
       },
       '&:last-child': {
         borderBottomWidth: '1px',
-        borderBottomLeftRadius: theme.spacing(0.5)
+        borderBottomLeftRadius: theme.shape.borderRadius
       },
       '&:hover': {
         backgroundColor: theme.palette.grey['100']
