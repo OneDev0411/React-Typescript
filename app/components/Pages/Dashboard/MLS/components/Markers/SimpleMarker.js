@@ -3,6 +3,7 @@ import React from 'react'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import { useDispatch } from 'react-redux'
 
+import { useNavigate } from '@app/hooks/use-navigate'
 import toggleFavorite from '@app/store_actions/listings/favorites/toggle-favorite'
 import { changeUrl } from '@app/utils/change-url'
 import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
@@ -30,13 +31,14 @@ const setMarkerCssPosition = listing => {
 }
 
 const SimpleMarker = ({ listing, isWidget }) => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [isHoverd, setIsHoverd] = React.useState(false)
+  const [isHovered, setIsHovered] = React.useState(false)
   const [isListingOpen, setIsListingOpen] = React.useState(false)
 
   const closeListing = () => {
     if (!isWidget) {
-      window.history.back()
+      navigate(-1)
     }
 
     setIsListingOpen(false)
@@ -58,15 +60,15 @@ const SimpleMarker = ({ listing, isWidget }) => {
     <>
       <ButtonBase
         className="single-marker"
-        onMouseLeave={() => setIsHoverd(false)}
-        onMouseEnter={() => setIsHoverd(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onMouseEnter={() => setIsHovered(true)}
         onClick={handleClick}
         style={setMarkerCssPosition(listing)}
       >
         <ListingMarker
           context="map"
           listing={listing}
-          popupIsActive={isHoverd}
+          popupIsActive={isHovered}
         />
       </ButtonBase>
       <ListingDetailsModal
