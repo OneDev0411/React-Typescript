@@ -71,7 +71,7 @@ export function Calendar({
     async (
       range: ICalendarRange,
       position: ApiOptions['position']
-    ): Promise<ICalendarEvent[] | undefined> => {
+    ): Promise<Optional<ICalendarEvent[]>> => {
       const { low = calendarRange.low, high = calendarRange.high } = range
 
       const commonParams = {

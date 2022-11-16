@@ -1,5 +1,6 @@
 import { Component } from 'react'
 
+import { Box } from '@material-ui/core'
 import { connect } from 'react-redux'
 
 import { excludeContactFromGlobalTrigger } from '@app/models/instant-marketing/global-triggers'
@@ -536,7 +537,7 @@ class MasterField extends Component {
     const { disabled, isDirty, label, error } = this.state
 
     if (!this.attribute_def.editable) {
-      return <div style={{ padding: '4px 0px' }}>{this.renderViewMode()}</div>
+      return <Box py={2}>{this.renderViewMode()}</Box>
     }
 
     return (

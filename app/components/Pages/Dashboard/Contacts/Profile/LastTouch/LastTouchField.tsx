@@ -77,11 +77,7 @@ interface Props {
 
 const LastTouchField = ({ value }: Props) => {
   const classes = useStyles()
-  let lastTouchTime
-
-  if (value) {
-    lastTouchTime = timeago().format(value * 1000)
-  }
+  const lastTouchTime = value ? timeago().format(value * 1000) : undefined
 
   return (
     <Button variant="text" className={classes.container}>

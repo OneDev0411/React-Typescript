@@ -75,11 +75,7 @@ class AddressField extends React.Component {
   toggleMode = () => this.props.toggleMode(this.props.address)
 
   cancel = () => {
-    if (this.props.address.label) {
-      if (this.state.isDisabled) {
-        return
-      }
-
+    if (this.props.address.label && !this.state.isDisabled) {
       if (diffAddressStateWithProp(this.props, this.state)) {
         this.context.setConfirmationModal({
           confirmLabel: 'Yes, I do',
