@@ -79,7 +79,9 @@ const useStyles = makeStyles(
     loadButtonContainer: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      textAlign: 'center',
+      margin: theme.spacing(2, 0)
     },
     loadButton: {
       padding: theme.spacing(1, 2),
@@ -161,7 +163,7 @@ export function EventLoader({
           ))}
         </Box>
         {!isReachedStart && eventType === 'history' && (
-          <Box my={2} textAlign="left" className={classes.loadButtonContainer}>
+          <div className={classes.loadButtonContainer}>
             <Button
               variant="text"
               className={classes.loadButton}
@@ -171,10 +173,10 @@ export function EventLoader({
             >
               Load Previous Events
             </Button>
-          </Box>
+          </div>
         )}
         {!isReachedEnd && eventType === 'upcoming' && (
-          <Box my={2} textAlign="left" className={classes.loadButtonContainer}>
+          <div className={classes.loadButtonContainer}>
             <Button
               variant="text"
               className={classes.loadButton}
@@ -184,7 +186,7 @@ export function EventLoader({
             >
               Load Next Events
             </Button>
-          </Box>
+          </div>
         )}
       </Box>
     </Box>
