@@ -95,8 +95,6 @@ function getSortedEvents(events: ICalendarMonthEvents) {
 function getEventIndex(event: ICalendarEvent, range: ICalendarRange) {
   const eventTime = new Date(event.sort_timestamp * 1000)
 
-  console.log('eventTime', eventTime)
-
   const isAllDayEvent = event.all_day || false
 
   if (isAllDayEvent) {
@@ -130,8 +128,6 @@ function getEventIndex(event: ICalendarEvent, range: ICalendarRange) {
   const year = eventTime.getFullYear()
   const month = eventTime.getMonth()
   const day = eventTime.getDate()
-
-  console.log('year', year, 'month', month, 'day', day)
 
   return `${year}/${month + 1}/${day}`
 }
