@@ -133,7 +133,7 @@
     "google-map-react": "^1.1.2",
     "google-maps": "^3.3.0",
     "grapesjs": "^0.18.2",
-    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#adf2a0ccea3f98b33ae5f288f531a10ba8a7f120",
+    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#f4ee3a4cbb98797e8ae746b73535a85c21a1158f",
     "history": "^3.3.0",
     "idx": "^2.5.2",
     "iframe-resizer-react": "^1.1.0",
