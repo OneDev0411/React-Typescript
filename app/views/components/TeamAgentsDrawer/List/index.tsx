@@ -120,7 +120,6 @@ export function AgentsList({
                 } as ComponentProps<typeof ListRow>['data']
               }
               threshold={5}
-              isLoading={false}
               itemSize={getRowLength}
               overscanCount={15}
             >

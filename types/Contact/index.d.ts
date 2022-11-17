@@ -369,6 +369,6 @@ declare interface IAssignee {
   id: UUID
   role: string
   type: string
-  user?: BrandedUser
+  user: BrandedUser
   brand?: IBrand
 }

@@ -5,7 +5,8 @@ import {
   ListItemText,
   ListItem,
   ListItemIcon,
-  makeStyles
+  makeStyles,
+  Popover
 } from '@material-ui/core'
 import { mdiPlus, mdiTrashCanOutline } from '@mdi/js'
 import cn from 'classnames'
@@ -18,12 +19,9 @@ import { muiIconSizes } from '@app/views/components/SvgIcons'
 import UserAvatar from '@app/views/components/UserAvatar'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
+import { AssigneesEditMode } from '../../components/AssigneesEditMode'
 import { BasicSection } from '../components/Section/Basic'
 import { SectionButton } from '../components/Section/Button'
-
-import AssigneeDialog from './AssigneeDialog'
-import AssigneeEmail from './AssigneeEmail'
-import AssigneePopover from './AssigneePopover'
 
 interface Props {
   contact: INormalizedContact
@@ -37,7 +35,10 @@ const useStyles = makeStyles(
       paddingTop: theme.spacing(2),
       borderTop: `1px solid ${theme.palette.action.disabledBackground}`
     },
-
+    popoverContainer: {
+      padding: theme.spacing(1),
+      overflow: 'hidden'
+    },
     actionContainer: {
       display: 'flex',
       alignItems: 'center',
@@ -84,50 +85,19 @@ const useStyles = makeStyles(
 const Assignee = ({ contact, submitCallback }: Props) => {
   const dispatch = useDispatch()
   const classes = useStyles()
+
   const activeBrand = useActiveBrand()
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLButtonElement>>(null)
-  const [currentAgent, setCurrentAgent] = useState<Nullable<BrandedUser>>(null)
   const [showActionId, setShowActionId] = useState<Nullable<UUID>>(null)
-  const [showEmailDialog, setShowEmailDialog] = useState<boolean>(false)
-  const [showEmailDrawer, setShowEmailDrawer] = useState<boolean>(false)
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleOpenModal = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
-
-  const handleClose = () => setAnchorEl(null)
-
-  const handleSelectAgent = async (user: BrandedUser) => {
-    if (!user && !contact.assignees) {
-      return
-    }
-
-    const assignees = Array.isArray(contact.assignees)
-      ? contact.assignees.map(assignee => ({
-          user: assignee?.user?.id,
-          brand: assignee?.brand?.id
-        }))
-      : []
-
-    try {
-      const { data } = await addAssignee(contact.id, {
-        assignees: [...assignees, { brand: user.brand_id, user: user.id }]
-      })
-
-      setCurrentAgent(user)
-
-      // Email feature is only available if the contact has an email
-      if (contact.email) {
-        setShowEmailDialog(true)
-      }
-
-      submitCallback(data)
-
-      handleClose()
-    } catch (err) {
-      console.error(err)
-    }
+  const handleCloseModal = () => {
+    setAnchorEl(null)
   }
+  const open = Boolean(anchorEl)
+  const id = open ? 'assignees-popover' : undefined
+
   const handleDelete = (id: UUID) => {
     dispatch(
       confirmation({
@@ -169,34 +139,8 @@ const Assignee = ({ contact, submitCallback }: Props) => {
     }
   }
 
-  const handleCloseDialog = () => setShowEmailDialog(false)
-  const handleSendEmail = () => {
-    setShowEmailDialog(false)
-    setShowEmailDrawer(true)
-  }
-
-  const open = Boolean(anchorEl)
-  const id = open ? 'assignee-popover' : undefined
-
   return (
     <>
-      <AssigneeDialog
-        open={showEmailDialog}
-        currentAgentName={currentAgent?.display_name}
-        currentContactName={contact?.display_name}
-        handleClose={handleCloseDialog}
-        handleConfirm={handleSendEmail}
-      />
-      {contact?.email && currentAgent?.email && (
-        <AssigneeEmail
-          isOpen={showEmailDrawer}
-          onClose={() => setShowEmailDrawer(false)}
-          contactEmail={contact.email}
-          currentAgentName={currentAgent.display_name}
-          currentAgentEmail={currentAgent.email}
-          contactName={contact.display_name}
-        />
-      )}
       <div className={classes.basicSection}>
         <BasicSection title="Assignee">
           <List component="nav">
@@ -243,20 +187,35 @@ const Assignee = ({ contact, submitCallback }: Props) => {
           {activeBrand.id === contact.brand && (
             <SectionButton
               aria-describedby={id}
-              onClick={handleClick}
+              onClick={handleOpenModal}
               label="Add new assignee"
               icon={mdiPlus}
             />
           )}
-          <AssigneePopover
-            id={id}
-            open={open}
-            anchorEl={anchorEl}
-            handleClose={handleClose}
-            handleSelect={handleSelectAgent}
-          />
         </BasicSection>
       </div>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleCloseModal}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left'
+        }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+      >
+        <div className={classes.popoverContainer}>
+          <AssigneesEditMode
+            contact={contact}
+            onSave={submitCallback}
+            onClose={handleCloseModal}
+          />
+        </div>
+      </Popover>
     </>
   )
 }
