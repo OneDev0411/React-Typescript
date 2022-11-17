@@ -10,7 +10,7 @@ const useStyles = makeStyles(
     container: {
       display: 'flex',
       alignItems: 'center',
-      padding: theme.spacing(4, 0, 2),
+      padding: theme.spacing(2, 0),
       gap: theme.spacing(3)
     },
     catalogContainer: {
