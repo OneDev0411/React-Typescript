@@ -44,9 +44,7 @@ export const BasicSection = ({ title, subtitle, children }: Props) => {
         </Typography>
       )}
       {subtitle && (
-        <Typography className={classes.subtitle} variant="body3">
-          {subtitle}
-        </Typography>
+        <Typography className={classes.subtitle}>{subtitle}</Typography>
       )}
       {children}
     </Box>
