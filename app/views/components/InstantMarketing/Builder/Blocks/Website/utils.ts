@@ -1,7 +1,7 @@
 export const isComponent =
   (type: string, returnFunc?: (el: HTMLElement) => object) =>
   (el: HTMLElement) =>
-    el.dataset?.type === type
+    el?.dataset?.type === type
       ? returnFunc
         ? { type, ...returnFunc(el) }
         : true

@@ -16,6 +16,10 @@ import registerArticleBlock, {
   articleLeftBlockName,
   articleRightBlockName
 } from './Articles'
+import registerCanvasTextBlock, {
+  Options as CanvasTextOptions,
+  canvasTextBlockName
+} from './CanvasText'
 import registerImageBlock, {
   Options as ImageOptions,
   blockName as rechatImageBlockName
@@ -47,6 +51,7 @@ interface Options {
   agent: AgentOptions & BlockOptions
   image: ImageOptions
   video: VideoOptions
+  canvasText: CanvasTextOptions
   article: ArticleOptions
   neighborhoods?: NeighborhoodsOptions
 }
@@ -60,6 +65,7 @@ const BLOCK_BUTTONS_ORDER = [
   'column-3',
   headline1BlockName,
   headline2BlockName,
+  canvasTextBlockName,
   'text',
   dividerBlockName,
   spacerBlockName,
@@ -88,7 +94,7 @@ export function registerEmailBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
-  { listing, agent, image, video, article, neighborhoods }: Options
+  { listing, agent, image, video, article, neighborhoods, canvasText }: Options
 ) {
   const draggable =
     '[data-gjs-type=mj-column],[data-gjs-type=mj-wrapper],[data-gjs-type=mj-body]'
@@ -111,6 +117,7 @@ export function registerEmailBlocks(
     image: ReturnType<typeof registerImageBlock>
     video: ReturnType<typeof registerVideoBlock>
     article: ReturnType<typeof registerArticleBlock>
+    canvasText: ReturnType<typeof registerCanvasTextBlock>
     neighborhoods?: ReturnType<typeof registerNeighborhoodsBlocks>
   } = {
     listing: registerListingBlocks(
@@ -122,6 +129,12 @@ export function registerEmailBlocks(
     agent: registerAgentBlocks(editor, renderData, templateBlockOptions, agent),
     image: registerImageBlock(editor, renderData, templateBlockOptions, image),
     video: registerVideoBlock(editor, renderData, templateBlockOptions, video),
+    canvasText: registerCanvasTextBlock(
+      editor,
+      renderData,
+      templateBlockOptions,
+      canvasText
+    ),
     article: registerArticleBlock(
       editor,
       renderData,
