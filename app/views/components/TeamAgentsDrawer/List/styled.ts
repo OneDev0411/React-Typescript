@@ -69,4 +69,5 @@ export const RowItem = styled.div<{
 
 export const AgentEmail = styled(SubTitle)`
   font-size: 1rem;
+  overflow-wrap: anywhere;
 `
