@@ -13,7 +13,13 @@ export const withGuest = connectedRouterRedirect({
   // This sends the user either to the query param route if we have one,
   // or to the landing page if none is specified and the user is already logged in
   redirectPath: (state, { location: { query = {}, locationState = {} } }) => {
-    const { redirectTo } = query || locationState
+    const { redirectTo, navigateTo } = query || locationState
+
+    // TO fix open house redirect issue
+    // https://gitlab.com/rechat/web/-/issues/6917
+    if (navigateTo && navigateTo.includes('http')) {
+      return '/branch?waitingForRedirect'
+    }
 
     return redirectTo || getUserDefaultHomepage(state.activeTeam ?? null)
   },
