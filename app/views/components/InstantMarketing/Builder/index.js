@@ -47,6 +47,7 @@ import Templates from '../Templates'
 import { AddToMarketingCenterButton } from './AddToMarketingCenterButton'
 import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenterButton/constants'
 import { registerEmailBlocks } from './Blocks/Email'
+import { CanvasTextDrawer } from './Blocks/Email/CanvasText/CanvasTextDrawer'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
 import { registerSocialBlocks } from './Blocks/Social'
 import {
@@ -108,6 +109,7 @@ class Builder extends React.Component {
       mapToEdit: null,
       carouselToEdit: null,
       videoToEdit: null,
+      canvasTextToEdit: null,
       matterportToEdit: null,
       showImageQuickFilters: false
     }
@@ -604,6 +606,14 @@ class Builder extends React.Component {
       },
       video: {
         onDrop: this.openSearchVideoDrawer
+      },
+      canvasText: {
+        onInit: model => {
+          this.setState({ canvasTextToEdit: model })
+        },
+        onDrop: () => {
+          this.blocks.canvasText.selectHandler({})
+        }
       },
       article: {
         onDrop: () => {
@@ -1615,6 +1625,18 @@ class Builder extends React.Component {
                 const uploadedAsset = await uploadAsset(templateId, file)
 
                 return uploadedAsset.file.url
+              }}
+            />
+          )}
+          {!!this.state.canvasTextToEdit && (
+            <CanvasTextDrawer
+              model={this.state.canvasTextToEdit}
+              onUpdate={data => {
+                console.log('(ON UPDATE)', data)
+                this.blocks.canvasText.selectHandler(data)
+              }}
+              onClose={() => {
+                this.setState({ canvasTextToEdit: null })
               }}
             />
           )}
