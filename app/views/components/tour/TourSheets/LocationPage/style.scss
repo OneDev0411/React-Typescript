@@ -46,8 +46,11 @@
   margin-bottom: 1.5rem;
   font-size: 0.75rem;
   min-height: auto;
-  max-height: 26rem;
   overflow: hidden;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 23;
+  -webkit-box-orient: vertical;
 
   @media print {
     text-align: justify;
