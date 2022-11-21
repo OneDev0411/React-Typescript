@@ -6,7 +6,6 @@ import hash from 'object-hash'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
-import { browserHistory, withRouter } from 'react-router'
 
 import {
   sortListingsByIndex,
@@ -16,6 +15,7 @@ import {
 } from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
 import { getSavedSearchListings } from '@app/models/listings/alerts/get-alert-listings'
 import { selectAlert } from '@app/reducers/listings/alerts/list'
+import { withRouter } from '@app/routes/with-router'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import getAlerts from '@app/store_actions/listings/alerts/get-alerts'
 import { changeUrl } from '@app/utils/change-url'
@@ -95,7 +95,7 @@ class SavedSearch extends React.Component {
         ascending
       },
       isFetching: false,
-      activeView: props.location.query.view || DEFAULT_VIEW
+      activeView: props.searchParams.get('view') || DEFAULT_VIEW
     }
   }
 
@@ -139,8 +139,7 @@ class SavedSearch extends React.Component {
     const activeView = to
 
     this.setState({ activeView: to }, () => {
-      browserHistory.push(
-        // eslint-disable-next-line max-len
+      this.props.navigate(
         `/dashboard/mls/saved-searches/${this.props.savedSearch.id}?view=${activeView}`
       )
     })
