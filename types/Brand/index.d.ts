@@ -21,10 +21,11 @@ declare type IPermission =
   | 'Showings'
   | 'ShareToInstagram'
 
-declare type BrandMarketingPaletteAddressValue = Nullable<Partial<IStdAddr>>
+declare type BrandMarketingPaletteAddressValue = Partial<IStdAddr>
 declare type BrandMarketingPaletteValue =
   | string
   | BrandMarketingPaletteAddressValue
+  | null
 
 declare type BrandMarketingPaletteKey =
   | 'address'

@@ -13,7 +13,7 @@ export default function AddressField({
   value,
   names,
   onChange
-}: FieldProps<BrandMarketingPaletteAddressValue>) {
+}: FieldProps<Nullable<BrandMarketingPaletteAddressValue>>) {
   const formRef = useRef<any>(null)
 
   const handleChange = (newValue: BrandMarketingPaletteAddressValue) => {
