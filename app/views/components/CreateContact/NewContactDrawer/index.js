@@ -43,9 +43,10 @@ const defaultProps = {
 class NewContactDrawer extends React.Component {
   state = {
     submitError: '',
-    isSubmitting: false,
-    tagKey: 0
+    isSubmitting: false
   }
+
+  inputRef = React.createRef()
 
   onClose = () => {
     this.setState({ submitError: '' }, this.props.onClose)
@@ -105,7 +106,7 @@ class NewContactDrawer extends React.Component {
         )
 
         form.reset()
-        this.setState({ tagKey: Math.random() })
+        this.inputRef.current.clear()
       } else {
         this.props.onClose()
 
@@ -142,7 +143,7 @@ class NewContactDrawer extends React.Component {
   }
 
   render() {
-    const { isSubmitting, submitError, tagKey } = this.state
+    const { isSubmitting, submitError } = this.state
     const initValues = generateInitialValues(this.props.initValues)
 
     return (
@@ -174,7 +175,7 @@ class NewContactDrawer extends React.Component {
                   <Drawer.Body>
                     <TextField name="first_name" label="First Name" />
                     <TextField name="last_name" label="Last Name" />
-                    <Tags key={tagKey} />
+                    <Tags ref={this.inputRef} />
                     <TextField name="source" label="Source" />
                     <TextField
                       name="touch_freq"
