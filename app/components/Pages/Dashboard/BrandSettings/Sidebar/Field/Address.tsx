@@ -7,13 +7,13 @@ import { InlineAddressField } from '@app/views/components/inline-editable-fields
 import { normalizePostgressStdaddr } from '@app/views/components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/normalize-postgres-stdaddr'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { FieldProps } from './types'
+import { AddressProps } from './types'
 
 export default function AddressField({
   value,
   names,
   onChange
-}: FieldProps<Nullable<BrandMarketingPaletteAddressValue>>) {
+}: AddressProps<Nullable<BrandMarketingPaletteAddressValue>>) {
   const formRef = useRef<any>(null)
 
   const handleChange = (newValue: BrandMarketingPaletteAddressValue) => {

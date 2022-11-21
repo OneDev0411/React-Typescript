@@ -25,6 +25,10 @@ declare type BrandMarketingPaletteAddressValue = Partial<IStdAddr>
 declare type BrandMarketingPaletteValue =
   | string
   | BrandMarketingPaletteAddressValue
+
+declare type BrandMarketingPaletteAddress =
+  | string
+  | BrandMarketingPaletteAddressValue
   | null
 
 declare type BrandMarketingPaletteKey =
