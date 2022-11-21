@@ -36,6 +36,8 @@ export default function Signin(props: Props) {
   const redirectTo =
     props.location.state?.redirectTo || props.location.query?.redirectTo
 
+  const navigateTo = props.location.query?.navigateTo
+
   const [isLookinUp, setIsLookingUp] = useState<boolean>(false)
   const [lookUpFormSubmitMsg, setLookUpFormSubmitMsg] =
     useState<SubmitMessage | null>(null)
@@ -125,9 +127,14 @@ export default function Signin(props: Props) {
 
       const defaultHomePage = getUserDefaultHomepage(activeTeam)
 
-      if (redirectTo && redirectTo.includes('http')) {
-        browserHistory.replace('/branch?waitingForRedirect')
-        window.location.href = redirectTo
+      // TO fix open house redirect issue
+      // https://gitlab.com/rechat/web/-/issues/6917
+      if (
+        navigateTo &&
+        typeof navigateTo === 'string' &&
+        navigateTo.includes('http')
+      ) {
+        window.location.href = navigateTo
 
         return
       }

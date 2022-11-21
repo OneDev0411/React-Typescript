@@ -23,7 +23,9 @@ export default async (
   if (!user) {
     const fullUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`
 
-    res.redirect(`/signin?redirectTo=${fullUrl}`)
+    // TO fix open house redirect issue
+    // https://gitlab.com/rechat/web/-/issues/6917
+    res.redirect(`/signin?navigateTo=${fullUrl}`)
 
     return false
   }
