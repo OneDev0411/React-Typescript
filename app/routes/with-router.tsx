@@ -11,18 +11,20 @@ export function withRouter<T extends WithRouterProps>(
   Component: ComponentType<T>
 ) {
   function ComponentWithRouterProp(
-    props: Exclude<T, keyof WithRouterProps<any>>
+    componentProps: Omit<T, keyof ExtendedWithRouterProps>
   ): ReactElement<T> {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const routerProps: ExtendedWithRouterProps = {
+    const extendedRouterProps: ExtendedWithRouterProps = {
       navigate,
       searchParams,
       setSearchParams
     }
 
-    return <Component {...props} {...routerProps} />
+    const props = { ...componentProps, ...extendedRouterProps } as T
+
+    return <Component {...props} />
   }
 
   return legacyWithRouter(ComponentWithRouterProp)

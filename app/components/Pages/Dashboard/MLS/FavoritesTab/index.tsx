@@ -2,12 +2,12 @@ import { useCallback, useReducer } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
-import { WithRouterProps } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { confirmation } from '@app/store_actions/confirmation'
-import { goTo } from '@app/utils/go-to'
 import { getLocationErrorMessage } from '@app/utils/map'
 import GlobalPageLayout from '@app/views/components/GlobalPageLayout'
 
@@ -34,12 +34,12 @@ const useStyles = makeStyles(
   { name: 'FavoritesTab' }
 )
 
-interface Props extends WithRouterProps {
+interface Props extends RouteComponentProps {
   user: IUser
   isWidget: boolean
 }
 
-function FavoritesTab({ isWidget, user }: Props) {
+function FavoritesTab({ isWidget, user, navigate }: Props) {
   const classes = useStyles()
   const activeTeam = useUnsafeActiveTeam()
 
@@ -104,7 +104,7 @@ function FavoritesTab({ isWidget, user }: Props) {
   // https://gitlab.com/rechat/web/-/issues/6108
   useEffectOnce(() => {
     if (!userLastBrowsingLocation) {
-      goTo('/dashboard/mls')
+      navigate('/dashboard/mls')
     }
   })
 
@@ -125,4 +125,4 @@ function FavoritesTab({ isWidget, user }: Props) {
   )
 }
 
-export default FavoritesTab
+export default withRouter(FavoritesTab)

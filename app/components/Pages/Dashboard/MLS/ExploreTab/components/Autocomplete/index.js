@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 
 import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
-import { browserHistory } from 'react-router'
 
 import { getPlace } from '@app/models/listings/search/get-place'
 import { searchListings } from '@app/models/listings/search/search-listings'
+import { withRouter } from '@app/routes/with-router'
 import { changeUrl } from '@app/utils/change-url'
 import { getListingAddress } from '@app/utils/listing'
 import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch/SearchInput'
@@ -154,7 +154,7 @@ class MlsAutocompleteSearch extends Component {
 
   closeListingDetailsModal = () => {
     if (!this.props.isWidget) {
-      window.history.back()
+      this.props.navigate(-1)
     }
 
     this.setState({
@@ -186,7 +186,7 @@ class MlsAutocompleteSearch extends Component {
       // It's a place and we are in search landing page
       const query = encodeURIComponent(item.description)
 
-      browserHistory.push(`/dashboard/mls?q=${query}`)
+      this.props.navigate(`/dashboard/mls?q=${query}`)
       this.handleSelectedPlace(item)
     } else {
       this.handleSelectedPlace(item)
@@ -300,4 +300,4 @@ class MlsAutocompleteSearch extends Component {
   }
 }
 
-export default MlsAutocompleteSearch
+export default withRouter(MlsAutocompleteSearch)
