@@ -10,6 +10,7 @@ interface Props {
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: () => ({
+    fontWeight: 700,
     whiteSpace: 'nowrap',
     letterSpacing: '0.4px',
     textTransform: 'uppercase'
@@ -28,7 +29,7 @@ export function EventHeader({ item }: Props) {
   const classes = useStyles()
 
   return (
-    <Typography className={classes.root} variant="h6">
+    <Typography className={classes.root} variant="subtitle1">
       {item.isToday && 'TODAY - '}
       {item.isToday
         ? fecha.format(date, 'MMM D, YY')

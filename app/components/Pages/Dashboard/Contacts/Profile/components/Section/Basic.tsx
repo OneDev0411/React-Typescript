@@ -16,7 +16,8 @@ const useStyles = makeStyles(
     title: {
       paddingLeft: theme.spacing(1),
       marginBottom: theme.spacing(0.2),
-      fontFamily: theme.typography.h6.fontFamily
+      fontFamily: theme.typography.button.fontFamily,
+      fontWeight: 600
     },
     subtitle: {
       paddingLeft: theme.spacing(1),
