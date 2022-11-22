@@ -2,11 +2,12 @@ import { useCallback, useReducer, useState } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
-import { WithRouterProps } from 'react-router'
 import { useEffectOnce, useLocalStorage } from 'react-use'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { getPlace } from '@app/models/listings/search/get-place'
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { confirmation } from '@app/store_actions/confirmation'
 import { getLocationErrorMessage } from '@app/utils/map'
 import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
@@ -48,12 +49,12 @@ const useStyles = makeStyles(
   { name: 'ExploreTab' }
 )
 
-interface Props extends WithRouterProps {
+interface Props extends RouteComponentProps {
   user: IUser
   isWidget: boolean
 }
 
-function ExploreTab({ isWidget, user, location }: Props) {
+function ExploreTab({ isWidget, user, searchParams }: Props) {
   const classes = useStyles()
   const activeTeam = useUnsafeActiveTeam()
 
@@ -61,8 +62,10 @@ function ExploreTab({ isWidget, user, location }: Props) {
     Nullable<string>
   >(PROPERTIES_FILTERS_STORAGE_KEY, null)
   const reduxDispatch = useDispatch()
-  const [searchQuery, setSearchQuery] = useState<string>(location.query.q || '')
-  const brokerageQuery = location.query.brokerage || ''
+  const [searchQuery, setSearchQuery] = useState<string>(
+    searchParams.get('q') || ''
+  )
+  const brokerageQuery = searchParams.get('brokerage') || ''
 
   const hasUrlQuery = !!(brokerageQuery || searchQuery)
 
@@ -187,7 +190,7 @@ function ExploreTab({ isWidget, user, location }: Props) {
     const zoom = estimateMapZoom(bounds, zoomOffset)
 
     dispatch(setMapLocation(center, zoom, true))
-    setSearchQuery(location.query.q)
+    setSearchQuery(searchParams.get('q') || '')
     setUserLocationState(prev => ({ ...prev, firstRun: false }))
   }
 
@@ -258,4 +261,4 @@ function ExploreTab({ isWidget, user, location }: Props) {
   )
 }
 
-export default ExploreTab
+export default withRouter(ExploreTab)
