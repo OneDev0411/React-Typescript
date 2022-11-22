@@ -27,7 +27,7 @@ export function List({ deals, contact }: Props) {
   return (
     <ShowMoreLess
       count={3}
-      moreText="Show more deals"
+      moreText="More +"
       textStyle={{
         padding: theme.spacing(1),
         color: theme.palette.grey[700],
