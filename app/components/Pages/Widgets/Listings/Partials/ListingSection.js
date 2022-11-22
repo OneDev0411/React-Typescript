@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
 
+import { withRouter } from '@app/routes/with-router'
 import ActionButton from 'views/components/Button/ActionButton'
 import { primary } from 'views/utils/colors'
 
@@ -45,14 +45,12 @@ class Section extends Component {
   }
 
   get options() {
-    const {
-      type,
-      user,
-      brand,
-      location: {
-        query: { brokerage, agent, brand: brandId, limit }
-      }
-    } = this.props
+    const { type, user, brand, searchParams } = this.props
+
+    const brokerage = searchParams.get('brokerage')
+    const agent = searchParams.get('agent')
+    const brandId = searchParams.get('brand')
+    const limit = searchParams.get('limit')
 
     return getOptions(
       brokerage,
@@ -176,13 +174,13 @@ class Section extends Component {
 
 export default withRouter(
   connect(
-    ({ widgets, user, brand }, { type, location }) => {
+    ({ widgets, user, brand }, { searchParams, type }) => {
       const listings = widgets.listings[type] || {}
 
       return {
         user,
         brand,
-        location,
+        searchParams,
         listings: listings.listings || [],
         listingsInfo: listings.listingsInfo || {},
         isFetching: listings.isFetching || false

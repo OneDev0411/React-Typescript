@@ -4,6 +4,8 @@ import * as Sentry from '@sentry/react'
 import idx from 'idx'
 import { connect } from 'react-redux'
 
+import { withRouter } from '@app/routes/with-router'
+
 import getBrand from '../../../store_actions/brand'
 
 class App extends Component {
@@ -15,7 +17,9 @@ class App extends Component {
     }
 
     if (!brand) {
-      this.props.getBrand(idx(this.props, props => props.location.query.brand))
+      this.props.getBrand(
+        idx(this.props, props => props.searchParams.get('brand'))
+      )
     }
 
     if (user) {
@@ -60,10 +64,12 @@ class App extends Component {
   }
 }
 
-export default connect(
-  ({ user, brand }) => ({
-    brand,
-    user
-  }),
-  { getBrand }
-)(App)
+export default withRouter(
+  connect(
+    ({ user, brand }) => ({
+      brand,
+      user
+    }),
+    { getBrand }
+  )(App)
+)

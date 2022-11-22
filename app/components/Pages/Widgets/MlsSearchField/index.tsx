@@ -1,11 +1,11 @@
-import React from 'react'
-
 import { Grid, TextField } from '@material-ui/core'
+
+import { withRouter } from '@app/routes/with-router'
 
 import SearchIcon from '../../../../views/components/SvgIcons/Search/IconSearch'
 import MLSSearch from '../MlsSearchAutocomplete'
 
-export default function Search() {
+function Search() {
   return (
     <MLSSearch id="standard_search">
       <Grid container spacing={1} alignItems="flex-end">
@@ -19,3 +19,5 @@ export default function Search() {
     </MLSSearch>
   )
 }
+
+export default withRouter(Search)
