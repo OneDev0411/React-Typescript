@@ -3,7 +3,7 @@
 */
 import { useRef, useState, RefObject, useEffect, useCallback } from 'react'
 
-import { makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
@@ -504,7 +504,9 @@ const ContactProfile = props => {
                 disabled={isUpdatingOwner}
               />
               {activeBrand.id === contact.brand && (
-                <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
+                <Box mx={1}>
+                  <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
+                </Box>
               )}
             </div>
 

@@ -14,6 +14,7 @@ const useStyles = makeStyles(
       gap: theme.spacing(3)
     },
     catalogContainer: {
+      marginLeft: theme.spacing(-2),
       flex: '1 1'
     },
     actionsContainer: {
