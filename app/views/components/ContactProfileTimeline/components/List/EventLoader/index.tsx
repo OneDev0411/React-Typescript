@@ -66,8 +66,8 @@ const useStyles = makeStyles(
       position: 'absolute',
       zIndex: 10,
       top: 0,
-      left: 0,
-      right: 0,
+      left: theme.spacing(2),
+      right: theme.spacing(2),
       bottom: 0,
       backgroundColor: theme.palette.background.paper,
       opacity: 0.6

@@ -56,7 +56,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     header: {
       padding: theme.spacing(0, 4),
-      border: `1px solid ${theme.palette.action.disabledBackground}`
+      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },
     container: {
       display: 'flex',
@@ -83,7 +83,7 @@ const useStyles = makeStyles(
       justifyContent: 'space-between',
       alignItems: 'center',
       borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
-      padding: theme.spacing(0, 2)
+      margin: theme.spacing(0, 2)
     },
     timelineContainer: {
       marginTop: theme.spacing(4),
@@ -96,8 +96,7 @@ const useStyles = makeStyles(
       }
     },
     boxContainer: {
-      display: 'flex',
-      gap: theme.spacing(2)
+      display: 'flex'
     },
     sidenavContainer: {
       width: '30%',

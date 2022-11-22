@@ -20,7 +20,7 @@ const useStyles = makeStyles(
       backgroundColor: 'transparent',
       fontWeight: 400,
       color: theme.palette.grey[600],
-      borderBottom: '1px solid transparent',
+      borderBottom: '2px solid transparent',
       '&$selected, &$selected:hover': {
         fontWeight: 600,
         color: theme.palette.grey[900],
