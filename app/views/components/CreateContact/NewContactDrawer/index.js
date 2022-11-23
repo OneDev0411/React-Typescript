@@ -46,8 +46,6 @@ class NewContactDrawer extends React.Component {
     isSubmitting: false
   }
 
-  inputRef = React.createRef()
-
   onClose = () => {
     this.setState({ submitError: '' }, this.props.onClose)
   }
