@@ -117,13 +117,15 @@ export default function Inbox({ params }: WithRouterProps) {
           >
             <AddAccountButton
               className={classes.addAccountButton}
-              createMenuItemProps={{
-                title: 'Compose an email',
-                iconPath: mdiEmailOutline,
-                onClick: () => {
-                  setIsOpenEmailComposeDrawer(true)
+              createMenuItemProps={[
+                {
+                  title: 'Compose an email',
+                  iconPath: mdiEmailOutline,
+                  onClick: () => {
+                    setIsOpenEmailComposeDrawer(true)
+                  }
                 }
-              }}
+              ]}
               onFetchedOAuthAccounts={onFetchedOAuthAccounts}
             />
             {isOpenEmailComposeDrawer && (

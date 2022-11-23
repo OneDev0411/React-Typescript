@@ -858,13 +858,15 @@ class ContactsList extends React.Component {
               {showImportAction && (
                 <>
                   <AddAccountButton
-                    createMenuItemProps={{
-                      title: 'Add Contact',
-                      iconPath: mdiAccountPlus,
-                      onClick: () => {
-                        this.setState({ isOpenNewContactDrawer: true })
+                    createMenuItemProps={[
+                      {
+                        title: 'Add Contact',
+                        iconPath: mdiAccountPlus,
+                        onClick: () => {
+                          this.setState({ isOpenNewContactDrawer: true })
+                        }
                       }
-                    }}
+                    ]}
                     hasCSVButton
                   />
                   <NewContactDrawer
