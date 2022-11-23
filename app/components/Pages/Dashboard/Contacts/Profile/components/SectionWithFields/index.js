@@ -487,7 +487,7 @@ class SectionWithFields extends React.Component {
       <BasicSection subtitle={subtitle} title={title}>
         {(orderedAttributes || []).map(attr => this.renderField(attr))}
         {this.props.children}
-        {orderedAttributes.find(a => a.text === '') &&
+        {orderedAttributes.find(a => a.text === '' || a.date === '') &&
           shouldToggleEmptyAttributes &&
           this.renderToggleButton()}
       </BasicSection>
