@@ -82,27 +82,19 @@ class NewContactDrawer extends React.Component {
         activity: false
       }
 
-      console.log('attributes', attributes)
-
       const response = await createContacts(
         [{ attributes, user: values.owner.id, touch_freq: values.touch_freq }],
         query
       )
 
       this.props.dispatch(getContactsTags())
-      console.log('formProps on submit', this.props)
 
       const contact = response.data[0]
-
-      console.log('contact', contact)
 
       this.setState({ isSubmitting: false })
 
       if (reInitializeAfterSubmit) {
-        console.log('1111', reInitializeAfterSubmit)
-
         if (saveAndAddNewCallback) {
-          console.log('2222', saveAndAddNewCallback)
           saveAndAddNewCallback(contact)
         }
 
@@ -114,8 +106,6 @@ class NewContactDrawer extends React.Component {
         )
 
         form.reset()
-        console.log('formProps after reset', this.props)
-        // this.inputRef.current.clear()
       } else {
         this.props.onClose()
 
@@ -126,7 +116,6 @@ class NewContactDrawer extends React.Component {
         }
       }
     } catch (error) {
-      console.log('error', error)
       this.setState({ isSubmitting: false, submitError: error.message })
     }
   }
@@ -136,13 +125,10 @@ class NewContactDrawer extends React.Component {
       return false
     }
 
-    console.log('formProps', formProps)
     this.onSubmit(formProps.values, formProps.form, undefined, true)
   }
 
   getDefaultValues = (attributeName, properyName) => {
-    console.log('ne default', attributeName)
-
     const attribute = selectDefinitionByName(
       this.props.attributeDefs,
       attributeName
