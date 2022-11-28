@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core'
 import { mdiPencilOutline } from '@mdi/js'
 import pluralize from 'pluralize'
+import ClickOutside from 'react-click-outside'
 
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
@@ -147,70 +148,73 @@ const TouchFrequency = ({ value, onUpdateTouchFreq }: Props) => {
   }
 
   return (
-    <Button
-      variant="text"
-      onMouseEnter={handleShowAction}
-      onMouseLeave={handleRemoveAction}
-      className={classes.container}
-    >
-      <Typography variant="body2">Touch Frequency</Typography>
-      <Typography ref={anchorRef} variant="body2" className={classes.value}>
-        {value
-          ? `Every ${value} ${pluralize('day', value)}`
-          : 'Add Touch Frequency'}
-      </Typography>
-      {showAction && (
-        <div className={classes.videoModeActionBar}>
-          <div className={classes.actionIcon} onClick={handleEdit}>
-            <SvgIcon path={mdiPencilOutline} size={muiIconSizes.small} />
-            <span className={classes.actionLabel}>Edit</span>
-          </div>
-        </div>
-      )}
-      <Popover
-        id={id}
-        open={isOpen}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center'
-        }}
-        className={classes.popoverContainer}
+    <ClickOutside onClickOutside={handleClose}>
+      <Button
+        variant="text"
+        onMouseEnter={handleShowAction}
+        onMouseLeave={handleRemoveAction}
+        className={classes.container}
+        onClick={handleEdit}
       >
-        <div className={classes.actionContainer}>
-          {showCustom ? (
-            <ManageRelationshipCustomItem
-              contactTouchFreq={value || null}
-              onChangeTouchFreq={handleSelect}
-            />
-          ) : (
-            <div className={classes.actionsWrapper}>
-              {Object.keys(frequencyOptions).map(key => (
+        <Typography variant="body2">Touch Frequency</Typography>
+        <Typography ref={anchorRef} variant="body2" className={classes.value}>
+          {value
+            ? `Every ${value} ${pluralize('day', value)}`
+            : 'Add Touch Frequency'}
+        </Typography>
+        {showAction && (
+          <div className={classes.videoModeActionBar}>
+            <div className={classes.actionIcon} onClick={handleEdit}>
+              <SvgIcon path={mdiPencilOutline} size={muiIconSizes.small} />
+              <span className={classes.actionLabel}>Edit</span>
+            </div>
+          </div>
+        )}
+        <Popover
+          id={id}
+          open={isOpen}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center'
+          }}
+          className={classes.popoverContainer}
+        >
+          <div className={classes.actionContainer}>
+            {showCustom ? (
+              <ManageRelationshipCustomItem
+                contactTouchFreq={value || null}
+                onChangeTouchFreq={handleSelect}
+              />
+            ) : (
+              <div className={classes.actionsWrapper}>
+                {Object.keys(frequencyOptions).map(key => (
+                  <div
+                    onClick={() => handleSelect(Number(key))}
+                    key={key}
+                    className={classes.action}
+                  >
+                    {frequencyOptions[key]}
+                  </div>
+                ))}
+                <Divider />
                 <div
-                  onClick={() => handleSelect(Number(key))}
-                  key={key}
+                  onClick={() => setShowCustom(true)}
                   className={classes.action}
                 >
-                  {frequencyOptions[key]}
+                  Custom...
                 </div>
-              ))}
-              <Divider />
-              <div
-                onClick={() => setShowCustom(true)}
-                className={classes.action}
-              >
-                Custom...
               </div>
-            </div>
-          )}
-        </div>
-      </Popover>
-    </Button>
+            )}
+          </div>
+        </Popover>
+      </Button>
+    </ClickOutside>
   )
 }
 

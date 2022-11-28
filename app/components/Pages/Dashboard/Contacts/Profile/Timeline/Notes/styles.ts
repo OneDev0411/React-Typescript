@@ -5,7 +5,6 @@ export const useStyles = makeStyles(
   (theme: Theme) => ({
     section: {
       backgroundColor: theme.palette.background.paper,
-      padding: theme.spacing(0, 2),
       margin: theme.spacing(0, 2),
       borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },
@@ -14,7 +13,7 @@ export const useStyles = makeStyles(
       flexDirection: 'column',
       minWidth: theme.spacing(12),
       maxWidth: theme.spacing(12),
-      paddingTop: theme.spacing(1),
+      padding: theme.spacing(1),
       color: theme.palette.grey['900'],
       ...theme.typography.caption,
       lineHeight: 2
