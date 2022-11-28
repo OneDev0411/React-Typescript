@@ -31,7 +31,8 @@ export function EventHeader({ item }: Props) {
   return (
     <Typography className={classes.root} variant="subtitle1">
       {item.isToday && 'TODAY - '}
-      {item.isToday
+      {item.isTomorrow && 'TOMORROW - '}
+      {item.isToday || item.isTomorrow
         ? fecha.format(date, 'MMM D, YY')
         : fecha.format(date, 'ddd - MMM D, YY')}
     </Typography>
