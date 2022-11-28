@@ -6,7 +6,11 @@ export const useStyles = makeStyles(
     section: {
       backgroundColor: theme.palette.background.paper,
       margin: theme.spacing(0, 2),
-      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
+      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
+      '&:hover': {
+        cursor: 'pointer',
+        backgroundColor: theme.palette.grey['100']
+      }
     },
     header: {
       display: 'flex',
@@ -35,10 +39,6 @@ export const useStyles = makeStyles(
       overflow: 'hidden',
       '&:hover $actions': {
         opacity: 1
-      },
-      '&:hover': {
-        cursor: 'pointer',
-        backgroundColor: theme.palette.grey['100']
       }
     },
     title: {

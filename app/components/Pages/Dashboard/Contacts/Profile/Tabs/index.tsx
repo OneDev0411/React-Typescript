@@ -10,7 +10,8 @@ export enum Filters {
 const useStyles = makeStyles(
   theme => ({
     root: {
-      border: 'none'
+      border: 'none',
+      fontSize: theme.typography.body1.fontSize
     },
     tab: {
       boxSizing: 'border-box',

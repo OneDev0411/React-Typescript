@@ -13,7 +13,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     mainContainer: {
       display: 'flex',
-      gap: theme.spacing(1),
+      gap: theme.spacing(2),
       height: 'min-content',
       width: '100%',
       justifyItems: 'start',

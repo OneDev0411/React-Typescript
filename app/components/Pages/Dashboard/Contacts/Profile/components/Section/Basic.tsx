@@ -7,10 +7,13 @@ const useStyles = makeStyles(
     container: {
       marginBottom: (props: Props) => {
         if (props.title) {
-          return theme.spacing(6)
+          return theme.spacing(3)
         }
 
         return theme.spacing(1)
+      },
+      '&:first-child': {
+        marginTop: theme.spacing(3)
       }
     },
     title: {

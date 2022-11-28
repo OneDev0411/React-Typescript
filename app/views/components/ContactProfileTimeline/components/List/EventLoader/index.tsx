@@ -34,6 +34,7 @@ const useStyles = makeStyles(
       backgroundColor: '#fff',
       border: `1px solid ${theme.palette.action.disabledBackground}`,
       borderBottomWidth: 0,
+      color: theme.palette.grey['500'],
       '&:first-child': {
         borderTopLeftRadius: theme.shape.borderRadius
       },

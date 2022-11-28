@@ -55,7 +55,7 @@ import Timeline, { TimelineRef } from './Timeline'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     header: {
-      padding: theme.spacing(0, 4),
+      padding: theme.spacing(0, 5),
       borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },
     container: {
@@ -73,7 +73,7 @@ const useStyles = makeStyles(
       height: '100%'
     },
     tabContainer: {
-      padding: theme.spacing(2),
+      padding: theme.spacing(3),
       flex: '1 1',
       display: 'flex',
       flexDirection: 'column'
@@ -102,7 +102,7 @@ const useStyles = makeStyles(
       width: '30%',
       minWidth: '350px',
       maxWidth: '450px',
-      padding: theme.spacing(2)
+      padding: theme.spacing(3)
     },
     warnContainer: {
       marginBottom: theme.spacing(2),
