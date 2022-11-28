@@ -10,6 +10,7 @@ const STYLE_MANAGER_ALIGNABLE_TYPES = ['social-group']
 
 const STYLE_MANAGER_BG_COLORABLE_TAGS = [
   'mj-button',
+  'mj-body',
   'mj-column',
   'mj-section',
   'mj-wrapper',
@@ -22,7 +23,11 @@ const STYLE_MANAGER_BG_COLORABLE_TYPES = ['button', 'grid-column', 'grid-row']
 const STYLE_MANAGER_WIDTH_ALLOWED_TAGS = ['mj-button']
 const STYLE_MANAGER_WIDTH_ALLOWED_TYPES = ['button']
 
-const STYLE_MANAGER_PADDING_ALLOWED_TAGS = ['mj-section', 'mj-wrapper']
+const STYLE_MANAGER_PADDING_ALLOWED_TAGS = [
+  'mj-section',
+  'mj-wrapper',
+  'mj-body'
+]
 const STYLE_MANAGER_PADDING_ALLOWED_TYPES = ['grid-row']
 
 export function createGrapesInstance(
