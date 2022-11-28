@@ -13,7 +13,8 @@ export const useStyles = makeStyles(
       flexDirection: 'column',
       minWidth: theme.spacing(12),
       maxWidth: theme.spacing(12),
-      padding: theme.spacing(1),
+      paddingTop: theme.spacing(1),
+      paddingLeft: theme.spacing(2),
       color: theme.palette.grey['900'],
       ...theme.typography.caption,
       lineHeight: 2
