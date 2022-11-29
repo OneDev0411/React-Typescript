@@ -25,7 +25,7 @@ export const useStyles = makeStyles(
     },
     container: {
       '& $row:nth-child(even)': {
-        backgroundColor: theme.palette.grey['50']
+        borderTop: `1px solid ${theme.palette.action.disabledBackground}`
       }
     },
     row: {
