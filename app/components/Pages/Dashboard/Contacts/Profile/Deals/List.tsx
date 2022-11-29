@@ -1,14 +1,12 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
-import { useTheme, Theme } from '@material-ui/core'
 import { mdiPlus, mdiChevronUp } from '@mdi/js'
 
 import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
-import { ShowMoreLess } from 'components/ShowMoreLess'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { sortDealsStatus } from 'utils/sort-deals-status'
+
+import { SectionButton } from '../components/Section/Button'
 
 import { DealItem } from './Item'
 
@@ -17,33 +15,39 @@ interface Props {
   deals: IDeal[]
 }
 
+const TOGGLE_ITEM_COUNT = 3
+
 export function List({ deals, contact }: Props) {
-  const theme: Theme = useTheme()
   const activeBrandId = useUnsafeActiveBrandId()
+  const [toggleEmptyAttributes, setToggleEmptyAttributes] = useState(false)
   const [statuses] = useBrandStatuses(activeBrandId || '')
-  const sortedDealsByStatus = useMemo(() => {
+
+  const handleToggleEmptyFields = () => {
+    setToggleEmptyAttributes(prevState => !prevState)
+  }
+
+  const items = useMemo(() => {
     const activeDeals = deals.filter(deal => !deal.deleted_at)
 
-    return sortDealsStatus(activeDeals, statuses)
-  }, [deals, statuses])
+    const sortedDealsByStatus = sortDealsStatus(activeDeals, statuses)
+
+    return toggleEmptyAttributes
+      ? sortedDealsByStatus
+      : sortedDealsByStatus.slice(0, TOGGLE_ITEM_COUNT)
+  }, [deals, statuses, toggleEmptyAttributes])
 
   return (
-    <ShowMoreLess
-      count={3}
-      moreText="More"
-      lessText="Hide empty fields"
-      moreIcon={<SvgIcon path={mdiPlus} size={muiIconSizes.small} />}
-      lessIcon={<SvgIcon path={mdiChevronUp} size={muiIconSizes.small} />}
-      textStyle={{
-        padding: theme.spacing(1),
-        gap: theme.spacing(1),
-        color: theme.palette.grey[700],
-        ...theme.typography.body2
-      }}
-    >
-      {sortedDealsByStatus.map(deal => (
+    <>
+      {items.map(deal => (
         <DealItem key={deal.id} deal={deal} contact={contact} />
       ))}
-    </ShowMoreLess>
+      {deals.length > TOGGLE_ITEM_COUNT && (
+        <SectionButton
+          label={!toggleEmptyAttributes ? 'More' : 'Hide empty fields'}
+          icon={!toggleEmptyAttributes ? mdiPlus : mdiChevronUp}
+          onClick={handleToggleEmptyFields}
+        />
+      )}
+    </>
   )
 }
