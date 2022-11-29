@@ -97,7 +97,8 @@ class SectionWithFields extends React.Component {
       toggleEmptyAttributes,
       orderedAttributes,
       isAllFieldsEmpty,
-      triggers
+      triggers,
+      isConfirmationModalOpen: false
     }
   }
 
@@ -106,13 +107,21 @@ class SectionWithFields extends React.Component {
     return this.state.orderedAttributes.slice()
   }
 
-  toggleMode = ({ order }) =>
+  setConfirmationModal = value => {
+    this.setState(prevState => ({
+      ...prevState,
+      isConfirmationModalOpen: value
+    }))
+  }
+
+  toggleMode = ({ order }) => {
     this.setState(state => ({
       orderedAttributes: state.orderedAttributes.map(attribute => ({
         ...attribute,
         isActive: attribute.order === order ? !attribute.isActive : false
       }))
     }))
+  }
 
   shouldUpdateContact = attribute_def => {
     if (fieldsNeedUpdateContact.includes(attribute_def.name)) {
@@ -445,6 +454,8 @@ class SectionWithFields extends React.Component {
         handleDelete={this.deleteHandler}
         handleSave={this.save}
         handleToggleMode={this.toggleMode}
+        setConfirmationModal={this.setConfirmationModal}
+        isConfirmationModalOpen={this.state.isConfirmationModalOpen}
         isActive={attribute.isActive}
         key={attribute.cuid || attribute.id}
       />
