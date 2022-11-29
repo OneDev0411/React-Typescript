@@ -1,3 +1,5 @@
+import { useRef } from 'react'
+
 import { makeStyles } from '@material-ui/core'
 import cn from 'classnames'
 // import DayPicker from 'react-day-picker'
@@ -48,10 +50,12 @@ const useCustomGridStyles = makeStyles(theme => ({
 
 const ContactsList = props => {
   const gridClasses = useGridStyles()
+  const tableContainerRef = useRef(null)
   const gridBorderedClasses = useGridBorderedStyles()
   const customGridClasses = useCustomGridStyles()
   const columns = useColumns({
-    totalRows: props.totalRows
+    totalRows: props.totalRows,
+    tableContainerRef
   })
 
   const getLoading = () => {
@@ -78,55 +82,59 @@ const ContactsList = props => {
   const getColumnProps = () => ({})
 
   return (
-    <Table
-      headless={false}
-      rows={props.data}
-      totalRows={props.totalRows}
-      loading={getLoading()}
-      columns={columns}
-      rowSize={5}
-      LoadingStateComponent={LoadingComponent}
-      getTrProps={getRowProps}
-      getTdProps={getColumnProps}
-      selection={{
-        defaultRender: ({ row }) => <Avatar contact={row} />,
-        columnProps: {
-          width: '80px'
-        },
-        showSelectAll: false
-      }}
-      classes={{
-        row: cn(
-          gridClasses.row,
-          gridBorderedClasses.row,
-          customGridClasses.row
-        ),
-        tableContainer: cn(
-          gridClasses.tableContainer,
-          gridBorderedClasses.row,
-          customGridClasses.tableContainer
-        )
-      }}
-      infiniteScrolling={{
-        onReachEnd: props.onRequestLoadMore,
-        onReachStart: props.onRequestLoadMoreBefore
-      }}
-      TableActions={
-        <TableActions
-          filters={props.filters}
-          isFetching={props.isFetching}
-          totalRowsCount={props.listInfo.total}
-          reloadContacts={props.reloadContacts}
-          onRequestDelete={props.onRequestDelete}
-          activeSegmentId={props.activeSegment?.id ?? ''}
-          handleChangeContactsAttributes={props.handleChangeContactsAttributes}
-        />
-      }
-      EmptyStateComponent={() => (
-        // eslint-disable-next-line max-len
-        <NoSearchResults description="Try typing another name, email, phone or tag." />
-      )}
-    />
+    <div ref={tableContainerRef}>
+      <Table
+        headless={false}
+        rows={props.data}
+        totalRows={props.totalRows}
+        loading={getLoading()}
+        columns={columns}
+        rowSize={5}
+        LoadingStateComponent={LoadingComponent}
+        getTrProps={getRowProps}
+        getTdProps={getColumnProps}
+        selection={{
+          defaultRender: ({ row }) => <Avatar contact={row} />,
+          columnProps: {
+            width: '80px'
+          },
+          showSelectAll: false
+        }}
+        classes={{
+          row: cn(
+            gridClasses.row,
+            gridBorderedClasses.row,
+            customGridClasses.row
+          ),
+          tableContainer: cn(
+            gridClasses.tableContainer,
+            gridBorderedClasses.row,
+            customGridClasses.tableContainer
+          )
+        }}
+        infiniteScrolling={{
+          onReachEnd: props.onRequestLoadMore,
+          onReachStart: props.onRequestLoadMoreBefore
+        }}
+        TableActions={
+          <TableActions
+            filters={props.filters}
+            isFetching={props.isFetching}
+            totalRowsCount={props.listInfo.total}
+            reloadContacts={props.reloadContacts}
+            onRequestDelete={props.onRequestDelete}
+            activeSegmentId={props.activeSegment?.id ?? ''}
+            handleChangeContactsAttributes={
+              props.handleChangeContactsAttributes
+            }
+          />
+        }
+        EmptyStateComponent={() => (
+          // eslint-disable-next-line max-len
+          <NoSearchResults description="Try typing another name, email, phone or tag." />
+        )}
+      />
+    </div>
   )
 }
 

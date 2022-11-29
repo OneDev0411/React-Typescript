@@ -133,7 +133,6 @@ class ContactsList extends React.Component {
     }
 
     if (fetchTags) {
-      console.log('fetchTags ...')
       getContactsTags()
     }
 

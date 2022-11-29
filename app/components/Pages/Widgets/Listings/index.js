@@ -1,6 +1,7 @@
 // Widgets/Listings/index.js
-import React, { Component } from 'react'
+import { Component } from 'react'
 
+import { withRouter } from '@app/routes/with-router'
 import { ZeroState } from 'partials/ZeroState'
 
 import ListingSection from './Partials/ListingSection'
@@ -112,4 +113,4 @@ class ListingsWidget extends Component {
   }
 }
 
-export default ListingsWidget
+export default withRouter(ListingsWidget)

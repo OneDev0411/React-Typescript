@@ -1,8 +1,9 @@
 import React, { ReactNode } from 'react'
 
 import { Box } from '@material-ui/core'
-import { withRouter, WithRouterProps } from 'react-router'
 
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { PageTabs, Tab, TabLink } from '@app/views/components/PageTabs'
 
 import SavedSearchesList from '../SavedSearchesList'
@@ -32,7 +33,7 @@ const tabLinks: TabsShape[] = [
   }
 ]
 
-export const Tabs = ({ user, isWidget, location }: Props) => {
+export const Tabs = ({ user, isWidget, location, ...rest }: Props) => {
   const currentUrl = location.pathname
 
   let availableTabs: React.ReactNode[]
@@ -50,29 +51,10 @@ export const Tabs = ({ user, isWidget, location }: Props) => {
       <Tab
         key="saved-list"
         value="saved-searches"
-        label={<SavedSearchesList />}
+        label={<SavedSearchesList location={location} {...rest} />}
       />
     ]
   }
-
-  // const saveSearchTab = (
-  //   <Tab
-  //     key="save"
-  //     label={
-  //       <>
-  //         <ButtonBase
-  //           component="div"
-  //           className={classes.saveSearch}
-  //           disabled={isFetching}
-  //           onClick={saveSearchHandler}
-  //         >
-  //           <SvgIcon path={mdiPlus} size={muiIconSizes.small} rightMargined />
-  //           Save Search
-  //         </ButtonBase>
-  //       </>
-  //     }
-  //   />
-  // )
 
   return (
     <Box display={{ xs: 'none', md: 'flex' }}>
@@ -85,12 +67,6 @@ export const Tabs = ({ user, isWidget, location }: Props) => {
           }
         />
       </Box>
-      {/* <Box className={classes.boxSwitcher}>
-        <SortDropdown onChangeSort={onChangeSort} activeSort={activeSort} />
-        {!isWidget && user && (
-          <ViewSwitcher onChangeView={onChangeView} activeView={activeView} />
-        )}
-      </Box> */}
     </Box>
   )
 }

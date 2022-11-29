@@ -1,4 +1,3 @@
-import { routerReducer } from 'react-router-redux'
 import { reducer as notificationsReducer } from 'reapop'
 import { combineReducers } from 'redux'
 import { reducer as reduxFormReducer } from 'redux-form'
@@ -65,8 +64,7 @@ const appReducer = combineReducers({
 
   /* third party reducers */
   notifications: notificationsReducer(),
-  form: reduxFormReducer,
-  routing: routerReducer
+  form: reduxFormReducer
 })
 
 // Typings in the latest redux version allows this beautiful store type inference

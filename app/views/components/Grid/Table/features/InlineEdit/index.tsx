@@ -86,6 +86,7 @@ function InlineEdit<Row>({
           style: column.inlineEditStyles?.paper
         }}
         onClose={closeMenu}
+        {...column.inlineEditProps}
       >
         <div
           style={{

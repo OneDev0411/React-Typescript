@@ -43,8 +43,9 @@ const useInlineEditableStringStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       viewRoot: {
-        display: 'inline-flex',
+        display: 'flex',
         alignItems: 'center',
+        justifyContent: 'space-between',
         '&:hover $editIcon': {
           opacity: 1
         }
@@ -62,7 +63,8 @@ const useInlineEditableStringStyles = makeStyles(
       editIcon: {
         verticalAlign: 'text-bottom',
         opacity: 0,
-        transition: 'opacity 300ms'
+        transition: 'opacity 300ms',
+        flexShrink: 0
       }
     }),
   { name: 'InlineEditableString' }

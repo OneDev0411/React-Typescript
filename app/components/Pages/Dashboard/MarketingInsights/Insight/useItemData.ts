@@ -11,9 +11,11 @@ export function useItemData(emailCampaignId: string) {
 
   function loadEmailCampaign() {
     return getEmailCampaign(emailCampaignId, {
-      emailCampaignAssociations: ['emails', 'from', 'recipients'],
-      emailRecipientsAssociations: [],
-      emailCampaignEmailsAssociation: []
+      associations: {
+        associations: ['emails', 'from', 'recipients'],
+        recipientsAssociations: []
+      },
+      emailFields: []
     })
       .then(data => {
         setError(false)

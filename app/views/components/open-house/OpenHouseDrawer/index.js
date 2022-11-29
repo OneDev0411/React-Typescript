@@ -594,7 +594,7 @@ class OpenHouseDrawerInternal extends React.Component {
                             variant="outlined"
                             onClick={this.handleEditTemplateClick}
                           >
-                            {this.state.openHouse
+                            {this.state.openHouse?.metadata?.template
                               ? 'Redesign Guest Registration Page'
                               : 'Edit Guest Registration Page'}
                           </Button>

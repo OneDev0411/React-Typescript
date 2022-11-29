@@ -1,11 +1,13 @@
-import { ReactElement, ReactChildren, cloneElement } from 'react'
+import { ReactElement, cloneElement } from 'react'
 
 import { useTitle } from 'react-use'
 
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { ListSelection } from '@app/views/components/ListSelection'
 
-interface Props {
-  children: ReactElement<ReactChildren>
+interface Props extends RouteComponentProps {
+  children: ReactElement
 }
 
 function Listings({ children, ...rest }: Props) {
@@ -18,4 +20,4 @@ function Listings({ children, ...rest }: Props) {
   )
 }
 
-export default Listings
+export default withRouter(Listings)

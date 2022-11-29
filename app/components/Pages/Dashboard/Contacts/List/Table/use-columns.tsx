@@ -1,5 +1,8 @@
+import { RefObject } from 'react'
+
 import { Typography, makeStyles, Theme, Tooltip } from '@material-ui/core'
 import {
+  mdiAccountArrowLeft,
   mdiCake,
   mdiCalendar,
   mdiEmail,
@@ -12,20 +15,24 @@ import {
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router'
 
+import { ACL } from '@app/constants/acl'
 import {
   getAttributeFromSummary,
   updateContactQuery as defaultUpdateContactQuery
 } from '@app/models/contacts/helpers'
 import { getContact } from '@app/store_actions/contacts/get-contact'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderColumn'
 import { SelectionCount } from '@app/views/components/Grid/Table/features/Selection/SelectionCount'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 
-import { BirthdayInlineEdit } from './columns-inline-edit/Birthday'
+import { AssigneesInlineEdit } from './columns-inline-edit/Assignees'
 import { EmailsInlineEdit } from './columns-inline-edit/Emails'
 import { FlowsInlineEdit } from './columns-inline-edit/Flows'
 import { PhonesInlineEdit } from './columns-inline-edit/Phones'
 import { TagsInlineEdit } from './columns-inline-edit/Tags'
+import { TriggerableInlineEdit } from './columns-inline-edit/Triggerable'
+import { AssigneesCell } from './columns/Assignees'
 import { BirthdayCell } from './columns/Birthday'
 import { EmailsCell } from './columns/Emails'
 import { FlowsCell } from './columns/Flows'
@@ -69,9 +76,14 @@ const useStyles = makeStyles(
 
 interface Data {
   totalRows: number
+  tableContainerRef?: RefObject<HTMLDivElement>
 }
 
-export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
+export function useColumns({
+  totalRows,
+  tableContainerRef
+}: Data): TableColumn<IContact>[] {
+  const hasBetaAccess = useAcl(ACL.BETA)
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -83,7 +95,11 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     dispatch(getContact(contactId, query))
   }
 
-  return [
+  // TODO: I had to extract columns this way because the assignees column is
+  // in the middle of the array and it should be behind the beta access ACL for now
+  // Merge all of these and convert the return to a simple array after it goes public
+  // https://gitlab.com/rechat/web/-/issues/6705#note_1166240925
+  const columns = [
     {
       id: 'name',
       width: '250px',
@@ -185,15 +201,20 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     },
     {
       id: 'birthday',
-      width: '150px',
+      width: '180px',
       header: () => <HeaderColumn text="Birthday" iconPath={mdiCake} />,
       render: ({ row: contact }) => (
         <div className={classes.cell}>
           <BirthdayCell contact={contact} />
         </div>
       ),
+      inlineEditProps: {
+        disableEnforceFocus: true,
+        container: tableContainerRef?.current
+      },
       renderInlineEdit: ({ row: contact }, close) => (
-        <BirthdayInlineEdit
+        <TriggerableInlineEdit
+          attributeName="birthday"
           contact={contact}
           callback={handleReloadContact}
           close={close}
@@ -202,12 +223,24 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
     },
     {
       id: 'home-anniversary',
-      width: '200px',
+      width: '190px',
       header: () => (
         <HeaderColumn text="Home Anniversary" iconPath={mdiHomeOutline} />
       ),
       render: ({ row: contact }) => (
         <HomeAnniversary contact={contact} className={classes.cell} />
+      ),
+      inlineEditProps: {
+        disableEnforceFocus: true,
+        container: tableContainerRef?.current
+      },
+      renderInlineEdit: ({ row: contact }, close) => (
+        <TriggerableInlineEdit
+          attributeName="home_anniversary"
+          contact={contact}
+          callback={handleReloadContact}
+          close={close}
+        />
       )
     },
     {
@@ -229,4 +262,35 @@ export function useColumns({ totalRows }: Data): TableColumn<IContact>[] {
       }
     }
   ]
+
+  const assigneesColumn = {
+    id: 'assignees',
+    width: '160px',
+    header: () => (
+      <HeaderColumn text="Assignees" iconPath={mdiAccountArrowLeft} />
+    ),
+    render: ({ row: contact }) => {
+      return (
+        <div className={classes.cell}>
+          <AssigneesCell assignees={contact.assignees || []} />
+        </div>
+      )
+    },
+    renderInlineEdit: (
+      { row: contact }: any,
+      close: (() => void) | undefined
+    ) => (
+      <AssigneesInlineEdit
+        contact={contact}
+        callback={handleReloadContact}
+        close={close}
+      />
+    )
+  }
+
+  if (hasBetaAccess) {
+    columns.splice(columns.length - 1, 0, assigneesColumn)
+  }
+
+  return columns
 }

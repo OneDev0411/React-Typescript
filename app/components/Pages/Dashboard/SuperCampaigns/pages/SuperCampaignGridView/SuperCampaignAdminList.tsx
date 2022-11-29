@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 
 import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/Table/components/LoadingComponent'
-import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
+import { InsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
 import { useGetAllSuperCampaigns } from '@app/models/super-campaign'
 import { goTo } from '@app/utils/go-to'
 import Table from '@app/views/components/Grid/Table'
@@ -49,7 +49,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
     {
       id: 'subject',
       primary: true,
-      width: '30%',
+      width: '18vw',
       render: ({ row }) => (
         <SuperCampaignListColumnSubject
           subject={row.subject}
@@ -59,18 +59,18 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
     },
     {
       id: 'userCount',
-      width: '20%',
+      width: '12vw',
       render: ({ row }) => (
         <SuperCampaignAdminListColumnUserCount value={row.enrollments_count} />
       )
     },
     {
       id: 'tags',
-      width: '40%',
+      width: '50vw',
       render: ({ row }) =>
         isSuperCampaignReadOnly(row) ? (
           <SuperCampaignAdminListColumnStats
-            sent={row.enrollments_count}
+            sent={row.recipients_count}
             delivered={row.delivered}
             opened={row.opened}
             clicked={row.clicked}
@@ -82,6 +82,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
     {
       id: 'actions',
       align: 'right',
+      width: '3vw',
       render: ({ row }) => (
         <SuperCampaignAdminMoreActions
           superCampaign={row}
@@ -116,7 +117,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
         onReachEnd: fetchNextPage
       }}
       EmptyStateComponent={() => (
-        <EmailInsightsZeroState
+        <InsightsZeroState
           title="No campaign to show, yet."
           subTitle="Try creating your first campaign and help your agents"
         />

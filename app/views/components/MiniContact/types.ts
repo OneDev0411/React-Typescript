@@ -49,5 +49,6 @@ export enum SocialMediasEnum {
   instagram = 'instagram',
   facebook = 'facebook',
   linkedin = 'linkedin',
+  pinterest = 'pinterest',
   tiktok = 'tiktok'
 }

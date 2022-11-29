@@ -24,8 +24,9 @@ import {
 import { getContactTriggers } from './helpers/get-contact-triggers'
 import { getScheduleEmailTrigger } from './helpers/get-schedule-email-trigger'
 
-function generateEmptyAttribute(attribute_def, is_partner, order) {
+export function generateEmptyAttribute(attribute_def, is_partner, order) {
   return {
+    id: '',
     attribute_def,
     cuid: cuid(),
     is_partner,

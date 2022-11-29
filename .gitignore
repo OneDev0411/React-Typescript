@@ -191,10 +191,3 @@ server-dist
 !.idea/codeStyles
 !.idea/misc.xml
 !.idea/jsLibraryMappings.xml
-
-# yarn.lock
-# package-lock.json
-
-// cypress
-tests/cypress/screenshots/
-tests/cypress/videos/
