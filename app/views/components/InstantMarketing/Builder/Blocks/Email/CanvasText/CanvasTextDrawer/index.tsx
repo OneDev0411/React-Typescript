@@ -8,7 +8,7 @@ import Pikaso, { LabelModel } from 'pikaso'
 import OverlayDrawer from '@app/views/components/OverlayDrawer'
 import { PageTabs, Tab } from '@app/views/components/PageTabs'
 
-import { AdvancedProperties } from './Advanced'
+import { AdvancedProperties } from './AdvancedProperties'
 import { BasicProperties } from './BasicProperties'
 import { DefaultCanvasTextProperties } from './constants'
 import { Context } from './context'
