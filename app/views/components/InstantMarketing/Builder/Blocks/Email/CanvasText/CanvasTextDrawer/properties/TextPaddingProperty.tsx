@@ -43,7 +43,7 @@ export function TextPaddingProperty() {
           valueLabelDisplay="auto"
           defaultValue={padding}
           min={0}
-          max={20}
+          max={50}
           step={1}
           onChange={(_, value) => handleChangePadding(value as number)}
         />

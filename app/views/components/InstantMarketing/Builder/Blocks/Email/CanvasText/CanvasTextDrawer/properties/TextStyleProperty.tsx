@@ -17,6 +17,7 @@ import {
   mdiFormatUnderline
 } from '@mdi/js'
 import cn from 'classnames'
+import FontFaceObserver from 'fontfaceobserver'
 
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
@@ -37,7 +38,7 @@ const useStyles = makeStyles(
 
 export function TextStyleProperty() {
   const classes = useStyles()
-  const { setTextProperty, preview } = useCanvasTextContext()
+  const { label, setTextProperty, preview } = useCanvasTextContext()
   const [fontStyle, setFontStyle] = useState({
     bold: false,
     italic: false
@@ -53,14 +54,21 @@ export function TextStyleProperty() {
 
   useEffect(() => {
     const fontStyleString = Object.entries(fontStyle)
-      .filter(([key, value]) => !!value)
-      .map(([key, value]) => key)
+      .filter(([_, value]) => !!value)
+      .map(([key]) => key)
       .join(' ')
+      .trim()
 
-    setTextProperty('fontStyle', fontStyleString)
-
-    preview()
-  }, [fontStyle, setTextProperty, preview])
+    new FontFaceObserver(label?.textNode.fontFamily())
+      .load()
+      .then(() => {
+        setTextProperty('fontStyle', fontStyleString || 'normal')
+        preview()
+      })
+      .catch((e: ErrorEvent) => {
+        console.log(e)
+      })
+  }, [fontStyle, setTextProperty, preview, label?.textNode])
 
   useEffect(() => {
     setTextProperty('align', alignment)

@@ -73,8 +73,7 @@ export function FontExplorer() {
     limit: 300,
     categories: ['handwriting', 'display', 'serif', 'monospace'],
     sort: 'popularity',
-    scripts: ['latin', 'latin-ext'],
-    variants: ['500', '700']
+    scripts: ['latin', 'latin-ext']
   })
   const [activeFont, setActiveFont] = useState<Nullable<Font>>(null)
   const [displayCount, setDisplayCount] = useState(LIMIT)
@@ -105,7 +104,6 @@ export function FontExplorer() {
     new FontFaceObserver(font.family)
       .load()
       .then(() => {
-        console.log(font)
         setTextProperty('fontFamily', font.family)
         preview()
       })

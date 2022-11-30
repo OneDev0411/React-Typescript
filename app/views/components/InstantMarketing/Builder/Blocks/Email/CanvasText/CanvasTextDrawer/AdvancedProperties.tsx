@@ -1,5 +1,6 @@
 import { Box } from '@material-ui/core'
 
+import { TagCornerRadius } from './properties/TagCornerRadius'
 import { TextLineHeightProperty } from './properties/TextLineHeightProperty'
 import { TextOpacityProperty } from './properties/TextOpacityProperty'
 import { TextPaddingProperty } from './properties/TextPaddingProperty'
@@ -13,6 +14,7 @@ export function AdvancedProperties() {
       <TextOpacityProperty />
       <TextPaddingProperty />
       <TextRotateProperty />
+      <TagCornerRadius />
       <TextShadowProperty />
     </Box>
   )

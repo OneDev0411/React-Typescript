@@ -34,7 +34,7 @@ export function TextFontSizeProperty() {
           valueLabelDisplay="auto"
           defaultValue={fontSize}
           min={DefaultCanvasTextProperties.text.fontSize! / 2}
-          max={65}
+          max={80}
           onChange={(_, value) => handleChangeFontSize(value as number)}
         />
       </Box>
