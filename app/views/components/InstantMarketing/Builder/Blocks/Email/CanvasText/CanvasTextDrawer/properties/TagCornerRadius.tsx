@@ -6,9 +6,11 @@ import { useDebounce } from 'react-use'
 import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
 
 export function TagCornerRadius() {
-  const { setTagProperty, preview } = useCanvasTextContext()
+  const { getTagProperty, setTagProperty, preview } = useCanvasTextContext()
 
-  const [radius, setRadius] = useState<number>(1)
+  const [radius, setRadius] = useState<number>(
+    getTagProperty<number>('cornerRadius') ?? 1
+  )
   const [debouncedRadius, setDebouncedRadius] = useState(radius)
 
   useDebounce(

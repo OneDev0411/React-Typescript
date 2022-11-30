@@ -8,7 +8,9 @@ import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
 export function TextRotateProperty() {
   const { label, preview } = useCanvasTextContext()
 
-  const [rotation, setRotation] = useState<number>(0)
+  const [rotation, setRotation] = useState<number>(
+    label?.node.getAttr('rotation') ?? 0
+  )
   const [debouncedRotation, setDebouncedRotation] = useState(rotation)
 
   useDebounce(
@@ -40,8 +42,8 @@ export function TextRotateProperty() {
           value={rotation}
           valueLabelDisplay="auto"
           defaultValue={rotation}
-          min={-10}
-          max={10}
+          min={-90}
+          max={90}
           onChange={(_, value) => handleChangeRotation(value as number)}
         />
       </Box>

@@ -608,7 +608,12 @@ class Builder extends React.Component {
         onDrop: this.openSearchVideoDrawer
       },
       canvasText: {
-        onInit: model => {
+        onInit: (model, isNewBlock) => {
+          if (isNewBlock) {
+            this.setState({ canvasTextToEdit: model })
+          }
+        },
+        onLoad: model => {
           this.setState({ canvasTextToEdit: model })
         },
         onDrop: () => {

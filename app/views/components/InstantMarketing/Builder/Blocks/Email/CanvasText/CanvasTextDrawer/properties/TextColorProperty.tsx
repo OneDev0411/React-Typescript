@@ -7,10 +7,10 @@ import { DefaultCanvasTextProperties } from '../constants'
 import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
 
 export function TextColorProperty() {
-  const { label, setTextProperty, preview } = useCanvasTextContext()
+  const { getTextProperty, setTextProperty, preview } = useCanvasTextContext()
 
   const [color, setColor] = useState<ColorState['hex']>(
-    label?.textNode.fill() || DefaultCanvasTextProperties.text.fill!
+    getTextProperty<string>('fill') ?? DefaultCanvasTextProperties.text.fill!
   )
 
   const handleChangeColor = (color: ColorState) => {

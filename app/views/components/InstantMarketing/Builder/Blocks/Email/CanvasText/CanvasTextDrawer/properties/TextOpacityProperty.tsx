@@ -6,9 +6,11 @@ import { useDebounce } from 'react-use'
 import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
 
 export function TextOpacityProperty() {
-  const { setTextProperty, preview } = useCanvasTextContext()
+  const { getTextProperty, setTextProperty, preview } = useCanvasTextContext()
 
-  const [opacity, setOpacity] = useState<number>(1)
+  const [opacity, setOpacity] = useState<number>(
+    getTextProperty<number>('opacity') ?? 1
+  )
   const [debouncedOpacity, setDebouncedOpacity] = useState(opacity)
 
   useDebounce(

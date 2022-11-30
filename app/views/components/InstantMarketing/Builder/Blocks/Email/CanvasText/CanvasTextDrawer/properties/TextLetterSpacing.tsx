@@ -6,9 +6,11 @@ import { useDebounce } from 'react-use'
 import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
 
 export function TextLetterSpacingProperty() {
-  const { setTextProperty, preview } = useCanvasTextContext()
+  const { getTextProperty, setTextProperty, preview } = useCanvasTextContext()
 
-  const [letterSpacing, setLetterSpacing] = useState<number>(0)
+  const [letterSpacing, setLetterSpacing] = useState<number>(
+    getTextProperty<number>('letterSpacing') ?? 0
+  )
   const [debouncedLetterSpacing, setDebouncedLetterSpacing] =
     useState(letterSpacing)
 

@@ -13,11 +13,14 @@ export const DefaultCanvasTextProperties: CanvasTextProperties = {
     y: 0
   },
   text: {
-    text: 'Your Text',
+    text: 'Untitled Text',
     fontSize: 40,
+    fontFamily: 'Arial',
     lineHeight: 1.1,
     padding: 10,
     fill: '#000'
   },
-  tag: {}
+  tag: {
+    fill: 'transparent'
+  }
 }

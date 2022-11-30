@@ -1,10 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { Box, CircularProgress, makeStyles } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  CircularProgress,
+  makeStyles,
+  Typography
+} from '@material-ui/core'
 import type { Model } from 'backbone'
 import cn from 'classnames'
 import Pikaso, { LabelModel } from 'pikaso'
 
+import { noop } from '@app/utils/helpers'
 import OverlayDrawer from '@app/views/components/OverlayDrawer'
 import { PageTabs, Tab } from '@app/views/components/PageTabs'
 
@@ -53,6 +60,16 @@ export function CanvasTextDrawer({ model, onUpdate, onClose }: Props) {
 
   const label = editor ? (editor.board.activeShapes[0] as LabelModel) : null
 
+  const handleDone = () => {
+    const data = JSON.stringify(editor?.export.toJson())
+
+    model!.trigger('canvas-text:done', {
+      data
+    })
+
+    onClose()
+  }
+
   const preview = useCallback(() => {
     if (!label) {
       return
@@ -62,10 +79,12 @@ export function CanvasTextDrawer({ model, onUpdate, onClose }: Props) {
       pixelRatio: 2
     })
 
+    const rect = label.node.getClientRect()
+
     model!.trigger('canvas-text:update', {
       image,
-      width: label.width(),
-      height: label.height()
+      width: rect.width,
+      height: rect.height
     })
   }, [label, model])
 
@@ -75,6 +94,7 @@ export function CanvasTextDrawer({ model, onUpdate, onClose }: Props) {
     },
     [label]
   )
+
   const setTagProperty = useCallback(
     (property: string, value: unknown) => {
       label?.tagNode.setAttr(property, value)
@@ -82,8 +102,22 @@ export function CanvasTextDrawer({ model, onUpdate, onClose }: Props) {
     [label]
   )
 
+  const getTextProperty = useCallback(
+    (property: string) => {
+      return label?.textNode.getAttr(property)
+    },
+    [label]
+  )
+
+  const getTagProperty = useCallback(
+    (property: string) => {
+      return label?.tagNode.getAttr(property)
+    },
+    [label]
+  )
+
   useEffect(() => {
-    if (editor || !editorRef.current) {
+    if (editor || !model || !editorRef.current) {
       return
     }
 
@@ -93,15 +127,34 @@ export function CanvasTextDrawer({ model, onUpdate, onClose }: Props) {
       container: editorRef.current
     })
 
-    instance.shapes.label.insert(DefaultCanvasTextProperties)
+    const state = decodeURIComponent(model.get('canvas-json'))
+
+    if (state) {
+      instance.load(state)
+    } else {
+      instance.shapes.label.insert(DefaultCanvasTextProperties)
+    }
 
     setEditor(instance)
-  }, [editorRef, editor])
+  }, [editorRef, editor, model])
 
   return (
     <>
-      <OverlayDrawer open hideBackdrop width={400} onClose={onClose}>
-        <OverlayDrawer.Header title="Fancy Test" />
+      <OverlayDrawer open hideBackdrop width={400} onClose={noop}>
+        <OverlayDrawer.Header title="Fancy Test">
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            py={1}
+          >
+            <Typography variant="h6">Fancy Text</Typography>
+
+            <Button variant="contained" color="primary" onClick={handleDone}>
+              Done
+            </Button>
+          </Box>
+        </OverlayDrawer.Header>
         <OverlayDrawer.Body className={classes.drawerBodyRoot}>
           {editor ? (
             <div>
@@ -111,6 +164,8 @@ export function CanvasTextDrawer({ model, onUpdate, onClose }: Props) {
                   label,
                   setTextProperty,
                   setTagProperty,
+                  getTextProperty,
+                  getTagProperty,
                   preview
                 }}
               >

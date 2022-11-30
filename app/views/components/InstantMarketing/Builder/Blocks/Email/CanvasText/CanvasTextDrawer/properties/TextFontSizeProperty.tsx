@@ -7,10 +7,11 @@ import { DefaultCanvasTextProperties } from '../constants'
 import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
 
 export function TextFontSizeProperty() {
-  const { setTextProperty, preview } = useCanvasTextContext()
+  const { setTextProperty, getTextProperty, preview } = useCanvasTextContext()
 
   const [fontSize, setFontSize] = useState<number>(
-    DefaultCanvasTextProperties.text.fontSize!
+    getTextProperty<number>('fontSize') ??
+      DefaultCanvasTextProperties.text.fontSize!
   )
   const [debouncedFontSize, setDebouncedFontSize] = useState(fontSize)
 

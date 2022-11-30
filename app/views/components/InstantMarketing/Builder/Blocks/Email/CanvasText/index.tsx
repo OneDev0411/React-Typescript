@@ -29,14 +29,15 @@ interface UpdateEvent {
 export interface Options {
   canvasTextClassNames: string
   onDrop: (model: Model) => void
-  onInit: (model: Model) => void
+  onLoad: (model: Model) => void
+  onInit: (model: Model, isNewBlock: boolean) => void
 }
 
 export default function registerCanvasTextBlock(
   editor: Editor,
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
-  { onDrop, onInit }: Options
+  { onDrop, onLoad, onInit }: Options
 ): RegisterBlockSelectHandler<CanvasText> {
   // create a new type for canvas-text
   editor.DomComponents.addType(canvasTextBlockName, {
@@ -44,13 +45,18 @@ export default function registerCanvasTextBlock(
     extend: 'mj-image',
     model: {
       defaults: {},
-      init() {
-        onInit(this)
-      }
+      init() {}
     },
     view: {
       init({ model }) {
+        const isNewBlock = this.attr['data-json'] === ''
+
+        model.set('canvas-json', this.attr['data-json'])
+
         this.listenTo(model, 'canvas-text:update', this.update)
+        this.listenTo(model, 'canvas-text:done', this.saveState)
+
+        onInit(model, isNewBlock)
       },
       update(data: UpdateEvent) {
         this.model.setAttributes({
@@ -62,9 +68,13 @@ export default function registerCanvasTextBlock(
 
         this.rerender()
       },
+      saveState({ data }: { data: string }) {
+        this.attr['data-json'] = encodeURIComponent(data)
+        this.model.set('canvas-json', this.attr['data-json'])
+      },
       events: {
-        click() {
-          console.log('>>> CLICKED <<<')
+        dblclick() {
+          onLoad(this.model)
         }
       }
     }

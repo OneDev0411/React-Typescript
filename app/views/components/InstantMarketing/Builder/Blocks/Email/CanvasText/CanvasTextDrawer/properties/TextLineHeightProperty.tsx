@@ -6,9 +6,11 @@ import { useDebounce } from 'react-use'
 import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
 
 export function TextLineHeightProperty() {
-  const { setTextProperty, preview } = useCanvasTextContext()
+  const { getTextProperty, setTextProperty, preview } = useCanvasTextContext()
 
-  const [lineHeight, setLineHeight] = useState<number>(1)
+  const [lineHeight, setLineHeight] = useState<number>(
+    getTextProperty<number>('lineHeight') ?? 1
+  )
   const [debouncedLineHeight, setDebouncedLineHeight] = useState(lineHeight)
 
   useDebounce(

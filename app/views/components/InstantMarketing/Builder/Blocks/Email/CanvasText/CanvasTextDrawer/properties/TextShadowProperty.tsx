@@ -66,14 +66,14 @@ const useStyles = makeStyles(
 
 export function TextShadowProperty() {
   const classes = useStyles()
-  const { setTextProperty, preview } = useCanvasTextContext()
+  const { getTextProperty, setTextProperty, preview } = useCanvasTextContext()
   const [shadow, setShadow] = useState({
-    x: 0,
-    y: 0,
-    fill: '#000',
-    opacity: 0.1,
-    blur: 0,
-    disabled: false
+    x: getTextProperty<number>('shadowOffsetX') ?? 0,
+    y: getTextProperty<number>('shadowOffsetY') ?? 0,
+    fill: getTextProperty<string>('shadowColor') ?? '#000',
+    opacity: getTextProperty<number>('shadowOpacity') ?? 0.1,
+    blur: getTextProperty<number>('shadowBlur') ?? 0,
+    disabled: !(getTextProperty<boolean>('shadowEnabled') ?? true)
   })
 
   const [debouncedShadow, setDebouncedShadow] = useState(shadow)

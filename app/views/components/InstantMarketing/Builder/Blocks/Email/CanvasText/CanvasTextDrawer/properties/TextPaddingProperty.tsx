@@ -7,10 +7,11 @@ import { DefaultCanvasTextProperties } from '../constants'
 import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
 
 export function TextPaddingProperty() {
-  const { setTextProperty, preview } = useCanvasTextContext()
+  const { getTextProperty, setTextProperty, preview } = useCanvasTextContext()
 
   const [padding, setPadding] = useState<number>(
-    DefaultCanvasTextProperties.text.padding!
+    getTextProperty<number>('padding') ??
+      DefaultCanvasTextProperties.text.padding!
   )
   const [debouncedPadding, setDebouncedPadding] = useState(padding)
 

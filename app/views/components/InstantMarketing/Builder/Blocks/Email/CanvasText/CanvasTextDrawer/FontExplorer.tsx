@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import {
+  Box,
   Button,
   InputAdornment,
   makeStyles,
@@ -16,6 +17,7 @@ import matchSorter from 'match-sorter'
 import { useFonts } from '@app/hooks/use-fonts'
 import { SvgIcon } from '@app/views/components/SvgIcons'
 
+import { DefaultCanvasTextProperties } from './constants'
 import { useCanvasTextContext } from './hooks/get-canvas-text-context'
 
 const LIMIT = 30
@@ -50,6 +52,13 @@ const useStyles = makeStyles(
         cursor: 'pointer'
       }
     },
+    activeFont: {
+      display: 'block',
+      width: '100%',
+      textAlign: 'center',
+      fontSize: 25,
+      color: theme.palette.info.main
+    },
     searchBar: {
       position: 'sticky',
       top: 0,
@@ -67,13 +76,14 @@ const useStyles = makeStyles(
 
 export function FontExplorer() {
   const classes = useStyles()
-  const { preview, setTextProperty } = useCanvasTextContext()
+  const { getTextProperty, setTextProperty, preview } = useCanvasTextContext()
 
   const [fonts] = useFonts({
     limit: 300,
     categories: ['handwriting', 'display', 'serif', 'monospace'],
     sort: 'popularity',
-    scripts: ['latin', 'latin-ext']
+    scripts: ['latin', 'latin-ext'],
+    variants: ['regular', '600']
   })
   const [activeFont, setActiveFont] = useState<Nullable<Font>>(null)
   const [displayCount, setDisplayCount] = useState(LIMIT)
@@ -101,7 +111,9 @@ export function FontExplorer() {
   const handleSelectFont = (font: Font) => {
     setActiveFont(font)
 
-    new FontFaceObserver(font.family)
+    new FontFaceObserver(font.family, {
+      style: getTextProperty<string>('fontStyle')
+    })
       .load()
       .then(() => {
         setTextProperty('fontFamily', font.family)
@@ -123,6 +135,23 @@ export function FontExplorer() {
 
     return true
   }
+
+  /**
+   * When creating canvas data from json, select the active font
+   */
+  useEffect(() => {
+    const currentLabelFont =
+      getTextProperty<string>('fontFamily') ??
+      DefaultCanvasTextProperties.text.fontFamily!
+
+    if (
+      fonts.size > 0 &&
+      activeFont === null &&
+      currentLabelFont !== DefaultCanvasTextProperties.text.fontFamily
+    ) {
+      setActiveFont(fonts.get(currentLabelFont) ?? null)
+    }
+  }, [fonts, activeFont, getTextProperty])
 
   return (
     <div className={classes.root}>
@@ -149,6 +178,19 @@ export function FontExplorer() {
           }}
         />
       </div>
+
+      {activeFont && (
+        <Box mb={2}>
+          <div
+            className={classes.activeFont}
+            style={{
+              fontFamily: activeFont.family
+            }}
+          >
+            {activeFont.family}
+          </div>
+        </Box>
+      )}
 
       <div className={classes.container}>
         {list.map(font => (

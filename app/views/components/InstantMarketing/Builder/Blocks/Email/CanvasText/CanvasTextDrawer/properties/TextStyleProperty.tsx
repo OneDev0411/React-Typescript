@@ -23,6 +23,9 @@ import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
 import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
 
+type Alignment = 'left' | 'center' | 'right'
+type TextDecoration = 'line-through' | 'underline' | ''
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     icon: {
@@ -38,37 +41,38 @@ const useStyles = makeStyles(
 
 export function TextStyleProperty() {
   const classes = useStyles()
-  const { label, setTextProperty, preview } = useCanvasTextContext()
+  const { getTextProperty, setTextProperty, preview } = useCanvasTextContext()
   const [fontStyle, setFontStyle] = useState({
-    bold: false,
-    italic: false
+    bold: getTextProperty<string>('fontStyle')?.includes('bold') ?? false,
+    italic: getTextProperty<string>('fontStyle')?.includes('italic') ?? false
   })
 
-  const [alignment, setAlignment] = useState<'left' | 'center' | 'right'>(
-    'left'
+  const [alignment, setAlignment] = useState<Alignment>(
+    getTextProperty<Alignment>('align') ?? 'left'
   )
 
-  const [textDecoration, setTextDecoration] = useState<
-    'line-through' | 'underline' | ''
-  >('')
+  const [textDecoration, setTextDecoration] = useState<TextDecoration>(
+    getTextProperty<TextDecoration>('textDecoration') ?? ''
+  )
 
   useEffect(() => {
+    const fontFamily = getTextProperty<string>('fontFamily')
     const fontStyleString = Object.entries(fontStyle)
       .filter(([_, value]) => !!value)
       .map(([key]) => key)
       .join(' ')
       .trim()
 
-    new FontFaceObserver(label?.textNode.fontFamily())
+    new FontFaceObserver(fontFamily, {
+      style: fontStyleString
+    })
       .load()
       .then(() => {
         setTextProperty('fontStyle', fontStyleString || 'normal')
         preview()
       })
-      .catch((e: ErrorEvent) => {
-        console.log(e)
-      })
-  }, [fontStyle, setTextProperty, preview, label?.textNode])
+      .catch((e: ErrorEvent) => {})
+  }, [fontStyle, setTextProperty, getTextProperty, preview])
 
   useEffect(() => {
     setTextProperty('align', alignment)

@@ -3,13 +3,14 @@ import { useState } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { CirclePicker, ColorState } from 'react-color'
 
+import { DefaultCanvasTextProperties } from '../constants'
 import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
 
 export function TagColorProperty() {
-  const { label, setTagProperty, preview } = useCanvasTextContext()
+  const { getTagProperty, setTagProperty, preview } = useCanvasTextContext()
 
   const [color, setColor] = useState<ColorState['hex']>(
-    label?.tagNode.fill() || '#fff'
+    getTagProperty<string>('fill') ?? DefaultCanvasTextProperties.tag.fill!
   )
 
   const handleChangeColor = (color: ColorState) => {
