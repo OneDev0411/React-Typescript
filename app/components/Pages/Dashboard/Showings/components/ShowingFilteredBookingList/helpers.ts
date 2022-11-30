@@ -4,7 +4,7 @@ import { AppointmentFilter } from '../../types'
 const validFilters = Object.keys(appointmentListInfo)
 
 export function getValidAppointmentFilter(
-  filter: string | undefined,
+  filter: string | null,
   defaultFilter: AppointmentFilter = 'All'
 ): AppointmentFilter {
   return filter && validFilters.includes(filter)
