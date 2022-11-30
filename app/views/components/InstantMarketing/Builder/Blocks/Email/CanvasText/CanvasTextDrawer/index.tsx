@@ -1,28 +1,41 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { makeStyles, TextField, Theme } from '@material-ui/core'
-import { Font } from '@samuelmeuli/font-manager'
+import { Box, CircularProgress, makeStyles } from '@material-ui/core'
 import type { Model } from 'backbone'
+import cn from 'classnames'
 import Pikaso, { LabelModel } from 'pikaso'
-import { useDebounce } from 'react-use'
 
 import OverlayDrawer from '@app/views/components/OverlayDrawer'
+import { PageTabs, Tab } from '@app/views/components/PageTabs'
 
+import { AdvancedProperties } from './Advanced'
+import { BasicProperties } from './BasicProperties'
+import { DefaultCanvasTextProperties } from './constants'
+import { Context } from './context'
 import { FontExplorer } from './FontExplorer'
+import { TextEditor } from './TextEditor'
 
 const useStyles = makeStyles(
-  (theme: Theme) => ({
+  () => ({
     drawerBodyRoot: {
       display: 'flex',
       flexDirection: 'column',
       maxHeight: '100vh',
       overflow: 'auto'
+    },
+    tab: {
+      display: 'none',
+      '&.active': {
+        display: 'block'
+      }
     }
   }),
   {
     name: 'MarketingCenterBlocksCanvasTextDrawer'
   }
 )
+
+type Tabs = 'fonts' | 'basic-properties' | 'advanced-properties'
 
 interface Props {
   model: Nullable<Model>
@@ -33,41 +46,41 @@ interface Props {
 export function CanvasTextDrawer({ model, onUpdate, onClose }: Props) {
   const classes = useStyles()
 
-  const [textValue, setTextValue] = useState('Type your text here')
-  const [debouncedTextValue, setDebouncedTextValue] = useState(textValue)
+  const [activeTab, setActiveTab] = useState<Tabs>('fonts')
 
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
 
-  useDebounce(
-    () => {
-      setDebouncedTextValue(textValue)
-    },
-    500,
-    [textValue]
-  )
+  const label = editor ? (editor.board.activeShapes[0] as LabelModel) : null
 
-  useEffect(() => {
-    if (!editor || !model) {
+  const preview = useCallback(() => {
+    if (!label) {
       return
     }
-
-    const label = editor.board.activeShapes[0] as LabelModel
-
-    label.updateText({
-      text: debouncedTextValue
-    })
 
     const image = label.node.toDataURL({
       pixelRatio: 2
     })
 
-    model.trigger('canvas-text:update', {
+    model!.trigger('canvas-text:update', {
       image,
       width: label.width(),
       height: label.height()
     })
-  }, [editor, debouncedTextValue, model])
+  }, [label, model])
+
+  const setTextProperty = useCallback(
+    (property: string, value: unknown) => {
+      label?.textNode.setAttr(property, value)
+    },
+    [label]
+  )
+  const setTagProperty = useCallback(
+    (property: string, value: unknown) => {
+      label?.tagNode.setAttr(property, value)
+    },
+    [label]
+  )
 
   useEffect(() => {
     if (editor || !editorRef.current) {
@@ -80,62 +93,80 @@ export function CanvasTextDrawer({ model, onUpdate, onClose }: Props) {
       container: editorRef.current
     })
 
-    instance.shapes.label.insert({
-      container: {
-        x: 0,
-        y: 0
-      },
-      text: {
-        text: 'Your Text',
-        fontSize: 40,
-        lineHeight: 1.1,
-        padding: 10,
-        fillLinearGradientStartPoint: { x: 0, y: 0 },
-        fillLinearGradientEndPoint: { x: 50, y: 50 },
-        fillLinearGradientColorStops: [0, 'yellow', 1, 'tomato']
-      },
-      tag: {}
-    })
+    instance.shapes.label.insert(DefaultCanvasTextProperties)
 
     setEditor(instance)
   }, [editorRef, editor])
-
-  const handleSelectFont = (font: Font) => {
-    const label = editor!.board.activeShapes[0] as LabelModel
-
-    label.textNode.fontFamily(font.family)
-
-    const image = label.node.toDataURL({
-      pixelRatio: 2
-    })
-
-    model!.trigger('canvas-text:update', {
-      image,
-      width: label.width(),
-      height: label.height()
-    })
-  }
 
   return (
     <>
       <OverlayDrawer open hideBackdrop width={400} onClose={onClose}>
         <OverlayDrawer.Header title="Fancy Test" />
         <OverlayDrawer.Body className={classes.drawerBodyRoot}>
-          <div>
-            <TextField
-              autoFocus
-              multiline
-              fullWidth
-              rows={5}
-              variant="outlined"
-              value={textValue}
-              onChange={e => setTextValue(e.target.value)}
-            />
-          </div>
+          {editor ? (
+            <div>
+              <Context.Provider
+                value={{
+                  editor,
+                  label,
+                  setTextProperty,
+                  setTagProperty,
+                  preview
+                }}
+              >
+                <div>
+                  <TextEditor />
+                </div>
 
-          <div>
-            <FontExplorer onSelect={handleSelectFont} />
-          </div>
+                <div>
+                  <PageTabs
+                    defaultValue={activeTab}
+                    value={activeTab}
+                    tabs={[
+                      <Tab key={0} label="Font" value="fonts" />,
+                      <Tab
+                        key={1}
+                        label="Properties"
+                        value="basic-properties"
+                      />,
+                      <Tab
+                        key={2}
+                        label="Advanced"
+                        value="advanced-properties"
+                      />
+                    ]}
+                    onChange={tab => setActiveTab(tab as Tabs)}
+                  />
+
+                  <Box
+                    className={cn(classes.tab, {
+                      active: activeTab === 'fonts'
+                    })}
+                  >
+                    <FontExplorer />
+                  </Box>
+
+                  <Box
+                    className={cn(classes.tab, {
+                      active: activeTab === 'basic-properties'
+                    })}
+                  >
+                    <BasicProperties />
+                  </Box>
+
+                  <Box
+                    className={cn(classes.tab, {
+                      active: activeTab === 'advanced-properties'
+                    })}
+                  >
+                    <AdvancedProperties />
+                  </Box>
+                </div>
+              </Context.Provider>
+            </div>
+          ) : (
+            <CircularProgress />
+          )}
         </OverlayDrawer.Body>
       </OverlayDrawer>
 
