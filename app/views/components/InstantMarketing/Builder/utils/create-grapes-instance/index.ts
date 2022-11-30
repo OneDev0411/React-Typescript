@@ -10,6 +10,7 @@ const STYLE_MANAGER_ALIGNABLE_TYPES = ['social-group']
 
 const STYLE_MANAGER_BG_COLORABLE_TAGS = [
   'mj-button',
+  'mj-body',
   'mj-column',
   'mj-section',
   'mj-wrapper',
