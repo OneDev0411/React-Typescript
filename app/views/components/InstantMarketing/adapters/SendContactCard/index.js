@@ -1,6 +1,5 @@
 import { Component } from 'react'
 
-import { Button } from '@material-ui/core'
 import idx from 'idx'
 import { connect } from 'react-redux'
 
@@ -21,6 +20,8 @@ import { createTemplateInstance } from 'models/instant-marketing/create-template
 import { hasUserAccessToMarketingCenter } from 'utils/acl'
 
 import SocialDrawer from '../../components/SocialDrawer'
+
+import { BirthdayButton } from './styles'
 
 class SendContactCard extends Component {
   constructor(props) {
@@ -250,14 +251,14 @@ class SendContactCard extends Component {
     }
 
     return (
-      <Button
+      <BirthdayButton
         variant="outlined"
         onClick={this.showBuilder}
         disabled={this.state.isFetchingContact}
         {...this.props.buttonProps}
       >
         {this.props.children}
-      </Button>
+      </BirthdayButton>
     )
   }
 
