@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Button, makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 import { connect } from 'react-redux'
 import { useTitle, useEffectOnce } from 'react-use'
 
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
 import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
@@ -42,7 +44,11 @@ export const useStyles = makeStyles(
   }
 )
 
-function ToursList(props: { user: IUser }) {
+interface Props extends RouteComponentProps {
+  user: IUser
+}
+
+function ToursList(props: Props) {
   const [, dispatch] = useGlobalActionContext()
   const gridClasses = useGridStyles()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
@@ -245,4 +251,6 @@ function ToursList(props: { user: IUser }) {
   )
 }
 
-export default connect((state: IAppState) => ({ user: state.user }))(ToursList)
+export default withRouter(
+  connect((state: IAppState) => ({ user: state.user }))(ToursList)
+)
