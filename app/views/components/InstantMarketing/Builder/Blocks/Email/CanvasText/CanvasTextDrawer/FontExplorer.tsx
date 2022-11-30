@@ -16,6 +16,8 @@ import matchSorter from 'match-sorter'
 import { useFonts } from '@app/hooks/use-fonts'
 import { SvgIcon } from '@app/views/components/SvgIcons'
 
+import { useCanvasTextContext } from './hooks/get-canvas-text-context'
+
 const LIMIT = 30
 
 const useStyles = makeStyles(
@@ -63,12 +65,10 @@ const useStyles = makeStyles(
   }
 )
 
-interface Props {
-  onSelect: (font: Font) => void
-}
-
-export function FontExplorer({ onSelect }: Props) {
+export function FontExplorer() {
   const classes = useStyles()
+  const { preview, setTextProperty } = useCanvasTextContext()
+
   const [fonts] = useFonts({
     limit: 300,
     categories: ['handwriting', 'display', 'serif', 'monospace'],
@@ -105,9 +105,11 @@ export function FontExplorer({ onSelect }: Props) {
     new FontFaceObserver(font.family)
       .load()
       .then(() => {
-        onSelect(font)
+        console.log(font)
+        setTextProperty('fontFamily', font.family)
+        preview()
       })
-      .catch(e => {
+      .catch((e: ErrorEvent) => {
         console.log(e)
       })
   }
