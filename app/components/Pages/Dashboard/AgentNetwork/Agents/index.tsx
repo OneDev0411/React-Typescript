@@ -21,7 +21,7 @@ import AgentsGrid from './Grid'
 import { getListingVAlertFilters, getLocationVAlertFilters } from './helpers'
 import { ListingWithProposedAgent } from './types'
 
-const DISABLED_MLS_LIST = ['NTREIS']
+const DISABLED_MLS_LIST: string[] = []
 const GOOGLE_MAPS_LIBRARIES: LoadScriptProps['libraries'] = ['geometry']
 
 function Agents(props: WithRouterProps) {
