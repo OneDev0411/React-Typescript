@@ -2,12 +2,12 @@ import { useEffect } from 'react'
 
 import { Box, makeStyles } from '@material-ui/core'
 
+import { useNavigate } from '@app/hooks/use-navigate'
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
 import useAsync from 'hooks/use-async'
 import { searchContacts } from 'models/contacts/search-contacts'
-import { goTo } from 'utils/go-to'
 
 import ShowingColumnContactActions from '../ShowingColumnContactActions'
 import ShowingEmptyState from '../ShowingEmptyState'
@@ -46,6 +46,7 @@ function ShowingDetailTabVisitors({
   showingBookingUrl
 }: ShowingDetailTabVisitorsProps) {
   const classes = useStyles()
+  const navigate = useNavigate()
   const { data: contacts, isLoading, run } = useAsync<IContact[]>({ data: [] })
 
   const appointmentsByVisitorId =
@@ -117,7 +118,7 @@ function ShowingDetailTabVisitors({
   ]
 
   const handleRowClick = (id: UUID) => {
-    goTo(`/dashboard/contacts/${id}`)
+    navigate(`/dashboard/contacts/${id}`)
   }
 
   return (

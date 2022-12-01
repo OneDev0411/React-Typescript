@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import { Location } from 'history'
+import { Location } from '@app/routes/types'
 
 import ShowingDetailEmptyStateDescription from '../../components/ShowingDetailTabVisitors/ShowingDetailEmptyStateDescription'
 import ShowingFilteredBookingList from '../../components/ShowingFilteredBookingList'

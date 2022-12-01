@@ -2,10 +2,10 @@ import { useRef, useState, ChangeEvent, useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
-import { Location } from 'history'
 import { InjectedRouter, PlainRoute } from 'react-router'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { useSearchParams } from '@app/hooks/use-search-param'
 import TabContentSwitch from 'components/TabContentSwitch'
 import useAsync from 'hooks/use-async'
 import useNotify from 'hooks/use-notify'
@@ -64,19 +64,20 @@ interface ShowingDetailTabSettingsProps {
   setShowing: (showing: IShowing<'showing'>) => void
   router: InjectedRouter
   route: PlainRoute
-  location: Location
 }
 
 function ShowingDetailTabSettings({
   showing,
   setShowing,
   router,
-  route,
-  location
+  route
 }: ShowingDetailTabSettingsProps) {
   const classes = useStyles()
+  const [searchParams] = useSearchParams()
 
-  const tab = getValidShowingDetailSettingsTab(location.query.tab as string)
+  const tab = getValidShowingDetailSettingsTab(
+    searchParams.get('tab') || undefined
+  )
 
   const notify = useNotify()
   const showingRef = useRef(showing)
