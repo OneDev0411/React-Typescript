@@ -253,7 +253,6 @@ class SendContactCard extends Component {
     return (
       <BirthdayButton
         variant="outlined"
-        color="black"
         onClick={this.showBuilder}
         disabled={this.state.isFetchingContact}
         {...this.props.buttonProps}
