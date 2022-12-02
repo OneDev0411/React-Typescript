@@ -32,7 +32,8 @@ function AddEvent({ contact, user, callback }: Props & StateProps) {
   return (
     <>
       <Button
-        variant="outlined"
+        variant="contained"
+        color="primary"
         onClick={toggleDrawer}
         data-tour-id="add-event-button"
         startIcon={<SvgIcon path={mdiPlus} />}
