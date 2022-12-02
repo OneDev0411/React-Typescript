@@ -4,6 +4,7 @@ import { useTitle } from 'react-use'
 
 import SuperCampaignGridView from '@app/components/Pages/Dashboard/SuperCampaigns/pages/SuperCampaignGridView'
 import { ACL } from '@app/constants/acl'
+import { withRouter } from '@app/routes/with-router'
 import { useAcl } from '@app/views/components/Acl/use-acl'
 
 import InsightsPageLayout from '../../PageLayout'
@@ -22,4 +23,4 @@ function SuperCampaignList() {
   )
 }
 
-export default memo(SuperCampaignList)
+export default memo(withRouter(SuperCampaignList))
