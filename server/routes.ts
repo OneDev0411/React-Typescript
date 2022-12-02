@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser'
 import express from 'express'
+import multer from 'multer'
 
 import loadAppBundleRoute from './app/routes/appz/load-app-url'
 import branchLinkRoute from './app/routes/branch-link'
@@ -34,6 +35,7 @@ import getVideoboltVideosRoute from './app/routes/videobolt/get-videobolt-videos
 import getYoutubeVideoGifRoute from './app/routes/youtube/get-youtube-video-gif'
 
 const router = express.Router()
+const upload = multer()
 
 const requestLimit = bodyParser.json({
   limit: '10mb'
@@ -89,10 +91,7 @@ router.post(
 
 router.post(
   '/api/templates/assets/upload',
-  bodyParser.urlencoded({
-    limit: '15mb',
-    extended: true
-  }),
+  upload.single('attachment'),
   templateAssetsUploadRoute
 )
 

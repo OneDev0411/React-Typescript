@@ -1,5 +1,3 @@
-import { Blob } from 'buffer'
-
 import { AxiosError, AxiosResponse } from 'axios'
 import { Request, Response } from 'express'
 import FormData from 'form-data'
@@ -8,39 +6,30 @@ import sharp from 'sharp'
 import { request } from '../../../libs/request'
 import { getParsedHeaders } from '../../../utils/parse-headers'
 
-export default async (req: Request & { files?: any }, res: Response) => {
+export default async (req: Request, res: Response) => {
   const { template } = req.body
+  const file = req.file
 
-  if (!req.files) {
+  if (!file) {
     res.status(400)
+
+    return
   }
 
-  const attachment = req.files.attachment
-
-  const resizedImage = await sharp(attachment.data)
+  const resizedImage = await sharp(file.buffer)
     .resize({ width: 800 })
     .toBuffer()
 
-  const file = new Blob([resizedImage])
-
   const data = new FormData()
 
-  data.append('attachment', file, { filename: attachment.name })
+  data.append('attachment', resizedImage, { filename: file.originalname })
   data.append('template', template)
-
-  //   console.log({ resizedImage, data })
-
-  //   res.type('png')
-  //   res.send(resizedImage)
 
   request(req, {
     responseType: 'stream',
     method: 'post',
     url: '/templates/assets',
-    headers: {
-      ...getParsedHeaders(req),
-      'Content-Type': 'multipart/form-data'
-    },
+    headers: getParsedHeaders(req),
     data
   })
     .then((response: AxiosResponse) => {
