@@ -156,6 +156,7 @@ class MasterField extends Component {
   toggleMode = () => this.props.handleToggleMode(this.props.attribute)
 
   setInitialState = () => {
+    this.props.setConfirmationModal(false)
     this.toggleMode()
     this.setState(getInitialState(this.props))
   }
@@ -221,10 +222,12 @@ class MasterField extends Component {
     }
 
     if (this.isDirty) {
+      this.props.setConfirmationModal(true)
       this.context.setConfirmationModal({
         message: 'Heads up!',
         confirmLabel: 'Yes, I do',
         onConfirm: this.setInitialState,
+        onCancel: () => this.props.setConfirmationModal(false),
         description: 'You have made changes, do you want to discard them?'
       })
     } else {
@@ -562,6 +565,7 @@ class MasterField extends Component {
         renderViewMode={this.renderViewMode}
         showAdd={this.showAdd}
         toggleMode={this.toggleMode}
+        isConfirmationModalOpen={this.props.isConfirmationModalOpen}
       />
     )
   }
