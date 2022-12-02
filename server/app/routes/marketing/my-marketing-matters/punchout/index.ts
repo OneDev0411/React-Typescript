@@ -5,8 +5,8 @@ import { Request, Response, NextFunction } from 'express'
 import nunjucks from 'nunjucks'
 import xml2js from 'xml2js'
 
-import { request } from '../../../libs/request'
-import { getParsedHeaders } from '../../../utils/parse-headers'
+import { request } from '../../../../libs/request'
+import { getParsedHeaders } from '../../../../utils/parse-headers'
 import {
   API_URL,
   DUNS,

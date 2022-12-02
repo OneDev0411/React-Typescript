@@ -15,7 +15,8 @@ import facebookLoginRoute from './app/routes/facebook-login'
 import getPdfSizeRoute from './app/routes/get-pdf-size'
 import livebyNeighborhoodsRoute from './app/routes/liveby/neighborhoods'
 import livebyReportRoute from './app/routes/liveby/report'
-import myMarketingMattersPunchoutRoute from './app/routes/my-marketing-matters/punchout'
+import myMarketingMattersPunchoutRoute from './app/routes/marketing/my-marketing-matters/punchout'
+import templateAssetsUploadRoute from './app/routes/marketing/template-assets-upload'
 import openHouseRoute from './app/routes/openhouse/registration'
 import proxifierRoute from './app/routes/proxifier'
 import renderMjmlRoute from './app/routes/render-mjml'
@@ -78,12 +79,21 @@ router.post('/api/liveby/report', requestLimit, livebyReportRoute)
 router.post('/api/liveby/neighborhoods', requestLimit, livebyNeighborhoodsRoute)
 
 /**
- * my marketing matters routes.
+ * marketing routes.
  */
 router.post(
   '/api/my-marketing-matters/punchout',
   requestLimit,
   myMarketingMattersPunchoutRoute
+)
+
+router.post(
+  '/api/templates/assets/upload',
+  bodyParser.urlencoded({
+    limit: '15mb',
+    extended: true
+  }),
+  templateAssetsUploadRoute
 )
 
 /**

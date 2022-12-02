@@ -5,7 +5,7 @@ export async function uploadAsset(
   file: File
 ): Promise<ITemplateAsset> {
   const response = await new Fetch()
-    .upload('/templates/assets')
+    .post('/api/templates/assets/upload')
     .attach('attachment', file, file.name)
     .field('template', templateId)
 

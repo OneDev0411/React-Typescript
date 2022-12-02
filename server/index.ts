@@ -6,6 +6,7 @@ import history from 'connect-history-api-fallback'
 import timeout from 'connect-timeout'
 import cookieSession from 'cookie-session'
 import express, { Request, Response, NextFunction } from 'express'
+import fileUpload from 'express-fileupload'
 import enforce from 'express-sslify'
 import morgan from 'morgan'
 import serveStatic from 'serve-static'
@@ -27,6 +28,7 @@ const app = express()
 
 app.use(timeout('30s'))
 app.use(compress())
+app.use(fileUpload())
 
 app.use(
   cookieSession({
