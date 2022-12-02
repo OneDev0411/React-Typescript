@@ -1,10 +1,12 @@
 import { useTitle } from 'react-use'
 
+import { withRouter } from '@app/routes/with-router'
+
 import InsightsPageLayout from '../PageLayout'
 
 import { InsightsTable } from './InsightsTable'
 
-export default function InsightsList() {
+function InsightsList() {
   useTitle('Insight | Rechat')
 
   return (
@@ -15,3 +17,5 @@ export default function InsightsList() {
     </InsightsPageLayout>
   )
 }
+
+export default withRouter(InsightsList)
