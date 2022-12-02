@@ -1,8 +1,9 @@
 import { makeStyles, Typography } from '@material-ui/core'
 import { mdiAlertCircleOutline } from '@mdi/js'
 import classNames from 'classnames'
-import { withRouter, WithRouterProps } from 'react-router'
 
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import LinkButton from '../LinkButton'

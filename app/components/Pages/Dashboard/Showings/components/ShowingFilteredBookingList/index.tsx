@@ -1,5 +1,5 @@
-import { Location } from 'history'
-import { withRouter, WithRouterProps } from 'react-router'
+import { WithRouterProps, Location } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 
 import useAppointmentFilterInfo from '../../hooks/use-appointment-filter-info'
 import useAppointmentListInfo from '../../hooks/use-appointment-list-info'
@@ -34,8 +34,9 @@ function ShowingFilteredBookingList({
   onApprovalAction,
   onAckAction,
   hasPropertyColumn,
-  location,
+  searchParams,
   generateLink,
+  location,
   stackDateAndTimeColumns,
   emptyButtonLabel,
   emptyButtonLink,
@@ -45,7 +46,7 @@ function ShowingFilteredBookingList({
   const hasData = !!appointments.length
 
   const filter: AppointmentFilter = getValidAppointmentFilter(
-    location.query.filter
+    searchParams.get('filter')
   )
 
   const filterInfo = useAppointmentFilterInfo(filter)
