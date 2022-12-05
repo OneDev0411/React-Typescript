@@ -13,7 +13,7 @@ import { putUserSetting } from 'models/user/put-user-setting'
 import { getNameInitials } from 'utils/helpers'
 import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 
-import { AgentSide, ListingWithProposedAgent } from '../../types'
+import { AgentSide, ListingWithProposedAgent1 } from '../../types'
 import { TableActions } from '../Actions'
 import { Caption } from '../columns/Caption'
 import { SortableColumns } from '../helpers/sortable-columns'
@@ -23,7 +23,7 @@ const SORT_FIELD_SETTING_KEY = 'grid_deals_agent_network_sort_field'
 
 interface Props {
   user: IUser
-  listing: Nullable<ListingWithProposedAgent>
+  listing: Nullable<ListingWithProposedAgent1>
   agents: Nullable<AgentWithStats[]>
   isLoading: boolean
   onSelectAgentInfo: (info: AgentWithStats, side: AgentSide) => void
@@ -38,6 +38,41 @@ export function ListTable({
 }: Props) {
   const theme: Theme = useTheme()
   const activeTeam = useUnsafeActiveTeam()
+
+  const columns1 = [
+    {
+      id: 'name',
+      header: 'Name',
+      width: '20%',
+      accessor: (agentData: AgentWithStats) => agentData.full_name,
+      render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
+        <Typography noWrap>
+          {agentData.full_name}
+          {agentData.office?.name && (
+            <Caption variant="body2">{agentData.office?.name}</Caption>
+          )}
+        </Typography>
+      )
+    },
+    {
+      id: 'contact',
+      width: '10%',
+      render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
+        <Tooltip
+          title={
+            <>
+              <div>{agentData.email}</div>
+              <div>{agentData.phone_number}</div>
+            </>
+          }
+        >
+          <Flex alignCenter justifyCenter>
+            <SvgIcon path={mdiEmailOutline} />
+          </Flex>
+        </Tooltip>
+      )
+    }
+  ]
 
   const columns = [
     {
@@ -164,7 +199,9 @@ export function ListTable({
   return (
     <Table<AgentWithStats>
       rows={agents ?? []}
-      columns={columns}
+      columns={
+        listing?.mls_info.enable_agent_network === true ? columns : columns1
+      }
       totalRows={(agents || []).length}
       LoadingStateComponent={() => <LoadingContainer noPaddings />}
       loading={isLoading ? 'top' : null}

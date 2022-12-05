@@ -14,12 +14,13 @@ import { useLoadingEntities } from 'hooks/use-loading'
 import getListing from 'models/listings/listing/get-listing'
 import { selectUser } from 'selectors/user'
 
+// import { ZipcodeGroup } from '../../MLS/ExploreTab/components/Filters/otherEditor/zipcodeGroup'
 import { openSearchResultPage } from '../helpers'
 import Layout from '../Layout'
 
 import AgentsGrid from './Grid'
 import { getListingVAlertFilters, getLocationVAlertFilters } from './helpers'
-import { ListingWithProposedAgent } from './types'
+import { ListingWithProposedAgent1 } from './types'
 
 const DISABLED_MLS_LIST: string[] = []
 const GOOGLE_MAPS_LIBRARIES: LoadScriptProps['libraries'] = ['geometry']
@@ -32,7 +33,7 @@ function Agents(props: WithRouterProps) {
   })
 
   const [listing, setListing] =
-    useState<Nullable<ListingWithProposedAgent>>(null)
+    useState<Nullable<ListingWithProposedAgent1>>(null)
   const [agents, setAgents] = useState<Nullable<AgentWithStats[]>>(null)
   const [isLoadingAgents, setIsLoadingAgents] = useLoadingEntities(agents)
 
@@ -54,7 +55,7 @@ function Agents(props: WithRouterProps) {
       }
 
       try {
-        const fetchedListing: ListingWithProposedAgent = await getListing(
+        const fetchedListing: ListingWithProposedAgent1 = await getListing(
           listingId
         )
 
@@ -94,7 +95,7 @@ function Agents(props: WithRouterProps) {
       setFilters(placeBasedFilters)
 
       const mockedListing =
-        (await getMockListing()) as unknown as ListingWithProposedAgent
+        (await getMockListing()) as unknown as ListingWithProposedAgent1
 
       setListing(mockedListing)
     }
@@ -137,6 +138,7 @@ function Agents(props: WithRouterProps) {
       title="Select Agents"
       onSelectSearchResult={openSearchResultPage}
     >
+      {console.log({ filters })}
       {listing && DISABLED_MLS_LIST.includes(listing.mls) ? (
         <Alert severity="info">
           <p>
@@ -165,14 +167,19 @@ function Agents(props: WithRouterProps) {
                 </Typography>
               )}
             </Grid>
-            <Grid item>
-              {filters && (
-                <ListingAlertFilters
-                  filters={filters}
-                  onApply={handleApplyFilters}
-                />
-              )}
-            </Grid>
+            {listing?.mls_info.enable_agent_network === true ? (
+              <Grid item>
+                {filters && (
+                  <ListingAlertFilters
+                    filters={filters}
+                    onApply={handleApplyFilters}
+                  />
+                )}
+              </Grid>
+            ) : (
+              <Typography variant="body1">search</Typography>
+              // <ZipcodeGroup filters={filters} />
+            )}
           </Grid>
           <Grid item>
             <Box py={1}>

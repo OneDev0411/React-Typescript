@@ -59,7 +59,7 @@ export async function getListingVAlertFilters(
     points: getMapBoundsInCircle({ lat, lng }, DEFAULT_SEARCH_RADIUS),
     radius: DEFAULT_SEARCH_RADIUS,
     center: { latitude: lat, longitude: lng },
-    postal_code: listing.property.address.postal_code,
+    postal_codes: [listing.property.address.postal_code],
     mls: listing.mls
   }
 }

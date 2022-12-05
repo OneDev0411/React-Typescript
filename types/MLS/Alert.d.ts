@@ -46,7 +46,7 @@ declare interface AlertFilters {
   mls_areas?: Nullable<Array<Array[number]>>
   counties?: Nullable<string[]>
   subdivisions?: Nullable<string[]>
-  postal_code?: Nullable<string> // maybe we need to make it an array
+  postal_codes?: Nullable<string[]> // maybe we need to make it an array
   mls?: Nullable<string>
 }
 
