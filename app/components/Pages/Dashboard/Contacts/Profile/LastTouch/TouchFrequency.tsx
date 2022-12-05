@@ -159,7 +159,7 @@ const TouchFrequency = ({ value, onUpdateTouchFreq }: Props) => {
         <Typography variant="body2">Touch Frequency</Typography>
         <Typography ref={anchorRef} variant="body2" className={classes.value}>
           {value
-            ? `Every ${value} ${pluralize('day', value)}`
+            ? `Every ${pluralize('day', value, true)}`
             : 'Add Touch Frequency'}
         </Typography>
         {showAction && (
