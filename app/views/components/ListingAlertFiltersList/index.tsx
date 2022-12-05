@@ -15,8 +15,12 @@ const ALERT_FILTER_KEY_TO_DATA_MAP: {
   >
 } = {
   radius: {
-    label: 'Radius',
+    label: 'Radius: ',
     toString: radius => pluralize('mile', radius, true)
+  },
+  postal_codes: {
+    label: 'Zipcode: ',
+    toString: postal_codes => pluralize('', postal_codes, true)
   }
 }
 
@@ -27,13 +31,15 @@ interface Props {
   limit?: number
   children?: ReactNode
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void
+  isStatic: boolean
 }
 
 export default function ListingAlertFiltersList({
   filters,
   limit = Infinity,
   children,
-  onClick = noop
+  onClick = noop,
+  isStatic
 }: Props) {
   const [filtersKeyValueMap, setFiltersKeyValueMap] = useState<
     StringMap<string>
@@ -64,17 +70,16 @@ export default function ListingAlertFiltersList({
       alignItems="center"
       justifyContent="flex-end"
     >
-      {Object.entries(filtersKeyValueMap)
-        .slice(0, limit)
-        .map(([key, value]) => (
-          <Grid item key={key}>
-            <Box pr={1}>
-              <Button variant="text" onClick={onClick}>
-                {key}: {value}
-              </Button>
-            </Box>
-          </Grid>
-        ))}
+      <Grid item>
+        <Box pr={1}>
+          <Button variant="text" onClick={onClick}>
+            {isStatic === false
+              ? Object.entries(filtersKeyValueMap)[0]
+              : Object.entries(filtersKeyValueMap)[1]}
+          </Button>
+        </Box>
+      </Grid>
+
       {children}
     </Grid>
   )

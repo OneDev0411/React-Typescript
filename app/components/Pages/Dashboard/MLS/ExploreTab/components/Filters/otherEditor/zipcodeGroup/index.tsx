@@ -24,9 +24,6 @@ export const ZipcodeGroup = ({
   ZipCodeGroupProps) => {
   const classes = useStyles()
 
-  console.log('filters', filters)
-  console.log('filters111', updateFilters)
-
   const onZipcodeChange = (_: unknown, values: ZipcodeOption[]) => {
     // Remove [null] or spaces from selected items
     const selectedValues = values.reduce((acc, item) => {

@@ -6,14 +6,14 @@ import { AgentWithStats } from '@app/models/agent-network/get-agents'
 import { GridProvider } from 'components/Grid/Table'
 import { ZeroState } from 'partials/ZeroState'
 
-import { AgentSide, ListingWithProposedAgent1 } from '../types'
+import { AgentSide, ListingWithProposedAgentAndMlsInfo } from '../types'
 
 import AgentListingsDrawer from './AgentListingsDrawer'
 import { ListTable } from './Table'
 
 interface Props {
   user: IUser
-  listing: Nullable<ListingWithProposedAgent1>
+  listing: Nullable<ListingWithProposedAgentAndMlsInfo>
   filters: Nullable<AlertFilters>
   agents: Nullable<AgentWithStats[]>
   isLoading: boolean
