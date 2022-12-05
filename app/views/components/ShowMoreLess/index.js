@@ -7,6 +7,8 @@ import { ShowMoreLessText, ArrowDown, ArrowUp } from './styled'
 export class ShowMoreLess extends Component {
   static defaultProps = {
     defaultOpen: false,
+    moreIcon: undefined,
+    lessIcon: undefined,
     row: false,
     column: true,
     count: 7,
@@ -36,7 +38,7 @@ export class ShowMoreLess extends Component {
         onClick={this.toggleState}
       >
         {this.props.moreText}
-        <ArrowDown />
+        {this.props.moreIcon ?? <ArrowDown />}
       </ShowMoreLessText>
     )
   }
@@ -51,7 +53,7 @@ export class ShowMoreLess extends Component {
         onClick={this.toggleState}
       >
         {this.props.lessText}
-        <ArrowUp />
+        {this.props.lessIcon ?? <ArrowUp />}
       </ShowMoreLessText>
     )
   }
