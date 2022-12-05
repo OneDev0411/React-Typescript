@@ -74,6 +74,7 @@ const useStyles = makeStyles(
     },
     tabContainer: {
       padding: theme.spacing(3),
+      paddingTop: theme.spacing(1),
       flex: '1 1',
       display: 'flex',
       flexDirection: 'column'

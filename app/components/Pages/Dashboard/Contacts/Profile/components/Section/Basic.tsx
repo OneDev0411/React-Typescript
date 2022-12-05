@@ -11,9 +11,6 @@ const useStyles = makeStyles(
         }
 
         return theme.spacing(1)
-      },
-      '&:first-child': {
-        marginTop: theme.spacing(3)
       }
     },
     title: {
