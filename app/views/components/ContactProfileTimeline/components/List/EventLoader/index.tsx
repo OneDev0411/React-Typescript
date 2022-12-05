@@ -23,7 +23,7 @@ const useStyles = makeStyles(
       flexDirection: 'column',
       letterSpacing: '0.15px',
       marginBottom: theme.spacing(3),
-      padding: theme.spacing(0, 2),
+      // padding: theme.spacing(0, 2),
       fontSize: theme.typography.subtitle2.fontSize
     },
     eventsListContainer: {
