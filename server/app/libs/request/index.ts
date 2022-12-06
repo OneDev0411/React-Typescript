@@ -14,16 +14,17 @@ export function request(req: Request, requestConfig: AxiosRequestConfig) {
 
       return response
     },
-    async (error: AxiosError) => {
-      const originalRequest: AxiosRequestConfig & { retry?: boolean } =
-        error.config
+    async (error: AxiosError<{ message?: string }>) => {
+      const originalRequest = error.config as AxiosRequestConfig & {
+        retry?: boolean
+      }
 
       const session = (<RequestWithSession>req).session
 
       if (
         session.user &&
         error.response?.status === 401 &&
-        error.response?.data.message === 'Expired Token' &&
+        error.response?.data?.message === 'Expired Token' &&
         !originalRequest.retry
       ) {
         originalRequest.retry = true
@@ -33,8 +34,9 @@ export function request(req: Request, requestConfig: AxiosRequestConfig) {
             session.user.refresh_token
           )
 
-          // eslint-disable-next-line max-len
-          originalRequest.headers.authorization = `Bearer ${nextSession.access_token}`
+          if (originalRequest.headers) {
+            originalRequest.headers.authorization = `Bearer ${nextSession.access_token}`
+          }
 
           req.session!.user = nextSession
 
@@ -60,11 +62,16 @@ export function request(req: Request, requestConfig: AxiosRequestConfig) {
  */
 function log(response: AxiosResponse) {
   const method = (response.config.method || 'GET').toUpperCase()
+
   const duration =
-    new Date().getTime() - response.config.headers['x-request-time']
+    response?.config?.headers && response?.config?.headers['x-request-time']
+      ? new Date().getTime() - +response.config.headers['x-request-time']
+      : null
+
+  const durationPart = duration ? `(${duration}ms)` : ''
+  const statusPart = `HTTP\t${response.status} ${response.statusText}`
 
   console.log(
-    // eslint-disable-next-line max-len
-    `(${duration}ms) HTTP\t${response.status} ${response.statusText}\t${method}\t${response.config.url}`
+    `${durationPart} ${statusPart}\t${method}\t${response.config.url}`
   )
 }
