@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { shouldResizeTemplateAssets } from '@app/views/components/InstantMarketing/helpers/should-resize-template-assets'
 import { EditorDialog } from 'components/ImageEditor'
 import { uploadAsset } from 'models/instant-marketing/upload-asset'
 
@@ -74,7 +75,11 @@ export class AssetImage extends React.Component {
 
   onCropImg = async file => {
     const { templateId } = await this.props.getTemplateId()
-    const response = await uploadAsset(templateId, file)
+    const shouldResize = shouldResizeTemplateAssets(
+      this.props.getTemplateMedium()
+    )
+
+    const response = await uploadAsset(templateId, file, shouldResize)
 
     this.onImageSelect({ url: response.file.url })
     this.setState({

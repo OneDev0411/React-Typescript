@@ -406,7 +406,8 @@ class SendMlsListingCard extends Component {
           onHipPocketImageUpload={
             this.props.selectedTemplate
               ? getHipPocketTemplateImagesUploader(
-                  this.props.selectedTemplate.template.id
+                  this.props.selectedTemplate.template.id,
+                  this.props.selectedTemplate.template.medium
                 )
               : undefined
           }

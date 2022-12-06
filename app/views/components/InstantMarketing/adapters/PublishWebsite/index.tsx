@@ -264,7 +264,8 @@ function PublishWebsite({
         <SearchListingDrawer
           allowHipPocket
           onHipPocketImageUpload={getHipPocketTemplateImagesUploader(
-            selectedTemplate.template.id
+            selectedTemplate.template.id,
+            selectedTemplate.template.medium
           )}
           withMlsDisclaimer
           isOpen

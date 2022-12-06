@@ -12,6 +12,7 @@ import {
 } from '@app/selectors/brand'
 import { selectActiveTeamUnsafe } from '@app/selectors/team'
 import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
+import { shouldResizeTemplateAssets } from '@app/views/components/InstantMarketing/helpers/should-resize-template-assets'
 import SearchArticleDrawer from '@app/views/components/SearchArticleDrawer'
 import SearchVideoDrawer from '@app/views/components/SearchVideoDrawer'
 import CarouselDrawer from 'components/CarouselDrawer'
@@ -1107,6 +1108,12 @@ class Builder extends React.Component {
     })
   }
 
+  setEditorTemplateMedium = medium => {
+    this.editor.StorageManager.store({
+      templateMedium: medium
+    })
+  }
+
   refreshEditor = selectedTemplate => {
     const config = this.editor.getConfig()
 
@@ -1133,6 +1140,7 @@ class Builder extends React.Component {
     components.clear()
     this.editor.setStyle('')
     this.setEditorTemplateId(getTemplateObject(selectedTemplate).id)
+    this.setEditorTemplateMedium(getTemplateObject(selectedTemplate).medium)
     this.editor.setComponents(html)
     this.editor.trigger('editor:template:loaded') // Let others know the template is loaded
     this.lockIn()
@@ -1435,7 +1443,10 @@ class Builder extends React.Component {
 
   uploadFile = async file => {
     const templateId = this.selectedTemplate.id
-    const uploadedAsset = await uploadAsset(templateId, file)
+    const shouldResize = shouldResizeTemplateAssets(
+      this.selectedTemplate.medium
+    )
+    const uploadedAsset = await uploadAsset(templateId, file, shouldResize)
 
     return uploadedAsset.file.url
   }
@@ -1492,7 +1503,10 @@ class Builder extends React.Component {
               allowHipPocket
               onHipPocketImageUpload={
                 this.selectedTemplate
-                  ? getHipPocketTemplateImagesUploader(this.selectedTemplate.id)
+                  ? getHipPocketTemplateImagesUploader(
+                      this.selectedTemplate.id,
+                      this.selectedTemplate.medium
+                    )
                   : undefined
               }
               multipleSelection
@@ -1589,7 +1603,14 @@ class Builder extends React.Component {
               }}
               onSave={async file => {
                 const templateId = this.selectedTemplate.id
-                const uploadedAsset = await uploadAsset(templateId, file)
+                const shouldResize = shouldResizeTemplateAssets(
+                  this.selectedTemplate.medium
+                )
+                const uploadedAsset = await uploadAsset(
+                  templateId,
+                  file,
+                  shouldResize
+                )
 
                 this.editor.runCommand('set-image', {
                   value: uploadedAsset.file.url
@@ -1612,7 +1633,14 @@ class Builder extends React.Component {
               }}
               uploadThumbnail={async file => {
                 const templateId = this.selectedTemplate.id
-                const uploadedAsset = await uploadAsset(templateId, file)
+                const shouldResize = shouldResizeTemplateAssets(
+                  this.selectedTemplate.medium
+                )
+                const uploadedAsset = await uploadAsset(
+                  templateId,
+                  file,
+                  shouldResize
+                )
 
                 return uploadedAsset.file.url
               }}
@@ -1843,9 +1871,13 @@ class Builder extends React.Component {
 
                 if (image) {
                   const templateId = this.selectedTemplate.id
+                  const shouldResize = shouldResizeTemplateAssets(
+                    this.selectedTemplate.medium
+                  )
                   const uploadedAsset = await uploadAsset(
                     templateId,
-                    await convertUrlToImageFile(image)
+                    await convertUrlToImageFile(image),
+                    shouldResize
                   )
 
                   this.editor.runCommand('set-image', {
