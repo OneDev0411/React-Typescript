@@ -68,18 +68,20 @@ export default function ListingAlertFiltersEditor({
   }
 
   function handleZipcodeChange(_: unknown, values: ZipcodeOption[]) {
-    const selectedValues = values.reduce((acc, item) => {
-      if (item.id) {
-        return [...acc, item.id.trim()]
-      }
+    if (values.length >= 1) {
+      const selectedValues = values.reduce((acc, item) => {
+        if (item.id) {
+          return [...acc, item.id.trim()]
+        }
 
-      return acc
-    }, [])
+        return acc
+      }, [])
 
-    setFilters({
-      ...filters,
-      postal_codes: selectedValues
-    })
+      setFilters({
+        ...filters,
+        postal_codes: selectedValues
+      })
+    }
   }
 
   function handleReset() {
