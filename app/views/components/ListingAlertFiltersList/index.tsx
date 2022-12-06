@@ -20,7 +20,7 @@ const ALERT_FILTER_KEY_TO_DATA_MAP: {
   },
   postal_codes: {
     label: 'Zipcode: ',
-    toString: postal_codes => postal_codes
+    toString: postal_codes => postal_codes?.join(', ')
   }
 }
 
