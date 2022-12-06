@@ -169,27 +169,16 @@ function Agents(props: WithRouterProps) {
                 </Typography>
               )}
             </Grid>
-            {listing?.mls_info.enable_agent_network === true ? (
-              <Grid item>
-                {filters && (
-                  <ListingAlertFilters
-                    filters={filters}
-                    onApply={handleApplyFilters}
-                    isStatic={false}
-                  />
-                )}
-              </Grid>
-            ) : (
-              <Grid item>
-                {filters && (
-                  <ListingAlertFilters
-                    filters={filters}
-                    onApply={handleApplyFilters}
-                    isStatic
-                  />
-                )}
-              </Grid>
-            )}
+
+            <Grid item>
+              {filters && (
+                <ListingAlertFilters
+                  filters={filters}
+                  onApply={handleApplyFilters}
+                  isStatic={listing?.mls_info.enable_agent_network !== true}
+                />
+              )}
+            </Grid>
           </Grid>
           <Grid item>
             <Box py={1}>

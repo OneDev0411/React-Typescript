@@ -73,9 +73,7 @@ export default function ListingAlertFiltersList({
       <Grid item>
         <Box pr={1}>
           <Button variant="text" onClick={onClick}>
-            {isStatic === false
-              ? Object.entries(filtersKeyValueMap)[0]
-              : Object.entries(filtersKeyValueMap)[1]}
+            {Object.entries(filtersKeyValueMap)?.[isStatic === false ? 0 : 1]}
           </Button>
         </Box>
       </Grid>

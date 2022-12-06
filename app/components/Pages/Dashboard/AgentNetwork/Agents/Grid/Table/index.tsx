@@ -55,9 +55,7 @@ export function ListTable({
       width: '30%',
       accessor: (agentData: AgentWithStats) => agentData.office?.name,
       render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
-        <Typography noWrap>
-          {agentData.office?.name && agentData.office?.name}
-        </Typography>
+        <Typography noWrap>{agentData.office?.name}</Typography>
       )
     },
     {
