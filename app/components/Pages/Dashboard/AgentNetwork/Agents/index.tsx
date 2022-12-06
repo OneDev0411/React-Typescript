@@ -19,9 +19,14 @@ import Layout from '../Layout'
 
 import AgentsGrid from './Grid'
 import { getListingVAlertFilters, getLocationVAlertFilters } from './helpers'
-import { ListingWithProposedAgent } from './types'
+import { ListingWithProposedAgentAndMlsInfo } from './types'
 
-const DISABLED_MLS_LIST = ['NTREIS']
+export interface ZipcodeOption {
+  id: string
+  title: string
+}
+
+const DISABLED_MLS_LIST: string[] = []
 const GOOGLE_MAPS_LIBRARIES: LoadScriptProps['libraries'] = ['geometry']
 
 function Agents(props: WithRouterProps) {
@@ -32,7 +37,7 @@ function Agents(props: WithRouterProps) {
   })
 
   const [listing, setListing] =
-    useState<Nullable<ListingWithProposedAgent>>(null)
+    useState<Nullable<ListingWithProposedAgentAndMlsInfo>>(null)
   const [agents, setAgents] = useState<Nullable<AgentWithStats[]>>(null)
   const [isLoadingAgents, setIsLoadingAgents] = useLoadingEntities(agents)
 
@@ -54,9 +59,8 @@ function Agents(props: WithRouterProps) {
       }
 
       try {
-        const fetchedListing: ListingWithProposedAgent = await getListing(
-          listingId
-        )
+        const fetchedListing: ListingWithProposedAgentAndMlsInfo =
+          await getListing(listingId)
 
         setListing(fetchedListing)
 
@@ -94,7 +98,7 @@ function Agents(props: WithRouterProps) {
       setFilters(placeBasedFilters)
 
       const mockedListing =
-        (await getMockListing()) as unknown as ListingWithProposedAgent
+        (await getMockListing()) as unknown as ListingWithProposedAgentAndMlsInfo
 
       setListing(mockedListing)
     }
@@ -165,14 +169,27 @@ function Agents(props: WithRouterProps) {
                 </Typography>
               )}
             </Grid>
-            <Grid item>
-              {filters && (
-                <ListingAlertFilters
-                  filters={filters}
-                  onApply={handleApplyFilters}
-                />
-              )}
-            </Grid>
+            {listing?.mls_info.enable_agent_network === true ? (
+              <Grid item>
+                {filters && (
+                  <ListingAlertFilters
+                    filters={filters}
+                    onApply={handleApplyFilters}
+                    isStatic={false}
+                  />
+                )}
+              </Grid>
+            ) : (
+              <Grid item>
+                {filters && (
+                  <ListingAlertFilters
+                    filters={filters}
+                    onApply={handleApplyFilters}
+                    isStatic
+                  />
+                )}
+              </Grid>
+            )}
           </Grid>
           <Grid item>
             <Box py={1}>

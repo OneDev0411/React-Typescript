@@ -13,7 +13,7 @@ import { putUserSetting } from 'models/user/put-user-setting'
 import { getNameInitials } from 'utils/helpers'
 import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 
-import { AgentSide, ListingWithProposedAgent } from '../../types'
+import { AgentSide, ListingWithProposedAgentAndMlsInfo } from '../../types'
 import { TableActions } from '../Actions'
 import { Caption } from '../columns/Caption'
 import { SortableColumns } from '../helpers/sortable-columns'
@@ -23,7 +23,7 @@ const SORT_FIELD_SETTING_KEY = 'grid_deals_agent_network_sort_field'
 
 interface Props {
   user: IUser
-  listing: Nullable<ListingWithProposedAgent>
+  listing: Nullable<ListingWithProposedAgentAndMlsInfo>
   agents: Nullable<AgentWithStats[]>
   isLoading: boolean
   onSelectAgentInfo: (info: AgentWithStats, side: AgentSide) => void
@@ -38,6 +38,41 @@ export function ListTable({
 }: Props) {
   const theme: Theme = useTheme()
   const activeTeam = useUnsafeActiveTeam()
+
+  const basicColumns = [
+    {
+      id: 'name',
+      header: 'Name',
+      width: '25%',
+      accessor: (agentData: AgentWithStats) => agentData.full_name,
+      render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
+        <Typography noWrap>{agentData.full_name}</Typography>
+      )
+    },
+    {
+      id: 'brokerage-name',
+      header: 'Brokerage Name',
+      width: '30%',
+      accessor: (agentData: AgentWithStats) => agentData.office?.name,
+      render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
+        <Typography noWrap>
+          {agentData.office?.name && agentData.office?.name}
+        </Typography>
+      )
+    },
+    {
+      id: 'contact',
+      width: '30%',
+      render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
+        <Typography noWrap>
+          {agentData.email}
+          {agentData.phone_number && (
+            <Caption variant="body2">{agentData.phone_number}</Caption>
+          )}
+        </Typography>
+      )
+    }
+  ]
 
   const columns = [
     {
@@ -164,7 +199,9 @@ export function ListTable({
   return (
     <Table<AgentWithStats>
       rows={agents ?? []}
-      columns={columns}
+      columns={
+        listing?.mls_info.enable_agent_network === true ? columns : basicColumns
+      }
       totalRows={(agents || []).length}
       LoadingStateComponent={() => <LoadingContainer noPaddings />}
       loading={isLoading ? 'top' : null}
