@@ -169,13 +169,12 @@ function Agents(props: WithRouterProps) {
                 </Typography>
               )}
             </Grid>
-
             <Grid item>
               {filters && (
                 <ListingAlertFilters
                   filters={filters}
                   onApply={handleApplyFilters}
-                  isStatic={listing?.mls_info.enable_agent_network !== true}
+                  isStatic={listing?.mls_info?.enable_agent_network !== true}
                 />
               )}
             </Grid>

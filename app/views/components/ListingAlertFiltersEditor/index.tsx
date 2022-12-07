@@ -14,9 +14,8 @@ import {
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import isEqual from 'lodash/isEqual'
 
+import { mapPostcodesToOptions } from '@app/components/Pages/Dashboard/MLS/ExploreTab/components/Filters/otherEditor/helpers'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
-
-import { mapPostcodesToOptions } from '../../../components/Pages/Dashboard/MLS/ExploreTab/components/Filters/otherEditor/helpers'
 
 export interface ZipcodeOption {
   id: string
@@ -135,7 +134,7 @@ export default function ListingAlertFiltersEditor({
           </Grid>
           <Grid container item direction="column">
             <Grid item>
-              {isStatic === false && (
+              {isStatic === false ? (
                 <>
                   <Typography variant="caption">Radius</Typography>
                   <Slider
@@ -149,15 +148,15 @@ export default function ListingAlertFiltersEditor({
                     }}
                   />
                 </>
-              )}
-              {isStatic && (
+              ) : (
                 <Autocomplete
                   classes={{ popper: 'u-scrollbar--thinner' }}
                   id="zip-codes-select"
                   options={mapPostcodesToOptions(filters?.postal_codes)}
                   size="small"
                   multiple
-                  limitTags={2}
+                  limitTags={1}
+                  disableClearable
                   clearOnBlur
                   selectOnFocus
                   handleHomeEndKeys
