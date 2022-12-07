@@ -15,7 +15,7 @@ export function CrmStatus({ event, onChange }: Props) {
   const context = useContext(ConfirmationModalContext)
   const [isChecked, setIsChecked] = useState<boolean>(event.status === 'DONE')
 
-  const dueDate = new Date(event.timestamp * 1000)
+  const dueDate = new Date(event.sort_timestamp * 1000)
   const now = new Date()
 
   if (now > dueDate) {

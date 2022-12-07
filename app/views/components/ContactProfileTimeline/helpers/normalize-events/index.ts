@@ -17,8 +17,8 @@ export function normalizeEvents(
 
   return Object.entries(list).reduce((acc, [month, daysOfMonth]) => {
     return {
-      ...acc,
-      [month]: getSortedEvents(daysOfMonth)
+      [month]: getSortedEvents(daysOfMonth),
+      ...acc
     }
   }, {})
 }
@@ -81,8 +81,8 @@ function getEvents(
 function getSortedEvents(events: ICalendarMonthEvents) {
   return Object.entries(events).reduce((acc, [day, events]) => {
     return {
-      ...acc,
-      [day]: sortEvents(events)
+      [day]: sortEvents(events),
+      ...acc
     }
   }, {})
 }
@@ -93,11 +93,8 @@ function getSortedEvents(events: ICalendarMonthEvents) {
  * @param range
  */
 function getEventIndex(event: ICalendarEvent, range: ICalendarRange) {
-  const { low, high } = range
+  const eventTime = new Date(event.sort_timestamp * 1000)
 
-  const from = new Date(high * 1000)
-  const to = new Date(low * 1000)
-  const eventTime = new Date(event.timestamp * 1000)
   const isAllDayEvent = event.all_day || false
 
   if (isAllDayEvent) {
@@ -128,15 +125,9 @@ function getEventIndex(event: ICalendarEvent, range: ICalendarRange) {
     return createDayId(eventTime, convertToUTC)
   }
 
-  const year =
-    from.getUTCFullYear() === to.getUTCFullYear() &&
-    eventTime.getUTCMonth() >= from.getUTCMonth()
-      ? from.getUTCFullYear()
-      : to.getUTCFullYear()
-  const month = isAllDayEvent
-    ? eventTime.getMonth() + 1
-    : eventTime.getUTCMonth() + 1
-  const day = isAllDayEvent ? eventTime.getDate() : eventTime.getUTCDate()
+  const year = eventTime.getFullYear()
+  const month = eventTime.getMonth()
+  const day = eventTime.getDate()
 
-  return `${year}/${month}/${day}`
+  return `${year}/${month + 1}/${day}`
 }

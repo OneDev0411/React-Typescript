@@ -4,36 +4,41 @@ import { alpha } from '@material-ui/core/styles'
 export const useStyles = makeStyles(
   (theme: Theme) => ({
     section: {
-      paddingLeft: theme.spacing(2),
-      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
+      backgroundColor: theme.palette.background.paper,
+      margin: theme.spacing(0, 2),
+      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
+      '&:hover': {
+        cursor: 'pointer',
+        backgroundColor: theme.palette.grey['100']
+      }
     },
     header: {
       display: 'flex',
       flexDirection: 'column',
       minWidth: theme.spacing(12),
       maxWidth: theme.spacing(12),
-      paddingTop: theme.spacing(2),
+      paddingTop: theme.spacing(1),
+      paddingLeft: theme.spacing(2),
       color: theme.palette.grey['900'],
       ...theme.typography.caption,
       lineHeight: 2
     },
     container: {
       '& $row:nth-child(even)': {
-        backgroundColor: theme.palette.grey['50']
+        borderTop: `1px solid ${theme.palette.action.disabledBackground}`
       }
     },
     row: {
       display: 'flex',
       alignItems: 'flex-start',
       justifyContent: 'space-between',
-      padding: theme.spacing(2, 2),
+      padding: theme.spacing(1, 1),
+      minHeight: '64px',
       transition: '0.1s ease-in background-color',
+      maxWidth: '100%',
+      overflow: 'hidden',
       '&:hover $actions': {
         opacity: 1
-      },
-      '&:hover': {
-        cursor: 'pointer',
-        backgroundColor: theme.palette.grey['100']
       }
     },
     title: {

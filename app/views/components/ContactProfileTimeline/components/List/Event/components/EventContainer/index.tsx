@@ -37,7 +37,7 @@ export function EventContainer({
 }: Props & ClassesProps<typeof styles>) {
   const theme = useTheme()
   const sharedClasses = useSharedStyles({
-    pastEvent: isPastDay(new Date(event.timestamp * 1000))
+    pastEvent: isPastDay(new Date(event.sort_timestamp * 1000))
   })
 
   const classes = useStyles({

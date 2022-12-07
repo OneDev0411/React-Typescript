@@ -25,7 +25,8 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
     labelContainer: {
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      padding: theme.spacing(0, 1)
     },
     label: ({ address }: Props) => ({
       color: address.id ? theme.palette.grey[600] : theme.palette.text.hint
@@ -35,7 +36,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     value: ({ address }: Props) => ({
       textAlign: address.id ? 'left' : 'right',
-      color: address.id ? theme.palette.grey[900] : theme.palette.text.hint
+      color: address.id ? theme.palette.grey[900] : theme.palette.text.hint,
+      padding: theme.spacing(0, 1)
     })
   })
 )

@@ -28,7 +28,7 @@ function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
         contacts={{ ids: [contactId] }}
         buttonRenderer={buttonProps => (
           <SectionButton
-            label="Enroll To a Flow"
+            label="More"
             icon={mdiPlus}
             onClick={e => buttonProps?.onClick(e)}
           />

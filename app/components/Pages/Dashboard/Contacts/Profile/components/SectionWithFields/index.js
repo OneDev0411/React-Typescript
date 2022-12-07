@@ -426,7 +426,7 @@ class SectionWithFields extends React.Component {
 
   renderToggleButton = () => {
     const { toggleEmptyAttributes } = this.state
-    const { expandButtonLabel = 'More Fields', expandButtonIcon = mdiPlus } =
+    const { expandButtonLabel = 'More', expandButtonIcon = mdiPlus } =
       this.props
 
     return (
@@ -463,7 +463,7 @@ class SectionWithFields extends React.Component {
   }
 
   render() {
-    const { title, contact, renderer, showTitleAnyway } = this.props
+    const { title, subtitle, contact, renderer } = this.props
     const {
       isAllFieldsEmpty,
       orderedAttributes,
@@ -488,7 +488,7 @@ class SectionWithFields extends React.Component {
 
     if (isAllFieldsEmpty && !toggleEmptyAttributes) {
       return (
-        <BasicSection title={showTitleAnyway ? title : undefined}>
+        <BasicSection subtitle={subtitle} title={title}>
           {this.props.children}
           {this.renderToggleButton()}
         </BasicSection>
@@ -496,10 +496,12 @@ class SectionWithFields extends React.Component {
     }
 
     return (
-      <BasicSection title={title}>
+      <BasicSection subtitle={subtitle} title={title}>
         {(orderedAttributes || []).map(attr => this.renderField(attr))}
         {this.props.children}
-        {shouldToggleEmptyAttributes && this.renderToggleButton()}
+        {orderedAttributes.find(a => a.text === '' || a.date === '') &&
+          shouldToggleEmptyAttributes &&
+          this.renderToggleButton()}
       </BasicSection>
     )
   }

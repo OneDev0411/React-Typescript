@@ -74,7 +74,6 @@ export const InlineEditableField = (props: Props) => {
 
     onToggleMode()
   }
-
   const handleAddNew = event => {
     event.stopPropagation()
 
@@ -152,8 +151,8 @@ export const InlineEditableField = (props: Props) => {
       isPartner,
       showDelete,
       attributeName,
-      handleDelete,
       handleAddNew,
+      handleDelete,
       renderBody: renderViewMode,
       toggleMode: handleToggleMode
     }
