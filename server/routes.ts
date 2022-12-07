@@ -17,7 +17,7 @@ import getPdfSizeRoute from './app/routes/get-pdf-size'
 import livebyNeighborhoodsRoute from './app/routes/liveby/neighborhoods'
 import livebyReportRoute from './app/routes/liveby/report'
 import myMarketingMattersPunchoutRoute from './app/routes/marketing/my-marketing-matters/punchout'
-import templateAssetsUploadRoute from './app/routes/marketing/template-assets-upload'
+import templateAssetsResizeRoute from './app/routes/marketing/template-assets-resize'
 import openHouseRoute from './app/routes/openhouse/registration'
 import proxifierRoute from './app/routes/proxifier'
 import renderMjmlRoute from './app/routes/render-mjml'
@@ -90,9 +90,9 @@ router.post(
 )
 
 router.post(
-  '/api/templates/assets/upload',
+  '/api/templates/assets/resize',
   upload.single('attachment'),
-  templateAssetsUploadRoute
+  templateAssetsResizeRoute
 )
 
 /**

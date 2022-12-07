@@ -9,7 +9,7 @@ import { request } from '../../../libs/request'
 import { getParsedHeaders } from '../../../utils/parse-headers'
 
 export default async (req: Request, res: Response) => {
-  const { template, shouldResize = 0 } = req.body
+  const { template } = req.body
   const file = req.file
 
   if (!file) {
@@ -20,22 +20,19 @@ export default async (req: Request, res: Response) => {
 
   let image = file.buffer
 
-  // We want to resize image if shouldResize is present
-  if (+shouldResize) {
-    const metadata = await sharp(image).metadata()
+  const metadata = await sharp(image).metadata()
 
-    // We want to resize image if the width of the image is too large
-    if (metadata.width && metadata.width > RESIZED_IMAGE_MAX_WIDTH) {
-      const animated = !!metadata.pages
+  // We want to resize image if the width of the image is too large
+  if (metadata.width && metadata.width > RESIZED_IMAGE_MAX_WIDTH) {
+    const animated = !!metadata.pages
 
-      // disable pixels limit when its animated
-      // https://github.com/lovell/sharp/issues/3421
-      const limitInputPixels = !animated
+    // disable pixels limit when its animated
+    // https://github.com/lovell/sharp/issues/3421
+    const limitInputPixels = !animated
 
-      image = await sharp(file.buffer, { animated, limitInputPixels })
-        .resize({ width: RESIZED_IMAGE_MAX_WIDTH })
-        .toBuffer()
-    }
+    image = await sharp(file.buffer, { animated, limitInputPixels })
+      .resize({ width: RESIZED_IMAGE_MAX_WIDTH })
+      .toBuffer()
   }
 
   const data = new FormData()
