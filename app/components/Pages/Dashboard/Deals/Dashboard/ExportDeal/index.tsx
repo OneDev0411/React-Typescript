@@ -5,6 +5,7 @@ import { saveAs } from 'file-saver'
 
 import useNotify from '@app/hooks/use-notify'
 import { exportDeal } from '@app/models/Deal/export/export-deal'
+import { urlToBlob } from '@app/utils/url-to-blob'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -30,7 +31,8 @@ export function ExportDeal({ deal }: Props) {
     setIsExporting(true)
 
     try {
-      const data = await exportDeal(deal)
+      const { url } = await exportDeal(deal)
+      const data = await urlToBlob(url)
 
       saveAs(data, `${deal.title}.zip`)
     } catch (e) {
