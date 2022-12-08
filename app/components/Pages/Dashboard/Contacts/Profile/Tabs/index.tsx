@@ -14,12 +14,13 @@ const useStyles = makeStyles(
       fontSize: theme.typography.body1.fontSize
     },
     tab: {
+      fontFamily: 'latoregular',
       boxSizing: 'border-box',
       border: 'none',
       borderRadius: 0,
       padding: theme.spacing(2, 2),
       backgroundColor: 'transparent',
-      fontWeight: 400,
+      fontWeight: theme.typography.fontWeightRegular,
       color: theme.palette.grey[600],
       fontSize: '1rem',
       borderBottom: '2px solid transparent',
