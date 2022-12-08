@@ -26,6 +26,7 @@ interface Props {
   listing: Nullable<ListingWithProposedAgentAndMlsInfo>
   agents: Nullable<AgentWithStats[]>
   isLoading: boolean
+  isStatic: boolean
   onSelectAgentInfo: (info: AgentWithStats, side: AgentSide) => void
 }
 
@@ -34,6 +35,7 @@ export function ListTable({
   listing,
   agents,
   isLoading,
+  isStatic,
   onSelectAgentInfo
 }: Props) {
   const theme: Theme = useTheme()
@@ -197,9 +199,7 @@ export function ListTable({
   return (
     <Table<AgentWithStats>
       rows={agents ?? []}
-      columns={
-        listing?.mls_info.enable_agent_network === true ? columns : basicColumns
-      }
+      columns={isStatic === false ? columns : basicColumns}
       totalRows={(agents || []).length}
       LoadingStateComponent={() => <LoadingContainer noPaddings />}
       loading={isLoading ? 'top' : null}

@@ -17,6 +17,7 @@ interface Props {
   filters: Nullable<AlertFilters>
   agents: Nullable<AgentWithStats[]>
   isLoading: boolean
+  isStatic: boolean
 }
 
 export default function AgentsGrid({
@@ -24,7 +25,8 @@ export default function AgentsGrid({
   listing,
   filters,
   agents,
-  isLoading
+  isLoading,
+  isStatic
 }: Props) {
   const [selectedAgent, setSelectedAgent] = useState<Nullable<IAgent>>(null)
   const [selectedSide, setSelectedSide] = useState<Nullable<AgentSide>>(null)
@@ -76,6 +78,7 @@ export default function AgentsGrid({
         agents={agents}
         isLoading={isLoading}
         onSelectAgentInfo={onSelectAgentInfo}
+        isStatic={isStatic}
       />
 
       {selectedAgent && selectedSide && (

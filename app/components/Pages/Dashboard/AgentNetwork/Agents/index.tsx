@@ -171,11 +171,23 @@ function Agents(props: WithRouterProps) {
             </Grid>
             <Grid item>
               {filters && (
-                <ListingAlertFilters
-                  filters={filters}
-                  onApply={handleApplyFilters}
-                  isStatic={listing?.mls_info?.enable_agent_network !== true}
-                />
+                <>
+                  {listing?.mls_info !== undefined ? (
+                    <ListingAlertFilters
+                      filters={filters}
+                      onApply={handleApplyFilters}
+                      isStatic={
+                        listing?.mls_info?.enable_agent_network !== true
+                      }
+                    />
+                  ) : (
+                    <ListingAlertFilters
+                      filters={filters}
+                      onApply={handleApplyFilters}
+                      isStatic={false}
+                    />
+                  )}
+                </>
               )}
             </Grid>
           </Grid>
@@ -185,13 +197,25 @@ function Agents(props: WithRouterProps) {
             </Box>
           </Grid>
           <Grid item>
-            <AgentsGrid
-              user={user}
-              filters={filters}
-              listing={listing}
-              agents={agents}
-              isLoading={isLoadingAgents}
-            />
+            {listing?.mls_info !== undefined ? (
+              <AgentsGrid
+                user={user}
+                filters={filters}
+                listing={listing}
+                agents={agents}
+                isLoading={isLoadingAgents}
+                isStatic={listing?.mls_info?.enable_agent_network !== true}
+              />
+            ) : (
+              <AgentsGrid
+                user={user}
+                filters={filters}
+                listing={listing}
+                agents={agents}
+                isLoading={isLoadingAgents}
+                isStatic={false}
+              />
+            )}
           </Grid>
         </Grid>
       )}

@@ -14,7 +14,7 @@ import {
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import isEqual from 'lodash/isEqual'
 
-import { mapPostcodesToOptions } from '@app/components/Pages/Dashboard/MLS/ExploreTab/components/Filters/otherEditor/helpers'
+import { mapPostcodesToOptions } from '@app/utils/map-postcodes'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 
 export interface ZipcodeOption {
