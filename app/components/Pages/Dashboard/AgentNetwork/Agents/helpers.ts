@@ -58,7 +58,9 @@ export async function getListingVAlertFilters(
     minimum_sold_date: minimumSoldDate,
     points: getMapBoundsInCircle({ lat, lng }, DEFAULT_SEARCH_RADIUS),
     radius: DEFAULT_SEARCH_RADIUS,
-    center: { latitude: lat, longitude: lng }
+    center: { latitude: lat, longitude: lng },
+    postal_codes: [listing.property.address.postal_code],
+    mls: listing.mls
   }
 }
 
