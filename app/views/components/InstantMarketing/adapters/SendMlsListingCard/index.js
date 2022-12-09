@@ -179,7 +179,7 @@ class SendMlsListingCard extends Component {
       if (agent.type === 'agent') {
         return {
           recipient_type: 'Agent',
-          agent: agent.id
+          agent
         }
       }
 
