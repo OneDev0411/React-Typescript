@@ -170,6 +170,8 @@ class ContactsList extends React.Component {
       await resetActiveFilters(CONTACTS_SEGMENT_NAME)
     }
 
+    this.handleUnmount()
+
     setContactsListTextFilter(this.state.searchInputValue)
   }
 
@@ -322,6 +324,39 @@ class ContactsList extends React.Component {
       selectedShortcutFilter: null
     })
     this.handleFilterChange({}, true)
+  }
+
+  handleUnmount = () => {
+    const {
+      filters = this.props.filters,
+      searchInputValue = this.state.searchInputValue,
+      start = 0,
+      order = this.state.sortOrder,
+      viewAsUsers = this.props.viewAsUsers,
+      flows = this.props.flows,
+      crmTasks = this.props.crmTasks,
+      conditionOperator = this.props.conditionOperator,
+      prependResult = false,
+      firstLetter = this.state.firstLetter
+    } = filters || {}
+
+    this.props.searchContacts(
+      filters,
+      start,
+      undefined,
+      false,
+      searchInputValue,
+      order,
+      viewAsUsers,
+      conditionOperator,
+      prependResult,
+      {
+        s: start
+      },
+      flows,
+      crmTasks,
+      firstLetter
+    )
   }
 
   handleFilterChange = async (
