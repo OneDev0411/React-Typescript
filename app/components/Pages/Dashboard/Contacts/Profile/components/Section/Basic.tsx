@@ -14,12 +14,14 @@ const useStyles = makeStyles(
       }
     },
     title: {
+      marginLeft: theme.spacing(1),
       marginBottom: theme.spacing(0.2),
       fontSize: theme.typography.pxToRem(16),
       fontFamily: theme.typography.button.fontFamily,
       fontWeight: 600
     },
     subtitle: {
+      marginLeft: theme.spacing(1),
       marginBottom: theme.spacing(0.5),
       ...theme.typography.body3
     }

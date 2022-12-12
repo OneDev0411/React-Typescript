@@ -6,7 +6,7 @@ const useStyles = makeStyles(
     container: {
       position: 'relative',
       width: '100%',
-      padding: theme.spacing(0.5, 0),
+      padding: theme.spacing(0.5, 1),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
