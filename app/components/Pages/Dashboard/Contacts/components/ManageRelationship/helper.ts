@@ -11,7 +11,7 @@ export const frequencyOptions = {
 
 export function frequencyToString(
   frequency: Nullable<number>,
-  defaultValue: string = 'Manage Relationship'
+  defaultValue: string = 'Adjust touch frequency'
 ): string {
   if (!frequency) {
     return defaultValue
