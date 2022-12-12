@@ -65,7 +65,7 @@ function log(response: AxiosResponse) {
 
   const duration =
     response?.config?.headers && response?.config?.headers['x-request-time']
-      ? new Date().getTime() - +response.config.headers['x-request-time']
+      ? new Date().getTime() - Number(response.config.headers['x-request-time'])
       : null
 
   const durationPart = duration ? `(${duration}ms)` : ''
