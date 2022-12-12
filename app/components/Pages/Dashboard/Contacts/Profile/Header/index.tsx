@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 
@@ -31,12 +31,14 @@ export interface Props {
   contact: INormalizedContact
   contactChangeCallback: () => void
   onUpdateTouchFreq(newValue: Nullable<number>): void
+  RenderActions?: ReactNode
 }
 
 export const Header = ({
   contact,
   contactChangeCallback,
-  onUpdateTouchFreq
+  onUpdateTouchFreq,
+  RenderActions
 }: Props) => {
   const classes = useStyles()
 
@@ -50,6 +52,7 @@ export const Header = ({
       </div>
       <div className={classes.actionsContainer}>
         <Actions contact={contact} onUpdateTouchFreq={onUpdateTouchFreq} />
+        {RenderActions}
       </div>
     </div>
   )

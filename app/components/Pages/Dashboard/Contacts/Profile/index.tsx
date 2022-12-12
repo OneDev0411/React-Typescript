@@ -130,7 +130,7 @@ const ContactProfile = props => {
   const confirmation = useConfirmation()
   const [contact, setContact] = useState<Nullable<INormalizedContact>>(null)
   const [currentContactId, setCurrentContactId] = useState<string | undefined>(
-    props.params?.id
+    props.params?.id || props.id
   )
   const [isDeleting, setIsDeleting] = useState(false)
   const [isUpdatingOwner, setIsUpdatingOwner] = useState(false)
@@ -147,7 +147,7 @@ const ContactProfile = props => {
       }
 
       try {
-        const response = await getContact(props.params.id, {
+        const response = await getContact(props.params?.id || props.id, {
           associations: [
             ...updateContactQuery.associations,
             'contact.deals',
@@ -174,12 +174,15 @@ const ContactProfile = props => {
         }
       }
     },
-    [props.params.id, props.router]
+    [props.id, props.params?.id, props.router]
   )
 
   const updateContact = useCallback(async () => {
     try {
-      const response = await getContact(props.params.id, updateContactQuery)
+      const response = await getContact(
+        props.params?.id || props.id,
+        updateContactQuery
+      )
       const normalizedContact = normalizeContact(response.data)
 
       if (contact) {
@@ -194,7 +197,7 @@ const ContactProfile = props => {
     } catch (error) {
       console.error(error)
     }
-  }, [contact, props.params.id])
+  }, [contact, props.id, props.params?.id])
 
   const handleDelete = async () => {
     try {
@@ -406,8 +409,10 @@ const ContactProfile = props => {
   useEffect(() => {
     const socket: SocketIOClient.Socket = (window as any).socket
 
-    if (props.params.id !== currentContactId) {
-      setCurrentContactId(props.params.id)
+    const contactId = props.params?.id || props.id
+
+    if (contactId !== currentContactId) {
+      setCurrentContactId(contactId)
       initializeContact(true)
     }
 
@@ -431,13 +436,14 @@ const ContactProfile = props => {
       socket?.off('email_thread:delete', handleEmailThreadChangeEvent)
     }
   }, [
-    props.params.id,
+    props.params?.id,
     currentContactId,
     detectScreenSize,
     fetchTimeline,
     handleEmailThreadChangeEvent,
     initializeContact,
-    onTouchChange
+    onTouchChange,
+    props.id
   ])
 
   if (isLoading) {
@@ -465,6 +471,7 @@ const ContactProfile = props => {
             contact={contact}
             contactChangeCallback={fetchContact}
             onUpdateTouchFreq={handleUpdateTouchFreq}
+            RenderActions={props.RenderActions}
           />
         </div>
 
@@ -550,7 +557,7 @@ const mapStateToProps = ({ user, contacts, activeTeam = null }, props) => {
   const tags = contacts.list
   const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
 
-  let contact = selectContact(contacts.list, props.params.id)
+  let contact = selectContact(contacts.list, props.params?.id || props.id)
 
   if (!contact || !contact.user) {
     contact = null
