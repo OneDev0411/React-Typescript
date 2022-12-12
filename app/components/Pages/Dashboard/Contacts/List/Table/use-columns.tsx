@@ -111,7 +111,6 @@ export function useColumns({
           onClick={() => {
             onOpenContact(contact.id)
           }}
-          to={`/dashboard/contacts/${contact.id}`}
         >
           <Typography noWrap variant="inherit">
             {getAttributeFromSummary(contact, 'display_name')}
