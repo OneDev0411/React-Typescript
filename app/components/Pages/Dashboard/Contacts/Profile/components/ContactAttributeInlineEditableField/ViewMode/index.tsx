@@ -19,8 +19,8 @@ const useStyles = makeStyles(
     container: {
       display: 'flex',
       flexDirection: 'row',
-      padding: theme.spacing(0, 1),
       overflow: 'hidden',
+      padding: theme.spacing(0, 1),
       '&:hover $title': {
         color: theme.palette.text.primary
       }
