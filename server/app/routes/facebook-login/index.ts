@@ -15,17 +15,28 @@ export default async (req: Request, res: Response) => {
     .then(() => {
       res.send('')
     })
-    .catch((e: AxiosError) => {
-      if (e.response?.status === 302) {
+    .catch((e: AxiosError<string | { message: string }>) => {
+      if (e.response?.status === 302 && typeof e.response.data === 'string') {
         const link = e.response.data
-          .match(URL_PATTERN)
-          .map((url: string) => url.trim())
+          ?.match(URL_PATTERN)
+          ?.map((url: string) => url.trim())
 
-        res.redirect(link)
-      } else {
+        if (link) {
+          res.redirect(link[0])
+
+          return
+        }
+      } else if (
+        typeof e.response?.data === 'object' &&
+        e.response?.data?.message
+      ) {
         res.redirect(
-          `/api/facebook/auth-result?error=Unknown&message=${e.response?.data?.message}`
+          `/api/facebook/auth-result?error=Unknown&message=${
+            e.response?.data?.message || ''
+          }`
         )
+
+        return
       }
 
       res.status(e.response?.status || 500)
