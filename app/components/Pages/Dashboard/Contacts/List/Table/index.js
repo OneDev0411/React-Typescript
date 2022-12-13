@@ -154,7 +154,7 @@ const ContactsList = props => {
       </div>
       {currentContactId && (
         <ContactDetailsModal
-          isNavigable={props.data && props.data.length > 2}
+          isNavigable={props.data && props.data.length > 1}
           contactId={currentContactId}
           onClose={onCloseContact}
           onNext={onNextContact}
