@@ -868,6 +868,8 @@ class ContactsList extends React.Component {
                       }
                     ]}
                     hasCSVButton
+                    hasRealtor
+                    hasZillow
                   />
                   <NewContactDrawer
                     isOpen={this.state.isOpenNewContactDrawer}

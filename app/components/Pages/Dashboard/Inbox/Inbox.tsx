@@ -127,6 +127,8 @@ export default function Inbox({ params }: WithRouterProps) {
                 }
               ]}
               onFetchedOAuthAccounts={onFetchedOAuthAccounts}
+              hasRealtor
+              hasZillow
             />
             {isOpenEmailComposeDrawer && (
               <SingleEmailComposeDrawer
