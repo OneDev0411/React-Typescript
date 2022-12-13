@@ -48,8 +48,8 @@ export function AddAccountButton({
   createMenuItemProps,
   onFetchedOAuthAccounts,
   hasCSVButton = false,
-  hasZillow = true,
-  hasRealtor = true,
+  hasZillow = false,
+  hasRealtor = false,
   tooltip = 'Connect to Google, Outlook, Zillow or Realtor',
   className = ''
 }: Props) {
