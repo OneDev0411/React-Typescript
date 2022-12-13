@@ -1,11 +1,11 @@
 import { TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 
+import { mapPostcodesToOptions } from '@app/utils/map-postcodes'
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 
 import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'
-import { mapPostcodesToOptions } from '../helpers'
 
 export interface ZipcodeOption {
   id: string

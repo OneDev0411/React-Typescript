@@ -34,7 +34,7 @@ export const sharedStyles = (theme: Theme) =>
     time: {
       width: '8rem',
       flexShrink: 0,
-      color: theme.palette.grey[700],
+      color: theme.palette.grey[500],
       ...theme.typography.caption
     },
     link: {

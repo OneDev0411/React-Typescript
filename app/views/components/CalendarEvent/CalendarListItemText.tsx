@@ -62,7 +62,7 @@ function CalendarListItemText({ event }: Props) {
     return baseTitle
   }
   const getEventSubTitle = () => {
-    const baseDate = convertTimestampToDate(event.timestamp)
+    const baseDate = convertTimestampToDate(event.sort_timestamp)
     const currentDate = new Date()
 
     if (event.all_day) {

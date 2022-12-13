@@ -48,13 +48,14 @@ class Addresses extends React.Component {
     this.addressAttributeDefs = addressAttributeDefs
   }
 
-  toggleAddressActiveMode = ({ index }) =>
+  toggleAddressActiveMode = ({ index }) => {
     this.setState(state => ({
       addresses: state.addresses.map(a => ({
         ...a,
         isActive: a.index === index ? !a.isActive : a.isActive
       }))
     }))
+  }
 
   addNewAddress = event => {
     if (event && event.stopPropagation) {

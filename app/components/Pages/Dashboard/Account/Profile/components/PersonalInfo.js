@@ -62,6 +62,12 @@ let PersonalInfoForm = ({
           format={value => value.replace(/\+1|[^+\d]*/g, '')}
         />
         <VerifyMobileNumber />
+        <Field
+          name="designation"
+          type="text"
+          label="Designation"
+          component={SimpleField}
+        />
 
         {/* socials */}
         <hr />
@@ -231,6 +237,7 @@ export default compose(
         last_name,
         email,
         phone_number,
+        designation,
         website,
         instagram,
         facebook,
@@ -264,6 +271,7 @@ export default compose(
           last_name,
           first_name,
           phone_number: phone_number || '',
+          designation,
           website: cleanURL(website),
           instagram: cleanURL(instagram),
           facebook: cleanURL(facebook),

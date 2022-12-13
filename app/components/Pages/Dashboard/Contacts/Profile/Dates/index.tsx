@@ -78,7 +78,8 @@ export function Dates({ contact, submitCallback }: Props) {
         section="Dates"
         submitCallback={submitCallback}
         title="Touch Dates"
-        expandButtonLabel="Add Birthdays & Anniversaries"
+        subtitle="Birthdays, Anniversaries"
+        expandButtonLabel="More"
       >
         {isLoading ? (
           <Box className={classes.loadingContainer}>

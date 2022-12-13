@@ -1,10 +1,11 @@
 import { memo, useState } from 'react'
 
 import { Box } from '@material-ui/core'
-import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import NoSearchResults from '@app/components/Partials/no-search-results'
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import TabContentSwitch from 'components/TabContentSwitch'
@@ -16,7 +17,7 @@ import ShowingsTabProperties from './ShowingsTabProperties'
 import ShowingsTabs, { ShowingsTabsProps } from './ShowingsTabs'
 import useGetShowings from './use-get-showings'
 
-type ShowingsProps = WithRouterProps<{
+type ShowingsProps = RouteComponentProps<{
   tab?: ShowingsTabsProps['value']
 }>
 
@@ -72,4 +73,4 @@ function Showings({ params }: ShowingsProps) {
   )
 }
 
-export default memo(Showings)
+export default memo(withRouter(Showings))

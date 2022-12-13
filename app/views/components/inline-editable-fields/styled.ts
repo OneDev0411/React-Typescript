@@ -12,7 +12,7 @@ export const ViewModeContainer = styled.div<{
   theme: Theme
 }>`
   position: relative;
-  padding: 4px 8px;
+  padding: 4px 0;
   border-radius: ${({ theme }) => theme.shape.borderRadius}px;
 
   &:hover {
@@ -46,8 +46,8 @@ export const EditModeContainer = styled.div<
     Theme
   >
 >`
+  padding: ${({ theme }) => theme.spacing(1)}px;
   position: relative;
-  padding: 0.5em;
   border-radius: ${({ isStatic, theme }) =>
     isStatic
       ? `${theme.shape.borderRadius}px`
