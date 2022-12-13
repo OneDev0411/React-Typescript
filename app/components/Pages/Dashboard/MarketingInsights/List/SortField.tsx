@@ -2,14 +2,8 @@ import { MenuItem } from '@material-ui/core'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 
+import { useInsightsContext } from '../context/use-insights-context'
 import { SortableColumnsType } from '../types'
-
-const sortableColumns: SortableColumnsType[] = [
-  { label: 'Newest Created', value: '-created_at', ascending: false },
-  { label: 'Oldest Created', value: 'created_at', ascending: true },
-  { label: 'Newest Executed', value: '-executed_at', ascending: false },
-  { label: 'Oldest Executed', value: 'executed_at', ascending: true }
-]
 
 interface Props {
   label: string
@@ -17,13 +11,15 @@ interface Props {
 }
 
 export const SortFields = ({ label, onChange }: Props) => {
+  const { sortOptions } = useInsightsContext()
+
   return (
     <BaseDropdown
       component="div"
       buttonLabel={label || 'A - Z'}
       renderMenu={({ close }) => (
         <div>
-          {sortableColumns.map((column, index) => (
+          {sortOptions.map((column, index) => (
             <MenuItem
               key={index}
               value={index}
