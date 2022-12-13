@@ -1,11 +1,11 @@
 import Fetch from 'services/fetch'
 
-export async function uploadAsset(
+export async function uploadResizedAsset(
   templateId: UUID,
   file: File
 ): Promise<ITemplateAsset> {
   const response = await new Fetch()
-    .upload('/templates/assets')
+    .post('/api/templates/assets/resize')
     .attach('attachment', file, file.name)
     .field('template', templateId)
 

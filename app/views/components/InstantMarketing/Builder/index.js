@@ -31,6 +31,7 @@ import SearchListingDrawer from 'components/SearchListingDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
 import { uploadAsset } from 'models/instant-marketing/upload-asset'
+import { uploadResizedAsset } from 'models/instant-marketing/upload-resized-asset'
 import { getBrandListings } from 'models/listings/search/get-brand-listings'
 import { isAdmin } from 'utils/acl'
 import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
@@ -1446,7 +1447,9 @@ class Builder extends React.Component {
     const shouldResize = shouldResizeTemplateAssets(
       this.selectedTemplate.medium
     )
-    const uploadedAsset = await uploadAsset(templateId, file, shouldResize)
+    const uploadedAsset = shouldResize
+      ? await uploadResizedAsset(templateId, file)
+      : await uploadAsset(templateId, file)
 
     return uploadedAsset.file.url
   }
@@ -1606,11 +1609,9 @@ class Builder extends React.Component {
                 const shouldResize = shouldResizeTemplateAssets(
                   this.selectedTemplate.medium
                 )
-                const uploadedAsset = await uploadAsset(
-                  templateId,
-                  file,
-                  shouldResize
-                )
+                const uploadedAsset = shouldResize
+                  ? await uploadResizedAsset(templateId, file)
+                  : await uploadAsset(templateId, file)
 
                 this.editor.runCommand('set-image', {
                   value: uploadedAsset.file.url
@@ -1636,11 +1637,9 @@ class Builder extends React.Component {
                 const shouldResize = shouldResizeTemplateAssets(
                   this.selectedTemplate.medium
                 )
-                const uploadedAsset = await uploadAsset(
-                  templateId,
-                  file,
-                  shouldResize
-                )
+                const uploadedAsset = shouldResize
+                  ? await uploadResizedAsset(templateId, file)
+                  : await uploadAsset(templateId, file)
 
                 return uploadedAsset.file.url
               }}
@@ -1874,11 +1873,11 @@ class Builder extends React.Component {
                   const shouldResize = shouldResizeTemplateAssets(
                     this.selectedTemplate.medium
                   )
-                  const uploadedAsset = await uploadAsset(
-                    templateId,
-                    await convertUrlToImageFile(image),
-                    shouldResize
-                  )
+                  const file = await convertUrlToImageFile(image)
+
+                  const uploadedAsset = shouldResize
+                    ? await uploadResizedAsset(templateId, file)
+                    : await uploadAsset(templateId, file)
 
                   this.editor.runCommand('set-image', {
                     value: uploadedAsset.file.url

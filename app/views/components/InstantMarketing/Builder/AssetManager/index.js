@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import { shouldResizeTemplateAssets } from '@app/views/components/InstantMarketing/helpers/should-resize-template-assets'
 import { Uploader } from 'components/Uploader'
 import { uploadAsset } from 'models/instant-marketing/upload-asset'
+import { uploadResizedAsset } from 'models/instant-marketing/upload-resized-asset'
 
 import { AppTheme } from '../../../../../AppTheme'
 import store from '../../../../../stores'
@@ -63,7 +64,9 @@ export const load = async () => {
                       shouldResizeTemplateAssets(templateMedium)
                     const uploadResponses = await Promise.all(
                       files.map(file =>
-                        uploadAsset(templateId, file, shouldResize)
+                        shouldResize
+                          ? uploadResizedAsset(templateId, file, shouldResize)
+                          : uploadAsset(templateId, file, shouldResize)
                       )
                     )
 
