@@ -29,8 +29,8 @@ export default function InsightsPageLayout({
   const activeTeam = useUnsafeActiveTeam()
 
   const [sortField, setSortField] = useState<SortableColumnsType>({
-    label: 'Newest',
-    value: '-created_at',
+    label: 'Newest Executed',
+    value: '-executed_at',
     ascending: false
   })
 
