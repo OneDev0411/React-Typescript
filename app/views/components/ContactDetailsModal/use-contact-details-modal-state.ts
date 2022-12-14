@@ -17,10 +17,14 @@ export const useContactDetailsModalState = (
     return contacts.indexOf(currentContactId)
   }, [contacts, currentContactId])
 
-  const onOpenContact = (id: UUID) => {
-    callbackUrl.current = `${window.location.pathname}${window.location.search}${window.location.hash}`
+  const handleOpenContact = (id: UUID) => {
     changeUrl(`/dashboard/contacts/${id}`)
     setCurrentContactId(id)
+  }
+
+  const onOpenContact = (id: UUID) => {
+    callbackUrl.current = `${window.location.pathname}${window.location.search}${window.location.hash}`
+    handleOpenContact(id)
   }
 
   const onCloseContact = () => {
@@ -38,7 +42,7 @@ export const useContactDetailsModalState = (
         ? contacts[0]
         : contacts[currentContactIndex + 1]
 
-    onOpenContact(nextContactId)
+    handleOpenContact(nextContactId)
   }
 
   const onPreviousContact = () => {
@@ -51,7 +55,7 @@ export const useContactDetailsModalState = (
         ? contacts[contacts.length - 1]
         : contacts[currentContactIndex - 1]
 
-    onOpenContact(previousContactId)
+    handleOpenContact(previousContactId)
   }
 
   return {
