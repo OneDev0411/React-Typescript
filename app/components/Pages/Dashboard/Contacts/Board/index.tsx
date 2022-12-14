@@ -45,7 +45,9 @@ export const Board = memo(({ criteria }: Props) => {
   const classes = useStyles()
   const [list, setList] = useState<Record<string, IContact[]>>({})
   const contactsIdList = useMemo(() => {
-    return Object.keys(list)
+    return Object.values(list)
+      .flat(1)
+      .map(contact => contact.id)
   }, [list])
 
   const {
