@@ -1,7 +1,8 @@
-import React from 'react'
-
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { makeStyles } from '@material-ui/styles'
+
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 
 import Brand from '../../../../controllers/Brand'
 import SearchIcon from '../../../../views/components/SvgIcons/Search/IconSearch'
@@ -11,11 +12,11 @@ import { styles } from './styles'
 
 const useStyles = makeStyles(styles, { name: 'HeroSearchSection' })
 
-interface Props {
+interface Props extends RouteComponentProps {
   brand: IBrand
 }
 
-export default function HeroSearchSection({ brand }: Props) {
+function HeroSearchSection({ brand }: Props) {
   const brandSearchBackgroundImage = Brand.asset('search_bg', '', brand)
   const brandSearchHeadline = Brand.message('search_headline', '', brand)
   const isTablet = useMediaQuery('(min-width:480px)')
@@ -45,3 +46,5 @@ export default function HeroSearchSection({ brand }: Props) {
     </>
   )
 }
+
+export default withRouter(HeroSearchSection)

@@ -1,9 +1,10 @@
 import { memo } from 'react'
 
 import { Box } from '@material-ui/core'
-import { RouteComponentProps } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import TabContentSwitch from 'components/TabContentSwitch'
@@ -19,22 +20,14 @@ import ShowingDetailTabBookings from './ShowingDetailTabBookings'
 import ShowingDetailTabs, { ShowingDetailTabsProps } from './ShowingDetailTabs'
 import useGetShowing from './use-get-showing'
 
-type ShowingDetailProps = RouteComponentProps<
-  {
-    tab?: ShowingDetailTabsProps['value']
-    id: UUID
-  },
-  {} // Used this empty type because if you pass `any` it ruins the params type
->
+type ShowingDetailProps = RouteComponentProps<{
+  tab?: ShowingDetailTabsProps['value']
+  id: UUID
+}>
 
 const defaultAppointments: IShowingAppointment<'showing'>[] = []
 
-function ShowingDetail({
-  params,
-  route,
-  router,
-  location
-}: ShowingDetailProps) {
+function ShowingDetail({ params, route, router }: ShowingDetailProps) {
   useTitle('Showing Detail | Rechat')
 
   const showingId = params.id
@@ -99,7 +92,6 @@ function ShowingDetail({
                 setShowing={setShowing}
                 route={route}
                 router={router}
-                location={location}
               />
             </TabContentSwitch.Item>
           </TabContentSwitch.Container>
@@ -109,4 +101,4 @@ function ShowingDetail({
   )
 }
 
-export default memo(ShowingDetail)
+export default memo(withRouter(ShowingDetail))

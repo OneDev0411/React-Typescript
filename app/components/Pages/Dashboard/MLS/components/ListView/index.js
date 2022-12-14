@@ -10,6 +10,7 @@ import {
 import Pagination from '@material-ui/lab/Pagination'
 import pluralize from 'pluralize'
 
+import { useNavigate } from '@app/hooks/use-navigate'
 import { changeUrl } from '@app/utils/change-url'
 import {
   addressTitle,
@@ -51,6 +52,7 @@ const useStyles = makeStyles(
 const ListView = props => {
   const theme = useTheme()
   const classes = useStyles()
+  const navigate = useNavigate()
 
   const gridClasses = useGridStyles()
   const [currentPage, setCurrentPage] = useState(1)
@@ -60,10 +62,10 @@ const ListView = props => {
     useState(false)
 
   const closeListingDetailsModal = useCallback(() => {
-    window.history.back()
+    navigate(-1)
     setIsListingDetailsModalOpen(false)
     setSelectedListingId(null)
-  }, [])
+  }, [navigate])
 
   const openListingDetailsModal = useCallback(id => {
     changeUrl(`/dashboard/mls/${id}`)

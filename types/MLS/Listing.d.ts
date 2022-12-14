@@ -229,6 +229,7 @@ interface MlsInfo extends IModel<'mls_info'> {
   mls: string
   disclaimer: string
   logo: Nullable<string>
+  enable_agent_network: boolean
 }
 
 declare type IListing<Associations extends IListingAssociation = ''> = {

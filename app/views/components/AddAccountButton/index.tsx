@@ -27,6 +27,8 @@ import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { getSettingFromTeam } from 'utils/user-teams'
 
+import Acl from '../Acl'
+
 import { AccountMenuItem } from './AccountMenuItem'
 import { ConnectedAccounts } from './ConnectedAccounts'
 import { CreateMenuItem, Props as CreateMenuItemProps } from './CreateMenuItem'
@@ -188,41 +190,47 @@ export function AddAccountButton({
             helperLink="https://help.rechat.com/guides/crm/connect-to-outlook-google"
           />
           {hasZillow && (
-            <AccountMenuItem
-              onClick={() => {
-                goTo('/dashboard/account/connected-accounts', null, {
-                  [ADD_LEAD_CHANNEL_QUERY_PARAM_KEY]: 'Zillow'
-                })
-                toggleMenu()
-              }}
-              title="Connect to Zillow"
-              icon={
-                <ZillowIcon
-                  size={iconSizes.medium}
-                  className={classes.listIcon}
-                />
-              }
-              helperLink="https://help.rechat.com/guides/crm/connect-to-zillow"
-            />
+            <Acl.Beta>
+              <AccountMenuItem
+                onClick={() => {
+                  goTo('/dashboard/account/connected-accounts', null, {
+                    [ADD_LEAD_CHANNEL_QUERY_PARAM_KEY]: 'Zillow'
+                  })
+                  toggleMenu()
+                }}
+                title="Connect to Zillow"
+                icon={
+                  <ZillowIcon
+                    size={iconSizes.medium}
+                    className={classes.listIcon}
+                  />
+                }
+                helperLink="https://help.rechat.com/guides/crm/connect-to-zillow"
+              />
+            </Acl.Beta>
           )}
+
           {hasRealtor && (
-            <AccountMenuItem
-              onClick={() => {
-                goTo('/dashboard/account/connected-accounts', null, {
-                  [ADD_LEAD_CHANNEL_QUERY_PARAM_KEY]: 'Realtor'
-                })
-                toggleMenu()
-              }}
-              title="Connect to Realtor"
-              icon={
-                <RealtorIcon
-                  size={iconSizes.medium}
-                  className={classes.listIcon}
-                />
-              }
-              helperLink="https://help.rechat.com/guides/crm/connect-to-realtor"
-            />
+            <Acl.Beta>
+              <AccountMenuItem
+                onClick={() => {
+                  goTo('/dashboard/account/connected-accounts', null, {
+                    [ADD_LEAD_CHANNEL_QUERY_PARAM_KEY]: 'Realtor'
+                  })
+                  toggleMenu()
+                }}
+                title="Connect to Realtor"
+                icon={
+                  <RealtorIcon
+                    size={iconSizes.medium}
+                    className={classes.listIcon}
+                  />
+                }
+                helperLink="https://help.rechat.com/guides/crm/connect-to-realtor"
+              />
+            </Acl.Beta>
           )}
+
           <ConnectedAccounts
             accounts={accounts}
             onClickItems={() => {

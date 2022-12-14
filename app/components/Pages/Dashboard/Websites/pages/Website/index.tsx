@@ -3,6 +3,7 @@ import { memo, useState } from 'react'
 import { Button } from '@material-ui/core'
 import { useTitle } from 'react-use'
 
+import { withRouter } from '@app/routes/with-router'
 import PageLayout from 'components/GlobalPageLayout'
 
 import WebsiteList from '../../components/WebsiteList'
@@ -48,4 +49,4 @@ function Website() {
   )
 }
 
-export default memo(Website)
+export default memo(withRouter(Website))

@@ -3,7 +3,7 @@
 */
 import { useRef, useState, RefObject, useEffect, useCallback } from 'react'
 
-import { makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
@@ -55,44 +55,48 @@ import Timeline, { TimelineRef } from './Timeline'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     header: {
-      padding: theme.spacing(0, 4)
+      padding: theme.spacing(0, 3),
+      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },
     container: {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
       height: 'auto',
-      padding: theme.spacing(2, 4, 4),
-      background: theme.palette.grey[50]
+      background: theme.palette.grey[100]
     },
     contentContainer: {
       background: theme.palette.background.paper,
       border: `1px solid ${theme.palette.action.disabledBackground}`,
-      borderRadius: `${theme.shape.borderRadius}px`,
+      borderTop: 'none',
       width: '100%',
       height: '100%'
     },
     tabContainer: {
-      flex: '1 1 auto',
+      padding: theme.spacing(3),
+      paddingTop: theme.spacing(1),
+      flex: '1 1',
       display: 'flex',
       flexDirection: 'column'
     },
     tabHeaderContainer: {
       display: 'flex',
       justifyContent: 'space-between',
-      alignItems: 'flex-start'
+      alignItems: 'center',
+      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },
     timelineContainer: {
-      background: theme.palette.background.paper,
-      border: `1px solid ${theme.palette.action.disabledBackground}`,
+      marginTop: theme.spacing(4),
       borderRadius: `${theme.shape.borderRadius}px`,
       display: 'flex',
       flexDirection: 'column',
-      height: '100%'
+      height: '100%',
+      '&::webkit-scrollbar': {
+        display: 'none'
+      }
     },
     boxContainer: {
-      display: 'flex',
-      gap: theme.spacing(2)
+      display: 'flex'
     },
     sidenavContainer: {
       width: '30%',
@@ -134,7 +138,7 @@ const ContactProfile = props => {
   const [isLoading, setIsLoading] = useState(
     !isLoadedContactAttrDefs(props?.attributeDefs) || !props?.contact
   )
-  const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Events)
+  const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Upcoming)
 
   const fetchContact = useCallback(
     async (callback = () => {}, showFullScreenLoading = false) => {
@@ -389,10 +393,9 @@ const ContactProfile = props => {
       if (Array.isArray(contacts) && contacts.includes(currentContactId)) {
         console.log('[ Socket ] Touch Changed')
         updateContact()
-        fetchTimeline()
       }
     },
-    [currentContactId, updateContact, fetchTimeline]
+    [currentContactId, updateContact]
   )
 
   useEffectOnce(() => {
@@ -472,7 +475,10 @@ const ContactProfile = props => {
             <div
               className={cn(classes.contentContainer, classes.sidenavContainer)}
             >
-              <LastTouch contact={contact} />
+              <LastTouch
+                contact={contact}
+                onUpdateTouchFreq={handleUpdateTouchFreq}
+              />
               <ContactInfo {..._props} />
               <Flows
                 // @ts-ignore
@@ -497,7 +503,9 @@ const ContactProfile = props => {
                 disabled={isUpdatingOwner}
               />
               {activeBrand.id === contact.brand && (
-                <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
+                <Box mx={1}>
+                  <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
+                </Box>
               )}
             </div>
 
@@ -514,7 +522,8 @@ const ContactProfile = props => {
                     onCreateNote={handleCreateNote}
                   />
                 )}
-                {activeFilter === Filters.Events && (
+                {(activeFilter === Filters.History ||
+                  activeFilter === Filters.Upcoming) && (
                   <AddEvent contact={contact} callback={fetchTimeline} />
                 )}
               </div>

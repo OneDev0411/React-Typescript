@@ -1,35 +1,40 @@
-import { Chip, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { ToggleButtonGroup, ToggleButton } from '@material-ui/lab'
 
-import { getNotes } from 'models/contacts/helpers/get-notes'
-
 export enum Filters {
-  Events = 'events',
+  History = 'history',
+  Upcoming = 'upcoming',
   Notes = 'notes'
 }
 
 const useStyles = makeStyles(
   theme => ({
     root: {
-      marginBottom: theme.spacing(2)
+      border: 'none',
+      fontSize: theme.typography.body1.fontSize
     },
     tab: {
-      backgroundColor: theme.palette.common.white,
-      color: theme.palette.text.primary,
+      fontFamily: 'latoregular',
+      boxSizing: 'border-box',
+      border: 'none',
+      borderRadius: 0,
+      padding: theme.spacing(2, 2),
+      backgroundColor: 'transparent',
+      fontWeight: theme.typography.fontWeightRegular,
+      color: theme.palette.grey[600],
+      fontSize: '1rem',
+      borderBottom: '2px solid transparent',
       '&$selected, &$selected:hover': {
-        backgroundColor: theme.palette.success.ultralight,
-        color: theme.palette.primary.main,
+        fontWeight: 700,
+        color: theme.palette.grey[900],
+        backgroundColor: 'transparent',
+        borderBottomColor: theme.palette.primary.main,
         cursor: 'default'
       }
     },
     selected: {
-      backgroundColor: theme.palette.success.ultralight,
+      backgroundColor: 'transparent',
       color: theme.palette.primary.main
-    },
-    chip: {
-      marginLeft: theme.spacing(1),
-      backgroundColor: theme.palette.grey[400],
-      color: theme.palette.common.white
     }
   }),
   { name: 'ContactProfileTabs' }
@@ -43,7 +48,6 @@ interface Props {
 
 export const Tabs = ({ contact, activeFilter, onChangeFilter }: Props) => {
   const classes = useStyles()
-  const notes = getNotes(contact)
 
   const handleChange = (_, value) => {
     if (value !== null) {
@@ -61,10 +65,18 @@ export const Tabs = ({ contact, activeFilter, onChangeFilter }: Props) => {
     >
       <ToggleButton
         classes={{ root: classes.tab, selected: classes.selected }}
-        value={Filters.Events}
-        aria-label="Events"
+        value={Filters.History}
+        aria-label="History"
       >
-        Events
+        History
+      </ToggleButton>
+
+      <ToggleButton
+        classes={{ root: classes.tab, selected: classes.selected }}
+        value={Filters.Upcoming}
+        aria-label="Upcoming"
+      >
+        Upcoming
       </ToggleButton>
 
       <ToggleButton
@@ -73,9 +85,6 @@ export const Tabs = ({ contact, activeFilter, onChangeFilter }: Props) => {
         aria-label="Notes"
       >
         Notes
-        {notes.length > 0 && (
-          <Chip className={classes.chip} size="small" label={notes.length} />
-        )}
       </ToggleButton>
     </ToggleButtonGroup>
   )

@@ -9,7 +9,7 @@ import { TeamContactSelect } from '../../../../../../views/components/TeamContac
 const useStyles = makeStyles(
   theme => ({
     container: {
-      marginTop: theme.spacing(2),
+      margin: theme.spacing(2, 1, 0),
       padding: theme.spacing(2, 0, 2),
       borderTop: `1px solid ${theme.palette.action.disabledBackground}`
     },

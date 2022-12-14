@@ -1,10 +1,11 @@
 import { memo, useState, useMemo } from 'react'
 
 import { Box } from '@material-ui/core'
-import { InjectedRouter, PlainRoute } from 'react-router'
 import { useTitle } from 'react-use'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import PageLayout from 'components/GlobalPageLayout'
 import { QuestionWizard } from 'components/QuestionWizard'
 import useAsync from 'hooks/use-async'
@@ -38,12 +39,7 @@ import {
 import useShowingAvailabilitiesState from './use-showing-availabilities-state'
 import useShowingRoles from './use-showing-roles'
 
-interface CreateShowingProps {
-  router: InjectedRouter
-  route: PlainRoute
-}
-
-function CreateShowing({ router, route }: CreateShowingProps) {
+function CreateShowing({ router, route }: RouteComponentProps) {
   useTitle('Create New Showing | Rechat')
 
   const activeBrandId = useActiveBrandId()
@@ -268,4 +264,4 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   )
 }
 
-export default memo(CreateShowing)
+export default memo(withRouter(CreateShowing))

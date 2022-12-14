@@ -15,7 +15,8 @@ export default function ListingAlertFilters({
   title,
   filters,
   limit,
-  onApply
+  onApply,
+  isStatic
 }: Props) {
   const [alertFiltersAnchor, setAlertFiltersAnchor] =
     useState<Nullable<HTMLButtonElement>>(null)
@@ -37,7 +38,11 @@ export default function ListingAlertFilters({
 
   return (
     <>
-      <ListingAlertFiltersList filters={filters} limit={limit}>
+      <ListingAlertFiltersList
+        isStatic={isStatic}
+        filters={filters}
+        limit={limit}
+      >
         <Grid item>
           <Button variant="outlined" onClick={handleShowAlertFiltersDialog}>
             Change Filters
@@ -62,6 +67,7 @@ export default function ListingAlertFilters({
           title={title}
           filters={filters}
           onApply={handleApplyFilters}
+          isStatic={isStatic}
         />
       </Popover>
     </>

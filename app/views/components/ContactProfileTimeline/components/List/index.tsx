@@ -20,6 +20,7 @@ interface Props {
     event: ICalendarEvent,
     emailCampaign: IEmailCampaign
   ) => void
+  eventType?: 'upcoming' | 'history'
 }
 
 export function CalendarList({
@@ -32,7 +33,8 @@ export function CalendarList({
   onLoadNextEvents,
   onLoadPreviousEvents,
   onCrmEventChange,
-  onScheduledEmailChange
+  onScheduledEmailChange,
+  eventType
 }: Props) {
   const [selectedEvent, setSelectedEvent] = useState<ICalendarEvent | null>(
     null
@@ -74,6 +76,7 @@ export function CalendarList({
         onLoadPreviousEvents={onLoadPreviousEvents}
         onLoadNextEvents={onLoadNextEvents}
         handleEventChange={handleEventChange}
+        eventType={eventType}
       />
 
       <EventController

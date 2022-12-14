@@ -2,6 +2,8 @@ import { memo } from 'react'
 
 import { useTitle } from 'react-use'
 
+import { withRouter } from '@app/routes/with-router'
+
 import InsightsPageLayout from '../../PageLayout'
 
 import SocialPostTable from './SocialPostTable'
@@ -16,4 +18,4 @@ function SocialPostList() {
   )
 }
 
-export default memo(SocialPostList)
+export default memo(withRouter(SocialPostList))

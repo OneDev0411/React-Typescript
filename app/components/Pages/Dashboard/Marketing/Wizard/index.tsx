@@ -23,6 +23,8 @@ import { useTitle } from 'react-use'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
+import { uploadResizedAsset } from '@app/models/instant-marketing/upload-resized-asset'
+import { shouldResizeTemplateAssets } from '@app/views/components/InstantMarketing/helpers/should-resize-template-assets'
 import PageLayout from 'components/GlobalPageLayout'
 import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 import { addNotification } from 'components/notification'
@@ -219,7 +221,13 @@ function MarketingWizard(props: WithRouterProps) {
   }
 
   const handleUploadAsset = (file: File) => {
-    return uploadAsset(currentTabTemplates[0].template.id, file)
+    const shouldResize = shouldResizeTemplateAssets(
+      currentTabTemplates[0].template.medium
+    )
+
+    return shouldResize
+      ? uploadResizedAsset(currentTabTemplates[0].template.id, file)
+      : uploadAsset(currentTabTemplates[0].template.id, file)
   }
 
   const handlePrepareClick = async (template: IBrandMarketingTemplate) => {

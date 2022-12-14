@@ -17,9 +17,10 @@ import {
 import classNames from 'classnames'
 import pluralize from 'pluralize'
 import { useDispatch } from 'react-redux'
-import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { Avatar } from 'components/Avatar'
 import { formatDate } from 'components/DateTimePicker/helpers'
 import EmailNotificationSetting from 'components/EmailNotificationSetting'
@@ -113,13 +114,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-interface Props {
-  params: {
-    id: string
-  }
-}
+type Props = RouteComponentProps<{ id: string }>
 
-function Insight({ location, params: { id } }: Props & WithRouterProps) {
+function Insight({ searchParams, params: { id } }: Props) {
   const [sortField, setSortField] = useState<SortableColumnsType>({
     label: 'Most Opened',
     value: 'opened',
@@ -130,6 +127,7 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
   const [emailPreview, setEmailPreview] =
     useState<IEmail<IEmailOptionalFields> | null>(null)
 
+  const backUrl = searchParams.get('backUrl') ?? '/dashboard/insights'
   const documentTitle = () => {
     return item && item.subject
       ? `${item.subject} | Marketing Insights | Rechat`
@@ -275,7 +273,7 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
     <>
       <div className={classes.pageContainer}>
         <Header
-          backUrl={location.query?.backUrl ?? '/dashboard/insights'}
+          backUrl={backUrl}
           title={item.subject}
           viewEmailDisabled={!item.emails}
           onViewEmail={openViewEmail}

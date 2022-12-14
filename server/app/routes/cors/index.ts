@@ -1,6 +1,7 @@
-import axios, { AxiosError, AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { Request, Response, NextFunction } from 'express'
 
+import { RequestError } from '../../../types'
 import { getParsedHeaders } from '../../utils/parse-headers'
 
 export default async (req: Request, res: Response, next: NextFunction) => {
@@ -15,8 +16,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       res.set(response.headers)
       response.data.pipe(res)
     })
-    .catch((e: AxiosError) => {
+    .catch((e: RequestError) => {
       res.status(e.response?.status || 400)
-      e.response && e.response.data.pipe(res)
+      e.response?.data && e.response.data.pipe(res)
     })
 }

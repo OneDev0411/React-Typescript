@@ -20,12 +20,10 @@ const useStyles = makeStyles(
     },
     eventsSectionContainer: {
       display: 'flex',
+      flexDirection: 'column',
       letterSpacing: '0.15px',
-      paddingLeft: theme.spacing(2),
-      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
-      '&.isToday': {
-        borderBottom: `1px solid ${theme.palette.error.main}`
-      }
+      marginBottom: theme.spacing(3),
+      fontSize: theme.typography.subtitle2.fontSize
     },
     eventsListContainer: {
       width: '100%'
@@ -34,8 +32,15 @@ const useStyles = makeStyles(
       width: '100%',
       flex: '1 1 auto',
       backgroundColor: '#fff',
-      '&:nth-child(even)': {
-        backgroundColor: theme.palette.grey['50']
+      border: `1px solid ${theme.palette.action.disabledBackground}`,
+      borderBottomWidth: 0,
+      color: theme.palette.grey['500'],
+      '&:first-child': {
+        borderTopLeftRadius: theme.shape.borderRadius
+      },
+      '&:last-child': {
+        borderBottomWidth: '1px',
+        borderBottomLeftRadius: theme.shape.borderRadius
       },
       '&:hover': {
         backgroundColor: theme.palette.grey['100']
@@ -53,14 +58,17 @@ const useStyles = makeStyles(
       top: 0,
       left: 0,
       right: 0,
-      bottom: 0
+      bottom: 0,
+      '&::-webkit-scrollbar': {
+        display: 'none'
+      }
     },
     progressLoaderContainer: {
       position: 'absolute',
       zIndex: 10,
       top: 0,
-      left: 0,
-      right: 0,
+      left: theme.spacing(2),
+      right: theme.spacing(2),
       bottom: 0,
       backgroundColor: theme.palette.background.paper,
       opacity: 0.6
@@ -70,8 +78,20 @@ const useStyles = makeStyles(
       top: '20%',
       left: '50%'
     },
+    loadButtonContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
+      margin: theme.spacing(2, 0)
+    },
     loadButton: {
-      minWidth: '12rem'
+      padding: theme.spacing(1, 2),
+      textAlign: 'center',
+      color: theme.palette.grey['800'],
+      '&:hover': {
+        backgroundColor: theme.palette.grey['200']
+      }
     }
   }),
   {
@@ -87,6 +107,7 @@ interface Props {
   onLoadPreviousEvents: () => void
   onLoadNextEvents: () => void
   handleEventChange: (event: IEvent, type: CrmEventType) => void
+  eventType?: 'upcoming' | 'history'
 }
 
 export function EventLoader({
@@ -96,7 +117,8 @@ export function EventLoader({
   isReachedStart,
   onLoadNextEvents,
   handleEventChange,
-  onLoadPreviousEvents
+  onLoadPreviousEvents,
+  eventType
 }: Props) {
   const classes = useStyles()
 
@@ -120,18 +142,6 @@ export function EventLoader({
     <Box className={classes.mainContainer}>
       {Loader()}
       <Box className={classes.calendarContainer}>
-        {!isReachedEnd && (
-          <Box my={2} textAlign="center">
-            <Button
-              className={classes.loadButton}
-              size="small"
-              disabled={isLoading}
-              onClick={onLoadNextEvents}
-            >
-              Load Next Year Events
-            </Button>
-          </Box>
-        )}
         <Box>
           {rows.map((section, index) => (
             <Box
@@ -154,17 +164,31 @@ export function EventLoader({
             </Box>
           ))}
         </Box>
-        {!isReachedStart && (
-          <Box my={2} textAlign="center">
+        {!isReachedStart && eventType === 'history' && (
+          <div className={classes.loadButtonContainer}>
             <Button
+              variant="text"
               className={classes.loadButton}
               size="small"
               disabled={isLoading}
               onClick={onLoadPreviousEvents}
             >
-              Load Previous Year Events
+              Load Previous Events
             </Button>
-          </Box>
+          </div>
+        )}
+        {!isReachedEnd && eventType === 'upcoming' && (
+          <div className={classes.loadButtonContainer}>
+            <Button
+              variant="text"
+              className={classes.loadButton}
+              size="small"
+              disabled={isLoading}
+              onClick={onLoadNextEvents}
+            >
+              Load Next Events
+            </Button>
+          </div>
         )}
       </Box>
     </Box>

@@ -2,12 +2,12 @@ import { Box, makeStyles } from '@material-ui/core'
 import { mdiAccountTie, mdiCheck, mdiEyeOutline, mdiOpenInNew } from '@mdi/js'
 import classNames from 'classnames'
 
+import { useNavigate } from '@app/hooks/use-navigate'
 import { HeaderColumn } from '@app/views/components/Grid/Table/features/HeaderColumn'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
-import { goTo } from 'utils/go-to'
 
 import { getShowingBookingPageUrl, getShowingImage } from '../../helpers'
 import ShowingColumnProperty from '../ShowingColumnProperty'
@@ -46,11 +46,12 @@ function ShowingPropertyList({
 }: ShowingPropertyListProps) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
+  const navigate = useNavigate()
 
   const showingNotificationCount = useGetShowingNotificationCount(rows)
 
   const handleRowClick = (showingId: UUID) => {
-    goTo(`/dashboard/showings/${showingId}/detail`)
+    navigate(`/dashboard/showings/${showingId}/detail`)
   }
 
   const sortedRows = useSortPropertiesByNotificationCount(
