@@ -21,6 +21,7 @@ export function ContactDetailsModal({
       <ContactDetails
         isModal
         onOpenContact={onOpen}
+        onCloseContact={otherProps.onClose}
         id={contactId}
         RenderActions={<ContactDetailsModalActions {...otherProps} />}
       />

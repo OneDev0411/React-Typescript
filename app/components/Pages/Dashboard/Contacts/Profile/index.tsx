@@ -140,6 +140,29 @@ const ContactProfile = props => {
   )
   const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Upcoming)
 
+  const isModal: boolean = props.isModal
+  const onCloseContact: () => void = props.onCloseContact
+  const onOpenContact: (id: UUID) => void = props.onOpenContact
+
+  const goToContacts = useCallback(() => {
+    if (isModal && typeof onCloseContact === 'function') {
+      onCloseContact()
+    } else {
+      goTo('/dashboard/contacts')
+    }
+  }, [isModal, onCloseContact])
+
+  const goToContact = useCallback(
+    (masterContactId: UUID) => {
+      if (isModal && typeof onOpenContact === 'function') {
+        onOpenContact(masterContactId)
+      } else {
+        goTo(`/dashboard/contacts/${masterContactId}`)
+      }
+    },
+    [isModal, onOpenContact]
+  )
+
   const fetchContact = useCallback(
     async (callback = () => {}, showFullScreenLoading = false) => {
       if (showFullScreenLoading) {
@@ -170,11 +193,11 @@ const ContactProfile = props => {
         callback()
       } catch (error) {
         if (error.status === 404 || error.status === 400) {
-          props.router.push('/dashboard/contacts')
+          goToContacts()
         }
       }
     },
-    [props.id, props.params?.id, props.router]
+    [props.id, props.params?.id, goToContacts]
   )
 
   const updateContact = useCallback(async () => {
@@ -205,7 +228,7 @@ const ContactProfile = props => {
 
       await deleteContacts([contact?.id])
 
-      props.router.push('/dashboard/contacts')
+      goToContacts()
     } catch (error) {
       console.log(error)
     }
@@ -374,7 +397,7 @@ const ContactProfile = props => {
       return
     }
 
-    props.goToContact(masterContactId)
+    goToContact(masterContactId)
   }
 
   const handleChangeFilter = (value: Filters) => {
@@ -567,22 +590,13 @@ const mapStateToProps = ({ user, contacts, activeTeam = null }, props) => {
     contacts.oAuthAccounts
   )
 
-  const goToContact = (masterContactId: UUID) => {
-    if (props.isModal && typeof props.onOpenContact === 'function') {
-      props.onOpenContact(masterContactId)
-    } else {
-      goTo(`/dashboard/contacts/${masterContactId}`)
-    }
-  }
-
   return {
     user,
     contact,
     fetchTags,
     viewAsUsers: viewAs(activeTeam),
     attributeDefs: contacts.attributeDefs,
-    allConnectedAccounts,
-    goToContact
+    allConnectedAccounts
   }
 }
 
