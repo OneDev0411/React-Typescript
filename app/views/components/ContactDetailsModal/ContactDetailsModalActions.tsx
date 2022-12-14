@@ -12,7 +12,11 @@ import { SvgIcon } from '@app/views/components/SvgIcons'
 const useStyles = makeStyles(
   theme => ({
     root: { marginLeft: theme.spacing(2) },
-    button: { minWidth: '40px', padding: theme.spacing(0.75, 1) },
+    button: {
+      minWidth: '40px',
+      paddingRight: theme.spacing(1),
+      paddingLeft: theme.spacing(1)
+    },
     groupButton: { marginRight: theme.spacing(2) }
   }),
   { name: 'ContactDetailsModalActions' }
