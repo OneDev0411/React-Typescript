@@ -1,8 +1,8 @@
 import { AxiosError } from 'axios'
 import { Request, Response } from 'express'
 
-import { URL_PATTERN } from '../../../constants'
 import { request } from '../../../libs/request'
+import { getErrorRedirectUrl } from '../../../utils/get-error-redirect-url'
 import { getParsedHeaders } from '../../../utils/parse-headers'
 
 export default async (req: Request, res: Response) => {
@@ -14,13 +14,13 @@ export default async (req: Request, res: Response) => {
     .then(() => {
       res.send('')
     })
-    .catch((e: AxiosError) => {
-      if (e.response?.status === 302) {
-        const link = e.response.data
-          .match(URL_PATTERN)
-          .map((url: string) => url.trim())
+    .catch((e: AxiosError<string>) => {
+      const errorRedirectUrl = getErrorRedirectUrl(e)
 
-        res.redirect(link)
+      if (errorRedirectUrl) {
+        res.redirect(errorRedirectUrl)
+
+        return
       }
 
       if (e.response?.status === 400 || e.response?.status === 401) {
