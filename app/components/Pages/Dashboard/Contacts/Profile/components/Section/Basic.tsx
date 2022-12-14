@@ -5,6 +5,10 @@ import { Box, makeStyles, Theme, Typography } from '@material-ui/core'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
+      '&:first-child': {
+        marginTop: theme.spacing(1)
+      },
+
       marginBottom: (props: Props) => {
         if (props.title) {
           return theme.spacing(3)
@@ -17,7 +21,7 @@ const useStyles = makeStyles(
       marginLeft: theme.spacing(1),
       marginBottom: theme.spacing(0.2),
       fontSize: theme.typography.pxToRem(16),
-      fontFamily: theme.typography.button.fontFamily,
+      fontFamily: 'latoregular',
       fontWeight: 600
     },
     subtitle: {

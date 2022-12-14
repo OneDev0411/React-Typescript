@@ -82,6 +82,28 @@ export function Notes(props: Props) {
     fecha.format(new Date(note.created_at * 1000), 'YYYY-MM-DD')
   )
 
+  const isToday = currentDate => {
+    const today = new Date()
+
+    return (
+      currentDate.getDate() == today.getDate() &&
+      currentDate.getMonth() == today.getMonth() &&
+      currentDate.getFullYear() == today.getFullYear()
+    )
+  }
+  const isTomorrow = currentDate => {
+    const today = new Date()
+    const tomorrow = new Date(today)
+
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
+    return (
+      currentDate.getDate() == tomorrow.getDate() &&
+      currentDate.getMonth() == tomorrow.getMonth() &&
+      currentDate.getFullYear() == tomorrow.getFullYear()
+    )
+  }
+
   return (
     <>
       {map(noteGroups, (group, date) => {
@@ -90,11 +112,20 @@ export function Notes(props: Props) {
         not time so the Date class will parse the value in UTC (GMT) at midnight
         which cause 1 day off, so we need to add time like this
         */
-        const header = fecha.format(new Date(`${date}T00:00:00`), 'D MMM, ddd')
+        const notesDate = new Date(date)
+        let header
+
+        if (isToday(notesDate) || isTomorrow(notesDate)) {
+          header = fecha.format(new Date(`${date}T00:00:00`), 'MMM D, YY')
+        } else {
+          header = fecha.format(new Date(`${date}T00:00:00`), 'ddd - MMM D, YY')
+        }
 
         return (
           <Box display="flex" className={classes.section} key={date}>
-            <div className={classes.header}>{header}</div>
+            <div className={classes.header}>{`${
+              isToday(notesDate) ? 'Today - ' : ''
+            } ${isTomorrow(notesDate) ? 'Tomorrow - ' : ''} ${header}`}</div>
             <Box flexGrow={1} className={classes.container}>
               {group.map((note, index) => (
                 <Box
