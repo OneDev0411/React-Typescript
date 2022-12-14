@@ -374,7 +374,7 @@ const ContactProfile = props => {
       return
     }
 
-    goTo(`/dashboard/contacts/${masterContactId}`)
+    props.goToContact(masterContactId)
   }
 
   const handleChangeFilter = (value: Filters) => {
@@ -567,13 +567,22 @@ const mapStateToProps = ({ user, contacts, activeTeam = null }, props) => {
     contacts.oAuthAccounts
   )
 
+  const goToContact = (masterContactId: UUID) => {
+    if (props.isModal && typeof props.onOpenContact === 'function') {
+      props.onOpenContact(masterContactId)
+    } else {
+      goTo(`/dashboard/contacts/${masterContactId}`)
+    }
+  }
+
   return {
     user,
     contact,
     fetchTags,
     viewAsUsers: viewAs(activeTeam),
     attributeDefs: contacts.attributeDefs,
-    allConnectedAccounts
+    allConnectedAccounts,
+    goToContact
   }
 }
 

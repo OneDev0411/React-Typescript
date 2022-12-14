@@ -159,6 +159,7 @@ const ContactsList = props => {
           onClose={onCloseContact}
           onNext={onNextContact}
           onPrevious={onPreviousContact}
+          onOpen={onOpenContact}
         />
       )}
     </>

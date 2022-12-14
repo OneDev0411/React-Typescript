@@ -157,6 +157,7 @@ export const Board = memo(({ criteria }: Props) => {
           onClose={onCloseContact}
           onNext={onNextContact}
           onPrevious={onPreviousContact}
+          onOpen={onOpenContact}
         />
       )}
     </>

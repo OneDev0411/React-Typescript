@@ -8,12 +8,19 @@ import {
 
 interface Props extends ContactDetailsModalActionsProps {
   contactId: UUID
+  onOpen: (id: UUID) => void
 }
 
-export function ContactDetailsModal({ contactId, ...otherProps }: Props) {
+export function ContactDetailsModal({
+  contactId,
+  onOpen,
+  ...otherProps
+}: Props) {
   return (
     <InlineDialog open>
       <ContactDetails
+        isModal
+        onOpenContact={onOpen}
         id={contactId}
         RenderActions={<ContactDetailsModalActions {...otherProps} />}
       />
