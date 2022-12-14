@@ -1,10 +1,10 @@
-import React from 'react'
-
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
+import { shouldResizeTemplateAssets } from '@app/views/components/InstantMarketing/helpers/should-resize-template-assets'
 import { Uploader } from 'components/Uploader'
 import { uploadAsset } from 'models/instant-marketing/upload-asset'
+import { uploadResizedAsset } from 'models/instant-marketing/upload-resized-asset'
 
 import { AppTheme } from '../../../../../AppTheme'
 import store from '../../../../../stores'
@@ -35,6 +35,7 @@ export const load = async () => {
                 model={this.model}
                 target={target}
                 getTemplateId={() => getStorageData('templateId')}
+                getTemplateMedium={() => getStorageData('templateMedium')}
               />
             </AppTheme>
           </Provider>,
@@ -55,9 +56,18 @@ export const load = async () => {
                 uploadHandler={async files => {
                   try {
                     const { templateId } = await getStorageData('templateId')
+                    const { templateMedium } = await getStorageData(
+                      'templateMedium'
+                    )
 
+                    const shouldResize =
+                      shouldResizeTemplateAssets(templateMedium)
                     const uploadResponses = await Promise.all(
-                      files.map(file => uploadAsset(templateId, file))
+                      files.map(file =>
+                        shouldResize
+                          ? uploadResizedAsset(templateId, file, shouldResize)
+                          : uploadAsset(templateId, file, shouldResize)
+                      )
                     )
 
                     const uploadedAssets = uploadResponses.map(response => ({

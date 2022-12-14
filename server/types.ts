@@ -1,4 +1,5 @@
-import type { Request } from 'express'
+import { AxiosError } from 'axios'
+import type { Request, Response } from 'express'
 
 export type RequestWithSession = Request & {
   session: Session
@@ -11,3 +12,7 @@ export interface Session {
     expire_date: number
   } | null
 }
+
+export type RequestError = AxiosError<{
+  pipe: (res: Response<any, Record<string, any>>) => void
+}>
