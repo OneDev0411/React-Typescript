@@ -903,8 +903,7 @@ class ContactsList extends React.Component {
                       }
                     ]}
                     hasCSVButton
-                    hasRealtor
-                    hasZillow
+                    leadChannels={['Realtor', 'Zillow']}
                   />
                   <NewContactDrawer
                     isOpen={this.state.isOpenNewContactDrawer}

@@ -51,6 +51,7 @@ export default function CalendarPage() {
           <ViewAs />
         </div>
         <AddAccountButton
+          leadChannels={[]}
           createMenuItemProps={[
             {
               title: 'Add a Reminder',
@@ -67,8 +68,6 @@ export default function CalendarPage() {
               }
             }
           ]}
-          hasRealtor={false}
-          hasZillow={false}
         />
         {isOpenRemainder && (
           <EventDrawer

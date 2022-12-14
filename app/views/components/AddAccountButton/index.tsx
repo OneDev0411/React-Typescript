@@ -40,20 +40,18 @@ interface Props {
   createMenuItemProps?: CreateMenuItemProps[]
   onFetchedOAuthAccounts?: () => void
   hasCSVButton?: boolean
-  hasZillow?: boolean
-  hasRealtor?: boolean
   tooltip?: string
   className?: string
+  leadChannels: LeadChannelSourceType[]
 }
 
 export function AddAccountButton({
   createMenuItemProps,
   onFetchedOAuthAccounts,
   hasCSVButton = false,
-  hasZillow = false,
-  hasRealtor = false,
   tooltip = 'Connect to Google, Outlook, Zillow or Realtor',
-  className = ''
+  className = '',
+  leadChannels
 }: Props) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
@@ -131,18 +129,17 @@ export function AddAccountButton({
     >
       {({ toggleMenu }) => (
         <div className={classes.dropdown}>
-          {createMenuItemProps &&
-            createMenuItemProps.map(menuItemProps => (
-              <CreateMenuItem
-                key={menuItemProps.title}
-                title={menuItemProps.title}
-                iconPath={menuItemProps.iconPath}
-                onClick={() => {
-                  menuItemProps.onClick()
-                  toggleMenu()
-                }}
-              />
-            ))}
+          {createMenuItemProps?.map(menuItemProps => (
+            <CreateMenuItem
+              key={menuItemProps.title}
+              title={menuItemProps.title}
+              iconPath={menuItemProps.iconPath}
+              onClick={() => {
+                menuItemProps.onClick()
+                toggleMenu()
+              }}
+            />
+          ))}
           {hasCSVButton && (
             <AccountMenuItem
               onClick={() => {
@@ -189,7 +186,7 @@ export function AddAccountButton({
             }
             helperLink="https://help.rechat.com/guides/crm/connect-to-outlook-google"
           />
-          {hasZillow && (
+          {leadChannels.includes('Zillow') && (
             <Acl.Beta>
               <AccountMenuItem
                 onClick={() => {
@@ -210,7 +207,7 @@ export function AddAccountButton({
             </Acl.Beta>
           )}
 
-          {hasRealtor && (
+          {leadChannels.includes('Realtor') && (
             <Acl.Beta>
               <AccountMenuItem
                 onClick={() => {
