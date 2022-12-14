@@ -1,4 +1,4 @@
-import config from '../../../../config'
+import config from '../../../../../config'
 
 export const API_URL = 'https://bfsir.mymarketingmatters.com/PunchoutSetup.asp'
 export const DUNS = config.my_marketing_matters_duns
