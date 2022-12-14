@@ -88,6 +88,7 @@ interface Props {
   title: string
   tag?: string
   criteria: FilterCriteria
+  onOpenContact: (id: UUID) => void
   onReachStart?: () => void
   onReachEnd?: () => void
 }
@@ -96,7 +97,8 @@ export const BoardColumn = memo(function BoardColumn({
   id,
   title,
   criteria,
-  tag
+  tag,
+  onOpenContact
 }: Props) {
   const classes = useStyles()
   const viewAs = useViewAs()
@@ -248,6 +250,7 @@ export const BoardColumn = memo(function BoardColumn({
               isCombineEnabled={false}
               renderClone={(provided, snapshot, rubric) => (
                 <CardItem
+                  onOpenContact={onOpenContact}
                   provided={provided}
                   isDragging={snapshot.isDragging}
                   contact={list[rubric.source.index]}
@@ -271,7 +274,8 @@ export const BoardColumn = memo(function BoardColumn({
                       {
                         rows: list,
                         columnId: id,
-                        onChangeTags: handleChangeTags
+                        onChangeTags: handleChangeTags,
+                        onOpenContact
                       } as React.ComponentProps<
                         typeof DraggableCardItem
                       >['data']

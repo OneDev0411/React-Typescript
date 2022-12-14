@@ -6,13 +6,13 @@ import {
   Tooltip,
   makeStyles,
   Theme,
+  Link,
   useTheme
 } from '@material-ui/core'
 import { mdiCalendar } from '@mdi/js'
 import cn from 'classnames'
 import { DraggableProvided } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
-import { Link } from 'react-router'
 
 import { PopoverContactTagSelector } from '@app/components/Pages/Dashboard/Contacts/components/TagSelector'
 import { updateContactTags } from 'actions/contacts/update-contact-tags'
@@ -95,6 +95,7 @@ interface Props {
   contact: IContact
   isDragging: boolean
   style?: React.CSSProperties
+  onOpenContact: (id: UUID) => void
   onChangeTags?: (contact: IContact, tags: string[]) => void
 }
 
@@ -103,6 +104,7 @@ export function CardItem({
   contact,
   isDragging,
   style = {},
+  onOpenContact,
   onChangeTags
 }: Props) {
   const classes = useStyles()
@@ -147,10 +149,16 @@ export function CardItem({
             </Avatar>
 
             <Link
-              to={`/dashboard/contacts/${contact.id}`}
+              onClick={() => {
+                onOpenContact(contact.id)
+              }}
               className={classes.cardName}
             >
-              <MiniContact type="contact" data={contact}>
+              <MiniContact
+                onOpenProfile={onOpenContact}
+                type="contact"
+                data={contact}
+              >
                 <Typography variant="body2">
                   <TextMiddleTruncate
                     text={contact.display_name}
