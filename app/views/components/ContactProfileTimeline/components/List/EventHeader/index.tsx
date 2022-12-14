@@ -10,10 +10,10 @@ interface Props {
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: () => ({
-    fontWeight: 700,
     whiteSpace: 'nowrap',
     letterSpacing: '0.4px',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    fontWeight: 700
   })
 }))
 

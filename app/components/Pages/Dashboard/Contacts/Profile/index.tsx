@@ -102,7 +102,7 @@ const useStyles = makeStyles(
       width: '30%',
       minWidth: '350px',
       maxWidth: '450px',
-      padding: theme.spacing(3)
+      padding: theme.spacing(2)
     },
     warnContainer: {
       marginBottom: theme.spacing(2),
