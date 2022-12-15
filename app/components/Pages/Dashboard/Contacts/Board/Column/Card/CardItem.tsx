@@ -49,7 +49,8 @@ const useStyles = makeStyles(
       marginRight: theme.spacing(1)
     },
     cardName: {
-      color: theme.palette.common.black
+      color: theme.palette.common.black,
+      cursor: 'pointer'
     },
     grey: {
       color: theme.palette.grey['500']
@@ -148,16 +149,16 @@ export function CardItem({
               {getContactNameInitials(contact)}
             </Avatar>
 
-            <Link
-              onClick={() => {
-                onOpenContact(contact.id)
-              }}
-              className={classes.cardName}
+            <MiniContact
+              onOpenProfile={onOpenContact}
+              type="contact"
+              data={contact}
             >
-              <MiniContact
-                onOpenProfile={onOpenContact}
-                type="contact"
-                data={contact}
+              <Link
+                onClick={() => {
+                  onOpenContact(contact.id)
+                }}
+                className={classes.cardName}
               >
                 <Typography variant="body2">
                   <TextMiddleTruncate
@@ -165,8 +166,8 @@ export function CardItem({
                     maxLength={25}
                   />
                 </Typography>
-              </MiniContact>
-            </Link>
+              </Link>
+            </MiniContact>
           </div>
 
           <div className={classes.flexCenter}>
