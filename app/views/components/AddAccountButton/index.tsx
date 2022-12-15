@@ -109,6 +109,9 @@ export function AddAccountButton({
           show={isTooltipOpen}
           caption={tooltip}
           onClose={handleCloseTooltip}
+          // Due to a technical limitation
+          // https://gitlab.com/rechat/web/-/issues/6704#note_1208914220
+          popoverStyle={{ zIndex: theme.zIndex.modal - 1 }}
         >
           <SvgIcon className={classes.buttonIcon} path={mdiPlus} />
         </PopOver>
