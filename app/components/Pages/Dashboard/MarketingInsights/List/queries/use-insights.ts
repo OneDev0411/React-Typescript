@@ -12,7 +12,7 @@ const LIMIT = 50
 
 export function useInsights(
   status: EmailCampaignStatus,
-  sortBy = '-created_at',
+  sortBy = '-executed_at',
   limit = LIMIT
 ) {
   const activeBrandId = useActiveBrandId()
