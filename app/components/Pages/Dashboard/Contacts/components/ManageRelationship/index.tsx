@@ -29,7 +29,7 @@ const useStyles = makeStyles(
 export function ManageRelationship({
   value,
   onChange,
-  label = 'Manage Relationship'
+  label = 'Auto Remind'
 }: Props) {
   const classes = useStyles()
 
