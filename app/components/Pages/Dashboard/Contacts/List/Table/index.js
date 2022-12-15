@@ -97,6 +97,11 @@ const ContactsList = props => {
   const getRowProps = () => ({})
   const getColumnProps = () => ({})
 
+  const handleCloseContact = () => {
+    props.reloadContacts()
+    onCloseContact()
+  }
+
   return (
     <>
       <div ref={tableContainerRef}>
@@ -156,7 +161,7 @@ const ContactsList = props => {
         <ContactDetailsModal
           isNavigable={props.data && props.data.length > 1}
           contactId={currentContactId}
-          onClose={onCloseContact}
+          onClose={handleCloseContact}
           onNext={onNextContact}
           onPrevious={onPreviousContact}
           onOpen={onOpenContact}
