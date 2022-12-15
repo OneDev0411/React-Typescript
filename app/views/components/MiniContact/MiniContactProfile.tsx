@@ -61,7 +61,6 @@ function MiniContact(props: MiniContactPropsType) {
         as={props.as || 'div'}
         onMouseEnter={e => debouncedHandleHovered(e.currentTarget)}
         onMouseLeave={closeMiniContact}
-        onClick={e => e.stopPropagation()}
       >
         {props.children}
         {isHovered && (
