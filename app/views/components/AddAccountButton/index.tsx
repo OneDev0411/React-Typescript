@@ -37,11 +37,12 @@ import { useStyles } from './styles'
 const TOOLTIP_WIDTH = 150
 
 interface Props {
-  createMenuItemProps?: CreateMenuItemProps
+  createMenuItemProps?: CreateMenuItemProps[]
   onFetchedOAuthAccounts?: () => void
   hasCSVButton?: boolean
   tooltip?: string
   className?: string
+  leadChannels: LeadChannelSourceType[]
 }
 
 export function AddAccountButton({
@@ -49,7 +50,8 @@ export function AddAccountButton({
   onFetchedOAuthAccounts,
   hasCSVButton = false,
   tooltip = 'Connect to Google, Outlook, Zillow or Realtor',
-  className = ''
+  className = '',
+  leadChannels
 }: Props) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
@@ -127,16 +129,17 @@ export function AddAccountButton({
     >
       {({ toggleMenu }) => (
         <div className={classes.dropdown}>
-          {createMenuItemProps && (
+          {createMenuItemProps?.map(menuItemProps => (
             <CreateMenuItem
-              title={createMenuItemProps.title}
-              iconPath={createMenuItemProps.iconPath}
+              key={menuItemProps.title}
+              title={menuItemProps.title}
+              iconPath={menuItemProps.iconPath}
               onClick={() => {
-                createMenuItemProps.onClick()
+                menuItemProps.onClick()
                 toggleMenu()
               }}
             />
-          )}
+          ))}
           {hasCSVButton && (
             <AccountMenuItem
               onClick={() => {
@@ -183,42 +186,48 @@ export function AddAccountButton({
             }
             helperLink="https://help.rechat.com/guides/crm/connect-to-outlook-google"
           />
-          <Acl.Beta>
-            <AccountMenuItem
-              onClick={() => {
-                goTo('/dashboard/account/connected-accounts', null, {
-                  [ADD_LEAD_CHANNEL_QUERY_PARAM_KEY]: 'Zillow'
-                })
-                toggleMenu()
-              }}
-              title="Connect to Zillow"
-              icon={
-                <ZillowIcon
-                  size={iconSizes.medium}
-                  className={classes.listIcon}
-                />
-              }
-              helperLink="https://help.rechat.com/guides/crm/connect-to-zillow"
-            />
-          </Acl.Beta>
-          <Acl.Beta>
-            <AccountMenuItem
-              onClick={() => {
-                goTo('/dashboard/account/connected-accounts', null, {
-                  [ADD_LEAD_CHANNEL_QUERY_PARAM_KEY]: 'Realtor'
-                })
-                toggleMenu()
-              }}
-              title="Connect to Realtor"
-              icon={
-                <RealtorIcon
-                  size={iconSizes.medium}
-                  className={classes.listIcon}
-                />
-              }
-              helperLink="https://help.rechat.com/guides/crm/connect-to-realtor"
-            />
-          </Acl.Beta>
+          {leadChannels.includes('Zillow') && (
+            <Acl.Beta>
+              <AccountMenuItem
+                onClick={() => {
+                  goTo('/dashboard/account/connected-accounts', null, {
+                    [ADD_LEAD_CHANNEL_QUERY_PARAM_KEY]: 'Zillow'
+                  })
+                  toggleMenu()
+                }}
+                title="Connect to Zillow"
+                icon={
+                  <ZillowIcon
+                    size={iconSizes.medium}
+                    className={classes.listIcon}
+                  />
+                }
+                helperLink="https://help.rechat.com/guides/crm/connect-to-zillow"
+              />
+            </Acl.Beta>
+          )}
+
+          {leadChannels.includes('Realtor') && (
+            <Acl.Beta>
+              <AccountMenuItem
+                onClick={() => {
+                  goTo('/dashboard/account/connected-accounts', null, {
+                    [ADD_LEAD_CHANNEL_QUERY_PARAM_KEY]: 'Realtor'
+                  })
+                  toggleMenu()
+                }}
+                title="Connect to Realtor"
+                icon={
+                  <RealtorIcon
+                    size={iconSizes.medium}
+                    className={classes.listIcon}
+                  />
+                }
+                helperLink="https://help.rechat.com/guides/crm/connect-to-realtor"
+              />
+            </Acl.Beta>
+          )}
+
           <ConnectedAccounts
             accounts={accounts}
             onClickItems={() => {
