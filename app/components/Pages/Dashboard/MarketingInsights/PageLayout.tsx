@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Box, Button } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
-import { useEffectOnce } from 'react-use'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
@@ -14,48 +13,46 @@ import { usePageTabs } from './hooks/use-page-tabs'
 import { InsightsPageTabs } from './List/PageTabs'
 import { EmailCampaignStatus, SortableColumnsType } from './types'
 
-const SORT_FIELD_INSIGHT_KEY = 'insight_layout_sort_field'
-
 interface Props {
+  sortKey: string
+  sortOptions: SortableColumnsType[]
   disableSort?: boolean
   children: (renderProps: { sortField: SortableColumnsType }) => React.ReactNode
 }
 
 export default function InsightsPageLayout({
+  sortKey,
+  sortOptions,
   disableSort = false,
   children
 }: Props) {
   const dispatch = useDispatch()
   const activeTeam = useUnsafeActiveTeam()
 
-  const [sortField, setSortField] = useState<SortableColumnsType>({
-    label: 'Newest',
-    value: '-created_at',
-    ascending: false
-  })
+  const [sortField, setSortField] = useState<SortableColumnsType>(
+    sortOptions[0]
+  )
 
   const [, activeTab] = usePageTabs()
   const [status, setStatus] = useState<Nullable<EmailCampaignStatus>>(activeTab)
 
-  useEffectOnce(() => {
-    const savedSortField = getSettingFromTeam(
-      activeTeam,
-      SORT_FIELD_INSIGHT_KEY
-    )
+  useEffect(() => {
+    const savedSortField = getSettingFromTeam(activeTeam, sortKey)
 
     if (savedSortField) {
       setSortField(savedSortField)
     }
-  })
+  }, [sortKey, activeTeam])
 
   const handleChangeSort = (item: SortableColumnsType) => {
-    dispatch(setActiveTeamSetting(SORT_FIELD_INSIGHT_KEY, item))
+    dispatch(setActiveTeamSetting(sortKey, item))
     setSortField(item)
   }
 
   return (
     <Context.Provider
       value={{
+        sortOptions,
         sortBy: sortField,
         status: status || 'executed'
       }}
