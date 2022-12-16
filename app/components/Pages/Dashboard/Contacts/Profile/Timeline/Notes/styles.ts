@@ -52,7 +52,8 @@ export const useStyles = makeStyles(
     time: {
       display: 'flex',
       alignItems: 'center',
-      minWidth: '5rem',
+      minWidth: '8rem',
+      padding: theme.spacing(0, 1),
       color: theme.palette.grey[500],
       ...theme.typography.caption,
       lineHeight: 2

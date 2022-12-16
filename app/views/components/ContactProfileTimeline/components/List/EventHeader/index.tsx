@@ -14,7 +14,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     letterSpacing: '0.4px',
     textTransform: 'uppercase',
     fontWeight: 700,
-    fontSize: theme.typography.pxToRem(14)
+    fontSize: theme.typography.pxToRem(14),
+    color: '#000000'
   })
 }))
 
