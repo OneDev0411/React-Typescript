@@ -12,7 +12,7 @@ export const useStyles = makeStyles(
       }
     },
     header: {
-      color: theme.palette.grey['900'],
+      color: '#000000',
       fontSize: theme.typography.pxToRem(14),
       fontWeight: 700,
       textTransform: 'uppercase',
