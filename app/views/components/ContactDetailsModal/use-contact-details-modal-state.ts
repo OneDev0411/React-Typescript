@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { changeUrl } from '@app/utils/change-url'
 
@@ -8,6 +8,16 @@ export const useContactDetailsModalState = (
 ) => {
   const [currentContactId, setCurrentContactId] = useState<Nullable<UUID>>(null)
   const callbackUrl = useRef<string>(defaultCallbackUrl)
+
+  const currentPathname = window.location.pathname
+
+  // clicking the contacts on the sidebar should close the contact details modal
+  // https://gitlab.com/rechat/web/-/issues/6704#note_1207711787
+  useEffect(() => {
+    if (currentContactId && currentPathname === defaultCallbackUrl) {
+      setCurrentContactId(null)
+    }
+  }, [currentContactId, currentPathname, defaultCallbackUrl])
 
   const currentContactIndex = useMemo(() => {
     if (!currentContactId || !contacts) {
