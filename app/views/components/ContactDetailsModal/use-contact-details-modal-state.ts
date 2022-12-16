@@ -58,11 +58,18 @@ export const useContactDetailsModalState = (
     handleOpenContact(previousContactId)
   }
 
+  const nextButtonDisabled =
+    !contacts || contacts[contacts.length - 1] === currentContactId
+
+  const previousButtonDisabled = !contacts || contacts[0] === currentContactId
+
   return {
     currentContactId,
     onOpenContact,
     onCloseContact,
     onNextContact,
-    onPreviousContact
+    onPreviousContact,
+    nextButtonDisabled,
+    previousButtonDisabled
   }
 }

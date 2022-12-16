@@ -55,7 +55,9 @@ export const Board = memo(({ criteria }: Props) => {
     onOpenContact,
     onCloseContact,
     onNextContact,
-    onPreviousContact
+    onPreviousContact,
+    nextButtonDisabled,
+    previousButtonDisabled
   } = useContactDetailsModalState('/dashboard/contacts', contactsIdList)
 
   const [debouncedCriteria, setDebouncedCriteria] =
@@ -160,6 +162,8 @@ export const Board = memo(({ criteria }: Props) => {
           onNext={onNextContact}
           onPrevious={onPreviousContact}
           onOpen={onOpenContact}
+          nextButtonDisabled={nextButtonDisabled}
+          previousButtonDisabled={previousButtonDisabled}
         />
       )}
     </>

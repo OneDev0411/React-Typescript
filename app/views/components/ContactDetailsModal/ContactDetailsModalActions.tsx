@@ -27,13 +27,17 @@ export interface ContactDetailsModalActionsProps {
   onNext: () => void
   onPrevious: () => void
   isNavigable?: boolean
+  nextButtonDisabled?: boolean
+  previousButtonDisabled?: boolean
 }
 
 export function ContactDetailsModalActions({
   onPrevious,
   onNext,
   onClose,
-  isNavigable = false
+  isNavigable = false,
+  nextButtonDisabled = false,
+  previousButtonDisabled = false
 }: ContactDetailsModalActionsProps) {
   const classes = useStyles()
 
@@ -51,6 +55,7 @@ export function ContactDetailsModalActions({
                 className={classes.button}
                 variant="outlined"
                 onClick={onPrevious}
+                disabled={previousButtonDisabled}
               >
                 <SvgIcon path={mdiArrowLeft} />
               </Button>
@@ -60,6 +65,7 @@ export function ContactDetailsModalActions({
                 className={classes.button}
                 variant="outlined"
                 onClick={onNext}
+                disabled={nextButtonDisabled}
               >
                 <SvgIcon path={mdiArrowRight} />
               </Button>
