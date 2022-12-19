@@ -113,6 +113,8 @@ export default function AddRoleForm({
 
   const roleItems = getRoleItems()
 
+  console.log('hereee')
+
   return (
     <div className={classes.container}>
       {actionRenderer ? (

@@ -18,6 +18,8 @@ import SplitButton from 'components/SplitButton'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { useDictionary } from 'hooks/use-dictionary'
 
+import ChecklistRoles from './ChecklistRoles'
+
 type Props = {
   checklist?: IBrandChecklist
   setTerminable: (terminable: boolean) => void
@@ -91,121 +93,127 @@ export function ChecklistHeader({
   }
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="flex-end">
-      <FormControlLabel
-        control={
-          <Checkbox
-            color="primary"
-            disabled={isTerminableChanging(checklist.id)}
-            checked={checklist.is_terminatable}
-            onChange={async event => {
-              setTerminableChanging(checklist.id, true)
-              await setTerminable(event.target.checked)
-              setTerminableChanging(checklist.id, false)
-            }}
-          />
-        }
-        label="Terminable"
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            color="primary"
-            disabled={isDeactivatableChanging(checklist.id)}
-            checked={checklist.is_deactivatable}
-            onChange={async event => {
-              setDeactivatableChanging(checklist.id, true)
-              await setDeactivatable(event.target.checked)
-              setDeactivatableChanging(checklist.id, false)
-            }}
-          />
-        }
-        label="Deactivable"
-      />
-      <SplitButton
-        color="primary"
-        variant="contained"
-        size="small"
-        onClick={openFormPickerDrawer}
-        className={classes.splitButton}
-        RenderMenu={({ closeMenu }) => (
-          <List dense>
-            <ListItem
-              className={classes.splitMenuItem}
-              button
-              onClick={event => {
-                addGenericTask(checklist)
-                closeMenu(event)
+    <Box>
+      <Box display="flex" alignItems="center" justifyContent="flex-start">
+        <h1>testt cdc dcdv dfvdfv dfvdf</h1>
+        <ChecklistRoles />
+      </Box>
+      <Box display="flex" alignItems="center" justifyContent="flex-end">
+        <FormControlLabel
+          control={
+            <Checkbox
+              color="primary"
+              disabled={isTerminableChanging(checklist.id)}
+              checked={checklist.is_terminatable}
+              onChange={async event => {
+                setTerminableChanging(checklist.id, true)
+                await setTerminable(event.target.checked)
+                setTerminableChanging(checklist.id, false)
               }}
-            >
-              Add Generic Task
-            </ListItem>
-            <ListItem
-              className={classes.splitMenuItem}
-              button
-              onClick={event => {
-                addSplitterTask(checklist)
-                closeMenu(event)
-              }}
-            >
-              Add Splitter
-            </ListItem>
-            {Array.isArray(checklist.tasks) &&
-              checklist.tasks.every(
-                task => task.task_type !== 'GeneralComments'
-              ) && (
-                <ListItem
-                  className={classes.splitMenuItem}
-                  button
-                  onClick={event => {
-                    addGeneralCommentTask(checklist)
-                    closeMenu(event)
-                  }}
-                >
-                  Add General Comments
-                </ListItem>
-              )}
-          </List>
-        )}
-      >
-        Add Form
-      </SplitButton>
-      {formPickerOpen && (
-        <SearchDrawer
-          title="Select a form"
-          notFoundMessage="No form was found"
-          searchFunction={q => formSearchFuse.search(q)}
-          onSelectItems={async (items: Record<UUID, IDealForm>) => {
-            setFormPickerOpen(false)
-
-            // eslint-disable-next-line no-restricted-syntax
-            for (const form of Object.values(items)) {
-              // eslint-disable-next-line no-await-in-loop
-              await addFormTask(checklist, form)
-            }
-          }}
-          isOpen={formPickerOpen}
-          ItemRow={ItemRow}
-          searchInputOptions={{
-            placeholder: 'Type in to search'
-          }}
-          // we can enable multipleSelection but the experience is a
-          // little different and probably needs better components for
-          // rendering items
-          multipleSelection={false}
-          onChangeSelectedItems={onChangeSelectedItems}
-          selectedItems={selectedItems}
-          normalizeSelectedItem={i => i}
-          defaultLists={[
-            {
-              title: '',
-              items: forms || []
-            }
-          ]}
-          onClose={() => setFormPickerOpen(false)}
-          showLoadingIndicator={formsState === 'pending'}
+            />
+          }
+          label="Terminable"
         />
-      )}
+        <FormControlLabel
+          control={
+            <Checkbox
+              color="primary"
+              disabled={isDeactivatableChanging(checklist.id)}
+              checked={checklist.is_deactivatable}
+              onChange={async event => {
+                setDeactivatableChanging(checklist.id, true)
+                await setDeactivatable(event.target.checked)
+                setDeactivatableChanging(checklist.id, false)
+              }}
+            />
+          }
+          label="Deactivable"
+        />
+        <SplitButton
+          color="primary"
+          variant="contained"
+          size="small"
+          onClick={openFormPickerDrawer}
+          className={classes.splitButton}
+          RenderMenu={({ closeMenu }) => (
+            <List dense>
+              <ListItem
+                className={classes.splitMenuItem}
+                button
+                onClick={event => {
+                  addGenericTask(checklist)
+                  closeMenu(event)
+                }}
+              >
+                Add Generic Task
+              </ListItem>
+              <ListItem
+                className={classes.splitMenuItem}
+                button
+                onClick={event => {
+                  addSplitterTask(checklist)
+                  closeMenu(event)
+                }}
+              >
+                Add Splitter
+              </ListItem>
+              {Array.isArray(checklist.tasks) &&
+                checklist.tasks.every(
+                  task => task.task_type !== 'GeneralComments'
+                ) && (
+                  <ListItem
+                    className={classes.splitMenuItem}
+                    button
+                    onClick={event => {
+                      addGeneralCommentTask(checklist)
+                      closeMenu(event)
+                    }}
+                  >
+                    Add General Comments
+                  </ListItem>
+                )}
+            </List>
+          )}
+        >
+          Add Form
+        </SplitButton>
+        {formPickerOpen && (
+          <SearchDrawer
+            title="Select a form"
+            notFoundMessage="No form was found"
+            searchFunction={q => formSearchFuse.search(q)}
+            onSelectItems={async (items: Record<UUID, IDealForm>) => {
+              setFormPickerOpen(false)
+
+              // eslint-disable-next-line no-restricted-syntax
+              for (const form of Object.values(items)) {
+                // eslint-disable-next-line no-await-in-loop
+                await addFormTask(checklist, form)
+              }
+            }}
+            isOpen={formPickerOpen}
+            ItemRow={ItemRow}
+            searchInputOptions={{
+              placeholder: 'Type in to search'
+            }}
+            // we can enable multipleSelection but the experience is a
+            // little different and probably needs better components for
+            // rendering items
+            multipleSelection={false}
+            onChangeSelectedItems={onChangeSelectedItems}
+            selectedItems={selectedItems}
+            normalizeSelectedItem={i => i}
+            defaultLists={[
+              {
+                title: '',
+                items: forms || []
+              }
+            ]}
+            onClose={() => setFormPickerOpen(false)}
+            showLoadingIndicator={formsState === 'pending'}
+          />
+        )}
+      </Box>
     </Box>
   )
 }
