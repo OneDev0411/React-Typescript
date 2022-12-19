@@ -201,14 +201,14 @@ export const GridCalendarPresentation = ({
           ? fetchedEvents
           : fetchedEvents.concat(rowEvents)
 
-        updateEvents(nextEvents)
+        updateEvents(nextEvents, activeFilter)
       } catch (e) {
         console.log(e)
       } finally {
         setIsLoading(false)
       }
     },
-    [viewAsUsers, associations, rowEvents, updateEvents]
+    [viewAsUsers, associations, rowEvents, updateEvents, activeFilter]
   )
 
   const handleLoadEvents = async (range: Nullable<ICalendarRange> = null) => {
