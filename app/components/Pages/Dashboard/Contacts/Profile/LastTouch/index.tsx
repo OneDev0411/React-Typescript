@@ -10,12 +10,12 @@ interface Props {
 
 export const LastTouch = ({ contact, onUpdateTouchFreq }: Props) => {
   return (
-    <BasicSection title="Last Touch">
+    <BasicSection title="Relationship">
       {contact.last_touch && <LastTouchField value={contact?.last_touch} />}
 
       <TouchFrequency
         onUpdateTouchFreq={onUpdateTouchFreq}
-        value={contact?.touch_freq}
+        value={contact?.touch_freq || null}
       />
     </BasicSection>
   )

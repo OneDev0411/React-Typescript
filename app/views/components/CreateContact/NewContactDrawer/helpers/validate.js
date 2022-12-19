@@ -20,9 +20,9 @@ export function submitValidate(values) {
     values.touch_freq !== '' &&
     (Number.isNaN(Number(values.touch_freq)) ||
       Number(values.touch_freq) > DaysOfYear ||
-      Number(values.touch_freq) < 1)
+      Number(values.touch_freq) < 0)
   ) {
-    return 'Manage Relationship should have a valid duration between 1 and 365 days'
+    return 'Manage Relationship should have a valid duration between 0 and 365 days'
   }
 
   return ''
