@@ -60,8 +60,7 @@ export default function Tabs(props: Props) {
           defaultValue={tab?.id}
           onChange={props.onChangeTab}
           containerStyle={{
-            marginBottom: 0,
-            zIndex: 0
+            marginBottom: 0
           }}
           tabs={tabs.map(({ id, label }) => (
             <TabLink
