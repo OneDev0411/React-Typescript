@@ -34,7 +34,7 @@ describe('ManageRelationship', () => {
           expect(screen.getByText(option)).toBeInTheDocument()
         })
 
-        expect(screen.getByText('Custom...')).toBeInTheDocument()
+        expect(screen.getByText('Custom')).toBeInTheDocument()
       })
     })
     it('should change the touch frequency when user clicks on Every week item', async () => {
@@ -71,7 +71,7 @@ describe('ManageRelationship', () => {
         expect(screen.queryByRole('menu')).toBeInTheDocument()
       })
 
-      fireEvent.click(screen.getByText('Custom...'))
+      fireEvent.click(screen.getByText('Custom'))
 
       await waitFor(() => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()
@@ -106,7 +106,7 @@ describe('ManageRelationship', () => {
         expect(screen.queryByRole('menu')).toBeInTheDocument()
       })
 
-      fireEvent.click(screen.getByText('Custom...'))
+      fireEvent.click(screen.getByText('Custom'))
 
       await waitFor(() => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()
@@ -137,7 +137,7 @@ describe('ManageRelationship', () => {
         expect(screen.queryByRole('menu')).toBeInTheDocument()
       })
 
-      fireEvent.click(screen.getByText('Custom...'))
+      fireEvent.click(screen.getByText('Custom'))
 
       await waitFor(() => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()

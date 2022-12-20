@@ -73,7 +73,7 @@ export function ManageRelationshipMenu({
             </MenuItem>
           ))}
           <Divider />
-          <MenuItem onClick={openCustomItem}>Custom...</MenuItem>
+          <MenuItem onClick={openCustomItem}>Custom</MenuItem>
           <MenuItem
             onClick={() => {
               onChangeTouchFreq(0)

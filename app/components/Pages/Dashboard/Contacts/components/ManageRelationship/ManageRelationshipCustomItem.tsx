@@ -87,7 +87,7 @@ export function ManageRelationshipCustomItem({
       notify({
         status: 'error',
         message:
-          'Manage Relationship should have a valid duration between 0 and 365 days'
+          'Auto Remind should have a valid duration between 0 and 365 days'
       })
 
       return

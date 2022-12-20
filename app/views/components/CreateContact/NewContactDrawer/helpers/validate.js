@@ -22,7 +22,7 @@ export function submitValidate(values) {
       Number(values.touch_freq) > DaysOfYear ||
       Number(values.touch_freq) < 0)
   ) {
-    return 'Manage Relationship should have a valid duration between 0 and 365 days'
+    return 'Auto Remind should have a valid duration between 0 and 365 days'
   }
 
   return ''
