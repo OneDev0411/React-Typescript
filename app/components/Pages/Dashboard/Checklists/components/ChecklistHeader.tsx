@@ -18,7 +18,7 @@ import SplitButton from 'components/SplitButton'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { useDictionary } from 'hooks/use-dictionary'
 
-import ChecklistRoles from './ChecklistRoles'
+// import ChecklistRoles from './ChecklistRoles'
 
 type Props = {
   checklist?: IBrandChecklist
@@ -95,8 +95,7 @@ export function ChecklistHeader({
   return (
     <Box>
       <Box display="flex" alignItems="center" justifyContent="flex-start">
-        <h1>testt cdc dcdv dfvdfv dfvdf</h1>
-        <ChecklistRoles />
+        {/* <ChecklistRoles checklists={} brand={}/> */}
       </Box>
       <Box display="flex" alignItems="center" justifyContent="flex-end">
         <FormControlLabel

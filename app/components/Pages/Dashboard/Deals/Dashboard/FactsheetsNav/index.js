@@ -17,8 +17,6 @@ import { Card } from './styled'
 function FactsheetsSideNav(props) {
   const { deal, isBackOffice } = props
 
-  console.log('deal', deal)
-
   return (
     <Card style={props.style}>
       {props.isFetchingContexts ? (

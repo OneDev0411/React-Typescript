@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
 import { confirmation } from 'actions/confirmation'
-import { createRoles, deleteRole } from 'actions/deals' // createChecklistsRoles
+import { createChecklistsRoles, deleteChecklistsRole } from 'actions/deals' // createChecklistsRoles
 import { Avatar } from 'components/Avatar'
 import DealRole from 'components/DealRole'
 import DeleteRole from 'components/DealRole/components/DeleteRole'
@@ -35,7 +35,9 @@ import { getAvatarTitle } from '../../../Deals/utils/get-avatar-title'
 import { getLegalFullName, isPrimaryAgent } from '../../../Deals/utils/roles'
 
 const propTypes = {
-  deal: PropTypes.object.isRequired,
+  brand: PropTypes.object,
+  checklists: PropTypes.object,
+  deal: PropTypes.object,
   disableAddRole: PropTypes.bool,
   disableList: PropTypes.bool,
   allowDeleteRole: PropTypes.bool,
@@ -150,8 +152,16 @@ class Roles extends React.Component {
     this.toggleReplaceAgentDrawer()
 
     try {
-      await this.props.deleteRole(this.props.deal.id, this.state.user.id)
-      await this.props.createRoles(this.props.deal.id, [role])
+      await this.props.deleteChecklistsRole(
+        this.props.brand.id,
+        this.props.checklists.id,
+        this.state.user.id
+      )
+      await this.props.createChecklistsRoles(
+        this.props.brand.id,
+        this.props.checklists.id,
+        [role]
+      )
 
       this.props.notify({
         message: 'Primary Agent replaced',
@@ -318,7 +328,11 @@ class Roles extends React.Component {
             showBrokerageFields={false}
             allowedRoles={[]}
             onBeforeUpsert={async () =>
-              this.props.deleteRole(this.props.deal.id, this.state.user.id)
+              this.props.deleteChecklistsRole(
+                this.props.brand.id,
+                this.props.checklists.id,
+                this.state.user.id
+              )
             }
             onUpsertRole={this.props.onUpsertRole}
             onClose={this.closeRoleForm}
@@ -341,7 +355,7 @@ function mapStateToProps({ user, deals }, props) {
 
 export default connect(mapStateToProps, {
   notify,
-  createRoles,
-  deleteRole,
+  createChecklistsRoles,
+  deleteChecklistsRole,
   confirmation
 })(Roles)

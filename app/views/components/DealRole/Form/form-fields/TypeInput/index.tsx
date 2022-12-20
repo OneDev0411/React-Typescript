@@ -26,7 +26,7 @@ export function TypeInput(props: Props) {
           aria-label="disabled tabs example"
         >
           <Tab label="Person" value={TYPE_PERSON} />
-          <Tab label="Company / Trustt" value={TYPE_COMPANY} />
+          <Tab label="Company / Trust" value={TYPE_COMPANY} />
         </Tabs>
       )}
     />
