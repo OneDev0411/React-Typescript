@@ -196,7 +196,7 @@ export function RoleForm(props) {
           <Grid item md={compact ? 12 : true} xs={12}>
             <Field
               name="phone_number"
-              label="Phonee"
+              label="Phone"
               isVisible={isVisible('phone_number')}
               isRequired={isRequired('phone_number')}
               component={AutoCompleteInput}
@@ -211,7 +211,7 @@ export function RoleForm(props) {
           <Grid item md={compact ? 12 : true} xs={12}>
             <Field
               name="company_title"
-              label="Company / Trust1"
+              label="Company / Trust"
               searchFieldValue="company"
               searchFieldLabel="company"
               isVisible={isVisible('company_title')}
