@@ -57,12 +57,12 @@ export function DealSide(props: Props) {
       },
       {
         value: 'AgentDoubleEnder',
-        label: `${dealType} (Agent Double Ender)`,
+        label: `${dealType} (Agent Dual Agency)`,
         isAvailable: dealType === 'Selling'
       },
       {
         value: 'OfficeDoubleEnder',
-        label: `${dealType} (Office Double Ender)`,
+        label: `${dealType} (Office Dual Agency)`,
         isAvailable: true
       }
     ].filter(option => option.isAvailable)

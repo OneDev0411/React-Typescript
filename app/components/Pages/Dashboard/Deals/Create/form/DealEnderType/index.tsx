@@ -45,7 +45,7 @@ export function DealEnderType({ onChange }: Props) {
               value: null
             },
             {
-              label: 'Yes (this is an office double-ender deal)',
+              label: 'Yes (this is an office dual agency deal)',
               value: 'OfficeDoubleEnder'
             }
           ]}
