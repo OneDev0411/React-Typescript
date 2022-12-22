@@ -68,11 +68,7 @@ const ContactsList = props => {
     onPreviousContact,
     nextButtonDisabled,
     previousButtonDisabled
-  } = useContactDetailsModalState(
-    '/dashboard/contacts',
-    contactsIdList,
-    props.reloadContacts
-  )
+  } = useContactDetailsModalState('/dashboard/contacts', contactsIdList)
 
   const columns = useColumns({
     onOpenContact,
@@ -170,6 +166,8 @@ const ContactsList = props => {
           onNext={onNextContact}
           onPrevious={onPreviousContact}
           onOpen={onOpenContact}
+          onUpdateContact={props.onUpdateContact}
+          onDeleteContact={props.onDeleteContact}
           nextButtonDisabled={nextButtonDisabled}
           previousButtonDisabled={previousButtonDisabled}
         />

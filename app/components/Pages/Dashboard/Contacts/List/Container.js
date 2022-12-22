@@ -9,7 +9,13 @@ import _ from 'underscore'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import AddAccountButton from '@app/views/components/AddAccountButton'
 import { confirmation } from 'actions/confirmation'
-import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
+import {
+  deleteContacts,
+  getContacts,
+  searchContacts,
+  patchContact,
+  removeContactFromList
+} from 'actions/contacts'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
 import { updateFilterSegment } from 'actions/filter-segments'
@@ -995,6 +1001,8 @@ class ContactsList extends React.Component {
                     onRequestDelete={this.handleOnDelete}
                     tableContainerId={this.tableContainerId}
                     reloadContacts={this.reloadContacts}
+                    onUpdateContact={this.props.patchContact}
+                    onDeleteContact={this.props.removeContactFromList}
                     handleChangeContactsAttributes={() =>
                       this.handleFilterChange({}, true)
                     }
@@ -1073,6 +1081,8 @@ export default withRouter(
     getContacts,
     searchContacts,
     deleteContacts,
+    patchContact,
+    removeContactFromList,
     confirmation,
     setContactsListTextFilter,
     getContactsTags,
