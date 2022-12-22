@@ -1,12 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { changeUrl } from '@app/utils/change-url'
-import { noop } from '@app/utils/helpers'
 
 export const useContactDetailsModalState = (
   defaultCallbackUrl = '',
-  contacts?: UUID[],
-  onCloseCallback: () => void = noop
+  contacts?: UUID[]
 ) => {
   const [currentContactId, setCurrentContactId] = useState<Nullable<UUID>>(null)
   const callbackUrl = useRef<string>(defaultCallbackUrl)
@@ -18,9 +16,8 @@ export const useContactDetailsModalState = (
   useEffect(() => {
     if (currentContactId && currentPathname === defaultCallbackUrl) {
       setCurrentContactId(null)
-      onCloseCallback()
     }
-  }, [currentContactId, currentPathname, defaultCallbackUrl, onCloseCallback])
+  }, [currentContactId, currentPathname, defaultCallbackUrl])
 
   const currentContactIndex = useMemo(() => {
     if (!currentContactId || !contacts) {
@@ -43,7 +40,6 @@ export const useContactDetailsModalState = (
   const onCloseContact = () => {
     changeUrl(callbackUrl.current ?? defaultCallbackUrl)
     setCurrentContactId(null)
-    onCloseCallback()
   }
 
   const onNextContact = () => {
