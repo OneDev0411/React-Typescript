@@ -40,7 +40,7 @@ const useStyles = makeStyles(
     displayName: {
       wordBreak: 'break-all',
       height: 'max-content',
-      fontSize: theme.typography.pxToRem(24)
+      fontSize: theme.typography.h5.fontSize
     },
     socialContainer: {
       width: 'min-content',

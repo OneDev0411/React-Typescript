@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react'
 import { Box, Typography, Tooltip, IconButton, Theme } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 import { mdiPencilOutline } from '@mdi/js'
+import { isToday, isTomorrow } from 'date-fns'
 import fecha from 'fecha'
 import produce from 'immer'
 import groupBy from 'lodash/groupBy'
@@ -81,28 +82,6 @@ export function Notes(props: Props) {
   const noteGroups = groupBy(notes, note =>
     fecha.format(new Date(note.created_at * 1000), 'YYYY-MM-DD')
   )
-
-  const isToday = currentDate => {
-    const today = new Date()
-
-    return (
-      currentDate.getDate() == today.getDate() &&
-      currentDate.getMonth() == today.getMonth() &&
-      currentDate.getFullYear() == today.getFullYear()
-    )
-  }
-  const isTomorrow = currentDate => {
-    const today = new Date()
-    const tomorrow = new Date(today)
-
-    tomorrow.setDate(tomorrow.getDate() + 1)
-
-    return (
-      currentDate.getDate() == tomorrow.getDate() &&
-      currentDate.getMonth() == tomorrow.getMonth() &&
-      currentDate.getFullYear() == tomorrow.getFullYear()
-    )
-  }
 
   return (
     <>
