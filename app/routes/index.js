@@ -561,11 +561,21 @@ const AsyncInbox = withAcl.crm(
 //  Insights
 /* ==================================== */
 
-const AsyncMarketingInsightsList = withAcl(
+const AsyncMarketingInsightExecutedList = withAcl(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/MarketingInsights/List' /* webpackChunkName: "marketing_insights_list" */
+        '../components/Pages/Dashboard/MarketingInsights/List/ExecutedList' /* webpackChunkName: "marketing_insight_executed_list" */
+      )
+  }),
+  { oneOf: [ACL.MARKETING, ACL.CRM] }
+)
+
+const AsyncMarketingInsightScheduledList = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/MarketingInsights/List/ScheduledList' /* webpackChunkName: "marketing_insight_scheduled_list" */
       )
   }),
   { oneOf: [ACL.MARKETING, ACL.CRM] }
@@ -1051,8 +1061,11 @@ export default (
         />
 
         <Route path="insights">
-          <IndexRoute component={AsyncMarketingInsightsList} />
-          <Route path="scheduled" component={AsyncMarketingInsightsList} />
+          <IndexRoute component={AsyncMarketingInsightExecutedList} />
+          <Route
+            path="scheduled"
+            component={AsyncMarketingInsightScheduledList}
+          />
           <Route
             path="super-campaign/:id/detail"
             component={AsyncSuperCampaignDetail}
