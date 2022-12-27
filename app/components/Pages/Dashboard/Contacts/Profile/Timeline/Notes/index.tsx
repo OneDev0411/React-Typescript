@@ -83,12 +83,14 @@ export function Notes(props: Props) {
     fecha.format(new Date(note.created_at * 1000), 'YYYY-MM-DD')
   )
 
-  const renderHeader = date => {
+  const toHumanReadableDate = date => {
     let header
     let notesDate = new Date(date)
 
     if (isToday(notesDate) || isTomorrow(notesDate)) {
-      header = fecha.format(new Date(`${date}T00:00:00`), 'MMM D, YY')
+      header = `${
+        isToday(notesDate) ? 'Today - ' : 'Tomorrow - '
+      } ${fecha.format(new Date(`${date}T00:00:00`), 'MMM D, YY')}`
     } else {
       header = fecha.format(new Date(`${date}T00:00:00`), 'ddd - MMM D, YY')
     }
@@ -104,15 +106,10 @@ export function Notes(props: Props) {
         not time so the Date class will parse the value in UTC (GMT) at midnight
         which cause 1 day off, so we need to add time like this
         */
-        const notesDate = new Date(date)
 
         return (
           <Box display="flex" className={classes.section} key={date}>
-            <div className={classes.header}>{`${
-              isToday(notesDate) ? 'Today - ' : ''
-            } ${isTomorrow(notesDate) ? 'Tomorrow - ' : ''} ${renderHeader(
-              date
-            )}`}</div>
+            <div className={classes.header}>{toHumanReadableDate(date)}</div>
             <Box flexGrow={1} className={classes.container}>
               {group.map((note, index) => (
                 <Box
