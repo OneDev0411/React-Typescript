@@ -257,7 +257,6 @@ const ContactProfile = ({
   ) => {
     setContact({ ...contact, ...newContact })
     onUpdateContact({ ...contact, ...newContact })
-    console.log('on update contact', { ...contact, ...newContact })
 
     if (fallback) {
       fallback()
