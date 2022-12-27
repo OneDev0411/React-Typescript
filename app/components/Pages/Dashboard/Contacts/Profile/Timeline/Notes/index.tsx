@@ -84,18 +84,16 @@ export function Notes(props: Props) {
   )
 
   const toHumanReadableDate = date => {
-    let header
-    let notesDate = new Date(date)
+    const notesDate = new Date(`${date}T00:00:00`)
 
     if (isToday(notesDate) || isTomorrow(notesDate)) {
-      header = `${
-        isToday(notesDate) ? 'Today - ' : 'Tomorrow - '
-      } ${fecha.format(new Date(`${date}T00:00:00`), 'MMM D, YY')}`
-    } else {
-      header = fecha.format(new Date(`${date}T00:00:00`), 'ddd - MMM D, YY')
+      return `${isToday(notesDate) ? 'Today - ' : 'Tomorrow - '} ${fecha.format(
+        notesDate,
+        'MMM D, YY'
+      )}`
     }
 
-    return header
+    return fecha.format(notesDate, 'ddd - MMM D, YY')
   }
 
   return (
