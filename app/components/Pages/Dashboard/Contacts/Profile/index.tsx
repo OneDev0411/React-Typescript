@@ -198,7 +198,6 @@ const ContactProfile = ({
         setIsLoading(false)
 
         if (!showFullScreenLoading) {
-          console.log('from fetchContact')
           onUpdateContact(normalizedContact)
         }
 
@@ -218,21 +217,15 @@ const ContactProfile = ({
         props.params?.id || props.id,
         updateContactQuery
       )
+
       const normalizedContact = normalizeContact(response.data)
 
-      if (contact) {
-        setContact({
-          ...normalizedContact,
-          deals: contact.deals,
-          flows: contact.flows
-        })
-      } else {
-        setContact(normalizedContact)
-      }
+      setContact(normalizedContact)
+      onUpdateContact(normalizedContact)
     } catch (error) {
       console.error(error)
     }
-  }, [contact, props.id, props.params?.id])
+  }, [onUpdateContact, props.id, props.params?.id])
 
   const handleDelete = async () => {
     try {

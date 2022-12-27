@@ -5,7 +5,9 @@ export const associations = [
   'contact_attribute.attribute_def',
   'contact.assignees',
   'contact_role.user',
-  'contact_role.brand'
+  'contact_role.brand',
+  'contact.flows',
+  'contact.deals'
 ]
 
 export const defaultQuery = { associations }
