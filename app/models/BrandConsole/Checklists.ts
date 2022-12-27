@@ -87,7 +87,7 @@ export async function sortTasks(
 ) {
   try {
     return await new Fetch()
-      .put(`/brands/${brand}/checklists/${checklist}/sort`)
+      .put(`/brands/${brand}/checklists/${checklist}/tasks/sort`)
       .send(list)
   } catch (error) {
     return { error }
