@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 import {
   Box,
@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core'
 import { FORM_ERROR } from 'final-form'
 import { useDispatch } from 'react-redux'
-import { browserHistory } from 'react-router'
 
+import { useNavigate } from '@app/hooks/use-navigate'
 import { updateUser } from 'actions/user'
 import { upgradeAgent } from 'models/user/upgrade-to-agent'
 
@@ -48,6 +48,8 @@ interface Props {
 export function SecretQuestionModal({ isOpen, onHide, agents, mlsId }: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const pathname = '/dashboard/account'
   const backdropTimeout = useRef<Nullable<ReturnType<typeof setTimeout>>>(null)
   const [selectedAgent, setSelectedAgent] = useState<IAgent | null>(null)
 
@@ -88,7 +90,7 @@ export function SecretQuestionModal({ isOpen, onHide, agents, mlsId }: Props) {
 
       dispatch(updateUser(user))
       hide()
-      browserHistory.push('/dashboard/account')
+      navigate(pathname)
     } catch (error) {
       return {
         [FORM_ERROR]:

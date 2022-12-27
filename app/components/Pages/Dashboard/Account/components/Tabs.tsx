@@ -1,5 +1,3 @@
-import React from 'react'
-
 import Acl from 'components/Acl'
 import SideNavItem from 'components/PageSideNav/SideNavItem'
 import { ACL } from 'constants/acl'
