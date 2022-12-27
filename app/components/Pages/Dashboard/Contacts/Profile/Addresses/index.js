@@ -115,12 +115,14 @@ class Addresses extends React.Component {
     try {
       await deleteAttributesFromContacts(ids)
 
+      const addNewAddress = this.props.contact.address?.filter(
+        (_, index) => index !== listIndex
+      )
+
       this.props.submitCallback(
         {
           ...this.props.contact,
-          address: this.props.contact.address.filter(
-            (_, index) => index !== listIndex
-          )
+          address: addNewAddress.length ? addNewAddress : null
         },
         this.addressAttributeDefs
       )
