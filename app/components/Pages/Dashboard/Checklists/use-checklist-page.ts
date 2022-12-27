@@ -8,7 +8,8 @@ import {
   removeBrandChecklistTask,
   updateBrandChecklist,
   updateBrandChecklistTask,
-  sortTasks
+  sortTasks,
+  addBrandChecklistRole
 } from 'models/BrandConsole/Checklists'
 import { getBrandForms } from 'models/BrandConsole/Forms'
 
@@ -76,6 +77,31 @@ export function useChecklistsPage(rootBrandId: string | null) {
       )
     }
   }
+
+  const addRole = async (checklist: IBrandChecklist, role: IDealRole) => {
+    if (rootBrandId) {
+      applyChecklistUpdate(
+        checklist.id,
+        await addBrandChecklistRole(rootBrandId, checklist.id, {
+          ...role,
+          order:
+            Array.isArray(checklist.roles) && checklist.roles.length > 0
+              ? Math.max(...checklist.roles.map(task => task.order)) + 1
+              : 1
+        })
+      )
+    }
+  }
+
+  const updateRole = async (
+    checklist: IBrandChecklist,
+    role: IBrandChecklistRole
+  ) => {
+    if (rootBrandId) {
+      // TODO
+    }
+  }
+
   const updateChecklist = async (checklist: IBrandChecklist) => {
     applyChecklistUpdate(checklist.id, await updateBrandChecklist(checklist))
   }
@@ -114,13 +140,19 @@ export function useChecklistsPage(rootBrandId: string | null) {
     }
   }
 
-  const deleteTask = async (checklistId, taskId: UUID) => {
+  const deleteTask = async (checklistId: UUID, taskId: UUID) => {
     if (rootBrandId) {
       await removeBrandChecklistTask(rootBrandId, checklistId, taskId)
       applyChecklistUpdate(checklistId, checklist => ({
         ...checklist,
         tasks: (checklist.tasks || []).filter(task => task.id !== taskId)
       }))
+    }
+  }
+
+  const deleteRole = async (checklistId: UUID, roleId: UUID) => {
+    if (rootBrandId) {
+      // TODO
     }
   }
 
@@ -149,15 +181,25 @@ export function useChecklistsPage(rootBrandId: string | null) {
     }
   }
 
+  const reorderRoles = (checklistId: UUID, roles: IBrandChecklistRole[]) => {
+    if (rootBrandId) {
+      // TODO
+    }
+  }
+
   return {
     checklists,
     loading,
     error,
     addTask,
+    addRole,
     updateChecklist,
     updateTask,
+    updateRole,
     deleteTask,
+    deleteRole,
     reorderTasks,
+    reorderRoles,
     addChecklists,
     addGenericTask,
     addGeneralCommentTask,
