@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     textTransform: 'uppercase',
     fontWeight: theme.typography.fontWeightBold,
     fontSize: theme.typography.fontSize,
-    color: '#000000'
+    color: theme.palette.common.black
   })
 }))
 

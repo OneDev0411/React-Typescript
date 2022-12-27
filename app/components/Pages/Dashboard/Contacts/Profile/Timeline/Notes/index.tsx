@@ -83,6 +83,19 @@ export function Notes(props: Props) {
     fecha.format(new Date(note.created_at * 1000), 'YYYY-MM-DD')
   )
 
+  const renderHeader = date => {
+    let header
+    let notesDate = new Date(date)
+
+    if (isToday(notesDate) || isTomorrow(notesDate)) {
+      header = fecha.format(new Date(`${date}T00:00:00`), 'MMM D, YY')
+    } else {
+      header = fecha.format(new Date(`${date}T00:00:00`), 'ddd - MMM D, YY')
+    }
+
+    return header
+  }
+
   return (
     <>
       {map(noteGroups, (group, date) => {
@@ -92,19 +105,14 @@ export function Notes(props: Props) {
         which cause 1 day off, so we need to add time like this
         */
         const notesDate = new Date(date)
-        let header
-
-        if (isToday(notesDate) || isTomorrow(notesDate)) {
-          header = fecha.format(new Date(`${date}T00:00:00`), 'MMM D, YY')
-        } else {
-          header = fecha.format(new Date(`${date}T00:00:00`), 'ddd - MMM D, YY')
-        }
 
         return (
           <Box display="flex" className={classes.section} key={date}>
             <div className={classes.header}>{`${
               isToday(notesDate) ? 'Today - ' : ''
-            } ${isTomorrow(notesDate) ? 'Tomorrow - ' : ''} ${header}`}</div>
+            } ${isTomorrow(notesDate) ? 'Tomorrow - ' : ''} ${renderHeader(
+              date
+            )}`}</div>
             <Box flexGrow={1} className={classes.container}>
               {group.map((note, index) => (
                 <Box
