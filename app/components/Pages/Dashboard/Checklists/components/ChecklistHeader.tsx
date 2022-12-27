@@ -8,7 +8,8 @@ import {
   ListItem,
   List,
   makeStyles,
-  Theme
+  Theme,
+  Typography
 } from '@material-ui/core'
 import Fuse from 'fuse.js'
 import usePromise from 'react-use-promise'
@@ -91,85 +92,89 @@ export function ChecklistHeader({
   }
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="flex-end">
-      <FormControlLabel
-        control={
-          <Checkbox
-            color="primary"
-            disabled={isTerminableChanging(checklist.id)}
-            checked={checklist.is_terminatable}
-            onChange={async event => {
-              setTerminableChanging(checklist.id, true)
-              await setTerminable(event.target.checked)
-              setTerminableChanging(checklist.id, false)
-            }}
-          />
-        }
-        label="Terminable"
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            color="primary"
-            disabled={isDeactivatableChanging(checklist.id)}
-            checked={checklist.is_deactivatable}
-            onChange={async event => {
-              setDeactivatableChanging(checklist.id, true)
-              await setDeactivatable(event.target.checked)
-              setDeactivatableChanging(checklist.id, false)
-            }}
-          />
-        }
-        label="Deactivable"
-      />
-      <SplitButton
-        color="primary"
-        variant="contained"
-        size="small"
-        onClick={openFormPickerDrawer}
-        className={classes.splitButton}
-        RenderMenu={({ closeMenu }) => (
-          <List dense>
-            <ListItem
-              className={classes.splitMenuItem}
-              button
-              onClick={event => {
-                addGenericTask(checklist)
-                closeMenu(event)
+    <Box display="flex" alignItems="center" justifyContent="space-between">
+      <Typography variant="h6">Forms</Typography>
+
+      <Box>
+        <FormControlLabel
+          control={
+            <Checkbox
+              color="primary"
+              disabled={isTerminableChanging(checklist.id)}
+              checked={checklist.is_terminatable}
+              onChange={async event => {
+                setTerminableChanging(checklist.id, true)
+                await setTerminable(event.target.checked)
+                setTerminableChanging(checklist.id, false)
               }}
-            >
-              Add Generic Task
-            </ListItem>
-            <ListItem
-              className={classes.splitMenuItem}
-              button
-              onClick={event => {
-                addSplitterTask(checklist)
-                closeMenu(event)
+            />
+          }
+          label="Terminable"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              color="primary"
+              disabled={isDeactivatableChanging(checklist.id)}
+              checked={checklist.is_deactivatable}
+              onChange={async event => {
+                setDeactivatableChanging(checklist.id, true)
+                await setDeactivatable(event.target.checked)
+                setDeactivatableChanging(checklist.id, false)
               }}
-            >
-              Add Splitter
-            </ListItem>
-            {Array.isArray(checklist.tasks) &&
-              checklist.tasks.every(
-                task => task.task_type !== 'GeneralComments'
-              ) && (
-                <ListItem
-                  className={classes.splitMenuItem}
-                  button
-                  onClick={event => {
-                    addGeneralCommentTask(checklist)
-                    closeMenu(event)
-                  }}
-                >
-                  Add General Comments
-                </ListItem>
-              )}
-          </List>
-        )}
-      >
-        Add Form
-      </SplitButton>
+            />
+          }
+          label="Deactivable"
+        />
+        <SplitButton
+          color="primary"
+          variant="contained"
+          size="small"
+          onClick={openFormPickerDrawer}
+          className={classes.splitButton}
+          RenderMenu={({ closeMenu }) => (
+            <List dense>
+              <ListItem
+                className={classes.splitMenuItem}
+                button
+                onClick={event => {
+                  addGenericTask(checklist)
+                  closeMenu(event)
+                }}
+              >
+                Add Generic Task
+              </ListItem>
+              <ListItem
+                className={classes.splitMenuItem}
+                button
+                onClick={event => {
+                  addSplitterTask(checklist)
+                  closeMenu(event)
+                }}
+              >
+                Add Splitter
+              </ListItem>
+              {Array.isArray(checklist.tasks) &&
+                checklist.tasks.every(
+                  task => task.task_type !== 'GeneralComments'
+                ) && (
+                  <ListItem
+                    className={classes.splitMenuItem}
+                    button
+                    onClick={event => {
+                      addGeneralCommentTask(checklist)
+                      closeMenu(event)
+                    }}
+                  >
+                    Add General Comments
+                  </ListItem>
+                )}
+            </List>
+          )}
+        >
+          Add Form
+        </SplitButton>
+      </Box>
       {formPickerOpen && (
         <SearchDrawer
           title="Select a form"
