@@ -177,8 +177,6 @@ const ContactProfile = ({
         const response = await getContact(props.params?.id || props.id, {
           associations: [
             ...updateContactQuery.associations,
-            'contact.deals',
-            'contact.flows',
             'flow_step.email',
             'contact.triggers',
             'trigger.campaign',
@@ -259,6 +257,7 @@ const ContactProfile = ({
   ) => {
     setContact({ ...contact, ...newContact })
     onUpdateContact({ ...contact, ...newContact })
+    console.log('on update contact', { ...contact, ...newContact })
 
     if (fallback) {
       fallback()
@@ -427,6 +426,7 @@ const ContactProfile = ({
       fetchTimeline()
     }
   }
+
   const onTouchChange = useCallback(
     ({ contacts }) => {
       if (Array.isArray(contacts) && contacts.includes(currentContactId)) {

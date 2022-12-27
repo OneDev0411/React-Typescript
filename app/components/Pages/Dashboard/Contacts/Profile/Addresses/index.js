@@ -70,7 +70,7 @@ class Addresses extends React.Component {
     }))
   }
 
-  handleDelete = async (addressIndex, ids) => {
+  handleDelete = async (addressIndex, ids, listIndex) => {
     const removeAddressFromState = () =>
       this.setState(state => {
         const addresses = state.addresses.filter(
@@ -115,6 +115,16 @@ class Addresses extends React.Component {
     try {
       await deleteAttributesFromContacts(ids)
 
+      this.props.submitCallback(
+        {
+          ...this.props.contact,
+          address: this.props.contact.address.filter(
+            (_, index) => index !== listIndex
+          )
+        },
+        this.addressAttributeDefs
+      )
+
       return removeAddressFromState()
     } catch (error) {
       console.error(error)
@@ -145,6 +155,8 @@ class Addresses extends React.Component {
       this.setState({
         addresses: getAddresses(addresses, this.addressAttributeDefs)
       })
+
+      this.props.submitCallback(updatedContact, attributes)
     } catch (error) {
       console.error(error)
       this.props.notify({
@@ -162,7 +174,7 @@ class Addresses extends React.Component {
           <AddressField
             key={index}
             address={address}
-            handleDelete={this.handleDelete}
+            handleDelete={(...e) => this.handleDelete(...e, index)}
             handleSubmit={this.handleSubmit}
             handleAddNew={this.addNewAddress}
             toggleMode={this.toggleAddressActiveMode}
