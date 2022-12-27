@@ -93,3 +93,29 @@ export async function sortTasks(
     return { error }
   }
 }
+
+export async function addBrandChecklistRole(
+  brandId: string,
+  checklistId: string,
+  role: Partial<IBrandChecklistRole>
+): Promise<IBrandChecklist> {
+  const response = await new Fetch()
+    .post(`/brands/${brandId}/checklists/${checklistId}/roles`)
+    .send(role)
+
+  return response.body.data
+}
+
+export async function sortRoles(
+  brand: UUID,
+  checklist: UUID,
+  list: { id: UUID; order: number }[]
+) {
+  try {
+    return await new Fetch()
+      .put(`/brands/${brand}/checklists/${checklist}/roles/sort`)
+      .send(list)
+  } catch (error) {
+    return { error }
+  }
+}
