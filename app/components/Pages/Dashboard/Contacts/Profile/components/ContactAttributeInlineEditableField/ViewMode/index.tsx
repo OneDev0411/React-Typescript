@@ -19,6 +19,8 @@ const useStyles = makeStyles(
     container: {
       display: 'flex',
       flexDirection: 'row',
+      alignItems: 'flex-start',
+      justifyContent: 'space-between',
       overflow: 'hidden',
       padding: theme.spacing(0, 1),
       '&:hover $title': {
@@ -35,13 +37,13 @@ const useStyles = makeStyles(
       color: theme.palette.grey[600]
     },
     value: {
-      flex: '1 0 auto',
+      flex: '1 0',
       display: 'inline-block',
-      whiteSpace: 'nowrap',
       msTextOverflow: 'ellipsis',
       textOverflow: 'ellipsis',
       textAlign: 'right',
-      color: theme.palette.grey[900]
+      color: theme.palette.grey[900],
+      wordBreak: 'break-word'
     },
     triggerIndicator: {
       width: theme.spacing(2),
