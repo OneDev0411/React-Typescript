@@ -19,7 +19,20 @@ export class VideoToolbar extends React.Component {
     this.view = wrapper.view.el.ownerDocument.defaultView
     this.view.document.addEventListener('load', this.handleLoadTemplate, true)
 
-    editor.on('component:update', () => {
+    /*
+     * Imagine this scenario: We are on T1000. At T1000 animejs has change the opacity of an element to 1.
+     * But that's an animejs change, not something inside the component tree that grapesjs maintains.
+     * So, user clicks on the image and changes it to another one. What happens is that grapesjs rerenders the element
+     * using the properties it has stored. But since the opacity attribute is not stored within component's attributes, it's
+     * the new rendered version doesn't have the opacity: 1. Therefore the image, after user clicks on it, becomes insisible.
+     *
+     * This scenario would cause an issue on videos. Basically anything attribute applied by animejs will be lost
+     * the user changes something on the element.
+     *
+     * So, we basically re-apply animejs's changes by seeking everythingg to the current time. Which basically asks
+     * animejs to reapply it's properties.
+     */
+    editor.on('update', () => {
       if (!this.Timeline) {
         return
       }
