@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { useMemo, memo, useState } from 'react'
 
 import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
@@ -18,6 +18,8 @@ import { areEqual } from 'react-window'
 import { useViewAs } from '@app/hooks/team/use-view-as'
 import { searchContacts } from '@app/models/contacts/search-contacts'
 import { IAppState } from '@app/reducers'
+import { ContactDetailsModal } from '@app/views/components/ContactDetailsModal'
+import { useContactDetailsModalState } from '@app/views/components/ContactDetailsModal/use-contact-details-modal-state'
 import VirtualList, { LoadingPosition } from '@app/views/components/VirtualList'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -88,7 +90,6 @@ interface Props {
   title: string
   tag?: string
   criteria: FilterCriteria
-  onOpenContact: (id: UUID) => void
   onReachStart?: () => void
   onReachEnd?: () => void
 }
@@ -97,13 +98,29 @@ export const BoardColumn = memo(function BoardColumn({
   id,
   title,
   criteria,
-  tag,
-  onOpenContact
+  tag
 }: Props) {
   const classes = useStyles()
   const viewAs = useViewAs()
   const [currentCriteria, setCurrentCriteria] = useState(criteria)
   const [list, updateList] = useColumnList(tag)
+
+  const contactsIdList = useMemo(() => {
+    return Object.values(list)
+      .flat(1)
+      .map(contact => contact.id)
+  }, [list])
+
+  const {
+    currentContactId,
+    onOpenContact,
+    onCloseContact,
+    onNextContact,
+    onPreviousContact,
+    nextButtonDisabled,
+    previousButtonDisabled
+  } = useContactDetailsModalState('/dashboard/contacts', contactsIdList)
+
   const [loadingOffset, setLoadingOffset] = useState(0)
   const [loadingState, setLoadingState] =
     useState<Nullable<'initial' | 'more'>>(null)
@@ -196,6 +213,24 @@ export const BoardColumn = memo(function BoardColumn({
     )
 
     updateList(newList)
+  }
+
+  const handleDeleteContact = (contactId: UUID) => {
+    const newList = list.filter(contact => contact.id !== contactId)
+
+    updateList(newList, tag)
+  }
+
+  const handleUpdateContact = (updatedContact: IContact) => {
+    const newList = list.map(contact => {
+      if (contact.id === updatedContact.id) {
+        return updatedContact
+      }
+
+      return contact
+    })
+
+    updateList(newList, tag)
   }
 
   return (
@@ -300,6 +335,21 @@ export const BoardColumn = memo(function BoardColumn({
           )}
         </AutoSizer>
       </div>
+
+      {currentContactId && (
+        <ContactDetailsModal
+          isNavigable={contactsIdList && contactsIdList.length > 1}
+          contactId={currentContactId}
+          onClose={onCloseContact}
+          onNext={onNextContact}
+          onPrevious={onPreviousContact}
+          onDeleteContact={handleDeleteContact}
+          onUpdateContact={handleUpdateContact}
+          onOpen={onOpenContact}
+          nextButtonDisabled={nextButtonDisabled}
+          previousButtonDisabled={previousButtonDisabled}
+        />
+      )}
     </div>
   )
 },
