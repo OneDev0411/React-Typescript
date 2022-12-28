@@ -12,10 +12,12 @@ import {
 } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import { useDispatch } from 'react-redux'
-import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle, useEffectOnce } from 'react-use'
 
 import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
+import { useNavigate } from '@app/hooks/use-navigate'
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
@@ -27,7 +29,6 @@ import { editBrandFlowStep } from 'models/flows/edit-brand-flow-step'
 import { editBrandFlowStepOrder } from 'models/flows/edit-brand-flow-step-order'
 import { getBrandFlow } from 'models/flows/get-brand-flow'
 import { stopFlow } from 'models/flows/stop-flow'
-import { goTo } from 'utils/go-to'
 
 import { getFlowEditUrl, createFlow } from '../helpers'
 import New from '../New'
@@ -66,6 +67,7 @@ const useStyles = makeStyles(
 )
 
 function Edit(props: WithRouterProps) {
+  const navigate = useNavigate()
   const classes = useStyles()
   const dispatch = useDispatch()
   const activeBrandId = useUnsafeActiveBrandId()
@@ -109,13 +111,13 @@ function Edit(props: WithRouterProps) {
               status: 'info'
             })
           )
-          goTo('/dashboard/flows')
+          navigate('/dashboard/flows')
         }
 
         throw error
       }
     },
-    [dispatch, props.location.state]
+    [dispatch, navigate, props.location.state]
   )
 
   const loadFlowData = useCallback(
@@ -260,17 +262,13 @@ function Edit(props: WithRouterProps) {
 
       await createFlow(activeBrandId, flowData, flow, createdFlow => {
         setIsDuplicateModalOpen(false)
-        goTo(
-          getFlowEditUrl(createdFlow.id),
-          null,
-          {},
-          {
-            flow: createdFlow
-          }
+        navigate(
+          { pathname: getFlowEditUrl(createdFlow.id) },
+          { state: { flow: createdFlow } }
         )
       })
     },
-    [activeBrandId, flow]
+    [activeBrandId, flow, navigate]
   )
 
   if (error) {
@@ -347,7 +345,7 @@ function Edit(props: WithRouterProps) {
             <Contacts
               onStop={flowStopHandler}
               onContactClick={contactId =>
-                props.router.push(`/dashboard/contacts/${contactId}`)
+                props.navigate(`/dashboard/contacts/${contactId}`)
               }
               flowId={flow.id}
             />

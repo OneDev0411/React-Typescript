@@ -11,10 +11,12 @@ import {
 } from '@material-ui/core'
 import { mdiDotsHorizontal } from '@mdi/js'
 import { connect, useDispatch } from 'react-redux'
-import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
+import { useNavigate } from '@app/hooks/use-navigate'
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { BaseDropdown } from 'components/BaseDropdown'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import PageLayout from 'components/GlobalPageLayout'
@@ -24,7 +26,6 @@ import { addNotification as notify } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useGetBrandFlows } from 'hooks/use-get-brand-flows'
 import { deleteBrandFlow } from 'models/flows/delete-brand-flow'
-import { goTo } from 'utils/go-to'
 
 import CtaBar from '../../Account/components/CtaBar'
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
@@ -69,6 +70,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 function List(props: WithRouterProps) {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const activeBrandId = useActiveBrandId()
 
@@ -95,13 +97,9 @@ function List(props: WithRouterProps) {
       }
 
       await createFlow(activeBrandId, flowData, selectedFlow, createdFlow => {
-        goTo(
-          getFlowEditUrl(createdFlow.id),
-          null,
-          {},
-          {
-            flow: createdFlow
-          }
+        navigate(
+          { pathname: getFlowEditUrl(createdFlow.id) },
+          { state: { flow: createdFlow } }
         )
       })
     } catch (err) {
@@ -214,7 +212,7 @@ function List(props: WithRouterProps) {
 
                         case 'edit':
                         case 'view':
-                          goTo(getFlowEditUrl(row.id))
+                          navigate(getFlowEditUrl(row.id))
                           break
                       }
                     }}
@@ -268,7 +266,7 @@ function List(props: WithRouterProps) {
                 getTdProps={({ column, row }) => ({
                   onClick: () => {
                     if (column.id !== 'actions') {
-                      props.router.push(`/dashboard/flows/${row.id}`)
+                      props.navigate(`/dashboard/flows/${row.id}`)
                     }
                   }
                 })}
