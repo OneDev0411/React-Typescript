@@ -120,7 +120,13 @@ const useStyles = makeStyles(
   in hopes of taking care of the other improvements in future
 */
 
-const ContactProfile = props => {
+const ContactProfile = ({
+  onCloseContact,
+  onOpenContact,
+  onUpdateContact,
+  onDeleteContact,
+  ...props
+}) => {
   useGetGlobalTriggers()
 
   const notify = useNotify()
@@ -141,8 +147,6 @@ const ContactProfile = props => {
   const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Upcoming)
 
   const isModal: boolean = props.isModal
-  const onCloseContact: () => void = props.onCloseContact
-  const onOpenContact: (id: UUID) => void = props.onOpenContact
 
   const goToContacts = useCallback(() => {
     if (isModal && typeof onCloseContact === 'function') {
@@ -173,8 +177,6 @@ const ContactProfile = props => {
         const response = await getContact(props.params?.id || props.id, {
           associations: [
             ...updateContactQuery.associations,
-            'contact.deals',
-            'contact.flows',
             'flow_step.email',
             'contact.triggers',
             'trigger.campaign',
@@ -187,9 +189,20 @@ const ContactProfile = props => {
             'contact_role.brand'
           ]
         })
+        const normalizedContact = normalizeContact(response.data)
 
-        setContact(normalizeContact(response.data))
+        setContact(normalizedContact)
+
         setIsLoading(false)
+
+        if (
+          !showFullScreenLoading &&
+          isModal &&
+          typeof onUpdateContact === 'function'
+        ) {
+          onUpdateContact(normalizedContact)
+        }
+
         callback()
       } catch (error) {
         if (error.status === 404 || error.status === 400) {
@@ -197,38 +210,41 @@ const ContactProfile = props => {
         }
       }
     },
-    [props.id, props.params?.id, goToContacts]
+    [props.params?.id, props.id, isModal, onUpdateContact, goToContacts]
   )
 
-  const updateContact = useCallback(async () => {
+  const handleOnTouchChange = useCallback(async () => {
     try {
       const response = await getContact(
         props.params?.id || props.id,
         updateContactQuery
       )
+
       const normalizedContact = normalizeContact(response.data)
 
-      if (contact) {
-        setContact({
-          ...normalizedContact,
-          deals: contact.deals,
-          flows: contact.flows
-        })
-      } else {
-        setContact(normalizedContact)
+      setContact(normalizedContact)
+
+      if (isModal && typeof onUpdateContact === 'function') {
+        onUpdateContact(normalizedContact)
       }
     } catch (error) {
       console.error(error)
     }
-  }, [contact, props.id, props.params?.id])
+  }, [isModal, onUpdateContact, props.id, props.params?.id])
 
   const handleDelete = async () => {
     try {
-      setIsDeleting(true)
+      if (contact) {
+        setIsDeleting(true)
 
-      await deleteContacts([contact?.id])
+        await deleteContacts([contact?.id])
 
-      goToContacts()
+        if (isModal && typeof onDeleteContact === 'function') {
+          onDeleteContact(contact.id)
+        }
+
+        goToContacts()
+      }
     } catch (error) {
       console.log(error)
     }
@@ -251,6 +267,10 @@ const ContactProfile = props => {
   ) => {
     setContact({ ...contact, ...newContact })
 
+    if (isModal && typeof onUpdateContact === 'function') {
+      onUpdateContact({ ...contact, ...newContact })
+    }
+
     if (fallback) {
       fallback()
     }
@@ -269,6 +289,10 @@ const ContactProfile = props => {
       touch_freq: newVal
     }))
 
+    if (isModal && typeof onUpdateContact === 'function') {
+      onUpdateContact({ ...contact, touch_freq: newVal })
+    }
+
     fetchTimeline()
 
     updateContactTouchReminder(contact.id, newVal).catch(e => {
@@ -282,6 +306,10 @@ const ContactProfile = props => {
         ...prevContact,
         touch_freq: oldValue
       }))
+
+      if (isModal && typeof onUpdateContact === 'function') {
+        onUpdateContact({ ...contact, touch_freq: oldValue })
+      }
     })
   }
 
@@ -359,6 +387,11 @@ const ContactProfile = props => {
       const alteredContact = response.data || {}
 
       setContact({ ...contact, ...alteredContact })
+
+      if (isModal && typeof onUpdateContact === 'function') {
+        onUpdateContact({ ...contact, ...alteredContact })
+      }
+
       setIsUpdatingOwner(false)
     } catch (error) {
       console.log(error)
@@ -414,19 +447,20 @@ const ContactProfile = props => {
       fetchTimeline()
     }
   }
+
   const onTouchChange = useCallback(
     ({ contacts }) => {
       if (Array.isArray(contacts) && contacts.includes(currentContactId)) {
         console.log('[ Socket ] Touch Changed')
-        updateContact()
+        handleOnTouchChange()
       }
     },
-    [currentContactId, updateContact]
+    [currentContactId, handleOnTouchChange]
   )
 
   useEffectOnce(() => {
     detectScreenSize()
-    initializeContact()
+    initializeContact(true)
   })
 
   useEffect(() => {

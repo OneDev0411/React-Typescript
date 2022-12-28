@@ -1,4 +1,4 @@
-import { useState, memo, useCallback, useMemo } from 'react'
+import { useState, memo, useCallback } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 import uniq from 'lodash/uniq'
@@ -6,8 +6,6 @@ import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
 import { useDebounce } from 'react-use'
 
-import { ContactDetailsModal } from '@app/views/components/ContactDetailsModal'
-import { useContactDetailsModalState } from '@app/views/components/ContactDetailsModal/use-contact-details-modal-state'
 import { updateContactTags } from 'actions/contacts/update-contact-tags'
 import { bulkTag } from 'models/contacts/bulk-tag'
 
@@ -44,21 +42,6 @@ interface Props {
 export const Board = memo(({ criteria }: Props) => {
   const classes = useStyles()
   const [list, setList] = useState<Record<string, IContact[]>>({})
-  const contactsIdList = useMemo(() => {
-    return Object.values(list)
-      .flat(1)
-      .map(contact => contact.id)
-  }, [list])
-
-  const {
-    currentContactId,
-    onOpenContact,
-    onCloseContact,
-    onNextContact,
-    onPreviousContact,
-    nextButtonDisabled,
-    previousButtonDisabled
-  } = useContactDetailsModalState('/dashboard/contacts', contactsIdList)
 
   const [debouncedCriteria, setDebouncedCriteria] =
     useState<Props['criteria']>(criteria)
@@ -147,25 +130,12 @@ export const Board = memo(({ criteria }: Props) => {
                   title={title}
                   tag={tag}
                   criteria={debouncedCriteria}
-                  onOpenContact={onOpenContact}
                 />
               ))}
             </div>
           </div>
         </DragDropContext>
       </BoardContext.Provider>
-      {currentContactId && (
-        <ContactDetailsModal
-          isNavigable={contactsIdList && contactsIdList.length > 1}
-          contactId={currentContactId}
-          onClose={onCloseContact}
-          onNext={onNextContact}
-          onPrevious={onPreviousContact}
-          onOpen={onOpenContact}
-          nextButtonDisabled={nextButtonDisabled}
-          previousButtonDisabled={previousButtonDisabled}
-        />
-      )}
     </>
   )
 })
