@@ -195,7 +195,11 @@ const ContactProfile = ({
 
         setIsLoading(false)
 
-        if (!showFullScreenLoading) {
+        if (
+          !showFullScreenLoading &&
+          isModal &&
+          typeof onUpdateContact === 'function'
+        ) {
           onUpdateContact(normalizedContact)
         }
 
@@ -206,7 +210,7 @@ const ContactProfile = ({
         }
       }
     },
-    [props.params?.id, props.id, onUpdateContact, goToContacts]
+    [props.params?.id, props.id, isModal, onUpdateContact, goToContacts]
   )
 
   const handleOnTouchChange = useCallback(async () => {
@@ -219,11 +223,14 @@ const ContactProfile = ({
       const normalizedContact = normalizeContact(response.data)
 
       setContact(normalizedContact)
-      onUpdateContact(normalizedContact)
+
+      if (isModal && typeof onUpdateContact === 'function') {
+        onUpdateContact(normalizedContact)
+      }
     } catch (error) {
       console.error(error)
     }
-  }, [onUpdateContact, props.id, props.params?.id])
+  }, [isModal, onUpdateContact, props.id, props.params?.id])
 
   const handleDelete = async () => {
     try {
@@ -231,7 +238,10 @@ const ContactProfile = ({
         setIsDeleting(true)
 
         await deleteContacts([contact?.id])
-        onDeleteContact(contact.id)
+
+        if (isModal && typeof onDeleteContact === 'function') {
+          onDeleteContact(contact.id)
+        }
 
         goToContacts()
       }
@@ -256,7 +266,10 @@ const ContactProfile = ({
     fallback?: () => void
   ) => {
     setContact({ ...contact, ...newContact })
-    onUpdateContact({ ...contact, ...newContact })
+
+    if (isModal && typeof onUpdateContact === 'function') {
+      onUpdateContact({ ...contact, ...newContact })
+    }
 
     if (fallback) {
       fallback()
@@ -275,7 +288,10 @@ const ContactProfile = ({
       ...prevContact,
       touch_freq: newVal
     }))
-    onUpdateContact({ ...contact, touch_freq: newVal })
+
+    if (isModal && typeof onUpdateContact === 'function') {
+      onUpdateContact({ ...contact, touch_freq: newVal })
+    }
 
     fetchTimeline()
 
@@ -290,7 +306,10 @@ const ContactProfile = ({
         ...prevContact,
         touch_freq: oldValue
       }))
-      onUpdateContact({ ...contact, touch_freq: oldValue })
+
+      if (isModal && typeof onUpdateContact === 'function') {
+        onUpdateContact({ ...contact, touch_freq: oldValue })
+      }
     })
   }
 
@@ -368,7 +387,10 @@ const ContactProfile = ({
       const alteredContact = response.data || {}
 
       setContact({ ...contact, ...alteredContact })
-      onUpdateContact({ ...contact, ...alteredContact })
+
+      if (isModal && typeof onUpdateContact === 'function') {
+        onUpdateContact({ ...contact, ...alteredContact })
+      }
 
       setIsUpdatingOwner(false)
     } catch (error) {
