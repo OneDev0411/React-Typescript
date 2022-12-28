@@ -15,7 +15,7 @@ export function areaMeterFilter(area_meters) {
   return new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
-  }).format(Math.floor(area_meters * 10.7639))
+  }).format(Math.round(area_meters * 10.7639))
 }
 
 export function phoneNumberFilter(phone) {
