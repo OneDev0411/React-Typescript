@@ -12,8 +12,8 @@ export const useStyles = makeStyles(
       }
     },
     header: {
-      color: '#000000',
-      fontSize: theme.typography.pxToRem(14),
+      color: theme.palette.common.black,
+      fontSize: theme.typography.subtitle2.fontSize,
       fontWeight: 700,
       textTransform: 'uppercase',
       lineHeight: 2,
