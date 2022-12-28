@@ -1,30 +1,38 @@
+import { useNavigate } from '@app/hooks/use-navigate'
 import { SearchResult } from 'components/DealsAndListingsAndPlacesSearchInput/types'
-import { goTo } from 'utils/go-to'
+// import { goTo } from 'utils/go-to'
 
-export function openListingPage(listing: ICompactListing | IListing): void {
+export function OpenListingPage(listing: ICompactListing | IListing): void {
+  const navigate = useNavigate()
   const listingAddress =
     listing.type === 'compact_listing'
       ? listing.address
       : listing.property.address
 
-  goTo('/dashboard/agent-network/agents', null, {
-    listing: listing.id,
-    title: listingAddress.street_address
+  navigate('/dashboard/agent-network/agents', {
+    state: {
+      listing: listing.id,
+      title: listingAddress.street_address
+    }
   })
 }
 
-export function openPlacePage(place: google.maps.GeocoderResult): void {
-  goTo('/dashboard/agent-network/agents', null, {
-    lat: place.geometry.location.lat,
-    lng: place.geometry.location.lng,
-    title: place.formatted_address
+export function OpenPlacePage(place: google.maps.GeocoderResult): void {
+  const navigate = useNavigate()
+
+  navigate('/dashboard/agent-network/agents', {
+    state: {
+      lat: place.geometry.location.lat,
+      lng: place.geometry.location.lng,
+      title: place.formatted_address
+    }
   })
 }
 
-export function openSearchResultPage(result: SearchResult): void {
+export function OpenSearchResultPage(result: SearchResult): void {
   if (result.type === 'listing') {
-    openListingPage(result.listing)
+    OpenListingPage(result.listing)
   } else if (result.type === 'location') {
-    openPlacePage(result.location)
+    OpenPlacePage(result.location)
   }
 }

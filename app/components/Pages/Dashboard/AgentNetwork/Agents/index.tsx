@@ -4,9 +4,10 @@ import { Box, Divider, Grid, Typography } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { useLoadScript, LoadScriptProps } from '@react-google-maps/api'
 import { useSelector } from 'react-redux'
-import { withRouter, WithRouterProps } from 'react-router'
 
 import getAgents, { AgentWithStats } from '@app/models/agent-network/get-agents'
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import ListingAlertFilters from 'components/ListingAlertFilters'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import config from 'config'
@@ -14,7 +15,7 @@ import { useLoadingEntities } from 'hooks/use-loading'
 import getListing from 'models/listings/listing/get-listing'
 import { selectUser } from 'selectors/user'
 
-import { openSearchResultPage } from '../helpers'
+import { OpenSearchResultPage } from '../helpers'
 import Layout from '../Layout'
 
 import AgentsGrid from './Grid'
@@ -50,7 +51,8 @@ function Agents(props: WithRouterProps) {
         return
       }
 
-      const listingId: Optional<string> = props.location.query.listing
+      const listingId: Optional<string | null> =
+        props.searchParams.get('listing')
 
       if (!listingId) {
         setListing(null)
@@ -75,7 +77,7 @@ function Agents(props: WithRouterProps) {
     }
 
     fetchListingBasedData()
-  }, [isGoogleMapsLoaded, props.location.query.listing])
+  }, [isGoogleMapsLoaded, props.searchParams])
 
   useEffect(() => {
     async function fetchLocationBasedData() {
@@ -83,8 +85,8 @@ function Agents(props: WithRouterProps) {
         return
       }
 
-      const lat: Optional<string> = props.location.query.lat
-      const lng: Optional<string> = props.location.query.lng
+      const lat: Optional<string | null> = props.searchParams.get('lat')
+      const lng: Optional<string | null> = props.searchParams.get('lng')
 
       if (!lat || !lng) {
         return
@@ -104,7 +106,7 @@ function Agents(props: WithRouterProps) {
     }
 
     fetchLocationBasedData()
-  }, [isGoogleMapsLoaded, props.location.query.lat, props.location.query.lng])
+  }, [isGoogleMapsLoaded, props.searchParams])
 
   useEffect(() => {
     async function fetchAgents() {
@@ -139,7 +141,7 @@ function Agents(props: WithRouterProps) {
     <Layout
       noGlobalActionsButton
       title="Select Agents"
-      onSelectSearchResult={openSearchResultPage}
+      onSelectSearchResult={OpenSearchResultPage}
     >
       {listing && DISABLED_MLS_LIST.includes(listing.mls) ? (
         <Alert severity="info">
@@ -163,9 +165,9 @@ function Agents(props: WithRouterProps) {
             justifyContent="space-between"
           >
             <Grid item>
-              {props.location.query.title && (
+              {props.searchParams.get('title') && (
                 <Typography variant="body1">
-                  {props.location.query.title}
+                  {props.searchParams.get('title')}
                 </Typography>
               )}
             </Grid>
