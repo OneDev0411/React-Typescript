@@ -16,7 +16,7 @@ import { useNavigate } from '@app/hooks/use-navigate'
 import useNotify from '@app/hooks/use-notify'
 import { useReplaceQueryParam } from '@app/hooks/use-query-param'
 import { useSearchParams } from '@app/hooks/use-search-param'
-import { RouteComponentProps } from '@app/routes/types'
+import { WithRouterProps } from '@app/routes/types'
 import { withRouter } from '@app/routes/with-router'
 import {
   hasUserAccessToBrandSettings,
@@ -78,10 +78,11 @@ export function MarketingLayout({
   render,
   ...props
 }: Props &
-  RouteComponentProps<
-    { types: string; medium: IMarketingTemplateMedium },
-    { templateId?: UUID }
-  >) {
+  WithRouterProps<{
+    types: string
+    medium: IMarketingTemplateMedium
+    templateId?: UUID
+  }>) {
   const classes = useStyles()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
