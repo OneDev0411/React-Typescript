@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { withRouter } from '@app/routes/with-router'
 import { getFileType } from 'utils/file-utils/get-file-type'
 

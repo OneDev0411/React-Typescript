@@ -4,7 +4,6 @@ import { Button, Tooltip, IconButton, makeStyles } from '@material-ui/core'
 import { mdiCogOutline, mdiPlus } from '@mdi/js'
 import { orderBy } from 'lodash'
 import pluralize from 'pluralize'
-// import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import { useActiveTeam } from '@app/hooks/team/use-active-team'

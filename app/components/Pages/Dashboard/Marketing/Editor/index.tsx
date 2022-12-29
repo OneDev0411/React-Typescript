@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useTitle } from 'react-use'
 
 import Acl from 'components/Acl'

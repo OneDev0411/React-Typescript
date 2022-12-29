@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Grid, makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import { useNavigate } from '@app/hooks/use-navigate'
