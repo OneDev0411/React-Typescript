@@ -3,11 +3,12 @@ import React, { useState } from 'react'
 import {
   Theme,
   Select,
-  Checkbox,
   MenuItem,
   makeStyles,
   OutlinedInput,
-  FormControlLabel
+  FormControlLabel,
+  Typography,
+  Radio
 } from '@material-ui/core'
 import pluralize from 'pluralize'
 
@@ -17,16 +18,18 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      justifyContent: 'space-between'
     },
     fieldsContainer: {
       display: 'flex',
       alignItems: 'center',
-      flexWrap: 'nowrap',
-      flexGrow: 1
+      flexWrap: 'nowrap'
+    },
+    separator: {
+      color: theme.palette.grey[500]
     },
     value: {
-      flexGrow: 1,
       maxWidth: '100px'
     },
     unit: {
@@ -92,16 +95,15 @@ export const WaitForFields = ({
     baseValue.value === 0
   )
 
-  const handleSameDayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = event.target.checked
+  const handleSameDayChange = (isSameDay: boolean) => {
     const sameDayState: RawWaitFor = {
       ...defaultWaitForValue,
       value: 0
     }
 
-    setIsSameDayActive(isChecked)
+    setIsSameDayActive(isSameDay)
 
-    if (isChecked) {
+    if (isSameDay) {
       onChange(sameDayState)
     } else {
       onChange({ value, unit, triggerAt })
@@ -138,16 +140,28 @@ export const WaitForFields = ({
       <FormControlLabel
         disabled={disabled}
         control={
-          <Checkbox
+          <Radio
             checked={isSameDayActive}
             disabled={disabled}
-            onChange={handleSameDayChange}
+            onChange={() => handleSameDayChange(true)}
             name="sameDay"
           />
         }
-        label="Same Day"
+        label="Same Day / ASAP"
       />
-      <div className={classes.fieldsContainer}>
+      <Typography className={classes.separator} variant="body2">
+        OR
+      </Typography>
+      <div
+        className={classes.fieldsContainer}
+        onClick={() => handleSameDayChange(false)}
+      >
+        <Radio
+          checked={!isSameDayActive}
+          disabled={disabled}
+          onChange={() => handleSameDayChange(false)}
+          name="sameDay"
+        />
         <div className={classes.value}>
           <OutlinedInput
             id="value"
