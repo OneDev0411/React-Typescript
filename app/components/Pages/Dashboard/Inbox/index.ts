@@ -1,4 +1,4 @@
-import { withRouter } from 'react-router'
+import { withRouter } from '@app/routes/with-router'
 
 import Inbox from './Inbox'
 

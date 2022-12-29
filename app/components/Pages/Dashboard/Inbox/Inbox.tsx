@@ -5,10 +5,10 @@ import { makeStyles } from '@material-ui/styles'
 import { mdiEmailOutline } from '@mdi/js'
 import classNames from 'classnames'
 import { useSelector } from 'react-redux'
-import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import { useNavigate } from '@app/hooks/use-navigate'
+import { WithRouterProps } from '@app/routes/types'
 import AddAccountButton from '@app/views/components/AddAccountButton'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import GlobalPageLayout from 'components/GlobalPageLayout'
@@ -92,11 +92,11 @@ export default function Inbox({ params }: WithRouterProps) {
   const setSelectedEmailThreadId = (
     selectedEmailThreadId: UUID | undefined
   ) => {
-    if (selectedEmailThreadId) {
-      navigate(`/dashboard/inbox/${selectedEmailThreadId}`)
-    } else {
-      navigate('/dashboard/inbox')
-    }
+    navigate(
+      selectedEmailThreadId
+        ? `/dashboard/inbox/${selectedEmailThreadId}`
+        : '/dashboard/inbox'
+    )
   }
 
   const classes = useStyles()
