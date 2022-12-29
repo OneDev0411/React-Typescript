@@ -2,7 +2,8 @@ import { useState } from 'react'
 
 import { Divider, List, makeStyles, MenuItem, Popover } from '@material-ui/core'
 
-import { frequencyOptions, frequencyToString } from './helper'
+import { frequencyOptions } from './constants'
+import { frequencyToString } from './helper'
 import { ManageRelationshipCustomItem } from './ManageRelationshipCustomItem'
 
 interface Props {
@@ -72,7 +73,14 @@ export function ManageRelationshipMenu({
             </MenuItem>
           ))}
           <Divider />
-          <MenuItem onClick={openCustomItem}>Custom...</MenuItem>
+          <MenuItem onClick={openCustomItem}>Custom</MenuItem>
+          <MenuItem
+            onClick={() => {
+              onChangeTouchFreq(0)
+            }}
+          >
+            Don't remind me
+          </MenuItem>
         </List>
       )}
     </Popover>

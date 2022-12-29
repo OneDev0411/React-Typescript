@@ -48,7 +48,7 @@ export function LastTouched({ contact, children }: Props) {
       {touchFreq && (
         <span>
           , you wanted to be in touch{' '}
-          <b>{frequencyToString(touchFreq || null).toLocaleLowerCase()}</b>
+          <b>{frequencyToString(touchFreq).toLocaleLowerCase()}</b>
         </span>
       )}
       {children}

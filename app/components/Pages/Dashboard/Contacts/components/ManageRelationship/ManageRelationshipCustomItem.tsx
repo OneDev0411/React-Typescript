@@ -81,13 +81,13 @@ export function ManageRelationshipCustomItem({
   const onConfirm = () => {
     if (
       Number.isNaN(inputValue) ||
-      Number(inputValue) < 1 ||
+      Number(inputValue) < 0 ||
       Number(inputValue) > 365
     ) {
       notify({
         status: 'error',
         message:
-          'Manage Relationship should have a valid duration between 1 and 365 days'
+          'Auto Remind should have a valid duration between 0 and 365 days'
       })
 
       return

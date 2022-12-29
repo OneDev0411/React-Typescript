@@ -42,6 +42,7 @@ interface Props {
 export const Board = memo(({ criteria }: Props) => {
   const classes = useStyles()
   const [list, setList] = useState<Record<string, IContact[]>>({})
+
   const [debouncedCriteria, setDebouncedCriteria] =
     useState<Props['criteria']>(criteria)
 
@@ -112,27 +113,29 @@ export const Board = memo(({ criteria }: Props) => {
   )
 
   return (
-    <BoardContext.Provider
-      value={{
-        list,
-        updateList: handleUpdateList
-      }}
-    >
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div className={classes.root}>
-          <div className={classes.container}>
-            {Columns.map(({ title, tag }, index) => (
-              <BoardColumn
-                key={index}
-                id={tag || '-1'}
-                title={title}
-                tag={tag}
-                criteria={debouncedCriteria}
-              />
-            ))}
+    <>
+      <BoardContext.Provider
+        value={{
+          list,
+          updateList: handleUpdateList
+        }}
+      >
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className={classes.root}>
+            <div className={classes.container}>
+              {Columns.map(({ title, tag }, index) => (
+                <BoardColumn
+                  key={index}
+                  id={tag || '-1'}
+                  title={title}
+                  tag={tag}
+                  criteria={debouncedCriteria}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </DragDropContext>
-    </BoardContext.Provider>
+        </DragDropContext>
+      </BoardContext.Provider>
+    </>
   )
 })

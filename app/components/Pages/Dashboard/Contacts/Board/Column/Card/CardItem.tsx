@@ -6,13 +6,13 @@ import {
   Tooltip,
   makeStyles,
   Theme,
+  Link,
   useTheme
 } from '@material-ui/core'
 import { mdiCalendar } from '@mdi/js'
 import cn from 'classnames'
 import { DraggableProvided } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
-import { Link } from 'react-router'
 
 import { PopoverContactTagSelector } from '@app/components/Pages/Dashboard/Contacts/components/TagSelector'
 import { updateContactTags } from 'actions/contacts/update-contact-tags'
@@ -49,7 +49,8 @@ const useStyles = makeStyles(
       marginRight: theme.spacing(1)
     },
     cardName: {
-      color: theme.palette.common.black
+      color: theme.palette.common.black,
+      cursor: 'pointer'
     },
     grey: {
       color: theme.palette.grey['500']
@@ -95,6 +96,7 @@ interface Props {
   contact: IContact
   isDragging: boolean
   style?: React.CSSProperties
+  onOpenContact: (id: UUID) => void
   onChangeTags?: (contact: IContact, tags: string[]) => void
 }
 
@@ -103,6 +105,7 @@ export function CardItem({
   contact,
   isDragging,
   style = {},
+  onOpenContact,
   onChangeTags
 }: Props) {
   const classes = useStyles()
@@ -146,19 +149,25 @@ export function CardItem({
               {getContactNameInitials(contact)}
             </Avatar>
 
-            <Link
-              to={`/dashboard/contacts/${contact.id}`}
-              className={classes.cardName}
+            <MiniContact
+              onOpenProfile={onOpenContact}
+              type="contact"
+              data={contact}
             >
-              <MiniContact type="contact" data={contact}>
+              <Link
+                onClick={() => {
+                  onOpenContact(contact.id)
+                }}
+                className={classes.cardName}
+              >
                 <Typography variant="body2">
                   <TextMiddleTruncate
                     text={contact.display_name}
                     maxLength={25}
                   />
                 </Typography>
-              </MiniContact>
-            </Link>
+              </Link>
+            </MiniContact>
           </div>
 
           <div className={classes.flexCenter}>

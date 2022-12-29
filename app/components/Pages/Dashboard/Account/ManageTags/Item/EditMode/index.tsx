@@ -142,11 +142,11 @@ export function EditMode({
               rules={{
                 min: {
                   value: 0,
-                  message: 'Touch date must be equal or greater than 0.'
+                  message: 'Auto remind must be equal or greater than 0.'
                 },
                 max: {
                   value: 1000,
-                  message: 'Touch Date must be less than 1000 or equal'
+                  message: 'Auto remind must be less than 1000 or equal'
                 }
               }}
               render={({ ref, value, ...props }) => {
@@ -156,7 +156,7 @@ export function EditMode({
                   <TextField
                     {...props}
                     type="number"
-                    label="Touch Date"
+                    label="Auto remind"
                     size="small"
                     color="secondary"
                     value={value}
