@@ -49,7 +49,6 @@ export function SecretQuestionModal({ isOpen, onHide, agents, mlsId }: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const pathname = '/dashboard/account'
   const backdropTimeout = useRef<Nullable<ReturnType<typeof setTimeout>>>(null)
   const [selectedAgent, setSelectedAgent] = useState<IAgent | null>(null)
 
@@ -90,7 +89,7 @@ export function SecretQuestionModal({ isOpen, onHide, agents, mlsId }: Props) {
 
       dispatch(updateUser(user))
       hide()
-      navigate(pathname)
+      navigate('/dashboard/account')
     } catch (error) {
       return {
         [FORM_ERROR]:
