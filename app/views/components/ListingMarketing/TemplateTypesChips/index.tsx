@@ -15,7 +15,7 @@ const useStyles = makeStyles(
 
 interface Props {
   types: IMarketingTemplateType[]
-  activeType?: IMarketingTemplateType
+  activeType?: IMarketingTemplateType | string
   onClick: (type: IMarketingTemplateType) => void
 }
 

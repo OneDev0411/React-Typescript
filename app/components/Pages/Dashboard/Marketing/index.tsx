@@ -4,7 +4,7 @@ import { Button, Tooltip, IconButton, makeStyles } from '@material-ui/core'
 import { mdiCogOutline, mdiPlus } from '@mdi/js'
 import { orderBy } from 'lodash'
 import pluralize from 'pluralize'
-import { withRouter, WithRouterProps } from 'react-router'
+// import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import { useActiveTeam } from '@app/hooks/team/use-active-team'
@@ -12,13 +12,16 @@ import { useBrandAssets } from '@app/hooks/use-brand-assets'
 import { useMarketingCenterCategories } from '@app/hooks/use-marketing-center-categories'
 import { useMarketingCenterSections } from '@app/hooks/use-marketing-center-sections'
 import { useMarketingTemplateTypesWithMediums } from '@app/hooks/use-marketing-template-types-with-mediums'
+import { useNavigate } from '@app/hooks/use-navigate'
 import useNotify from '@app/hooks/use-notify'
 import { useReplaceQueryParam } from '@app/hooks/use-query-param'
+import { useSearchParams } from '@app/hooks/use-search-param'
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import {
   hasUserAccessToBrandSettings,
   hasUserAccessToUploadBrandAssets
 } from '@app/utils/acl'
-import { goTo } from '@app/utils/go-to'
 import {
   isBrandAsset,
   isTemplateInstance
@@ -58,7 +61,7 @@ interface Props {
     isLoading: boolean
     types: string
     medium: IMarketingTemplateMedium
-    defaultSelectedTemplate: Optional<UUID>
+    defaultSelectedTemplate: Optional<UUID | null>
     onSelectTemplate: (
       template:
         | IBrandMarketingTemplate
@@ -75,11 +78,13 @@ export function MarketingLayout({
   render,
   ...props
 }: Props &
-  WithRouterProps<
+  RouteComponentProps<
     { types: string; medium: IMarketingTemplateMedium },
     { templateId?: UUID }
   >) {
   const classes = useStyles()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const activeTeam = useActiveTeam()
   const notify = useNotify()
   const activeBrandId = activeTeam.brand.id
@@ -170,7 +175,7 @@ export function MarketingLayout({
   }
 
   const handleSelectSearchResult = (result: TemplateTypeWithMedium) => {
-    goTo(
+    navigate(
       `/dashboard/marketing/${result.type}${
         result.medium ? `/${result.medium}` : ''
       }`
@@ -220,7 +225,9 @@ export function MarketingLayout({
             {hasAccessToBrandSettings && (
               <div>
                 <Tooltip title="Brand Setup">
-                  <IconButton onClick={() => goTo('/dashboard/brand-settings')}>
+                  <IconButton
+                    onClick={() => navigate('/dashboard/brand-settings')}
+                  >
                     <SvgIcon path={mdiCogOutline} />
                   </IconButton>
                 </Tooltip>
@@ -260,7 +267,7 @@ export function MarketingLayout({
               types: params.types,
               medium: params.medium,
               onSelectTemplate,
-              defaultSelectedTemplate: location.query.templateId,
+              defaultSelectedTemplate: searchParams.get('templateId'),
               onDeleteTemplate: deleteTemplate,
               onDeleteBrandAsset: deleteBrandAsset,
               hasDeleteAccessOnBrandAsset

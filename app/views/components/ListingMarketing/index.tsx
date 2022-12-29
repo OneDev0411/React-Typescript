@@ -41,7 +41,7 @@ type ListingRelatedProps = RequireOnlyOne<
 >
 
 type Props = {
-  templateType?: IMarketingTemplateType
+  templateType?: IMarketingTemplateType | null | string
   medium?: IMarketingTemplateMedium
   onChangeTemplateType: (type: IMarketingTemplateType) => void
   onChangeMedium: (medium: IMarketingTemplateMedium) => void

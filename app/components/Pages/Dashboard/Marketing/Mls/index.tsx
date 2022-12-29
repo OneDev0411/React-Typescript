@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 
-import { WithRouterProps } from 'react-router'
+// import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { useSearchParams } from '@app/hooks/use-search-param'
 import getListing from '@app/models/listings/listing/get-listing'
+import { WithRouterProps } from '@app/routes/types'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import ListingHeader from '@app/views/components/ListingHeader'
 import ListingMarketing from '@app/views/components/ListingMarketing'
@@ -15,8 +17,13 @@ export default function ListingMarketingPage({
 }: WithRouterProps) {
   useTitle('Marketing | Rechat')
 
+  const [searchParams] = useSearchParams()
   const listingId: UUID = params.id
-  const templateType: Optional<IMarketingTemplateType> = location.query.type
+
+  console.log('searchParams.get', searchParams.get('type'))
+
+  const templateType: Optional<Nullable<IMarketingTemplateType | string>> =
+    searchParams.get('type')
   const medium: Optional<IMarketingTemplateMedium> =
     (location.hash.split('#').pop() as IMarketingTemplateMedium) || undefined
 
@@ -54,7 +61,7 @@ export default function ListingMarketingPage({
             router.push({
               ...location,
               query: {
-                ...location.query,
+                ...searchParams.get,
                 type
               }
             })

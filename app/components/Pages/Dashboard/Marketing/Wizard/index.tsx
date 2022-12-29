@@ -18,12 +18,13 @@ import { mdiPencilOutline } from '@mdi/js'
 import fileSaver from 'file-saver'
 import { isDesktop } from 'react-device-detect'
 import { useSelector, useDispatch } from 'react-redux'
-import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
 import { uploadResizedAsset } from '@app/models/instant-marketing/upload-resized-asset'
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { shouldResizeTemplateAssets } from '@app/views/components/InstantMarketing/helpers/should-resize-template-assets'
 import PageLayout from 'components/GlobalPageLayout'
 import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
@@ -91,12 +92,12 @@ function MarketingWizard(props: WithRouterProps) {
   )
 
   useEffect(() => {
-    const listingId = props.location.query[LISTING_ID_QUERY_KEY]
+    const listingId = props.searchParams.get[LISTING_ID_QUERY_KEY]
 
     if (isDesktop && listingId) {
       props.router.replace(`/dashboard/marketing/mls/${listingId}`)
     }
-  }, [props.location.query, props.router])
+  }, [props.router, props.searchParams.get])
 
   useGoogleMapsPlaces()
 

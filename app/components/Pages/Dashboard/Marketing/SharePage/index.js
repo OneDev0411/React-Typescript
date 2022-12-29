@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { withRouter } from 'react-router'
-
+import { withRouter } from '@app/routes/with-router'
 import { getFileType } from 'utils/file-utils/get-file-type'
 
 import SharedMedia from './SharedMedia'
