@@ -1,9 +1,11 @@
+import { Box } from '@material-ui/core'
 import { WithRouterProps } from 'react-router'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { goTo } from '@app/utils/go-to'
 import PageLayout from 'components/GlobalPageLayout'
 
+import { DocumentsRepositoryButton } from '../components/DocumentsRepositoryButton'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
 import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
@@ -34,6 +36,10 @@ export default function BackofficeWraperPage(props: WithRouterProps) {
     <PageLayout>
       <PageLayout.Header title="Deals Admin">
         <div className={classes.headerContainer}>
+          <Box mr={1}>
+            <DocumentsRepositoryButton />
+          </Box>
+
           {
             // The search box on other tab should be readonly.
             // We redirect to the Search tab when users click the search box,
