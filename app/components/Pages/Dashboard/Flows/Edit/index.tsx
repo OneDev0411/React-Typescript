@@ -345,7 +345,7 @@ function Edit(props: WithRouterProps) {
             <Contacts
               onStop={flowStopHandler}
               onContactClick={contactId =>
-                props.navigate(`/dashboard/contacts/${contactId}`)
+                navigate(`/dashboard/contacts/${contactId}`)
               }
               flowId={flow.id}
             />

@@ -266,7 +266,7 @@ function List(props: WithRouterProps) {
                 getTdProps={({ column, row }) => ({
                   onClick: () => {
                     if (column.id !== 'actions') {
-                      props.navigate(`/dashboard/flows/${row.id}`)
+                      navigate(`/dashboard/flows/${row.id}`)
                     }
                   }
                 })}
