@@ -21,7 +21,6 @@ export default function CalendarPage() {
   useTitle('Calendar | Rechat')
 
   const classes = useCommonStyles()
-
   const actionRef = useRef<ActionRef>(null)
   const user = useUser()
   const [isOpenEventDrawer, setIsOpenEventDrawer] = useState(false)
