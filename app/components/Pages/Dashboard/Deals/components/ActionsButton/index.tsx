@@ -1,7 +1,7 @@
 // TODO: reimplement is required
 import React from 'react'
 
-import { Tooltip } from '@material-ui/core'
+import { Theme, Tooltip, useTheme } from '@material-ui/core'
 import { mdiChevronDown } from '@mdi/js'
 import { connect } from 'react-redux'
 
@@ -88,6 +88,7 @@ interface Props {
 interface ContextProps {
   actionsState: DealTaskActionsStateContext
   actionsDispatch: DealTaskActionsDispatchContext
+  theme: Theme
 }
 
 interface State {
@@ -547,6 +548,11 @@ class ActionsButton extends React.Component<
           placement="bottom-end"
           PopperProps={{
             style: {
+              /*
+               * The z-index needs discussion.
+               * When popper has a higher z-index than sideNavDrawer, it blinks on close.
+               */
+              zIndex: this.props.theme.zIndex.sideNavDrawer - 1,
               marginTop: '4px',
               width: '10.8rem' // TODO: needs refactor all styled components
             }
@@ -691,9 +697,15 @@ function mapStateToProps(
 const withContext =
   (Component: typeof ActionsButton) => (props: Props & StateProps) => {
     const [state, dispatch] = useChecklistActionsContext()
+    const theme = useTheme<Theme>()
 
     return (
-      <Component {...props} actionsState={state} actionsDispatch={dispatch} />
+      <Component
+        {...props}
+        actionsState={state}
+        actionsDispatch={dispatch}
+        theme={theme}
+      />
     )
   }
 

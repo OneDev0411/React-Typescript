@@ -113,11 +113,14 @@ export function BaseDropdown({
       <Popper
         open={open}
         anchorEl={anchorRef.current}
-        style={{ zIndex: theme.zIndex.modal }}
         transition
         placement={placement}
         disablePortal={disablePortal}
         {...PopperProps}
+        style={{
+          zIndex: theme.zIndex.modal,
+          ...(PopperProps.style ?? {})
+        }}
       >
         {({ TransitionProps, placement }) => (
           <Fade
