@@ -16,6 +16,7 @@ interface Props {
   children: ReactNode
   width?: React.CSSProperties['width']
   onClose?: () => void
+  popoverStyle?: React.CSSProperties
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -43,6 +44,7 @@ function PopOver({
   show,
   dark,
   width = 'auto',
+  popoverStyle,
   onClose = noop
 }: Props) {
   const classes = useStyles({ placement, width })
@@ -73,6 +75,7 @@ function PopOver({
         {children}
       </div>
       <Popover
+        style={popoverStyle}
         id={id}
         className={classNames(classes.popover, className)}
         classes={{
