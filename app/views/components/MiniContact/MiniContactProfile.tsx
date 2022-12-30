@@ -23,6 +23,7 @@ interface MiniContactPropsType {
   children: React.ReactNode
   as?: string
   onEventChange?(event: IEvent, type: string): void
+  onOpenProfile?: (id: UUID) => void
 }
 
 function MiniContact(props: MiniContactPropsType) {
@@ -45,6 +46,13 @@ function MiniContact(props: MiniContactPropsType) {
   const closeMiniContact = () => {
     setAnchorEl(null)
     cancel()
+  }
+
+  const handleOpenProfile = (id: UUID) => {
+    if (typeof props.onOpenProfile === 'function') {
+      closeMiniContact()
+      props.onOpenProfile(id)
+    }
   }
 
   return (
@@ -71,6 +79,11 @@ function MiniContact(props: MiniContactPropsType) {
                 actionSettings={actionSettings}
                 setActionSettings={setActionSettings}
                 onSubmit={props.onEventChange}
+                onOpenProfile={
+                  typeof props.onOpenProfile === 'function'
+                    ? handleOpenProfile
+                    : undefined
+                }
               />
             </Paper>
           </ContentSizeAwarePopper>

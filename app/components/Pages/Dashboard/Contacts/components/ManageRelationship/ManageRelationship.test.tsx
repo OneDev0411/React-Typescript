@@ -2,7 +2,8 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 import { TestBed } from 'tests/unit/TestBed'
 
-import { frequencyOptions, frequencyToString } from './helper'
+import { frequencyOptions } from './constants'
+import { frequencyToString } from './helper'
 
 import { ManageRelationship } from './index'
 
@@ -14,51 +15,6 @@ describe('ManageRelationship', () => {
     jest.resetAllMocks()
 
     value = null
-  })
-
-  describe('ManageRelationship button text', () => {
-    it('should render button default text when touch_freq is null', async () => {
-      render(
-        <TestBed>
-          <ManageRelationship value={value} onChange={onChange} />
-        </TestBed>
-      )
-
-      const expectedText = frequencyToString(value)
-
-      await waitFor(() => {
-        expect(screen.getByText(expectedText)).toBeInTheDocument()
-      })
-    })
-
-    it('should render monthly when touch_freq is 30', async () => {
-      value = 30
-      render(
-        <TestBed>
-          <ManageRelationship value={value} onChange={onChange} />
-        </TestBed>
-      )
-
-      const expectedText = frequencyToString(value)
-
-      await waitFor(() => {
-        expect(screen.getByText(expectedText)).toBeInTheDocument()
-      })
-    })
-    it('should render exact day when touch_freq is 91', async () => {
-      value = 91
-      render(
-        <TestBed>
-          <ManageRelationship value={value} onChange={onChange} />
-        </TestBed>
-      )
-
-      const expectedText = frequencyToString(value)
-
-      await waitFor(() => {
-        expect(screen.getByText(expectedText)).toBeInTheDocument()
-      })
-    })
   })
 
   describe('ManageRelationship menu', () => {
@@ -78,10 +34,10 @@ describe('ManageRelationship', () => {
           expect(screen.getByText(option)).toBeInTheDocument()
         })
 
-        expect(screen.getByText('Custom...')).toBeInTheDocument()
+        expect(screen.getByText('Custom')).toBeInTheDocument()
       })
     })
-    it('should change the touch frequency when user clicks on weekly item', async () => {
+    it('should change the touch frequency when user clicks on Every week item', async () => {
       render(
         <TestBed>
           <ManageRelationship value={value} onChange={onChange} />
@@ -94,7 +50,7 @@ describe('ManageRelationship', () => {
         expect(screen.queryByRole('menu')).toBeInTheDocument()
       })
 
-      fireEvent.click(screen.getByText('Weekly'))
+      fireEvent.click(screen.getByText('Every week'))
 
       await waitFor(() => {
         expect(onChange).toBeCalledTimes(1)
@@ -115,7 +71,7 @@ describe('ManageRelationship', () => {
         expect(screen.queryByRole('menu')).toBeInTheDocument()
       })
 
-      fireEvent.click(screen.getByText('Custom...'))
+      fireEvent.click(screen.getByText('Custom'))
 
       await waitFor(() => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()
@@ -150,7 +106,7 @@ describe('ManageRelationship', () => {
         expect(screen.queryByRole('menu')).toBeInTheDocument()
       })
 
-      fireEvent.click(screen.getByText('Custom...'))
+      fireEvent.click(screen.getByText('Custom'))
 
       await waitFor(() => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()
@@ -165,7 +121,7 @@ describe('ManageRelationship', () => {
       fireEvent.click(screen.getByTitle('Save'))
 
       await waitFor(() => {
-        expect(onChange).toBeCalledTimes(0)
+        expect(onChange).toBeCalledTimes(1)
       })
     })
     it('should reset the touch frequency when user enter empty custom value', async () => {
@@ -181,7 +137,7 @@ describe('ManageRelationship', () => {
         expect(screen.queryByRole('menu')).toBeInTheDocument()
       })
 
-      fireEvent.click(screen.getByText('Custom...'))
+      fireEvent.click(screen.getByText('Custom'))
 
       await waitFor(() => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()
@@ -196,7 +152,7 @@ describe('ManageRelationship', () => {
       fireEvent.click(screen.getByTitle('Save'))
 
       await waitFor(() => {
-        expect(onChange).toBeCalledTimes(0)
+        expect(onChange).toBeCalledTimes(1)
       })
     })
   })
@@ -204,42 +160,46 @@ describe('ManageRelationship', () => {
 
 describe('frequencyToString helper', () => {
   it('should return default value when frequency is null', () => {
-    expect(frequencyToString(null, 'default')).toBe('default')
+    expect(frequencyToString(null, 'default')).toContain('default')
   })
 
   it('should return preset default value when frequency is null', () => {
-    expect(frequencyToString(null)).toBe('Manage Relationship')
+    expect(frequencyToString(null)).toContain('Add auto remind')
   })
 
-  it('should return "Weekly" when frequency is 7', () => {
-    expect(frequencyToString(7)).toBe('Weekly')
+  it('should return default when frequency is 0', () => {
+    expect(frequencyToString(0, 'default')).toContain('default')
   })
 
-  it('should return "Monthly" when frequency is 30', () => {
-    expect(frequencyToString(30)).toBe('Monthly')
+  it('should return option when frequency is 7', () => {
+    expect(frequencyToString(7)).toContain(frequencyOptions[7])
   })
 
-  it('should return "Bimonthly" when frequency is 60', () => {
-    expect(frequencyToString(60)).toBe('Bimonthly')
+  it('should return option when frequency is 30', () => {
+    expect(frequencyToString(30)).toContain(frequencyOptions[30])
   })
 
-  it('should return "Quarterly" when frequency is 90', () => {
-    expect(frequencyToString(90)).toBe('Quarterly')
+  it('should return option when frequency is 60', () => {
+    expect(frequencyToString(60)).toContain(frequencyOptions[60])
   })
 
-  it('should return "Quarterly" when frequency is 180', () => {
-    expect(frequencyToString(180)).toBe('Semiannually')
+  it('should return option when frequency is 90', () => {
+    expect(frequencyToString(90)).toContain(frequencyOptions[90])
   })
 
-  it('should return "Annually" when frequency is 365', () => {
-    expect(frequencyToString(365)).toBe('Annually')
+  it('should return option when frequency is 180', () => {
+    expect(frequencyToString(180)).toContain(frequencyOptions[180])
+  })
+
+  it('should return option when frequency is 365', () => {
+    expect(frequencyToString(365)).toContain(frequencyOptions[365])
   })
 
   it('should return exact days when frequency is 121', () => {
-    expect(frequencyToString(121)).toBe('Every 121 Days')
+    expect(frequencyToString(121)).toContain('Every 121 Days')
   })
 
   it('should return exact day (singular) when frequency is 1', () => {
-    expect(frequencyToString(1)).toBe('Every 1 Day')
+    expect(frequencyToString(1)).toContain('Every 1 Day')
   })
 })

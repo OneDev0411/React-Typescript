@@ -1,20 +1,12 @@
-import { useState, useRef } from 'react'
+import { useState, MouseEvent } from 'react'
 
-import {
-  Divider,
-  Button,
-  makeStyles,
-  Popover,
-  Theme,
-  Typography
-} from '@material-ui/core'
+import { Button, makeStyles, Theme, Typography } from '@material-ui/core'
 import { mdiPencilOutline } from '@mdi/js'
-import pluralize from 'pluralize'
-import ClickOutside from 'react-click-outside'
 
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
-import { ManageRelationshipCustomItem } from './CustomTouchFrequency'
+import { frequencyToString } from '../../components/ManageRelationship/helper'
+import { ManageRelationshipMenu } from '../../components/ManageRelationship/ManageRelationshipMenu'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -56,7 +48,7 @@ const useStyles = makeStyles(
       color: theme.palette.grey[800],
       '& svg': {
         color: theme.palette.grey[800],
-        margin: 'auto'
+        margin: theme.spacing(1, 'auto', 0, 'auto')
       },
       '&:hover': {
         background: theme.palette.action.hover,
@@ -101,120 +93,78 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  value?: Nullable<number>
+  value: Nullable<number>
   onUpdateTouchFreq(newValue: Nullable<number>): void
-}
-
-export const frequencyOptions = {
-  7: 'Weekly',
-  30: 'Monthly',
-  60: 'Bimonthly',
-  90: 'Quarterly',
-  180: 'Semiannually',
-  365: 'Annually'
 }
 
 const TouchFrequency = ({ value, onUpdateTouchFreq }: Props) => {
   const classes = useStyles()
   const [showAction, setShowAction] = useState(false)
-  const [showCustom, setShowCustom] = useState(false)
-  const [anchorEl, setAnchorEl] = useState(null)
-  const isOpen = Boolean(anchorEl)
-  const anchorRef = useRef(null)
+  const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLButtonElement | null>(
+    null
+  )
 
-  const id = isOpen ? 'touch-date-popover' : undefined
+  const isMenuOpen = Boolean(menuAnchorEl)
 
-  const handleEdit = () => {
-    setAnchorEl(anchorRef.current)
+  const handleOpenMenu = (event: MouseEvent<HTMLButtonElement>) => {
+    setMenuAnchorEl(event.currentTarget)
   }
 
-  function handleClose() {
+  const handleClose = () => {
     setShowAction(false)
-    setShowCustom(false)
-    setAnchorEl(null)
+    setMenuAnchorEl(null)
   }
 
-  const handleSelect = (newValue: Nullable<number>) => {
-    onUpdateTouchFreq(newValue)
+  const handleChangeTouchFreq = (newValue: Nullable<number>) => {
     handleClose()
+
+    // Falsy values ('' / 0 / undefined) should be considered null in the backend
+    const normalizedNewValue = newValue || null
+
+    // To do the optimistic update,
+    // we need to update the contact object in parent component
+    onUpdateTouchFreq(normalizedNewValue)
   }
 
   const handleShowAction = () => {
     setShowAction(true)
   }
 
-  const handleRemoveAction = () => {
+  const handleCloseAction = () => {
     setShowAction(false)
   }
 
   return (
-    <ClickOutside onClickOutside={handleClose}>
+    <>
       <Button
         variant="text"
         onMouseEnter={handleShowAction}
-        onMouseLeave={handleRemoveAction}
+        onMouseLeave={handleCloseAction}
         className={classes.container}
-        onClick={handleEdit}
+        onClick={handleOpenMenu}
       >
-        <Typography variant="body2">Touch Frequency</Typography>
-        <Typography ref={anchorRef} variant="body2" className={classes.value}>
-          {value
-            ? `Every ${pluralize('day', value, true)}`
-            : 'Add Touch Frequency'}
+        <Typography variant="body2">Auto Remind</Typography>
+        <Typography variant="body2" className={classes.value}>
+          {value ? frequencyToString(value) : 'Add Auto Remind'}
         </Typography>
         {showAction && (
           <div className={classes.videoModeActionBar}>
-            <div className={classes.actionIcon} onClick={handleEdit}>
+            <div className={classes.actionIcon}>
               <SvgIcon path={mdiPencilOutline} size={muiIconSizes.small} />
               <span className={classes.actionLabel}>Edit</span>
             </div>
           </div>
         )}
-        <Popover
-          id={id}
-          open={isOpen}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center'
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center'
-          }}
-          className={classes.popoverContainer}
-        >
-          <div className={classes.actionContainer}>
-            {showCustom ? (
-              <ManageRelationshipCustomItem
-                contactTouchFreq={value || null}
-                onChangeTouchFreq={handleSelect}
-              />
-            ) : (
-              <div className={classes.actionsWrapper}>
-                {Object.keys(frequencyOptions).map(key => (
-                  <div
-                    onClick={() => handleSelect(Number(key))}
-                    key={key}
-                    className={classes.action}
-                  >
-                    {frequencyOptions[key]}
-                  </div>
-                ))}
-                <Divider />
-                <div
-                  onClick={() => setShowCustom(true)}
-                  className={classes.action}
-                >
-                  Custom...
-                </div>
-              </div>
-            )}
-          </div>
-        </Popover>
       </Button>
-    </ClickOutside>
+      {isMenuOpen && (
+        <ManageRelationshipMenu
+          anchorEl={menuAnchorEl}
+          onClose={handleClose}
+          contactTouchFreq={value}
+          onChangeTouchFreq={handleChangeTouchFreq}
+        />
+      )}
+    </>
   )
 }
 

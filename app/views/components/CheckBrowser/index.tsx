@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) => {
 })
 
 interface CheckBrowserPropsType {
-  id: string
+  id?: string
   children: ReactElement
 }
 
