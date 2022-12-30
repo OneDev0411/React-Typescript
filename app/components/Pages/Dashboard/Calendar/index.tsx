@@ -21,6 +21,7 @@ export default function CalendarPage() {
   useTitle('Calendar | Rechat')
 
   const classes = useCommonStyles()
+
   const actionRef = useRef<ActionRef>(null)
   const user = useUser()
   const [isOpenEventDrawer, setIsOpenEventDrawer] = useState(false)
@@ -29,7 +30,9 @@ export default function CalendarPage() {
   const handleCreateTask = (
     event: IEvent | ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => {
-    actionRef.current!.updateCrmEvents(event, 'created')
+    if (actionRef.current !== null) {
+      actionRef.current!.updateCrmEvents(event, 'created')
+    }
   }
 
   useEffectOnce(() => {
