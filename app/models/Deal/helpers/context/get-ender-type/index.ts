@@ -7,11 +7,11 @@ export function getEnderType(deal: IDeal): string {
   const dealType = getSide(deal)
 
   if (enderType === 'AgentDoubleEnder') {
-    return `${dealType} (Agent Double Ender)`
+    return `${dealType} (Agent Dual Agency)`
   }
 
   if (enderType === 'OfficeDoubleEnder') {
-    return `${dealType} (Office Double Ender)`
+    return `${dealType} (Office Dual Agency)`
   }
 
   return dealType

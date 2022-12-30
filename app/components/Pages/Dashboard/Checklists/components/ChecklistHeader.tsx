@@ -8,7 +8,8 @@ import {
   ListItem,
   List,
   makeStyles,
-  Theme
+  Theme,
+  Typography
 } from '@material-ui/core'
 import Fuse from 'fuse.js'
 import usePromise from 'react-use-promise'
@@ -17,8 +18,6 @@ import SearchDrawer from 'components/SearchDrawer'
 import SplitButton from 'components/SplitButton'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { useDictionary } from 'hooks/use-dictionary'
-
-// import ChecklistRoles from './ChecklistRoles'
 
 type Props = {
   checklist?: IBrandChecklist
@@ -93,11 +92,10 @@ export function ChecklistHeader({
   }
 
   return (
-    <Box>
-      <Box display="flex" alignItems="center" justifyContent="flex-start">
-        {/* <ChecklistRoles checklists={} brand={}/> */}
-      </Box>
-      <Box display="flex" alignItems="center" justifyContent="flex-end">
+    <Box display="flex" alignItems="center" justifyContent="space-between">
+      <Typography variant="h6">Forms</Typography>
+
+      <Box>
         <FormControlLabel
           control={
             <Checkbox
@@ -176,43 +174,43 @@ export function ChecklistHeader({
         >
           Add Form
         </SplitButton>
-        {formPickerOpen && (
-          <SearchDrawer
-            title="Select a form"
-            notFoundMessage="No form was found"
-            searchFunction={q => formSearchFuse.search(q)}
-            onSelectItems={async (items: Record<UUID, IDealForm>) => {
-              setFormPickerOpen(false)
-
-              // eslint-disable-next-line no-restricted-syntax
-              for (const form of Object.values(items)) {
-                // eslint-disable-next-line no-await-in-loop
-                await addFormTask(checklist, form)
-              }
-            }}
-            isOpen={formPickerOpen}
-            ItemRow={ItemRow}
-            searchInputOptions={{
-              placeholder: 'Type in to search'
-            }}
-            // we can enable multipleSelection but the experience is a
-            // little different and probably needs better components for
-            // rendering items
-            multipleSelection={false}
-            onChangeSelectedItems={onChangeSelectedItems}
-            selectedItems={selectedItems}
-            normalizeSelectedItem={i => i}
-            defaultLists={[
-              {
-                title: '',
-                items: forms || []
-              }
-            ]}
-            onClose={() => setFormPickerOpen(false)}
-            showLoadingIndicator={formsState === 'pending'}
-          />
-        )}
       </Box>
+      {formPickerOpen && (
+        <SearchDrawer
+          title="Select a form"
+          notFoundMessage="No form was found"
+          searchFunction={q => formSearchFuse.search(q)}
+          onSelectItems={async (items: Record<UUID, IDealForm>) => {
+            setFormPickerOpen(false)
+
+            // eslint-disable-next-line no-restricted-syntax
+            for (const form of Object.values(items)) {
+              // eslint-disable-next-line no-await-in-loop
+              await addFormTask(checklist, form)
+            }
+          }}
+          isOpen={formPickerOpen}
+          ItemRow={ItemRow}
+          searchInputOptions={{
+            placeholder: 'Type in to search'
+          }}
+          // we can enable multipleSelection but the experience is a
+          // little different and probably needs better components for
+          // rendering items
+          multipleSelection={false}
+          onChangeSelectedItems={onChangeSelectedItems}
+          selectedItems={selectedItems}
+          normalizeSelectedItem={i => i}
+          defaultLists={[
+            {
+              title: '',
+              items: forms || []
+            }
+          ]}
+          onClose={() => setFormPickerOpen(false)}
+          showLoadingIndicator={formsState === 'pending'}
+        />
+      )}
     </Box>
   )
 }

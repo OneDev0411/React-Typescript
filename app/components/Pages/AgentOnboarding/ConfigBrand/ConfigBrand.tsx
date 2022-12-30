@@ -62,7 +62,7 @@ export function ConfigBrand() {
         [
           {
             role: 'Admin',
-            acl: ['Admin', 'Marketing'],
+            acl: ['Admin', 'Marketing', 'BackOffice'],
             members: [{ user: user.id }]
           }
         ]
@@ -77,7 +77,7 @@ export function ConfigBrand() {
         [
           {
             role: 'Agent',
-            acl: ['CRM', 'Marketing'],
+            acl: ['CRM', 'Marketing', 'Deals'],
             members: [{ user: user.id }]
           }
         ]

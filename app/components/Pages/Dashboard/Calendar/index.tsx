@@ -24,6 +24,7 @@ export default function CalendarPage() {
   const actionRef = useRef<ActionRef>(null)
   const user = useUser()
   const [isOpenEventDrawer, setIsOpenEventDrawer] = useState(false)
+  const [isOpenRemainder, setIsOpenRemainder] = useState(false)
   const [, dispatch] = useGlobalActionContext()
   const handleCreateTask = (
     event: IEvent | ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
@@ -50,14 +51,42 @@ export default function CalendarPage() {
           <ViewAs />
         </div>
         <AddAccountButton
-          createMenuItemProps={{
-            title: 'Log Activity',
-            iconPath: mdiCalendarPlus,
-            onClick: () => {
-              setIsOpenEventDrawer(true)
+          leadChannels={[]}
+          createMenuItemProps={[
+            {
+              title: 'Add a Reminder',
+              iconPath: mdiCalendarPlus,
+              onClick: () => {
+                setIsOpenRemainder(true)
+              }
+            },
+            {
+              title: 'Log Activity',
+              iconPath: mdiCalendarPlus,
+              onClick: () => {
+                setIsOpenEventDrawer(true)
+              }
             }
-          }}
+          ]}
         />
+        {isOpenRemainder && (
+          <EventDrawer
+            isOpen
+            user={user}
+            title="Add a Reminder"
+            submitCallback={(event: IEvent) => {
+              handleCreateTask(event)
+              setIsOpenRemainder(false)
+            }}
+            onClose={() => {
+              setIsOpenRemainder(false)
+            }}
+            initialValues={{
+              ...initialValueGenerator(user, [], new Date()),
+              status: undefined
+            }}
+          />
+        )}
         {isOpenEventDrawer && (
           <EventDrawer
             isOpen

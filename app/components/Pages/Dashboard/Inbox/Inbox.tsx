@@ -101,7 +101,10 @@ export default function Inbox({ params }: WithRouterProps) {
       <Box paddingLeft={5} flex="0 1 auto">
         {initializing || noConnectedAccounts ? (
           <GlobalPageLayout.Header title="Inbox">
-            <AddAccountButton onFetchedOAuthAccounts={onFetchedOAuthAccounts} />
+            <AddAccountButton
+              leadChannels={['Realtor', 'Zillow']}
+              onFetchedOAuthAccounts={onFetchedOAuthAccounts}
+            />
           </GlobalPageLayout.Header>
         ) : (
           <GlobalPageLayout.HeaderWithSearch
@@ -117,14 +120,17 @@ export default function Inbox({ params }: WithRouterProps) {
           >
             <AddAccountButton
               className={classes.addAccountButton}
-              createMenuItemProps={{
-                title: 'Compose an email',
-                iconPath: mdiEmailOutline,
-                onClick: () => {
-                  setIsOpenEmailComposeDrawer(true)
+              createMenuItemProps={[
+                {
+                  title: 'Compose an email',
+                  iconPath: mdiEmailOutline,
+                  onClick: () => {
+                    setIsOpenEmailComposeDrawer(true)
+                  }
                 }
-              }}
+              ]}
               onFetchedOAuthAccounts={onFetchedOAuthAccounts}
+              leadChannels={['Realtor', 'Zillow']}
             />
             {isOpenEmailComposeDrawer && (
               <SingleEmailComposeDrawer

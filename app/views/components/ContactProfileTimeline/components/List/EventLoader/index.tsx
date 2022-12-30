@@ -66,12 +66,13 @@ const useStyles = makeStyles(
     progressLoaderContainer: {
       position: 'absolute',
       zIndex: 10,
+      border: `1px solid ${theme.palette.action.disabledBackground}`,
       top: 0,
-      left: theme.spacing(2),
-      right: theme.spacing(2),
+      left: 0,
+      right: 0,
       bottom: 0,
       backgroundColor: theme.palette.background.paper,
-      opacity: 0.6
+      opacity: 0.8
     },
     progressLoaderIcon: {
       position: 'absolute',

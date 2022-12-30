@@ -343,6 +343,11 @@ class EventDrawerContainer extends Component {
                             <DateTimeField
                               name="dueDate"
                               showTimePicker={!values.allDay}
+                              datePickerModifiers={{
+                                disabled: {
+                                  before: new Date()
+                                }
+                              }}
                             />
 
                             {this.props.dateType === 'range' && (
