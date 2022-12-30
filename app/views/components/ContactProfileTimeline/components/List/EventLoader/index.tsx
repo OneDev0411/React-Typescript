@@ -43,7 +43,7 @@ const useStyles = makeStyles(
         borderBottomLeftRadius: theme.shape.borderRadius
       },
       '&:hover': {
-        backgroundColor: theme.palette.grey['100']
+        backgroundColor: theme.palette.grey[50]
       }
     },
     mainContainer: {
