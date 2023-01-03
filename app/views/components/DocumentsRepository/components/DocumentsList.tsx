@@ -1,4 +1,10 @@
-import { Box, makeStyles, Theme, Typography } from '@material-ui/core'
+import {
+  Box,
+  CircularProgress,
+  makeStyles,
+  Theme,
+  Typography
+} from '@material-ui/core'
 
 import { DealFormsList } from '../../DealFormsList'
 import { useDocumentRepositoryContext } from '../context/use-document-repository-context'
@@ -22,8 +28,8 @@ const useStyles = makeStyles(
 export function DocumentsList() {
   const classes = useStyles()
 
-  const [folders] = useFolders()
-  const { searchCriteria } = useDocumentRepositoryContext()
+  const [folders, isSearching] = useFolders()
+  const { searchCriteria, isFetching } = useDocumentRepositoryContext()
 
   return (
     <Box className={classes.root} height="700px" overflow="scroll" p={3}>
@@ -34,18 +40,28 @@ export function DocumentsList() {
           </Typography>
         </Box>
       )}
-
-      <>
-        {folders.map(({ title, list }, index) => (
-          <DocumentFolder key={index} title={title} totalCount={list.length}>
-            <DealFormsList
-              forms={list}
-              selectionType="multiple"
-              textHighlight={searchCriteria}
-            />
-          </DocumentFolder>
-        ))}
-      </>
+      {isFetching || (isSearching && folders.length === 0) ? (
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          height="100%"
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          {folders.map(({ title, list }, index) => (
+            <DocumentFolder key={index} title={title} totalCount={list.length}>
+              <DealFormsList
+                forms={list}
+                selectionType="multiple"
+                textHighlight={searchCriteria}
+              />
+            </DocumentFolder>
+          ))}
+        </>
+      )}
     </Box>
   )
 }

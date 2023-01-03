@@ -15,15 +15,16 @@ const useStyles = makeStyles(
 
 interface Props {
   isOpen: boolean
+  onClose: () => void
 }
 
-export function DocumentsRepositoryDialog({ isOpen }: Props) {
+export function DocumentsRepositoryDialog({ isOpen, onClose }: Props) {
   const classes = useStyles()
 
   return (
     <Dialog fullWidth maxWidth="md" open={isOpen}>
       <DialogContent className={classes.dialogContent}>
-        <DocumentsRepository />
+        {isOpen && <DocumentsRepository onClose={onClose} />}
       </DialogContent>
     </Dialog>
   )

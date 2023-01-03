@@ -1,6 +1,7 @@
 import { createContext } from 'react'
 
 export interface IDocumentRepositoryContext {
+  isFetching: boolean
   searchCriteria: string
   activeCategoryIndex: number
   categoryNames: string[]

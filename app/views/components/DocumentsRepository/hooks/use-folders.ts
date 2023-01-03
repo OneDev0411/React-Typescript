@@ -40,11 +40,9 @@ export function useFolders(): [SearchResult[], boolean] {
       const results =
         searchCriteria.length === 0
           ? [getFolder(activeCategoryIndex)]
-          : Object.values(forms)
-              .map((_, index) => getFolder(index))
-              .filter(item => item.list.length > 0)
+          : Object.values(forms).map((_, index) => getFolder(index))
 
-      setList(results)
+      setList(results.filter(item => item.list.length > 0))
       setIsSearching(false)
     }, 0)
   }, [searchCriteria, categoryNames, forms, activeCategoryIndex])

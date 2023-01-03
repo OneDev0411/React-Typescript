@@ -33,7 +33,11 @@ const useStyles = makeStyles(
   }
 )
 
-export function DocumentsRepository() {
+interface Props {
+  onClose?: () => void
+}
+
+export function DocumentsRepository({ onClose }: Props) {
   const classes = useStyles()
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0)
   const [searchCriteria, setSearchCriteria] = useState('')
@@ -42,6 +46,7 @@ export function DocumentsRepository() {
   return (
     <DocumentRepositoryContext.Provider
       value={{
+        isFetching,
         searchCriteria,
         forms: isFetching ? {} : forms,
         categoryNames,
@@ -76,13 +81,15 @@ export function DocumentsRepository() {
             className={classes.header}
           >
             <Box width="300px">
-              <SearchField debounceTime={200} onChange={setSearchCriteria} />
+              <SearchField debounceTime={500} onChange={setSearchCriteria} />
             </Box>
 
             <Box>
-              <IconButton>
-                <SvgIcon path={mdiClose} />
-              </IconButton>
+              {onClose && (
+                <IconButton onClick={onClose}>
+                  <SvgIcon path={mdiClose} />
+                </IconButton>
+              )}
             </Box>
           </Box>
 

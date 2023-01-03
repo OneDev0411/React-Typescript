@@ -13,7 +13,10 @@ export function DocumentsRepositoryButton() {
         Download Forms
       </Button>
 
-      <DocumentsRepositoryDialog isOpen={isOpen} />
+      <DocumentsRepositoryDialog
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      />
     </>
   )
 }
