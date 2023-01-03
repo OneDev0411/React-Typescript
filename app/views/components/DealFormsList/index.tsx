@@ -3,6 +3,11 @@ import { Checkbox, makeStyles, Theme, Typography } from '@material-ui/core'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
+      '& :last-child': {
+        borderBottom: 'none'
+      }
+    },
+    row: {
       display: 'flex',
       alignItems: 'center',
       padding: theme.spacing(1.5, 2),
@@ -33,12 +38,12 @@ export function DealFormsList({
   const classes = useStyles()
 
   return (
-    <div>
+    <div className={classes.root}>
       {forms.map(form => (
-        <div key={form.id} className={classes.root}>
+        <div key={form.id} className={classes.row}>
           {selectionType === 'multiple' && (
             <div className={classes.checkboxContainer}>
-              <Checkbox />
+              <Checkbox color="primary" />
             </div>
           )}
           <Typography variant="subtitle2">{form.name}</Typography>

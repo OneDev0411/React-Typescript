@@ -36,11 +36,13 @@ const useStyles = makeStyles(
 export function DocumentsRepository() {
   const classes = useStyles()
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0)
+  const [searchCriteria, setSearchCriteria] = useState('')
   const { forms, categoryNames, isFetching } = useDocumentsRepository()
 
   return (
     <DocumentRepositoryContext.Provider
       value={{
+        searchCriteria,
         forms: isFetching ? {} : forms,
         categoryNames,
         activeCategoryIndex
@@ -74,7 +76,7 @@ export function DocumentsRepository() {
             className={classes.header}
           >
             <Box width="300px">
-              <SearchField />
+              <SearchField debounceTime={200} onChange={setSearchCriteria} />
             </Box>
 
             <Box>
