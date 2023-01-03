@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import {
   Box,
   IconButton,
@@ -12,6 +14,8 @@ import { SvgIcon } from '../SvgIcons'
 import { CategoriesSidebar } from './components/CategoriesSidebar'
 import { DocumentsList } from './components/DocumentsList'
 import { SearchField } from './components/SearchField'
+import { DocumentRepositoryContext } from './context'
+import { useDocumentsRepository } from './queries/use-documents-repository'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -31,42 +35,60 @@ const useStyles = makeStyles(
 
 export function DocumentsRepository() {
   const classes = useStyles()
+  const [activeCategoryIndex, setActiveCategoryIndex] = useState(0)
+  const { forms, categoryNames, isFetching } = useDocumentsRepository()
 
   return (
-    <Box display="flex" className={classes.root}>
-      <Box width="200px" px={2}>
-        <Box display="flex" alignItems="center" className={classes.header}>
-          <Typography variant="h6">Documents</Typography>
-        </Box>
-
-        <Box mt={2}>
-          <CategoriesSidebar />
-        </Box>
-      </Box>
-
-      <Box flexGrow={1}>
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          pr={2}
-          className={classes.header}
-        >
-          <Box width="300px">
-            <SearchField />
+    <DocumentRepositoryContext.Provider
+      value={{
+        forms: isFetching ? {} : forms,
+        categoryNames,
+        activeCategoryIndex
+      }}
+    >
+      <Box display="flex" className={classes.root}>
+        <Box minWidth="300px" maxWidth="300px">
+          <Box
+            display="flex"
+            alignItems="center"
+            className={classes.header}
+            pl={3}
+          >
+            <Typography variant="h6">Documents</Typography>
           </Box>
 
-          <Box>
-            <IconButton>
-              <SvgIcon path={mdiClose} />
-            </IconButton>
+          <Box mt={2}>
+            <CategoriesSidebar
+              isFetching={isFetching}
+              onChangeActiveCategory={setActiveCategoryIndex}
+            />
           </Box>
         </Box>
 
-        <Box mt={2}>
-          <DocumentsList />
+        <Box flexGrow={1}>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            pr={2}
+            className={classes.header}
+          >
+            <Box width="300px">
+              <SearchField />
+            </Box>
+
+            <Box>
+              <IconButton>
+                <SvgIcon path={mdiClose} />
+              </IconButton>
+            </Box>
+          </Box>
+
+          <Box mt={2}>
+            <DocumentsList />
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </DocumentRepositoryContext.Provider>
   )
 }
