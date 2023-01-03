@@ -14,7 +14,7 @@ import { SvgIcon } from '../SvgIcons'
 import { CategoriesSidebar } from './components/CategoriesSidebar'
 import { DocumentsList } from './components/DocumentsList'
 import { SearchField } from './components/SearchField'
-import { DocumentRepositoryContext } from './context'
+import { DocumentRepositoryContext } from './context/document-repository'
 import { useDocumentsRepository } from './queries/use-documents-repository'
 
 const useStyles = makeStyles(
@@ -41,6 +41,7 @@ export function DocumentsRepository({ onClose }: Props) {
   const classes = useStyles()
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0)
   const [searchCriteria, setSearchCriteria] = useState('')
+
   const { forms, categoryNames, isFetching } = useDocumentsRepository()
 
   return (
@@ -64,7 +65,7 @@ export function DocumentsRepository({ onClose }: Props) {
             <Typography variant="h6">Documents</Typography>
           </Box>
 
-          <Box mt={2}>
+          <Box width="100%" mt={2}>
             <CategoriesSidebar
               isFetching={isFetching}
               onChangeActiveCategory={setActiveCategoryIndex}

@@ -1,3 +1,5 @@
+import { useCallback, useState } from 'react'
+
 import {
   Box,
   CircularProgress,
@@ -27,9 +29,25 @@ const useStyles = makeStyles(
 
 export function DocumentsList() {
   const classes = useStyles()
+  const [selectionState, setSelectionState] = useState({})
 
-  const [folders, isSearching] = useFolders()
+  const folders = useFolders()
   const { searchCriteria, isFetching } = useDocumentRepositoryContext()
+
+  const updateSelectionState = useCallback(
+    (category: string, formId: UUID, checked: boolean) => {
+      setSelectionState(state => ({
+        ...state,
+        [category]: {
+          ...state[category],
+          [formId]: checked
+        }
+      }))
+    },
+    []
+  )
+
+  // const { updateSelectionState } = useDocumentRepositorySelectionContext()
 
   return (
     <Box className={classes.root} height="700px" overflow="scroll" p={3}>
@@ -40,7 +58,7 @@ export function DocumentsList() {
           </Typography>
         </Box>
       )}
-      {isFetching || (isSearching && folders.length === 0) ? (
+      {isFetching ? (
         <Box
           display="flex"
           alignItems="center"
@@ -52,12 +70,18 @@ export function DocumentsList() {
       ) : (
         <>
           {folders.map(({ title, list }, index) => (
-            <DocumentFolder key={index} title={title} totalCount={list.length}>
-              <DealFormsList
-                forms={list}
-                selectionType="multiple"
-                textHighlight={searchCriteria}
-              />
+            <DocumentFolder key={title} title={title} totalCount={list.length}>
+              <div>
+                <DealFormsList
+                  forms={list}
+                  selectionType="multiple"
+                  selectionList={selectionState[title] ?? {}}
+                  onChangeSelection={(formId, checked) =>
+                    updateSelectionState(title, formId, checked)
+                  }
+                  textHighlight={searchCriteria}
+                />
+              </div>
             </DocumentFolder>
           ))}
         </>

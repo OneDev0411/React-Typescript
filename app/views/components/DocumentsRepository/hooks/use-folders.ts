@@ -9,43 +9,43 @@ interface SearchResult {
   list: IBrandForm[]
 }
 
-export function useFolders(): [SearchResult[], boolean] {
-  const [isSearching, setIsSearching] = useState(false)
+export function useFolders(): SearchResult[] {
   const [list, setList] = useState<SearchResult[]>([])
 
   const { activeCategoryIndex, forms, searchCriteria, categoryNames } =
     useDocumentRepositoryContext()
 
   useEffect(() => {
-    setIsSearching(true)
+    console.log('XXXXX', {
+      searchCriteria,
+      categoryNames,
+      forms,
+      activeCategoryIndex
+    })
 
-    // use async searching technique to avoid page lock for huge lists
-    setTimeout(() => {
-      const getFolder = (index: number) => {
-        const title = categoryNames?.[index]
-        const formsList = forms?.[title] ?? []
+    const getFolder = (index: number) => {
+      const title = categoryNames?.[index]
+      const formsList = forms?.[title] ?? []
 
-        const list = searchCriteria
-          ? matchSorter(formsList, searchCriteria, {
-              keys: ['name']
-            })
-          : formsList
+      const list = searchCriteria
+        ? matchSorter(formsList, searchCriteria, {
+            keys: ['name']
+          })
+        : formsList
 
-        return {
-          title,
-          list
-        }
+      return {
+        title,
+        list
       }
+    }
 
-      const results =
-        searchCriteria.length === 0
-          ? [getFolder(activeCategoryIndex)]
-          : Object.values(forms).map((_, index) => getFolder(index))
+    const results =
+      searchCriteria.length === 0
+        ? [getFolder(activeCategoryIndex)]
+        : Object.values(forms).map((_, index) => getFolder(index))
 
-      setList(results.filter(item => item.list.length > 0))
-      setIsSearching(false)
-    }, 0)
+    setList(results.filter(item => item.list.length > 0))
   }, [searchCriteria, categoryNames, forms, activeCategoryIndex])
 
-  return [list, isSearching]
+  return list
 }

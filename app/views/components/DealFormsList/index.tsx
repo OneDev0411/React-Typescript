@@ -1,6 +1,8 @@
-import { Checkbox, makeStyles, Theme, Typography } from '@material-ui/core'
+import { makeStyles, Theme, Typography } from '@material-ui/core'
 
 import { TextWithHighlights } from '../TextWithHighlights'
+
+import { DealFormSelection } from './Selection'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -31,8 +33,19 @@ const useStyles = makeStyles(
   }
 )
 
+interface SingleSelection {
+  selectionType?: 'single'
+}
+
+interface MultipleSelection {
+  selectionType?: 'multiple'
+  selectionList: string[]
+  onChangeSelection: (formId: UUID, checked: boolean) => void
+}
+
+type SelectionType = SingleSelection | MultipleSelection
+
 interface Props {
-  selectionType?: 'single' | 'multiple'
   forms: IBrandForm[]
   textHighlight?: string
 }
@@ -40,9 +53,14 @@ interface Props {
 export function DealFormsList({
   textHighlight,
   forms = [],
-  selectionType = 'multiple'
-}: Props) {
+  selectionType = 'multiple',
+  ...restProps
+}: Props & SelectionType) {
   const classes = useStyles()
+
+  const handleSelectionChange = (formId: UUID, checked: boolean) => {
+    ;(restProps as MultipleSelection)?.onChangeSelection?.(formId, checked)
+  }
 
   return (
     <div className={classes.root}>
@@ -50,7 +68,13 @@ export function DealFormsList({
         <div key={form.id} className={classes.row}>
           {selectionType === 'multiple' && (
             <div className={classes.checkboxContainer}>
-              <Checkbox color="primary" />
+              <DealFormSelection
+                checked={
+                  (restProps as MultipleSelection).selectionList[form.id] ??
+                  false
+                }
+                onChange={checked => handleSelectionChange(form.id, checked)}
+              />
             </div>
           )}
           <Typography variant="body2">

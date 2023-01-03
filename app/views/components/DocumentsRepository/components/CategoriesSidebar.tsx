@@ -68,6 +68,7 @@ export function CategoriesSidebar({
       {categoryNames.map((categoryName, index) => (
         <Box
           key={index}
+          width="100%"
           display="flex"
           alignItems="center"
           justifyContent="space-between"
