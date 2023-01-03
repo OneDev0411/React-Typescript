@@ -18,7 +18,7 @@ const useStyles = makeStyles(
       boxSizing: 'border-box',
       border: 'none',
       borderRadius: 0,
-      padding: theme.spacing(2, 2),
+      padding: theme.spacing(1.5, 2),
       backgroundColor: 'transparent',
       fontWeight: theme.typography.fontWeightRegular,
       color: theme.palette.grey[600],
