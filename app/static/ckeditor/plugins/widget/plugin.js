@@ -4043,10 +4043,13 @@
 				return;
 			}
 
-			var label = this.getLabel ? this.getLabel() : getLabelDefault.call( this );
-
 			widget.wrapper.setAttribute( 'role', 'region' );
-			widget.wrapper.setAttribute( 'aria-label', label );
+
+			// To fix email clients (like gmail) show aria-label
+			// into visible text, which cause us some problems.
+			// https://gitlab.com/rechat/web/-/issues/7062#note_1226123690
+			//var label = this.getLabel ? this.getLabel() : getLabelDefault.call( this );
+			// widget.wrapper.setAttribute( 'aria-label', label );
 		}, null, null, 9999 );
 	}
 
