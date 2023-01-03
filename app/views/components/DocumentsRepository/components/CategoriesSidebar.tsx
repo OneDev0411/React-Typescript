@@ -11,9 +11,13 @@ const useStyles = makeStyles(
     root: {
       padding: theme.spacing(1, 1, 1, 3),
       color: theme.palette.tertiary.main,
+      cursor: 'pointer',
       '&.active': {
         color: theme.palette.secondary.main,
         backgroundColor: theme.palette.info.ultralight
+      },
+      '&:hover': {
+        backgroundColor: theme.palette.action.hover
       }
     },
     folderIcon: {
@@ -37,12 +41,15 @@ const useStyles = makeStyles(
 
 interface Props {
   isFetching: boolean
-  categories: string[]
+  onChangeActiveCategory: (index: number) => void
 }
 
-export function CategoriesSidebar({ isFetching, categories }: Props) {
+export function CategoriesSidebar({
+  isFetching,
+  onChangeActiveCategory
+}: Props) {
   const classes = useStyles()
-  const { activeCategoryIndex } = useDocumentRepositoryContext()
+  const { activeCategoryIndex, categoryNames } = useDocumentRepositoryContext()
 
   if (isFetching) {
     return (
@@ -58,7 +65,7 @@ export function CategoriesSidebar({ isFetching, categories }: Props) {
 
   return (
     <Box pt={2}>
-      {categories.map((categoryName, index) => (
+      {categoryNames.map((categoryName, index) => (
         <Box
           key={index}
           display="flex"
@@ -67,6 +74,7 @@ export function CategoriesSidebar({ isFetching, categories }: Props) {
           className={cn(classes.root, {
             active: activeCategoryIndex === index
           })}
+          onClick={() => onChangeActiveCategory(index)}
         >
           <Box display="flex" alignItems="center">
             <SvgIcon
