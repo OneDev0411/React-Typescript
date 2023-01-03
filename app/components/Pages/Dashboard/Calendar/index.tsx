@@ -29,9 +29,7 @@ export default function CalendarPage() {
   const handleCreateTask = (
     event: IEvent | ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => {
-    if (actionRef.current !== null) {
-      actionRef.current!.updateCrmEvents(event, 'created')
-    }
+    actionRef.current?.updateCrmEvents?.(event, 'created')
   }
 
   useEffectOnce(() => {
