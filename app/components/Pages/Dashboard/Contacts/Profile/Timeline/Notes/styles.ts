@@ -35,14 +35,20 @@ export const useStyles = makeStyles(
       maxWidth: '100%',
       overflow: 'hidden',
       borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
-      '&:last-child': {
-        borderBottom: 'none'
-      },
       '&:hover': {
-        backgroundColor: theme.palette.grey['100']
+        backgroundColor: theme.palette.grey[50]
       },
       '&:hover $actions': {
         opacity: 1
+      },
+      '&:first-child': {
+        borderTopLeftRadius: theme.shape.borderRadius,
+        borderTopRightRadius: theme.shape.borderRadius
+      },
+      '&:last-child': {
+        borderBottom: 'none',
+        borderBottomLeftRadius: theme.shape.borderRadius,
+        borderBottomRightRadius: theme.shape.borderRadius
       }
     },
     title: {
