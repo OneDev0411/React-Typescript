@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react'
 import { Box, Typography, Tooltip, IconButton, Theme } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 import { mdiPencilOutline } from '@mdi/js'
+import { isToday, isTomorrow } from 'date-fns'
 import fecha from 'fecha'
 import produce from 'immer'
 import groupBy from 'lodash/groupBy'
@@ -82,6 +83,19 @@ export function Notes(props: Props) {
     fecha.format(new Date(note.created_at * 1000), 'YYYY-MM-DD')
   )
 
+  const toHumanReadableDate = date => {
+    const notesDate = new Date(`${date}T00:00:00`)
+
+    if (isToday(notesDate) || isTomorrow(notesDate)) {
+      return `${isToday(notesDate) ? 'Today - ' : 'Tomorrow - '} ${fecha.format(
+        notesDate,
+        'MMM D, YY'
+      )}`
+    }
+
+    return fecha.format(notesDate, 'ddd - MMM D, YY')
+  }
+
   return (
     <>
       {map(noteGroups, (group, date) => {
@@ -90,11 +104,10 @@ export function Notes(props: Props) {
         not time so the Date class will parse the value in UTC (GMT) at midnight
         which cause 1 day off, so we need to add time like this
         */
-        const header = fecha.format(new Date(`${date}T00:00:00`), 'D MMM, ddd')
 
         return (
           <Box display="flex" className={classes.section} key={date}>
-            <div className={classes.header}>{header}</div>
+            <div className={classes.header}>{toHumanReadableDate(date)}</div>
             <Box flexGrow={1} className={classes.container}>
               {group.map((note, index) => (
                 <Box
