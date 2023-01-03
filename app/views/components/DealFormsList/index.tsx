@@ -1,5 +1,7 @@
 import { Checkbox, makeStyles, Theme, Typography } from '@material-ui/core'
 
+import { TextWithHighlights } from '../TextWithHighlights'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
@@ -19,6 +21,9 @@ const useStyles = makeStyles(
     },
     checkboxContainer: {
       marginRight: theme.spacing(1)
+    },
+    textHighlight: {
+      display: 'inline'
     }
   }),
   {
@@ -29,9 +34,11 @@ const useStyles = makeStyles(
 interface Props {
   selectionType?: 'single' | 'multiple'
   forms: IBrandForm[]
+  textHighlight?: string
 }
 
 export function DealFormsList({
+  textHighlight,
   forms = [],
   selectionType = 'multiple'
 }: Props) {
@@ -46,7 +53,22 @@ export function DealFormsList({
               <Checkbox color="primary" />
             </div>
           )}
-          <Typography variant="subtitle2">{form.name}</Typography>
+          <Typography variant="body2">
+            {textHighlight ? (
+              <TextWithHighlights
+                HighlightComponent={Typography}
+                highlightProps={{
+                  variant: 'subtitle2',
+                  className: classes.textHighlight
+                }}
+                search={textHighlight}
+              >
+                {form.name}
+              </TextWithHighlights>
+            ) : (
+              <>{form.name}</>
+            )}
+          </Typography>
         </div>
       ))}
     </div>

@@ -38,7 +38,11 @@ export function DocumentsList() {
       <>
         {folders.map(({ title, list }, index) => (
           <DocumentFolder key={index} title={title} totalCount={list.length}>
-            <DealFormsList forms={list} selectionType="multiple" />
+            <DealFormsList
+              forms={list}
+              selectionType="multiple"
+              textHighlight={searchCriteria}
+            />
           </DocumentFolder>
         ))}
       </>
