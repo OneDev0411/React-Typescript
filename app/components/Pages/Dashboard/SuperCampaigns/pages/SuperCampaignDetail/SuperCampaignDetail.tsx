@@ -1,9 +1,9 @@
 import { memo } from 'react'
 
 import { Box, makeStyles } from '@material-ui/core'
-import { RouteComponentProps } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { RouteComponentProps } from '@app/routes/types'
 import PageLayout from 'components/GlobalPageLayout'
 
 import SuperCampaignOverview from '../../components/SuperCampaignOverview'
