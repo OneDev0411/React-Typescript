@@ -2,6 +2,8 @@ import { Fragment } from 'react'
 
 import { useTitle } from 'react-use'
 
+import { withRouter } from '@app/routes/with-router'
+
 // import CoverImage from './components/CoverImage'
 import ChangePassword from './components/ChangePassword'
 import PersonalInfo from './components/PersonalInfo'
@@ -22,4 +24,4 @@ function Profile() {
   )
 }
 
-export default Profile
+export default withRouter(Profile)

@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { useTitle } from 'react-use'
 import Flex from 'styled-flex-component'
 
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import FormCard from 'components/FormCard'
 import { addNotification, Notification } from 'components/notification'
 import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
@@ -40,7 +42,7 @@ function getCSSInput({
   }
 }
 
-interface Props {
+interface Props extends RouteComponentProps {
   notify: (notification: Notification) => any
 }
 
@@ -140,6 +142,6 @@ function CentralizedShowingService({ notify }: Props) {
   )
 }
 
-export default connect(null, { notify: addNotification })(
-  CentralizedShowingService
+export default withRouter(
+  connect(null, { notify: addNotification })(CentralizedShowingService)
 )

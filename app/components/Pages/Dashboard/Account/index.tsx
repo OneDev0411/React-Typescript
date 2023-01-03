@@ -4,12 +4,14 @@ import Box from '@material-ui/core/Box'
 import { connect } from 'react-redux'
 import { useTitle, useLocation } from 'react-use'
 
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import PageLayout from 'components/GlobalPageLayout'
 import { IAppState } from 'reducers'
 
 import SettingsTabs from './Tabs'
 
-interface Props {
+interface Props extends RouteComponentProps {
   user: IUser
   children: ReactElement<any>
 }
@@ -68,4 +70,6 @@ const AccountLayout = ({ user, children }: Props) => {
   )
 }
 
-export default connect(({ user }: IAppState) => ({ user }))(AccountLayout)
+export default withRouter(
+  connect(({ user }: IAppState) => ({ user }))(AccountLayout)
+)
