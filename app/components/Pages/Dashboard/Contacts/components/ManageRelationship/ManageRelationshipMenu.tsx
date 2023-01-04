@@ -64,6 +64,7 @@ export function ManageRelationshipMenu({
           */}
           {Object.keys(frequencyOptions).map(value => (
             <MenuItem
+              selected={Number(value) === contactTouchFreq}
               key={value}
               onClick={() => {
                 onChangeTouchFreq(Number(value))
@@ -74,13 +75,15 @@ export function ManageRelationshipMenu({
           ))}
           <Divider />
           <MenuItem onClick={openCustomItem}>Custom</MenuItem>
-          <MenuItem
-            onClick={() => {
-              onChangeTouchFreq(0)
-            }}
-          >
-            Don't remind me
-          </MenuItem>
+          {contactTouchFreq && (
+            <MenuItem
+              onClick={() => {
+                onChangeTouchFreq(0)
+              }}
+            >
+              Don't remind me
+            </MenuItem>
+          )}
         </List>
       )}
     </Popover>

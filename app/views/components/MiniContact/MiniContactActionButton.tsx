@@ -1,26 +1,13 @@
-import { makeStyles, Theme } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
-import { mdiCalendarOutline } from '@mdi/js'
 
 import ActionButton from 'components/Button/ActionButton'
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   ActionSettingsType,
   ActionSettingsNamesType,
   FormatterOutputType
 } from './types'
-
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    icon: {
-      marginRight: theme.spacing(0.5)
-    }
-  }),
-  { name: 'MiniContactActionButton' }
-)
 
 interface MiniContactActionButtonType {
   isLoading: boolean
@@ -32,8 +19,6 @@ interface MiniContactActionButtonType {
 }
 
 function MiniContactActionButton(props: MiniContactActionButtonType) {
-  const classes = useStyles()
-
   if (props.isLoading) {
     return <Loading />
   }
@@ -65,13 +50,6 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
 
     return (
       <Button
-        startIcon={
-          <SvgIcon
-            path={mdiCalendarOutline}
-            size={muiIconSizes.small}
-            className={classes.icon}
-          />
-        }
         onClick={() => {
           props.setActionSettings(actionSettings)
         }}
@@ -79,7 +57,7 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
         color="secondary"
         size="small"
       >
-        Add Event
+        Add Reminder
       </Button>
     )
   }

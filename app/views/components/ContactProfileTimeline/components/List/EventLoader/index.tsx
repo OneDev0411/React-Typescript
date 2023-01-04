@@ -36,14 +36,16 @@ const useStyles = makeStyles(
       borderBottomWidth: 0,
       color: theme.palette.grey['500'],
       '&:first-child': {
-        borderTopLeftRadius: theme.shape.borderRadius
+        borderTopLeftRadius: theme.shape.borderRadius,
+        borderTopRightRadius: theme.shape.borderRadius
       },
       '&:last-child': {
         borderBottomWidth: '1px',
-        borderBottomLeftRadius: theme.shape.borderRadius
+        borderBottomLeftRadius: theme.shape.borderRadius,
+        borderBottomRightRadius: theme.shape.borderRadius
       },
       '&:hover': {
-        backgroundColor: theme.palette.grey['100']
+        backgroundColor: theme.palette.grey[50]
       }
     },
     mainContainer: {
