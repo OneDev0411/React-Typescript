@@ -5,6 +5,7 @@ import { Alert } from '@material-ui/lab'
 import { useLoadScript, LoadScriptProps } from '@react-google-maps/api'
 import { useSelector } from 'react-redux'
 
+import { useNavigate } from '@app/hooks/use-navigate'
 import getAgents, { AgentWithStats } from '@app/models/agent-network/get-agents'
 import { WithRouterProps } from '@app/routes/types'
 import { withRouter } from '@app/routes/with-router'
@@ -15,7 +16,7 @@ import { useLoadingEntities } from 'hooks/use-loading'
 import getListing from 'models/listings/listing/get-listing'
 import { selectUser } from 'selectors/user'
 
-import { OpenSearchResultPage } from '../helpers'
+import { toSearchResultPage } from '../helpers'
 import Layout from '../Layout'
 
 import AgentsGrid from './Grid'
@@ -36,6 +37,7 @@ function Agents(props: WithRouterProps) {
     googleMapsApiKey: config.google.api_key,
     libraries: GOOGLE_MAPS_LIBRARIES
   })
+  const navigate = useNavigate()
 
   const [listing, setListing] =
     useState<Nullable<ListingWithProposedAgentAndMlsInfo>>(null)
@@ -135,6 +137,12 @@ function Agents(props: WithRouterProps) {
 
   if (!isGoogleMapsLoaded) {
     return null
+  }
+
+  const OpenSearchResultPage = () => {
+    console.log('test 2', toSearchResultPage)
+
+    navigate('/dashboard/agent-network/agents', { state: toSearchResultPage })
   }
 
   return (
