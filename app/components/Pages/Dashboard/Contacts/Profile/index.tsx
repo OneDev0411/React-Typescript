@@ -86,7 +86,7 @@ const useStyles = makeStyles(
       borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },
     timelineContainer: {
-      marginTop: theme.spacing(4),
+      marginTop: theme.spacing(3),
       borderRadius: `${theme.shape.borderRadius}px`,
       display: 'flex',
       flexDirection: 'column',
