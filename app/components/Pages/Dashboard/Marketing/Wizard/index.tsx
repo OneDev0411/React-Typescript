@@ -96,8 +96,6 @@ function MarketingWizard(props: WithRouterProps) {
   useEffect(() => {
     const listingId = props.searchParams.get(LISTING_ID_QUERY_KEY)
 
-    console.log('listing id', listingId)
-
     if (isDesktop && listingId) {
       navigate(`/dashboard/marketing/mls/${listingId}`, { replace: true })
     }

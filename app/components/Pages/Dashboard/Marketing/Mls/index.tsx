@@ -54,13 +54,15 @@ function ListingMarketingPage({ params, location, router }: WithRouterProps) {
           templateType={templateType}
           medium={medium}
           onChangeTemplateType={type => {
-            router.push({
-              ...location,
-              query: {
-                ...searchParams,
-                type
+            navigate(
+              { ...location },
+              {
+                state: {
+                  ...searchParams,
+                  type
+                }
               }
-            })
+            )
           }}
           onChangeMedium={medium => {
             navigate(
