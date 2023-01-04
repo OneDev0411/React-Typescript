@@ -1,9 +1,10 @@
 import { useTitle } from 'react-use'
 
+import { withRouter } from '@app/routes/with-router'
 import Acl from 'components/Acl'
 import StatefulUrlFlow from 'components/InstantMarketing/adapters/StatefulUrl'
 
-export default function MarketingEditor() {
+function MarketingEditor() {
   useTitle('Marketing | Rechat')
 
   return (
@@ -12,3 +13,5 @@ export default function MarketingEditor() {
     </Acl.Marketing>
   )
 }
+
+export default withRouter(MarketingEditor)

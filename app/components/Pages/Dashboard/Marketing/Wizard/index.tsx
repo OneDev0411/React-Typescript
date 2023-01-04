@@ -22,6 +22,7 @@ import { useTitle } from 'react-use'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
+import { useNavigate } from '@app/hooks/use-navigate'
 import { uploadResizedAsset } from '@app/models/instant-marketing/upload-resized-asset'
 import { WithRouterProps } from '@app/routes/types'
 import { withRouter } from '@app/routes/with-router'
@@ -87,17 +88,20 @@ function MarketingWizard(props: WithRouterProps) {
   useTitle('Marketing | Rechat')
 
   const classes = useStyles()
+  const navigate = useNavigate()
   const isMobileView = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down('xs')
   )
 
   useEffect(() => {
-    const listingId = props.searchParams.get[LISTING_ID_QUERY_KEY]
+    const listingId = props.searchParams.get(LISTING_ID_QUERY_KEY)
+
+    console.log('listing id', listingId)
 
     if (isDesktop && listingId) {
-      props.router.replace(`/dashboard/marketing/mls/${listingId}`)
+      navigate(`/dashboard/marketing/mls/${listingId}`, { replace: true })
     }
-  }, [props.router, props.searchParams.get])
+  }, [navigate, props, props.router, props.searchParams.get])
 
   useGoogleMapsPlaces()
 

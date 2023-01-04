@@ -1,13 +1,14 @@
 import { Box, Grid } from '@material-ui/core'
 import { useTitle } from 'react-use'
 
+import { withRouter } from '@app/routes/with-router'
 import LoadingContainer from 'components/LoadingContainer'
 
 import Layout from '..'
 
 import Sections from './Sections'
 
-export default function MarketingOverview() {
+function MarketingOverview() {
   useTitle('Marketing | Rechat')
 
   return (
@@ -28,3 +29,5 @@ export default function MarketingOverview() {
     />
   )
 }
+
+export default withRouter(MarketingOverview)
