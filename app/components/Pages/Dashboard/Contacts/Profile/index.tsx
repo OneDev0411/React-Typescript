@@ -132,7 +132,7 @@ const ContactProfile = ({
 
   const notify = useNotify()
   const activeBrand = useActiveBrand()
-
+  const abortControllerRef = useRef<Nullable<AbortController>>(null)
   const classes = useStyles()
   const confirmation = useConfirmation()
 
@@ -182,21 +182,32 @@ const ContactProfile = ({
       }
 
       try {
-        const response = await getContact(props.params?.id || props.id, {
-          associations: [
-            ...updateContactQuery.associations,
-            'flow_step.email',
-            'contact.triggers',
-            'trigger.campaign',
-            'flow_step.crm_task',
-            'email_campaign.from',
-            'email_campaign.template',
-            'template_instance.template',
-            'contact.assignees',
-            'contact_role.user',
-            'contact_role.brand'
-          ]
-        })
+        if (abortControllerRef.current) {
+          abortControllerRef.current.abort()
+          abortControllerRef.current = null
+        }
+
+        abortControllerRef.current = new AbortController()
+
+        const response = await getContact(
+          props.params?.id || props.id,
+          {
+            associations: [
+              ...updateContactQuery.associations,
+              'flow_step.email',
+              'contact.triggers',
+              'trigger.campaign',
+              'flow_step.crm_task',
+              'email_campaign.from',
+              'email_campaign.template',
+              'template_instance.template',
+              'contact.assignees',
+              'contact_role.user',
+              'contact_role.brand'
+            ]
+          },
+          abortControllerRef.current.signal
+        )
         const normalizedContact = normalizeContact(response.data)
 
         setContact(normalizedContact)
@@ -476,6 +487,13 @@ const ContactProfile = ({
   useEffectOnce(() => {
     detectScreenSize()
     initializeContact(true)
+
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+        abortControllerRef.current = null
+      }
+    }
   })
 
   useEffect(() => {
