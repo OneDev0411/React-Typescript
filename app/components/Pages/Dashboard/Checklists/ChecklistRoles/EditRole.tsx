@@ -5,7 +5,7 @@ import DealRoleModal from '@app/views/components/DealRole'
 interface Props {
   children: React.ReactNode
   role: IBrandChecklistRole
-  onUpdateRole: (role: IDealRole) => void
+  onUpdateRole: (role: IBrandChecklistRole) => void
 }
 
 export function EditRole({ children, role, onUpdateRole }: Props) {

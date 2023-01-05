@@ -101,10 +101,13 @@ export function useChecklistsPage(rootBrandId: string | null) {
     role: IBrandChecklistRole
   ) => {
     if (rootBrandId) {
-      applyChecklistUpdate(
+      const checklist1 = await updateBrandChecklistRole(
+        rootBrandId,
         checklist.id,
-        await updateBrandChecklistRole(rootBrandId, checklist.id, role)
+        role
       )
+
+      applyChecklistUpdate(checklist.id, checklist1)
     }
   }
 

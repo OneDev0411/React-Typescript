@@ -5,10 +5,10 @@ import { ChecklistRolesTable } from './RolesTable'
 
 interface Props {
   checklist: IBrandChecklist
-  onCreateRole: (role: IDealRole) => void
-  onUpdateRole: (role: IDealRole) => void
+  onCreateRole: (role: IBrandChecklistRole) => void
+  onUpdateRole: (role: IBrandChecklistRole) => void
   onDeleteRole: (roleId: UUID) => void
-  onReorderRoles: (roles: IDealRole[]) => void
+  onReorderRoles: (roles: IBrandChecklistRole[]) => void
 }
 
 export function ChecklistRoles({
