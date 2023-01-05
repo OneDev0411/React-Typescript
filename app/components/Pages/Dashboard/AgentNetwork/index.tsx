@@ -11,15 +11,11 @@ export function AgentNetwork() {
   const { listings, isLoading } = useBrandAndDealsListings()
   const navigate = useNavigate()
   const OpenListingPage = () => {
-    console.log('test', toListingPage)
-
-    navigate('/dashboard/agent-network/agents', { state: toListingPage })
+    navigate(...toListingPage)
   }
 
   const OpenSearchResultPage = () => {
-    console.log('test 1', toSearchResultPage)
-
-    navigate('/dashboard/agent-network/agents', { state: toSearchResultPage })
+    navigate(...toSearchResultPage(listing))
   }
 
   return (

@@ -1,27 +1,38 @@
+import { NavigateFunction } from '@app/hooks/use-navigate'
 import { SearchResult } from 'components/DealsAndListingsAndPlacesSearchInput/types'
 
-export function toListingPage(listing: ICompactListing | IListing) {
+export function toListingPage(
+  listing: ICompactListing | IListing
+): Parameters<NavigateFunction> {
   const listingAddress =
     listing.type === 'compact_listing'
       ? listing.address
       : listing.property.address
 
-  const state = {
-    listing: listing.id,
-    title: listingAddress.street_address
-  }
-
-  return state
+  return [
+    '/dashboard/agent-network/agents',
+    {
+      state: {
+        listing: listing.id,
+        title: listingAddress.street_address
+      }
+    }
+  ]
 }
 
-export function toPlacePage(place: google.maps.GeocoderResult) {
-  const state = {
-    lat: place.geometry.location.lat,
-    lng: place.geometry.location.lng,
-    title: place.formatted_address
-  }
-
-  return state
+export function toPlacePage(
+  place: google.maps.GeocoderResult
+): Parameters<NavigateFunction> {
+  return [
+    '/dashboard/agent-network/agents',
+    {
+      state: {
+        lat: place.geometry.location.lat,
+        lng: place.geometry.location.lng,
+        title: place.formatted_address
+      }
+    }
+  ]
 }
 
 export function toSearchResultPage(result: SearchResult) {
