@@ -125,6 +125,7 @@ const ContactProfile = ({
   onOpenContact,
   onUpdateContact,
   onDeleteContact,
+  cachedContact,
   ...props
 }) => {
   useGetGlobalTriggers()
@@ -134,16 +135,23 @@ const ContactProfile = ({
 
   const classes = useStyles()
   const confirmation = useConfirmation()
-  const [contact, setContact] = useState<Nullable<INormalizedContact>>(null)
+
+  const isCachedContactExists = !!cachedContact
+
+  const [contact, setContact] = useState<Nullable<INormalizedContact>>(
+    isCachedContactExists ? normalizeContact(cachedContact) : null
+  )
   const [currentContactId, setCurrentContactId] = useState<string | undefined>(
     props.params?.id || props.id
   )
   const [isDeleting, setIsDeleting] = useState(false)
   const [isUpdatingOwner, setIsUpdatingOwner] = useState(false)
   const [isDesktopScreen, setIsDesktopScreen] = useState(false)
+
   const [isLoading, setIsLoading] = useState(
-    !isLoadedContactAttrDefs(props?.attributeDefs) || !props?.contact
+    !isLoadedContactAttrDefs(props?.attributeDefs) || !isCachedContactExists
   )
+
   const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Upcoming)
 
   const isModal: boolean = props.isModal
@@ -169,7 +177,7 @@ const ContactProfile = ({
 
   const fetchContact = useCallback(
     async (callback = () => {}, showFullScreenLoading = false) => {
-      if (showFullScreenLoading) {
+      if (showFullScreenLoading && !isCachedContactExists) {
         setIsLoading(true)
       }
 
@@ -210,7 +218,14 @@ const ContactProfile = ({
         }
       }
     },
-    [props.params?.id, props.id, isModal, onUpdateContact, goToContacts]
+    [
+      isCachedContactExists,
+      props.params?.id,
+      props.id,
+      isModal,
+      onUpdateContact,
+      goToContacts
+    ]
   )
 
   const handleOnTouchChange = useCallback(async () => {
@@ -614,11 +629,8 @@ const mapStateToProps = ({ user, contacts, activeTeam = null }, props) => {
   const tags = contacts.list
   const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
 
-  let contact = selectContact(contacts.list, props.params?.id || props.id)
-
-  if (!contact || !contact.user) {
-    contact = null
-  }
+  const cachedContact =
+    selectContact(contacts.list, props.params?.id || props.id) || null
 
   const allConnectedAccounts = selectAllConnectedAccounts(
     contacts.oAuthAccounts
@@ -626,7 +638,7 @@ const mapStateToProps = ({ user, contacts, activeTeam = null }, props) => {
 
   return {
     user,
-    contact,
+    cachedContact,
     fetchTags,
     viewAsUsers: viewAs(activeTeam),
     attributeDefs: contacts.attributeDefs,
