@@ -3,7 +3,7 @@ import { createContext } from 'react'
 export interface IDocumentRepositoryContext {
   isFetching: boolean
   searchCriteria: string
-  activeCategoryIndex: number
+  activeCategoryIndex: Nullable<number>
   categoryNames: string[]
   forms: Record<string, IBrandForm[]>
 }

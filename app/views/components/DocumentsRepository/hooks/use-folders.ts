@@ -16,13 +16,6 @@ export function useFolders(): SearchResult[] {
     useDocumentRepositoryContext()
 
   useEffect(() => {
-    console.log('XXXXX', {
-      searchCriteria,
-      categoryNames,
-      forms,
-      activeCategoryIndex
-    })
-
     const getFolder = (index: number) => {
       const title = categoryNames?.[index]
       const formsList = forms?.[title] ?? []
@@ -39,12 +32,16 @@ export function useFolders(): SearchResult[] {
       }
     }
 
-    const results =
-      searchCriteria.length === 0
-        ? [getFolder(activeCategoryIndex)]
-        : Object.values(forms).map((_, index) => getFolder(index))
+    let results: SearchResult[] = []
 
-    setList(results.filter(item => item.list.length > 0))
+    if (activeCategoryIndex !== null) {
+      results =
+        searchCriteria.length === 0
+          ? [getFolder(activeCategoryIndex)]
+          : Object.values(forms).map((_, index) => getFolder(index))
+
+      setList(results.filter(item => item.list.length > 0))
+    }
   }, [searchCriteria, categoryNames, forms, activeCategoryIndex])
 
   return list

@@ -13,6 +13,7 @@ import { useDocumentRepositoryContext } from '../context/use-document-repository
 import { useFolders } from '../hooks/use-folders'
 
 import { DocumentFolder } from './DocumentFolder'
+import { DocumentsRepositoryEmptyState } from './EmptyState'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -32,7 +33,8 @@ export function DocumentsList() {
   const [selectionState, setSelectionState] = useState({})
 
   const folders = useFolders()
-  const { searchCriteria, isFetching } = useDocumentRepositoryContext()
+  const { searchCriteria, isFetching, activeCategoryIndex } =
+    useDocumentRepositoryContext()
 
   const updateSelectionState = useCallback(
     (category: string, formId: UUID, checked: boolean) => {
@@ -47,10 +49,46 @@ export function DocumentsList() {
     []
   )
 
-  // const { updateSelectionState } = useDocumentRepositorySelectionContext()
+  const toggleFolderSelection = useCallback(
+    (category: string, checked: boolean) => {
+      if (checked) {
+        const selectAll = folders
+          .find(folder => folder.title === category)
+          ?.list.reduce(
+            (acc, item) => ({
+              ...acc,
+              [item.id]: true
+            }),
+            {}
+          )
+
+        setSelectionState(state => ({
+          ...state,
+          [category]: selectAll ?? {}
+        }))
+      } else {
+        setSelectionState(state => ({
+          ...state,
+          [category]: {}
+        }))
+      }
+    },
+    [folders]
+  )
 
   return (
     <Box className={classes.root} height="700px" overflow="scroll" p={3}>
+      {!isFetching && activeCategoryIndex === null && (
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          height="100%"
+        >
+          <DocumentsRepositoryEmptyState />
+        </Box>
+      )}
+
       {searchCriteria.length > 0 && (
         <Box mb={2}>
           <Typography variant="button">
@@ -58,6 +96,7 @@ export function DocumentsList() {
           </Typography>
         </Box>
       )}
+
       {isFetching ? (
         <Box
           display="flex"
@@ -69,19 +108,25 @@ export function DocumentsList() {
         </Box>
       ) : (
         <>
-          {folders.map(({ title, list }, index) => (
-            <DocumentFolder key={title} title={title} totalCount={list.length}>
-              <div>
-                <DealFormsList
-                  forms={list}
-                  selectionType="multiple"
-                  selectionList={selectionState[title] ?? {}}
-                  onChangeSelection={(formId, checked) =>
-                    updateSelectionState(title, formId, checked)
-                  }
-                  textHighlight={searchCriteria}
-                />
-              </div>
+          {folders.map(({ title, list }) => (
+            <DocumentFolder
+              key={title}
+              title={title}
+              totalCount={list.length}
+              selectionList={selectionState[title] ?? {}}
+              onToggleFolderSelection={checked =>
+                toggleFolderSelection(title, checked)
+              }
+            >
+              <DealFormsList
+                forms={list}
+                selectionType="multiple"
+                selectionList={selectionState[title] ?? {}}
+                onChangeSelection={(formId, checked) =>
+                  updateSelectionState(title, formId, checked)
+                }
+                textHighlight={searchCriteria}
+              />
             </DocumentFolder>
           ))}
         </>

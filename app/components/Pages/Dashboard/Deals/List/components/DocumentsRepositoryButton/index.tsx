@@ -9,7 +9,7 @@ export function DocumentsRepositoryButton() {
 
   return (
     <>
-      <Button variant="outlined" onClick={() => setIsOpen(true)}>
+      <Button variant="outlined" size="large" onClick={() => setIsOpen(true)}>
         Download Forms
       </Button>
 

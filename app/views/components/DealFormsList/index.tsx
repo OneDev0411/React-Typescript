@@ -39,7 +39,7 @@ interface SingleSelection {
 
 interface MultipleSelection {
   selectionType?: 'multiple'
-  selectionList: string[]
+  selectionList: Record<string, boolean>
   onChangeSelection: (formId: UUID, checked: boolean) => void
 }
 

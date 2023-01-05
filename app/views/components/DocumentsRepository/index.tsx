@@ -39,7 +39,8 @@ interface Props {
 
 export function DocumentsRepository({ onClose }: Props) {
   const classes = useStyles()
-  const [activeCategoryIndex, setActiveCategoryIndex] = useState(0)
+  const [activeCategoryIndex, setActiveCategoryIndex] =
+    useState<Nullable<number>>(null)
   const [searchCriteria, setSearchCriteria] = useState('')
 
   const { forms, categoryNames, isFetching } = useDocumentsRepository()

@@ -24,7 +24,7 @@ export function DocumentsRepositoryDialog({ isOpen, onClose }: Props) {
   return (
     <Dialog fullWidth maxWidth="md" open={isOpen}>
       <DialogContent className={classes.dialogContent}>
-        {isOpen && <DocumentsRepository onClose={onClose} />}
+        <DocumentsRepository onClose={onClose} />
       </DialogContent>
     </Dialog>
   )
