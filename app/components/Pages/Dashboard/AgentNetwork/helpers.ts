@@ -1,5 +1,5 @@
 import { NavigateFunction } from '@app/hooks/use-navigate'
-import { SearchResult } from 'components/DealsAndListingsAndPlacesSearchInput/types'
+// import { SearchResult } from 'components/DealsAndListingsAndPlacesSearchInput/types'
 
 export function toListingPage(
   listing: ICompactListing | IListing
@@ -35,10 +35,12 @@ export function toPlacePage(
   ]
 }
 
-export function toSearchResultPage(result: SearchResult) {
-  if (result.type === 'listing') {
-    toListingPage(result.listing)
-  } else if (result.type === 'location') {
-    toPlacePage(result.location)
-  }
-}
+// export function toSearchResultPage(result: SearchResult) {
+//   if (result.type === 'listing') {
+//     toListingPage(result.listing)
+//   }
+
+//   if (result.type === 'location') {
+//     toPlacePage(result.location)
+//   }
+// }

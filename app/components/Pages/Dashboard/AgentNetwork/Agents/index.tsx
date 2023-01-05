@@ -9,6 +9,7 @@ import { useNavigate } from '@app/hooks/use-navigate'
 import getAgents, { AgentWithStats } from '@app/models/agent-network/get-agents'
 import { WithRouterProps } from '@app/routes/types'
 import { withRouter } from '@app/routes/with-router'
+import { SearchResult } from '@app/views/components/DealsAndListingsAndPlacesSearchInput/types'
 import ListingAlertFilters from 'components/ListingAlertFilters'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import config from 'config'
@@ -16,7 +17,7 @@ import { useLoadingEntities } from 'hooks/use-loading'
 import getListing from 'models/listings/listing/get-listing'
 import { selectUser } from 'selectors/user'
 
-import { toSearchResultPage } from '../helpers'
+import { toListingPage, toPlacePage } from '../helpers'
 import Layout from '../Layout'
 
 import AgentsGrid from './Grid'
@@ -139,10 +140,14 @@ function Agents(props: WithRouterProps) {
     return null
   }
 
-  const OpenSearchResultPage = () => {
-    console.log('test 2', toSearchResultPage)
+  const OpenSearchResultPage = (result: SearchResult) => {
+    if (result.type === 'listing') {
+      navigate(...toListingPage(result.listing))
+    }
 
-    navigate('/dashboard/agent-network/agents', { state: toSearchResultPage })
+    if (result.type === 'location') {
+      navigate(...toPlacePage(result.location))
+    }
   }
 
   return (
