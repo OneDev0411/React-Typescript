@@ -2,7 +2,6 @@ import React from 'react'
 
 import {
   Box,
-  alpha,
   Slide,
   Theme,
   MenuItem,
@@ -20,6 +19,7 @@ import {
 import pluralize from 'pluralize'
 
 import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
+import { useGridActionButtonStyles } from '@app/views/components/Grid/Table/features/Actions/use-grid-action-button-styles'
 import { BaseDropdown } from 'components/BaseDropdown'
 import {
   EmailFormValues,
@@ -48,24 +48,6 @@ import GetSignature from '../../Signature'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    root: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      width: '95%',
-      height: theme.spacing(10),
-      margin: 'auto',
-      position: 'sticky',
-      bottom: `${theme.spacing(3)}px`,
-      padding: theme.spacing(0, 2),
-      background: theme.palette.tertiary.main,
-      borderRadius: `${theme.spacing(2)}px`,
-      boxShadow: `0 ${theme.spacing(0.5)}px ${theme.spacing(2)}px ${alpha(
-        theme.palette.common.black,
-        0.4
-      )}`,
-      zIndex: theme.zIndex.gridAction
-    },
     divider: {
       margin: theme.spacing(0, 1)
     },
@@ -98,6 +80,7 @@ interface Props {
 export function TaskActions({ deal }: Props) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
+  const gridActionButtonClasses = useGridActionButtonStyles()
   const [state, dispatch] = useChecklistActionsContext()
 
   const handleCancel = () => {
@@ -139,7 +122,7 @@ export function TaskActions({ deal }: Props) {
     <>
       {state.actions.length > 0 && !state.isDrawerOpen && (
         <Slide in direction="up">
-          <Box className={classes.root}>
+          <Box className={gridActionButtonClasses.root}>
             <GridActionButton
               label="Cancel"
               icon={mdiClose}
