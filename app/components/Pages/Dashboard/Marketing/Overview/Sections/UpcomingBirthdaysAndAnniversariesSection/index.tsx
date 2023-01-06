@@ -25,6 +25,10 @@ export default function UpcomingBirthdaysAndAnniversariesSection() {
     celebrationsEventTypes.includes(event.event_type)
   )
 
+  if (!isLoading && celebrationEvents.length < 1) {
+    return null
+  }
+
   return (
     <SectionLayout
       title="Upcoming Birthdays and Anniversaries"
@@ -54,8 +58,6 @@ export default function UpcomingBirthdaysAndAnniversariesSection() {
           </Grid>
         </>
       )}
-
-      {!isLoading && celebrationEvents.length === 0 && null}
 
       {!isLoading &&
         celebrationEvents.slice(0, 4).map(event => (
