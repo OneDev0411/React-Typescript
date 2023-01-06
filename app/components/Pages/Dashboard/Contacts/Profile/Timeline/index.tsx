@@ -1,4 +1,11 @@
-import { forwardRef, RefObject, useImperativeHandle, useRef } from 'react'
+import {
+  forwardRef,
+  RefObject,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef
+} from 'react'
 
 import List from 'components/ContactProfileTimeline'
 import { CalendarRef } from 'components/ContactProfileTimeline/types'
@@ -22,14 +29,24 @@ const associations = ['calendar_event.full_thread']
 
 function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
   const localTimelineRef = useRef<CalendarRef>(null)
+  const contactId = contact.id
 
-  const handleReload = (filter = activeFilter) => {
-    if (filter === Filters.History || filter === Filters.Upcoming) {
-      const date = new Date().getTime() / 1000
+  const handleReload = useCallback(
+    (filter = activeFilter) => {
+      if (filter === Filters.History || filter === Filters.Upcoming) {
+        const date = new Date().getTime() / 1000
 
-      localTimelineRef.current!.refresh(true, { high: date, low: date })
-    }
-  }
+        localTimelineRef.current!.refresh(true, { high: date, low: date })
+      }
+    },
+    [activeFilter]
+  )
+
+  // We have to reload time line when contact changed
+  // https://gitlab.com/rechat/web/-/issues/7096#note_1230178460
+  useEffect(() => {
+    handleReload()
+  }, [contactId, handleReload])
 
   const getFilter = () => {
     if (activeFilter === Filters.Notes) {
