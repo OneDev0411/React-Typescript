@@ -181,7 +181,13 @@ const ContactProfile = ({
         setIsLoading(true)
       }
 
+      // To set cached contact after click on next/prev button on modal
+      if (isCachedContactExists && isModal) {
+        setContact(normalizeContact(cachedContact))
+      }
+
       try {
+        // To prevent race condition
         if (abortControllerRef.current) {
           abortControllerRef.current.abort()
           abortControllerRef.current = null
@@ -231,9 +237,10 @@ const ContactProfile = ({
     },
     [
       isCachedContactExists,
+      isModal,
+      cachedContact,
       props.params?.id,
       props.id,
-      isModal,
       onUpdateContact,
       goToContacts
     ]

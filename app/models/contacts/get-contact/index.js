@@ -13,6 +13,7 @@ export async function getContact(
   try {
     const request = new Fetch().get(`/contacts/${contactId}`).query(query)
 
+    // To prevent race condition
     signal?.addEventListener('abort', () => {
       request.abort()
     })
