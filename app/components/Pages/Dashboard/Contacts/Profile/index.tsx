@@ -184,6 +184,7 @@ const ContactProfile = ({
       // To set cached contact after click on next/prev button on modal
       if (isCachedContactExists && isModal) {
         setContact(normalizeContact(cachedContact))
+        timelineRef.current?.refresh()
       }
 
       try {
