@@ -10,8 +10,8 @@ interface Props {
   label: ReactNode
   disabled?: boolean
   attachedElementRef?: RefObject<any>
-  onClick?: (e: MouseEvent<HTMLElement>) => void
   tourId?: string
+  onClick?: (e: MouseEvent<HTMLElement>) => void
 }
 
 const useStyles = makeStyles(

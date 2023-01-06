@@ -20,6 +20,7 @@ import { useDocumentsRepository } from './queries/use-documents-repository'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
+      position: 'relative',
       width: '100%',
       backgroundColor: theme.palette.grey[50],
       paddingTop: theme.spacing(2)
@@ -50,53 +51,55 @@ export function DocumentsRepository({ onClose }: Props) {
       value={{
         isFetching,
         searchCriteria,
-        forms: isFetching ? {} : forms,
         categoryNames,
-        activeCategoryIndex
+        activeCategoryIndex,
+        forms: isFetching ? {} : forms
       }}
     >
-      <Box display="flex" className={classes.root}>
-        <Box minWidth="300px" maxWidth="300px">
-          <Box
-            display="flex"
-            alignItems="center"
-            className={classes.header}
-            pl={3}
-          >
-            <Typography variant="h6">Documents</Typography>
-          </Box>
-
-          <Box width="100%" mt={2}>
-            <CategoriesSidebar
-              isFetching={isFetching}
-              onChangeActiveCategory={setActiveCategoryIndex}
-            />
-          </Box>
-        </Box>
-
-        <Box flexGrow={1}>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            pr={2}
-            className={classes.header}
-          >
-            <Box width="300px">
-              <SearchField debounceTime={500} onChange={setSearchCriteria} />
+      <Box className={classes.root}>
+        <Box display="flex">
+          <Box minWidth="300px" maxWidth="300px">
+            <Box
+              display="flex"
+              alignItems="center"
+              className={classes.header}
+              pl={3}
+            >
+              <Typography variant="h6">Documents</Typography>
             </Box>
 
-            <Box>
-              {onClose && (
-                <IconButton onClick={onClose}>
-                  <SvgIcon path={mdiClose} />
-                </IconButton>
-              )}
+            <Box width="100%" mt={2}>
+              <CategoriesSidebar
+                isFetching={isFetching}
+                onChangeActiveCategory={setActiveCategoryIndex}
+              />
             </Box>
           </Box>
 
-          <Box mt={2}>
-            <DocumentsList />
+          <Box flexGrow={1}>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              pr={2}
+              className={classes.header}
+            >
+              <Box width="300px">
+                <SearchField debounceTime={500} onChange={setSearchCriteria} />
+              </Box>
+
+              <Box>
+                {onClose && (
+                  <IconButton onClick={onClose}>
+                    <SvgIcon path={mdiClose} />
+                  </IconButton>
+                )}
+              </Box>
+            </Box>
+
+            <Box mt={2}>
+              <DocumentsList />
+            </Box>
           </Box>
         </Box>
       </Box>

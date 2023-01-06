@@ -12,6 +12,7 @@ import { DealFormsList } from '../../DealFormsList'
 import { useDocumentRepositoryContext } from '../context/use-document-repository-context'
 import { useFolders } from '../hooks/use-folders'
 
+import { BulkActions } from './BulkActions'
 import { DocumentFolder } from './DocumentFolder'
 import { DocumentsRepositoryEmptyState } from './EmptyState'
 
@@ -30,7 +31,9 @@ const useStyles = makeStyles(
 
 export function DocumentsList() {
   const classes = useStyles()
-  const [selectionState, setSelectionState] = useState({})
+  const [selectionState, setSelectionState] = useState<
+    Record<string, Record<string, boolean>>
+  >({})
 
   const folders = useFolders()
   const { searchCriteria, isFetching, activeCategoryIndex } =
@@ -76,9 +79,11 @@ export function DocumentsList() {
     [folders]
   )
 
+  const handleReset = useCallback(() => setSelectionState({}), [])
+
   return (
     <Box className={classes.root} height="700px" overflow="scroll" p={3}>
-      {!isFetching && activeCategoryIndex === null && (
+      {!isFetching && !searchCriteria && activeCategoryIndex === null && (
         <Box
           display="flex"
           alignItems="center"
@@ -131,6 +136,10 @@ export function DocumentsList() {
           ))}
         </>
       )}
+
+      <Box width="100%">
+        <BulkActions selectionState={selectionState} onReset={handleReset} />
+      </Box>
     </Box>
   )
 }
