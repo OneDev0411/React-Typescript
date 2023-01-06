@@ -12,11 +12,11 @@ export function AgentNetwork() {
   const { listings, isLoading } = useBrandAndDealsListings()
   const navigate = useNavigate()
 
-  const OpenListingPage = (listing: ICompactListing | IListing) => {
+  const openListingPage = (listing: ICompactListing | IListing) => {
     navigate(...toListingPage(listing))
   }
 
-  const OpenSearchResultPage = (result: SearchResult) => {
+  const openSearchResultPage = (result: SearchResult) => {
     if (result.type === 'listing') {
       navigate(...toListingPage(result.listing))
     }
@@ -27,12 +27,12 @@ export function AgentNetwork() {
   }
 
   return (
-    <Layout title="Agent Network" onSelectSearchResult={OpenSearchResultPage}>
+    <Layout title="Agent Network" onSelectSearchResult={openSearchResultPage}>
       <Info />
       <Listings
         isLoading={isLoading}
         listings={listings}
-        onSelectListing={OpenListingPage}
+        onSelectListing={openListingPage}
       />
     </Layout>
   )

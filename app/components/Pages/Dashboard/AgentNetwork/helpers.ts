@@ -8,13 +8,15 @@ export function toListingPage(
       ? listing.address
       : listing.property.address
 
+  const searchParams = new URLSearchParams({
+    listing: listing.id,
+    title: listingAddress.street_address
+  })
+
   return [
-    '/dashboard/agent-network/agents',
     {
-      state: {
-        listing: listing.id,
-        title: listingAddress.street_address
-      }
+      pathname: '/dashboard/agent-network/agents',
+      search: searchParams.toString()
     }
   ]
 }
@@ -22,24 +24,16 @@ export function toListingPage(
 export function toPlacePage(
   place: google.maps.GeocoderResult
 ): Parameters<NavigateFunction> {
+  const searchParams = new URLSearchParams({
+    lat: place.geometry.location.lat.toString(),
+    lng: place.geometry.location.lng.toString(),
+    title: place.formatted_address
+  })
+
   return [
-    '/dashboard/agent-network/agents',
     {
-      state: {
-        lat: place.geometry.location.lat,
-        lng: place.geometry.location.lng,
-        title: place.formatted_address
-      }
+      pathname: '/dashboard/agent-network/agents',
+      search: searchParams.toString()
     }
   ]
 }
-
-// export function toSearchResultPage(result: SearchResult) {
-//   if (result.type === 'listing') {
-//     toListingPage(result.listing)
-//   }
-
-//   if (result.type === 'location') {
-//     toPlacePage(result.location)
-//   }
-// }

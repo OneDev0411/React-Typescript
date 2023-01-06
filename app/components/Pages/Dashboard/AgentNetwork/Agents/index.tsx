@@ -55,7 +55,7 @@ function Agents() {
         return
       }
 
-      const listingId: Optional<string | null> = searchParams.get('listing')
+      const listingId: Nullable<string> = searchParams.get('listing')
 
       if (!listingId) {
         setListing(null)
@@ -88,8 +88,8 @@ function Agents() {
         return
       }
 
-      const lat: Optional<string | null> = searchParams.get('lat')
-      const lng: Optional<string | null> = searchParams.get('lng')
+      const lat: Nullable<string> = searchParams.get('lat')
+      const lng: Nullable<string> = searchParams.get('lng')
 
       if (!lat || !lng) {
         return
@@ -140,7 +140,7 @@ function Agents() {
     return null
   }
 
-  const OpenSearchResultPage = (result: SearchResult) => {
+  const openSearchResultPage = (result: SearchResult) => {
     if (result.type === 'listing') {
       navigate(...toListingPage(result.listing))
     }
@@ -154,7 +154,7 @@ function Agents() {
     <Layout
       noGlobalActionsButton
       title="Select Agents"
-      onSelectSearchResult={OpenSearchResultPage}
+      onSelectSearchResult={openSearchResultPage}
     >
       {listing && DISABLED_MLS_LIST.includes(listing.mls) ? (
         <Alert severity="info">
