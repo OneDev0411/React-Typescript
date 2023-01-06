@@ -112,6 +112,8 @@ class SectionWithFields extends React.Component {
     if (state.contactId && state.contactId !== props.contact?.id) {
       return getInitialState(props)
     }
+
+    return state
   }
 
   get orderedAttributesCopy() {
