@@ -12,7 +12,7 @@ function SuperCampaignsSectionLayout() {
 
   const isEmpty = !isLoading && superCampaignsWithEnrollment.length === 0
 
-  if (isEmpty) {
+  if (isLoading || isEmpty) {
     return null
   }
 
@@ -31,7 +31,6 @@ function SuperCampaignsSectionLayout() {
       grayMode
     >
       <SuperCampaignsSectionContent
-        isLoading={isLoading}
         superCampaignsWithEnrollment={superCampaignsWithEnrollment}
       />
     </SectionLayout>
