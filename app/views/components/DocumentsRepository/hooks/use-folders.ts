@@ -32,16 +32,15 @@ export function useFolders(): SearchResult[] {
       }
     }
 
-    let results: SearchResult[] = []
+    const activeFolder =
+      activeCategoryIndex !== null ? [getFolder(activeCategoryIndex)] : []
 
-    if (activeCategoryIndex !== null) {
-      results =
-        searchCriteria.length === 0
-          ? [getFolder(activeCategoryIndex)]
-          : Object.values(forms).map((_, index) => getFolder(index))
+    const results =
+      searchCriteria.length === 0
+        ? activeFolder
+        : Object.values(forms).map((_, index) => getFolder(index))
 
-      setList(results.filter(item => item.list.length > 0))
-    }
+    setList(results.filter(item => item.list.length > 0))
   }, [searchCriteria, categoryNames, forms, activeCategoryIndex])
 
   return list
