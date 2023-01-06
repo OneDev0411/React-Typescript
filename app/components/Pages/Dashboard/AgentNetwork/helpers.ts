@@ -1,5 +1,4 @@
 import { NavigateFunction } from '@app/hooks/use-navigate'
-// import { SearchResult } from 'components/DealsAndListingsAndPlacesSearchInput/types'
 
 export function toListingPage(
   listing: ICompactListing | IListing

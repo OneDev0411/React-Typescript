@@ -6,8 +6,8 @@ import { useLoadScript, LoadScriptProps } from '@react-google-maps/api'
 import { useSelector } from 'react-redux'
 
 import { useNavigate } from '@app/hooks/use-navigate'
+import { useSearchParams } from '@app/hooks/use-search-param'
 import getAgents, { AgentWithStats } from '@app/models/agent-network/get-agents'
-import { WithRouterProps } from '@app/routes/types'
 import { withRouter } from '@app/routes/with-router'
 import { SearchResult } from '@app/views/components/DealsAndListingsAndPlacesSearchInput/types'
 import ListingAlertFilters from 'components/ListingAlertFilters'
@@ -32,8 +32,9 @@ export interface ZipcodeOption {
 const DISABLED_MLS_LIST: string[] = []
 const GOOGLE_MAPS_LIBRARIES: LoadScriptProps['libraries'] = ['geometry']
 
-function Agents(props: WithRouterProps) {
+function Agents() {
   const user = useSelector(selectUser)
+  const [searchParams] = useSearchParams()
   const { isLoaded: isGoogleMapsLoaded } = useLoadScript({
     googleMapsApiKey: config.google.api_key,
     libraries: GOOGLE_MAPS_LIBRARIES
@@ -54,8 +55,7 @@ function Agents(props: WithRouterProps) {
         return
       }
 
-      const listingId: Optional<string | null> =
-        props.searchParams.get('listing')
+      const listingId: Optional<string | null> = searchParams.get('listing')
 
       if (!listingId) {
         setListing(null)
@@ -80,7 +80,7 @@ function Agents(props: WithRouterProps) {
     }
 
     fetchListingBasedData()
-  }, [isGoogleMapsLoaded, props.searchParams])
+  }, [isGoogleMapsLoaded, searchParams])
 
   useEffect(() => {
     async function fetchLocationBasedData() {
@@ -88,8 +88,8 @@ function Agents(props: WithRouterProps) {
         return
       }
 
-      const lat: Optional<string | null> = props.searchParams.get('lat')
-      const lng: Optional<string | null> = props.searchParams.get('lng')
+      const lat: Optional<string | null> = searchParams.get('lat')
+      const lng: Optional<string | null> = searchParams.get('lng')
 
       if (!lat || !lng) {
         return
@@ -109,7 +109,7 @@ function Agents(props: WithRouterProps) {
     }
 
     fetchLocationBasedData()
-  }, [isGoogleMapsLoaded, props.searchParams])
+  }, [isGoogleMapsLoaded, searchParams])
 
   useEffect(() => {
     async function fetchAgents() {
@@ -178,9 +178,9 @@ function Agents(props: WithRouterProps) {
             justifyContent="space-between"
           >
             <Grid item>
-              {props.searchParams.get('title') && (
+              {searchParams.get('title') && (
                 <Typography variant="body1">
-                  {props.searchParams.get('title')}
+                  aa {searchParams.get('title')}
                 </Typography>
               )}
             </Grid>

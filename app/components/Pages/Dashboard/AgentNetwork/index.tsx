@@ -11,6 +11,7 @@ import Listings from './Sections/Listings'
 export function AgentNetwork() {
   const { listings, isLoading } = useBrandAndDealsListings()
   const navigate = useNavigate()
+
   const OpenListingPage = (listing: ICompactListing | IListing) => {
     navigate(...toListingPage(listing))
   }
