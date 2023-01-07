@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import {
   Box,
@@ -12,7 +12,7 @@ import { DealFormsList } from '../../DealFormsList'
 import { useDocumentRepositoryContext } from '../context/use-document-repository-context'
 import { useFolders } from '../hooks/use-folders'
 
-import { BulkActions } from './BulkActions'
+import { BulkActions } from './bulk-actions/BulkActions'
 import { DocumentFolder } from './DocumentFolder'
 import { DocumentsRepositoryEmptyState } from './EmptyState'
 
@@ -35,9 +35,21 @@ export function DocumentsList() {
     Record<string, Record<string, boolean>>
   >({})
 
-  const folders = useFolders()
+  const [folders] = useFolders()
   const { searchCriteria, isFetching, activeCategoryIndex } =
     useDocumentRepositoryContext()
+
+  const selectedForms: UUID[] = useMemo(
+    () =>
+      Object.values(selectionState).reduce<UUID[]>((result, ids) => {
+        const values = Object.entries(ids)
+          .filter(([_, state]) => !!state)
+          .map(([id]) => id)
+
+        return [...result, ...values]
+      }, []),
+    [selectionState]
+  )
 
   const updateSelectionState = useCallback(
     (category: string, formId: UUID, checked: boolean) => {
@@ -112,7 +124,7 @@ export function DocumentsList() {
           <CircularProgress />
         </Box>
       ) : (
-        <>
+        <Box pb={12}>
           {folders.map(({ title, list }) => (
             <DocumentFolder
               key={title}
@@ -134,11 +146,11 @@ export function DocumentsList() {
               />
             </DocumentFolder>
           ))}
-        </>
+        </Box>
       )}
 
       <Box width="100%">
-        <BulkActions selectionState={selectionState} onReset={handleReset} />
+        <BulkActions selectedForms={selectedForms} onReset={handleReset} />
       </Box>
     </Box>
   )

@@ -9,7 +9,7 @@ interface SearchResult {
   list: IBrandForm[]
 }
 
-export function useFolders(): SearchResult[] {
+export function useFolders(): [SearchResult[], Record<string, IBrandForm[]>] {
   const [list, setList] = useState<SearchResult[]>([])
 
   const { activeCategoryIndex, forms, searchCriteria, categoryNames } =
@@ -43,5 +43,5 @@ export function useFolders(): SearchResult[] {
     setList(results.filter(item => item.list.length > 0))
   }, [searchCriteria, categoryNames, forms, activeCategoryIndex])
 
-  return list
+  return [list, forms]
 }

@@ -46,7 +46,7 @@ export function EmailBulkAction({ selectedForms }: Props) {
           attachments: files
         }}
         onClose={() => setIsEmailDrawerOpen(false)}
-        onSent={() => {}}
+        onSent={() => setIsEmailDrawerOpen(false)}
       />
     </>
   )
