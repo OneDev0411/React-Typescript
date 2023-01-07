@@ -22,7 +22,7 @@ export function DocumentsRepositoryDialog({ isOpen, onClose }: Props) {
   const classes = useStyles()
 
   return (
-    <Dialog fullWidth maxWidth="md" open={isOpen}>
+    <Dialog fullWidth maxWidth="lg" open={isOpen}>
       <DialogContent className={classes.dialogContent}>
         <DocumentsRepository onClose={onClose} />
       </DialogContent>
