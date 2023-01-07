@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 
 import { DealFormsList } from '../../DealFormsList'
+import { DocumentRepositorySelectionContext } from '../context/document-repository-selection'
 import { useDocumentRepositoryContext } from '../context/use-document-repository-context'
 import { useFolders } from '../hooks/use-folders'
 
@@ -34,6 +35,7 @@ export function DocumentsList() {
   const [selectionState, setSelectionState] = useState<
     Record<string, Record<string, boolean>>
   >({})
+  const [isBulkActionWorking, setIsBulkActionWorking] = useState(false)
 
   const [folders] = useFolders()
   const { searchCriteria, isFetching, activeCategoryIndex } =
@@ -94,64 +96,73 @@ export function DocumentsList() {
   const handleReset = useCallback(() => setSelectionState({}), [])
 
   return (
-    <Box className={classes.root} height="700px" overflow="scroll" p={3}>
-      {!isFetching && !searchCriteria && activeCategoryIndex === null && (
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          height="100%"
-        >
-          <DocumentsRepositoryEmptyState />
-        </Box>
-      )}
+    <DocumentRepositorySelectionContext.Provider
+      value={{
+        selectionState,
+        selectedForms,
+        isBulkActionWorking,
+        setIsBulkActionWorking
+      }}
+    >
+      <Box className={classes.root} height="700px" overflow="scroll" p={3}>
+        {!isFetching && !searchCriteria && activeCategoryIndex === null && (
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            height="100%"
+          >
+            <DocumentsRepositoryEmptyState />
+          </Box>
+        )}
 
-      {searchCriteria.length > 0 && (
-        <Box mb={2}>
-          <Typography variant="button">
-            Search results for “{searchCriteria}”
-          </Typography>
-        </Box>
-      )}
+        {searchCriteria.length > 0 && (
+          <Box mb={2}>
+            <Typography variant="button">
+              Search results for “{searchCriteria}”
+            </Typography>
+          </Box>
+        )}
 
-      {isFetching ? (
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          height="100%"
-        >
-          <CircularProgress />
-        </Box>
-      ) : (
-        <Box pb={12}>
-          {folders.map(({ title, list }) => (
-            <DocumentFolder
-              key={title}
-              title={title}
-              totalCount={list.length}
-              selectionList={selectionState[title] ?? {}}
-              onToggleFolderSelection={checked =>
-                toggleFolderSelection(title, checked)
-              }
-            >
-              <DealFormsList
-                forms={list}
-                selectionType="multiple"
+        {isFetching ? (
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            height="100%"
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Box pb={12}>
+            {folders.map(({ title, list }) => (
+              <DocumentFolder
+                key={title}
+                title={title}
+                totalCount={list.length}
                 selectionList={selectionState[title] ?? {}}
-                onChangeSelection={(formId, checked) =>
-                  updateSelectionState(title, formId, checked)
+                onToggleFolderSelection={checked =>
+                  toggleFolderSelection(title, checked)
                 }
-                textHighlight={searchCriteria}
-              />
-            </DocumentFolder>
-          ))}
-        </Box>
-      )}
+              >
+                <DealFormsList
+                  forms={list}
+                  selectionType="multiple"
+                  selectionList={selectionState[title] ?? {}}
+                  onChangeSelection={(formId, checked) =>
+                    updateSelectionState(title, formId, checked)
+                  }
+                  textHighlight={searchCriteria}
+                />
+              </DocumentFolder>
+            ))}
+          </Box>
+        )}
 
-      <Box width="100%">
-        <BulkActions selectedForms={selectedForms} onReset={handleReset} />
+        <Box width="100%">
+          <BulkActions onReset={handleReset} />
+        </Box>
       </Box>
-    </Box>
+    </DocumentRepositorySelectionContext.Provider>
   )
 }

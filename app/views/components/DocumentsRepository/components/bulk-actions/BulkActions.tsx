@@ -4,6 +4,7 @@ import cn from 'classnames'
 
 import { GridActionButton } from '../../../Grid/Table/features/Actions/Button'
 import { useGridActionButtonStyles } from '../../../Grid/Table/features/Actions/use-grid-action-button-styles'
+import { useDocumentRepositorySelectionContext } from '../../context/use-document-repository-selection-context'
 
 import { DownloadBulkAction } from './DownloadBulkAction'
 import { EmailBulkAction } from './EmailBulkAction'
@@ -27,13 +28,14 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  selectedForms: UUID[]
   onReset: () => void
 }
 
-export function BulkActions({ selectedForms, onReset }: Props) {
+export function BulkActions({ onReset }: Props) {
   const classes = useStyles()
   const gridActionButtonClasses = useGridActionButtonStyles()
+  const { selectedForms, isBulkActionWorking } =
+    useDocumentRepositorySelectionContext()
 
   if (selectedForms.length === 0) {
     return null
@@ -43,7 +45,12 @@ export function BulkActions({ selectedForms, onReset }: Props) {
     <>
       <Slide in direction="up">
         <Box className={cn(gridActionButtonClasses.root, classes.root)}>
-          <GridActionButton label="Cancel" icon={mdiClose} onClick={onReset} />
+          <GridActionButton
+            disabled={isBulkActionWorking}
+            label="Cancel"
+            icon={mdiClose}
+            onClick={onReset}
+          />
 
           <GridActionButton
             label="Selected"
@@ -58,8 +65,8 @@ export function BulkActions({ selectedForms, onReset }: Props) {
             }
           />
 
-          <DownloadBulkAction selectedForms={selectedForms} />
-          <EmailBulkAction selectedForms={selectedForms} />
+          <DownloadBulkAction />
+          <EmailBulkAction />
         </Box>
       </Slide>
     </>
