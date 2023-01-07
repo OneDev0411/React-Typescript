@@ -12,6 +12,7 @@ import { DealFormsList } from '../../DealFormsList'
 import { DocumentRepositorySelectionContext } from '../context/document-repository-selection'
 import { useDocumentRepositoryContext } from '../context/use-document-repository-context'
 import { useFolders } from '../hooks/use-folders'
+import { SelectionType } from '../types'
 
 import { BulkActions } from './bulk-actions/BulkActions'
 import { DocumentFolder } from './DocumentFolder'
@@ -30,7 +31,11 @@ const useStyles = makeStyles(
   }
 )
 
-export function DocumentsList() {
+interface Props {
+  selectionType: SelectionType
+}
+
+export function DocumentsList({ selectionType }: Props) {
   const classes = useStyles()
   const [selectionState, setSelectionState] = useState<
     Record<string, Record<string, boolean>>
@@ -139,6 +144,7 @@ export function DocumentsList() {
               <DocumentFolder
                 key={title}
                 title={title}
+                selectionType={selectionType}
                 totalCount={list.length}
                 selectionList={selectionState[title] ?? {}}
                 onToggleFolderSelection={checked =>
@@ -147,7 +153,7 @@ export function DocumentsList() {
               >
                 <DealFormsList
                   forms={list}
-                  selectionType="multiple"
+                  selectionType={selectionType}
                   selectionList={selectionState[title] ?? {}}
                   onChangeSelection={(formId, checked) =>
                     updateSelectionState(title, formId, checked)

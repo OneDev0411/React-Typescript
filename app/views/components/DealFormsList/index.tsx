@@ -15,8 +15,8 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       padding: theme.spacing(1.5, 2),
+      height: theme.spacing(7.5),
       borderBottom: `1px solid ${theme.palette.grey[200]}`,
-      cursor: 'pointer',
       '&:hover': {
         backgroundColor: theme.palette.action.hover
       }

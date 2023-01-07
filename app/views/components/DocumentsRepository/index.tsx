@@ -16,6 +16,7 @@ import { DocumentsList } from './components/DocumentsList'
 import { SearchField } from './components/SearchField'
 import { DocumentRepositoryContext } from './context/document-repository'
 import { useDocumentsRepository } from './queries/use-documents-repository'
+import { SelectionType } from './types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -35,10 +36,11 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  selectionType: SelectionType
   onClose?: () => void
 }
 
-export function DocumentsRepository({ onClose }: Props) {
+export function DocumentsRepository({ selectionType, onClose }: Props) {
   const classes = useStyles()
   const [activeCategoryIndex, setActiveCategoryIndex] =
     useState<Nullable<number>>(null)
@@ -98,7 +100,7 @@ export function DocumentsRepository({ onClose }: Props) {
             </Box>
 
             <Box mt={2}>
-              <DocumentsList />
+              <DocumentsList selectionType={selectionType} />
             </Box>
           </Box>
         </Box>
