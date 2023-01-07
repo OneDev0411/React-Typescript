@@ -180,7 +180,7 @@ function Agents() {
             <Grid item>
               {searchParams.get('title') && (
                 <Typography variant="body1">
-                  aa {searchParams.get('title')}
+                  {searchParams.get('title')}
                 </Typography>
               )}
             </Grid>
