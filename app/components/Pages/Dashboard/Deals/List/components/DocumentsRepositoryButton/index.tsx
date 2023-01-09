@@ -16,6 +16,7 @@ export function DocumentsRepositoryButton() {
 
       <DocumentsRepositoryDialog
         isOpen={isOpen}
+        selectionType="multiple"
         RowActionsBuilder={({ form }) => <PreviewActionButton form={form} />}
         onClose={() => setIsOpen(false)}
       />
