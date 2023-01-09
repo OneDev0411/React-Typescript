@@ -125,6 +125,7 @@ export default function TaskCreate({
       {taskType === 'Form' && !isCreating && (
         <DocumentsRepositoryDialog
           isOpen
+          deal={deal}
           selectionType="single"
           RowActionsBuilder={({ form }) => (
             <>
