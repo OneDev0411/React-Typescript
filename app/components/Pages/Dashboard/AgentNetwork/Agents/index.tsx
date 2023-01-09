@@ -49,13 +49,15 @@ function Agents() {
   const [filters, setFilters] =
     useState<Nullable<AlertFiltersWithRadiusAndCenter>>(null)
 
+  const listingId: Nullable<string> = searchParams.get('listing')
+  const lat: Nullable<string> = searchParams.get('lat')
+  const lng: Nullable<string> = searchParams.get('lng')
+
   useEffect(() => {
     async function fetchListingBasedData() {
       if (!isGoogleMapsLoaded) {
         return
       }
-
-      const listingId: Nullable<string> = searchParams.get('listing')
 
       if (!listingId) {
         setListing(null)
@@ -80,16 +82,13 @@ function Agents() {
     }
 
     fetchListingBasedData()
-  }, [isGoogleMapsLoaded, searchParams])
+  }, [isGoogleMapsLoaded, listingId])
 
   useEffect(() => {
     async function fetchLocationBasedData() {
       if (!isGoogleMapsLoaded) {
         return
       }
-
-      const lat: Nullable<string> = searchParams.get('lat')
-      const lng: Nullable<string> = searchParams.get('lng')
 
       if (!lat || !lng) {
         return
@@ -109,7 +108,7 @@ function Agents() {
     }
 
     fetchLocationBasedData()
-  }, [isGoogleMapsLoaded, searchParams])
+  }, [isGoogleMapsLoaded, lat, lng])
 
   useEffect(() => {
     async function fetchAgents() {
