@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, makeStyles } from '@material-ui/core'
 
-import { SelectionType } from './types'
+import { RowActionsBuilder, SelectionType } from './types'
 
 import { DocumentsRepository } from '.'
 
@@ -18,22 +18,26 @@ const useStyles = makeStyles(
 interface Props {
   isOpen: boolean
   selectionType?: SelectionType
+  RowActionsBuilder?: RowActionsBuilder
   onClose: () => void
 }
 
 export function DocumentsRepositoryDialog({
   isOpen,
+  RowActionsBuilder,
   selectionType = 'multiple',
   onClose
 }: Props) {
   const classes = useStyles()
 
-  console.log('!!', selectionType)
-
   return (
     <Dialog fullWidth maxWidth="lg" open={isOpen}>
       <DialogContent className={classes.dialogContent}>
-        <DocumentsRepository selectionType={selectionType} onClose={onClose} />
+        <DocumentsRepository
+          selectionType={selectionType}
+          RowActionsBuilder={RowActionsBuilder}
+          onClose={onClose}
+        />
       </DialogContent>
     </Dialog>
   )

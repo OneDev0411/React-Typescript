@@ -2,14 +2,18 @@ import { useState } from 'react'
 
 import { useSelector } from 'react-redux'
 
+import useNotify from '@app/hooks/use-notify'
 import { useReduxDispatch } from '@app/hooks/use-redux-dispatch'
 import { IAppState } from '@app/reducers'
 import { selectChecklistTasks } from '@app/reducers/deals/tasks'
+import { PreviewActionButton } from '@app/views/components/DocumentsRepository/components/row-actions/PreviewActionButton'
+import { SelectActionButton } from '@app/views/components/DocumentsRepository/components/row-actions/SelectActionButton'
+import { DocumentsRepositoryDialog } from '@app/views/components/DocumentsRepository/Dialog'
 import { createTask } from 'actions/deals'
 import LoadingContainer from 'components/LoadingContainer'
 import OverlayDrawer from 'components/OverlayDrawer'
 
-import { FormTask } from './FormTask'
+// import { FormTask } from './FormTask'
 import { GenericTask } from './GenericTask'
 import { SplitterTask } from './SplitterTask'
 
@@ -28,10 +32,24 @@ export default function TaskCreate({
 }: Props) {
   const dispatch = useReduxDispatch()
 
+  const notify = useNotify()
   const [isCreating, setIsCreating] = useState(false)
   const tasks = useSelector<IAppState, IDealTask[]>(({ deals }) =>
     selectChecklistTasks(checklist, deals.tasks)
   )
+
+  const onSelectFormTask = (form: IBrandForm) => {
+    handleCreateTask({
+      title: form.name,
+      form: form.id,
+      taskType: 'Form'
+    })
+
+    notify({
+      status: 'success',
+      message: 'The form has been successfully created.'
+    })
+  }
 
   const handleCreateTask = async ({
     title,
@@ -65,45 +83,59 @@ export default function TaskCreate({
       return task
     } catch (e) {
       console.log(e)
+      notify({
+        status: 'error',
+        message: 'An error occurred during task creation. Please try again.'
+      })
     } finally {
       onClose()
     }
   }
 
   return (
-    <OverlayDrawer open={!!taskType} onClose={onClose}>
-      {isCreating ? (
-        <LoadingContainer style={{ height: '90vh' }} />
-      ) : (
-        <>
-          {taskType === 'Form' && (
-            <>
-              <OverlayDrawer.Header title="Add new Form" />
-              <OverlayDrawer.Body>
-                <FormTask deal={deal} onSelectForm={handleCreateTask} />
-              </OverlayDrawer.Body>
-            </>
-          )}
+    <>
+      <OverlayDrawer
+        open={!!taskType && ['Generic', 'Splitter'].includes(taskType)}
+        onClose={onClose}
+      >
+        {isCreating ? (
+          <LoadingContainer style={{ height: '90vh' }} />
+        ) : (
+          <>
+            {taskType === 'Generic' && (
+              <>
+                <OverlayDrawer.Header title="Add new Folder" />
+                <OverlayDrawer.Body>
+                  <GenericTask onCreateTask={handleCreateTask} />
+                </OverlayDrawer.Body>
+              </>
+            )}
 
-          {taskType === 'Generic' && (
-            <>
-              <OverlayDrawer.Header title="Add new Folder" />
-              <OverlayDrawer.Body>
-                <GenericTask onCreateTask={handleCreateTask} />
-              </OverlayDrawer.Body>
-            </>
-          )}
+            {taskType === 'Splitter' && (
+              <>
+                <OverlayDrawer.Header title="Add new Section" />
+                <OverlayDrawer.Body>
+                  <SplitterTask onCreateTask={handleCreateTask} />
+                </OverlayDrawer.Body>
+              </>
+            )}
+          </>
+        )}
+      </OverlayDrawer>
 
-          {taskType === 'Splitter' && (
+      {taskType === 'Form' && !isCreating && (
+        <DocumentsRepositoryDialog
+          isOpen
+          selectionType="single"
+          RowActionsBuilder={({ form }: { form: IBrandForm }) => (
             <>
-              <OverlayDrawer.Header title="Add new Section" />
-              <OverlayDrawer.Body>
-                <SplitterTask onCreateTask={handleCreateTask} />
-              </OverlayDrawer.Body>
+              <PreviewActionButton />
+              <SelectActionButton form={form} onSelect={onSelectFormTask} />
             </>
           )}
-        </>
+          onClose={onClose}
+        />
       )}
-    </OverlayDrawer>
+    </>
   )
 }

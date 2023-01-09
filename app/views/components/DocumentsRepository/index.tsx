@@ -16,7 +16,7 @@ import { DocumentsList } from './components/DocumentsList'
 import { SearchField } from './components/SearchField'
 import { DocumentRepositoryContext } from './context/document-repository'
 import { useDocumentsRepository } from './queries/use-documents-repository'
-import { SelectionType } from './types'
+import { RowActionsBuilder, SelectionType } from './types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -37,10 +37,15 @@ const useStyles = makeStyles(
 
 interface Props {
   selectionType: SelectionType
+  RowActionsBuilder?: RowActionsBuilder
   onClose?: () => void
 }
 
-export function DocumentsRepository({ selectionType, onClose }: Props) {
+export function DocumentsRepository({
+  selectionType,
+  RowActionsBuilder,
+  onClose
+}: Props) {
   const classes = useStyles()
   const [activeCategoryIndex, setActiveCategoryIndex] =
     useState<Nullable<number>>(null)
@@ -100,7 +105,10 @@ export function DocumentsRepository({ selectionType, onClose }: Props) {
             </Box>
 
             <Box mt={2}>
-              <DocumentsList selectionType={selectionType} />
+              <DocumentsList
+                selectionType={selectionType}
+                RowActionsBuilder={RowActionsBuilder}
+              />
             </Box>
           </Box>
         </Box>

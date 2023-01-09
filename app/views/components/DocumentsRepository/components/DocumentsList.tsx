@@ -12,7 +12,7 @@ import { DealFormsList } from '../../DealFormsList'
 import { DocumentRepositorySelectionContext } from '../context/document-repository-selection'
 import { useDocumentRepositoryContext } from '../context/use-document-repository-context'
 import { useFolders } from '../hooks/use-folders'
-import { SelectionType } from '../types'
+import { RowActionsBuilder, SelectionType } from '../types'
 
 import { BulkActions } from './bulk-actions/BulkActions'
 import { DocumentFolder } from './DocumentFolder'
@@ -33,9 +33,10 @@ const useStyles = makeStyles(
 
 interface Props {
   selectionType: SelectionType
+  RowActionsBuilder?: RowActionsBuilder
 }
 
-export function DocumentsList({ selectionType }: Props) {
+export function DocumentsList({ selectionType, RowActionsBuilder }: Props) {
   const classes = useStyles()
   const [selectionState, setSelectionState] = useState<
     Record<string, Record<string, boolean>>
@@ -154,6 +155,7 @@ export function DocumentsList({ selectionType }: Props) {
                 <DealFormsList
                   forms={list}
                   selectionType={selectionType}
+                  RowActionsBuilder={RowActionsBuilder}
                   selectionList={selectionState[title] ?? {}}
                   onChangeSelection={(formId, checked) =>
                     updateSelectionState(title, formId, checked)
