@@ -3,7 +3,10 @@ import { useContext, useEffect, ReactNode } from 'react'
 import { Theme, useMediaQuery, makeStyles } from '@material-ui/core'
 import { alpha } from '@material-ui/core/styles'
 import cn from 'classnames'
-import { Link as RouterLink, withRouter, WithRouterProps } from 'react-router'
+import { Link as RouterLink } from 'react-router'
+
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 
 import { SideNavContext } from '../../DashboardLayout'
 import { BaseAccordionMenu, ExpandedMenu } from '../types'
@@ -56,7 +59,7 @@ const useStyles = makeStyles(
   }
 )
 
-interface Props {
+interface Props extends WithRouterProps {
   children: ReactNode
   isSubmenu?: boolean
   onExpandMenu?: (panel: ExpandedMenu) => void
@@ -75,7 +78,7 @@ function SideNavLinkItem({
   subMenu,
   to = '',
   tourId
-}: Props & WithRouterProps) {
+}: Props) {
   const classes = useStyles()
 
   const { onDrawerToggle } = useContext(SideNavContext)
