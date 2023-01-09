@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 
 import { ListItem, makeStyles } from '@material-ui/core'
 import { isLeapYear, getDaysInMonth } from 'date-fns'
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
@@ -54,9 +55,6 @@ export function DateField(props) {
   }
 
   const onChangeMonth = selectedMonth => {
-    setMonth(selectedMonth)
-    props.onChangeMonth(selectedMonth)
-
     /*
       here we resetting day if the user select the Feb month and the day-input
       is more than 29 because the Feb is 28 days month (29 in leap year) 
@@ -71,7 +69,20 @@ export function DateField(props) {
 
       setDay(alteredDay)
       props.onChangeDay(alteredDay)
+    } else if (
+      moment(`${selectedMonth.value + 1}`, 'MM').daysInMonth() < day.value
+    ) {
+      const alteredDay = {
+        label: `${moment(`${selectedMonth.value + 1}`, 'MM').daysInMonth()}`,
+        value: moment(`${selectedMonth.value + 1}`, 'MM').daysInMonth()
+      }
+
+      setDay(alteredDay)
+      props.onChangeDay(alteredDay)
     }
+
+    setMonth(selectedMonth)
+    props.onChangeMonth(selectedMonth)
   }
 
   const onChangeYear = event => {
