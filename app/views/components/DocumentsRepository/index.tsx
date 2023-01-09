@@ -35,14 +35,16 @@ const useStyles = makeStyles(
   }
 )
 
-interface Props {
+export interface Props {
   selectionType: SelectionType
   RowActionsBuilder?: RowActionsBuilder
+  deal?: IDeal
   onClose?: () => void
 }
 
 export function DocumentsRepository({
   selectionType,
+  deal,
   RowActionsBuilder,
   onClose
 }: Props) {
@@ -51,7 +53,7 @@ export function DocumentsRepository({
     useState<Nullable<number>>(null)
   const [searchCriteria, setSearchCriteria] = useState('')
 
-  const { forms, categoryNames, isFetching } = useDocumentsRepository()
+  const { forms, categoryNames, isFetching } = useDocumentsRepository(deal)
 
   return (
     <DocumentRepositoryContext.Provider
