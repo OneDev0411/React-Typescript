@@ -16,11 +16,7 @@ import MasterField from '../ContactAttributeInlineEditableField'
 import { BasicSection } from '../Section/Basic'
 import { SectionButton } from '../Section/Button'
 
-import {
-  fieldsNeedUpdateContact,
-  orderFields,
-  normalizeAttributes
-} from './helpers'
+import { orderFields, normalizeAttributes } from './helpers'
 import { getContactTriggers } from './helpers/get-contact-triggers'
 import { getScheduleEmailTrigger } from './helpers/get-schedule-email-trigger'
 
@@ -137,19 +133,7 @@ class SectionWithFields extends React.Component {
     }))
   }
 
-  shouldUpdateContact = attribute_def => {
-    if (fieldsNeedUpdateContact.includes(attribute_def.name)) {
-      return true
-    }
-
-    return false
-  }
-
   updateContact = async attribute_def => {
-    if (!this.shouldUpdateContact(attribute_def)) {
-      return
-    }
-
     const { contact, submitCallback } = this.props
 
     try {
