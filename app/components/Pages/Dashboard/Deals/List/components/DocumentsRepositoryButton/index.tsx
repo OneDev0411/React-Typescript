@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { Button } from '@material-ui/core'
 
+import { PreviewActionButton } from '@app/views/components/DocumentsRepository/components/row-actions/PreviewActionButton'
 import { DocumentsRepositoryDialog } from '@app/views/components/DocumentsRepository/Dialog'
 
 export function DocumentsRepositoryButton() {
@@ -15,6 +16,7 @@ export function DocumentsRepositoryButton() {
 
       <DocumentsRepositoryDialog
         isOpen={isOpen}
+        RowActionsBuilder={({ form }) => <PreviewActionButton form={form} />}
         onClose={() => setIsOpen(false)}
       />
     </>
