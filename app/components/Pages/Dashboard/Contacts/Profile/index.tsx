@@ -566,6 +566,7 @@ const ContactProfile = ({
         <div className={classes.header}>
           <Header
             contact={contact}
+            onChangeAvatar={updateAttributeSubmitCallback}
             contactChangeCallback={fetchContact}
             onUpdateTouchFreq={handleUpdateTouchFreq}
             RenderActions={props.RenderActions}
