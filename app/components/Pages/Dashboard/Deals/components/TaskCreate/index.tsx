@@ -127,9 +127,9 @@ export default function TaskCreate({
         <DocumentsRepositoryDialog
           isOpen
           selectionType="single"
-          RowActionsBuilder={({ form }: { form: IBrandForm }) => (
+          RowActionsBuilder={({ form }) => (
             <>
-              <PreviewActionButton />
+              <PreviewActionButton form={form} />
               <SelectActionButton form={form} onSelect={onSelectFormTask} />
             </>
           )}

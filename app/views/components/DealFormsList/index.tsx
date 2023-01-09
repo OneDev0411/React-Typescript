@@ -1,4 +1,4 @@
-import { Box, makeStyles, Theme, Typography } from '@material-ui/core'
+import { makeStyles, Theme, Typography } from '@material-ui/core'
 
 import { TextWithHighlights } from '../TextWithHighlights'
 
@@ -33,6 +33,10 @@ const useStyles = makeStyles(
     },
     textHighlight: {
       display: 'inline'
+    },
+    title: {
+      display: 'flex',
+      alignItems: 'center'
     },
     actions: {
       '& button': {
@@ -80,7 +84,7 @@ export function DealFormsList({
     <div className={classes.root}>
       {forms.map(form => (
         <div key={form.id} className={classes.row}>
-          <Box display="flex" alignItems="center">
+          <div className={classes.title}>
             {selectionType === 'multiple' && (
               <div className={classes.checkboxContainer}>
                 <DealFormSelection
@@ -108,11 +112,11 @@ export function DealFormsList({
                 <>{form.name}</>
               )}
             </Typography>
-          </Box>
+          </div>
 
-          <Box className={classes.actions}>
+          <div className={classes.actions}>
             {RowActionsBuilder && <RowActionsBuilder form={form} />}
-          </Box>
+          </div>
         </div>
       ))}
     </div>
