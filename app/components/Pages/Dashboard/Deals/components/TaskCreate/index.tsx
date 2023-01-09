@@ -13,7 +13,6 @@ import { createTask } from 'actions/deals'
 import LoadingContainer from 'components/LoadingContainer'
 import OverlayDrawer from 'components/OverlayDrawer'
 
-// import { FormTask } from './FormTask'
 import { GenericTask } from './GenericTask'
 import { SplitterTask } from './SplitterTask'
 
