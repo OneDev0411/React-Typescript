@@ -8,7 +8,8 @@ import {
   OutlinedInput,
   FormControlLabel,
   Typography,
-  Radio
+  Radio,
+  FormControl
 } from '@material-ui/core'
 import pluralize from 'pluralize'
 
@@ -23,6 +24,7 @@ const useStyles = makeStyles(
     },
     fieldsContainer: {
       display: 'flex',
+      flexDirection: 'row',
       alignItems: 'center',
       flexWrap: 'nowrap'
     },
@@ -152,7 +154,7 @@ export const WaitForFields = ({
       <Typography className={classes.separator} variant="body2">
         OR
       </Typography>
-      <div
+      <FormControl
         className={classes.fieldsContainer}
         onClick={() => handleSameDayChange(false)}
       >
@@ -162,62 +164,70 @@ export const WaitForFields = ({
           onChange={() => handleSameDayChange(false)}
           name="sameDay"
         />
+
         <div className={classes.value}>
-          <OutlinedInput
-            id="value"
-            type="number"
-            labelWidth={0}
-            defaultValue={value}
-            disabled={disabled || isSameDayActive}
-            inputProps={{
-              min: '1'
-            }}
-            classes={{
-              input: classes.outlinedPadding
-            }}
-            onChange={handleValueChange}
-          />
+          <FormControl>
+            <OutlinedInput
+              id="value"
+              type="number"
+              labelWidth={0}
+              defaultValue={value}
+              disabled={disabled || isSameDayActive}
+              inputProps={{
+                min: '1'
+              }}
+              classes={{
+                input: classes.outlinedPadding
+              }}
+              onChange={handleValueChange}
+            />
+          </FormControl>
         </div>
+
         <div className={classes.unit}>
-          <Select
-            fullWidth
-            labelId="event-unit"
-            id="event-unit-select"
-            variant="outlined"
-            color="secondary"
-            value={unit}
-            disabled={disabled || isSameDayActive}
-            onChange={handleUnitChange}
-            classes={{
-              outlined: classes.outlinedPadding
-            }}
-          >
-            {unitOptions.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {pluralize(option.title, value)}
-              </MenuItem>
-            ))}
-          </Select>
+          <FormControl>
+            <Select
+              fullWidth
+              labelId="event-unit"
+              id="event-unit-select"
+              variant="outlined"
+              color="secondary"
+              value={unit}
+              disabled={disabled || isSameDayActive}
+              onChange={handleUnitChange}
+              classes={{
+                outlined: classes.outlinedPadding
+              }}
+            >
+              {unitOptions.map(option => (
+                <MenuItem key={option.value} value={option.value}>
+                  {pluralize(option.title, value)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
         <div className={classes.triggerAt}>
-          <Select
-            fullWidth
-            labelId="trigger-at"
-            id="trigger-at-select"
-            variant="outlined"
-            color="secondary"
-            value={triggerAt}
-            disabled={disabled || isSameDayActive}
-            onChange={handleTriggerAtChange}
-            classes={{
-              outlined: classes.outlinedPadding
-            }}
-          >
-            <MenuItem value="after">After</MenuItem>
-            <MenuItem value="before">Before</MenuItem>
-          </Select>
+          <FormControl>
+            <Select
+              fullWidth
+              labelId="trigger-at"
+              id="trigger-at-select"
+              variant="outlined"
+              color="secondary"
+              value={triggerAt}
+              disabled={disabled || isSameDayActive}
+              onChange={handleTriggerAtChange}
+              classes={{
+                outlined: classes.outlinedPadding
+              }}
+            >
+              <MenuItem value="after">After</MenuItem>
+              <MenuItem value="before">Before</MenuItem>
+            </Select>
+          </FormControl>
         </div>
-      </div>
+      </FormControl>
     </div>
   )
 }
