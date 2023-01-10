@@ -1,8 +1,8 @@
 import { ReactNode } from 'react'
 
-import { withRouter, WithRouterProps } from 'react-router'
-
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { PageTabs, TabLink } from 'components/PageTabs'
 import { hasUserAccessToCrm, hasUserAccessToDeals } from 'utils/acl'
 

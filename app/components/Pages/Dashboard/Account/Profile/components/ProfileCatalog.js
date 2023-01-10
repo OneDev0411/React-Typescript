@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 import { Button, IconButton, Box, Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'

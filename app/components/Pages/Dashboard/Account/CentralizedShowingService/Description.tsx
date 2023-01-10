@@ -1,5 +1,3 @@
-import React from 'react'
-
 import FormCard from 'components/FormCard'
 
 export default function Description() {
