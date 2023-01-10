@@ -23,7 +23,8 @@ const useStyles = makeStyles(
     root: {
       backgroundColor: '#fff',
       borderLeft: `1px solid ${theme.palette.grey['200']}`,
-      borderTop: `1px solid ${theme.palette.grey['200']}`
+      borderTop: `1px solid ${theme.palette.grey['200']}`,
+      height: '100%'
     }
   }),
   {
@@ -110,7 +111,7 @@ export function DocumentsList({ selectionType, RowActionsBuilder }: Props) {
         setIsBulkActionWorking
       }}
     >
-      <Box className={classes.root} height="700px" overflow="scroll" p={3}>
+      <Box className={classes.root} p={3}>
         {!isFetching && !searchCriteria && activeCategoryIndex === null && (
           <Box
             display="flex"
@@ -130,7 +131,7 @@ export function DocumentsList({ selectionType, RowActionsBuilder }: Props) {
           </Box>
         )}
 
-        {isFetching ? (
+        {isFetching && (
           <Box
             display="flex"
             alignItems="center"
@@ -139,7 +140,9 @@ export function DocumentsList({ selectionType, RowActionsBuilder }: Props) {
           >
             <CircularProgress />
           </Box>
-        ) : (
+        )}
+
+        {!isFetching && activeCategoryIndex !== null && (
           <Box pb={12}>
             {folders.map(({ title, list }) => (
               <DocumentFolder

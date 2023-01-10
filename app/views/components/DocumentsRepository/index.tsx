@@ -22,6 +22,8 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
       position: 'relative',
+      height: '800px',
+      overflow: 'hidden',
       width: '100%',
       backgroundColor: theme.palette.grey[50],
       paddingTop: theme.spacing(2)
@@ -66,8 +68,15 @@ export function DocumentsRepository({
       }}
     >
       <Box className={classes.root}>
-        <Box display="flex">
-          <Box minWidth="300px" maxWidth="300px">
+        <Box display="flex" height="100%">
+          <Box
+            display="flex"
+            flexDirection="column"
+            minWidth="350px"
+            maxWidth="350px"
+            pr={0.5}
+            className="u-scrollbar--thinner"
+          >
             <Box
               display="flex"
               alignItems="center"
@@ -77,7 +86,7 @@ export function DocumentsRepository({
               <Typography variant="h6">Documents</Typography>
             </Box>
 
-            <Box width="100%" mt={2}>
+            <Box width="100%" overflow="auto" mt={4} flexGrow={1}>
               <CategoriesSidebar
                 isFetching={isFetching}
                 onChangeActiveCategory={setActiveCategoryIndex}
@@ -85,7 +94,13 @@ export function DocumentsRepository({
             </Box>
           </Box>
 
-          <Box flexGrow={1}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            flexGrow={1}
+            pr={0.5}
+            className="u-scrollbar--thinner"
+          >
             <Box
               display="flex"
               alignItems="center"
@@ -106,7 +121,7 @@ export function DocumentsRepository({
               </Box>
             </Box>
 
-            <Box mt={2}>
+            <Box mt={2} flexGrow={1} overflow="auto">
               <DocumentsList
                 selectionType={selectionType}
                 RowActionsBuilder={RowActionsBuilder}
