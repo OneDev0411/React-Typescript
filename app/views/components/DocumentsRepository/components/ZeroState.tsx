@@ -1,4 +1,4 @@
-export function DocumentsRepositoryEmptyState(
+export function DocumentsRepositoryZeroState(
   props: React.SVGProps<SVGSVGElement>
 ) {
   return (

@@ -16,7 +16,8 @@ import { RowActionsBuilder, SelectionType } from '../types'
 
 import { BulkActions } from './bulk-actions/BulkActions'
 import { DocumentFolder } from './DocumentFolder'
-import { DocumentsRepositoryEmptyState } from './EmptyState'
+import { SearchEmptyState } from './SearchEmptyState'
+import { DocumentsRepositoryZeroState } from './ZeroState'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -119,15 +120,31 @@ export function DocumentsList({ selectionType, RowActionsBuilder }: Props) {
             justifyContent="center"
             height="100%"
           >
-            <DocumentsRepositoryEmptyState />
+            <DocumentsRepositoryZeroState />
           </Box>
         )}
 
         {searchCriteria.length > 0 && (
-          <Box mb={2}>
+          <Box
+            mb={2}
+            display="flex"
+            flexDirection="column"
+            height={folders.length === 0 ? '100%' : 'unset'}
+          >
             <Typography variant="button">
               Search results for “{searchCriteria}”
             </Typography>
+
+            {folders.length === 0 && (
+              <Box
+                flexGrow={1}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <SearchEmptyState />
+              </Box>
+            )}
           </Box>
         )}
 
@@ -142,7 +159,7 @@ export function DocumentsList({ selectionType, RowActionsBuilder }: Props) {
           </Box>
         )}
 
-        {!isFetching && activeCategoryIndex !== null && (
+        {!isFetching && folders.length > 0 && (
           <Box pb={12}>
             {folders.map(({ title, list }) => (
               <DocumentFolder
