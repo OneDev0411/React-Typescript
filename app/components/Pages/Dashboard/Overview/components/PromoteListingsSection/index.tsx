@@ -6,7 +6,7 @@ import { mdiPlus } from '@mdi/js'
 
 import { EmptyState } from '@app/components/Pages/Dashboard/Overview/components/EmptyState'
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
-import { goTo } from '@app/utils/go-to'
+import { useNavigate } from '@app/hooks/use-navigate'
 import Link from '@app/views/components/ALink'
 import CardSkeleton from '@app/views/components/CardSkeleton'
 import ListingCard from '@app/views/components/ListingCards/ListingCard'
@@ -34,6 +34,7 @@ const useStyles = makeStyles(
 
 export default function PromoteListingsSection() {
   const classes = useStyles()
+  const navigate = useNavigate()
 
   const addMlsAccountButtonRef = useRef<Nullable<HTMLButtonElement>>(null)
 
@@ -41,8 +42,9 @@ export default function PromoteListingsSection() {
 
   const handleAddMlsAccountClick = () => {
     // Go to settings and open add MLS account dialog
-    goTo('/dashboard/account/connected-accounts', null, {
-      action: 'add-mls-account'
+    navigate({
+      pathname: '/dashboard/account/connected-accounts',
+      search: 'action=add-mls-account'
     })
   }
 
