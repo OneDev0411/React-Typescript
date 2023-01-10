@@ -94,7 +94,7 @@ export function getMessage(status: BrowserStatus) {
   return output
 }
 
-export function isListingPage(id: UUID): boolean {
+export function isListingPage(id?: UUID): boolean {
   if (
     id &&
     window &&

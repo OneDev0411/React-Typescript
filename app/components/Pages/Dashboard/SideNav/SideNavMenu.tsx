@@ -11,7 +11,6 @@ import {
   mdiHomeCityOutline
 } from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
-import { withRouter, WithRouterProps } from 'react-router'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { ACL } from '@app/constants/acl'
@@ -22,6 +21,8 @@ import { IAppState } from '@app/reducers'
 import { selectUnreadEmailThreadsCount } from '@app/reducers/inbox'
 import { InboxAction } from '@app/reducers/inbox/types'
 import { selectNotificationNewCount } from '@app/reducers/notifications'
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { selectIntercom } from '@app/selectors/intercom'
 import { selectShowingsTotalNotificationCount } from '@app/selectors/showings'
 import { selectUserUnsafe } from '@app/selectors/user'

@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 
 import CalendarEventCard from 'components/CalendarEvent/Card'
 import CardSkeleton from 'components/CardSkeleton'
@@ -24,6 +24,10 @@ export default function UpcomingBirthdaysAndAnniversariesSection() {
   const celebrationEvents = events.filter(event =>
     celebrationsEventTypes.includes(event.event_type)
   )
+
+  if (!isLoading && celebrationEvents.length < 1) {
+    return null
+  }
 
   return (
     <SectionLayout
@@ -54,13 +58,7 @@ export default function UpcomingBirthdaysAndAnniversariesSection() {
           </Grid>
         </>
       )}
-      {!isLoading && celebrationEvents.length === 0 && (
-        <Grid item xs={12}>
-          <Typography variant="body1" color="textSecondary">
-            Upcoming birthdays and anniversaries will be here.
-          </Typography>
-        </Grid>
-      )}
+
       {!isLoading &&
         celebrationEvents.slice(0, 4).map(event => (
           <Grid key={event.id} item xs={6} sm={6} md={3}>

@@ -154,7 +154,7 @@ export const getAddressLine2 = (address: Address | ICompactAddress): string => {
   const part2 = [state, address.postal_code].filter(item => !!item?.trim())
 
   return (
-    (part1.length ? `${part1.join(' ')}, ` : '') +
+    (part1.length ? `${part1.join(', ')}, ` : '') +
     (part2.length ? `${part2.join(' ')}` : '')
   )
 }

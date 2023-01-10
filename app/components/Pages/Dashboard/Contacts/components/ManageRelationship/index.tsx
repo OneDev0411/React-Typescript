@@ -1,7 +1,7 @@
 import { MouseEvent, useState } from 'react'
 
-import { Button, makeStyles } from '@material-ui/core'
-import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
+import { Button, makeStyles, Tooltip } from '@material-ui/core'
+import { mdiBellOffOutline, mdiBellRing } from '@mdi/js'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -17,7 +17,11 @@ interface Props {
 
 const useStyles = makeStyles(
   theme => ({
-    buttonLabel: { marginLeft: theme.spacing(1) }
+    iconButton: {
+      height: '36px',
+      minWidth: '40px',
+      padding: theme.spacing(0.75, 1)
+    }
   }),
   { name: 'ManageRelationship' }
 )
@@ -25,7 +29,7 @@ const useStyles = makeStyles(
 export function ManageRelationship({
   value,
   onChange,
-  label = 'Manage Relationship'
+  label = 'Auto Remind'
 }: Props) {
   const classes = useStyles()
 
@@ -55,21 +59,33 @@ export function ManageRelationship({
 
   return (
     <>
-      <Button
-        classes={{ label: classes.buttonLabel }}
-        color="primary"
-        variant="contained"
-        onClick={handleOpenMenu}
-        endIcon={
-          <SvgIcon
-            path={isMenuOpen ? mdiChevronUp : mdiChevronDown}
-            size={muiIconSizes.small}
-          />
-        }
+      <Tooltip
+        title={`${value ? 'Auto reminder: ' : ''}${frequencyToString(
+          value,
+          label
+        )}`}
       >
-        {frequencyToString(value, label)}
-      </Button>
-
+        <Button
+          className={value ? classes.iconButton : ''}
+          color="default"
+          variant="outlined"
+          onClick={handleOpenMenu}
+          startIcon={
+            !value ? (
+              <SvgIcon
+                path={value ? mdiBellRing : mdiBellOffOutline}
+                size={muiIconSizes.small}
+              />
+            ) : undefined
+          }
+        >
+          {value ? (
+            <SvgIcon path={mdiBellRing} size={muiIconSizes.small} />
+          ) : (
+            'Auto Remind'
+          )}
+        </Button>
+      </Tooltip>
       {isMenuOpen && (
         <ManageRelationshipMenu
           anchorEl={menuAnchorEl}

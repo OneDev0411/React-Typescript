@@ -16,13 +16,14 @@ interface Props {
     rows: IContact[]
     columnId: string
     onChangeTags: (contact: IContact, tags: string[]) => void
+    onOpenContact: (id: UUID) => void
   }
 }
 
 export const DraggableCardItem = React.memo(function DraggableCardItem({
   style,
   index,
-  data: { rows, columnId, onChangeTags }
+  data: { rows, columnId, onChangeTags, onOpenContact }
 }: Props) {
   const contact = rows[index]
 
@@ -42,6 +43,7 @@ export const DraggableCardItem = React.memo(function DraggableCardItem({
           contact={contact}
           style={style}
           isDragging={snapshot.isDragging}
+          onOpenContact={onOpenContact}
           onChangeTags={onChangeTags}
         />
       )}

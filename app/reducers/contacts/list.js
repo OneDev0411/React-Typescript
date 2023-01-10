@@ -48,6 +48,13 @@ const byId = (state = {}, action) => {
         }
       }
 
+    case actionTypes.REMOVE_CONTACT_FROM_LIST:
+      const newState = { ...state }
+
+      delete newState[action.id]
+
+      return newState
+
     case actionTypes.CLEAR_CONTACTS_LIST:
       return {}
 
@@ -76,6 +83,9 @@ const ids = (state = [], action) => {
 
     case actionTypes.CREATE_CONTACTS_SUCCESS:
       return [...action.response.result.contacts, ...state]
+
+    case actionTypes.REMOVE_CONTACT_FROM_LIST:
+      return state.filter(id => id !== action.id)
 
     case actionTypes.DELETE_CONTACTS_SUCCESS:
       return state.filter(id => !action.contactIds.includes(id))
@@ -108,6 +118,14 @@ export const info = (state = listInfoInitialState, action) => {
       }
     case actionTypes.UPDATE_CONTACT_LIST_INFO:
       return action.info
+
+    case actionTypes.REMOVE_CONTACT_FROM_LIST:
+      return {
+        ...state,
+        count: state.count ? state.count - 1 : 0,
+        total: state.total ? state.total - 1 : 0
+      }
+
     default:
       return state
   }
