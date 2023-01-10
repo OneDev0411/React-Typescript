@@ -10,7 +10,7 @@ import {
   DroppableProvided,
   DroppableStateSnapshot
 } from 'react-beautiful-dnd'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { areEqual } from 'react-window'
@@ -18,6 +18,7 @@ import { areEqual } from 'react-window'
 import { useViewAs } from '@app/hooks/team/use-view-as'
 import { searchContacts } from '@app/models/contacts/search-contacts'
 import { IAppState } from '@app/reducers'
+import { patchContact } from '@app/store_actions/contacts'
 import { ContactDetailsModal } from '@app/views/components/ContactDetailsModal'
 import { useContactDetailsModalState } from '@app/views/components/ContactDetailsModal/use-contact-details-modal-state'
 import VirtualList, { LoadingPosition } from '@app/views/components/VirtualList'
@@ -120,6 +121,7 @@ export const BoardColumn = memo(function BoardColumn({
     nextButtonDisabled,
     previousButtonDisabled
   } = useContactDetailsModalState('/dashboard/contacts', contactsIdList)
+  const dispatch = useDispatch()
 
   const [loadingOffset, setLoadingOffset] = useState(0)
   const [loadingState, setLoadingState] =
@@ -231,6 +233,7 @@ export const BoardColumn = memo(function BoardColumn({
     })
 
     updateList(newList, tag)
+    dispatch(patchContact(updatedContact))
   }
 
   return (
