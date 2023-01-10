@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
+import { withRouter } from '@app/routes/with-router'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { getSettingFromTeam } from '@app/utils/user-teams'
 
@@ -90,4 +91,4 @@ function Campaigns() {
   )
 }
 
-export default Campaigns
+export default withRouter(Campaigns)

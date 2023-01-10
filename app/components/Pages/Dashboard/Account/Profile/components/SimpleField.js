@@ -1,5 +1,3 @@
-import React from 'react'
-
 const simpleField = ({ input, label, placeholder, meta, ...rest }) => {
   const { touched, error } = meta
   const hasError = touched && error

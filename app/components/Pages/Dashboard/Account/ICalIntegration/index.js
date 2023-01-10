@@ -5,6 +5,7 @@ import omit from 'lodash/omit'
 import { Helmet } from 'react-helmet'
 
 import { getTeams } from '@app/models/user/get-teams'
+import { withRouter } from '@app/routes/with-router'
 import { addNotification as notify } from 'components/notification'
 import getCalenderFeedSetting from 'models/user/calendar-feed-setting'
 import { getTeamAvailableMembers } from 'utils/user-teams'
@@ -228,4 +229,4 @@ class ICalIntegration extends React.Component {
   }
 }
 
-export default ICalIntegration
+export default withRouter(ICalIntegration)

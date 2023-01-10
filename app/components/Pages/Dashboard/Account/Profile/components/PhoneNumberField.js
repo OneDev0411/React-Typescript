@@ -1,5 +1,3 @@
-import React from 'react'
-
 import MaskedInput from 'react-input-mask'
 
 const PhoneNumberField = ({ type, input, label, meta: { dirty, error } }) => {

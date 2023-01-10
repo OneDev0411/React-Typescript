@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Checkbox } from 'components/Checkbox'
 
 import Title from '../Title'
