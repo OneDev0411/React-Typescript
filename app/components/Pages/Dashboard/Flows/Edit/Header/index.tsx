@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
 
+import { useNavigate } from '@app/hooks/use-navigate'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { goTo } from 'utils/go-to'
 
 import Field from './Field'
 import { nameValidate, descriptionValidate } from './helpers'
@@ -52,6 +52,7 @@ export default function Header({
   onChange,
   onDuplicateClick
 }: Props) {
+  const navigate = useNavigate()
   const classes = useStyles()
 
   return (
@@ -85,7 +86,7 @@ export default function Header({
             Duplicate
           </Button>
         </Tooltip>
-        <IconButton size="small" onClick={() => goTo('/dashboard/flows')}>
+        <IconButton size="small" onClick={() => navigate('/dashboard/flows')}>
           <SvgIcon path={mdiClose} />
         </IconButton>
       </Box>
