@@ -19,7 +19,12 @@ export function EditRole({ children, role, onUpdateRole }: Props) {
         isOpen={isFormOpen}
         form={role}
         hideNewContactButton
-        onUpsertRole={onUpdateRole}
+        onUpsertRole={(data: IDealRole) =>
+          onUpdateRole({
+            ...data,
+            order: role.order
+          })
+        }
         onClose={() => setIsFormOpen(false)}
       />
     </>
