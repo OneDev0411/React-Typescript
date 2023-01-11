@@ -3,10 +3,10 @@ import { useState } from 'react'
 import { Box, Button, List, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { mdiArrowRight } from '@mdi/js'
-import { browserHistory } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
 import { OAuthProvider } from '@app/constants/contacts'
+import { useNavigate } from '@app/hooks/use-navigate'
 import { getOAuthAccounts } from '@app/models/o-auth-accounts/get-o-auth-accounts'
 import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
 import CalendarEventListItem from '@app/views/components/CalendarEvent/ListItem'
@@ -58,6 +58,7 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
   const classes = useStyles()
   const [isAccountSyncing, setIsAccountSyncing] = useState(true)
   const [hasAccount, setHasAccount] = useState(false)
+  const navigate = useNavigate()
 
   // We just need to show events not in the celebrations-event-types
   const filteredEvents = events.filter(
@@ -89,7 +90,7 @@ export function ThisWeeksSchedule({ isLoading, events }: Props) {
           variant="text"
           color="primary"
           endIcon={<SvgIcon path={mdiArrowRight} size={muiIconSizes.small} />}
-          onClick={() => browserHistory.push('/dashboard/calendar')}
+          onClick={() => navigate('/dashboard/calendar')}
         >
           Calendar
         </Button>
