@@ -1,6 +1,7 @@
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { useTitle } from 'react-use'
 
+import { withRouter } from '@app/routes/with-router'
 import PageLayout from 'components/GlobalPageLayout'
 
 import Welcome from './Welcome'
@@ -27,4 +28,4 @@ function OverviewDashboard() {
   )
 }
 
-export default OverviewDashboard
+export default withRouter(OverviewDashboard)
