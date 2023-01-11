@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { Alert } from '@material-ui/lab'
 import Cookies from 'universal-cookie'

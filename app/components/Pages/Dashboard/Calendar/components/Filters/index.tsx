@@ -5,8 +5,8 @@ import React, {
   RefObject
 } from 'react'
 
-import { withRouter, WithRouterProps } from 'react-router'
-
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { PageTabs, TabLink } from 'components/PageTabs'
 
 const BASE_URL = '/dashboard/calendar/'
@@ -59,12 +59,12 @@ export interface FiltersRef {
   changeFilter(tab: string): void
 }
 
-interface Props {
+interface Props extends WithRouterProps {
   filtersRef?: RefObject<FiltersRef>
   onChange: (filter: object) => void
 }
 
-const Filters = withRouter((props: Props & WithRouterProps) => {
+const Filters = withRouter((props: Props) => {
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB)
 
   const handleChangeTab = (value: string) => {

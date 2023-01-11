@@ -16,3 +16,5 @@ app/views/components/SvgIcons/**/*.*
 *.css
 *.svg
 *.png
+
+app/static/ckeditor

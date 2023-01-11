@@ -4,6 +4,7 @@ import { mdiCalendarPlus } from '@mdi/js'
 import { useEffectOnce, useTitle } from 'react-use'
 
 import { useUser } from '@app/hooks/use-user'
+import { withRouter } from '@app/routes/with-router'
 import AddAccountButton from '@app/views/components/AddAccountButton'
 import { SET_CREATE_CALLBACK_HANDLER } from '@app/views/components/GlobalActionsButton/context/constants'
 import { useGlobalActionContext } from '@app/views/components/GlobalActionsButton/hooks/use-global-action-context'
@@ -17,7 +18,7 @@ import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-va
 
 import { useStyles as useCommonStyles } from './use-styles'
 
-export default function CalendarPage() {
+function CalendarPage() {
   useTitle('Calendar | Rechat')
 
   const classes = useCommonStyles()
@@ -29,7 +30,7 @@ export default function CalendarPage() {
   const handleCreateTask = (
     event: IEvent | ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => {
-    actionRef.current!.updateCrmEvents(event, 'created')
+    actionRef.current?.updateCrmEvents?.(event, 'created')
   }
 
   useEffectOnce(() => {
@@ -112,3 +113,5 @@ export default function CalendarPage() {
     </div>
   )
 }
+
+export default withRouter(CalendarPage)

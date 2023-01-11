@@ -1,5 +1,3 @@
-import React from 'react'
-
 import Flex from 'styled-flex-component'
 
 import ActionButton from 'components/Button/ActionButton'

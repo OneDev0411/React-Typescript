@@ -23,7 +23,7 @@ export function NextTouch({ event }: Props) {
       editable={false}
       title={
         <div>
-          Touch Reminder:{' '}
+          Auto Reminder:{' '}
           <MiniContactProfile type="event" data={contact} as="span">
             <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
               {contact.display_name}

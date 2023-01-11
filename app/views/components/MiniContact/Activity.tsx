@@ -1,3 +1,5 @@
+import { memo, useMemo } from 'react'
+
 import { mdiClockOutline, mdiDotsHorizontalCircleOutline } from '@mdi/js'
 
 import { RelativeTime } from 'components/RelativeTime'
@@ -14,25 +16,30 @@ interface ActivityPropsType {
   contactId?: string
 }
 
-function Activity(props: ActivityPropsType) {
-  if ((!props.dates || props.dates.length == 0) && !props.last_touch) {
+function Activity({ dates, last_touch }: ActivityPropsType) {
+  const formattedDates = useMemo(
+    () => (dates ? activitiesFormatter(dates) : []),
+    [dates]
+  )
+
+  if ((!dates || dates.length == 0) && !last_touch) {
     return null
   }
 
   return (
     <div className="activity">
       <ul>
-        {props.last_touch && (
+        {last_touch && (
           <li>
             <div className="icon">
               <SvgIcon path={mdiClockOutline} size={muiIconSizes.small} />
             </div>
             <div className="text">
-              Last Touched <RelativeTime time={props.last_touch * 1000} />
+              Last Touched <RelativeTime time={last_touch * 1000} />
             </div>
           </li>
         )}
-        {activitiesFormatter(props.dates).map((item, i) => {
+        {formattedDates.map((item, i) => {
           return (
             <li key={i}>
               <div className="icon">
@@ -72,4 +79,4 @@ function Activity(props: ActivityPropsType) {
   )
 }
 
-export default Activity
+export default memo(Activity)

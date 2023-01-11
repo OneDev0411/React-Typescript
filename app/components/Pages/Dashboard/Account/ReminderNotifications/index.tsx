@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { withRouter } from '@app/routes/with-router'
 import { getContextsByBrand } from 'actions/deals'
 import ActionButton from 'components/Button/ActionButton'
 import { addNotification } from 'components/notification'
@@ -28,7 +29,7 @@ import { getSettingsFromColumns } from './helpers/get-settings-from-columns'
 import { updateNewColumnInColumns } from './helpers/update-new-column-in-columns'
 import { ColumnState } from './types'
 
-export default function ReminderNotifications() {
+function ReminderNotifications() {
   const activeTeam = useUnsafeActiveTeam()
   const deals = useSelector(selectDeals)
   const contactsAttributeDefs = useSelector(
@@ -167,3 +168,5 @@ export default function ReminderNotifications() {
     </>
   )
 }
+
+export default withRouter(ReminderNotifications)

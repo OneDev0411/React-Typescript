@@ -39,7 +39,8 @@ const useStyles = makeStyles(
     },
     displayName: {
       wordBreak: 'break-all',
-      height: 'max-content'
+      height: 'max-content',
+      fontSize: theme.typography.h5.fontSize
     },
     socialContainer: {
       width: 'min-content',

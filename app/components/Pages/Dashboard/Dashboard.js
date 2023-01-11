@@ -2,8 +2,8 @@ import { Component, cloneElement } from 'react'
 
 import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
 
+import { withRouter } from '@app/routes/with-router'
 import { fetchShowingTotalNotificationCount } from 'actions/showings'
 import ShowingSocket from 'services/socket/showings'
 import {

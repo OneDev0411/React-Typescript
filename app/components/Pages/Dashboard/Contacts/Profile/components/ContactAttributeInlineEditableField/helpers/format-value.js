@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 import { addZero, months_abbr } from 'utils/date-times'
 import { formatPhoneNumber } from 'utils/format'
 import { isNumeric } from 'utils/helpers'
@@ -27,6 +29,12 @@ export function formatValue(attribute_def, value) {
     let { year } = value
 
     year = year === 1800 || !year ? '' : `, ${year}`
+
+    if (moment(`${month.value + 1}`, 'MM').daysInMonth() < day.value) {
+      return `${months_abbr[month.value + 1]} ${addZero(
+        day.value - moment(`${month.value + 1}`, 'MM').daysInMonth()
+      )}${year}`
+    }
 
     return `${months_abbr[month.value]} ${addZero(day.value)}${year}`
   }

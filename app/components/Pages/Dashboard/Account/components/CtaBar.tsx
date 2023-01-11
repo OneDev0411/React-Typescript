@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Theme, Paper, Grid, Button, Typography } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/styles'
 import { mdiPlusCircleOutline } from '@mdi/js'

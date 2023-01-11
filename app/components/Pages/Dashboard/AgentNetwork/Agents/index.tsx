@@ -21,7 +21,11 @@ import { toListingPage, toPlacePage } from '../helpers'
 import Layout from '../Layout'
 
 import AgentsGrid from './Grid'
-import { getListingVAlertFilters, getLocationVAlertFilters } from './helpers'
+import {
+  getListingVAlertFilters,
+  getListingVAlertFiltersWithPostalCodes,
+  getLocationVAlertFilters
+} from './helpers'
 import { ListingWithProposedAgentAndMlsInfo } from './types'
 
 export interface ZipcodeOption {
@@ -71,18 +75,25 @@ function Agents() {
 
         setListing(fetchedListing)
 
-        const listingBasedFilters = await getListingVAlertFilters(
-          fetchedListing
-        )
+        if (listing?.mls_info?.enable_agent_network === true) {
+          const listingBasedFilters = await getListingVAlertFilters(
+            fetchedListing
+          )
 
-        setFilters(listingBasedFilters)
+          setFilters(listingBasedFilters)
+        } else {
+          const listingBasedFilters =
+            await getListingVAlertFiltersWithPostalCodes(fetchedListing)
+
+          setFilters(listingBasedFilters)
+        }
       } catch (error) {
         console.error('Error fetching listing/listing filters', error)
       }
     }
 
     fetchListingBasedData()
-  }, [isGoogleMapsLoaded, listingId])
+  }, [isGoogleMapsLoaded, listingId, listing?.mls_info?.enable_agent_network])
 
   useEffect(() => {
     async function fetchLocationBasedData() {

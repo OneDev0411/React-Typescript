@@ -1,6 +1,6 @@
 import { RefObject } from 'react'
 
-import { Typography, makeStyles, Theme, Tooltip } from '@material-ui/core'
+import { Typography, makeStyles, Theme, Tooltip, Link } from '@material-ui/core'
 import {
   mdiAccountArrowLeft,
   mdiCake,
@@ -13,7 +13,6 @@ import {
   mdiTag
 } from '@mdi/js'
 import { useDispatch } from 'react-redux'
-import { Link } from 'react-router'
 
 import { ACL } from '@app/constants/acl'
 import {
@@ -75,11 +74,13 @@ const useStyles = makeStyles(
 )
 
 interface Data {
+  onOpenContact: (id: UUID) => void
   totalRows: number
   tableContainerRef?: RefObject<HTMLDivElement>
 }
 
 export function useColumns({
+  onOpenContact,
   totalRows,
   tableContainerRef
 }: Data): TableColumn<IContact>[] {
@@ -107,7 +108,9 @@ export function useColumns({
       render: ({ row: contact }) => (
         <Link
           className={classes.cellName}
-          to={`/dashboard/contacts/${contact.id}`}
+          onClick={() => {
+            onOpenContact(contact.id)
+          }}
         >
           <Typography noWrap variant="inherit">
             {getAttributeFromSummary(contact, 'display_name')}

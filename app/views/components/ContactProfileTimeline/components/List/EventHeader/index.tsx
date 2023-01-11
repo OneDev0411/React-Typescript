@@ -13,7 +13,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     whiteSpace: 'nowrap',
     letterSpacing: '0.4px',
     textTransform: 'uppercase',
-    fontWeight: 700
+    fontWeight: theme.typography.fontWeightBold,
+    fontSize: theme.typography.fontSize,
+    color: theme.palette.common.black,
+    lineHeight: 1,
+    marginBottom: theme.spacing(0.5)
   })
 }))
 
