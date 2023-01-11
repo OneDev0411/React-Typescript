@@ -58,6 +58,29 @@ export async function getListingVAlertFilters(
     minimum_sold_date: minimumSoldDate,
     points: getMapBoundsInCircle({ lat, lng }, DEFAULT_SEARCH_RADIUS),
     radius: DEFAULT_SEARCH_RADIUS,
+    center: { latitude: lat, longitude: lng }
+  }
+}
+
+export async function getListingVAlertFiltersWithPostalCodes(
+  listing: IListing
+): Promise<AlertFiltersWithRadiusAndCenter> {
+  const minimumSoldDate = getPastMonthsTimestamp(DEFAULT_SEARCH_MONTHS_PERIOD)
+  const { lat, lng } = await getListingLatLng(listing)
+
+  return {
+    property_types: isLeaseProperty(listing)
+      ? undefined
+      : [listing.property.property_type],
+    minimum_bedrooms: listing.property.bedroom_count
+      ? Math.max(listing.property.bedroom_count - 2, 0)
+      : undefined,
+    maximum_bedrooms: listing.property.bedroom_count
+      ? listing.property.bedroom_count + 2
+      : undefined,
+    minimum_sold_date: minimumSoldDate,
+    points: getMapBoundsInCircle({ lat, lng }, DEFAULT_SEARCH_RADIUS),
+    radius: DEFAULT_SEARCH_RADIUS,
     center: { latitude: lat, longitude: lng },
     postal_codes: [listing.property.address.postal_code],
     mls: listing.mls
