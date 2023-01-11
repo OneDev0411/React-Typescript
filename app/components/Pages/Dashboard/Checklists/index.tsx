@@ -2,11 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Box } from '@material-ui/core'
 import { DropResult } from 'react-beautiful-dnd'
-import { browserHistory, RouteComponentProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import { DealRolesProvider } from '@app/contexts/deals-roles-definitions/provider'
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
+import { useNavigate } from '@app/hooks/use-navigate'
+import { useSearchParams } from '@app/hooks/use-search-param'
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { reorder } from '@app/utils/dnd-reorder'
 import Acl from 'components/Acl'
 import { PageTabs, TabLink } from 'components/PageTabs'
@@ -26,13 +29,17 @@ interface Props extends RouteComponentProps<any, {}> {
   user: IUser
 }
 
-export default function ChecklistsPage({ location }: Props) {
+function ChecklistsPage({ location }: Props) {
   useTitle('Checklists')
 
-  const propertyTypeId = location.query.property
-  const checklistType = location.query.checklist_type
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+
+  const propertyTypeId = searchParams.get('property') as UUID
+  const checklistType = searchParams.get('checklist_type') as IDealChecklistType
   const [isFormOpen, setIsFormOpen] = useState(false)
   const activeBrandId = useActiveBrandId()
+  const changedURL = window.location.pathname
 
   const lastTaskNameEditorRef = useRef<any>(null)
 
@@ -67,11 +74,17 @@ export default function ChecklistsPage({ location }: Props) {
 
   useEffect(() => {
     if (!propertyTypeId && propertyTypes.length > 0) {
-      browserHistory.replace(
-        getChecklistPageLink(propertyTypes[0].id, TabNames[0].type)
-      )
+      navigate(getChecklistPageLink(propertyTypes[0].id, TabNames[0].type), {
+        replace: true
+      })
     }
-  }, [propertyTypeId, propertyTypes])
+  }, [propertyTypeId, propertyTypes, navigate])
+
+  useEffect(() => {
+    if (!propertyTypeId) {
+      navigate(changedURL, { replace: true })
+    }
+  }, [propertyTypeId, navigate, changedURL])
 
   const handleCreatePropertyType = (propertyType: IDealPropertyType) => {
     addPropertyTypes(propertyType)
@@ -195,3 +208,5 @@ export default function ChecklistsPage({ location }: Props) {
     </Acl.Admin>
   )
 }
+
+export default withRouter(ChecklistsPage)
