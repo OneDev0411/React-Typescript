@@ -19,7 +19,7 @@ export function useDocumentsRepository(deal: IDeal | undefined) {
   const forms = useMemo(() => {
     const normalized = (query.data ?? []).map((form: IBrandForm) => ({
       ...form,
-      libraryName: form.library.name || 'Untitled'
+      libraryName: form.library?.name || 'Untitled'
     }))
 
     return groupBy(normalized, form => form.libraryName)
