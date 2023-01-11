@@ -18,8 +18,9 @@ function ListingMarketingPage({ params, location, router }: WithRouterProps) {
   const navigate = useNavigate()
   const listingId: UUID = params.id
 
-  const templateType: Optional<Nullable<IMarketingTemplateType>> =
-    searchParams.get('type') as IMarketingTemplateType
+  const templateType: Nullable<IMarketingTemplateType> = searchParams.get(
+    'type'
+  ) as IMarketingTemplateType
   const medium: Optional<IMarketingTemplateMedium> =
     (location.hash.split('#').pop() as IMarketingTemplateMedium) || undefined
 
@@ -54,15 +55,11 @@ function ListingMarketingPage({ params, location, router }: WithRouterProps) {
           templateType={templateType}
           medium={medium}
           onChangeTemplateType={type => {
-            navigate(
-              { ...location },
-              {
-                state: {
-                  ...searchParams,
-                  type
-                }
-              }
-            )
+            const navParams = new URLSearchParams({
+              type: type.toString()
+            })
+
+            navigate({ ...location, search: navParams.toString() })
           }}
           onChangeMedium={medium => {
             navigate(

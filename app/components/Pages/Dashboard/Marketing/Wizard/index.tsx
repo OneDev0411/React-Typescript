@@ -100,7 +100,7 @@ function MarketingWizard(props: WithRouterProps) {
     if (isDesktop && listingId) {
       navigate(`/dashboard/marketing/mls/${listingId}`, { replace: true })
     }
-  }, [navigate, props, props.router, listingId])
+  }, [navigate, props.router, listingId])
 
   useGoogleMapsPlaces()
 

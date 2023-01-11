@@ -60,7 +60,7 @@ interface Props {
     isLoading: boolean
     types: string
     medium: IMarketingTemplateMedium
-    defaultSelectedTemplate: Optional<UUID | null>
+    defaultSelectedTemplate: Nullable<UUID>
     onSelectTemplate: (
       template:
         | IBrandMarketingTemplate
