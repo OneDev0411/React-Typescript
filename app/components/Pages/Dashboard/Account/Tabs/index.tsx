@@ -80,7 +80,7 @@ export const SettingsTabs = ({ user, location }: Props & WithRouterProps) => {
 
   return (
     <PageTabs
-      defaultValue={matchingTab.to}
+      defaultValue={matchingTab?.to}
       tabs={tabs
         .filter(
           ({ isHidden }) => !isHidden || !isHidden({ team: activeTeam, user })
