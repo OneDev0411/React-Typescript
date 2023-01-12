@@ -3,6 +3,7 @@ import { mdiDownload } from '@mdi/js'
 import { saveAs } from 'file-saver'
 
 import useNotify from '@app/hooks/use-notify'
+import { useUnsafeUser } from '@app/hooks/use-unsafe-user'
 import { urlToBlob } from '@app/utils/url-to-blob'
 
 import { GridActionButton } from '../../../Grid/Table/features/Actions/Button'
@@ -14,6 +15,9 @@ export function DownloadBulkAction() {
   const notify = useNotify()
   const { selectedForms, isBulkActionWorking, setIsBulkActionWorking } =
     useDocumentRepositorySelectionContext()
+
+  const user = useUnsafeUser()
+  const isDisabled = (user?.agents?.length ?? 0) === 0
 
   const downloadForms = async () => {
     try {
@@ -52,8 +56,13 @@ export function DownloadBulkAction() {
       ) : (
         <GridActionButton
           label="Download Forms"
+          tooltip={
+            isDisabled
+              ? 'Your account does not allow you to download forms.'
+              : ''
+          }
           icon={mdiDownload}
-          disabled={isBulkActionWorking}
+          disabled={isDisabled || isBulkActionWorking}
           onClick={downloadForms}
         />
       )}

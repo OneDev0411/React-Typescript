@@ -4,6 +4,7 @@ import { CircularProgress } from '@material-ui/core'
 import { mdiEmail } from '@mdi/js'
 
 import useNotify from '@app/hooks/use-notify'
+import { useUnsafeUser } from '@app/hooks/use-unsafe-user'
 
 import { SingleEmailComposeDrawer } from '../../../EmailCompose'
 import { GridActionButton } from '../../../Grid/Table/features/Actions/Button'
@@ -17,6 +18,9 @@ export function EmailBulkAction() {
     useDocumentRepositorySelectionContext()
   const [isEmailDrawerOpen, setIsEmailDrawerOpen] = useState(false)
   const [files, setFiles] = useState<IFile[]>([])
+
+  const user = useUnsafeUser()
+  const isDisabled = (user?.agents?.length ?? 0) === 0
 
   const attachEmailForms = async () => {
     try {
@@ -48,8 +52,11 @@ export function EmailBulkAction() {
       ) : (
         <GridActionButton
           label="Email Forms"
+          tooltip={
+            isDisabled ? 'Your account does not allow you to email forms.' : ''
+          }
           icon={mdiEmail}
-          disabled={isBulkActionWorking}
+          disabled={isDisabled || isBulkActionWorking}
           onClick={attachEmailForms}
         />
       )}
