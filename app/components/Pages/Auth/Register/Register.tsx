@@ -1,13 +1,14 @@
-import React from 'react'
-
 import { Box, Theme, makeStyles, Typography, Tooltip } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
 import { useDispatch } from 'react-redux'
-import { browserHistory, WithRouterProps, Link } from 'react-router'
+import { Link } from 'react-router'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { useNavigate } from '@app/hooks/use-navigate'
+import { useSearchParams } from '@app/hooks/use-search-param'
+import { WithRouterProps } from '@app/routes/types'
 import { MaskedInput } from '@app/views/components/MaskedInput'
 import { PasswordTextField } from '@app/views/components/PasswordTextField'
 
@@ -64,19 +65,12 @@ export function Register(props: WithRouterProps) {
   const classes = useStyles()
   const inputClasses = useInputStyles()
   const dispatch = useDispatch()
-
-  const paramsFromURI: {
-    first_name?: string
-    last_name?: string
-    phone_number?: string
-    email?: string
-    redirectTo?: string
-    token: string
-  } = props.location.query
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   useEffectOnce(() => {
-    if (!props.location.query.token) {
-      browserHistory.push('/oops')
+    if (!searchParams.get('token')) {
+      navigate('/oops')
     }
   })
 
@@ -84,17 +78,15 @@ export function Register(props: WithRouterProps) {
     const { first_name, last_name, email, password, phone_number, user_type } =
       values
 
-    let {
-      token,
-      redirectTo,
-      phone_number: phoneNumberFromUri,
-      email: emailFromURI
-    } = paramsFromURI
+    const token = searchParams.get('token')
+    const redirectTo = searchParams.get('redirectTo')
+    const phoneNumberFromUri = searchParams.get('phone_number')
+    const emailFromURI = searchParams.get('email')
 
     const userPassword: {
       email?: string
       password: string
-      shadow_token: string
+      shadow_token: Nullable<string>
       phone_number?: string
     } = {
       password,
@@ -138,13 +130,20 @@ export function Register(props: WithRouterProps) {
           window.localStorage.setItem('onboarding_redirectAtTheEnd', redirectTo)
         }
 
-        browserHistory.push({
-          ...props.location,
-          query: {
-            ...props.location.query,
-            redirectTo: '/onboarding/confirm-agent-id'
-          }
+        const urlSearchParams = new URLSearchParams({
+          ...searchParams,
+          redirectTo: '/onboarding/confirm-agent-id'
         })
+
+        navigate(
+          {
+            pathname: props.location.pathname,
+            search: urlSearchParams.toString()
+          },
+          {
+            state: props.location.state
+          }
+        )
       }
 
       await dispatch(submitSigninForm(loginInfo))
@@ -160,29 +159,31 @@ export function Register(props: WithRouterProps) {
   }
 
   const getSignInUrl = () => {
-    const { email: username = '', redirectTo = '' } = paramsFromURI
+    const username = searchParams.get('email') || ''
+    const redirectTo = searchParams.get('redirectTo') || ''
+
     const queryString = new URLSearchParams({ username, redirectTo }).toString()
 
     return `/signin?${queryString}`
   }
 
   const getInitialValues = () => {
-    let phoneNumber: string = paramsFromURI.phone_number || ''
+    let phoneNumber = searchParams.get('phone_number') || ''
 
     if (phoneNumber.startsWith('+1')) {
       phoneNumber = phoneNumber.substring(2)
     }
 
     const values: FormValues = {
-      first_name: paramsFromURI.first_name || '',
-      last_name: paramsFromURI.last_name || '',
+      first_name: searchParams.get('first_name') || '',
+      last_name: searchParams.get('last_name') || '',
       phone_number: phoneNumber,
       password: '',
       user_type: 'Agent'
     }
 
-    if (!paramsFromURI.phone_number) {
-      values.email = paramsFromURI.email || ''
+    if (!searchParams.get('phone_number')) {
+      values.email = searchParams.get('email') || ''
     }
 
     return values
@@ -201,23 +202,24 @@ export function Register(props: WithRouterProps) {
 
             return (
               <form onSubmit={handleSubmit}>
-                {paramsFromURI.email && !paramsFromURI.phone_number && (
-                  <Tooltip
-                    title="You have to sign up with this email you were invited with,
+                {searchParams.get('email') &&
+                  !searchParams.get('phone_number') && (
+                    <Tooltip
+                      title="You have to sign up with this email you were invited with,
                           but once you are in the app, you can always go to your settings and
                           change your email to whatever you desire."
-                  >
-                    <TextField
-                      name="email"
-                      type="email"
-                      label="Email Address"
-                      InputProps={{
-                        readOnly: true
-                      }}
-                      classes={inputClasses}
-                    />
-                  </Tooltip>
-                )}
+                    >
+                      <TextField
+                        name="email"
+                        type="email"
+                        label="Email Address"
+                        InputProps={{
+                          readOnly: true
+                        }}
+                        classes={inputClasses}
+                      />
+                    </Tooltip>
+                  )}
 
                 <TextField
                   name="first_name"
@@ -231,7 +233,7 @@ export function Register(props: WithRouterProps) {
                   classes={inputClasses}
                 />
 
-                {paramsFromURI.phone_number && (
+                {searchParams.get('phone_number') && (
                   <TextField
                     name="phone_number"
                     type="phone"
