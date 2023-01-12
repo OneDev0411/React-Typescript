@@ -11,6 +11,7 @@ import { list } from './keys'
 
 export function useDocumentsRepository(deal: IDeal | undefined) {
   const activeBrand = useActiveBrand()
+  const brandName = activeBrand.name
 
   const query = useQuery(list(), () =>
     deal ? getDealForms(deal.id) : getBrandForms(activeBrand.id)
@@ -19,11 +20,11 @@ export function useDocumentsRepository(deal: IDeal | undefined) {
   const forms = useMemo(() => {
     const normalized = (query.data ?? []).map((form: IBrandForm) => ({
       ...form,
-      libraryName: form.library?.name || 'Untitled'
+      libraryName: form.library?.name || brandName || 'Untitled'
     }))
 
     return groupBy(normalized, form => form.libraryName)
-  }, [query.data])
+  }, [query.data, brandName])
 
   return {
     ...query,
