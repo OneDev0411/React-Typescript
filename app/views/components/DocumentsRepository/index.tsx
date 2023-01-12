@@ -8,6 +8,7 @@ import {
   Typography
 } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
+import { useWindowSize } from 'react-use'
 
 import { SvgIcon } from '../SvgIcons'
 
@@ -18,16 +19,20 @@ import { DocumentRepositoryContext } from './context/document-repository'
 import { useDocumentsRepository } from './queries/use-documents-repository'
 import { RowActionsBuilder, SelectionType } from './types'
 
+interface StyleProps {
+  windowHeight: number
+}
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    root: {
+    root: ({ windowHeight }: StyleProps) => ({
       position: 'relative',
-      height: '800px',
+      height: windowHeight - theme.spacing(10),
       overflow: 'hidden',
       width: '100%',
       backgroundColor: theme.palette.grey[50],
       paddingTop: theme.spacing(2)
-    },
+    }),
     header: {
       height: theme.spacing(6)
     }
@@ -50,11 +55,13 @@ export function DocumentsRepository({
   RowActionsBuilder,
   onClose
 }: Props) {
-  const classes = useStyles()
+  const { height: windowHeight } = useWindowSize()
+
+  const classes = useStyles({ windowHeight })
+
   const [activeCategoryIndex, setActiveCategoryIndex] =
     useState<Nullable<number>>(null)
   const [searchCriteria, setSearchCriteria] = useState('')
-
   const { forms, categoryNames, isFetching } = useDocumentsRepository(deal)
 
   return (
