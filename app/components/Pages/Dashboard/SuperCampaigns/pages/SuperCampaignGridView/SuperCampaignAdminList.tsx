@@ -5,8 +5,8 @@ import classNames from 'classnames'
 
 import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/Table/components/LoadingComponent'
 import { InsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
+import { useNavigate } from '@app/hooks/use-navigate'
 import { useGetAllSuperCampaigns } from '@app/models/super-campaign'
-import { goTo } from '@app/utils/go-to'
 import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
@@ -37,6 +37,7 @@ const SORT_DESC = ['-due_at', '-updated_at', '-created_at']
 function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
+  const navigate = useNavigate()
 
   const { data, isFetching, fetchNextPage } = useGetAllSuperCampaigns(
     sortDir === 'ASC' ? SORT_ASC : SORT_DESC
@@ -107,7 +108,7 @@ function SuperCampaignAdminList({ sortDir }: SuperCampaignAdminListProps) {
       getTdProps={({ column, row }) => ({
         onClick: () => {
           if (column.id !== 'actions') {
-            goTo(`/dashboard/insights/super-campaign/${row.id}/detail`)
+            navigate(`/dashboard/insights/super-campaign/${row.id}/detail`)
           }
         }
       })}
