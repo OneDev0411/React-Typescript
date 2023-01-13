@@ -158,12 +158,7 @@ export const WaitForFields = ({
         className={classes.fieldsContainer}
         onClick={() => handleSameDayChange(false)}
       >
-        <Radio
-          checked={!isSameDayActive}
-          disabled={disabled}
-          onChange={() => handleSameDayChange(false)}
-          name="sameDay"
-        />
+        <Radio checked={!isSameDayActive} disabled={disabled} name="sameDay" />
 
         <div className={classes.value}>
           <FormControl>
