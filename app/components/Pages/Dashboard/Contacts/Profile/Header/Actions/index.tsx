@@ -30,7 +30,7 @@ const useStyles = makeStyles(
 export const Actions = ({
   contact,
   onUpdateTouchFreq
-}: Omit<Props, 'contactChangeCallback'>) => {
+}: Omit<Props, 'contactChangeCallback' | 'onChangeAvatar'>) => {
   const classes = useStyles()
 
   const [manageRelationshipRef, setManageRelationshipRef] =

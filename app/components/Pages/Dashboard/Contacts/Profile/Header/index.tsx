@@ -28,6 +28,7 @@ const useStyles = makeStyles(
 
 export interface Props {
   contact: INormalizedContact
+  onChangeAvatar: (contact: INormalizedContact) => void
   contactChangeCallback: () => void
   onUpdateTouchFreq(newValue: Nullable<number>): void
   RenderActions?: ReactNode
@@ -35,6 +36,7 @@ export interface Props {
 
 export const Header = ({
   contact,
+  onChangeAvatar,
   contactChangeCallback,
   onUpdateTouchFreq,
   RenderActions
@@ -46,6 +48,7 @@ export const Header = ({
       <div className={classes.catalogContainer}>
         <Catalog
           contact={contact}
+          onChangeAvatar={onChangeAvatar}
           contactChangeCallback={contactChangeCallback}
         />
       </div>
