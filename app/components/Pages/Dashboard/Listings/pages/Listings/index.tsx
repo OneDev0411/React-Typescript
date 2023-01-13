@@ -5,7 +5,7 @@ import { mdiPlus } from '@mdi/js'
 import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
-import { goTo } from '@app/utils/go-to'
+import { useNavigate } from '@app/hooks/use-navigate'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import { ReminderDialog } from '@app/views/components/ReminderDialog'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -25,11 +25,13 @@ function Listings({ params }: ListingsProps) {
 
   const addMlsAccountButtonRef = useRef<Nullable<HTMLButtonElement>>(null)
   const [searchTerm, setSearchTerm] = useState('')
+  const navigate = useNavigate()
 
   const handleAddMlsAccountClick = () => {
     // Go to settings and open add MLS account dialog
-    goTo('/dashboard/account/connected-accounts', null, {
-      action: 'add-mls-account'
+    navigate({
+      pathname: '/dashboard/account/connected-accounts',
+      search: 'action=add-mls-account'
     })
   }
 
