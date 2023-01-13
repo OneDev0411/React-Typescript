@@ -2,9 +2,9 @@ import React from 'react'
 
 import { Tooltip } from '@material-ui/core'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 import styled from 'styled-components'
 
+import { withRouter } from '@app/routes/with-router'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 import { savedSegmentId } from 'reducers/filter-segments'
 import { blue } from 'views/utils/colors'
@@ -37,7 +37,7 @@ class Index extends React.Component {
   onClick = () => {
     if (!this.isSelected()) {
       this.props.changeActiveFilterSegment('contacts', 'duplicate contacts')
-      browserHistory.push('/dashboard/contacts/duplicate-contacts')
+      this.props.navigate('/dashboard/contacts/duplicate-contacts')
     }
   }
 
@@ -58,6 +58,8 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(mapStateToProps, {
-  changeActiveFilterSegment
-})(Index)
+export default withRouter(
+  connect(mapStateToProps, {
+    changeActiveFilterSegment
+  })(Index)
+)
