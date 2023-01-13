@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 
 import { connect } from 'react-redux'
 
@@ -7,6 +7,7 @@ import {
   getContactAvatar,
   getContactNameInitials
 } from 'models/contacts/helpers'
+import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { updateContact } from 'models/contacts/update-contact'
 import uploadAttachments from 'models/contacts/upload-attachments'
 import { IAppState } from 'reducers'
@@ -20,21 +21,22 @@ import { AvatarUploader as Uploader } from 'views/components/AvatarUploader'
 interface Props {
   attributeDefs: IAttributeDefsState
   contact: IContact
+  onChange: (contact: INormalizedContact) => void
 }
 
-function AvatarUploader({ contact, attributeDefs }: Props) {
-  const [isUploading, setIsUploading] = useState(false)
-  const [avatar, setAvatar] = useState<string | ArrayBuffer | null>(
-    getAccountAvatar(contact)
-  )
+function AvatarUploader({ contact, attributeDefs, onChange }: Props) {
+  const [uploadingAvatar, setUploadingAvatar] = useState<
+    string | ArrayBuffer | null
+  >(null)
+
+  const isUploading = !!uploadingAvatar
 
   const handleOnChange = useCallback(
     async (file: File) => {
       const dataUrl = await readFileAsDataUrl(file)
 
       try {
-        setAvatar(dataUrl)
-        setIsUploading(true)
+        setUploadingAvatar(dataUrl)
 
         const image = await uploadAttachments({ contactId: contact.id, file })
         const { url: text } = image
@@ -50,42 +52,40 @@ function AvatarUploader({ contact, attributeDefs }: Props) {
           )
         }
 
-        let attribute
         const avatar = getContactAvatar(contact, attribute_def.id)
 
-        if (avatar) {
-          attribute = [
-            {
-              id: avatar.id,
-              text
-            }
-          ]
-        } else {
-          attribute = [
-            {
-              attribute_def: attribute_def.id,
-              is_primary: true,
-              text
-            }
-          ]
-        }
+        const attribute = avatar
+          ? [
+              {
+                id: avatar.id,
+                text
+              }
+            ]
+          : [
+              {
+                attribute_def: attribute_def.id,
+                is_primary: true,
+                text
+              }
+            ]
 
-        await updateContact(contact.id, attribute)
+        const response = await updateContact(contact.id, attribute)
+
+        onChange(normalizeContact(response.data))
       } catch (error) {
-        setAvatar(null)
         console.log(error)
       } finally {
-        setIsUploading(false)
+        setUploadingAvatar(null)
       }
     },
-    [attributeDefs, contact]
+    [attributeDefs, contact, onChange]
   )
 
   return (
     <Uploader
       avatar={{
         size: 72,
-        src: avatar,
+        src: isUploading ? uploadingAvatar : getAccountAvatar(contact),
         initials: getContactNameInitials(contact)
       }}
       handleOnChange={handleOnChange}
