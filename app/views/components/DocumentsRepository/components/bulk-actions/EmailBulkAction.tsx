@@ -23,6 +23,15 @@ export function EmailBulkAction() {
   const isDisabled = (user?.agents?.length ?? 0) === 0
 
   const attachEmailForms = async () => {
+    if (selectedForms.length > 8) {
+      notify({
+        status: 'info',
+        message: 'There is a maximum of 8 files that can be attached.'
+      })
+
+      return
+    }
+
     try {
       setIsBulkActionWorking(true)
 
@@ -42,6 +51,10 @@ export function EmailBulkAction() {
     }
   }
 
+  if (isDisabled) {
+    return null
+  }
+
   return (
     <>
       {isFetching ? (
@@ -52,11 +65,8 @@ export function EmailBulkAction() {
       ) : (
         <GridActionButton
           label="Email Forms"
-          tooltip={
-            isDisabled ? 'Your account does not allow you to email forms.' : ''
-          }
           icon={mdiEmail}
-          disabled={isDisabled || isBulkActionWorking}
+          disabled={isBulkActionWorking}
           onClick={attachEmailForms}
         />
       )}

@@ -20,6 +20,15 @@ export function DownloadBulkAction() {
   const isDisabled = (user?.agents?.length ?? 0) === 0
 
   const downloadForms = async () => {
+    if (selectedForms.length > 8) {
+      notify({
+        status: 'info',
+        message: 'There is a maximum of 8 files that can be downloaded.'
+      })
+
+      return
+    }
+
     try {
       setIsBulkActionWorking(true)
 
@@ -46,6 +55,10 @@ export function DownloadBulkAction() {
     }
   }
 
+  if (isDisabled) {
+    return null
+  }
+
   return (
     <>
       {isFetching ? (
@@ -56,13 +69,8 @@ export function DownloadBulkAction() {
       ) : (
         <GridActionButton
           label="Download Forms"
-          tooltip={
-            isDisabled
-              ? 'Your account does not allow you to download forms.'
-              : ''
-          }
           icon={mdiDownload}
-          disabled={isDisabled || isBulkActionWorking}
+          disabled={isBulkActionWorking}
           onClick={downloadForms}
         />
       )}
