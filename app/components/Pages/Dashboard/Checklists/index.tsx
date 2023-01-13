@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Box } from '@material-ui/core'
 import { DropResult } from 'react-beautiful-dnd'
@@ -78,11 +78,6 @@ export default function ChecklistsPage({ location }: Props) {
     }
   }, [propertyTypeId, propertyTypes])
 
-  const selectedPropertyType = useMemo(
-    () => propertyTypes.find(({ id }) => id === propertyTypeId),
-    [propertyTypeId, propertyTypes]
-  )
-
   const handleCreatePropertyType = (propertyType: IDealPropertyType) => {
     addPropertyTypes(propertyType)
     addChecklists(propertyType.checklists || [])
@@ -134,7 +129,6 @@ export default function ChecklistsPage({ location }: Props) {
                 <Box mb={5}>
                   <ChecklistRoles
                     checklist={checklist}
-                    propertyType={selectedPropertyType}
                     onCreateRole={(role: IDealRole) => addRole(checklist, role)}
                     onUpdateRole={(role: IBrandChecklistRole) =>
                       updateRole(checklist, role)

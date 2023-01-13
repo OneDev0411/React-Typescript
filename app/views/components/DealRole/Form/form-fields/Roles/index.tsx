@@ -15,24 +15,14 @@ interface Props {
   meta: FieldMetaState<any>
   input: FieldInputProps<any, HTMLElement>
   deal: IDeal
-  propertyType?: IDealPropertyType
   isAllowedRole: (value: string, role: string) => boolean
   isRequired: boolean
 }
 
-export function Roles({
-  meta,
-  input,
-  deal,
-  propertyType,
-  isAllowedRole
-}: Props) {
+export function Roles({ meta, input, deal, isAllowedRole }: Props) {
   const role = input.value
   const { dealRolesByName } = useDealsRolesContext()
-
-  const propertyTypeLabel = propertyType?.label ?? deal?.property_type?.label
-
-  const { roles } = useBrandPropertyTypeRoles(propertyTypeLabel)
+  const { roles } = useBrandPropertyTypeRoles(deal?.property_type?.label)
 
   const options = useMemo(() => {
     let options: RoleOption[] = roles
