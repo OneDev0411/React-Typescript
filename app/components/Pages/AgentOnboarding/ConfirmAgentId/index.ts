@@ -1,5 +1,5 @@
+import { withRouter } from '@app/routes/with-router'
+
 import ConfirmAgentId from './ConfirmAgentId'
 
-export { ConfirmAgentId }
-
-export default ConfirmAgentId
+export default withRouter(ConfirmAgentId)

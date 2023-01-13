@@ -3,8 +3,9 @@ import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
 import { useDispatch } from 'react-redux'
-import { browserHistory, WithRouterProps } from 'react-router'
 
+import { useNavigate } from '@app/hooks/use-navigate'
+import { useSearchParams } from '@app/hooks/use-search-param'
 import { updateUser } from 'actions/user'
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
@@ -23,12 +24,14 @@ interface FormValues {
   phone_number: string | undefined
 }
 
-export function PhoneNumber({ location }: WithRouterProps) {
+export function PhoneNumber() {
   useDocumentTitle('Phone Number')
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const commonClasses = useCommonStyles()
-  const phoneNumber = window.decodeURIComponent(location.query.pn || '')
+  const phoneNumber = window.decodeURIComponent(searchParams.get('pn') || '')
 
   const onSubmit = async (values: FormValues) => {
     try {
@@ -41,7 +44,7 @@ export function PhoneNumber({ location }: WithRouterProps) {
       const user = await editUser(values)
 
       dispatch(updateUser(user))
-      browserHistory.push(
+      navigate(
         `/onboarding/verify-phone-number?pn=${window.encodeURIComponent(
           user.phone_number
         )}`

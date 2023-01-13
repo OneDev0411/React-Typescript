@@ -1,5 +1,5 @@
+import { withRouter } from '@app/routes/with-router'
+
 import { SecurityQuestion } from './SecurityQuestion'
 
-export { SecurityQuestion }
-
-export default SecurityQuestion
+export default withRouter(SecurityQuestion)

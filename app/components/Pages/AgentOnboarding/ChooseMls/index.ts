@@ -1,5 +1,5 @@
+import { withRouter } from '@app/routes/with-router'
+
 import { ChooseMls } from './ChooseMls'
 
-export { ChooseMls }
-
-export default ChooseMls
+export default withRouter(ChooseMls)

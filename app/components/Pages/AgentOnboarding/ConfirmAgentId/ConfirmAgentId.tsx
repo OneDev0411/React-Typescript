@@ -2,8 +2,8 @@ import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
-import { WithRouterProps } from 'react-router'
 
+import { WithRouterProps } from '@app/routes/types'
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import searchAgent from 'models/agent/search'
@@ -23,7 +23,7 @@ export default function ConfirmAgentId(props: WithRouterProps) {
   useDocumentTitle('Confirm Agent ID')
 
   const commonClasses = useCommonStyles()
-  const mlsId = props.location.query.mlsId
+  const mlsId = props.searchParams.get('mlsId')
 
   const onSubmit = async (values: FormValues) => {
     const notFoundError = {
@@ -38,11 +38,19 @@ export default function ConfirmAgentId(props: WithRouterProps) {
         return notFoundError
       }
 
-      props.router.push({
-        pathname: '/onboarding/confirm-agent-id/choose-mls',
-        query: { mlsId: values.mlsId },
-        state: { agents }
+      const urlSearchParams = new URLSearchParams({
+        mlsId: values.mlsId
       })
+
+      props.navigate(
+        {
+          pathname: '/onboarding/confirm-agent-id/choose-mls',
+          search: urlSearchParams.toString()
+        },
+        {
+          state: { agents }
+        }
+      )
     } catch (errorCode) {
       if (errorCode === 404) {
         return notFoundError
