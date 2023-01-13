@@ -1,5 +1,7 @@
 import { Button, CircularProgress } from '@material-ui/core'
 
+import { useUnsafeUser } from '@app/hooks/use-unsafe-user'
+
 import { useFetchForms } from '../../queries/use-fetch-forms'
 
 interface Props {
@@ -8,6 +10,7 @@ interface Props {
 
 export function PreviewActionButton({ form }: Props) {
   const { fetchForms, isFetching } = useFetchForms()
+  const user = useUnsafeUser()
 
   const handleClick = async () => {
     const result = await fetchForms([form.id])
@@ -15,6 +18,10 @@ export function PreviewActionButton({ form }: Props) {
     if (result) {
       window.open(result[0].url)
     }
+  }
+
+  if ((user?.agents?.length ?? 0) === 0) {
+    return null
   }
 
   return (
