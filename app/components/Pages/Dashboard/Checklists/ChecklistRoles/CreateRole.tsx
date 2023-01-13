@@ -32,6 +32,7 @@ export function CreateRole({ checklist, propertyType, onCreateRole }: Props) {
 
       <DealRoleModal
         isOpen={isFormOpen}
+        propertyType={propertyType}
         allowedRoles={allowedRoles}
         hideNewContactButton
         onUpsertRole={onCreateRole}
