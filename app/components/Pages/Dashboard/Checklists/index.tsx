@@ -129,6 +129,8 @@ export default function ChecklistsPage({ location }: Props) {
                 <Box mb={5}>
                   <ChecklistRoles
                     checklist={checklist}
+                    propertyTypeId={propertyTypeId}
+                    propertyTypes={propertyTypes}
                     onCreateRole={(role: IDealRole) => addRole(checklist, role)}
                     onUpdateRole={(role: IBrandChecklistRole) =>
                       updateRole(checklist, role)
