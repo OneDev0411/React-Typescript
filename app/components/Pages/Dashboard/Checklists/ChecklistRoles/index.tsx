@@ -5,6 +5,7 @@ import { ChecklistRolesTable } from './RolesTable'
 
 interface Props {
   checklist: IBrandChecklist
+  propertyType?: IDealPropertyType
   onCreateRole: (role: IBrandChecklistRole) => void
   onUpdateRole: (role: IBrandChecklistRole) => void
   onDeleteRole: (roleId: UUID) => void
@@ -13,6 +14,7 @@ interface Props {
 
 export function ChecklistRoles({
   checklist,
+  propertyType,
   onCreateRole,
   onUpdateRole,
   onDeleteRole,
@@ -22,7 +24,7 @@ export function ChecklistRoles({
     <Box>
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Typography variant="h6">Contacts</Typography>
-        <CreateRole onCreateRole={onCreateRole} />
+        <CreateRole propertyType={propertyType} onCreateRole={onCreateRole} />
       </Box>
 
       <Box mt={2} mb={4}>

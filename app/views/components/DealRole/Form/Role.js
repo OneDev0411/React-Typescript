@@ -128,6 +128,7 @@ export function RoleForm(props) {
           <Field
             name="role"
             label="Role"
+            propertyType={props.propertyType}
             deal={props.deal}
             isRequired={isRequired('role')}
             isAllowedRole={props.isAllowedRole}

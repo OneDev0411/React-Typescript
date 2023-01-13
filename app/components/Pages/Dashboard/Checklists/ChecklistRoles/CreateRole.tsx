@@ -5,10 +5,11 @@ import { Button } from '@material-ui/core'
 import DealRoleModal from '@app/views/components/DealRole'
 
 interface Props {
+  propertyType?: IDealPropertyType
   onCreateRole: (role: IDealRole) => void
 }
 
-export function CreateRole({ onCreateRole }: Props) {
+export function CreateRole({ propertyType, onCreateRole }: Props) {
   const [isFormOpen, setIsFormOpen] = useState(false)
 
   return (
@@ -19,6 +20,7 @@ export function CreateRole({ onCreateRole }: Props) {
 
       <DealRoleModal
         isOpen={isFormOpen}
+        propertyType={propertyType}
         hideNewContactButton
         onUpsertRole={onCreateRole}
         onClose={() => setIsFormOpen(false)}

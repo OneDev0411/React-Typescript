@@ -45,7 +45,8 @@ const propTypes = {
   onDeleteRole: PropTypes.func,
   showSaveContactButton: PropTypes.bool,
   dealSide: PropTypes.string,
-  hideNewContactButton: PropTypes.bool
+  hideNewContactButton: PropTypes.bool,
+  propertyType: PropTypes.object
 }
 
 const defaultProps = {
@@ -58,6 +59,7 @@ const defaultProps = {
   hideNewContactButton: false,
   title: '',
   defaultRole: '',
+  propertyType: null,
   allowedRoles: [],
   onUpsertRole: () => null,
   onDeleteRole: () => null
@@ -476,6 +478,7 @@ export class DealRole extends React.Component {
               ) : (
                 <RoleForm
                   {...sharedProps}
+                  propertyType={this.props.propertyType}
                   isNewRecord={this.isNewRecord}
                   isRoleRemovable={this.props.isRoleRemovable}
                   requiredFields={requiredFields}
