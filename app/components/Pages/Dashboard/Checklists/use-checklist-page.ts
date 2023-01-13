@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
 
-import usePromise from 'react-use-promise'
-
 import {
   addBrandCheckListTask,
   getBrandChecklists,
@@ -10,7 +8,6 @@ import {
   updateBrandChecklistTask,
   sortTasks
 } from 'models/BrandConsole/Checklists'
-import { getBrandForms } from 'models/BrandConsole/Forms'
 
 /**
  * react hook encapsulating logic related to checklists page
@@ -19,11 +16,6 @@ export function useChecklistsPage(rootBrandId: string | null) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<any>(null)
   const [checklists, setChecklists] = useState<IBrandChecklist[]>([])
-
-  const [forms, formsError, formsState] = usePromise(
-    () => (rootBrandId ? getBrandForms(rootBrandId) : Promise.reject()),
-    [rootBrandId]
-  )
 
   const fetchChecklists = async (brandId: UUID) => {
     setLoading(true)
@@ -99,7 +91,7 @@ export function useChecklistsPage(rootBrandId: string | null) {
       task_type: 'Splitter'
     })
   }
-  const addFormTask = (checklist: IBrandChecklist, form: IDealForm) => {
+  const addFormTask = (checklist: IBrandChecklist, form: IBrandForm) => {
     return addTask(checklist, {
       task_type: 'Form',
       title: form.name,
@@ -163,9 +155,6 @@ export function useChecklistsPage(rootBrandId: string | null) {
     addGeneralCommentTask,
     addSplitterTask,
     addFormTask,
-    forms,
-    formsError,
-    formsState,
     fetchChecklists
   }
 }
