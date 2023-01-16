@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { AgentWithStats } from '@app/models/agent-network/get-agents'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 

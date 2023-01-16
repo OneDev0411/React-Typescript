@@ -1,9 +1,10 @@
 import { memo } from 'react'
 
 import { Box, makeStyles } from '@material-ui/core'
-import { RouteComponentProps } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import PageLayout from 'components/GlobalPageLayout'
 
 import SuperCampaignOverview from '../../components/SuperCampaignOverview'
@@ -69,4 +70,4 @@ function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
   )
 }
 
-export default memo(SuperCampaignDetail)
+export default memo(withRouter(SuperCampaignDetail))

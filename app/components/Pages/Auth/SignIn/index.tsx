@@ -1,15 +1,17 @@
 import { useState } from 'react'
 
 import * as Sentry from '@sentry/react'
-import { Location } from 'history'
 import { useSelector, useDispatch } from 'react-redux'
-import { browserHistory } from 'react-router'
 
+import { useNavigate } from '@app/hooks/use-navigate'
+import { useSearchParams } from '@app/hooks/use-search-param'
 import signin from '@app/models/auth/signin'
 import signup from '@app/models/auth/signup'
 import { getActiveTeam } from '@app/models/user/get-active-team'
 import { logUserActivity } from '@app/models/user/log-activity'
 import { lookUpUserByEmail } from '@app/models/user/lookup-user-by-email'
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { setUserAndActiveTeam } from '@app/store_actions/active-team'
 import { Logo } from '@app/views/components/OAuthPageLayout/Logo'
 import { PoweredBy } from '@app/views/components/OAuthPageLayout/PoweredBy'
@@ -21,24 +23,23 @@ import LookUpUserForm from './LookupUserForm'
 import SignInForm from './SiginForm'
 import { SubmitMessage } from './types'
 
-interface Props {
-  location: Location
-}
-
-export default function Signin(props: Props) {
+function Signin(props: WithRouterProps) {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+
   const brand = useSelector((state: IAppState) => state.brand)
 
   const [username, setUsername] = useState<string>(
-    window.decodeURIComponent((props.location.query.username as string) || '')
+    window.decodeURIComponent(searchParams.get('username') || '')
   )
 
   const redirectTo =
-    props.location.state?.redirectTo || props.location.query?.redirectTo
+    props.location.state?.redirectTo || searchParams.get('redirectTo')
 
-  const navigateTo = props.location.query?.navigateTo
+  const navigateTo = searchParams.get('navigateTo')
 
-  const [isLookinUp, setIsLookingUp] = useState<boolean>(false)
+  const [isLookingUp, setIsLookingUp] = useState<boolean>(false)
   const [lookUpFormSubmitMsg, setLookUpFormSubmitMsg] =
     useState<SubmitMessage | null>(null)
 
@@ -139,7 +140,7 @@ export default function Signin(props: Props) {
         return
       }
 
-      browserHistory.replace(redirectTo || defaultHomePage)
+      navigate(redirectTo || defaultHomePage, { replace: true })
     } catch (errorCode) {
       if (errorCode === 403) {
         setSignInFormSubmitMsg({
@@ -182,7 +183,7 @@ export default function Signin(props: Props) {
           ) : (
             <LookUpUserForm
               initialValues={{ username }}
-              isLoading={isLookinUp}
+              isLoading={isLookingUp}
               onSubmit={handleLookUp}
               submitMessage={lookUpFormSubmitMsg}
             />
@@ -193,3 +194,5 @@ export default function Signin(props: Props) {
     </div>
   )
 }
+
+export default withRouter(Signin)

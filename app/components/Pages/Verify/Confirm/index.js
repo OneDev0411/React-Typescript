@@ -5,6 +5,7 @@ import lifecycle from 'recompose/lifecycle'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 
+import { withRouter } from '@app/routes/with-router'
 import { Logo } from '@app/views/components/OAuthPageLayout/Logo'
 import { PoweredBy } from '@app/views/components/OAuthPageLayout/PoweredBy'
 
@@ -171,4 +172,4 @@ export default compose(
       confirmHandler()
     }
   })
-)(ConfirmVerify)
+)(withRouter(ConfirmVerify))

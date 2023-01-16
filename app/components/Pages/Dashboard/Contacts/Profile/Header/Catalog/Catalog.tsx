@@ -53,6 +53,7 @@ const useStyles = makeStyles(
 
 export default function Catalog({
   contact,
+  onChangeAvatar,
   contactChangeCallback
 }: Omit<Props, 'onCreateNote' | 'onCreateEvent' | 'onUpdateTouchFreq'>) {
   const classes = useStyles()
@@ -60,7 +61,7 @@ export default function Catalog({
   return (
     <div className={classes.mainContainer}>
       <div className={classes.avatarContainer}>
-        <Avatar contact={contact} />
+        <Avatar onChange={onChangeAvatar} contact={contact} />
       </div>
       <div className={classes.profileContainer}>
         <div className={classes.displayNameContainer}>

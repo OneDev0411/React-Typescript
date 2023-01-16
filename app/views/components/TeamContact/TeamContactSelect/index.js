@@ -80,6 +80,10 @@ class TeamContactSelectPresentational extends React.Component {
       value: member
     }))
 
+    if (!owner) {
+      return <></>
+    }
+
     return (
       <BasicDropdown
         {...this.props}

@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 
 import { Grid, Box, CircularProgress } from '@material-ui/core'
 
+import { useNavigate } from '@app/hooks/use-navigate'
 import getAgentListings from '@app/models/agent-network/get-agent-listings'
 import ListingCard from 'components/ListingCards/ListingCard'
 import Drawer from 'components/OverlayDrawer'
-import { goTo } from 'utils/go-to'
 
 import { AgentSide } from '../../types'
 
@@ -22,6 +22,7 @@ export default function AgentListingsDrawer({
   onClose
 }: Props) {
   const [listings, setListings] = useState<Nullable<ICompactListing[]>>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function fetchAgentListings() {
@@ -38,7 +39,7 @@ export default function AgentListingsDrawer({
   }, [filters])
 
   const handleListingClick = (listing: ICompactListing) => {
-    goTo(`/dashboard/mls/${listing.id}`)
+    navigate(`/dashboard/mls/${listing.id}`)
   }
 
   return (
