@@ -1,7 +1,6 @@
-import React from 'react'
-
 import { Button, Theme, makeStyles } from '@material-ui/core'
-import { browserHistory } from 'react-router'
+
+import { useNavigate } from '@app/hooks/use-navigate'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -20,8 +19,8 @@ interface Props {
 
 export default function SkipButton({ to }: Props) {
   const classes = useStyles()
-
-  const onClick = () => browserHistory.push(to)
+  const navigate = useNavigate()
+  const onClick = () => navigate(to)
 
   return (
     <Button className={classes.button} onClick={onClick}>

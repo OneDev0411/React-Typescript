@@ -5,8 +5,9 @@ import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
 import { useDispatch } from 'react-redux'
-import { WithRouterProps, Link } from 'react-router'
+import { Link } from 'react-router'
 
+import { WithRouterProps } from '@app/routes/types'
 import { updateUser } from 'actions/user'
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import { addNotification as notify } from 'components/notification'
@@ -55,7 +56,9 @@ export function VerifyPhoneNumber(props: WithRouterProps) {
   const classes = useStyles()
   const commonClasses = useCommonStyles()
   const dispatch = useDispatch()
-  const phoneNumber = window.decodeURIComponent(props.location.query.pn || '')
+  const phoneNumber = window.decodeURIComponent(
+    props.searchParams.get('pn') || ''
+  )
   const [isReSending, setIsReSending] = useState(false)
 
   const onSubmit = async (values: FormValues) => {
@@ -70,7 +73,7 @@ export function VerifyPhoneNumber(props: WithRouterProps) {
 
       dispatch(updateUser(user))
 
-      props.router.push('/onboarding/oauth-accounts')
+      props.navigate('/onboarding/oauth-accounts')
     } catch (error) {
       if (error === 403) {
         return {

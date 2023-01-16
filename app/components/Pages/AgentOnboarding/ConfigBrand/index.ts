@@ -1,5 +1,5 @@
+import { withRouter } from '@app/routes/with-router'
+
 import { ConfigBrand } from './ConfigBrand'
 
-export { ConfigBrand }
-
-export default ConfigBrand
+export default withRouter(ConfigBrand)
