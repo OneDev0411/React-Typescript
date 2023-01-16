@@ -5,9 +5,7 @@ export const associations = [
   'contact_attribute.attribute_def',
   'contact.assignees',
   'contact_role.user',
-  'contact_role.brand',
-  'contact.flows',
-  'contact.deals'
+  'contact_role.brand'
 ]
 
 export const defaultQuery = { associations }
@@ -18,7 +16,9 @@ export const updateContactQuery = {
     'user.last_seen_by',
     'contact.user',
     'contact.created_by',
-    'contact.updated_by'
+    'contact.updated_by',
+    'contact.flows',
+    'contact.deals'
   ]
 }
 
