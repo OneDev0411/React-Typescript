@@ -1,17 +1,18 @@
 import React, { ReactNode, MouseEvent, RefObject } from 'react'
 
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { createStyles, makeStyles, Theme, Tooltip } from '@material-ui/core'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {
   icon?: string
+  tooltip?: string
   textIcon?: ReactNode
   label: ReactNode
   disabled?: boolean
   attachedElementRef?: RefObject<any>
-  onClick?: (e: MouseEvent<HTMLElement>) => void
   tourId?: string
+  onClick?: (e: MouseEvent<HTMLElement>) => void
 }
 
 const useStyles = makeStyles(
@@ -65,6 +66,7 @@ export const GridActionButton = ({
   icon,
   attachedElementRef,
   textIcon,
+  tooltip = '',
   onClick,
   tourId
 }: Props) => {
@@ -89,17 +91,19 @@ export const GridActionButton = ({
 
   return (
     <div className={classes.container}>
-      <div
-        className={classes.button}
-        onClick={handleOnClick}
-        ref={attachedElementRef}
-      >
-        {icon && <SvgIcon path={icon} className={classes.icon} />}
-        {textIcon && <div className={classes.textIcon}>{textIcon}</div>}
-        <div className={classes.label} data-tour-id={tourId || ''}>
-          {label}
+      <Tooltip title={tooltip} placement="top">
+        <div
+          className={classes.button}
+          onClick={handleOnClick}
+          ref={attachedElementRef}
+        >
+          {icon && <SvgIcon path={icon} className={classes.icon} />}
+          {textIcon && <div className={classes.textIcon}>{textIcon}</div>}
+          <div className={classes.label} data-tour-id={tourId || ''}>
+            {label}
+          </div>
         </div>
-      </div>
+      </Tooltip>
     </div>
   )
 }

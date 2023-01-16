@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 
-import { makeStyles, createStyles, Theme } from '@material-ui/core'
+import { makeStyles, createStyles, Theme, Box } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { useEffectOnce } from 'react-use'
@@ -13,6 +13,7 @@ import PageLayout from 'components/GlobalPageLayout'
 import { IAppState } from 'reducers'
 
 import { DEAL_GRID_FILTER_SETTING_KEY } from '../../constants/settings'
+import { DocumentsRepositoryButton } from '../components/DocumentsRepositoryButton'
 import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
@@ -93,6 +94,9 @@ export default function AgentTable(props: WithRouterProps) {
           />
 
           <ExportDeals />
+          <Box ml={1}>
+            <DocumentsRepositoryButton />
+          </Box>
         </div>
       </PageLayout.Header>
       <PageLayout.Main>
