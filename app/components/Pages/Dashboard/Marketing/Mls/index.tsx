@@ -55,11 +55,14 @@ function ListingMarketingPage({ params, location, router }: WithRouterProps) {
           templateType={templateType}
           medium={medium}
           onChangeTemplateType={type => {
-            const navParams = new URLSearchParams({
-              type: type.toString()
-            })
+            const searchParam = [
+              ...location.search.split('&'),
+              `type=${type.toString()}`
+            ]
+              .filter(item => !!item)
+              .join('&')
 
-            navigate({ ...location, search: navParams.toString() })
+            navigate({ ...location, search: searchParam })
           }}
           onChangeMedium={medium => {
             navigate(
