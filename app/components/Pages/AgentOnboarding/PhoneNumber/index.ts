@@ -1,9 +1,5 @@
-import { withRouter } from 'react-router'
+import { withRouter } from '@app/routes/with-router'
 
-import { PhoneNumber as component } from './PhoneNumber'
+import { PhoneNumber } from './PhoneNumber'
 
-const PhoneNumber = withRouter(component)
-
-export { PhoneNumber }
-
-export default PhoneNumber
+export default withRouter(PhoneNumber)
