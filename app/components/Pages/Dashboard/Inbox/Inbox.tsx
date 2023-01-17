@@ -89,15 +89,16 @@ export default function Inbox({ params }: WithRouterProps) {
     [navigate]
   )
 
-  const setSelectedEmailThreadId = (
-    selectedEmailThreadId: UUID | undefined
-  ) => {
-    navigate(
-      selectedEmailThreadId
-        ? `/dashboard/inbox/${selectedEmailThreadId}`
-        : '/dashboard/inbox'
-    )
-  }
+  const setSelectedEmailThreadId = useCallback(
+    (selectedEmailThreadId: UUID | undefined) => {
+      navigate(
+        selectedEmailThreadId
+          ? `/dashboard/inbox/${selectedEmailThreadId}`
+          : '/dashboard/inbox'
+      )
+    },
+    [navigate]
+  )
 
   const classes = useStyles()
 
