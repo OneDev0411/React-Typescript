@@ -39,7 +39,7 @@ function ChecklistsPage({ location }: Props) {
   const checklistType = searchParams.get('checklist_type') as IDealChecklistType
   const [isFormOpen, setIsFormOpen] = useState(false)
   const activeBrandId = useActiveBrandId()
-  const changedURL = window.location.pathname
+  const changedURL = location.pathname
 
   const lastTaskNameEditorRef = useRef<any>(null)
 
