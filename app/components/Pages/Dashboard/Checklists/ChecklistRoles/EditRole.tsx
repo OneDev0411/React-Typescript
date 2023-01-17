@@ -15,18 +15,20 @@ export function EditRole({ children, role, onUpdateRole }: Props) {
     <>
       <div onClick={() => setIsFormOpen(true)}>{children}</div>
 
-      <DealRoleModal
-        isOpen={isFormOpen}
-        form={role}
-        hideNewContactButton
-        onUpsertRole={(data: IDealRole) =>
-          onUpdateRole({
-            ...data,
-            order: role.order
-          })
-        }
-        onClose={() => setIsFormOpen(false)}
-      />
+      {isFormOpen && (
+        <DealRoleModal
+          isOpen
+          form={role}
+          hideNewContactButton
+          onUpsertRole={(data: IDealRole) =>
+            onUpdateRole({
+              ...data,
+              order: role.order
+            })
+          }
+          onClose={() => setIsFormOpen(false)}
+        />
+      )}
     </>
   )
 }
