@@ -18,12 +18,15 @@ import { mdiPencilOutline } from '@mdi/js'
 import fileSaver from 'file-saver'
 import { isDesktop } from 'react-device-detect'
 import { useSelector, useDispatch } from 'react-redux'
-import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
+import { useNavigate } from '@app/hooks/use-navigate'
+import { useSearchParams } from '@app/hooks/use-search-param'
 import { uploadResizedAsset } from '@app/models/instant-marketing/upload-resized-asset'
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { shouldResizeTemplateAssets } from '@app/views/components/InstantMarketing/helpers/should-resize-template-assets'
 import PageLayout from 'components/GlobalPageLayout'
 import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
@@ -86,17 +89,18 @@ function MarketingWizard(props: WithRouterProps) {
   useTitle('Marketing | Rechat')
 
   const classes = useStyles()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const isMobileView = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down('xs')
   )
+  const listingId = searchParams.get(LISTING_ID_QUERY_KEY)
 
   useEffect(() => {
-    const listingId = props.location.query[LISTING_ID_QUERY_KEY]
-
     if (isDesktop && listingId) {
-      props.router.replace(`/dashboard/marketing/mls/${listingId}`)
+      navigate(`/dashboard/marketing/mls/${listingId}`, { replace: true })
     }
-  }, [props.location.query, props.router])
+  }, [navigate, listingId])
 
   useGoogleMapsPlaces()
 

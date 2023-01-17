@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { useTitle } from 'react-use'
 
+import { withRouter } from '@app/routes/with-router'
 import TemplatesList from 'components/TemplatesList'
 
 import Layout from '..'
@@ -71,4 +72,4 @@ export const MarketingList = () => {
   )
 }
 
-export default MarketingList
+export default withRouter(MarketingList)
