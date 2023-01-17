@@ -1,6 +1,7 @@
 import { Button, Theme, makeStyles } from '@material-ui/core'
 
 import { useNavigate } from '@app/hooks/use-navigate'
+import { withRouter } from '@app/routes/with-router'
 import { CreateContact } from 'components/CreateContact'
 import { Divider } from 'components/Divider'
 import { GoogleSignInButton } from 'components/GoogleSignInButton'
@@ -18,7 +19,7 @@ const useStyles = makeStyles(
   { name: 'ContactsZeroState' }
 )
 
-export function ContactsZeroState() {
+function ContactsZeroState() {
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
   const classes = useStyles()
@@ -69,3 +70,5 @@ export function ContactsZeroState() {
     />
   )
 }
+
+export default withRouter(ContactsZeroState)

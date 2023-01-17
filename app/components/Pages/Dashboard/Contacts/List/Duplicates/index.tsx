@@ -10,6 +10,8 @@ import {
 import pluralize from 'pluralize'
 import { useDispatch } from 'react-redux'
 
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import DuplicateContactsList from 'components/DuplicateContacts/DuplicateContactsList'
 import PageLayout from 'components/GlobalPageLayout'
@@ -56,15 +58,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-interface Props {
+interface Props extends RouteComponentProps {
   isSideMenuOpen: boolean
   onSideMenuTriggerClick: () => void
 }
 
-export default function Duplicates({
-  isSideMenuOpen,
-  onSideMenuTriggerClick
-}: Props) {
+function Duplicates({ isSideMenuOpen, onSideMenuTriggerClick }: Props) {
   const dispatch = useDispatch()
   const classes = useStyles()
   const confirmation = useContext(ConfirmationModalContext)
@@ -426,3 +425,5 @@ export default function Duplicates({
     </PageLayout>
   )
 }
+
+export default withRouter(Duplicates)
