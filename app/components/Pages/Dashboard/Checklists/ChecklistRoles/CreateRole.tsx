@@ -44,14 +44,16 @@ export function CreateRole({
         Add Contact
       </Button>
 
-      <DealRoleModal
-        isOpen={isFormOpen}
-        propertyType={propertyType}
-        allowedRoles={allowedRoles}
-        hideNewContactButton
-        onUpsertRole={onCreateRole}
-        onClose={() => setIsFormOpen(false)}
-      />
+      {isFormOpen && (
+        <DealRoleModal
+          isOpen
+          propertyType={propertyType}
+          allowedRoles={allowedRoles}
+          hideNewContactButton
+          onUpsertRole={onCreateRole}
+          onClose={() => setIsFormOpen(false)}
+        />
+      )}
     </>
   )
 }
