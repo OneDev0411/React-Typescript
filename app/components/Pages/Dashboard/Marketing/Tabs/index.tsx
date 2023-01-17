@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { SectionsEnum } from 'components/PageSideNav/types'
 import { PageTabs, TabLink, MegaTab } from 'components/PageTabs'
 import { SectionCollection } from 'hooks/use-marketing-center-sections'

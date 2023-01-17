@@ -12,6 +12,7 @@ import { Alert } from '@material-ui/lab'
 import { mdiPlayCircleOutline } from '@mdi/js'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { withRouter } from '@app/routes/with-router'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { hasUserAccessToBrandSettings } from 'utils/acl'
 
@@ -60,7 +61,8 @@ ${getCoverSrc(0)} 1x,
 ${getCoverSrc(2)} 2x,
 ${getCoverSrc(3)} 3x
 `
-export default function EmptyState() {
+
+function EmptyState() {
   const theme = useTheme()
   const isDesktop = useMediaQuery('(min-width:1440px)')
   const classes = useStyles({ isDesktop })
@@ -117,3 +119,5 @@ export default function EmptyState() {
     </>
   )
 }
+
+export default withRouter(EmptyState)

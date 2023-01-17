@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Grid, Box, TextField } from '@material-ui/core'
 
 import { TemplateVariableType, TemplateVariable } from '../../types'
