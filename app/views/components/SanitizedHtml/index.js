@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 import sanitizeHtml from 'sanitize-html'
 /**
@@ -15,7 +15,17 @@ import sanitizeHtml from 'sanitize-html'
 export default function SanitizedHtml({ html, ...props }) {
   // We can optionally show something like "loading ..." if sanitize-html
   // is not yet loaded. the "loading ..." text can also be a prop.
-  const sanitizedHtml = useMemo(() => (html ? sanitizeHtml(html) : ''), [html])
+  const sanitizedHtml = useMemo(
+    () =>
+      html
+        ? sanitizeHtml(html, {
+            transformTags: {
+              a: sanitizeHtml.simpleTransform('a', { target: '_blank' })
+            }
+          })
+        : '',
+    [html]
+  )
 
   return <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }} {...props} />
 }

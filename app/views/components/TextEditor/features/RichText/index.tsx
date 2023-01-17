@@ -74,7 +74,8 @@ export function RichTextFeature({
   const { richButtonsPlugin } = useEditorPlugins(() => {
     const linkPlugins: { [key: string]: DraftJsPlugin } = link
       ? {
-          anchorPlugin: createAnchorPlugin({}),
+          // Adding target to be "_blank", To learn more about this change https://gitlab.com/rechat/web/-/merge_requests/3734#note_1199127715
+          anchorPlugin: createAnchorPlugin({ linkTarget: '_blank' }),
           pasteLinkPlugin: createPasteLinkPlugin(),
           // Can be extracted into a separate plugin file
           linkShortcutsPlugin: {
