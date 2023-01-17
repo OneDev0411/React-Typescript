@@ -2,18 +2,32 @@ import { useMemo, useState } from 'react'
 
 import { Button } from '@material-ui/core'
 
-import { useBrandPropertyTypeRoles } from '@app/hooks/use-brand-property-type-roles'
 import DealRoleModal from '@app/views/components/DealRole'
 
 interface Props {
   checklist: IBrandChecklist
-  propertyType?: IDealPropertyType
+  propertyTypeId: UUID
+  propertyTypes?: IDealPropertyType[]
   onCreateRole: (role: IDealRole) => void
 }
 
-export function CreateRole({ checklist, propertyType, onCreateRole }: Props) {
+export function CreateRole({
+  checklist,
+  propertyTypes,
+  propertyTypeId,
+  onCreateRole
+}: Props) {
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const { roles } = useBrandPropertyTypeRoles(propertyType?.label)
+
+  const { propertyType, roles } = useMemo(() => {
+    const propertyType = propertyTypes?.find(({ id }) => id === propertyTypeId)
+    const roles = [
+      ...(propertyType?.required_roles || []),
+      ...(propertyType?.optional_roles || [])
+    ]
+
+    return { propertyType, roles }
+  }, [propertyTypeId, propertyTypes])
 
   const allowedRoles = useMemo(() => {
     return roles

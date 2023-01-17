@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import { Box, Typography } from '@material-ui/core'
 
 import { CreateRole } from './CreateRole'
@@ -24,18 +22,14 @@ export function ChecklistRoles({
   onDeleteRole,
   onReorderRoles
 }: Props) {
-  const propertyType = useMemo(
-    () => propertyTypes.find(({ id }) => id === propertyTypeId),
-    [propertyTypeId, propertyTypes]
-  )
-
   return (
     <Box>
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Typography variant="h6">Contacts</Typography>
         <CreateRole
           checklist={checklist}
-          propertyType={propertyType}
+          propertyTypeId={propertyTypeId}
+          propertyTypes={propertyTypes}
           onCreateRole={onCreateRole}
         />
       </Box>
