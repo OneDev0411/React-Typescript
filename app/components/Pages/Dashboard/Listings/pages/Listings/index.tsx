@@ -2,10 +2,11 @@ import { useRef, useState } from 'react'
 
 import { Box, Button, Grid } from '@material-ui/core'
 import { mdiPlus } from '@mdi/js'
-import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import { useNavigate } from '@app/hooks/use-navigate'
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import { ReminderDialog } from '@app/views/components/ReminderDialog'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -15,7 +16,7 @@ import SearchTextField from '../../components/SearchTextField'
 import ListingsList from './ListingsList'
 import ListingsOpenHouseProvider from './ListingsOpenHouseProvider'
 
-type ListingsProps = WithRouterProps<{ brandId?: UUID }, {}>
+type ListingsProps = WithRouterProps<{ brandId?: UUID }>
 
 const ADD_MLS_ACCOUNT_REMINDER_DISMISSED_SETTINGS_KEY =
   'listings_add_mls_account_reminder_dismissed'
@@ -72,4 +73,4 @@ function Listings({ params }: ListingsProps) {
   )
 }
 
-export default Listings
+export default withRouter(Listings)
