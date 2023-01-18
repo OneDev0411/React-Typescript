@@ -8,7 +8,6 @@ import {
   ListItem,
   List,
   makeStyles,
-  Theme,
   Typography
 } from '@material-ui/core'
 
