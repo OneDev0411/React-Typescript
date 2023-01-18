@@ -129,6 +129,7 @@ export function RoleForm(props) {
             name="role"
             label="Role"
             deal={props.deal}
+            propertyType={props.propertyType}
             isRequired={isRequired('role')}
             isAllowedRole={props.isAllowedRole}
             component={Roles}
@@ -346,24 +347,25 @@ export function RoleForm(props) {
                   </span>
                 </Tooltip>
 
-                {(showNewContactButton || showUpdateContactButton) && (
-                  <Tooltip placement="top" title={getTooltip()}>
-                    <span>
-                      <Button
-                        ml={1}
-                        variant="contained"
-                        color="primary"
-                        disabled={hasErrors}
-                        onClick={() => props.onSubmit(props.form, true)}
-                      >
-                        Save &{' '}
-                        {props.values.contact
-                          ? 'Update Contact'
-                          : 'Add to My Contacts'}
-                      </Button>
-                    </span>
-                  </Tooltip>
-                )}
+                {!props.hideNewContactButton &&
+                  (showNewContactButton || showUpdateContactButton) && (
+                    <Tooltip placement="top" title={getTooltip()}>
+                      <span>
+                        <Button
+                          ml={1}
+                          variant="contained"
+                          color="primary"
+                          disabled={hasErrors}
+                          onClick={() => props.onSubmit(props.form, true)}
+                        >
+                          Save &{' '}
+                          {props.values.contact
+                            ? 'Update Contact'
+                            : 'Add to My Contacts'}
+                        </Button>
+                      </span>
+                    </Tooltip>
+                  )}
               </>
             )}
           </Box>

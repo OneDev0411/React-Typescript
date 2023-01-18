@@ -13,6 +13,7 @@ import { PageTabs, TabLink } from 'components/PageTabs'
 import { Container, Content } from 'components/SlideMenu'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 
+import { ChecklistRoles } from './ChecklistRoles'
 import { ChecklistCreate } from './components/ChecklistCreate'
 import { ChecklistHeader } from './components/ChecklistHeader'
 import { ChecklistsSidenav } from './components/ChecklistsSidenav'
@@ -39,14 +40,18 @@ export default function ChecklistsPage({ location }: Props) {
   const {
     checklists,
     addGenericTask,
+    addRole,
     updateTask,
+    updateRole,
     updateChecklist,
     addChecklists,
     addGeneralCommentTask,
     addSplitterTask,
     addFormTask,
     deleteTask,
-    reorderTasks
+    deleteRole,
+    reorderTasks,
+    reorderRoles
   } = useChecklistsPage(activeBrandId)
 
   const {
@@ -120,6 +125,22 @@ export default function ChecklistsPage({ location }: Props) {
 
               {checklist ? (
                 <Box mb={5}>
+                  <ChecklistRoles
+                    checklist={checklist}
+                    propertyTypeId={propertyTypeId}
+                    propertyTypes={propertyTypes}
+                    onCreateRole={(role: IDealRole) => addRole(checklist, role)}
+                    onUpdateRole={(role: IBrandChecklistRole) =>
+                      updateRole(checklist, role)
+                    }
+                    onDeleteRole={(roleId: UUID) =>
+                      deleteRole(checklist.id, roleId)
+                    }
+                    onReorderRoles={(roles: IBrandChecklistRole[]) =>
+                      reorderRoles(checklist.id, roles)
+                    }
+                  />
+
                   <ChecklistHeader
                     checklist={checklist}
                     setTerminable={value =>
