@@ -76,7 +76,14 @@ export function useEditorState(HTML: string = ''): UseEditorState {
         editorStateRef.current.getCurrentContent(),
         stateToHtmlOptions
       )
-      const html = rawHtml.replace(RegExp('&nbsp;', 'g'), '\xA0') // "A0" is the code for non-breaking-space and "20" is the code for regular space.
+      let html = rawHtml.replace(RegExp('&nbsp;', 'g'), '\xA0') // "A0" is the code for non-breaking-space and "20" is the code for regular space.
+
+      // add target="_blank" to all links
+      // to learn more about this change https://gitlab.com/rechat/web/-/merge_requests/3734#note_1199127715
+      html = html.replaceAll(
+        '<a',
+        "<a target='_blank' rel='noopener noreferrer'"
+      )
 
       return html
     }
