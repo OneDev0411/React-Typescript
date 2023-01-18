@@ -19,9 +19,9 @@ import cn from 'classnames'
 import pluralize from 'pluralize'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { useNavigate } from '@app/hooks/use-navigate'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { TeamContactSelect } from '@app/views/components/TeamContact/TeamContactSelect'
-import { goTo } from 'utils/go-to'
 import { isSoloActiveTeam } from 'utils/user-teams'
 
 import { TemplateSelector } from './components/TemplateSelector'
@@ -127,6 +127,7 @@ const TriggerEditModeComponent = ({
   const [sendBefore, setSendBefore] = useState<number>(
     convertSecondsToDay(sendBeforeProp)
   )
+  const navigate = useNavigate()
   const [selectedTemplate, setSelectedTemplate] =
     useState<Nullable<IMarketingTemplateInstance | IBrandMarketingTemplate>>(
       selectedTemplateProp
@@ -251,7 +252,7 @@ const TriggerEditModeComponent = ({
             variant="body2"
             color="primary"
             className={classes.goToGlobalTrigger}
-            onClick={() => goTo('/dashboard/account/triggers')}
+            onClick={() => navigate('/dashboard/account/triggers')}
           >
             Activate Global Trigger From The Settings
           </Typography>

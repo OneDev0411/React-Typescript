@@ -1,6 +1,6 @@
 import { Button, Theme, makeStyles } from '@material-ui/core'
-import { browserHistory } from 'react-router'
 
+import { useNavigate } from '@app/hooks/use-navigate'
 import { CreateContact } from 'components/CreateContact'
 import { Divider } from 'components/Divider'
 import { GoogleSignInButton } from 'components/GoogleSignInButton'
@@ -22,6 +22,7 @@ export function ContactsZeroState() {
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
   const classes = useStyles()
+  const navigate = useNavigate()
 
   return (
     <ZeroState
@@ -51,9 +52,7 @@ export function ContactsZeroState() {
             size="large"
             variant="outlined"
             className={classes.wideButton}
-            onClick={() =>
-              browserHistory.push('/dashboard/contacts/import/csv')
-            }
+            onClick={() => navigate('/dashboard/contacts/import/csv')}
           >
             Import from CSV file
           </Button>

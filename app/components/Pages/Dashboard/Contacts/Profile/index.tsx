@@ -6,14 +6,15 @@ import { useRef, useState, RefObject, useEffect, useCallback } from 'react'
 import { Box, makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
 import { useEffectOnce, useTitle } from 'react-use'
 
 import { useGetGlobalTriggers } from '@app/components/Pages/Dashboard/Account/Triggers/hooks/use-get-global-triggers'
 import { useActiveBrand } from '@app/hooks/brand'
 import useConfirmation from '@app/hooks/use-confirmation'
+import { useNavigate } from '@app/hooks/use-navigate'
 import useNotify from '@app/hooks/use-notify'
 import { updateContactTouchReminder } from '@app/models/contacts/update-contact-touch-reminder'
+import { withRouter } from '@app/routes/with-router'
 import Acl from '@app/views/components/Acl'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import PageLayout from 'components/GlobalPageLayout'
@@ -27,7 +28,6 @@ import { isLoadedContactAttrDefs } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
-import { goTo } from 'utils/go-to'
 import { viewAs } from 'utils/user-teams'
 
 import Loading from '../../../../Partials/Loading'
@@ -135,6 +135,7 @@ const ContactProfile = ({
   const abortControllerRef = useRef<Nullable<AbortController>>(null)
   const classes = useStyles()
   const confirmation = useConfirmation()
+  const navigate = useNavigate()
 
   const isCachedContactExists = !!cachedContact
 
@@ -160,19 +161,19 @@ const ContactProfile = ({
     if (isModal && typeof onCloseContact === 'function') {
       onCloseContact()
     } else {
-      goTo('/dashboard/contacts')
+      navigate('/dashboard/contacts')
     }
-  }, [isModal, onCloseContact])
+  }, [isModal, onCloseContact, navigate])
 
   const goToContact = useCallback(
     (masterContactId: UUID) => {
       if (isModal && typeof onOpenContact === 'function') {
         onOpenContact(masterContactId)
       } else {
-        goTo(`/dashboard/contacts/${masterContactId}`)
+        navigate(`/dashboard/contacts/${masterContactId}`)
       }
     },
-    [isModal, onOpenContact]
+    [isModal, onOpenContact, navigate]
   )
 
   const fetchContact = useCallback(

@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 
 import { Box, Button, makeStyles, Theme } from '@material-ui/core'
 
+import { withRouter } from '@app/routes/with-router'
 import { CloseButton } from '@app/views/components/Button/CloseButton'
 import PageLayout from 'components/GlobalPageLayout'
 
@@ -36,7 +37,7 @@ const useStyles = makeStyles(
   }
 )
 
-export default function CsvImport() {
+function CsvImport() {
   const classes = useStyles()
   const [file, setFile] = useState<Nullable<File>>(null)
   const [owner, setOwner] = useOwner()
@@ -119,3 +120,5 @@ export default function CsvImport() {
     </PageLayout>
   )
 }
+
+export default withRouter(CsvImport)

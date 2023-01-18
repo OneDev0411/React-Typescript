@@ -2,10 +2,11 @@ import { Component } from 'react'
 
 import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { selectActiveTeamUnsafe } from '@app/selectors/team'
 import { getAttributeDefs } from 'actions/contacts'
 import { IAppState } from 'reducers'
@@ -20,7 +21,7 @@ import Loading from '../../../../views/components/Spinner'
 import { Container } from './components/Container'
 import ContactsList from './List'
 
-interface Props {
+interface Props extends RouteComponentProps {
   getAttributeDefs: IAsyncActionProp<typeof getAttributeDefs>
   attributeDefs: IAttributeDefsState
   user: IUser
@@ -33,7 +34,7 @@ class Contacts extends Component<Props> {
     const hasCrmAccess = hasUserAccessToCrm(activeTeam)
 
     if (!hasCrmAccess) {
-      browserHistory.push('/dashboard/mls')
+      this.props.navigate('/dashboard/mls')
     }
 
     if (hasCrmAccess && !isLoadedContactAttrDefs(attributeDefs)) {
@@ -72,4 +73,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     getAttributeDefs: () => dispatch(getAttributeDefs())
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Contacts)
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Contacts)
+)

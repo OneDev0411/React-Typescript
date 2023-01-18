@@ -3,9 +3,9 @@ import React from 'react'
 import { Box } from '@material-ui/core'
 import { mdiAccountPlus, mdiLoading } from '@mdi/js'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
 import _ from 'underscore'
 
+import { withRouter } from '@app/routes/with-router'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import AddAccountButton from '@app/views/components/AddAccountButton'
 import { confirmation } from 'actions/confirmation'
@@ -43,7 +43,6 @@ import {
 } from 'reducers/contacts/list'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
-import { goTo } from 'utils/go-to'
 import {
   clearImportingGoogleContacts,
   getNewConnectedGoogleAccount
@@ -81,7 +80,7 @@ class ContactsList extends React.Component {
     super(props)
     this.state = {
       selectedShortcutFilter: null,
-      firstLetter: props.location.query.letter || null,
+      firstLetter: props.searchParams.get('letter') || null,
       isShowingDuplicatesList:
         props.activeSegment.id === DUPLICATE_CONTACTS_LIST_ID,
       isFetchingMoreContacts: false,
@@ -152,8 +151,8 @@ class ContactsList extends React.Component {
       }
     })
 
-    const prevStart = this.props.location.query.s
-    const nextStart = nextProps.location.query.s
+    const prevStart = this.props.searchParams.get('s')
+    const nextStart = nextProps.searchParams.get('s')
 
     if (prevStart !== undefined && nextStart === undefined) {
       this.setQueryParam('s', prevStart)
@@ -274,7 +273,7 @@ class ContactsList extends React.Component {
       ]
     }))
 
-  getQueryParam = key => this.props.location.query[key]
+  getQueryParam = key => this.props.searchParams.get(key)
 
   setQueryParam = (key, value) => {
     const currentLocation = this.props.location
@@ -282,14 +281,17 @@ class ContactsList extends React.Component {
     // again with previous queries for updating start number
     const letter = this.state.firstLetter
 
-    this.props.router.replace({
-      ...currentLocation,
-      query: {
-        ...currentLocation.query,
-        letter,
-        [key]: value
-      }
-    })
+    this.props.navigate(
+      {
+        ...currentLocation,
+        query: {
+          ...currentLocation.query,
+          letter,
+          [key]: value
+        }
+      },
+      { replace: true }
+    )
   }
 
   hasSearchState = () =>
@@ -761,7 +763,9 @@ class ContactsList extends React.Component {
           this.handleFilterChange({ parked: true }, true)
           this.handleResetShortcutFilter()
         }}
-        onClickDuplicateCluster={() => goTo('/dashboard/contacts/duplicates')}
+        onClickDuplicateCluster={() =>
+          this.props.navigate('/dashboard/contacts/duplicates')
+        }
         disabled={isFetchingContacts}
       />
     )

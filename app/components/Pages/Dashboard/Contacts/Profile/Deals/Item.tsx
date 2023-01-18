@@ -2,10 +2,10 @@ import React from 'react'
 
 import { Typography, Box } from '@material-ui/core'
 
+import { useNavigate } from '@app/hooks/use-navigate'
 import { Avatar } from 'components/Avatar'
 import Deal from 'models/Deal'
 import { getAddress } from 'models/Deal/helpers/context'
-import { goTo } from 'utils/go-to'
 import { normalizeDeal } from 'views/utils/association-normalizers'
 
 import { Container } from './styled'
@@ -20,9 +20,10 @@ export function DealItem({ deal, contact }: Props) {
   const address = getAddress(deal)
   const status = Deal.get.status(deal)
   const avatar = normalizeDeal(deal, false).avatar
+  const navigate = useNavigate()
 
   function handleOnClickItem() {
-    goTo(`/dashboard/deals/${deal.id}`)
+    navigate(`/dashboard/deals/${deal.id}`)
   }
 
   function getContactRole() {
