@@ -16,7 +16,9 @@ export const updateContactQuery = {
     'user.last_seen_by',
     'contact.user',
     'contact.created_by',
-    'contact.updated_by'
+    'contact.updated_by',
+    'contact.flows',
+    'contact.deals'
   ]
 }
 

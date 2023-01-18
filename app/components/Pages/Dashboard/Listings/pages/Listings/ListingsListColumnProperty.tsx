@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { useNavigate } from '@app/hooks/use-navigate'
 import { changeUrl } from '@app/utils/change-url'
 import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 import TableColumnProperty, {
@@ -16,9 +17,10 @@ function ListingsListColumnProperty({
   ...otherProps
 }: ListingsListColumnPropertyProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const navigate = useNavigate()
 
   const closeModal = () => {
-    window.history.back()
+    navigate(-1)
     setIsOpen(false)
   }
 

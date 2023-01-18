@@ -39,7 +39,8 @@ const useStyles = makeStyles(
     },
     displayName: {
       wordBreak: 'break-all',
-      height: 'max-content'
+      height: 'max-content',
+      fontSize: theme.typography.h5.fontSize
     },
     socialContainer: {
       width: 'min-content',
@@ -52,6 +53,7 @@ const useStyles = makeStyles(
 
 export default function Catalog({
   contact,
+  onChangeAvatar,
   contactChangeCallback
 }: Omit<Props, 'onCreateNote' | 'onCreateEvent' | 'onUpdateTouchFreq'>) {
   const classes = useStyles()
@@ -59,7 +61,7 @@ export default function Catalog({
   return (
     <div className={classes.mainContainer}>
       <div className={classes.avatarContainer}>
-        <Avatar contact={contact} />
+        <Avatar onChange={onChangeAvatar} contact={contact} />
       </div>
       <div className={classes.profileContainer}>
         <div className={classes.displayNameContainer}>

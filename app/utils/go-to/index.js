@@ -6,6 +6,7 @@ import { browserHistory } from 'react-router'
  * @param {string || null} pageTitle Current page title.
  * @param {object} query Query params as an object
  * @param {object} state Additional state params as an object
+ * @deprecated since react-router@6 https://gitlab.com/rechat/web/-/issues/2744
  */
 
 export function goTo(url, pageTitle = null, query = {}, state = {}) {

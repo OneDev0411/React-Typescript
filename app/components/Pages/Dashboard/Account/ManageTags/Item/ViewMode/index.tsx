@@ -8,8 +8,8 @@ import {
   makeStyles
 } from '@material-ui/core'
 import { mdiPencilOutline, mdiTrashCanOutline } from '@mdi/js'
-import pluralize from 'pluralize'
 
+import { frequencyToString } from '@app/components/Pages/Dashboard/Contacts/components/ManageRelationship/helper'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
@@ -31,7 +31,7 @@ const useStyles = makeStyles(
     touchDate: {
       display: 'flex',
       width: '20%',
-      maxWidth: '200px',
+      maxWidth: '250px',
       padding: theme.spacing(0, 1)
     },
     touchDateCaption: {
@@ -73,13 +73,13 @@ export function ViewMode({ tag, loading, onEdit, onDelete }: Props) {
       <div className={classes.touchDate}>
         {Number(tag.touch_freq) > 0 && (
           <Typography variant="caption" className={classes.touchDateCaption}>
-            Touch:
+            Auto Remind:
           </Typography>
         )}
         <Typography variant="body2" className={classes.touchDateValue}>
           {Number(tag.touch_freq) > 0
-            ? `every ${tag.touch_freq} ${pluralize('day', tag.touch_freq!)}`
-            : 'No touch reminder'}
+            ? frequencyToString(tag.touch_freq)
+            : 'No auto reminder'}
         </Typography>
       </div>
 

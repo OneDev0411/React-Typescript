@@ -1,9 +1,9 @@
 import { Box, Button, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { browserHistory } from 'react-router'
 
 import { EmptyState } from '@app/components/Pages/Dashboard/Overview/components/EmptyState'
 import { ACL } from '@app/constants/acl'
+import { useNavigate } from '@app/hooks/use-navigate'
 import Acl from '@app/views/components/Acl'
 import { useAcl } from '@app/views/components/Acl/use-acl'
 import MetabaseDashboard from '@app/views/components/MetabaseIFrame'
@@ -55,6 +55,7 @@ const useStyles = makeStyles(
 
 function OverviewDashboard() {
   const classes = useStyles()
+  const navigate = useNavigate()
 
   const isAdmin = useAcl(ACL.ADMIN)
   const getDealsList = useDealsList()
@@ -92,9 +93,7 @@ function OverviewDashboard() {
                 <Box pt={3}>
                   <Button
                     variant="outlined"
-                    onClick={() =>
-                      browserHistory.push('/dashboard/deals/create')
-                    }
+                    onClick={() => navigate('/dashboard/deals/create')}
                   >
                     Create New Deal
                   </Button>

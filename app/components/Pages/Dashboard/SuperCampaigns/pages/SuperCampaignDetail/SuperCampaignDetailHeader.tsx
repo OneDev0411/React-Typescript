@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core'
 
-import { goTo } from '@app/utils/go-to'
+import { useNavigate } from '@app/hooks/use-navigate'
 
 import SuperCampaignAdminMoreActions from '../../components/SuperCampaignAdminMoreActions'
 
@@ -28,13 +28,14 @@ function SuperCampaignDetailHeader({
 }: SuperCampaignDetailHeaderProps) {
   const classes = useStyles()
   const backUrl = useGetSuperCampaignBackUrl()
+  const navigate = useNavigate()
 
-  const handleDelete = () => goTo(backUrl)
+  const handleDelete = () => navigate(backUrl)
 
   const handleDuplicate = (
     newSuperCampaign: ISuperCampaign<'template_instance'>
   ) => {
-    goTo(`/dashboard/insights/super-campaign/${newSuperCampaign.id}/detail`)
+    navigate(`/dashboard/insights/super-campaign/${newSuperCampaign.id}/detail`)
   }
 
   return (

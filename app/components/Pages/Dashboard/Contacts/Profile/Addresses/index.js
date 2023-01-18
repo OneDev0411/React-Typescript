@@ -13,39 +13,51 @@ import { BasicSection } from '../components/Section/Basic'
 import AddressField from './AddressField'
 import { generateEmptyAddress, getAddresses } from './helpers/get-addresses'
 
+function getInitialState(props) {
+  const addressAttributeDefs = selectDefsBySection(
+    props.attributeDefs,
+    'Addresses'
+  )
+
+  let defaultLabel
+  let defaultIsPrimary = false
+  const addresses = getContactAddresses(props.contact)
+  const normalizedAddresses = getAddresses(addresses, addressAttributeDefs)
+
+  if (normalizedAddresses.length === 0) {
+    defaultLabel = 'Home'
+    defaultIsPrimary = true
+  }
+
+  return {
+    contactId: props.contact?.id,
+    addresses: [
+      ...normalizedAddresses,
+      generateEmptyAddress(
+        addressAttributeDefs,
+        normalizedAddresses,
+        false,
+        defaultLabel,
+        defaultIsPrimary
+      )
+    ],
+    addressAttributeDefs
+  }
+}
+
 class Addresses extends React.Component {
   constructor(props) {
     super(props)
 
-    const addressAttributeDefs = selectDefsBySection(
-      props.attributeDefs,
-      'Addresses'
-    )
+    this.state = getInitialState(props)
+  }
 
-    let defaultLabel
-    let defaultIsPrimary = false
-    const addresses = getContactAddresses(props.contact)
-    const normalizedAddresses = getAddresses(addresses, addressAttributeDefs)
-
-    if (normalizedAddresses.length === 0) {
-      defaultLabel = 'Home'
-      defaultIsPrimary = true
+  static getDerivedStateFromProps(props, state) {
+    if (state.contactId && state.contactId !== props.contact?.id) {
+      return getInitialState(props)
     }
 
-    this.state = {
-      addresses: [
-        ...normalizedAddresses,
-        generateEmptyAddress(
-          addressAttributeDefs,
-          normalizedAddresses,
-          false,
-          defaultLabel,
-          defaultIsPrimary
-        )
-      ]
-    }
-
-    this.addressAttributeDefs = addressAttributeDefs
+    return state
   }
 
   toggleAddressActiveMode = ({ index }) => {
@@ -65,12 +77,12 @@ class Addresses extends React.Component {
     this.setState(state => ({
       addresses: [
         ...state.addresses,
-        generateEmptyAddress(this.addressAttributeDefs, state.addresses, true)
+        generateEmptyAddress(state.addressAttributeDefs, state.addresses, true)
       ]
     }))
   }
 
-  handleDelete = async (addressIndex, ids) => {
+  handleDelete = async (addressIndex, ids, listIndex) => {
     const removeAddressFromState = () =>
       this.setState(state => {
         const addresses = state.addresses.filter(
@@ -98,7 +110,7 @@ class Addresses extends React.Component {
         return {
           addresses: [
             generateEmptyAddress(
-              this.addressAttributeDefs,
+              state.addressAttributeDefs,
               addresses,
               false,
               'Home',
@@ -114,6 +126,18 @@ class Addresses extends React.Component {
 
     try {
       await deleteAttributesFromContacts(ids)
+
+      const addNewAddress = this.props.contact.address?.filter(
+        (_, index) => index !== listIndex
+      )
+
+      this.props.submitCallback(
+        {
+          ...this.props.contact,
+          address: addNewAddress.length ? addNewAddress : null
+        },
+        this.state.addressAttributeDefs
+      )
 
       return removeAddressFromState()
     } catch (error) {
@@ -142,9 +166,11 @@ class Addresses extends React.Component {
 
       const addresses = getContactAddresses(updatedContact)
 
-      this.setState({
-        addresses: getAddresses(addresses, this.addressAttributeDefs)
-      })
+      this.setState(state => ({
+        addresses: getAddresses(addresses, state.addressAttributeDefs)
+      }))
+
+      this.props.submitCallback(updatedContact, attributes)
     } catch (error) {
       console.error(error)
       this.props.notify({
@@ -162,7 +188,7 @@ class Addresses extends React.Component {
           <AddressField
             key={index}
             address={address}
-            handleDelete={this.handleDelete}
+            handleDelete={(...e) => this.handleDelete(...e, index)}
             handleSubmit={this.handleSubmit}
             handleAddNew={this.addNewAddress}
             toggleMode={this.toggleAddressActiveMode}

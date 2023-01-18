@@ -2,11 +2,12 @@ import { useTheme } from '@material-ui/styles'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import { Field, reduxForm } from 'redux-form'
 import isEmail from 'validator/lib/isEmail'
 
+import { useSearchParams } from '@app/hooks/use-search-param'
+import { withRouter } from '@app/routes/with-router'
 import { Logo } from '@app/views/components/OAuthPageLayout/Logo'
 import { PoweredBy } from '@app/views/components/OAuthPageLayout/PoweredBy'
 
@@ -16,16 +17,62 @@ import Button from '../../../../../views/components/Button/ActionButton'
 import SimpleField from '../../../Dashboard/Account/Profile/components/SimpleField'
 
 const ForgotForm = ({
-  username,
   submitError,
   isSubmitting,
-  handleSubmit,
   setSubmitError,
-  onSubmitHandler,
-  resetSuccessfully
+  resetSuccessfully,
+  setIsSubmitting,
+  setResetSuccessfully
 }) => {
   const isDisabled = isSubmitting
   const theme = useTheme()
+  const [searchParams] = useSearchParams()
+
+  const username = searchParams.get('email')
+
+  const onSubmitHandler = async event => {
+    event.preventDefault()
+
+    const email = event.target.email.value
+
+    setIsSubmitting(true)
+
+    try {
+      const response = await resetPassword(email)
+
+      if (response.status === 204) {
+        setIsSubmitting(false)
+        setResetSuccessfully(email)
+      }
+    } catch ({ status, response }) {
+      if (status === 403) {
+        try {
+          await signup(email)
+        } catch (error) {}
+
+        setIsSubmitting(false)
+        setResetSuccessfully(email)
+
+        return
+      }
+
+      let errorMessage = 'Password recovery email expired.'
+
+      if (status === 404) {
+        errorMessage = (
+          <div>
+            Sorry, that email address is not registered with us.
+            <br />
+            <span>Please try again or</span>
+            <Link to="/signup"> register for a new account</Link>.
+          </div>
+        )
+      }
+
+      setIsSubmitting(false)
+      setSubmitError(errorMessage)
+    }
+  }
 
   return (
     <div className="signin-page-wrapper">
@@ -41,7 +88,7 @@ const ForgotForm = ({
         </header>
         <main className="c-auth__main">
           {!resetSuccessfully ? (
-            <form onSubmit={handleSubmit(onSubmitHandler)}>
+            <form onSubmit={onSubmitHandler}>
               <Field
                 autoFocus
                 name="email"
@@ -104,64 +151,24 @@ export const validateEmail = values => {
   return errors
 }
 
-export default compose(
-  connect(({ brand }, { location }) => {
-    const { email } = location.query
-
-    return {
-      brand,
-      username: email,
-      initialValues: { email }
-    }
-  }),
-  reduxForm({
-    form: 'forgot',
-    validate: validateEmail
-  }),
-  withState('submitError', 'setSubmitError', false),
-  withState('isSubmitting', 'setIsSubmitting', false),
-  withState('resetSuccessfully', 'setResetSuccessfully', false),
-  withHandlers({
-    onSubmitHandler:
-      ({ setIsSubmitting, setSubmitError, setResetSuccessfully }) =>
-      async ({ email }) => {
-        setIsSubmitting(true)
-
-        try {
-          const response = await resetPassword(email)
-
-          if (response.status === 204) {
-            setIsSubmitting(false)
-            setResetSuccessfully(email)
-          }
-        } catch ({ status, response }) {
-          if (status === 403) {
-            try {
-              await signup(email)
-            } catch (error) {}
-
-            setIsSubmitting(false)
-            setResetSuccessfully(email)
-
-            return
-          }
-
-          let errorMessage = 'Password recovery email expired.'
-
-          if (status === 404) {
-            errorMessage = (
-              <div>
-                Sorry, that email address is not registered with us.
-                <br />
-                <span>Please try again or</span>
-                <Link to="/signup"> register for a new account</Link>.
-              </div>
-            )
-          }
-
-          setIsSubmitting(false)
-          setSubmitError(errorMessage)
-        }
+export default withRouter(
+  compose(
+    connect(({ brand }, { searchParams }) => {
+      const initialValues = {
+        email: searchParams.get('email') || ''
       }
-  })
-)(ForgotForm)
+
+      return {
+        brand,
+        initialValues
+      }
+    }),
+    reduxForm({
+      form: 'forgot',
+      validate: validateEmail
+    }),
+    withState('submitError', 'setSubmitError', false),
+    withState('isSubmitting', 'setIsSubmitting', false),
+    withState('resetSuccessfully', 'setResetSuccessfully', false)
+  )(ForgotForm)
+)

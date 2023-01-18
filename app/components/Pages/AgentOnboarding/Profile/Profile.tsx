@@ -4,9 +4,9 @@ import { Box, makeStyles, Theme } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import idx from 'idx'
 import { useSelector, useDispatch } from 'react-redux'
-import { browserHistory } from 'react-router'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { useNavigate } from '@app/hooks/use-navigate'
 import { selectUserUnsafe } from '@app/selectors/user'
 import { updateUser } from 'actions/user'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
@@ -47,6 +47,7 @@ export function Profile() {
 
   const classes = useStyles()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const activeTeam = useUnsafeActiveTeam()
   const user = useSelector(selectUserUnsafe)
 
@@ -112,7 +113,7 @@ export function Profile() {
 
       setSubmitting(false)
 
-      browserHistory.push(nextStepUrl)
+      navigate(nextStepUrl)
     } catch (error) {
       const message =
         idx(error, e => e.response.body.message) ||

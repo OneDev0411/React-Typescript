@@ -1,13 +1,13 @@
 import React from 'react'
 
 import { Slide, createStyles, makeStyles, Theme } from '@material-ui/core'
-import { alpha } from '@material-ui/core/styles'
 import { mdiClose } from '@mdi/js'
 
 import { resetRows } from '../../context/actions/selection/reset-rows'
 import { useGridContext } from '../../hooks/use-grid-context'
 
 import { GridActionButton } from './Button'
+import { useGridActionButtonStyles } from './use-grid-action-button-styles'
 
 interface Props<Row> {
   rows: Row[]
@@ -19,23 +19,6 @@ interface Props<Row> {
 const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
-      container: {
-        position: 'sticky',
-        bottom: `${theme.spacing(3.5)}px`,
-        width: '100%',
-        height: theme.spacing(10),
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        padding: theme.spacing(0, 2),
-        background: theme.palette.tertiary.main,
-        borderRadius: `${theme.spacing(2)}px`,
-        boxShadow: `0 ${theme.spacing(0.5)}px ${theme.spacing(2)}px ${alpha(
-          theme.palette.common.black,
-          0.4
-        )}`,
-        zIndex: theme.zIndex.gridAction
-      },
       infoContainer: {
         display: 'flex',
         alignItems: 'center',
@@ -66,6 +49,8 @@ export function Actions<Row>({
   showSelectAll = true
 }: Props<Row>) {
   const classes = useStyles()
+  const gridActionButtonClasses = useGridActionButtonStyles()
+
   const [state, dispatch] = useGridContext()
   const {
     isAllRowsSelected,
@@ -97,7 +82,7 @@ export function Actions<Row>({
 
   return (
     <Slide in direction="up">
-      <div className={classes.container}>
+      <div className={gridActionButtonClasses.root}>
         <GridActionButton
           label="Cancel"
           icon={mdiClose}

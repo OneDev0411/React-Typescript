@@ -1,9 +1,7 @@
-import React from 'react'
-
 import { Grid, makeStyles, createStyles, Theme } from '@material-ui/core'
 
+import { useNavigate } from '@app/hooks/use-navigate'
 import { SectionItem } from 'components/PageSideNav/types'
-import { goTo } from 'utils/go-to'
 import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -45,6 +43,7 @@ interface Props {
 
 function Item({ data, mediums, onClose }: Props) {
   const classes = useStyles()
+  const navigate = useNavigate()
   const { title, link } = data
 
   const navigateTo = (e, link) => {
@@ -56,7 +55,7 @@ function Item({ data, mediums, onClose }: Props) {
 
     onClose()
 
-    goTo(link)
+    navigate(link)
   }
 
   const renderMediumsList = () => {

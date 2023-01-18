@@ -14,7 +14,7 @@ export const getTitle = (event: ICalendarEvent): string => {
   ) {
     const contact = event.people[0] as IContact
 
-    return `Touch Reminder: ${contact.display_name}`
+    return `Auto Reminder: ${contact.display_name}`
   }
 
   if (event_type === 'home_anniversary') {

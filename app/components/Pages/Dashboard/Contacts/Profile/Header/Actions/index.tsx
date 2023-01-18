@@ -30,7 +30,7 @@ const useStyles = makeStyles(
 export const Actions = ({
   contact,
   onUpdateTouchFreq
-}: Omit<Props, 'contactChangeCallback'>) => {
+}: Omit<Props, 'contactChangeCallback' | 'onChangeAvatar'>) => {
   const classes = useStyles()
 
   const [manageRelationshipRef, setManageRelationshipRef] =
@@ -50,7 +50,7 @@ export const Actions = ({
         <ReminderDialog
           userSettingsKey={TOUCH_REMINDER_HINT_DISMISSED_SETTINGS_KEY}
           anchorEl={manageRelationshipRef}
-          title="Setup how frequently you want to be in touch with this customer. We will remind you next time"
+          title="Configure the auto reminder for how often you want to reach this contact. The auto reminder will notify you when it's time to reach out again."
         />
       )}
     </div>

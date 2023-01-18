@@ -38,8 +38,6 @@ export default function ChecklistsPage({ location }: Props) {
   const lastTaskNameEditorRef = useRef<any>(null)
 
   const {
-    forms,
-    formsState,
     checklists,
     addGenericTask,
     addRole,
@@ -145,8 +143,6 @@ export default function ChecklistsPage({ location }: Props) {
 
                   <ChecklistHeader
                     checklist={checklist}
-                    forms={forms}
-                    formsState={formsState}
                     setTerminable={value =>
                       updateChecklist({
                         ...checklist,

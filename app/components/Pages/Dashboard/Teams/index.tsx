@@ -3,9 +3,10 @@ import { MutableRefObject, useCallback, useRef, useState } from 'react'
 
 import { debounce } from 'lodash'
 import { connect } from 'react-redux'
-import { RouteComponentProps } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import Search from 'components/Grid/Search'
 import { Container, Content, Menu } from 'components/SlideMenu'
 import Spinner from 'components/Spinner'
@@ -150,4 +151,4 @@ function TeamsPage(props: Props) {
   )
 }
 
-export default connect(({ user }: any) => ({ user }))(TeamsPage)
+export default connect(({ user }: any) => ({ user }))(withRouter(TeamsPage))

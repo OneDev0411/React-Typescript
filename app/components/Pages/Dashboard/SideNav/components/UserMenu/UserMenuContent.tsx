@@ -8,9 +8,9 @@ import {
   Theme
 } from '@material-ui/core'
 import { mdiLogoutVariant, mdiCogOutline } from '@mdi/js'
-import { browserHistory } from 'react-router'
 
 import { useUnsafeActiveTeam } from '@app/hooks/team/use-unsafe-active-team'
+import { useNavigate } from '@app/hooks/use-navigate'
 import { hasUserAccessToBrandSettings } from '@app/utils/acl'
 import Acl from '@app/views/components/Acl'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -54,12 +54,13 @@ interface Props {
 export function UserMenuContent({ showChecklists, onClose = noop }: Props) {
   const classes = useStyles()
   const activeTeam = useUnsafeActiveTeam()
+  const navigate = useNavigate()
 
   const hasAccessToBrandSettings = hasUserAccessToBrandSettings(activeTeam)
 
   const onClick = (path: string) => {
     onClose()
-    browserHistory.push(`/dashboard/${path}`)
+    navigate(`/dashboard/${path}`)
   }
 
   return (
@@ -130,7 +131,7 @@ export function UserMenuContent({ showChecklists, onClose = noop }: Props) {
           onClick={() => {
             onClose()
             removeImpersonateUser()
-            browserHistory.push('/signout')
+            navigate('/signout')
           }}
         >
           <ListItemIcon className={classes.listItemIcon}>

@@ -1,6 +1,8 @@
 import { Typography, makeStyles, Theme } from '@material-ui/core'
 import { useTitle } from 'react-use'
 
+import { withRouter } from '@app/routes/with-router'
+
 import { TriggerItems } from './components/Items'
 
 const useStyles = makeStyles(
@@ -12,7 +14,7 @@ const useStyles = makeStyles(
   { name: 'GlobalTrigger' }
 )
 
-export default function Triggers() {
+function Triggers() {
   useTitle('Trigger | Settings | Rechat')
 
   const classes = useStyles()
@@ -31,3 +33,5 @@ export default function Triggers() {
     </>
   )
 }
+
+export default withRouter(Triggers)

@@ -1,22 +1,26 @@
 import { useState, useEffect } from 'react'
 
-import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { useNavigate } from '@app/hooks/use-navigate'
+import { useSearchParams } from '@app/hooks/use-search-param'
 import getListing from '@app/models/listings/listing/get-listing'
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import ListingHeader from '@app/views/components/ListingHeader'
 import ListingMarketing from '@app/views/components/ListingMarketing'
 
-export default function ListingMarketingPage({
-  params,
-  location,
-  router
-}: WithRouterProps) {
+function ListingMarketingPage({ params, location, router }: WithRouterProps) {
   useTitle('Marketing | Rechat')
 
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
   const listingId: UUID = params.id
-  const templateType: Optional<IMarketingTemplateType> = location.query.type
+
+  const templateType: Nullable<IMarketingTemplateType> = searchParams.get(
+    'type'
+  ) as IMarketingTemplateType
   const medium: Optional<IMarketingTemplateMedium> =
     (location.hash.split('#').pop() as IMarketingTemplateMedium) || undefined
 
@@ -51,22 +55,28 @@ export default function ListingMarketingPage({
           templateType={templateType}
           medium={medium}
           onChangeTemplateType={type => {
-            router.push({
-              ...location,
-              query: {
-                ...location.query,
-                type
-              }
-            })
+            const searchParam = [
+              ...location.search.split('&'),
+              `type=${type.toString()}`
+            ]
+              .filter(item => !!item)
+              .join('&')
+
+            navigate({ ...location, search: searchParam })
           }}
           onChangeMedium={medium => {
-            router.replace({
-              ...location,
-              hash: `#${medium}`
-            })
+            navigate(
+              {
+                ...location,
+                hash: `#${medium}`
+              },
+              { replace: true }
+            )
           }}
         />
       </PageLayout.Main>
     </PageLayout>
   )
 }
+
+export default withRouter(ListingMarketingPage)

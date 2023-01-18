@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import {
   Box,
@@ -11,12 +11,11 @@ import {
   Theme,
   Typography
 } from '@material-ui/core'
-import Fuse from 'fuse.js'
-import usePromise from 'react-use-promise'
 
-import SearchDrawer from 'components/SearchDrawer'
+import { PreviewActionButton } from '@app/views/components/DocumentsRepository/components/row-actions/PreviewActionButton'
+import { SelectActionButton } from '@app/views/components/DocumentsRepository/components/row-actions/SelectActionButton'
+import { DocumentsRepositoryDialog } from '@app/views/components/DocumentsRepository/Dialog'
 import SplitButton from 'components/SplitButton'
-import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { useDictionary } from 'hooks/use-dictionary'
 
 type Props = {
@@ -26,14 +25,12 @@ type Props = {
   addGenericTask: (checklist: IBrandChecklist) => void
   addSplitterTask: (checklist: IBrandChecklist) => void
   addGeneralCommentTask: (checklist: IBrandChecklist) => void
-  addFormTask: (checklist: IBrandChecklist, form: IDealForm) => void
+  addFormTask: (checklist: IBrandChecklist, form: IBrandForm) => void
   renameChecklist: (name: string) => void
-  forms?: IDealForm[]
-  formsState: ReturnType<typeof usePromise>[2]
 }
 
 const useChecklistHeaderStyles = makeStyles(
-  (theme: Theme) =>
+  () =>
     createStyles({
       splitButton: {
         minWidth: '12rem'
@@ -45,22 +42,12 @@ const useChecklistHeaderStyles = makeStyles(
   { name: 'ChecklistHeader' }
 )
 
-const ItemRow = props => {
-  return (
-    <ListItem button onClick={props.onClick}>
-      <TextMiddleTruncate text={props.item.name} maxLength={70} />
-    </ListItem>
-  )
-}
-
 export function ChecklistHeader({
   addGeneralCommentTask,
   addGenericTask,
   addFormTask,
   addSplitterTask,
   checklist,
-  forms,
-  formsState,
   setDeactivatable,
   setTerminable
 }: Props) {
@@ -68,23 +55,18 @@ export function ChecklistHeader({
     useDictionary<boolean>()
   const [isTerminableChanging, setTerminableChanging] = useDictionary<boolean>()
   const [formPickerOpen, setFormPickerOpen] = useState(false)
-  const [selectedItems, setSelectedItems] = useState<Record<UUID, IDealForm>>(
-    {}
-  )
 
   const classes = useChecklistHeaderStyles()
 
-  const formSearchFuse = useMemo(
-    () => new Fuse<IDealForm, {}>(forms || [], { keys: ['name'] }),
-    [forms]
-  )
-
-  const onChangeSelectedItems = (newItems: Record<UUID, IDealForm>) => {
-    setSelectedItems(newItems)
-  }
-
   const openFormPickerDrawer = () => {
     setFormPickerOpen(true)
+  }
+
+  const onSelectFormTask = async (form: IBrandForm) => {
+    if (checklist) {
+      setFormPickerOpen(false)
+      await addFormTask(checklist, form)
+    }
   }
 
   if (!checklist) {
@@ -176,39 +158,16 @@ export function ChecklistHeader({
         </SplitButton>
       </Box>
       {formPickerOpen && (
-        <SearchDrawer
-          title="Select a form"
-          notFoundMessage="No form was found"
-          searchFunction={q => formSearchFuse.search(q)}
-          onSelectItems={async (items: Record<UUID, IDealForm>) => {
-            setFormPickerOpen(false)
-
-            // eslint-disable-next-line no-restricted-syntax
-            for (const form of Object.values(items)) {
-              // eslint-disable-next-line no-await-in-loop
-              await addFormTask(checklist, form)
-            }
-          }}
-          isOpen={formPickerOpen}
-          ItemRow={ItemRow}
-          searchInputOptions={{
-            placeholder: 'Type in to search'
-          }}
-          // we can enable multipleSelection but the experience is a
-          // little different and probably needs better components for
-          // rendering items
-          multipleSelection={false}
-          onChangeSelectedItems={onChangeSelectedItems}
-          selectedItems={selectedItems}
-          normalizeSelectedItem={i => i}
-          defaultLists={[
-            {
-              title: '',
-              items: forms || []
-            }
-          ]}
+        <DocumentsRepositoryDialog
+          isOpen
+          selectionType="single"
+          RowActionsBuilder={({ form }) => (
+            <>
+              <PreviewActionButton form={form} />
+              <SelectActionButton form={form} onSelect={onSelectFormTask} />
+            </>
+          )}
           onClose={() => setFormPickerOpen(false)}
-          showLoadingIndicator={formsState === 'pending'}
         />
       )}
     </Box>

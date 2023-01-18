@@ -14,6 +14,7 @@ const STYLE_MANAGER_BG_COLORABLE_TAGS = [
   'mj-column',
   'mj-section',
   'mj-wrapper',
+  'mj-spacer',
   'mj-image',
   'div',
   'section'
@@ -108,9 +109,12 @@ export function createGrapesInstance(
             forbiddenStyles: ['background-image']
           },
           getPropName: (model, defaultPropName) => {
-            // The mj-image component does not support the back-ground-color property. Instead,
+            // The mj-image and mj-spacer component do not support the background-color property. Instead,
             // it has the container-background-color.
-            if (model.get('type') === 'mj-image') {
+            if (
+              model.get('type') === 'mj-image' ||
+              model.get('type') === 'mj-spacer'
+            ) {
               return 'container-background-color'
             }
 

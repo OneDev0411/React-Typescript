@@ -4,9 +4,12 @@ import { Box, Divider, Grid, Typography } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { useLoadScript, LoadScriptProps } from '@react-google-maps/api'
 import { useSelector } from 'react-redux'
-import { withRouter, WithRouterProps } from 'react-router'
 
+import { useNavigate } from '@app/hooks/use-navigate'
+import { useSearchParams } from '@app/hooks/use-search-param'
 import getAgents, { AgentWithStats } from '@app/models/agent-network/get-agents'
+import { withRouter } from '@app/routes/with-router'
+import { SearchResult } from '@app/views/components/DealsAndListingsAndPlacesSearchInput/types'
 import ListingAlertFilters from 'components/ListingAlertFilters'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import config from 'config'
@@ -14,11 +17,15 @@ import { useLoadingEntities } from 'hooks/use-loading'
 import getListing from 'models/listings/listing/get-listing'
 import { selectUser } from 'selectors/user'
 
-import { openSearchResultPage } from '../helpers'
+import { toListingPage, toPlacePage } from '../helpers'
 import Layout from '../Layout'
 
 import AgentsGrid from './Grid'
-import { getListingVAlertFilters, getLocationVAlertFilters } from './helpers'
+import {
+  getListingVAlertFilters,
+  getListingVAlertFiltersWithPostalCodes,
+  getLocationVAlertFilters
+} from './helpers'
 import { ListingWithProposedAgentAndMlsInfo } from './types'
 
 export interface ZipcodeOption {
@@ -29,12 +36,14 @@ export interface ZipcodeOption {
 const DISABLED_MLS_LIST: string[] = []
 const GOOGLE_MAPS_LIBRARIES: LoadScriptProps['libraries'] = ['geometry']
 
-function Agents(props: WithRouterProps) {
+function Agents() {
   const user = useSelector(selectUser)
+  const [searchParams] = useSearchParams()
   const { isLoaded: isGoogleMapsLoaded } = useLoadScript({
     googleMapsApiKey: config.google.api_key,
     libraries: GOOGLE_MAPS_LIBRARIES
   })
+  const navigate = useNavigate()
 
   const [listing, setListing] =
     useState<Nullable<ListingWithProposedAgentAndMlsInfo>>(null)
@@ -44,13 +53,15 @@ function Agents(props: WithRouterProps) {
   const [filters, setFilters] =
     useState<Nullable<AlertFiltersWithRadiusAndCenter>>(null)
 
+  const listingId: Nullable<string> = searchParams.get('listing')
+  const lat: Nullable<string> = searchParams.get('lat')
+  const lng: Nullable<string> = searchParams.get('lng')
+
   useEffect(() => {
     async function fetchListingBasedData() {
       if (!isGoogleMapsLoaded) {
         return
       }
-
-      const listingId: Optional<string> = props.location.query.listing
 
       if (!listingId) {
         setListing(null)
@@ -64,27 +75,31 @@ function Agents(props: WithRouterProps) {
 
         setListing(fetchedListing)
 
-        const listingBasedFilters = await getListingVAlertFilters(
-          fetchedListing
-        )
+        if (listing?.mls_info?.enable_agent_network === true) {
+          const listingBasedFilters = await getListingVAlertFilters(
+            fetchedListing
+          )
 
-        setFilters(listingBasedFilters)
+          setFilters(listingBasedFilters)
+        } else {
+          const listingBasedFilters =
+            await getListingVAlertFiltersWithPostalCodes(fetchedListing)
+
+          setFilters(listingBasedFilters)
+        }
       } catch (error) {
         console.error('Error fetching listing/listing filters', error)
       }
     }
 
     fetchListingBasedData()
-  }, [isGoogleMapsLoaded, props.location.query.listing])
+  }, [isGoogleMapsLoaded, listingId, listing?.mls_info?.enable_agent_network])
 
   useEffect(() => {
     async function fetchLocationBasedData() {
       if (!isGoogleMapsLoaded) {
         return
       }
-
-      const lat: Optional<string> = props.location.query.lat
-      const lng: Optional<string> = props.location.query.lng
 
       if (!lat || !lng) {
         return
@@ -104,7 +119,7 @@ function Agents(props: WithRouterProps) {
     }
 
     fetchLocationBasedData()
-  }, [isGoogleMapsLoaded, props.location.query.lat, props.location.query.lng])
+  }, [isGoogleMapsLoaded, lat, lng])
 
   useEffect(() => {
     async function fetchAgents() {
@@ -135,6 +150,16 @@ function Agents(props: WithRouterProps) {
     return null
   }
 
+  const openSearchResultPage = (result: SearchResult) => {
+    if (result.type === 'listing') {
+      navigate(...toListingPage(result.listing))
+    }
+
+    if (result.type === 'location') {
+      navigate(...toPlacePage(result.location))
+    }
+  }
+
   return (
     <Layout
       noGlobalActionsButton
@@ -163,9 +188,9 @@ function Agents(props: WithRouterProps) {
             justifyContent="space-between"
           >
             <Grid item>
-              {props.location.query.title && (
+              {searchParams.get('title') && (
                 <Typography variant="body1">
-                  {props.location.query.title}
+                  {searchParams.get('title')}
                 </Typography>
               )}
             </Grid>

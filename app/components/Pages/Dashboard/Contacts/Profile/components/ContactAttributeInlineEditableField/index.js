@@ -108,7 +108,8 @@ class MasterField extends Component {
         props.attribute?.updated_at > state.updated_at) ||
       props.contact?.email !== state.contact?.email ||
       (!props.trigger && state.currentTrigger) ||
-      (!state.currentTrigger && props.trigger)
+      (!state.currentTrigger && props.trigger) ||
+      props.contact?.id !== state.contact?.id
     ) {
       return getInitialState(props)
     }
