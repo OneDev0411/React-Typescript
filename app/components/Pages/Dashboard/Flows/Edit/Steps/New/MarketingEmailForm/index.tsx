@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux'
 import { selectActiveBrand } from '@app/selectors/brand'
 import { selectUser } from '@app/selectors/user'
 
-import { Description } from '../components/BaseFields/Description'
 import { TemplateInctance } from '../components/BaseFields/TemplateInctance'
 import { Title } from '../components/BaseFields/Title'
 import { BaseFormLayout } from '../components/BaseFormLayout'
@@ -73,12 +72,6 @@ function MarketingEmailForm({
             <Box mb={2}>
               <Title
                 label="Email Subject"
-                textFieldProps={{ disabled: disableEdit }}
-              />
-            </Box>
-            <Box mb={2}>
-              <Description
-                enabled={!!values.description}
                 textFieldProps={{ disabled: disableEdit }}
               />
             </Box>
