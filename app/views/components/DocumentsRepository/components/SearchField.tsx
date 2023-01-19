@@ -51,6 +51,7 @@ export function SearchField({
           </InputAdornment>
         )
       }}
+      autoFocus
     />
   )
 }

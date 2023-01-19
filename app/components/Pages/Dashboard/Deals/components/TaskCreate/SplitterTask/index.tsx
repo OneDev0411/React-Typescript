@@ -23,6 +23,7 @@ export function SplitterTask({ onCreateTask }: Props) {
         value={taskTitle}
         label="Section Name"
         onChange={e => setTaskTitle(e.target.value)}
+        autoFocus
       />
 
       <Box my={6} display="flex" flexDirection="row-reverse">
