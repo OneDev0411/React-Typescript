@@ -10,11 +10,13 @@ import {
 } from '@material-ui/core'
 import Fuse from 'fuse.js'
 import { useDispatch } from 'react-redux'
-import { browserHistory } from 'react-router'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useBrandStatuses } from '@app/hooks/use-brand-statuses'
+import { useNavigate } from '@app/hooks/use-navigate'
 import useNotify from '@app/hooks/use-notify'
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { confirmation } from '@app/store_actions/confirmation'
 import { getDealStatusColor } from '@app/utils/get-deal-status-color'
 import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch'
@@ -45,17 +47,18 @@ const useStyles = makeStyles(
   }
 )
 
-interface Props {
+interface Props extends RouteComponentProps {
   params: {
     id: UUID
   }
 }
 
-export default function DealStatusesAdmin({ params }: Props) {
+function DealStatusesAdmin({ params }: Props) {
   const gridClasses = useGridStyles()
   const classes = useStyles()
   const dispatch = useDispatch()
   const notify = useNotify()
+  const navigate = useNavigate()
 
   const activeBrandId = useActiveBrandId()
 
@@ -120,11 +123,11 @@ export default function DealStatusesAdmin({ params }: Props) {
 
   const getRowProps = ({ row: status }) => {
     return {
-      onClick: () => browserHistory.push(`/dashboard/statuses/${status.id}`)
+      onclick: () => navigate(`/dashboard/statuses/${status.id}`)
     }
   }
 
-  const handleClose = () => browserHistory.push('/dashboard/statuses')
+  const handleClose = () => navigate('/dashboard/statuses')
 
   const handleDeleteStatus = () => {
     if (!selectedStatus) {
@@ -165,7 +168,7 @@ export default function DealStatusesAdmin({ params }: Props) {
           <Button
             color="primary"
             variant="contained"
-            onClick={() => browserHistory.push('/dashboard/statuses/new')}
+            onClick={() => navigate('/dashboard/statuses/new')}
           >
             Create New Status
           </Button>
@@ -206,3 +209,5 @@ export default function DealStatusesAdmin({ params }: Props) {
     </PageLayout>
   )
 }
+
+export default withRouter(DealStatusesAdmin)
