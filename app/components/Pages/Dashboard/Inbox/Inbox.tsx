@@ -1,13 +1,14 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 
 import { Grid, Theme, Divider, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { mdiEmailOutline } from '@mdi/js'
 import classNames from 'classnames'
 import { useSelector } from 'react-redux'
-import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { useNavigate } from '@app/hooks/use-navigate'
+import { WithRouterProps } from '@app/routes/types'
 import AddAccountButton from '@app/views/components/AddAccountButton'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import GlobalPageLayout from 'components/GlobalPageLayout'
@@ -18,7 +19,6 @@ import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
 import InboxEmailThread from './components/InboxEmailThread'
 import InboxEmailThreadList from './components/InboxEmailThreadList'
 import InboxZeroState from './components/ZeroState'
-import setSelectedEmailThreadId from './helpers/set-selected-email-thread-id'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -55,6 +55,7 @@ const useStyles = makeStyles(
 )
 
 export default function Inbox({ params }: WithRouterProps) {
+  const navigate = useNavigate()
   const selectedEmailThreadId: UUID | undefined = params.emailThreadId
 
   const unreadEmailThreadsCount = useSelector((state: IAppState) =>
@@ -84,8 +85,19 @@ export default function Inbox({ params }: WithRouterProps) {
   }, [])
 
   const handleInboxEmailThreadClose = useCallback(
-    () => setSelectedEmailThreadId(undefined),
-    []
+    () => navigate('/dashboard/inbox'),
+    [navigate]
+  )
+
+  const setSelectedEmailThreadId = useCallback(
+    (selectedEmailThreadId: UUID | undefined) => {
+      navigate(
+        selectedEmailThreadId
+          ? `/dashboard/inbox/${selectedEmailThreadId}`
+          : '/dashboard/inbox'
+      )
+    },
+    [navigate]
   )
 
   const classes = useStyles()
