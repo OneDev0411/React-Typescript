@@ -85,7 +85,7 @@ const MarketingTabs = ({
               key={linkItem.value as string}
               to={linkItem.link}
               value={section.key}
-              label={linkItem.title}
+              label={categories[section.key]?.label || linkItem.title}
             />
           ))
         }

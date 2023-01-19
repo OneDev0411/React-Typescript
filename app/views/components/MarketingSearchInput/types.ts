@@ -1,5 +1,6 @@
 export interface TemplateTypeWithMedium {
   type: IMarketingTemplateType
+  label: string
   medium?: IMarketingTemplateMedium
 }
 

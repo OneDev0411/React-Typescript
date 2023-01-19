@@ -1,7 +1,8 @@
+import { MouseEvent } from 'react'
+
 import { Grid, makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import { useNavigate } from '@app/hooks/use-navigate'
-import { SectionItem } from 'components/PageSideNav/types'
 import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -36,17 +37,17 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface Props {
-  data: SectionItem
+  link: string
+  title: string
   mediums: IMarketingTemplateMedium[]
   onClose: () => void
 }
 
-function Item({ data, mediums, onClose }: Props) {
+function Item({ title, link, mediums, onClose }: Props) {
   const classes = useStyles()
   const navigate = useNavigate()
-  const { title, link } = data
 
-  const navigateTo = (e, link) => {
+  const navigateTo = (e: MouseEvent, link: string) => {
     e.preventDefault()
 
     if (!link) {

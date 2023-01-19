@@ -7,7 +7,7 @@ export enum SectionsEnum {
 
 export interface SectionItem {
   title: string
-  value?: IMarketingTemplateType | IMarketingTemplateType[]
+  value?: IMarketingTemplateType
   link: string
   isIndex?: boolean
   icon?: React.ComponentType

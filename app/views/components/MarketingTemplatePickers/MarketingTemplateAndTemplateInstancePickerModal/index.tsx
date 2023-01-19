@@ -14,7 +14,9 @@ import { useActiveBrandId } from '@app/hooks/brand'
 import { getBrandMarketingCategories } from '@app/models/brand/get-brand-marketing-categories'
 import { sortAlphabetically } from '@app/utils/helpers'
 import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
-import MarketingSearchInput from '@app/views/components/MarketingSearchInput'
+import MarketingSearchInput, {
+  TemplateTypeWithMedium
+} from '@app/views/components/MarketingSearchInput'
 import MarketingTemplateAndTemplateInstancePicker from '@app/views/components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePicker'
 import {
   MarketingTemplateAndTemplateInstancePickerProps,
@@ -53,8 +55,7 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
     useState<Optional<MyDesignsOrTemplateType>>(undefined)
 
   const activeBrandId = useActiveBrandId()
-  const [categories, setCategories] =
-    useState<Optional<IMarketingTemplateType[]>>(undefined)
+  const [categories, setCategories] = useState<TemplateTypeWithMedium[]>([])
 
   useEffect(() => {
     // Load accurate (non-empty) categories list
@@ -69,19 +70,29 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
           }
         )
 
-        const loadedCategories = Object.keys(brandMarketingCategories).sort(
-          (a: IMarketingTemplateType, b: IMarketingTemplateType) =>
-            sortAlphabetically(getTemplateTypeLabel(a), getTemplateTypeLabel(b))
-        ) as IMarketingTemplateType[]
+        const loadedCategories = brandMarketingCategories
+          .sort((a, b) => sortAlphabetically(a.label, b.label))
+          .map(category => ({
+            type: category.template_type,
+            label: category.label
+          }))
 
         setCategories(loadedCategories)
-        setSelectedTab(loadedCategories[0])
+        setSelectedTab(loadedCategories[0].type)
       } catch (e) {
         // use template types as a plan B when we can load accurate categories list
         setCategories(
-          pickerProps.templateTypes.sort((a, b) =>
-            sortAlphabetically(getTemplateTypeLabel(a), getTemplateTypeLabel(b))
-          )
+          pickerProps.templateTypes
+            .sort((a, b) =>
+              sortAlphabetically(
+                getTemplateTypeLabel(a),
+                getTemplateTypeLabel(b)
+              )
+            )
+            .map(type => ({
+              type,
+              label: getTemplateTypeLabel(type)
+            }))
         )
         console.log(e)
       }
@@ -109,7 +120,7 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
           {categories && categories.length > 1 && (
             <div className={classes.searchContainer}>
               <MarketingSearchInput
-                types={categories.map(type => ({ type }))}
+                types={categories}
                 onSelect={({ type }) => setSelectedTab(type)}
               />
             </div>
@@ -118,7 +129,7 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
       </DialogTitle>
       <DialogContent ref={dialogRef}>
         <MarketingTemplateAndTemplateInstancePicker
-          tabs={categories}
+          tabs={categories.map(category => category.type)}
           {...pickerProps}
           selectedTab={selectedTab}
           onSelectTab={setSelectedTab}

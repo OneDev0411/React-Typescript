@@ -440,10 +440,15 @@ function getSerializedValue(value?: string | string[]): string {
   return Array.isArray(value) ? value.join(',') : value
 }
 
-export function useMarketingCenterSections({ types }): SectionCollection {
+export function useMarketingCenterSections(
+  types: Nullable<string | string[]>,
+  categories?: IMarketingTemplateCategories
+): SectionCollection {
   const activeTeam = useUnsafeActiveTeam()
   const newSections: SectionCollection = {}
   const sectionKeys = Object.keys(ALL_SECTIONS)
+
+  const activeType = types ? getSerializedValue(types) : null
 
   sectionKeys.forEach(key => {
     const section = ALL_SECTIONS[key]
@@ -457,17 +462,24 @@ export function useMarketingCenterSections({ types }): SectionCollection {
       return
     }
 
-    const activeType = section.items.find(
-      item => getSerializedValue(item.value) === types
+    const activeSection = section.items.find(
+      item => getSerializedValue(item.value) === activeType
     )
+
+    const activeTypeCategory =
+      categories && activeSection?.value && categories[activeSection.value]
+
+    const activeTypeTitle = activeTypeCategory
+      ? activeTypeCategory.label
+      : activeSection?.title || ''
 
     const newSection: ExtendedSection = {
       ...section,
       items: getPrivilegedSectionItems(activeTeam, section),
-      title: activeType
-        ? `${section.title}: ${activeType.title}`
+      title: activeSection
+        ? `${section.title}: ${activeTypeTitle}`
         : section.title,
-      value: activeType ? getSerializedValue(activeType.value) : null
+      value: activeSection ? getSerializedValue(activeSection.value) : null
     }
 
     newSections[key] = newSection

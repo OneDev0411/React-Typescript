@@ -26,17 +26,24 @@ export const SectionMegaMenu = ({ data, categories, onClose }: Props) => {
   const classes = useStyles()
   const { items } = data
 
-  const sanitizeMediums = (item: SectionItem) => {
+  const sanitizeMediums = (item: SectionItem): IMarketingTemplateMedium[] => {
     const mediumKey = Array.isArray(item.value) ? item.title : item.value
 
     if (mediumKey && categories[mediumKey]) {
-      return categories[mediumKey]
+      return categories[mediumKey]?.mediums || []
     }
 
     return []
   }
 
   const sortItemsByTitleAlphabetically = (a: SectionItem, b: SectionItem) => {
+    if (a.value && b.value) {
+      return compare(
+        categories[a.value]?.label.toLowerCase(),
+        categories[b.value]?.label.toLowerCase()
+      )
+    }
+
     return compare(a.title.toLowerCase(), b.title.toLowerCase())
   }
 
@@ -45,10 +52,14 @@ export const SectionMegaMenu = ({ data, categories, onClose }: Props) => {
       {items.sort(sortItemsByTitleAlphabetically).map((item, i) => {
         const currentSectionMediums = sanitizeMediums(item)
 
+        const category = item.value && categories[item.value]
+        const title = category ? category.label : item.title
+
         return (
           <Item
             key={i}
-            data={item}
+            link={item.link}
+            title={title}
             mediums={currentSectionMediums}
             onClose={onClose}
           />
