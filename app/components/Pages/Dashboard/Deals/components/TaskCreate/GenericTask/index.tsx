@@ -66,6 +66,7 @@ export function GenericTask({ onCreateTask }: Props) {
           helperText="Accurate titles help with context when glancing through your
         checklist."
           onChange={e => setTaskTitle(e.target.value)}
+          autoFocus
         />
 
         <Box my={6} display="flex" flexDirection="row-reverse">
