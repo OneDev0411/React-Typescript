@@ -7,6 +7,8 @@ import isEmpty from 'lodash/isEmpty'
 import { connect, useDispatch } from 'react-redux'
 import { useTitle, useEffectOnce } from 'react-use'
 
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { selectActiveBrandId } from '@app/selectors/brand'
 import { getContextsByBrand } from 'actions/deals'
 import LoadingContainer from 'components/LoadingContainer'
@@ -23,7 +25,7 @@ import CategoryItem from '../components/CategoryItem'
 import EmptyState from '../components/EmptyState'
 import NewCategoryModal from '../components/NewCategory'
 
-interface Props {
+interface Props extends RouteComponentProps {
   activeBrandId: UUID
   isFetching: boolean
   isEmpty: boolean
@@ -204,4 +206,4 @@ const mapStateToProps = (state: IAppState) => {
   }
 }
 
-export default connect(mapStateToProps)(DealContext)
+export default withRouter(connect(mapStateToProps)(DealContext))
