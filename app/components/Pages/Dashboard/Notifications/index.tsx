@@ -1,12 +1,15 @@
 import { useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { useTitle } from 'react-use'
+import { useEffectOnce, useTitle } from 'react-use'
 
 import { useNavigate } from '@app/hooks/use-navigate'
 import { WithRouterProps } from '@app/routes/types'
 import { withRouter } from '@app/routes/with-router'
-import { markNotificationAsSeen } from 'actions/notifications'
+import {
+  getAllNotifications,
+  markNotificationAsSeen
+} from '@app/store_actions/notifications'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import { IAppState } from 'reducers/index'
@@ -26,6 +29,11 @@ function Notifications({ params }: WithRouterProps) {
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
   const navigate = useNavigate()
+
+  useEffectOnce(() => {
+    dispatch(getAllNotifications())
+  })
+
   const isFetching = useSelector((store: IAppState) =>
     selectNotificationIsFetching(store.globalNotifications)
   )
