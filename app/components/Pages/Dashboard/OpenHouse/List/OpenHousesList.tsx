@@ -7,6 +7,7 @@ import { useTitle, useEffectOnce } from 'react-use'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
 import { useActiveBrandSettings } from '@app/hooks/brand/use-active-brand-settings'
+import { withRouter } from '@app/routes/with-router'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles/default'
 import Acl from 'components/Acl'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
@@ -277,4 +278,4 @@ function OpenHousesList() {
   )
 }
 
-export default OpenHousesList
+export default withRouter(OpenHousesList)
