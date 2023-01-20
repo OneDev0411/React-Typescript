@@ -47,13 +47,7 @@ const useStyles = makeStyles(
   }
 )
 
-interface Props extends RouteComponentProps {
-  params: {
-    id: UUID
-  }
-}
-
-function DealStatusesAdmin({ params }: Props) {
+function DealStatusesAdmin({ params }: RouteComponentProps<{ id: UUID }>) {
   const gridClasses = useGridStyles()
   const classes = useStyles()
   const dispatch = useDispatch()
