@@ -54,7 +54,7 @@ export const initialValueGenerator = (
     all_day: false,
     allDay: false,
     reminder,
-    task_type: { title: 'Call', value: 'Call' },
+    task_type: { title: 'Todo', value: 'Todo' },
     title
   }
 }
