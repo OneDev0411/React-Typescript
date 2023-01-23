@@ -19,7 +19,7 @@ import {
 } from 'reducers/notifications'
 import { selectUser } from 'selectors/user'
 
-import useNotificationsBadgesContext from '../SideNav/notificationsBadgesContext/useNotificationsBadgesContext'
+import useNotificationBadgesContext from '../SideNav/notificationBadgesContext/useNotificationBadgesContext'
 
 import { CrmEvents } from './CrmEvents'
 import EmptyState from './EmptyState'
@@ -30,7 +30,7 @@ function Notifications({ params }: WithRouterProps) {
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
   const navigate = useNavigate()
-  const { decreaseBadge, badges } = useNotificationsBadgesContext()
+  const { decreaseBadge, badges } = useNotificationBadgesContext()
 
   useEffectOnce(() => {
     dispatch(getAllNotifications())

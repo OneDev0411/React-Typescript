@@ -41,7 +41,7 @@ import { getEmailThread } from 'models/email/get-email-thread'
 import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
 import { getNameInitials } from 'utils/helpers'
 
-import useNotificationsBadgesContext from '../../../SideNav/notificationsBadgesContext/useNotificationsBadgesContext'
+import useNotificationBadgesContext from '../../../SideNav/notificationBadgesContext/useNotificationBadgesContext'
 import useEmailThreadArchiver from '../../helpers/use-email-thread-archiver'
 import useEmailThreadDeleter from '../../helpers/use-email-thread-deleter'
 import useEmailThreadEvents from '../../helpers/use-email-thread-events'
@@ -73,7 +73,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   const dispatch = useDispatch()
   const classes = useStyles()
   const theme = useTheme<Theme>()
-  const { decreaseBadge } = useNotificationsBadgesContext()
+  const { decreaseBadge } = useNotificationBadgesContext()
 
   const fetchEmailThread = useCallback(
     async (skipMarkingAsRead: boolean = false) => {

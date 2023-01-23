@@ -10,10 +10,10 @@ import {
   markAllNotificationsAsSeen,
   deleteNewNotifications
 } from '../../../../../store_actions/notifications'
-import useNotificationsBadgesContext from '../../SideNav/notificationsBadgesContext/useNotificationsBadgesContext'
+import useNotificationBadgesContext from '../../SideNav/notificationBadgesContext/useNotificationBadgesContext'
 
 const NotificationsHeader = props => {
-  const { setBadge } = useNotificationsBadgesContext()
+  const { setBadge } = useNotificationBadgesContext()
 
   return (
     <PageLayout.Header title="Notifications">

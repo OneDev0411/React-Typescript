@@ -35,7 +35,7 @@ import PoweredBy from './components/PoweredBy'
 import SideNavAccordion from './components/SideNavAccordion'
 import { SideNavToggleButton } from './components/SideNavToggleButton'
 import { UserMenu } from './components/UserMenu'
-import useNotificationsBadgesContext from './notificationsBadgesContext/useNotificationsBadgesContext'
+import useNotificationBadgesContext from './notificationBadgesContext/useNotificationBadgesContext'
 import { AccordionMenu, BaseAccordionMenu, ExpandedMenu } from './types'
 import { appSidenavWidth, scrollableAreaShadowColor } from './variables'
 
@@ -75,7 +75,7 @@ function SideNavMenu(props: WithRouterProps) {
   const user = useSelector(selectUserUnsafe)
   const brand = useUnsafeActiveBrand()
 
-  const { badges } = useNotificationsBadgesContext()
+  const { badges } = useNotificationBadgesContext()
 
   const { isActive: isIntercomActive } = useSelector(selectIntercom)
   const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()

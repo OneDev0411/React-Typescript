@@ -16,7 +16,7 @@ import fecha from 'fecha'
 import { useSelector } from 'react-redux'
 import useBoolean from 'react-use/lib/useBoolean'
 
-import useNotificationsBadgesContext from '@app/components/Pages/Dashboard/SideNav/notificationsBadgesContext/useNotificationsBadgesContext'
+import useNotificationBadgesContext from '@app/components/Pages/Dashboard/SideNav/notificationBadgesContext/useNotificationBadgesContext'
 import { Avatar } from 'components/Avatar'
 import CampaignStatus from 'components/CampaignStatus'
 import { Iframe } from 'components/Iframe'
@@ -97,7 +97,7 @@ export function EmailThreadItem({
   ...props
 }: Props) {
   const classes = useStyles(props)
-  const { decreaseBadge, increaseBadge } = useNotificationsBadgesContext()
+  const { decreaseBadge, increaseBadge } = useNotificationBadgesContext()
 
   const [isResponseOpen, setIsResponseOpen] = useState(false)
   const [trimQuotedContent, toggleTrimQuotedContent] = useBoolean(true)

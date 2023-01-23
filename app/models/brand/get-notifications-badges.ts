@@ -1,8 +1,8 @@
 import Fetch from '../../services/fetch'
 
-export async function getNotificationsBadges(
+export async function getNotificationBadges(
   brandId: UUID
-): Promise<INotificationsBadges> {
+): Promise<INotificationBadges> {
   try {
     const response = await new Fetch().get(
       `/brands/${brandId}/notifications/badges`

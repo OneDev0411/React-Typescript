@@ -13,7 +13,7 @@ import config from '../config/public'
 
 import { AppTheme } from './AppTheme'
 // This is our new confirmation modal. use this please.
-import { NotificationsBadgesContextProvider } from './components/Pages/Dashboard/SideNav/notificationsBadgesContext/Provider'
+import { NotificationBadgesContextProvider } from './components/Pages/Dashboard/SideNav/notificationBadgesContext/Provider'
 import ReduxConfirmationModal from './components/Partials/Confirmation'
 import { Notifications } from './Notifications'
 // Routes config
@@ -42,7 +42,7 @@ const App = () => {
           appId={config.intercom.app_id}
           onShow={() => dispatch(activateIntercom())}
         >
-          <NotificationsBadgesContextProvider brandId={brandId}>
+          <NotificationBadgesContextProvider brandId={brandId}>
             <GlobalActionsProvider>
               <ConfirmationModalProvider>
                 <Router history={browserHistory}>{routes}</Router>
@@ -53,7 +53,7 @@ const App = () => {
 
               <Notifications />
             </GlobalActionsProvider>
-          </NotificationsBadgesContextProvider>
+          </NotificationBadgesContextProvider>
         </IntercomProvider>
       </AppTheme>
     </ReactQueryProvider>
