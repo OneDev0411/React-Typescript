@@ -117,7 +117,7 @@ function DealStatusesAdmin({ params }: RouteComponentProps<{ id: UUID }>) {
 
   const getRowProps = ({ row: status }) => {
     return {
-      onclick: () => navigate(`/dashboard/statuses/${status.id}`)
+      onClick: () => navigate(`/dashboard/statuses/${status.id}`)
     }
   }
 
