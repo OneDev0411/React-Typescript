@@ -1,5 +1,4 @@
-declare interface INotificationsBadges
-  extends IModel<'notification_badge_stats'> {
+declare interface INotificationsBadges {
   deal_notifications: number
   deal_need_attentions: number
   unread_email_threads: number

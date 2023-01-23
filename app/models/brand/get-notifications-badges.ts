@@ -4,7 +4,7 @@ export async function getNotificationsBadges(
   brandId: UUID
 ): Promise<INotificationsBadges> {
   try {
-    const response = await new Fetch().put(
+    const response = await new Fetch().get(
       `/brands/${brandId}/notifications/badges`
     )
 
