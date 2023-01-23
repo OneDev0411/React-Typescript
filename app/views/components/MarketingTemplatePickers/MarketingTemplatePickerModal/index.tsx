@@ -10,6 +10,7 @@ import {
   makeStyles
 } from '@material-ui/core'
 
+import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
 import MarketingSearchInput from '@app/views/components/MarketingSearchInput'
 import MarketingTemplatePicker from '@app/views/components/MarketingTemplatePickers/MarketingTemplatePicker'
 import { MarketingTemplatePickerProps } from '@app/views/components/MarketingTemplatePickers/types'
@@ -66,7 +67,8 @@ export default function MarketingTemplatePickerModal({
             <div className={classes.searchContainer}>
               <MarketingSearchInput
                 types={marketingTemplatePickerProps.templateTypes.map(type => ({
-                  type
+                  type,
+                  label: getTemplateTypeLabel(type)
                 }))}
                 onSelect={({ type }) => setSelectedTab(type)}
               />

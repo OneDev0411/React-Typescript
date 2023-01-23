@@ -51,7 +51,7 @@ interface Props {
 export default function TemplateTypesSelect({ items, value, onSelect }: Props) {
   const classes = useStyles()
 
-  const sections = useMarketingCenterSections({ types: items })
+  const sections = useMarketingCenterSections(items)
   const valueToLabelMapping = getValueToLabelMapping(sections)
 
   const handleChange = (e: React.ChangeEvent<{ value: string }>) => {

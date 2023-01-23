@@ -51,15 +51,20 @@ export function useMarketingCenterCategories(
     setIsLoading(true)
 
     try {
-      const loadedMediums = await getBrandMarketingCategories(brandId, {
+      const loadedCategories = await getBrandMarketingCategories(brandId, {
         mediums,
         templateTypes
       })
 
       const orderedMediums: IMarketingTemplateCategories = {}
 
-      Object.keys(loadedMediums).forEach(key => {
-        orderedMediums[key] = sortMediums(loadedMediums[key])
+      loadedCategories.forEach(category => {
+        orderedMediums[category.template_type] = {
+          label: category.label,
+          mediums: sortMediums(
+            Object.keys(category.medium_stats) as IMarketingTemplateMedium[]
+          )
+        }
       })
 
       setCategories(orderedMediums)

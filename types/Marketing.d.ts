@@ -40,9 +40,22 @@ declare interface ITemplateAsset extends IModel<'template_asset'> {
   file: IFile
 }
 
-declare type IMarketingTemplateCategories = {
-  [key: IMarketingTemplateType]: IMarketingTemplateMedium[]
+declare type IMarketingTemplateCategoryWithStats = {
+  template_type: IMarketingTemplateType
+  label: string
+  type: 'template_type'
+  medium_stats: Partial<Record<IMarketingTemplateMedium, number>>
 }
+
+declare type IMarketingTemplateCategories = Partial<
+  Record<
+    IMarketingTemplateType,
+    {
+      label: string
+      mediums: IMarketingTemplateMedium[]
+    }
+  >
+>
 
 declare type IMarketingTemplateMedium =
   | 'Email'

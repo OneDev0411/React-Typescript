@@ -169,10 +169,7 @@ export function AddToMarketingCenterButton({
                 return null
               }
 
-              const value =
-                typeof category.value === 'string'
-                  ? category.value
-                  : category.value[category.value.length - 1]
+              const value = category.value
 
               return (
                 <ListItem

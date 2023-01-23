@@ -1,15 +1,12 @@
 import { useMemo } from 'react'
 
 import { useMarketingCenterSectionItems } from '@app/hooks/use-marketing-center-section-items'
-
-interface TypeWithMedium {
-  type: IMarketingTemplateType
-  medium?: IMarketingTemplateMedium
-}
+import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
+import { TemplateTypeWithMedium } from '@app/views/components/MarketingSearchInput/types'
 
 export function useMarketingTemplateTypesWithMediums(
   categories: IMarketingTemplateCategories
-): TypeWithMedium[] {
+): TemplateTypeWithMedium[] {
   const sectionItems = useMarketingCenterSectionItems()
 
   const templateTypes = useMemo(() => {
@@ -25,14 +22,15 @@ export function useMarketingTemplateTypesWithMediums(
   return useMemo(
     () =>
       templateTypes.flatMap(templateType => {
-        const currentTypeMediums = categories[
-          templateType
-        ] as IMarketingTemplateMedium[]
+        const currentTypeMediums = categories[templateType]?.mediums || []
 
         // Only categories with content should be displayed
-        if (currentTypeMediums?.length) {
+        if (currentTypeMediums.length) {
           return currentTypeMediums.map(medium => ({
             type: templateType,
+            label:
+              categories[templateType]?.label ||
+              getTemplateTypeLabel(templateType),
             medium
           }))
         }

@@ -94,7 +94,6 @@ export function MarketingLayout({
   ] = useState<boolean>(false)
 
   const { params, location } = props
-  const sections = useMarketingCenterSections(params)
 
   const templateTypes = useMemo(() => {
     return (
@@ -139,6 +138,8 @@ export function MarketingLayout({
     isLoading: isLoadingCategories,
     refetch: refetchCategories
   } = useMarketingCenterCategories(activeBrandId)
+
+  const sections = useMarketingCenterSections(params.types, categories)
 
   const templateTypesWithMediums =
     useMarketingTemplateTypesWithMediums(categories)
