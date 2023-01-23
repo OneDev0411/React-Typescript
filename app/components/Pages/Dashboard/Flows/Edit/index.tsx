@@ -194,7 +194,12 @@ function Edit(props: WithRouterProps) {
         return
       }
 
-      await editBrandFlowStep(activeBrandId, flow.id, stepId, step)
+      const stepData = {
+        ...step,
+        description: step.description || ''
+      }
+
+      await editBrandFlowStep(activeBrandId, flow.id, stepId, stepData)
 
       loadFlowData(true)
     },

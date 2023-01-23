@@ -18,6 +18,7 @@ const getBasicInitialValues = (
   if (!step) {
     return {
       title: '',
+      description: '',
       wait_for: defaultWaitForValue,
       time: '08:00:00',
       event_type: ''
