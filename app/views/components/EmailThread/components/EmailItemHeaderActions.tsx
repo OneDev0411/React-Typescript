@@ -171,7 +171,7 @@ export function EmailItemHeaderActions(
               )}
             </ListItemIcon>
             <ListItemText>
-              Mark as {props.email.isRead ? 'unread' : 'read'}
+              Mark as 1 {props.email.isRead ? 'unread' : 'read'}
             </ListItemText>
           </MenuItem>
         </Tooltip>

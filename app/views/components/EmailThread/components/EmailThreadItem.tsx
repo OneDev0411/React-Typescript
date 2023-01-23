@@ -16,6 +16,7 @@ import fecha from 'fecha'
 import { useSelector } from 'react-redux'
 import useBoolean from 'react-use/lib/useBoolean'
 
+import useNotificationsBadgesContext from '@app/components/Pages/Dashboard/SideNav/notificationsBadgesContext/useNotificationsBadgesContext'
 import { Avatar } from 'components/Avatar'
 import CampaignStatus from 'components/CampaignStatus'
 import { Iframe } from 'components/Iframe'
@@ -96,6 +97,7 @@ export function EmailThreadItem({
   ...props
 }: Props) {
   const classes = useStyles(props)
+  const { decreaseBadge, increaseBadge } = useNotificationsBadgesContext()
 
   const [isResponseOpen, setIsResponseOpen] = useState(false)
   const [trimQuotedContent, toggleTrimQuotedContent] = useBoolean(true)
@@ -125,6 +127,17 @@ export function EmailThreadItem({
     !!email.campaign?.microsoft_credential
   const campaignStatus = email.campaign && getStatusFromCampaign(email.campaign)
   const emailAvatar = getEmailAvatar(email.from, user)
+
+  const handleChangeReadStatus = () => {
+    updateEmailReadStatus(email, !email.isRead)
+
+    if (email.isRead) {
+      increaseBadge('unread_email_threads')
+    } else {
+      console.log('1')
+      decreaseBadge('unread_email_threads')
+    }
+  }
 
   return (
     <div className={classes.root}>
@@ -172,9 +185,7 @@ export function EmailThreadItem({
                 onReply={() => openResponse('reply')}
                 onReplyAll={() => openResponse('replyAll')}
                 onForward={() => openResponse('forward')}
-                onChangeReadStatus={() =>
-                  updateEmailReadStatus(email, !email.isRead)
-                }
+                onChangeReadStatus={handleChangeReadStatus}
               />
             )}
           </Box>
