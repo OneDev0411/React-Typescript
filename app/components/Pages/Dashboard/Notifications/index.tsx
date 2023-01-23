@@ -14,11 +14,12 @@ import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import { IAppState } from 'reducers/index'
 import {
-  selectNotificationNewCount,
   selectNotifications,
   selectNotificationIsFetching
 } from 'reducers/notifications'
 import { selectUser } from 'selectors/user'
+
+import useNotificationsBadgesContext from '../SideNav/notificationsBadgesContext/useNotificationsBadgesContext'
 
 import { CrmEvents } from './CrmEvents'
 import EmptyState from './EmptyState'
@@ -29,6 +30,7 @@ function Notifications({ params }: WithRouterProps) {
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
   const navigate = useNavigate()
+  const { decreaseBadge, badges } = useNotificationsBadgesContext()
 
   useEffectOnce(() => {
     dispatch(getAllNotifications())
@@ -40,16 +42,16 @@ function Notifications({ params }: WithRouterProps) {
   const notifications = useSelector((store: IAppState) =>
     selectNotifications(store.globalNotifications)
   )
-  const unreadNotificationsCount = useSelector((store: IAppState) =>
-    selectNotificationNewCount(store.globalNotifications)
-  )
+
   const [selectedEvent, setSelectedEvent] = useState<UUID | null>(
     (params.type && params.type === 'crm' && params.id) || null
   )
 
   const documentTitle = () => {
     const counter =
-      unreadNotificationsCount > 0 ? `: ${unreadNotificationsCount} unread` : ''
+      badges.unread_email_threads > 0
+        ? `: ${badges.unread_email_threads} unread`
+        : ''
 
     return `Notifications${counter} | Rechat`
   }
@@ -66,6 +68,10 @@ function Notifications({ params }: WithRouterProps) {
 
   const handleNotifClick = (notification: INotification) => {
     dispatch(markNotificationAsSeen(notification.id))
+
+    if (!notification.seen) {
+      decreaseBadge('generic')
+    }
 
     switch (notification.notification_type) {
       case 'DealRoleReactedToEnvelope':

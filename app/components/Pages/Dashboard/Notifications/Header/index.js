@@ -10,24 +10,30 @@ import {
   markAllNotificationsAsSeen,
   deleteNewNotifications
 } from '../../../../../store_actions/notifications'
+import useNotificationsBadgesContext from '../../SideNav/notificationsBadgesContext/useNotificationsBadgesContext'
 
-const NotificationsHeader = props => (
-  <PageLayout.Header title="Notifications">
-    <Box textAlign="right">
-      <Button
-        variant="outlined"
-        size="large"
-        disabled={props.isFetching}
-        onClick={() => {
-          props.dispatch(markAllNotificationsAsSeen())
-          props.dispatch(deleteNewNotifications())
-        }}
-      >
-        Mark all as read
-      </Button>
-    </Box>
-  </PageLayout.Header>
-)
+const NotificationsHeader = props => {
+  const { setBadge } = useNotificationsBadgesContext()
+
+  return (
+    <PageLayout.Header title="Notifications">
+      <Box textAlign="right">
+        <Button
+          variant="outlined"
+          size="large"
+          disabled={props.isFetching}
+          onClick={() => {
+            props.dispatch(markAllNotificationsAsSeen())
+            props.dispatch(deleteNewNotifications())
+            setBadge('generic', 0)
+          }}
+        >
+          Mark all as read
+        </Button>
+      </Box>
+    </PageLayout.Header>
+  )
+}
 
 export default connect(({ globalNotifications }) => ({
   isFetching: selectNotificationIsFetching(globalNotifications)
