@@ -6,6 +6,7 @@ import cn from 'classnames'
 import { Draggable, DraggableProvided } from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 
+import useNotificationBadgesContext from '@app/components/Pages/Dashboard/SideNav/notificationBadgesContext/useNotificationBadgesContext'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import {
@@ -50,6 +51,7 @@ export function TaskRow({
   const queryParamSelectTaskId = useTaskSelect(task)
 
   const dispatch = useDispatch()
+  const { reload: reloadNotificationBadges } = useNotificationBadgesContext()
   const [checklistBulkActionsContext] = useChecklistActionsContext()
 
   const [isTaskExpanded, setIsTaskExpanded] = useState(
@@ -82,9 +84,10 @@ export function TaskRow({
     if (task.room.new_notifications > 0) {
       setTimeout(() => {
         dispatch(updateDealNotifications(deal, task.room))
+        reloadNotificationBadges()
       }, 0)
     }
-  }, [deal, task, dispatch])
+  }, [dispatch, task, deal, reloadNotificationBadges])
 
   const isTaskExpandable = useMemo(() => {
     let count = 0

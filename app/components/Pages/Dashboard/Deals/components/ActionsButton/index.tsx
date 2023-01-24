@@ -1,5 +1,5 @@
 // TODO: reimplement is required
-import React from 'react'
+import React, { ComponentType } from 'react'
 
 import { Theme, Tooltip, useTheme } from '@material-ui/core'
 import { mdiChevronDown } from '@mdi/js'
@@ -38,6 +38,10 @@ import {
   getFileEsignAttachments
 } from 'views/utils/deal-files/get-esign-attachments'
 
+import {
+  withNotificationBadge,
+  IWithNotificationBadgeProps
+} from '../../../SideNav/notificationBadgesContext/WithNotificationBadges'
 import MakeVisibleToAdmin from '../../Create/MakeVisibleToAdmin'
 import PdfSplitter from '../../PdfSplitter'
 import UploadManager from '../../UploadManager'
@@ -118,10 +122,12 @@ interface StateProps {
 }
 
 class ActionsButton extends React.Component<
-  Props & StateProps & ContextProps,
+  Props & StateProps & ContextProps & IWithNotificationBadgeProps,
   State
 > {
-  constructor(props: Props & StateProps & ContextProps) {
+  constructor(
+    props: Props & StateProps & ContextProps & IWithNotificationBadgeProps
+  ) {
     super(props)
 
     this.state = {
@@ -172,7 +178,7 @@ class ActionsButton extends React.Component<
 
   private dropzone: any
 
-  handleSelectAction = button => {
+  handleSelectAction = async button => {
     if (button.disabled === true) {
       return false
     }
@@ -224,9 +230,20 @@ class ActionsButton extends React.Component<
       return
     }
 
-    this.actions[type] && this.actions[type](this.props)
+    await (this.actions[type] && this.actions[type](this.props))
 
     this.resetTaskActionMode()
+
+    if (
+      [
+        'approve-task',
+        'decline-task',
+        'notify-task',
+        'remove-task-notification'
+      ].includes(type)
+    ) {
+      this.props.notificationBadges.reload()
+    }
   }
 
   handleCloseMenu = () => this.setState({ isMenuOpen: false })
@@ -276,7 +293,7 @@ class ActionsButton extends React.Component<
     this.updateEmailList(attachments)
   }
 
-  createNeedsAttention = () => {
+  createNeedsAttention = async () => {
     this.setState({ isMakeVisibleToAdminFormOpen: false })
 
     if (this.props.deal.is_draft) {
@@ -284,23 +301,28 @@ class ActionsButton extends React.Component<
         isMakeVisibleToAdminFormOpen: true
       })
 
-      return
+      return Promise.reject()
     }
 
-    this.props.confirmation({
-      message: 'Notify Office to Review?',
-      confirmLabel: 'Notify Office',
-      needsUserEntry: true,
-      inputDefaultValue: '',
-      onConfirm: comment =>
-        notifyOffice(
-          {
-            deal: this.props.deal,
-            task: this.props.task,
-            user: this.props.user
-          },
-          comment
-        )
+    return new Promise((resolve, reject) => {
+      this.props.confirmation({
+        message: 'Notify Office to Review??',
+        confirmLabel: 'Notify Office',
+        needsUserEntry: true,
+        inputDefaultValue: '',
+        onabort: () => reject(),
+        onConfirm: async (comment: unknown) => {
+          await notifyOffice(
+            {
+              deal: this.props.deal,
+              task: this.props.task,
+              user: this.props.user
+            },
+            comment
+          )
+          resolve(null)
+        }
+      })
     })
   }
 
@@ -654,7 +676,10 @@ class ActionsButton extends React.Component<
             onCancel={() =>
               this.setState({ isMakeVisibleToAdminFormOpen: false })
             }
-            onComplete={this.createNeedsAttention}
+            onComplete={async () => {
+              await this.createNeedsAttention()
+              this.props.notificationBadges.reload()
+            }}
           />
         )}
 
@@ -695,7 +720,8 @@ function mapStateToProps(
 }
 
 const withContext =
-  (Component: typeof ActionsButton) => (props: Props & StateProps) => {
+  (Component: ComponentType<Props & StateProps & ContextProps>) =>
+  (props: Props & StateProps) => {
     const [state, dispatch] = useChecklistActionsContext()
     const theme = useTheme<Theme>()
 
@@ -712,4 +738,4 @@ const withContext =
 export default connect(mapStateToProps, {
   setSelectedTask,
   confirmation
-})(withContext(ActionsButton))
+})(withNotificationBadge(withContext(ActionsButton)))

@@ -5,6 +5,7 @@ import { Alert, AlertTitle } from '@material-ui/lab'
 import { mdiLockOutline } from '@mdi/js'
 import { connect } from 'react-redux'
 
+import { withNotificationBadge } from '@app/components/Pages/Dashboard/SideNav/notificationBadgesContext/WithNotificationBadges'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { confirmation } from 'actions/confirmation'
 import { changeTaskStatus, changeNeedsAttention } from 'actions/deals'
@@ -64,6 +65,7 @@ class CommentInput extends React.Component {
     try {
       if (attention_requested !== null) {
         await changeNeedsAttention(deal.id, task.id, attention_requested)
+        this.props.notificationBadges.reload()
       }
 
       if (task_status !== null) {
@@ -152,4 +154,4 @@ export default connect(
     user
   }),
   { changeTaskStatus, changeNeedsAttention, notify, confirmation }
-)(CommentInput)
+)(withNotificationBadge(CommentInput))

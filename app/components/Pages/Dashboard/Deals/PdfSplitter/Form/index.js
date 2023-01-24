@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 import _ from 'underscore'
 
+import { withNotificationBadge } from '@app/components/Pages/Dashboard/SideNav/notificationBadgesContext/WithNotificationBadges'
 import { changeNeedsAttention, addTaskFile } from 'actions/deals'
 import { CheckBoxButton } from 'components/Button/CheckboxButton'
 import { addNotification as notify } from 'components/notification'
@@ -149,11 +150,13 @@ class Form extends React.Component {
     })
 
     if (this.state.notifyOffice) {
-      this.props.changeNeedsAttention(
+      await this.props.changeNeedsAttention(
         this.state.task.deal,
         this.state.task.id,
         true
       )
+
+      this.props.notificationBadges.reload()
     }
 
     this.props.notify({
@@ -274,4 +277,4 @@ export default connect(mapStateToProps, {
   notify,
   changeNeedsAttention,
   addTaskFile
-})(Form)
+})(withNotificationBadge(Form))
