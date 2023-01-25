@@ -10,17 +10,15 @@ import {
   mdiHeadphones,
   mdiHomeCityOutline
 } from '@mdi/js'
-import { useDispatch, useSelector } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
+import { useSelector } from 'react-redux'
 
 import { ACL } from '@app/constants/acl'
 import { useUnsafeActiveBrand } from '@app/hooks/brand'
-import { InboxAction } from '@app/reducers/inbox/types'
+import { useReduxDispatch } from '@app/hooks/use-redux-dispatch'
 import { WithRouterProps } from '@app/routes/types'
 import { withRouter } from '@app/routes/with-router'
 import { selectIntercom } from '@app/selectors/intercom'
 import { selectUserUnsafe } from '@app/selectors/user'
-import { fetchUnreadEmailThreadsCount } from '@app/store_actions/inbox'
 import { activateIntercom } from '@app/store_actions/intercom'
 import { getBrandHelpCenterURL } from '@app/utils/brand'
 import { useAcl } from '@app/views/components/Acl/use-acl'
@@ -75,16 +73,16 @@ function SideNavMenu(props: WithRouterProps) {
   const user = useSelector(selectUserUnsafe)
   const brand = useUnsafeActiveBrand()
 
-  const { badges } = useNotificationBadgesContext()
+  const { badges, reload: reloadNotificationBadgesContext } =
+    useNotificationBadgesContext()
 
   const { isActive: isIntercomActive } = useSelector(selectIntercom)
-  const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
+  const dispatch = useReduxDispatch()
 
-  function handleEmailThreadEvent(): void {
-    dispatch(fetchUnreadEmailThreadsCount())
-  }
-
-  useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
+  useEmailThreadEvents(
+    reloadNotificationBadgesContext,
+    reloadNotificationBadgesContext
+  )
 
   // This is initially implemented for DE because they're using a
   // white-labeled version of help.rechat.com

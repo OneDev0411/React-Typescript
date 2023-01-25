@@ -35,7 +35,6 @@ import NotificationSocket from '@app/services/socket/Notifications'
 import ShowingSocket from '@app/services/socket/showings'
 import { getAttributeDefs } from '@app/store_actions/contacts'
 import { getDeals, searchDeals } from '@app/store_actions/deals'
-import { fetchUnreadEmailThreadsCount } from '@app/store_actions/inbox'
 import { deactivateIntercom } from '@app/store_actions/intercom'
 import getFavorites from '@app/store_actions/listings/favorites/get-favorites'
 import { getAllNotifications } from '@app/store_actions/notifications'
@@ -46,6 +45,7 @@ import EmailVerificationBanner from '@app/views/components/EmailVerificationBann
 import Intercom from '@app/views/components/Intercom'
 
 import { DashboardLayout } from './DashboardLayout'
+import useNotificationBadgesContext from './SideNav/notificationBadgesContext/useNotificationBadgesContext'
 
 type DashboardState = {
   isFetchingDeals: boolean
@@ -75,6 +75,7 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
   useTitle(documentTitle())
 
   const { user, activeTeam } = useLoadUserAndActiveTeam()
+  const { reload: reloadNotificationBadges } = useNotificationBadgesContext()
 
   const { deals, isFetchingDeals, contactsAttributeDefs }: DashboardState =
     useSelector((state: IAppState) => ({
@@ -95,9 +96,8 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
   )
 
   const handleOnlineEvent = useCallback(() => {
-    // update the number of unread emails in Inbox nav link notification badge
-    dispatch(fetchUnreadEmailThreadsCount())
-  }, [dispatch])
+    reloadNotificationBadges()
+  }, [reloadNotificationBadges])
 
   const initializeSockets = (user: IUser) => {
     new NotificationSocket(user)
@@ -168,9 +168,6 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
       dispatch(syncOpenHouseData(user.access_token))
 
       if (hasCrmAccess) {
-        // fetch the number of unread email threads
-        dispatch(fetchUnreadEmailThreadsCount())
-
         window.addEventListener('online', handleOnlineEvent)
       }
 

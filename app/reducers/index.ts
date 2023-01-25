@@ -12,7 +12,6 @@ import data from './data'
 import deals from './deals'
 import { emailTemplates } from './email-templates'
 import globalTriggers, { IGlobalTriggerState } from './global-triggers'
-import { inbox } from './inbox'
 import { intercom } from './intercom'
 import alerts from './listings/alerts'
 import favorites from './listings/favorites'
@@ -42,8 +41,6 @@ const appReducer = combineReducers({
   intercom,
   confirmation,
   globalNotifications,
-  inbox,
-
   /* deals reducers */
   deals,
 
