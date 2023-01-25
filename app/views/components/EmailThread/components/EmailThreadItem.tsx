@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useMemo, useState } from 'react'
 
 import {
@@ -97,7 +96,8 @@ export function EmailThreadItem({
   ...props
 }: Props) {
   const classes = useStyles(props)
-  const { decreaseBadge, increaseBadge } = useNotificationBadgesContext()
+  const { decreaseBadgeCounter, increaseBadgeCounter } =
+    useNotificationBadgesContext()
 
   const [isResponseOpen, setIsResponseOpen] = useState(false)
   const [trimQuotedContent, toggleTrimQuotedContent] = useBoolean(true)
@@ -132,10 +132,9 @@ export function EmailThreadItem({
     updateEmailReadStatus(email, !email.isRead)
 
     if (email.isRead) {
-      increaseBadge('unread_email_threads')
+      increaseBadgeCounter('unread_email_threads')
     } else {
-      console.log('1')
-      decreaseBadge('unread_email_threads')
+      decreaseBadgeCounter('unread_email_threads')
     }
   }
 

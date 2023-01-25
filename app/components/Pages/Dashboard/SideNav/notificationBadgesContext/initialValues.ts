@@ -10,7 +10,7 @@ export const initialNotificationBadgesContextValue = {
   badges: initialNotificationBadges,
   reload: () => {},
   resetAllBadges: () => {},
-  increaseBadge: (type: keyof INotificationBadges) => {},
-  decreaseBadge: (type: keyof INotificationBadges) => {},
-  setBadge: (type: keyof INotificationBadges, value: number) => {}
+  increaseBadgeCounter: (type: keyof INotificationBadges) => {},
+  decreaseBadgeCounter: (type: keyof INotificationBadges) => {},
+  setBadgeCounter: (type: keyof INotificationBadges, value: number) => {}
 }

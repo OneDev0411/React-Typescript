@@ -22,7 +22,8 @@ export default function useEmailThreadReadStatusSetter(
   }, [emailThreadId, readStatus])
 
   const dispatch = useDispatch()
-  const { decreaseBadge, increaseBadge } = useNotificationBadgesContext()
+  const { decreaseBadgeCounter, increaseBadgeCounter } =
+    useNotificationBadgesContext()
 
   async function setEmailThreadReadStatus(status: boolean): Promise<boolean> {
     if (
@@ -42,9 +43,9 @@ export default function useEmailThreadReadStatusSetter(
       setSettingEmailThreadReadStatus(false)
 
       if (status) {
-        decreaseBadge('unread_email_threads')
+        decreaseBadgeCounter('unread_email_threads')
       } else {
-        increaseBadge('unread_email_threads')
+        increaseBadgeCounter('unread_email_threads')
       }
 
       return true

@@ -30,21 +30,21 @@ export function NotificationBadgesContextProvider({
     setBadges(initialNotificationBadges)
   }
 
-  const increaseBadge = (type: keyof INotificationBadges) => {
+  const increaseBadgeCounter = (type: keyof INotificationBadges) => {
     setBadges(oldBadge => ({
       ...oldBadge,
       [type]: oldBadge[type] + 1
     }))
   }
 
-  const decreaseBadge = (type: keyof INotificationBadges) => {
+  const decreaseBadgeCounter = (type: keyof INotificationBadges) => {
     setBadges(oldBadge => ({
       ...oldBadge,
       [type]: Math.max(oldBadge[type] - 1, 0)
     }))
   }
 
-  const setBadge = (type: keyof INotificationBadges, value: number) => {
+  const setBadgeCounter = (type: keyof INotificationBadges, value: number) => {
     setBadges(oldBadge => ({
       ...oldBadge,
       [type]: Math.max(value, 0)
@@ -57,9 +57,9 @@ export function NotificationBadgesContextProvider({
         badges,
         reload: loadNotificationBadges,
         resetAllBadges,
-        increaseBadge,
-        decreaseBadge,
-        setBadge
+        increaseBadgeCounter,
+        decreaseBadgeCounter,
+        setBadgeCounter
       }}
     >
       {children}

@@ -73,7 +73,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   const dispatch = useDispatch()
   const classes = useStyles()
   const theme = useTheme<Theme>()
-  const { decreaseBadge } = useNotificationBadgesContext()
+  const { decreaseBadgeCounter } = useNotificationBadgesContext()
 
   const fetchEmailThread = useCallback(
     async (skipMarkingAsRead: boolean = false) => {
@@ -89,7 +89,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
           if (!skipMarkingAsRead && !emailThread.is_read) {
             try {
               await setEmailThreadsReadStatus([emailThread.id], true)
-              decreaseBadge('unread_email_threads')
+              decreaseBadgeCounter('unread_email_threads')
             } catch (reason) {
               console.error(reason)
               dispatch(
@@ -118,7 +118,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
         setStatus('empty')
       }
     },
-    [decreaseBadge, dispatch, emailThreadId]
+    [decreaseBadgeCounter, dispatch, emailThreadId]
   )
 
   useEffectOnce(() => {

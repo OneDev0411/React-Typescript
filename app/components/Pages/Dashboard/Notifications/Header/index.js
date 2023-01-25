@@ -13,7 +13,7 @@ import {
 import useNotificationBadgesContext from '../../SideNav/notificationBadgesContext/useNotificationBadgesContext'
 
 const NotificationsHeader = props => {
-  const { setBadge } = useNotificationBadgesContext()
+  const { setBadgeCounter } = useNotificationBadgesContext()
 
   return (
     <PageLayout.Header title="Notifications">
@@ -25,7 +25,7 @@ const NotificationsHeader = props => {
           onClick={() => {
             props.dispatch(markAllNotificationsAsSeen())
             props.dispatch(deleteNewNotifications())
-            setBadge('generic', 0)
+            setBadgeCounter('generic', 0)
           }}
         >
           Mark all as read

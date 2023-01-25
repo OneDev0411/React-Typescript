@@ -30,7 +30,7 @@ function Notifications({ params }: WithRouterProps) {
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
   const navigate = useNavigate()
-  const { decreaseBadge, badges } = useNotificationBadgesContext()
+  const { decreaseBadgeCounter, badges } = useNotificationBadgesContext()
 
   useEffectOnce(() => {
     dispatch(getAllNotifications())
@@ -70,7 +70,7 @@ function Notifications({ params }: WithRouterProps) {
     dispatch(markNotificationAsSeen(notification.id))
 
     if (!notification.seen) {
-      decreaseBadge('generic')
+      decreaseBadgeCounter('generic')
     }
 
     switch (notification.notification_type) {

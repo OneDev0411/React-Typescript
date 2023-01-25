@@ -15,7 +15,7 @@ function useShowingsAckAppointmentNotifications(
   setShowings: Dispatch<SetStateAction<IShowing<'showing'>[]>>
 ): UseShowingsAckAppointmentNotifications {
   const dispatch = useDispatch()
-  const { decreaseBadge } = useNotificationBadgesContext()
+  const { decreaseBadgeCounter } = useNotificationBadgesContext()
 
   return ({ appointmentId, showingId, notificationIds }: AckActionParams) => {
     updateShowingsAppointmentState(
@@ -31,7 +31,7 @@ function useShowingsAckAppointmentNotifications(
       })
     )
     dispatch(decreaseShowingTotalNotificationCount(notificationIds.length))
-    decreaseBadge('showing_notifications')
+    decreaseBadgeCounter('showing_notifications')
   }
 }
 
