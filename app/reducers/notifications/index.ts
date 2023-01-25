@@ -101,4 +101,3 @@ export const notifications = (
 
 export const selectNotifications = state => state.data
 export const selectNotificationIsFetching = state => state.isFetching
-export const selectNotificationNewCount = state => state.info.new || 0

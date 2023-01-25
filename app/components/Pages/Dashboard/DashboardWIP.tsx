@@ -2,13 +2,7 @@
   TODO: due to time limit I just convert it to typescript and small
   improvmennt to fix the bug but it would be good if make it better in typescript
 */
-import {
-  useMemo,
-  useEffect,
-  useCallback,
-  ReactElement,
-  cloneElement
-} from 'react'
+import { useMemo, useEffect, ReactElement, cloneElement } from 'react'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffectOnce, useTitle } from 'react-use'
@@ -37,7 +31,6 @@ import { getAttributeDefs } from '@app/store_actions/contacts'
 import { getDeals, searchDeals } from '@app/store_actions/deals'
 import { deactivateIntercom } from '@app/store_actions/intercom'
 import getFavorites from '@app/store_actions/listings/favorites/get-favorites'
-import { getAllNotifications } from '@app/store_actions/notifications'
 import { fetchShowingTotalNotificationCount } from '@app/store_actions/showings'
 import { viewAsEveryoneOnTeam } from '@app/utils/user-teams'
 import CheckBrowser from '@app/views/components/CheckBrowser'
@@ -94,10 +87,6 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
     () => getDashboardAccessList(activeTeam),
     [activeTeam]
   )
-
-  const handleOnlineEvent = useCallback(() => {
-    reloadNotificationBadges()
-  }, [reloadNotificationBadges])
 
   const initializeSockets = (user: IUser) => {
     new NotificationSocket(user)
@@ -160,15 +149,13 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
         dispatch(getAttributeDefs())
       }
 
-      dispatch(getAllNotifications())
-
       // Get MLS favorites
       dispatch(getFavorites(user))
 
       dispatch(syncOpenHouseData(user.access_token))
 
       if (hasCrmAccess) {
-        window.addEventListener('online', handleOnlineEvent)
+        window.addEventListener('online', reloadNotificationBadges)
       }
 
       // fetch the number of showing notifications count
@@ -185,10 +172,10 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
       dispatch(deactivateIntercom(true))
 
       if (activeTeam && hasCrmAccess) {
-        window.removeEventListener('online', handleOnlineEvent)
+        window.removeEventListener('online', reloadNotificationBadges)
       }
     }
-  }, [activeTeam, dispatch, handleOnlineEvent, hasCrmAccess])
+  }, [activeTeam, dispatch, reloadNotificationBadges, hasCrmAccess])
 
   return (
     <CheckBrowser id={params.id}>
