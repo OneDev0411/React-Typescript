@@ -1,3 +1,6 @@
+import http from 'http'
+import https from 'https'
+
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Request } from 'express'
 
@@ -5,8 +8,17 @@ import config from '../../../config'
 import type { RequestWithSession } from '../../../types'
 import { requestRefreshToken } from '../refresh-token'
 
+const AGENT_CONFIG = Object.freeze({
+  keepAlive: true,
+  maxSockets: 50,
+  maxTotalSockets: 200
+})
+
 export function request(req: Request, requestConfig: AxiosRequestConfig) {
-  const instance = axios.create()
+  const instance = axios.create({
+    httpAgent: new http.Agent(AGENT_CONFIG),
+    httpsAgent: new https.Agent(AGENT_CONFIG)
+  })
 
   instance.interceptors.response.use(
     (response: AxiosResponse) => {
