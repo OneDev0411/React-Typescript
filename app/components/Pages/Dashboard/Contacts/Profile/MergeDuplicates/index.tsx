@@ -22,10 +22,14 @@ interface Props {
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
+    root: {
+      borderRadius: theme.spacing(0.5)
+    },
     container: {
       padding: theme.spacing(1, 1),
       display: 'flex',
-      flexDirection: 'row'
+      flexDirection: 'row',
+      color: '#673400'
     },
     iconWrapper: {
       height: theme.spacing(2),
@@ -43,7 +47,12 @@ const useStyles = makeStyles(
       marginTop: theme.spacing(1)
     },
     secondaryButton: {
+      fontWeight: 400,
+      opacity: 0.7,
       color: '#854300'
+    },
+    bold: {
+      fontFamily: 'LatoBold'
     }
   }),
   {
@@ -207,8 +216,8 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
             <span style={{ color: theme.palette.warning.contrastText }}>
               We’ve found {duplicateContacts.contacts.length - 1} other{' '}
               {pluralize('contact', duplicateContacts.contacts.length - 1)}{' '}
-              similar to <b>{contact.display_name}</b>. Do you want to merge
-              them?
+              similar to <b className={classes.bold}>{contact.display_name}</b>.
+              Do you want to merge them?
             </span>
             <div className={classes.buttonWrapper}>
               <Button
