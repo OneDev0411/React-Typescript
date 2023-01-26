@@ -9,6 +9,7 @@ import CreateOpenHouse from './components/OpenHouse'
 
 export type ItemType =
   | 'email'
+  | 'task'
   | 'event'
   | 'log'
   | 'contact'
@@ -25,6 +26,10 @@ interface BaseItem<T extends ItemType> {
 
 interface EmailItem extends BaseItem<'email'> {
   render(props: ComponentProps<typeof SingleEmailComposeDrawer>): ReactNode
+}
+
+interface TaskItem extends BaseItem<'task'> {
+  render(props: ComponentProps<typeof EventDrawer>): ReactNode
 }
 
 interface EventItem extends BaseItem<'event'> {
@@ -57,6 +62,7 @@ interface ShowingItem extends BaseItem<'showing'> {
 
 export type Item =
   | EmailItem
+  | TaskItem
   | EventItem
   | LogItem
   | ContactItem
