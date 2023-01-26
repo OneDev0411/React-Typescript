@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 
 import { withRouter } from '@app/routes/with-router'
-import { fetchShowingTotalNotificationCount } from 'actions/showings'
 import ShowingSocket from 'services/socket/showings'
 import {
   hasUserAccessToCrm,
@@ -22,7 +21,6 @@ import DealSocket from '../../../services/socket/deals'
 import NotificationSocket from '../../../services/socket/Notifications'
 import { getAttributeDefs } from '../../../store_actions/contacts'
 import { getDeals, searchDeals } from '../../../store_actions/deals'
-import { fetchUnreadEmailThreadsCount } from '../../../store_actions/inbox'
 import { deactivateIntercom } from '../../../store_actions/intercom'
 import { getAllNotifications } from '../../../store_actions/notifications'
 import CheckBrowser from '../../../views/components/CheckBrowser'
@@ -111,14 +109,8 @@ class Dashboard extends Component {
 
     if (this.hasCrmAccess) {
       // fetch the number of unread email threads
-      dispatch(fetchUnreadEmailThreadsCount())
 
       window.addEventListener('online', this.handleOnlineEvent)
-    }
-
-    // fetch the number of showing notifications count
-    if (this.hasShowingsAccess) {
-      dispatch(fetchShowingTotalNotificationCount())
     }
   }
 
@@ -140,7 +132,6 @@ class Dashboard extends Component {
 
   handleOnlineEvent = () => {
     // update the number of unread emails in Inbox nav link notification badge
-    this.props.dispatch(fetchUnreadEmailThreadsCount())
   }
 
   render() {

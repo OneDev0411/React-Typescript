@@ -31,7 +31,6 @@ import { getAttributeDefs } from '@app/store_actions/contacts'
 import { getDeals, searchDeals } from '@app/store_actions/deals'
 import { deactivateIntercom } from '@app/store_actions/intercom'
 import getFavorites from '@app/store_actions/listings/favorites/get-favorites'
-import { fetchShowingTotalNotificationCount } from '@app/store_actions/showings'
 import { viewAsEveryoneOnTeam } from '@app/utils/user-teams'
 import CheckBrowser from '@app/views/components/CheckBrowser'
 import EmailVerificationBanner from '@app/views/components/EmailVerificationBanner'
@@ -68,7 +67,8 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
   useTitle(documentTitle())
 
   const { user, activeTeam } = useLoadUserAndActiveTeam()
-  const { reload: reloadNotificationBadges } = useNotificationBadgesContext()
+  const { reload: reloadNotificationBadges, increaseBadgeCounter } =
+    useNotificationBadgesContext()
 
   const { deals, isFetchingDeals, contactsAttributeDefs }: DashboardState =
     useSelector((state: IAppState) => ({
@@ -89,7 +89,10 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
   )
 
   const initializeSockets = (user: IUser) => {
-    new NotificationSocket(user)
+    new NotificationSocket(user, () => {
+      increaseBadgeCounter('showing_notifications')
+    })
+
     new ChatSocket(user)
 
     if (hasCrmAccess) {
@@ -97,11 +100,13 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
     }
 
     if (hasDealsAccess) {
-      new DealSocket(user)
+      new DealSocket(user, reloadNotificationBadges)
     }
 
     if (hasShowingsAccess) {
-      new ShowingSocket(user)
+      new ShowingSocket(user, () => {
+        increaseBadgeCounter('showing_notifications')
+      })
     }
   }
 
@@ -156,11 +161,6 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
 
       if (hasCrmAccess) {
         window.addEventListener('online', reloadNotificationBadges)
-      }
-
-      // fetch the number of showing notifications count
-      if (hasShowingsAccess) {
-        dispatch(fetchShowingTotalNotificationCount())
       }
     }
 
