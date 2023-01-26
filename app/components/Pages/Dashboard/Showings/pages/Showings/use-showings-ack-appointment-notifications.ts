@@ -1,9 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import { useDispatch } from 'react-redux'
-
-import { decreaseShowingTotalNotificationCount } from 'actions/showings'
-
 import useNotificationBadgesContext from '../../../SideNav/notificationBadgesContext/useNotificationBadgesContext'
 import { AckActionParams } from '../../types'
 
@@ -14,7 +10,6 @@ type UseShowingsAckAppointmentNotifications = (params: AckActionParams) => void
 function useShowingsAckAppointmentNotifications(
   setShowings: Dispatch<SetStateAction<IShowing<'showing'>[]>>
 ): UseShowingsAckAppointmentNotifications {
-  const dispatch = useDispatch()
   const { decreaseBadgeCounter } = useNotificationBadgesContext()
 
   return ({ appointmentId, showingId, notificationIds }: AckActionParams) => {
@@ -30,7 +25,6 @@ function useShowingsAckAppointmentNotifications(
           ) ?? null
       })
     )
-    dispatch(decreaseShowingTotalNotificationCount(notificationIds.length))
     decreaseBadgeCounter('showing_notifications')
   }
 }

@@ -20,7 +20,6 @@ import {
   INotificationState,
   notifications as globalNotifications
 } from './notifications'
-import showings, { IShowingsState } from './showings'
 import socket from './socket'
 import { tasks } from './tasks'
 import user, { IUserState } from './user'
@@ -49,9 +48,6 @@ const appReducer = combineReducers({
   alerts,
   favorites,
 
-  /* showings reducers */
-  showings,
-
   /* active team reducers (aka active user's role) */
   activeTeam,
   /* global-triggers reducer */
@@ -78,7 +74,6 @@ type IAppReducer = Omit<
 export interface IAppState extends IAppReducer {
   user: IUserState
   globalNotifications: INotificationState
-  showings: IShowingsState
   activeTeam: IActiveTeamState
   impersonateUser: IImpersonateUserState
   globalTriggers: IGlobalTriggerState
