@@ -28,10 +28,8 @@ import DealSocket from '@app/services/socket/deals'
 import NotificationSocket from '@app/services/socket/Notifications'
 import ShowingSocket from '@app/services/socket/showings'
 import { getAttributeDefs } from '@app/store_actions/contacts'
-import { getDeals, searchDeals } from '@app/store_actions/deals'
 import { deactivateIntercom } from '@app/store_actions/intercom'
 import getFavorites from '@app/store_actions/listings/favorites/get-favorites'
-import { viewAsEveryoneOnTeam } from '@app/utils/user-teams'
 import CheckBrowser from '@app/views/components/CheckBrowser'
 import EmailVerificationBanner from '@app/views/components/EmailVerificationBanner'
 import Intercom from '@app/views/components/Intercom'
@@ -70,23 +68,17 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
   const { reload: reloadNotificationBadges, increaseBadgeCounter } =
     useNotificationBadgesContext()
 
-  const { deals, isFetchingDeals, contactsAttributeDefs }: DashboardState =
-    useSelector((state: IAppState) => ({
+  const { contactsAttributeDefs }: DashboardState = useSelector(
+    (state: IAppState) => ({
       deals: selectDealsList(state),
       contactsAttributeDefs: selectContactAttributeDefs(state),
       isFetchingDeals: selectDeals(state).properties.isFetchingDeals
-    }))
+    })
+  )
   const dispatch = useDispatch()
 
-  const {
-    hasCrmAccess,
-    hasDealsAccess,
-    hasShowingsAccess,
-    hasBackOfficeAccess
-  }: AccessListType = useMemo(
-    () => getDashboardAccessList(activeTeam),
-    [activeTeam]
-  )
+  const { hasCrmAccess, hasDealsAccess, hasShowingsAccess }: AccessListType =
+    useMemo(() => getDashboardAccessList(activeTeam), [activeTeam])
 
   const initializeSockets = (user: IUser) => {
     new NotificationSocket(user, () => {
@@ -120,30 +112,6 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
 
       if (!activeTeam) {
         return
-      }
-
-      // load deals
-      if (
-        hasDealsAccess &&
-        Object.keys(deals).length === 0 &&
-        !isFetchingDeals
-      ) {
-        const searchParamValue =
-          location.pathname.startsWith('/dashboard/deals') &&
-          new URLSearchParams(location.search).get('q')
-
-        if (
-          (hasBackOfficeAccess || viewAsEveryoneOnTeam(activeTeam)) &&
-          !searchParamValue
-        ) {
-          dispatch(getDeals(activeTeam))
-        } else {
-          dispatch(
-            searchParamValue
-              ? searchDeals(activeTeam, decodeURIComponent(searchParamValue))
-              : getDeals(activeTeam)
-          )
-        }
       }
 
       // load CRM attributes definition

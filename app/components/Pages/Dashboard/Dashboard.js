@@ -11,7 +11,6 @@ import {
   hasUserAccessToShowings,
   isBackOffice
 } from 'utils/acl'
-import { viewAsEveryoneOnTeam } from 'utils/user-teams'
 
 import { isLoadedContactAttrDefs } from '../../../reducers/contacts/attributeDefs'
 import { selectListings } from '../../../reducers/listings'
@@ -20,7 +19,6 @@ import ContactSocket from '../../../services/socket/contacts'
 import DealSocket from '../../../services/socket/deals'
 import NotificationSocket from '../../../services/socket/Notifications'
 import { getAttributeDefs } from '../../../store_actions/contacts'
-import { getDeals, searchDeals } from '../../../store_actions/deals'
 import { deactivateIntercom } from '../../../store_actions/intercom'
 import { getAllNotifications } from '../../../store_actions/notifications'
 import CheckBrowser from '../../../views/components/CheckBrowser'
@@ -68,30 +66,6 @@ class Dashboard extends Component {
     this.hasDealsAccess =
       hasUserAccessToDeals(activeTeam) || hasBackOfficeAccess
     this.hasShowingsAccess = hasUserAccessToShowings(activeTeam)
-
-    // load deals
-    if (
-      this.hasDealsAccess &&
-      Object.keys(deals).length === 0 &&
-      !this.props.isFetchingDeals
-    ) {
-      const searchParamValue =
-        this.props.location.pathname.startsWith('/dashboard/deals') &&
-        new URLSearchParams(this.props.location.search).get('q')
-
-      if (
-        (isBackOffice || viewAsEveryoneOnTeam(activeTeam)) &&
-        !searchParamValue
-      ) {
-        dispatch(getDeals(activeTeam))
-      } else {
-        dispatch(
-          searchParamValue
-            ? searchDeals(activeTeam, decodeURIComponent(searchParamValue))
-            : getDeals(activeTeam)
-        )
-      }
-    }
 
     // load CRM attributes definition
     if (
