@@ -27,11 +27,12 @@ export const GlobalActions = ({ renderButton }: Props) => {
   const [state] = useGlobalActionContext()
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [selectedItem, setSelectedItem] = useState<null | Item>(null)
+
   const availableItems: Item[] = useMemo(() => {
     const actions: ItemType[] = []
 
     if (hasUserAccessToCrm(activeTeam)) {
-      actions.push('email', 'event', 'log', 'contact', 'tour')
+      actions.push('email', 'task', 'event', 'log', 'contact', 'tour')
     }
 
     if (hasUserAccessToDeals(activeTeam)) {
@@ -106,6 +107,14 @@ export const GlobalActions = ({ renderButton }: Props) => {
           followUpCallback: state.onCreateEmailFollowUp,
           onClose: handleCloseRenderedItem,
           onSent: handleSubmitEmail
+        })
+
+      case 'task':
+        return selectedItem.render({
+          user,
+          isOpen: true,
+          onClose: handleCloseRenderedItem,
+          submitCallback: handleSubmitEvent
         })
 
       case 'event':
