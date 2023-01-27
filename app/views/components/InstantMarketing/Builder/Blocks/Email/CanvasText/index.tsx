@@ -54,7 +54,7 @@ export default function registerCanvasTextBlock(
         model.set('canvas-json', this.attr['data-json'])
 
         this.listenTo(model, 'canvas-text:update', this.update)
-        this.listenTo(model, 'canvas-text:done', this.saveState)
+        this.listenTo(model, 'canvas-text:save-state', this.saveState)
 
         onInit(model, isNewBlock)
       },

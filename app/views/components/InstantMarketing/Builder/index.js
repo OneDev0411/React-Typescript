@@ -1663,12 +1663,28 @@ class Builder extends React.Component {
           {!!this.state.canvasTextToEdit && (
             <CanvasTextDrawer
               model={this.state.canvasTextToEdit}
-              onUpdate={data => {
-                console.log('(ON UPDATE)', data)
-                this.blocks.canvasText.selectHandler(data)
-              }}
-              onClose={() => {
-                this.setState({ canvasTextToEdit: null })
+              onClose={() => this.setState({ canvasTextToEdit: null })}
+              onUploadComplete={async ({ model, file, json, rect }) => {
+                const uploadedAsset = await uploadAsset(
+                  this.selectedTemplate.id,
+                  file
+                )
+
+                model.trigger('canvas-text:update', {
+                  image: uploadedAsset.file.url,
+                  width: rect.width,
+                  height: rect.height
+                })
+
+                const dataJson = encodeURIComponent(json)
+
+                // This snippet is used by the template team
+                console.log(`<mj-image 
+                    data-type="canvas-text" 
+                    width="${parseInt(rect.width, 10)}" 
+                    height="${parseInt(rect.height, 10)}" 
+                    data-json="${dataJson}" 
+                    src="${uploadedAsset.file.url}"></mj-image>`)
               }}
             />
           )}

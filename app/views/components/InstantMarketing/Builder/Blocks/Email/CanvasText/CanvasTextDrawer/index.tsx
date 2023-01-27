@@ -11,6 +11,7 @@ import type { Model } from 'backbone'
 import cn from 'classnames'
 import Pikaso, { LabelModel } from 'pikaso'
 
+import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
 import { noop } from '@app/utils/helpers'
 import OverlayDrawer from '@app/views/components/OverlayDrawer'
 import { PageTabs, Tab } from '@app/views/components/PageTabs'
@@ -44,13 +45,25 @@ const useStyles = makeStyles(
 
 type Tabs = 'fonts' | 'basic-properties' | 'advanced-properties'
 
-interface Props {
-  model: Nullable<Model>
-  onUpdate: (data: { image: string; text: string }) => void
-  onClose: () => void
+interface IRect {
+  x: number
+  y: number
+  width: number
+  height: number
 }
 
-export function CanvasTextDrawer({ model, onUpdate, onClose }: Props) {
+interface Props {
+  model: Nullable<Model>
+  onClose: () => void
+  onUploadComplete: (data: {
+    file: File
+    rect: IRect
+    json: string
+    model: Nullable<Model>
+  }) => void
+}
+
+export function CanvasTextDrawer({ model, onClose, onUploadComplete }: Props) {
   const classes = useStyles()
 
   const [activeTab, setActiveTab] = useState<Tabs>('fonts')
@@ -60,14 +73,34 @@ export function CanvasTextDrawer({ model, onUpdate, onClose }: Props) {
 
   const label = editor ? (editor.board.activeShapes[0] as LabelModel) : null
 
-  const handleDone = () => {
+  const handleDone = async () => {
+    onClose()
+    uploadResultImage()
+  }
+
+  const uploadResultImage = async () => {
+    if (!label) {
+      return
+    }
+
     const data = JSON.stringify(editor?.export.toJson())
 
-    model!.trigger('canvas-text:done', {
+    model!.trigger('canvas-text:save-state', {
       data
     })
 
-    onClose()
+    const file = await convertUrlToImageFile(
+      label.node.toDataURL({
+        pixelRatio: 2
+      })
+    )
+
+    onUploadComplete({
+      model,
+      file,
+      json: data,
+      rect: label.node.getClientRect()
+    })
   }
 
   const preview = useCallback(() => {
