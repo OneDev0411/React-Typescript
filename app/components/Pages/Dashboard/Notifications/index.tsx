@@ -53,10 +53,7 @@ function Notifications({ params }: WithRouterProps) {
   )
 
   const documentTitle = () => {
-    const counter =
-      badges.unread_email_threads > 0
-        ? `: ${badges.unread_email_threads} unread`
-        : ''
+    const counter = badges.generic > 0 ? `: ${badges.generic} unread` : ''
 
     return `Notifications${counter} | Rechat`
   }
