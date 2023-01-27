@@ -176,8 +176,8 @@ class NewContactDrawer extends React.Component {
                     <TextField name="source" label="Source" />
                     <TextField
                       name="touch_freq"
-                      label="Manage Relationship"
-                      placeholder="How frequently do you want to be in touch with this contact (day)"
+                      label="Auto Remind"
+                      placeholder="How frequently do you want to be in touch with this contact"
                       InputProps={{
                         inputProps: {
                           mask: createNumberMask({

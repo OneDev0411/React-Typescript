@@ -5,7 +5,8 @@ import {
   mdiCalendarOutline,
   mdiCalendarTextOutline,
   mdiCurrencyUsdCircleOutline,
-  mdiShoePrint
+  mdiShoePrint,
+  mdiCheckCircleOutline
 } from '@mdi/js'
 
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
@@ -32,6 +33,14 @@ const items: Item[] = [
     Icon: mdiEmailOutline,
     render: props => {
       return <SingleEmailComposeDrawer {...props} />
+    }
+  },
+  {
+    title: 'Task',
+    type: 'task',
+    Icon: mdiCheckCircleOutline,
+    render: props => {
+      return <EventDrawer title="Add Task" {...props} />
     }
   },
   {

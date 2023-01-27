@@ -47,7 +47,7 @@ export const eventFormPreSaveFormat = (
     ...baseData,
     event: {
       title: data.title,
-      description: data.task_type.value,
+      description: data.description,
       task_type: data.task_type.value
     }
   }

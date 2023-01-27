@@ -1,8 +1,9 @@
-import React, { Component, Fragment } from 'react'
+import { Component, Fragment } from 'react'
 
 import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 
+import { withRouter } from '@app/routes/with-router'
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags as getContactTagsAction } from 'actions/contacts/get-contacts-tags'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
@@ -309,10 +310,12 @@ class ManageTags extends Component {
   }
 }
 
-export default connect(null, {
-  notify,
-  confirmation,
-  getContactsTags: getContactTagsAction,
-  resetActiveFilters,
-  changeActiveFilterSegment
-})(ManageTags)
+export default withRouter(
+  connect(null, {
+    notify,
+    confirmation,
+    getContactsTags: getContactTagsAction,
+    resetActiveFilters,
+    changeActiveFilterSegment
+  })(ManageTags)
+)

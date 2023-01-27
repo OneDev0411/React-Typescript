@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Grid, Typography } from '@material-ui/core'
 
 import { useInsights } from '@app/components/Pages/Dashboard/MarketingInsights/List/queries/use-insights'

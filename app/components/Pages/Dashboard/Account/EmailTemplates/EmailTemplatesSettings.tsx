@@ -3,6 +3,7 @@ import { useState } from 'react'
 
 import { useTitle } from 'react-use'
 
+import { withRouter } from '@app/routes/with-router'
 import Drawer from 'components/AddOrEditEmailTemplateDrawer'
 
 import CtaBar from '../components/CtaBar'
@@ -43,4 +44,4 @@ function EmailTemplatesSettings() {
   )
 }
 
-export default EmailTemplatesSettings
+export default withRouter(EmailTemplatesSettings)

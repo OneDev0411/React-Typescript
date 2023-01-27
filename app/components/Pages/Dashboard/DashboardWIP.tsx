@@ -11,7 +11,6 @@ import {
 } from 'react'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { RouteComponentProps } from 'react-router'
 import { useEffectOnce, useTitle } from 'react-use'
 
 import {
@@ -25,6 +24,8 @@ import {
   isLoadedContactAttrDefs,
   IAttributeDefsState
 } from '@app/reducers/contacts/attributeDefs'
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { selectContactAttributeDefs } from '@app/selectors/contacts'
 import { selectDeals, selectDealsList } from '@app/selectors/deals'
 import ChatSocket from '@app/services/socket/chat'
@@ -46,19 +47,17 @@ import Intercom from '@app/views/components/Intercom'
 
 import { DashboardLayout } from './DashboardLayout'
 
-// TODO: fix type which is set to unknown
 type DashboardState = {
   isFetchingDeals: boolean
   deals: Record<UUID, IDeal>
   contactsAttributeDefs: IAttributeDefsState
 }
 
-interface DashboardProps
-  extends RouteComponentProps<Record<any, any>, Record<any, any>> {
+interface DashboardProps extends RouteComponentProps<{ id?: string }> {
   children: ReactElement
 }
 
-export function Dashboard({ params, children, location }: DashboardProps) {
+export function DashboardPage({ params, children, location }: DashboardProps) {
   const documentTitle = () => {
     let title = ''
 
@@ -216,3 +215,5 @@ export function Dashboard({ params, children, location }: DashboardProps) {
     </CheckBrowser>
   )
 }
+
+export const Dashboard = withRouter(DashboardPage)

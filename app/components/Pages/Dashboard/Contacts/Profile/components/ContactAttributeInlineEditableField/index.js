@@ -1,5 +1,6 @@
 import { Component } from 'react'
 
+import { Box } from '@material-ui/core'
 import { connect } from 'react-redux'
 
 import { excludeContactFromGlobalTrigger } from '@app/models/instant-marketing/global-triggers'
@@ -107,7 +108,8 @@ class MasterField extends Component {
         props.attribute?.updated_at > state.updated_at) ||
       props.contact?.email !== state.contact?.email ||
       (!props.trigger && state.currentTrigger) ||
-      (!state.currentTrigger && props.trigger)
+      (!state.currentTrigger && props.trigger) ||
+      props.contact?.id !== state.contact?.id
     ) {
       return getInitialState(props)
     }
@@ -156,6 +158,7 @@ class MasterField extends Component {
   toggleMode = () => this.props.handleToggleMode(this.props.attribute)
 
   setInitialState = () => {
+    this.props.setConfirmationModal(false)
     this.toggleMode()
     this.setState(getInitialState(this.props))
   }
@@ -221,10 +224,12 @@ class MasterField extends Component {
     }
 
     if (this.isDirty) {
+      this.props.setConfirmationModal(true)
       this.context.setConfirmationModal({
         message: 'Heads up!',
         confirmLabel: 'Yes, I do',
         onConfirm: this.setInitialState,
+        onCancel: () => this.props.setConfirmationModal(false),
         description: 'You have made changes, do you want to discard them?'
       })
     } else {
@@ -536,7 +541,7 @@ class MasterField extends Component {
     const { disabled, isDirty, label, error } = this.state
 
     if (!this.attribute_def.editable) {
-      return <div style={{ padding: '0.5em' }}>{this.renderViewMode()}</div>
+      return <Box py={0.5}>{this.renderViewMode()}</Box>
     }
 
     return (
@@ -562,6 +567,7 @@ class MasterField extends Component {
         renderViewMode={this.renderViewMode}
         showAdd={this.showAdd}
         toggleMode={this.toggleMode}
+        isConfirmationModalOpen={this.props.isConfirmationModalOpen}
       />
     )
   }

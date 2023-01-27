@@ -18,6 +18,7 @@ const getBasicInitialValues = (
   if (!step) {
     return {
       title: '',
+      description: '',
       wait_for: defaultWaitForValue,
       time: '08:00:00',
       event_type: ''
@@ -26,7 +27,7 @@ const getBasicInitialValues = (
 
   return {
     title: step.title,
-    description: step.description,
+    description: step?.event?.description || '',
     wait_for: convertWaitForToWebInput(step.wait_for),
     event_type: step.event_type,
     time: step.time

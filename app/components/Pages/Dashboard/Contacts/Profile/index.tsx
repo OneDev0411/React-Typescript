@@ -3,17 +3,18 @@
 */
 import { useRef, useState, RefObject, useEffect, useCallback } from 'react'
 
-import { makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
 import { useEffectOnce, useTitle } from 'react-use'
 
 import { useGetGlobalTriggers } from '@app/components/Pages/Dashboard/Account/Triggers/hooks/use-get-global-triggers'
 import { useActiveBrand } from '@app/hooks/brand'
 import useConfirmation from '@app/hooks/use-confirmation'
+import { useNavigate } from '@app/hooks/use-navigate'
 import useNotify from '@app/hooks/use-notify'
 import { updateContactTouchReminder } from '@app/models/contacts/update-contact-touch-reminder'
+import { withRouter } from '@app/routes/with-router'
 import Acl from '@app/views/components/Acl'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import PageLayout from 'components/GlobalPageLayout'
@@ -27,7 +28,6 @@ import { isLoadedContactAttrDefs } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
-import { goTo } from 'utils/go-to'
 import { viewAs } from 'utils/user-teams'
 
 import Loading from '../../../../Partials/Loading'
@@ -55,44 +55,48 @@ import Timeline, { TimelineRef } from './Timeline'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     header: {
-      padding: theme.spacing(0, 4)
+      padding: theme.spacing(0, 3),
+      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },
     container: {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
       height: 'auto',
-      padding: theme.spacing(2, 4, 4),
-      background: theme.palette.grey[50]
+      background: theme.palette.grey[100]
     },
     contentContainer: {
       background: theme.palette.background.paper,
       border: `1px solid ${theme.palette.action.disabledBackground}`,
-      borderRadius: `${theme.shape.borderRadius}px`,
+      borderTop: 'none',
       width: '100%',
       height: '100%'
     },
     tabContainer: {
-      flex: '1 1 auto',
+      padding: theme.spacing(3),
+      paddingTop: theme.spacing(1),
+      flex: '1 1',
       display: 'flex',
       flexDirection: 'column'
     },
     tabHeaderContainer: {
       display: 'flex',
       justifyContent: 'space-between',
-      alignItems: 'flex-start'
+      alignItems: 'center',
+      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },
     timelineContainer: {
-      background: theme.palette.background.paper,
-      border: `1px solid ${theme.palette.action.disabledBackground}`,
+      marginTop: theme.spacing(3),
       borderRadius: `${theme.shape.borderRadius}px`,
       display: 'flex',
       flexDirection: 'column',
-      height: '100%'
+      height: '100%',
+      '&::webkit-scrollbar': {
+        display: 'none'
+      }
     },
     boxContainer: {
-      display: 'flex',
-      gap: theme.spacing(2)
+      display: 'flex'
     },
     sidenavContainer: {
       width: '30%',
@@ -116,89 +120,165 @@ const useStyles = makeStyles(
   in hopes of taking care of the other improvements in future
 */
 
-const ContactProfile = props => {
+const ContactProfile = ({
+  onCloseContact,
+  onOpenContact,
+  onUpdateContact,
+  onDeleteContact,
+  cachedContact,
+  ...props
+}) => {
   useGetGlobalTriggers()
 
   const notify = useNotify()
   const activeBrand = useActiveBrand()
-
+  const abortControllerRef = useRef<Nullable<AbortController>>(null)
   const classes = useStyles()
   const confirmation = useConfirmation()
-  const [contact, setContact] = useState<Nullable<INormalizedContact>>(null)
+  const navigate = useNavigate()
+
+  const isCachedContactExists = !!cachedContact
+
+  const [contact, setContact] = useState<Nullable<INormalizedContact>>(
+    isCachedContactExists ? normalizeContact(cachedContact) : null
+  )
   const [currentContactId, setCurrentContactId] = useState<string | undefined>(
-    props.params?.id
+    props.params?.id || props.id
   )
   const [isDeleting, setIsDeleting] = useState(false)
   const [isUpdatingOwner, setIsUpdatingOwner] = useState(false)
   const [isDesktopScreen, setIsDesktopScreen] = useState(false)
+
   const [isLoading, setIsLoading] = useState(
-    !isLoadedContactAttrDefs(props?.attributeDefs) || !props?.contact
+    !isLoadedContactAttrDefs(props?.attributeDefs) || !isCachedContactExists
   )
-  const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Events)
+
+  const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Upcoming)
+
+  const isModal: boolean = props.isModal
+
+  const goToContacts = useCallback(() => {
+    if (isModal && typeof onCloseContact === 'function') {
+      onCloseContact()
+    } else {
+      navigate('/dashboard/contacts')
+    }
+  }, [isModal, onCloseContact, navigate])
+
+  const goToContact = useCallback(
+    (masterContactId: UUID) => {
+      if (isModal && typeof onOpenContact === 'function') {
+        onOpenContact(masterContactId)
+      } else {
+        navigate(`/dashboard/contacts/${masterContactId}`)
+      }
+    },
+    [isModal, onOpenContact, navigate]
+  )
 
   const fetchContact = useCallback(
     async (callback = () => {}, showFullScreenLoading = false) => {
-      if (showFullScreenLoading) {
+      if (showFullScreenLoading && !isCachedContactExists) {
         setIsLoading(true)
       }
 
-      try {
-        const response = await getContact(props.params.id, {
-          associations: [
-            ...updateContactQuery.associations,
-            'contact.deals',
-            'contact.flows',
-            'flow_step.email',
-            'contact.triggers',
-            'trigger.campaign',
-            'flow_step.crm_task',
-            'email_campaign.from',
-            'email_campaign.template',
-            'template_instance.template',
-            'contact.assignees',
-            'contact_role.user',
-            'contact_role.brand'
-          ]
-        })
+      // To set cached contact after click on next/prev button on modal
+      if (isCachedContactExists && isModal) {
+        setContact(normalizeContact(cachedContact))
+      }
 
-        setContact(normalizeContact(response.data))
+      try {
+        // To prevent race condition
+        if (abortControllerRef.current) {
+          abortControllerRef.current.abort()
+          abortControllerRef.current = null
+        }
+
+        abortControllerRef.current = new AbortController()
+
+        const response = await getContact(
+          props.params?.id || props.id,
+          {
+            associations: [
+              ...updateContactQuery.associations,
+              'flow_step.email',
+              'contact.triggers',
+              'trigger.campaign',
+              'flow_step.crm_task',
+              'email_campaign.from',
+              'email_campaign.template',
+              'template_instance.template',
+              'contact.assignees',
+              'contact_role.user',
+              'contact_role.brand'
+            ]
+          },
+          abortControllerRef.current.signal
+        )
+        const normalizedContact = normalizeContact(response.data)
+
+        setContact(normalizedContact)
+
         setIsLoading(false)
+
+        if (
+          !showFullScreenLoading &&
+          isModal &&
+          typeof onUpdateContact === 'function'
+        ) {
+          onUpdateContact(normalizedContact)
+        }
+
         callback()
       } catch (error) {
         if (error.status === 404 || error.status === 400) {
-          props.router.push('/dashboard/contacts')
+          goToContacts()
         }
       }
     },
-    [props.params.id, props.router]
+    [
+      isCachedContactExists,
+      isModal,
+      cachedContact,
+      props.params?.id,
+      props.id,
+      onUpdateContact,
+      goToContacts
+    ]
   )
 
-  const updateContact = useCallback(async () => {
+  const handleOnTouchChange = useCallback(async () => {
     try {
-      const response = await getContact(props.params.id, updateContactQuery)
+      const response = await getContact(
+        props.params?.id || props.id,
+        updateContactQuery
+      )
+
       const normalizedContact = normalizeContact(response.data)
 
-      if (contact) {
-        setContact({
-          ...normalizedContact,
-          deals: contact.deals,
-          flows: contact.flows
-        })
-      } else {
-        setContact(normalizedContact)
+      setContact(normalizedContact)
+
+      if (isModal && typeof onUpdateContact === 'function') {
+        onUpdateContact(normalizedContact)
       }
     } catch (error) {
       console.error(error)
     }
-  }, [contact, props.params.id])
+  }, [isModal, onUpdateContact, props.id, props.params?.id])
 
   const handleDelete = async () => {
     try {
-      setIsDeleting(true)
+      if (contact) {
+        setIsDeleting(true)
 
-      await deleteContacts([contact?.id])
+        await deleteContacts([contact?.id])
 
-      props.router.push('/dashboard/contacts')
+        if (isModal && typeof onDeleteContact === 'function') {
+          onDeleteContact(contact.id)
+        }
+
+        goToContacts()
+      }
     } catch (error) {
       console.log(error)
     }
@@ -221,6 +301,10 @@ const ContactProfile = props => {
   ) => {
     setContact({ ...contact, ...newContact })
 
+    if (isModal && typeof onUpdateContact === 'function') {
+      onUpdateContact({ ...contact, ...newContact })
+    }
+
     if (fallback) {
       fallback()
     }
@@ -239,6 +323,10 @@ const ContactProfile = props => {
       touch_freq: newVal
     }))
 
+    if (isModal && typeof onUpdateContact === 'function') {
+      onUpdateContact({ ...contact, touch_freq: newVal })
+    }
+
     fetchTimeline()
 
     updateContactTouchReminder(contact.id, newVal).catch(e => {
@@ -252,6 +340,10 @@ const ContactProfile = props => {
         ...prevContact,
         touch_freq: oldValue
       }))
+
+      if (isModal && typeof onUpdateContact === 'function') {
+        onUpdateContact({ ...contact, touch_freq: oldValue })
+      }
     })
   }
 
@@ -329,6 +421,11 @@ const ContactProfile = props => {
       const alteredContact = response.data || {}
 
       setContact({ ...contact, ...alteredContact })
+
+      if (isModal && typeof onUpdateContact === 'function') {
+        onUpdateContact({ ...contact, ...alteredContact })
+      }
+
       setIsUpdatingOwner(false)
     } catch (error) {
       console.log(error)
@@ -367,7 +464,7 @@ const ContactProfile = props => {
       return
     }
 
-    goTo(`/dashboard/contacts/${masterContactId}`)
+    goToContact(masterContactId)
   }
 
   const handleChangeFilter = (value: Filters) => {
@@ -384,27 +481,36 @@ const ContactProfile = props => {
       fetchTimeline()
     }
   }
+
   const onTouchChange = useCallback(
     ({ contacts }) => {
       if (Array.isArray(contacts) && contacts.includes(currentContactId)) {
         console.log('[ Socket ] Touch Changed')
-        updateContact()
-        fetchTimeline()
+        handleOnTouchChange()
       }
     },
-    [currentContactId, updateContact, fetchTimeline]
+    [currentContactId, handleOnTouchChange]
   )
 
   useEffectOnce(() => {
     detectScreenSize()
-    initializeContact()
+    initializeContact(true)
+
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+        abortControllerRef.current = null
+      }
+    }
   })
 
   useEffect(() => {
     const socket: SocketIOClient.Socket = (window as any).socket
 
-    if (props.params.id !== currentContactId) {
-      setCurrentContactId(props.params.id)
+    const contactId = props.params?.id || props.id
+
+    if (contactId !== currentContactId) {
+      setCurrentContactId(contactId)
       initializeContact(true)
     }
 
@@ -428,13 +534,14 @@ const ContactProfile = props => {
       socket?.off('email_thread:delete', handleEmailThreadChangeEvent)
     }
   }, [
-    props.params.id,
+    props.params?.id,
     currentContactId,
     detectScreenSize,
     fetchTimeline,
     handleEmailThreadChangeEvent,
     initializeContact,
-    onTouchChange
+    onTouchChange,
+    props.id
   ])
 
   if (isLoading) {
@@ -460,8 +567,10 @@ const ContactProfile = props => {
         <div className={classes.header}>
           <Header
             contact={contact}
+            onChangeAvatar={updateAttributeSubmitCallback}
             contactChangeCallback={fetchContact}
             onUpdateTouchFreq={handleUpdateTouchFreq}
+            RenderActions={props.RenderActions}
           />
         </div>
 
@@ -472,7 +581,10 @@ const ContactProfile = props => {
             <div
               className={cn(classes.contentContainer, classes.sidenavContainer)}
             >
-              <LastTouch contact={contact} />
+              <LastTouch
+                contact={contact}
+                onUpdateTouchFreq={handleUpdateTouchFreq}
+              />
               <ContactInfo {..._props} />
               <Flows
                 // @ts-ignore
@@ -497,7 +609,9 @@ const ContactProfile = props => {
                 disabled={isUpdatingOwner}
               />
               {activeBrand.id === contact.brand && (
-                <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
+                <Box mx={1}>
+                  <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
+                </Box>
               )}
             </div>
 
@@ -514,7 +628,8 @@ const ContactProfile = props => {
                     onCreateNote={handleCreateNote}
                   />
                 )}
-                {activeFilter === Filters.Events && (
+                {(activeFilter === Filters.History ||
+                  activeFilter === Filters.Upcoming) && (
                   <AddEvent contact={contact} callback={fetchTimeline} />
                 )}
               </div>
@@ -541,11 +656,8 @@ const mapStateToProps = ({ user, contacts, activeTeam = null }, props) => {
   const tags = contacts.list
   const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
 
-  let contact = selectContact(contacts.list, props.params.id)
-
-  if (!contact || !contact.user) {
-    contact = null
-  }
+  const cachedContact =
+    selectContact(contacts.list, props.params?.id || props.id) || null
 
   const allConnectedAccounts = selectAllConnectedAccounts(
     contacts.oAuthAccounts
@@ -553,7 +665,7 @@ const mapStateToProps = ({ user, contacts, activeTeam = null }, props) => {
 
   return {
     user,
-    contact,
+    cachedContact,
     fetchTags,
     viewAsUsers: viewAs(activeTeam),
     attributeDefs: contacts.attributeDefs,

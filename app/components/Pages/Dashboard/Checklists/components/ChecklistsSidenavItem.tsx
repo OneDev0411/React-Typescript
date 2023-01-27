@@ -15,9 +15,10 @@ import {
   DraggableStateSnapshot
 } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
-import { browserHistory, Link } from 'react-router'
+import { Link } from 'react-router'
 
 import { useActiveBrandId } from '@app/hooks/brand/use-active-brand-id'
+import { useNavigate } from '@app/hooks/use-navigate'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { confirmation } from 'actions/confirmation'
@@ -88,6 +89,7 @@ export function ChecklistsSidenavItem({
   const [isDeleted, setIsDeleted] = useState(false)
   const activeBrandId = useActiveBrandId()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const requestDelete = (propertyType: IDealPropertyType) => {
     if (propertyType.brand !== activeBrandId) {
@@ -119,7 +121,7 @@ export function ChecklistsSidenavItem({
       setIsDeleted(true)
       await deletePropertyType(activeBrandId, id)
 
-      browserHistory.push('/dashboard/checklists')
+      navigate('/dashboard/checklists')
 
       dispatch(
         notify({

@@ -176,9 +176,16 @@ class SendMlsListingCard extends Component {
      * @return {IDenormalizedEmailRecipientDealAgentInput}
      */
     const getRecipientInputByAgent = agent => {
+      if (agent.type === 'agent') {
+        return {
+          recipient_type: 'Agent',
+          agent
+        }
+      }
+
       return {
-        recipient_type: 'Agent',
-        agent
+        recipient_type: 'Email',
+        email: agent.email
       }
     }
 
@@ -406,7 +413,8 @@ class SendMlsListingCard extends Component {
           onHipPocketImageUpload={
             this.props.selectedTemplate
               ? getHipPocketTemplateImagesUploader(
-                  this.props.selectedTemplate.template.id
+                  this.props.selectedTemplate.template.id,
+                  this.props.selectedTemplate.template.medium
                 )
               : undefined
           }

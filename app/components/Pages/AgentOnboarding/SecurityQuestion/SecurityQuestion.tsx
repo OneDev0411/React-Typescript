@@ -3,8 +3,9 @@ import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
 import { useDispatch } from 'react-redux'
-import { Link, WithRouterProps } from 'react-router'
+import { Link } from 'react-router'
 
+import { WithRouterProps } from '@app/routes/types'
 import { updateUser } from 'actions/user'
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
@@ -38,7 +39,7 @@ export function SecurityQuestion(props: WithRouterProps) {
       if (user) {
         dispatch(updateUser(user))
 
-        props.router.push('/onboarding/config-brand')
+        props.navigate('/onboarding/config-brand')
       }
     } catch (error) {
       return {

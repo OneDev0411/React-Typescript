@@ -1,24 +1,33 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 
-import { Box, makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
+      '&:first-child': {
+        marginTop: theme.spacing(1)
+      },
+
       marginBottom: (props: Props) => {
         if (props.title) {
-          return theme.spacing(6)
+          return theme.spacing(3)
         }
 
         return theme.spacing(1)
       }
     },
     title: {
-      display: 'inline-block',
-      paddingLeft: theme.spacing(1),
+      marginLeft: theme.spacing(1),
+      marginBottom: theme.spacing(0.2),
+      fontSize: theme.typography.pxToRem(16),
+      fontFamily: theme.typography.fontFamily,
+      fontWeight: 600
+    },
+    subtitle: {
+      marginLeft: theme.spacing(1),
       marginBottom: theme.spacing(0.5),
-      color: theme.palette.text.primary,
-      ...theme.typography.body1
+      ...theme.typography.body3
     }
   }),
   { name: 'ContactProfileBasicSection' }
@@ -26,15 +35,23 @@ const useStyles = makeStyles(
 
 interface Props {
   title?: string
+  subtitle?: string
   children?: ReactNode
 }
 
-export const BasicSection = ({ title, children }: Props) => {
+export const BasicSection = ({ title, subtitle, children }: Props) => {
   const classes = useStyles({ title, children })
 
   return (
     <Box className={classes.container}>
-      {title && <span className={classes.title}>{title}</span>}
+      {title && (
+        <Typography className={classes.title} variant="body2" gutterBottom>
+          {title}
+        </Typography>
+      )}
+      {subtitle && (
+        <Typography className={classes.subtitle}>{subtitle}</Typography>
+      )}
       {children}
     </Box>
   )

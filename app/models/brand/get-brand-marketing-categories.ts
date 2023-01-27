@@ -10,7 +10,7 @@ interface Options {
 export async function getBrandMarketingCategories(
   brand: UUID,
   options?: Options
-): Promise<IMarketingTemplateCategories> {
+): Promise<IMarketingTemplateCategoryWithStats[]> {
   const query: {
     'types[]'?: IMarketingTemplateType[]
     'mediums[]'?: IMarketingTemplateMedium[]

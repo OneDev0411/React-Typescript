@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { useNavigate } from '@app/hooks/use-navigate'
 import { changeUrl } from '@app/utils/change-url'
 
 interface UseListingsListColumnActionsViewListingItemReturn {
@@ -13,6 +14,7 @@ interface UseListingsListColumnActionsViewListingItemReturn {
 function useListingsListColumnActionsViewListingItem(): UseListingsListColumnActionsViewListingItemReturn {
   const [isListingModalOpen, setIsListingsModalOpen] = useState(false)
   const viewListingLabel = 'View Listing'
+  const navigate = useNavigate()
 
   const openListingsModal = (listingId: UUID) => {
     changeUrl(`/dashboard/mls/${listingId}`)
@@ -20,7 +22,7 @@ function useListingsListColumnActionsViewListingItem(): UseListingsListColumnAct
   }
 
   const closeListingsModal = () => {
-    window.history.back()
+    navigate(-1)
     setIsListingsModalOpen(false)
   }
 

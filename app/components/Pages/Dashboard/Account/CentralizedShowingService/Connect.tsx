@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import { FunctionComponent } from 'react'
 
 import { Form, Field } from 'react-final-form'
 import Flex from 'styled-flex-component'

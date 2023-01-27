@@ -4,6 +4,9 @@ import { Button, Typography, Box } from '@material-ui/core'
 import { Form, Field } from 'react-final-form'
 import { Link } from 'react-router'
 
+import { useSearchParams } from '@app/hooks/use-search-param'
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { Logo } from '@app/views/components/OAuthPageLayout/Logo'
 import { PoweredBy } from '@app/views/components/OAuthPageLayout/PoweredBy'
 
@@ -18,9 +21,11 @@ interface SubmitState {
   status: 'initial' | 'pending' | 'succeed' | 'failed'
 }
 
-export default function Signup(props) {
+function Signup(props: WithRouterProps) {
+  const [searchParams] = useSearchParams()
+
   const [email, setEmail] = useState<string>(
-    window.decodeURIComponent(props.location.query.email || '')
+    window.decodeURIComponent(searchParams.get('email') || '')
   )
   const [submitState, setSubmitState] = useState<SubmitState>({
     status: 'initial',
@@ -110,3 +115,5 @@ export default function Signup(props) {
     </div>
   )
 }
+
+export default withRouter(Signup)

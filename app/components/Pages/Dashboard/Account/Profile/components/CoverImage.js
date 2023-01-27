@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 
 import { Button, IconButton, Box, useTheme, Tooltip } from '@material-ui/core'
 import { mdiAccount, mdiTrashCanOutline } from '@mdi/js'

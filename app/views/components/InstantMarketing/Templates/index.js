@@ -81,7 +81,16 @@ class Templates extends React.Component {
               brandTemplate.template.variant !== SAVED_TEMPLATE_VARIANT
           )
 
-          templates = [...otherTemplates, ...savedTemplates]
+          templates = [...otherTemplates, ...savedTemplates].sort((a, b) => {
+            // Video templates shouldn't be default templates,
+            // so we sort the templates array based on the absence of `video` property
+            // https://gitlab.com/rechat/web/-/issues/7131#note_1251796274
+            if (a.template.video === b.template.video) {
+              return 0
+            }
+
+            return a.template.video ? 1 : -1
+          })
         }
 
         const currentTemplatesTypes = [

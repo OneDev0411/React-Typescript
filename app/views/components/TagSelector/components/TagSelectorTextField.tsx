@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 
 import {
   Typography,
@@ -44,7 +44,9 @@ export const TagSelectorTextField = ({
   textFieldProps,
   disabled
 }: TagSelectorTextFieldProps) => {
-  const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
+  const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(
+    () => value
+  )
   const [availableTags, setAvailableTags] = useState<SelectorOption[]>([])
   const [availableTagKeys, setAvailableTagKeys] = useState<string[]>([])
   const existingTags = useSelector(selectExistingTags)
@@ -52,6 +54,10 @@ export const TagSelectorTextField = ({
     () => selectedTags.map(tag => tag.value?.toLowerCase()),
     [selectedTags]
   )
+
+  useEffect(() => {
+    setSelectedTags(value)
+  }, [value])
 
   useEffectOnce(() => {
     async function fetchTags() {

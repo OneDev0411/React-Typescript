@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 import {
   ListItem,
@@ -9,9 +9,9 @@ import {
 import { withStyles } from '@material-ui/core/styles'
 import { mdiChevronDown, mdiChevronUp, mdiClose } from '@mdi/js'
 import { connect } from 'react-redux'
-import { withRouter, browserHistory } from 'react-router'
 
 import { selectListings as selectAlerts } from '@app/reducers/listings'
+import { withRouter } from '@app/routes/with-router'
 import { confirmation } from '@app/store_actions/confirmation'
 import deleteAlert from '@app/store_actions/listings/alerts/delete-alert'
 import getAlerts from '@app/store_actions/listings/alerts/get-alerts'
@@ -75,7 +75,7 @@ class SavedSearchesList extends Component {
         // if we are on the same saved-search page which we're deleting it, we redirect user to
         // MLS' default page, otherwise we're staying where we are.
         if (location.pathname.includes(Item.id)) {
-          browserHistory.push('/dashboard/mls')
+          this.props.navigate('/dashboard/mls')
         }
       })
     } catch (error) {
@@ -84,7 +84,7 @@ class SavedSearchesList extends Component {
   }
 
   navigateToSavedItem = id => {
-    browserHistory.push(`/dashboard/mls/saved-searches/${id}`)
+    this.props.navigate(`/dashboard/mls/saved-searches/${id}`)
   }
 
   render() {

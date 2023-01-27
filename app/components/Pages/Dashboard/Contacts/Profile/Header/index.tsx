@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 
@@ -9,17 +9,18 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       display: 'flex',
-      padding: theme.spacing(3.5, 0, 1),
+      alignItems: 'flex-start',
+      padding: theme.spacing(2, 0),
       gap: theme.spacing(3)
     },
     catalogContainer: {
-      flex: '1 1 auto'
+      flex: '1 1'
     },
     actionsContainer: {
       width: 'min-content',
       display: 'flex',
       height: 'auto',
-      alignItems: 'start'
+      alignItems: 'center'
     }
   }),
   { name: 'ContactProfileHeader' }
@@ -27,14 +28,18 @@ const useStyles = makeStyles(
 
 export interface Props {
   contact: INormalizedContact
+  onChangeAvatar: (contact: INormalizedContact) => void
   contactChangeCallback: () => void
   onUpdateTouchFreq(newValue: Nullable<number>): void
+  RenderActions?: ReactNode
 }
 
 export const Header = ({
   contact,
+  onChangeAvatar,
   contactChangeCallback,
-  onUpdateTouchFreq
+  onUpdateTouchFreq,
+  RenderActions
 }: Props) => {
   const classes = useStyles()
 
@@ -43,11 +48,13 @@ export const Header = ({
       <div className={classes.catalogContainer}>
         <Catalog
           contact={contact}
+          onChangeAvatar={onChangeAvatar}
           contactChangeCallback={contactChangeCallback}
         />
       </div>
       <div className={classes.actionsContainer}>
         <Actions contact={contact} onUpdateTouchFreq={onUpdateTouchFreq} />
+        {RenderActions}
       </div>
     </div>
   )

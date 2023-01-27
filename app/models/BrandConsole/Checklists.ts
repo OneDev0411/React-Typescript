@@ -87,9 +87,57 @@ export async function sortTasks(
 ) {
   try {
     return await new Fetch()
-      .put(`/brands/${brand}/checklists/${checklist}/sort`)
+      .put(`/brands/${brand}/checklists/${checklist}/tasks/sort`)
       .send(list)
   } catch (error) {
     return { error }
   }
+}
+
+export async function addBrandChecklistRole(
+  brandId: string,
+  checklistId: string,
+  role: Partial<IBrandChecklistRole>
+): Promise<IBrandChecklist> {
+  const response = await new Fetch()
+    .post(`/brands/${brandId}/checklists/${checklistId}/roles`)
+    .send(role)
+
+  return response.body.data
+}
+
+export async function sortRoles(
+  brand: UUID,
+  checklist: UUID,
+  list: { id: UUID; order: number }[]
+) {
+  try {
+    return await new Fetch()
+      .put(`/brands/${brand}/checklists/${checklist}/roles/sort`)
+      .send(list)
+  } catch (error) {
+    return { error }
+  }
+}
+
+export async function removeBrandChecklistRole(
+  brandId: string,
+  checklistId: string,
+  roleId: string
+): Promise<void> {
+  await new Fetch().delete(
+    `/brands/${brandId}/checklists/${checklistId}/roles/${roleId}`
+  )
+}
+
+export async function updateBrandChecklistRole(
+  brandId: string,
+  checklistId: string,
+  role: IBrandChecklistRole
+): Promise<IBrandChecklist> {
+  const response = await new Fetch()
+    .put(`/brands/${brandId}/checklists/${checklistId}/roles/${role.id}`)
+    .send(role)
+
+  return response.body.data
 }

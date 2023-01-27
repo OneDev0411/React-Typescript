@@ -4,7 +4,6 @@ import { Box } from '@material-ui/core'
 import { mdiScriptTextOutline } from '@mdi/js'
 import { Form } from 'react-final-form'
 
-import { Description } from '../components/BaseFields/Description'
 import { EmailTemplate } from '../components/BaseFields/EmailTemplate'
 import { Title } from '../components/BaseFields/Title'
 import { BaseFormLayout } from '../components/BaseFormLayout'
@@ -66,12 +65,6 @@ function BasicEmailForm({
             <Box mb={2}>
               <Title
                 label="Email Subject"
-                textFieldProps={{ disabled: disableEdit }}
-              />
-            </Box>
-            <Box mb={2}>
-              <Description
-                enabled={!!values.description}
                 textFieldProps={{ disabled: disableEdit }}
               />
             </Box>

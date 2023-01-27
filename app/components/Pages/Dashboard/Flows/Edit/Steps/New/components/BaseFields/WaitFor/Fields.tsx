@@ -3,11 +3,13 @@ import React, { useState } from 'react'
 import {
   Theme,
   Select,
-  Checkbox,
   MenuItem,
   makeStyles,
   OutlinedInput,
-  FormControlLabel
+  FormControlLabel,
+  Typography,
+  Radio,
+  FormControl
 } from '@material-ui/core'
 import pluralize from 'pluralize'
 
@@ -17,16 +19,19 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      justifyContent: 'space-between'
     },
     fieldsContainer: {
       display: 'flex',
+      flexDirection: 'row',
       alignItems: 'center',
-      flexWrap: 'nowrap',
-      flexGrow: 1
+      flexWrap: 'nowrap'
+    },
+    separator: {
+      color: theme.palette.grey[500]
     },
     value: {
-      flexGrow: 1,
       maxWidth: '100px'
     },
     unit: {
@@ -92,16 +97,15 @@ export const WaitForFields = ({
     baseValue.value === 0
   )
 
-  const handleSameDayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = event.target.checked
+  const handleSameDayChange = (isSameDay: boolean) => {
     const sameDayState: RawWaitFor = {
       ...defaultWaitForValue,
       value: 0
     }
 
-    setIsSameDayActive(isChecked)
+    setIsSameDayActive(isSameDay)
 
-    if (isChecked) {
+    if (isSameDay) {
       onChange(sameDayState)
     } else {
       onChange({ value, unit, triggerAt })
@@ -137,73 +141,83 @@ export const WaitForFields = ({
     <div className={classes.container}>
       <FormControlLabel
         disabled={disabled}
+        onChange={() => handleSameDayChange(true)}
         control={
-          <Checkbox
-            checked={isSameDayActive}
-            disabled={disabled}
-            onChange={handleSameDayChange}
-            name="sameDay"
-          />
+          <Radio checked={isSameDayActive} disabled={disabled} name="sameDay" />
         }
-        label="Same Day"
+        label="Same Day / ASAP"
       />
-      <div className={classes.fieldsContainer}>
+      <Typography className={classes.separator} variant="body2">
+        OR
+      </Typography>
+      <FormControl
+        className={classes.fieldsContainer}
+        onClick={() => handleSameDayChange(false)}
+      >
+        <Radio checked={!isSameDayActive} disabled={disabled} name="date" />
         <div className={classes.value}>
-          <OutlinedInput
-            id="value"
-            type="number"
-            labelWidth={0}
-            defaultValue={value}
-            disabled={disabled || isSameDayActive}
-            inputProps={{
-              min: '1'
-            }}
-            classes={{
-              input: classes.outlinedPadding
-            }}
-            onChange={handleValueChange}
-          />
+          <FormControl>
+            <OutlinedInput
+              id="value"
+              type="number"
+              labelWidth={0}
+              defaultValue={value}
+              disabled={disabled || isSameDayActive}
+              inputProps={{
+                min: '1'
+              }}
+              classes={{
+                input: classes.outlinedPadding
+              }}
+              onChange={handleValueChange}
+            />
+          </FormControl>
         </div>
+
         <div className={classes.unit}>
-          <Select
-            fullWidth
-            labelId="event-unit"
-            id="event-unit-select"
-            variant="outlined"
-            color="secondary"
-            value={unit}
-            disabled={disabled || isSameDayActive}
-            onChange={handleUnitChange}
-            classes={{
-              outlined: classes.outlinedPadding
-            }}
-          >
-            {unitOptions.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {pluralize(option.title, value)}
-              </MenuItem>
-            ))}
-          </Select>
+          <FormControl>
+            <Select
+              fullWidth
+              labelId="event-unit"
+              id="event-unit-select"
+              variant="outlined"
+              color="secondary"
+              value={unit}
+              disabled={disabled || isSameDayActive}
+              onChange={handleUnitChange}
+              classes={{
+                outlined: classes.outlinedPadding
+              }}
+            >
+              {unitOptions.map(option => (
+                <MenuItem key={option.value} value={option.value}>
+                  {pluralize(option.title, value)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
         <div className={classes.triggerAt}>
-          <Select
-            fullWidth
-            labelId="trigger-at"
-            id="trigger-at-select"
-            variant="outlined"
-            color="secondary"
-            value={triggerAt}
-            disabled={disabled || isSameDayActive}
-            onChange={handleTriggerAtChange}
-            classes={{
-              outlined: classes.outlinedPadding
-            }}
-          >
-            <MenuItem value="after">After</MenuItem>
-            <MenuItem value="before">Before</MenuItem>
-          </Select>
+          <FormControl>
+            <Select
+              fullWidth
+              labelId="trigger-at"
+              id="trigger-at-select"
+              variant="outlined"
+              color="secondary"
+              value={triggerAt}
+              disabled={disabled || isSameDayActive}
+              onChange={handleTriggerAtChange}
+              classes={{
+                outlined: classes.outlinedPadding
+              }}
+            >
+              <MenuItem value="after">After</MenuItem>
+              <MenuItem value="before">Before</MenuItem>
+            </Select>
+          </FormControl>
         </div>
-      </div>
+      </FormControl>
     </div>
   )
 }

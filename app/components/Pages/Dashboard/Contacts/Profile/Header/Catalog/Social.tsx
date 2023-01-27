@@ -59,7 +59,6 @@ const useStyles = makeStyles(
     icon: {
       color: theme.palette.grey[700],
       borderRadius: '50%',
-      border: `1px solid ${theme.palette.grey[400]}`,
       padding: theme.spacing(0.25)
     }
   }),

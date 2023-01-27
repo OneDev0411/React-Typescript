@@ -12,7 +12,7 @@ export function DateTime({ event }: Props) {
   }
 
   const timeFormat = 'hh:mmA'
-  const dueDate = formatDate(event.timestamp, timeFormat).toLowerCase()
+  const dueDate = formatDate(event.sort_timestamp, timeFormat).toLowerCase()
 
   if (event.end_date) {
     return (

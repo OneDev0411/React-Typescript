@@ -1,3 +1,5 @@
+import { withRouter } from '@app/routes/with-router'
+
 import SearchMap from '../../Dashboard/MLS/ExploreTab'
 
 const MapWidget = props => (
@@ -6,4 +8,4 @@ const MapWidget = props => (
   </div>
 )
 
-export default MapWidget
+export default withRouter(MapWidget)

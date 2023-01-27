@@ -9,6 +9,7 @@ declare interface IBrandChecklist extends IModel<'brand_checklist'> {
   property_type: string // it's actually enum
   tab_name: string
   tasks: IBrandChecklistTask[] | null
+  roles: IBrandChecklistRole[]
   optional_contexts: IDealBrandContext[]
   required_contexts: IDealBrandContext[]
   statuses: IDealStatus[]
@@ -32,3 +33,7 @@ declare type IBrandChecklistTaskInput = Pick<IDealTask, 'task_type'> &
   Partial<
     Pick<IDealTask, 'order' | 'checklist' | 'form' | 'required' | 'title'>
   >
+
+declare interface IBrandChecklistRole extends IDealRole {
+  order: number
+}

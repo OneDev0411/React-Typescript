@@ -2,8 +2,9 @@ import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import idx from 'idx'
 import { Form } from 'react-final-form'
-import { WithRouterProps, Link } from 'react-router'
+import { Link } from 'react-router'
 
+import { WithRouterProps } from '@app/routes/types'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import Container from '../Container'
@@ -22,10 +23,10 @@ export function ChooseMls(props: WithRouterProps) {
   useDocumentTitle('Confirm Agent ID')
 
   const agents: IAgent[] = idx(props, p => p.location.state.agents)
-  const mlsId = props.location.query.mlsId
+  const mlsId = props.searchParams.get('mlsId')
 
   if (!Array.isArray(agents) || agents.length === 0) {
-    props.router.push('/oops')
+    props.navigate('/oops')
 
     return null
   }
@@ -37,10 +38,14 @@ export function ChooseMls(props: WithRouterProps) {
       return
     }
 
-    props.router.push({
-      pathname: '/onboarding/confirm-agent-id/security-question',
-      state: { agent }
-    })
+    props.navigate(
+      {
+        pathname: '/onboarding/confirm-agent-id/security-question'
+      },
+      {
+        state: { agent }
+      }
+    )
   }
 
   const defaultValue = '0000'

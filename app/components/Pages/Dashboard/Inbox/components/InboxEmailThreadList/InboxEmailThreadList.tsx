@@ -58,7 +58,7 @@ export default function InboxEmailThreadList({
     setEmailThreads([])
     searchQuery && onSelectEmailThread(undefined)
     delete searchMetaDataRef.current.next
-  }, [onUpdateEmailThreads, onSelectEmailThread, searchQuery])
+  }, [onSelectEmailThread, onUpdateEmailThreads, searchQuery])
 
   const dispatch = useDispatch()
 

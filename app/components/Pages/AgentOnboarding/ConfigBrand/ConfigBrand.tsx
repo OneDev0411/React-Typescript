@@ -5,9 +5,9 @@ import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { browserHistory } from 'react-router'
 
 import { useUnsafeActiveBrand } from '@app/hooks/brand/use-unsafe-active-brand'
+import { useNavigate } from '@app/hooks/use-navigate'
 import { setActiveTeam } from '@app/store_actions/active-team'
 import { updateUser } from 'actions/user'
 import { MUITextInput } from 'components/Forms/MUITextInput'
@@ -32,6 +32,7 @@ export function ConfigBrand() {
   useDocumentTitle('Config Brand')
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const commonClasses = useCommonStyles()
   const user = useSelector(selectUser)
   const activeBrand = useUnsafeActiveBrand()
@@ -62,7 +63,7 @@ export function ConfigBrand() {
         [
           {
             role: 'Admin',
-            acl: ['Admin', 'Marketing'],
+            acl: ['Admin', 'Marketing', 'BackOffice'],
             members: [{ user: user.id }]
           }
         ]
@@ -77,7 +78,7 @@ export function ConfigBrand() {
         [
           {
             role: 'Agent',
-            acl: ['CRM', 'Marketing'],
+            acl: ['CRM', 'Marketing', 'Deals'],
             members: [{ user: user.id }]
           }
         ]
@@ -102,7 +103,7 @@ export function ConfigBrand() {
         )
       }
 
-      browserHistory.push(getNextStep())
+      navigate(getNextStep())
     } catch (error) {
       let message = 'Something went wrong. Please try again.'
 
@@ -127,7 +128,7 @@ export function ConfigBrand() {
   }
 
   if (activeBrand) {
-    browserHistory.push(getNextStep())
+    navigate(getNextStep())
 
     return null
   }

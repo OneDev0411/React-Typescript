@@ -2,6 +2,7 @@ import { Grid, Typography, makeStyles } from '@material-ui/core'
 import { useTitle } from 'react-use'
 
 import { useQueryParamValue } from '@app/hooks/use-query-param'
+import { withRouter } from '@app/routes/with-router'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 
 const useStyles = makeStyles(
@@ -15,7 +16,7 @@ const useStyles = makeStyles(
   }
 )
 
-export default function Player() {
+function Player() {
   useTitle('Rechat | Player')
 
   const classes = useStyles()
@@ -45,3 +46,5 @@ export default function Player() {
     </PageLayout>
   )
 }
+
+export default withRouter(Player)

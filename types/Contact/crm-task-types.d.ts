@@ -1,4 +1,5 @@
 declare type CRMTaskTypes =
+  | 'Todo'
   | 'Call'
   | 'Chat'
   | 'Email'

@@ -1,8 +1,9 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 import { Button, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
-import { browserHistory } from 'react-router'
+
+import { useNavigate } from '@app/hooks/use-navigate'
 
 const useStyles = makeStyles((theme: Theme) => ({
   button: {
@@ -27,10 +28,10 @@ export default function NextButton({
   type = 'button'
 }: Props) {
   const classes = useStyles()
-
+  const navigate = useNavigate()
   const onClickHandler = () => {
     if (to) {
-      browserHistory.push(to)
+      navigate(to)
     } else if (onClick) {
       onClick()
     }

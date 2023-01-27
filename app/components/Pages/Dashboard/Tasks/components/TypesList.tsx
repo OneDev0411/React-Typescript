@@ -8,6 +8,10 @@ export const TaskTypeOptions: {
   value: CRMTaskTypes
 }[] = [
   {
+    label: 'Todo',
+    value: 'Todo'
+  },
+  {
     label: 'Call',
     value: 'Call'
   },

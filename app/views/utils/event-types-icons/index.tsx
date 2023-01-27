@@ -9,7 +9,6 @@ import {
   mdiNoteTextOutline,
   mdiHomeImportOutline,
   mdiMessageTextOutline,
-  mdiClipboardCheckOutline,
   mdiChatProcessingOutline,
   mdiAccountMultipleOutline,
   mdiCardAccountMailOutline,
@@ -19,7 +18,8 @@ import {
   mdiRing,
   mdiCakeVariant,
   mdiBriefcaseOutline,
-  mdiHomeHeart
+  mdiHomeHeart,
+  mdiCheckCircleOutline
 } from '@mdi/js'
 
 import {
@@ -122,9 +122,9 @@ export const eventTypesIcons = [
   },
   {
     name: 'Todo',
-    iconPath: mdiClipboardCheckOutline,
+    iconPath: mdiCheckCircleOutline,
     icon: (props: SvgIconProps) => (
-      <SvgIcon {...props} path={mdiClipboardCheckOutline} />
+      <SvgIcon {...props} path={mdiCheckCircleOutline} />
     ),
     color: '#4e709d'
   },

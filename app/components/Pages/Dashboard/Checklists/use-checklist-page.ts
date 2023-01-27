@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 
-import usePromise from 'react-use-promise'
-
 import {
   addBrandCheckListTask,
   getBrandChecklists,
   removeBrandChecklistTask,
   updateBrandChecklist,
   updateBrandChecklistTask,
-  sortTasks
+  sortTasks,
+  addBrandChecklistRole,
+  removeBrandChecklistRole,
+  sortRoles,
+  updateBrandChecklistRole
 } from 'models/BrandConsole/Checklists'
-import { getBrandForms } from 'models/BrandConsole/Forms'
 
 /**
  * react hook encapsulating logic related to checklists page
@@ -19,11 +20,6 @@ export function useChecklistsPage(rootBrandId: string | null) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<any>(null)
   const [checklists, setChecklists] = useState<IBrandChecklist[]>([])
-
-  const [forms, formsError, formsState] = usePromise(
-    () => (rootBrandId ? getBrandForms(rootBrandId) : Promise.reject()),
-    [rootBrandId]
-  )
 
   const fetchChecklists = async (brandId: UUID) => {
     setLoading(true)
@@ -76,6 +72,37 @@ export function useChecklistsPage(rootBrandId: string | null) {
       )
     }
   }
+
+  const addRole = async (checklist: IBrandChecklist, role: IDealRole) => {
+    if (rootBrandId) {
+      applyChecklistUpdate(
+        checklist.id,
+        await addBrandChecklistRole(rootBrandId, checklist.id, {
+          ...role,
+          order:
+            Array.isArray(checklist.roles) && checklist.roles.length > 0
+              ? Math.max(...checklist.roles.map(task => task.order)) + 1
+              : 1
+        })
+      )
+    }
+  }
+
+  const updateRole = async (
+    checklist: IBrandChecklist,
+    role: IBrandChecklistRole
+  ) => {
+    if (rootBrandId) {
+      const checklist1 = await updateBrandChecklistRole(
+        rootBrandId,
+        checklist.id,
+        role
+      )
+
+      applyChecklistUpdate(checklist.id, checklist1)
+    }
+  }
+
   const updateChecklist = async (checklist: IBrandChecklist) => {
     applyChecklistUpdate(checklist.id, await updateBrandChecklist(checklist))
   }
@@ -99,7 +126,7 @@ export function useChecklistsPage(rootBrandId: string | null) {
       task_type: 'Splitter'
     })
   }
-  const addFormTask = (checklist: IBrandChecklist, form: IDealForm) => {
+  const addFormTask = (checklist: IBrandChecklist, form: IBrandForm) => {
     return addTask(checklist, {
       task_type: 'Form',
       title: form.name,
@@ -114,12 +141,22 @@ export function useChecklistsPage(rootBrandId: string | null) {
     }
   }
 
-  const deleteTask = async (checklistId, taskId: UUID) => {
+  const deleteTask = async (checklistId: UUID, taskId: UUID) => {
     if (rootBrandId) {
       await removeBrandChecklistTask(rootBrandId, checklistId, taskId)
       applyChecklistUpdate(checklistId, checklist => ({
         ...checklist,
         tasks: (checklist.tasks || []).filter(task => task.id !== taskId)
+      }))
+    }
+  }
+
+  const deleteRole = async (checklistId: UUID, roleId: UUID) => {
+    if (rootBrandId) {
+      await removeBrandChecklistRole(rootBrandId, checklistId, roleId)
+      applyChecklistUpdate(checklistId, checklist => ({
+        ...checklist,
+        roles: (checklist.roles || []).filter(role => role.id !== roleId)
       }))
     }
   }
@@ -149,23 +186,48 @@ export function useChecklistsPage(rootBrandId: string | null) {
     }
   }
 
+  const reorderRoles = (checklistId: UUID, roles: IBrandChecklistRole[]) => {
+    if (rootBrandId) {
+      const orders = roles.map(role => ({
+        id: role.id,
+        order: role.order
+      }))
+
+      sortRoles(rootBrandId, checklistId, orders)
+
+      setChecklists(checklists =>
+        checklists.map(checklist => {
+          if (checklist.id === checklistId) {
+            return {
+              ...checklist,
+              roles
+            }
+          }
+
+          return checklist
+        })
+      )
+    }
+  }
+
   return {
     checklists,
     loading,
     error,
     addTask,
+    addRole,
     updateChecklist,
     updateTask,
+    updateRole,
     deleteTask,
+    deleteRole,
     reorderTasks,
+    reorderRoles,
     addChecklists,
     addGenericTask,
     addGeneralCommentTask,
     addSplitterTask,
     addFormTask,
-    forms,
-    formsError,
-    formsState,
     fetchChecklists
   }
 }

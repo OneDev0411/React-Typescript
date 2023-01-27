@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { SectionsEnum } from 'components/PageSideNav/types'
 import { PageTabs, TabLink, MegaTab } from 'components/PageTabs'
 import { SectionCollection } from 'hooks/use-marketing-center-sections'
@@ -87,7 +85,7 @@ const MarketingTabs = ({
               key={linkItem.value as string}
               to={linkItem.link}
               value={section.key}
-              label={linkItem.title}
+              label={categories[section.key]?.label || linkItem.title}
             />
           ))
         }

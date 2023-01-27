@@ -5,7 +5,6 @@ import Fuse from 'fuse.js'
 
 import { useTemplateTypeSections } from '@app/hooks/use-template-type-sections'
 import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
-import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
 import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch/SearchInput'
 
 import { MarketingSearchInputProps, TemplateTypeWithMedium } from './types'
@@ -25,7 +24,7 @@ export default function MarketingSearchInput({
       types.map(data => ({
         ...data,
         category: getSection(data.type).title,
-        title: `${getTemplateTypeLabel(data.type)}${
+        title: `${data.label}${
           data.medium ? ` ${getTemplateMediumLabel(data.medium)}` : ''
         }`
       })),

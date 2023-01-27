@@ -16,11 +16,7 @@ import MasterField from '../ContactAttributeInlineEditableField'
 import { BasicSection } from '../Section/Basic'
 import { SectionButton } from '../Section/Button'
 
-import {
-  fieldsNeedUpdateContact,
-  orderFields,
-  normalizeAttributes
-} from './helpers'
+import { orderFields, normalizeAttributes } from './helpers'
 import { getContactTriggers } from './helpers/get-contact-triggers'
 import { getScheduleEmailTrigger } from './helpers/get-schedule-email-trigger'
 
@@ -67,38 +63,53 @@ function orderAttributes(attributes, fieldsOrder, fieldsFilter) {
   })
 }
 
+function getInitialState(props) {
+  const { attributes, sectionAttributesDef } = normalizeAttributes(props)
+  const emptyAttributes = getEmptyAttributes(
+    attributes,
+    sectionAttributesDef,
+    props.isPartner
+  )
+
+  const allAttributes = [...attributes, ...emptyAttributes]
+  const shouldToggleEmptyAttributes = Boolean(emptyAttributes)
+  const toggleEmptyAttributes = false
+  const orderedAttributes = orderAttributes(
+    allAttributes,
+    props.fieldsOrder,
+    props.fieldsFilter
+  )
+  const isAllFieldsEmpty = attributes.length === 0
+  const triggers = getContactTriggers(props.contact)
+
+  return {
+    contactId: props.contact?.id,
+    shouldToggleEmptyAttributes,
+    toggleEmptyAttributes,
+    orderedAttributes,
+    isAllFieldsEmpty,
+    triggers,
+    isConfirmationModalOpen: false
+  }
+}
+
 class SectionWithFields extends React.Component {
   constructor(props) {
     super(props)
 
-    const { attributes, sectionAttributesDef } = normalizeAttributes(props)
+    const { sectionAttributesDef } = normalizeAttributes(props)
 
     this.sectionAttributesDef = sectionAttributesDef
 
-    const emptyAttributes = getEmptyAttributes(
-      attributes,
-      sectionAttributesDef,
-      props.isPartner
-    )
+    this.state = getInitialState(props)
+  }
 
-    const allAttributes = [...attributes, ...emptyAttributes]
-    const shouldToggleEmptyAttributes = Boolean(emptyAttributes)
-    const toggleEmptyAttributes = false
-    const orderedAttributes = orderAttributes(
-      allAttributes,
-      props.fieldsOrder,
-      props.fieldsFilter
-    )
-    const isAllFieldsEmpty = attributes.length === 0
-    const triggers = getContactTriggers(props.contact)
-
-    this.state = {
-      shouldToggleEmptyAttributes,
-      toggleEmptyAttributes,
-      orderedAttributes,
-      isAllFieldsEmpty,
-      triggers
+  static getDerivedStateFromProps(props, state) {
+    if (state.contactId && state.contactId !== props.contact?.id) {
+      return getInitialState(props)
     }
+
+    return state
   }
 
   get orderedAttributesCopy() {
@@ -106,26 +117,23 @@ class SectionWithFields extends React.Component {
     return this.state.orderedAttributes.slice()
   }
 
-  toggleMode = ({ order }) =>
-    this.setState(state => ({
-      orderedAttributes: state.orderedAttributes.map(a =>
-        a.order === order ? { ...a, isActive: !a.isActive } : a
-      )
+  setConfirmationModal = value => {
+    this.setState(prevState => ({
+      ...prevState,
+      isConfirmationModalOpen: value
     }))
+  }
 
-  shouldUpdateContact = attribute_def => {
-    if (fieldsNeedUpdateContact.includes(attribute_def.name)) {
-      return true
-    }
-
-    return false
+  toggleMode = ({ order }) => {
+    this.setState(state => ({
+      orderedAttributes: state.orderedAttributes.map(attribute => ({
+        ...attribute,
+        isActive: attribute.order === order ? !attribute.isActive : false
+      }))
+    }))
   }
 
   updateContact = async attribute_def => {
-    if (!this.shouldUpdateContact(attribute_def)) {
-      return
-    }
-
     const { contact, submitCallback } = this.props
 
     try {
@@ -150,13 +158,7 @@ class SectionWithFields extends React.Component {
       }))
 
       if (submitCallback) {
-        submitCallback(
-          {
-            ...normalizeContact(response.data),
-            deals: contact.deals
-          },
-          attribute_def
-        )
+        submitCallback(normalizeContact(response.data), attribute_def)
       }
     } catch (error) {
       console.log(error)
@@ -416,7 +418,7 @@ class SectionWithFields extends React.Component {
 
   renderToggleButton = () => {
     const { toggleEmptyAttributes } = this.state
-    const { expandButtonLabel = 'More Fields', expandButtonIcon = mdiPlus } =
+    const { expandButtonLabel = 'More', expandButtonIcon = mdiPlus } =
       this.props
 
     return (
@@ -444,6 +446,8 @@ class SectionWithFields extends React.Component {
         handleDelete={this.deleteHandler}
         handleSave={this.save}
         handleToggleMode={this.toggleMode}
+        setConfirmationModal={this.setConfirmationModal}
+        isConfirmationModalOpen={this.state.isConfirmationModalOpen}
         isActive={attribute.isActive}
         key={attribute.cuid || attribute.id}
       />
@@ -451,7 +455,7 @@ class SectionWithFields extends React.Component {
   }
 
   render() {
-    const { title, contact, renderer, showTitleAnyway } = this.props
+    const { title, subtitle, contact, renderer } = this.props
     const {
       isAllFieldsEmpty,
       orderedAttributes,
@@ -476,7 +480,7 @@ class SectionWithFields extends React.Component {
 
     if (isAllFieldsEmpty && !toggleEmptyAttributes) {
       return (
-        <BasicSection title={showTitleAnyway ? title : undefined}>
+        <BasicSection subtitle={subtitle} title={title}>
           {this.props.children}
           {this.renderToggleButton()}
         </BasicSection>
@@ -484,10 +488,12 @@ class SectionWithFields extends React.Component {
     }
 
     return (
-      <BasicSection title={title}>
+      <BasicSection subtitle={subtitle} title={title}>
         {(orderedAttributes || []).map(attr => this.renderField(attr))}
         {this.props.children}
-        {shouldToggleEmptyAttributes && this.renderToggleButton()}
+        {orderedAttributes.find(a => a.text === '' || a.date === '') &&
+          shouldToggleEmptyAttributes &&
+          this.renderToggleButton()}
       </BasicSection>
     )
   }

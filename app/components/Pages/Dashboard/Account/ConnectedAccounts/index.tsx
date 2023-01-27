@@ -13,6 +13,8 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
+import { RouteComponentProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import Acl from '@app/views/components/Acl'
 import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
@@ -38,7 +40,7 @@ const useStyles = makeStyles(
   { name: 'ConnectedAccountsLayout' }
 )
 
-interface Props {
+interface Props extends RouteComponentProps {
   accounts: IOAuthAccount[]
   fetchOAuthAccounts: IAsyncActionProp<typeof fetchOAuthAccounts>
   syncOAuthAccount: IAsyncActionProp<typeof syncOAuthAccount>
@@ -156,4 +158,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConnectedAccounts)
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ConnectedAccounts)
+)

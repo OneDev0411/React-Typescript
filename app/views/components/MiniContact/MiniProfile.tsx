@@ -38,6 +38,7 @@ interface MiniProfilePropsType {
   actionSettings: ActionSettingsType
   setActionSettings: (items: ActionSettingsType) => void
   onSubmit?(event: IEvent, type: string): void
+  onOpenProfile?: (id: UUID) => void
 }
 
 export default function MiniProfile({
@@ -45,7 +46,8 @@ export default function MiniProfile({
   initData,
   actionSettings,
   setActionSettings,
-  onSubmit
+  onSubmit,
+  onOpenProfile
 }: MiniProfilePropsType) {
   const user = useSelector(selectUser)
   const attributeDefs = useSelector(
@@ -82,6 +84,13 @@ export default function MiniProfile({
             {!!output.contact_id && (
               <Link
                 target="blank"
+                onClick={e => {
+                  if (typeof onOpenProfile === 'function') {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onOpenProfile(output.contact_id)
+                  }
+                }}
                 to={`/dashboard/contacts/${output.contact_id}`}
               >
                 <Button color="primary">View Profile</Button>

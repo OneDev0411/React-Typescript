@@ -31,6 +31,7 @@ interface Props {
   handleOutsideClick?: () => void
   handleSave: (callback: () => void) => void
   renderEditMode: (props: Pick<EditModeProps, 'error'>) => ReactNode
+  isConfirmationModalOpen?: boolean
 }
 
 export const InlineEditableField = (props: Props) => {
@@ -57,7 +58,8 @@ export const InlineEditableField = (props: Props) => {
     toggleMode: onToggleMode,
     handleDelete: onDelete = noop,
     handleAddNew: onAddNew = noop,
-    handleOutsideClick: onOutsideClick
+    handleOutsideClick: onOutsideClick,
+    isConfirmationModalOpen
   } = props
   const popoverEditContainerRef = useRef<Nullable<HTMLDivElement>>(null)
   const [ref, setRef] = useState<Nullable<HTMLElement>>(null)
@@ -66,13 +68,12 @@ export const InlineEditableField = (props: Props) => {
   const handleToggleMode = event => {
     event.stopPropagation()
 
-    if (isPopoverMode) {
+    if (isPopoverMode && !isConfirmationModalOpen) {
       setRef(event.currentTarget)
     }
 
     onToggleMode()
   }
-
   const handleAddNew = event => {
     event.stopPropagation()
 
@@ -150,8 +151,8 @@ export const InlineEditableField = (props: Props) => {
       isPartner,
       showDelete,
       attributeName,
-      handleDelete,
       handleAddNew,
+      handleDelete,
       renderBody: renderViewMode,
       toggleMode: handleToggleMode
     }

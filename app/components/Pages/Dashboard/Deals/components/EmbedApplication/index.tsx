@@ -29,9 +29,11 @@ import {
   changeNeedsAttention,
   changeTaskStatus,
   upsertContexts,
-  deleteRole
+  deleteRole,
+  updateRole
 } from '@app/store_actions/deals'
 import { AgentsPicker } from '@app/views/components/AgentsPicker'
+import { normalizeForm } from '@app/views/components/DealRole/helpers/normalize-form'
 import { DialogTitle } from '@app/views/components/DialogTitle'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import DatePicker from 'components/DatePicker'
@@ -213,6 +215,21 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
     [deal, dispatch]
   )
 
+  const updateDealRole = useCallback(
+    async (data: Partial<IDealRole>) => {
+      try {
+        dispatch(updateRole(deal.id, normalizeForm(data)))
+
+        return true
+      } catch (e) {
+        console.log(e)
+
+        return null
+      }
+    },
+    [deal, dispatch]
+  )
+
   const updateTaskStatus = useCallback(
     async (
       status: 'Approved' | 'Declined' | 'Incomplete',
@@ -322,6 +339,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
               updateDealContext,
               updateTaskStatus,
               deleteRole: deleteDealRole,
+              updateRole: updateDealRole,
               close: onClose
             }}
           />

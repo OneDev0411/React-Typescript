@@ -1,9 +1,11 @@
 import { useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { browserHistory, withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { useNavigate } from '@app/hooks/use-navigate'
+import { WithRouterProps } from '@app/routes/types'
+import { withRouter } from '@app/routes/with-router'
 import { markNotificationAsSeen } from 'actions/notifications'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
@@ -23,6 +25,7 @@ import List from './List'
 function Notifications({ params }: WithRouterProps) {
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
+  const navigate = useNavigate()
   const isFetching = useSelector((store: IAppState) =>
     selectNotificationIsFetching(store.globalNotifications)
   )
@@ -45,12 +48,12 @@ function Notifications({ params }: WithRouterProps) {
 
   const openCRMTaskDrawer = (selectedEvent: ICRMTask) => {
     setSelectedEvent(selectedEvent.id)
-    browserHistory.push(`/dashboard/notifications/crm/${selectedEvent.id}`)
+    navigate(`/dashboard/notifications/crm/${selectedEvent.id}`)
   }
 
   const closeCRMTaskDrawer = () => {
     setSelectedEvent(null)
-    browserHistory.push('/dashboard/notifications')
+    navigate('/dashboard/notifications')
   }
 
   const handleNotifClick = (notification: INotification) => {
@@ -58,20 +61,20 @@ function Notifications({ params }: WithRouterProps) {
 
     switch (notification.notification_type) {
       case 'DealRoleReactedToEnvelope':
-        browserHistory.push(`/dashboard/deals/${notification.objects[0].deal}`)
+        navigate(`/dashboard/deals/${notification.objects[0].deal}`)
         break
       case 'UserReactedToEnvelope':
-        browserHistory.push(`/dashboard/deals/${notification.objects[0].deal}`)
+        navigate(`/dashboard/deals/${notification.objects[0].deal}`)
         break
       case 'OpenHouseAvailableListing':
-        browserHistory.push(`/dashboard/mls/${notification.objects[0].id}`)
+        navigate(`/dashboard/mls/${notification.objects[0].id}`)
         break
       case 'ContactAttributeIsDueContact':
       case 'UserCapturedContact':
-        browserHistory.push(`/dashboard/contacts/${notification.objects[0].id}`)
+        navigate(`/dashboard/contacts/${notification.objects[0].id}`)
         break
       case 'DealContextIsDueDeal':
-        browserHistory.push(`/dashboard/deals/${notification.objects[0].id}`)
+        navigate(`/dashboard/deals/${notification.objects[0].id}`)
         break
       case 'CrmTaskIsDueCrmTask':
       case 'ReminderIsDueCrmTask':
@@ -82,13 +85,11 @@ function Notifications({ params }: WithRouterProps) {
       case 'ListingPriceDroppedUser':
       case 'ListingStatusChangedUser':
       case 'ListingBecameAvailableUser':
-        browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
+        navigate(`/dashboard/mls/${notification.subjects[0].id}`)
         break
       case 'EmailCampaignReactedToEmailCampaign':
       case 'EmailCampaignReactedToEmailCampaignEmail':
-        browserHistory.push(
-          `/dashboard/insights/${notification.subjects[0].id}`
-        )
+        navigate(`/dashboard/insights/${notification.subjects[0].id}`)
         break
       default:
         break

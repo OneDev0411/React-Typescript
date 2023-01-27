@@ -44,7 +44,9 @@ const propTypes = {
   onUpsertRole: PropTypes.func,
   onDeleteRole: PropTypes.func,
   showSaveContactButton: PropTypes.bool,
-  dealSide: PropTypes.string
+  dealSide: PropTypes.string,
+  hideNewContactButton: PropTypes.bool,
+  propertyType: PropTypes.object
 }
 
 const defaultProps = {
@@ -54,8 +56,10 @@ const defaultProps = {
   isCommissionRequired: true,
   showBrokerageFields: false,
   compact: false,
+  hideNewContactButton: false,
   title: '',
   defaultRole: '',
+  propertyType: null,
   allowedRoles: [],
   onUpsertRole: () => null,
   onDeleteRole: () => null
@@ -461,6 +465,7 @@ export class DealRole extends React.Component {
             initialValues: this.formObject,
             deal: this.props.deal,
             compact: this.props.compact,
+            hideNewContactButton: this.props.hideNewContactButton,
             isSubmitting: this.state.isSaving,
             onSubmit: this.handleSubmit,
             onClose: this.handleClose
@@ -477,6 +482,7 @@ export class DealRole extends React.Component {
                   isRoleRemovable={this.props.isRoleRemovable}
                   requiredFields={requiredFields}
                   visibleFields={visibleFields}
+                  propertyType={this.props.propertyType}
                   isAllowedRole={this.isAllowedRole}
                   userEmail={this.props.user.email}
                   onDeleteRole={this.handleDeleteRole}

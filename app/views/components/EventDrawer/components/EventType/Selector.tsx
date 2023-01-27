@@ -20,6 +20,10 @@ import { eventTypesIcons } from 'views/utils/event-types-icons'
 
 const SHORTHAND_ITEMS = [
   {
+    title: 'Todo',
+    value: 'Todo'
+  },
+  {
     title: 'Call',
     value: 'Call'
   },

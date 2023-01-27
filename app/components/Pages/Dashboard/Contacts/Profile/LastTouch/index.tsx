@@ -1,36 +1,22 @@
-import { Box, makeStyles, Theme } from '@material-ui/core'
-
-import { LastTouched } from 'components/LastTouched'
-
 import { BasicSection } from '../components/Section/Basic'
 
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    wrapper: {
-      padding: theme.spacing(0, 1)
-    },
-    icon: {
-      position: 'relative',
-      top: theme.spacing(0.5),
-      marginLeft: theme.spacing(1),
-      color: theme.palette.grey[900]
-    }
-  }),
-  { name: 'ContactProfileLastTouch' }
-)
+import LastTouchField from './LastTouchField'
+import TouchFrequency from './TouchFrequency'
 
 interface Props {
   contact: INormalizedContact
+  onUpdateTouchFreq(newValue: Nullable<number>): void
 }
 
-export const LastTouch = ({ contact }: Props) => {
-  const classes = useStyles()
-
+export const LastTouch = ({ contact, onUpdateTouchFreq }: Props) => {
   return (
-    <BasicSection title="Last Touch">
-      <Box className={classes.wrapper}>
-        <LastTouched contact={contact} />
-      </Box>
+    <BasicSection title="Relationship">
+      {contact.last_touch && <LastTouchField value={contact?.last_touch} />}
+
+      <TouchFrequency
+        onUpdateTouchFreq={onUpdateTouchFreq}
+        value={contact?.touch_freq || null}
+      />
     </BasicSection>
   )
 }

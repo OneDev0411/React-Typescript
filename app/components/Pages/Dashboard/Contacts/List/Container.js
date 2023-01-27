@@ -3,13 +3,19 @@ import React from 'react'
 import { Box } from '@material-ui/core'
 import { mdiAccountPlus, mdiLoading } from '@mdi/js'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
 import _ from 'underscore'
 
+import { withRouter } from '@app/routes/with-router'
 import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import AddAccountButton from '@app/views/components/AddAccountButton'
 import { confirmation } from 'actions/confirmation'
-import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
+import {
+  deleteContacts,
+  getContacts,
+  searchContacts,
+  patchContact,
+  removeContactFromList
+} from 'actions/contacts'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
 import { updateFilterSegment } from 'actions/filter-segments'
@@ -37,7 +43,6 @@ import {
 } from 'reducers/contacts/list'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
-import { goTo } from 'utils/go-to'
 import {
   clearImportingGoogleContacts,
   getNewConnectedGoogleAccount
@@ -75,7 +80,7 @@ class ContactsList extends React.Component {
     super(props)
     this.state = {
       selectedShortcutFilter: null,
-      firstLetter: props.location.query.letter || null,
+      firstLetter: props.searchParams.get('letter') || null,
       isShowingDuplicatesList:
         props.activeSegment.id === DUPLICATE_CONTACTS_LIST_ID,
       isFetchingMoreContacts: false,
@@ -146,8 +151,8 @@ class ContactsList extends React.Component {
       }
     })
 
-    const prevStart = this.props.location.query.s
-    const nextStart = nextProps.location.query.s
+    const prevStart = this.props.searchParams.get('s')
+    const nextStart = nextProps.searchParams.get('s')
 
     if (prevStart !== undefined && nextStart === undefined) {
       this.setQueryParam('s', prevStart)
@@ -169,6 +174,8 @@ class ContactsList extends React.Component {
     ) {
       await resetActiveFilters(CONTACTS_SEGMENT_NAME)
     }
+
+    this.handleUnmount()
 
     setContactsListTextFilter(this.state.searchInputValue)
   }
@@ -266,7 +273,7 @@ class ContactsList extends React.Component {
       ]
     }))
 
-  getQueryParam = key => this.props.location.query[key]
+  getQueryParam = key => this.props.searchParams.get(key)
 
   setQueryParam = (key, value) => {
     const currentLocation = this.props.location
@@ -274,14 +281,17 @@ class ContactsList extends React.Component {
     // again with previous queries for updating start number
     const letter = this.state.firstLetter
 
-    this.props.router.replace({
-      ...currentLocation,
-      query: {
-        ...currentLocation.query,
-        letter,
-        [key]: value
-      }
-    })
+    this.props.navigate(
+      {
+        ...currentLocation,
+        query: {
+          ...currentLocation.query,
+          letter,
+          [key]: value
+        }
+      },
+      { replace: true }
+    )
   }
 
   hasSearchState = () =>
@@ -322,6 +332,39 @@ class ContactsList extends React.Component {
       selectedShortcutFilter: null
     })
     this.handleFilterChange({}, true)
+  }
+
+  handleUnmount = () => {
+    const {
+      filters = this.props.filters,
+      searchInputValue = this.state.searchInputValue,
+      start = 0,
+      order = this.state.sortOrder,
+      viewAsUsers = this.props.viewAsUsers,
+      flows = this.props.flows,
+      crmTasks = this.props.crmTasks,
+      conditionOperator = this.props.conditionOperator,
+      prependResult = false,
+      firstLetter = this.state.firstLetter
+    } = filters || {}
+
+    this.props.searchContacts(
+      filters,
+      start,
+      undefined,
+      false,
+      searchInputValue,
+      order,
+      viewAsUsers,
+      conditionOperator,
+      prependResult,
+      {
+        s: start
+      },
+      flows,
+      crmTasks,
+      firstLetter
+    )
   }
 
   handleFilterChange = async (
@@ -720,7 +763,9 @@ class ContactsList extends React.Component {
           this.handleFilterChange({ parked: true }, true)
           this.handleResetShortcutFilter()
         }}
-        onClickDuplicateCluster={() => goTo('/dashboard/contacts/duplicates')}
+        onClickDuplicateCluster={() =>
+          this.props.navigate('/dashboard/contacts/duplicates')
+        }
         disabled={isFetchingContacts}
       />
     )
@@ -844,28 +889,29 @@ class ContactsList extends React.Component {
                 <ManageRelationship
                   value={activeSegment.touch_freq}
                   onChange={this.handleListTouchReminderUpdate}
-                  label="Manage Relationships"
                 />
               )}
               {activeTag && activeTag.id && (
                 <ManageRelationship
                   value={activeTag.touch_freq}
                   onChange={this.handleTagTouchReminderUpdate}
-                  label="Manage Relationships"
                 />
               )}
               {this.renderOtherContactsBadge()}
               {showImportAction && (
                 <>
                   <AddAccountButton
-                    createMenuItemProps={{
-                      title: 'Add Contact',
-                      iconPath: mdiAccountPlus,
-                      onClick: () => {
-                        this.setState({ isOpenNewContactDrawer: true })
+                    createMenuItemProps={[
+                      {
+                        title: 'Add Contact',
+                        iconPath: mdiAccountPlus,
+                        onClick: () => {
+                          this.setState({ isOpenNewContactDrawer: true })
+                        }
                       }
-                    }}
+                    ]}
                     hasCSVButton
+                    leadChannels={['Realtor', 'Zillow']}
                   />
                   <NewContactDrawer
                     isOpen={this.state.isOpenNewContactDrawer}
@@ -962,6 +1008,8 @@ class ContactsList extends React.Component {
                     onRequestDelete={this.handleOnDelete}
                     tableContainerId={this.tableContainerId}
                     reloadContacts={this.reloadContacts}
+                    onUpdateContact={this.props.patchContact}
+                    onDeleteContact={this.props.removeContactFromList}
                     handleChangeContactsAttributes={() =>
                       this.handleFilterChange({}, true)
                     }
@@ -1040,6 +1088,8 @@ export default withRouter(
     getContacts,
     searchContacts,
     deleteContacts,
+    patchContact,
+    removeContactFromList,
     confirmation,
     setContactsListTextFilter,
     getContactsTags,
