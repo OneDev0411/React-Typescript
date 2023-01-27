@@ -15,7 +15,7 @@ export default class ContactSocket extends Socket {
     const { socket } = window
 
     socket.on('Notification', notification => {
-      this.callback()
+      this.callback(notification)
       store.dispatch(receivedANotification(notification))
     })
   }

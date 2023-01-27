@@ -82,7 +82,7 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
 
   const initializeSockets = (user: IUser) => {
     new NotificationSocket(user, () => {
-      increaseBadgeCounter('showing_notifications')
+      increaseBadgeCounter('generic')
     })
 
     new ChatSocket(user)

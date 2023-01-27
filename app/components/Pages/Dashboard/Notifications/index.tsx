@@ -30,9 +30,14 @@ function Notifications({ params }: WithRouterProps) {
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
   const navigate = useNavigate()
-  const { decreaseBadgeCounter, badges } = useNotificationBadgesContext()
+  const {
+    reload: reloadNotificationBadges,
+    decreaseBadgeCounter,
+    badges
+  } = useNotificationBadgesContext()
 
   useEffectOnce(() => {
+    reloadNotificationBadges()
     dispatch(getAllNotifications())
   })
 

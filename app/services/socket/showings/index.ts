@@ -1,7 +1,7 @@
 import Socket from '..'
 
 export default class ShowingSocket extends Socket {
-  private callback: () => void
+  private callback: (notification: INotification) => void
 
   constructor(user: IUser, callback: () => void) {
     super(user)
@@ -13,7 +13,7 @@ export default class ShowingSocket extends Socket {
 
   OnNewNotification = (notification: INotification) => {
     if (notification.object_class === 'ShowingAppointment') {
-      this.callback()
+      this.callback(notification)
     }
   }
 }

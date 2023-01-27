@@ -44,7 +44,7 @@ export default class DealSocket extends Socket {
       return false
     }
 
-    this.changeCallback()
+    this.changeCallback(response)
 
     switch (action) {
       case 'Updated':
