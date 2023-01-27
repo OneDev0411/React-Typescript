@@ -4,6 +4,7 @@ import { Button, makeStyles, Theme, useTheme } from '@material-ui/core'
 import { mdiAlertOctagonOutline } from '@mdi/js'
 import pluralize from 'pluralize'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router'
 
 import { SvgIcon } from '@app/views/components/SvgIcons'
 import { Callout } from 'components/Callout'
@@ -28,28 +29,35 @@ const useStyles = makeStyles(
     container: {
       padding: theme.spacing(1, 1),
       display: 'flex',
-      flexDirection: 'row',
-      color: '#673400'
+      flexDirection: 'row'
     },
     iconWrapper: {
       height: theme.spacing(2),
       padding: theme.spacing(0, 2, 0, 0)
     },
     icon: {
-      color: '#854300B2'
+      color: '#854300'
     },
     content: {
       display: 'flex',
       width: 'fit-content',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      color: '#673400'
     },
     buttonWrapper: {
       marginTop: theme.spacing(1)
     },
     secondaryButton: {
+      marginRight: theme.spacing(1),
       fontWeight: 400,
       opacity: 0.7,
-      color: '#854300'
+      color: '#854300',
+      cursor: 'pointer',
+      textDecoration: 'none',
+      '&:hover': {
+        textDecoration: 'none',
+        color: '#854300'
+      }
     },
     bold: {
       fontFamily: 'LatoBold'
@@ -216,20 +224,19 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
             <span style={{ color: theme.palette.warning.contrastText }}>
               We’ve found {duplicateContacts.contacts.length - 1} other{' '}
               {pluralize('contact', duplicateContacts.contacts.length - 1)}{' '}
-              similar to <b className={classes.bold}>{contact.display_name}</b>.
-              Do you want to merge them?
+              similar. Do you want to merge them?
             </span>
             <div className={classes.buttonWrapper}>
-              <Button
+              <Link
                 className={classes.secondaryButton}
                 color="inherit"
-                variant="text"
                 onClick={() => {
                   handleDismissMergeCallout(contact.id)
                 }}
+                to=""
               >
                 Dismiss
-              </Button>
+              </Link>
               <Button
                 color="secondary"
                 variant="text"
