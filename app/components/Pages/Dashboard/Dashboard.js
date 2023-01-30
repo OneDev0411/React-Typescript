@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 
 import { withRouter } from '@app/routes/with-router'
-import { fetchShowingTotalNotificationCount } from 'actions/showings'
 import ShowingSocket from 'services/socket/showings'
 import {
   hasUserAccessToCrm,
@@ -12,7 +11,6 @@ import {
   hasUserAccessToShowings,
   isBackOffice
 } from 'utils/acl'
-import { viewAsEveryoneOnTeam } from 'utils/user-teams'
 
 import { isLoadedContactAttrDefs } from '../../../reducers/contacts/attributeDefs'
 import { selectListings } from '../../../reducers/listings'
@@ -21,8 +19,6 @@ import ContactSocket from '../../../services/socket/contacts'
 import DealSocket from '../../../services/socket/deals'
 import NotificationSocket from '../../../services/socket/Notifications'
 import { getAttributeDefs } from '../../../store_actions/contacts'
-import { getDeals, searchDeals } from '../../../store_actions/deals'
-import { fetchUnreadEmailThreadsCount } from '../../../store_actions/inbox'
 import { deactivateIntercom } from '../../../store_actions/intercom'
 import { getAllNotifications } from '../../../store_actions/notifications'
 import CheckBrowser from '../../../views/components/CheckBrowser'
@@ -71,30 +67,6 @@ class Dashboard extends Component {
       hasUserAccessToDeals(activeTeam) || hasBackOfficeAccess
     this.hasShowingsAccess = hasUserAccessToShowings(activeTeam)
 
-    // load deals
-    if (
-      this.hasDealsAccess &&
-      Object.keys(deals).length === 0 &&
-      !this.props.isFetchingDeals
-    ) {
-      const searchParamValue =
-        this.props.location.pathname.startsWith('/dashboard/deals') &&
-        new URLSearchParams(this.props.location.search).get('q')
-
-      if (
-        (isBackOffice || viewAsEveryoneOnTeam(activeTeam)) &&
-        !searchParamValue
-      ) {
-        dispatch(getDeals(activeTeam))
-      } else {
-        dispatch(
-          searchParamValue
-            ? searchDeals(activeTeam, decodeURIComponent(searchParamValue))
-            : getDeals(activeTeam)
-        )
-      }
-    }
-
     // load CRM attributes definition
     if (
       (this.hasCrmAccess || this.hasDealsAccess) &&
@@ -111,14 +83,8 @@ class Dashboard extends Component {
 
     if (this.hasCrmAccess) {
       // fetch the number of unread email threads
-      dispatch(fetchUnreadEmailThreadsCount())
 
       window.addEventListener('online', this.handleOnlineEvent)
-    }
-
-    // fetch the number of showing notifications count
-    if (this.hasShowingsAccess) {
-      dispatch(fetchShowingTotalNotificationCount())
     }
   }
 
@@ -140,7 +106,6 @@ class Dashboard extends Component {
 
   handleOnlineEvent = () => {
     // update the number of unread emails in Inbox nav link notification badge
-    this.props.dispatch(fetchUnreadEmailThreadsCount())
   }
 
   render() {

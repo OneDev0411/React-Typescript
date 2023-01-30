@@ -19,6 +19,7 @@ import { Modal, ModalContent, ModalHeader, ModalFooter } from 'components/Modal'
 import { addNotification as notify } from 'components/notification'
 import Deal from 'models/Deal'
 
+import { withNotificationBadge } from '../../../SideNav/notificationBadgesContext/WithNotificationBadges'
 import TasksDropDown from '../../components/TasksDropdown'
 import { NotifyOfficeConfirmation } from '../../Create/components/NotifyOfficeConfirmation'
 import PdfSplitter from '../../PdfSplitter'
@@ -266,10 +267,14 @@ class UploadModal extends React.Component {
     this.closeModal()
   }
 
-  notifyOffice = () => {
-    this.TaskIds.forEach(taskId =>
+  notifyOffice = async () => {
+    const changeNeedsAttentionRequests = this.TaskIds.map(taskId =>
       this.props.changeNeedsAttention(this.props.deal.id, taskId, true)
     )
+
+    await Promise.all(changeNeedsAttentionRequests)
+
+    this.props.notificationBadges.reload()
 
     this.closeModal()
   }
@@ -457,4 +462,4 @@ export default connect(mapStateToProps, {
   setUploadAttributes,
   setExpandChecklist,
   changeNeedsAttention
-})(UploadModal)
+})(withNotificationBadge(UploadModal))

@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux'
 import { addNotification } from 'components/notification'
 import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
 
+import useNotificationBadgesContext from '../../SideNav/notificationBadgesContext/useNotificationBadgesContext'
+
 export default function useEmailThreadReadStatusSetter(
   emailThreadId: UUID,
   readStatus: boolean
@@ -20,6 +22,8 @@ export default function useEmailThreadReadStatusSetter(
   }, [emailThreadId, readStatus])
 
   const dispatch = useDispatch()
+  const { decreaseBadgeCounter, increaseBadgeCounter } =
+    useNotificationBadgesContext()
 
   async function setEmailThreadReadStatus(status: boolean): Promise<boolean> {
     if (
@@ -37,6 +41,12 @@ export default function useEmailThreadReadStatusSetter(
       await setEmailThreadsReadStatus([emailThreadId], status)
       setLastEmailThreadReadStatus(status)
       setSettingEmailThreadReadStatus(false)
+
+      if (status) {
+        decreaseBadgeCounter('unread_email_threads')
+      } else {
+        increaseBadgeCounter('unread_email_threads')
+      }
 
       return true
     } catch (reason) {

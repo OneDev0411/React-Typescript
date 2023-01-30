@@ -19,12 +19,13 @@ import Acl from '@app/views/components/Acl'
 import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
-import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
 import { disconnectDocuSign } from 'actions/user/disconnect-docusign'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { selectUser } from 'selectors/user'
+
+import useNotificationBadgesContext from '../../SideNav/notificationBadgesContext/useNotificationBadgesContext'
 
 import ConnectAccountButtons from './ConnectAccountButtons'
 import ConnectedAccount from './ConnectedAccount'
@@ -46,9 +47,6 @@ interface Props extends RouteComponentProps {
   syncOAuthAccount: IAsyncActionProp<typeof syncOAuthAccount>
   disconnectOAuthAccount: IAsyncActionProp<typeof disconnectOAuthAccount>
   disconnectDocuSign: IAsyncActionProp<typeof disconnectDocuSign>
-  fetchUnreadEmailThreadsCount: IAsyncActionProp<
-    typeof fetchUnreadEmailThreadsCount
-  >
 }
 
 function ConnectedAccounts({
@@ -56,10 +54,11 @@ function ConnectedAccounts({
   fetchOAuthAccounts,
   syncOAuthAccount,
   disconnectOAuthAccount,
-  disconnectDocuSign,
-  fetchUnreadEmailThreadsCount
+  disconnectDocuSign
 }: Props) {
   const classes = useStyles()
+  const { reload: reloadNotificationBadgesContext } =
+    useNotificationBadgesContext()
 
   useTitle('Connected Accounts | Settings | Rechat')
   useEffectOnce(() => {
@@ -104,7 +103,7 @@ function ConnectedAccounts({
                         removed but imported contacts and emails will be preserved.`,
                   onConfirm: async () => {
                     await disconnectOAuthAccount(provider, accountId)
-                    await fetchUnreadEmailThreadsCount()
+                    reloadNotificationBadgesContext()
                   }
                 })
               }}
@@ -151,10 +150,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
       ...args: Parameters<typeof disconnectOAuthAccount>
     ) => dispatch(disconnectOAuthAccount(...args)),
     disconnectDocuSign: (...args: Parameters<typeof disconnectDocuSign>) =>
-      dispatch(disconnectDocuSign(...args)),
-    fetchUnreadEmailThreadsCount: (
-      ...args: Parameters<typeof fetchUnreadEmailThreadsCount>
-    ) => dispatch(fetchUnreadEmailThreadsCount(...args))
+      dispatch(disconnectDocuSign(...args))
   }
 }
 

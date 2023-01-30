@@ -2,13 +2,7 @@
   TODO: due to time limit I just convert it to typescript and small
   improvmennt to fix the bug but it would be good if make it better in typescript
 */
-import {
-  useMemo,
-  useEffect,
-  useCallback,
-  ReactElement,
-  cloneElement
-} from 'react'
+import { useMemo, useEffect, ReactElement, cloneElement } from 'react'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffectOnce, useTitle } from 'react-use'
@@ -34,18 +28,14 @@ import DealSocket from '@app/services/socket/deals'
 import NotificationSocket from '@app/services/socket/Notifications'
 import ShowingSocket from '@app/services/socket/showings'
 import { getAttributeDefs } from '@app/store_actions/contacts'
-import { getDeals, searchDeals } from '@app/store_actions/deals'
-import { fetchUnreadEmailThreadsCount } from '@app/store_actions/inbox'
 import { deactivateIntercom } from '@app/store_actions/intercom'
 import getFavorites from '@app/store_actions/listings/favorites/get-favorites'
-import { getAllNotifications } from '@app/store_actions/notifications'
-import { fetchShowingTotalNotificationCount } from '@app/store_actions/showings'
-import { viewAsEveryoneOnTeam } from '@app/utils/user-teams'
 import CheckBrowser from '@app/views/components/CheckBrowser'
 import EmailVerificationBanner from '@app/views/components/EmailVerificationBanner'
 import Intercom from '@app/views/components/Intercom'
 
 import { DashboardLayout } from './DashboardLayout'
+import useNotificationBadgesContext from './SideNav/notificationBadgesContext/useNotificationBadgesContext'
 
 type DashboardState = {
   isFetchingDeals: boolean
@@ -75,32 +65,26 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
   useTitle(documentTitle())
 
   const { user, activeTeam } = useLoadUserAndActiveTeam()
+  const { reload: reloadNotificationBadges, increaseBadgeCounter } =
+    useNotificationBadgesContext()
 
-  const { deals, isFetchingDeals, contactsAttributeDefs }: DashboardState =
-    useSelector((state: IAppState) => ({
+  const { contactsAttributeDefs }: DashboardState = useSelector(
+    (state: IAppState) => ({
       deals: selectDealsList(state),
       contactsAttributeDefs: selectContactAttributeDefs(state),
       isFetchingDeals: selectDeals(state).properties.isFetchingDeals
-    }))
+    })
+  )
   const dispatch = useDispatch()
 
-  const {
-    hasCrmAccess,
-    hasDealsAccess,
-    hasShowingsAccess,
-    hasBackOfficeAccess
-  }: AccessListType = useMemo(
-    () => getDashboardAccessList(activeTeam),
-    [activeTeam]
-  )
-
-  const handleOnlineEvent = useCallback(() => {
-    // update the number of unread emails in Inbox nav link notification badge
-    dispatch(fetchUnreadEmailThreadsCount())
-  }, [dispatch])
+  const { hasCrmAccess, hasDealsAccess, hasShowingsAccess }: AccessListType =
+    useMemo(() => getDashboardAccessList(activeTeam), [activeTeam])
 
   const initializeSockets = (user: IUser) => {
-    new NotificationSocket(user)
+    new NotificationSocket(user, () => {
+      increaseBadgeCounter('generic')
+    })
+
     new ChatSocket(user)
 
     if (hasCrmAccess) {
@@ -108,11 +92,13 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
     }
 
     if (hasDealsAccess) {
-      new DealSocket(user)
+      new DealSocket(user, reloadNotificationBadges)
     }
 
     if (hasShowingsAccess) {
-      new ShowingSocket(user)
+      new ShowingSocket(user, () => {
+        increaseBadgeCounter('showing_notifications')
+      })
     }
   }
 
@@ -128,30 +114,6 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
         return
       }
 
-      // load deals
-      if (
-        hasDealsAccess &&
-        Object.keys(deals).length === 0 &&
-        !isFetchingDeals
-      ) {
-        const searchParamValue =
-          location.pathname.startsWith('/dashboard/deals') &&
-          new URLSearchParams(location.search).get('q')
-
-        if (
-          (hasBackOfficeAccess || viewAsEveryoneOnTeam(activeTeam)) &&
-          !searchParamValue
-        ) {
-          dispatch(getDeals(activeTeam))
-        } else {
-          dispatch(
-            searchParamValue
-              ? searchDeals(activeTeam, decodeURIComponent(searchParamValue))
-              : getDeals(activeTeam)
-          )
-        }
-      }
-
       // load CRM attributes definition
       if (
         (hasCrmAccess || hasDealsAccess) &&
@@ -160,23 +122,13 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
         dispatch(getAttributeDefs())
       }
 
-      dispatch(getAllNotifications())
-
       // Get MLS favorites
       dispatch(getFavorites(user))
 
       dispatch(syncOpenHouseData(user.access_token))
 
       if (hasCrmAccess) {
-        // fetch the number of unread email threads
-        dispatch(fetchUnreadEmailThreadsCount())
-
-        window.addEventListener('online', handleOnlineEvent)
-      }
-
-      // fetch the number of showing notifications count
-      if (hasShowingsAccess) {
-        dispatch(fetchShowingTotalNotificationCount())
+        window.addEventListener('online', reloadNotificationBadges)
       }
     }
 
@@ -188,10 +140,10 @@ export function DashboardPage({ params, children, location }: DashboardProps) {
       dispatch(deactivateIntercom(true))
 
       if (activeTeam && hasCrmAccess) {
-        window.removeEventListener('online', handleOnlineEvent)
+        window.removeEventListener('online', reloadNotificationBadges)
       }
     }
-  }, [activeTeam, dispatch, handleOnlineEvent, hasCrmAccess])
+  }, [activeTeam, dispatch, reloadNotificationBadges, hasCrmAccess])
 
   return (
     <CheckBrowser id={params.id}>

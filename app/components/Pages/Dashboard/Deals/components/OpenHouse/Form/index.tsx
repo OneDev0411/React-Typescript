@@ -16,6 +16,7 @@ import DayPicker from 'react-day-picker'
 import { useSelector } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import useNotificationBadgesContext from '@app/components/Pages/Dashboard/SideNav/notificationBadgesContext/useNotificationBadgesContext'
 import { updateTask, changeNeedsAttention } from 'actions/deals'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -68,6 +69,7 @@ function OpenHouseForm(props: Props) {
   const { listing: listingId } = props.deal
   const classes = useStyles()
   const dispatch = useReduxDispatch()
+  const { reload: reloadNotificationBadges } = useNotificationBadgesContext()
 
   const { checklists, brandChecklists } = useSelector(
     ({ deals }: IAppState) => ({
@@ -167,7 +169,8 @@ function OpenHouseForm(props: Props) {
         })
       )
 
-      dispatch(changeNeedsAttention(props.deal.id, props.task.id, true))
+      await dispatch(changeNeedsAttention(props.deal.id, props.task.id, true))
+      reloadNotificationBadges()
 
       props.onUpsertTask(props.task)
 

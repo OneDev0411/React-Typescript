@@ -14,7 +14,8 @@ import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
+
+import useNotificationBadgesContext from '../SideNav/notificationBadgesContext/useNotificationBadgesContext'
 
 import InboxEmailThread from './components/InboxEmailThread'
 import InboxEmailThreadList from './components/InboxEmailThreadList'
@@ -58,9 +59,8 @@ export default function Inbox({ params }: WithRouterProps) {
   const navigate = useNavigate()
   const selectedEmailThreadId: UUID | undefined = params.emailThreadId
 
-  const unreadEmailThreadsCount = useSelector((state: IAppState) =>
-    selectUnreadEmailThreadsCount(state.inbox)
-  )
+  const { badges } = useNotificationBadgesContext()
+  const unreadEmailThreadsCount = badges.unread_email_threads
 
   const accounts = useSelector(({ contacts: { oAuthAccounts } }: IAppState) =>
     selectAllConnectedAccounts(oAuthAccounts)

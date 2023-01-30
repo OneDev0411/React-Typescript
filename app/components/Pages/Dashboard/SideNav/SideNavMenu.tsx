@@ -10,23 +10,15 @@ import {
   mdiHeadphones,
   mdiHomeCityOutline
 } from '@mdi/js'
-import { useDispatch, useSelector } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
+import { useSelector } from 'react-redux'
 
 import { ACL } from '@app/constants/acl'
 import { useUnsafeActiveBrand } from '@app/hooks/brand'
-import { useChatRoomsNotificationsNumber } from '@app/hooks/use-chat-rooms-notifications-number'
-import { useDealsNotificationsNumber } from '@app/hooks/use-deals-notifications-number'
-import { IAppState } from '@app/reducers'
-import { selectUnreadEmailThreadsCount } from '@app/reducers/inbox'
-import { InboxAction } from '@app/reducers/inbox/types'
-import { selectNotificationNewCount } from '@app/reducers/notifications'
+import { useReduxDispatch } from '@app/hooks/use-redux-dispatch'
 import { WithRouterProps } from '@app/routes/types'
 import { withRouter } from '@app/routes/with-router'
 import { selectIntercom } from '@app/selectors/intercom'
-import { selectShowingsTotalNotificationCount } from '@app/selectors/showings'
 import { selectUserUnsafe } from '@app/selectors/user'
-import { fetchUnreadEmailThreadsCount } from '@app/store_actions/inbox'
 import { activateIntercom } from '@app/store_actions/intercom'
 import { getBrandHelpCenterURL } from '@app/utils/brand'
 import { useAcl } from '@app/views/components/Acl/use-acl'
@@ -41,6 +33,7 @@ import PoweredBy from './components/PoweredBy'
 import SideNavAccordion from './components/SideNavAccordion'
 import { SideNavToggleButton } from './components/SideNavToggleButton'
 import { UserMenu } from './components/UserMenu'
+import useNotificationBadgesContext from './notificationBadgesContext/useNotificationBadgesContext'
 import { AccordionMenu, BaseAccordionMenu, ExpandedMenu } from './types'
 import { appSidenavWidth, scrollableAreaShadowColor } from './variables'
 
@@ -80,26 +73,16 @@ function SideNavMenu(props: WithRouterProps) {
   const user = useSelector(selectUserUnsafe)
   const brand = useUnsafeActiveBrand()
 
-  const appNotifications = useSelector((state: IAppState) =>
-    selectNotificationNewCount(state.globalNotifications)
-  )
-  const inboxNotificationNumber = useSelector((state: IAppState) =>
-    selectUnreadEmailThreadsCount(state.inbox)
-  )
-  const showingsTotalNotificationCount = useSelector(
-    selectShowingsTotalNotificationCount
-  )
+  const { badges, reload: reloadNotificationBadgesContext } =
+    useNotificationBadgesContext()
 
   const { isActive: isIntercomActive } = useSelector(selectIntercom)
-  const dealsNotificationsNumber = useDealsNotificationsNumber()
-  const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
-  const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
+  const dispatch = useReduxDispatch()
 
-  function handleEmailThreadEvent(): void {
-    dispatch(fetchUnreadEmailThreadsCount())
-  }
-
-  useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
+  useEmailThreadEvents(
+    reloadNotificationBadgesContext,
+    reloadNotificationBadgesContext
+  )
 
   // This is initially implemented for DE because they're using a
   // white-labeled version of help.rechat.com
@@ -130,9 +113,7 @@ function SideNavMenu(props: WithRouterProps) {
     },
     {
       access: ['CRM'],
-      hasChildrenNotification: !!(
-        inboxNotificationNumber || chatRoomsNotificationsNumber
-      ),
+      hasChildrenNotification: !!badges.unread_email_threads,
       hasDivider: false,
       icon: mdiAccountMultipleOutline,
       id: 'people',
@@ -164,7 +145,7 @@ function SideNavMenu(props: WithRouterProps) {
           id: 'inbox',
           isHidden: !useAcl(['CRM']),
           label: 'Inbox',
-          notificationCount: inboxNotificationNumber,
+          notificationCount: badges.unread_email_threads,
           to: '/dashboard/inbox'
         }
       ]
@@ -243,7 +224,7 @@ function SideNavMenu(props: WithRouterProps) {
     {
       access: transactionsAccess,
       hasChildrenNotification: !!(
-        dealsNotificationsNumber || showingsTotalNotificationCount
+        badges.deal_notifications || badges.showing_notifications
       ),
       hasDivider: true,
       icon: mdiCurrencyUsd,
@@ -255,7 +236,7 @@ function SideNavMenu(props: WithRouterProps) {
           id: 'deals',
           isHidden: !useAcl(dealsAccess),
           label: 'Deals',
-          notificationCount: dealsNotificationsNumber,
+          notificationCount: badges.deal_notifications,
           to: '/dashboard/deals'
         },
         {
@@ -277,7 +258,7 @@ function SideNavMenu(props: WithRouterProps) {
           id: 'showings',
           isHidden: !useAcl([ACL.SHOWINGS]),
           label: 'Showings',
-          notificationCount: showingsTotalNotificationCount,
+          notificationCount: badges.showing_notifications,
           to: '/dashboard/showings'
         }
       ]
@@ -288,7 +269,7 @@ function SideNavMenu(props: WithRouterProps) {
       id: 'notifications',
       isHidden: !user,
       label: 'Notifications',
-      notificationCount: appNotifications,
+      notificationCount: badges.generic,
       to: '/dashboard/notifications'
     },
     {

@@ -6,9 +6,10 @@ import { updateDeal } from '../../../store_actions/deals'
 import store from '../../../stores'
 
 export default class DealSocket extends Socket {
-  constructor(user) {
+  constructor(user, changeCallback) {
     super(user)
 
+    this.changeCallback = changeCallback
     // bind socket events
     window.socket.on('Deal', this.onDealChange.bind(this))
   }
@@ -42,6 +43,8 @@ export default class DealSocket extends Socket {
 
       return false
     }
+
+    this.changeCallback(response)
 
     switch (action) {
       case 'Updated':

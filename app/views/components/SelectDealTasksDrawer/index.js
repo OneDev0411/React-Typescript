@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
+import { withNotificationBadge } from '@app/components/Pages/Dashboard/SideNav/notificationBadgesContext/WithNotificationBadges'
 import {
   createFormTask,
   changeNeedsAttention,
@@ -34,13 +35,15 @@ class TasksDrawer extends React.Component {
       searchFilter
     })
 
-  notifyOffice = (deal, task) => {
-    this.props.changeNeedsAttention(deal.id, task.id, true).then(() =>
-      this.props.notify({
-        message: `Office has been notified for "${task.title}"`,
-        status: 'success'
-      })
-    )
+  notifyOffice = async (deal, task) => {
+    await this.props.changeNeedsAttention(deal.id, task.id, true)
+
+    this.props.notify({
+      message: `Office has been notified for "${task.title}"`,
+      status: 'success'
+    })
+
+    this.props.notificationBadges.reload()
   }
 
   handleCreateNewTask = async (checklistId, title, notifyOffice) => {
@@ -197,4 +200,4 @@ export default connect(mapStateToProps, {
   moveTaskFile,
   setExpandChecklist,
   notify
-})(TasksDrawer)
+})(withNotificationBadge(TasksDrawer))

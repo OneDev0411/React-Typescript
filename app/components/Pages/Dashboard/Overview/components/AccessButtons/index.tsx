@@ -1,13 +1,12 @@
 import { Box } from '@material-ui/core'
 import { Theme, makeStyles } from '@material-ui/core/styles'
-import { useDispatch, useSelector } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
+import { useSelector } from 'react-redux'
 
 import { AccessButton } from '@app/components/Pages/Dashboard/Overview/components/AccessButton'
 import { ACL } from '@app/constants/acl'
+import { useReduxDispatch } from '@app/hooks/use-redux-dispatch'
 import { selectIntercom } from '@app/selectors/intercom'
 import { activateIntercom } from '@app/store_actions/intercom'
-import { InboxAction } from 'reducers/inbox/types'
 
 import { AccessButtonType } from '../../types.d'
 
@@ -26,7 +25,7 @@ const styles = makeStyles(
 
 export function AccessButtons() {
   const classes = styles()
-  const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
+  const dispatch = useReduxDispatch()
 
   const { isActive: isIntercomActive } = useSelector(selectIntercom)
 

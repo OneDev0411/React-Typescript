@@ -2,10 +2,11 @@ import React, { useContext, useState, useRef, useEffect } from 'react'
 
 import { Popover } from '@material-ui/core'
 import { PopoverActions } from '@material-ui/core/Popover'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { useActiveBrandSettings } from '@app/hooks/brand/use-active-brand-settings'
+import { useReduxDispatch } from '@app/hooks/use-redux-dispatch'
 import {
   setSelectedTask,
   updateTask,
@@ -17,6 +18,8 @@ import { createTaskComment } from 'deals/utils/create-task-comment'
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { selectUser } from 'selectors/user'
+
+import useNotificationBadgesContext from '../../../SideNav/notificationBadgesContext/useNotificationBadgesContext'
 
 import Form from './Form'
 import List from './List'
@@ -34,8 +37,9 @@ function OpenHouses({
   router,
   defaultOpen = false
 }: Props & WithRouterProps) {
-  const dispatch = useDispatch()
+  const dispatch = useReduxDispatch()
 
+  const { reload: reloadNotificationBadges } = useNotificationBadgesContext()
   const user = useSelector(selectUser)
   const checklists = useSelector(({ deals }: IAppState) =>
     getDealChecklists(deal, deals.checklists)
@@ -110,10 +114,10 @@ function OpenHouses({
       message: 'Cancel Open House Request',
       needsUserEntry: true,
       inputDefaultValue: "I'd like to cancel this open house, please.",
-      onConfirm: (text: string) => {
+      onConfirm: async (text: string) => {
         dispatch(updateTask(task.id, { title: 'Delete Open House' }))
-        dispatch(changeNeedsAttention(deal.id, task.id, true))
-
+        await dispatch(changeNeedsAttention(deal.id, task.id, true))
+        reloadNotificationBadges()
         createTaskComment(task, user.id, text)
         dispatch(setSelectedTask(task))
       }

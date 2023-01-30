@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory, Router } from 'react-router'
 import { IntercomProvider } from 'react-use-intercom'
 import smoothscroll from 'smoothscroll-polyfill'
@@ -13,10 +13,12 @@ import config from '../config/public'
 
 import { AppTheme } from './AppTheme'
 // This is our new confirmation modal. use this please.
+import { NotificationBadgesContextProvider } from './components/Pages/Dashboard/SideNav/notificationBadgesContext/Provider'
 import ReduxConfirmationModal from './components/Partials/Confirmation'
 import { Notifications } from './Notifications'
 // Routes config
 import routes from './routes'
+import { selectActiveBrandIdUnsafe } from './selectors/brand'
 import { activateIntercom } from './store_actions/intercom'
 // This is a redux-based confirmation and will be deprecate asap.
 // import styles
@@ -29,6 +31,7 @@ if (typeof window !== 'undefined') {
 
 const App = () => {
   const dispatch = useDispatch()
+  const brandId = useSelector(selectActiveBrandIdUnsafe)
 
   useAppcues()
 
@@ -39,16 +42,18 @@ const App = () => {
           appId={config.intercom.app_id}
           onShow={() => dispatch(activateIntercom())}
         >
-          <GlobalActionsProvider>
-            <ConfirmationModalProvider>
-              <Router history={browserHistory}>{routes}</Router>
-              <ConfirmationModal />
-            </ConfirmationModalProvider>
+          <NotificationBadgesContextProvider brandId={brandId}>
+            <GlobalActionsProvider>
+              <ConfirmationModalProvider>
+                <Router history={browserHistory}>{routes}</Router>
+                <ConfirmationModal />
+              </ConfirmationModalProvider>
 
-            <ReduxConfirmationModal />
+              <ReduxConfirmationModal />
 
-            <Notifications />
-          </GlobalActionsProvider>
+              <Notifications />
+            </GlobalActionsProvider>
+          </NotificationBadgesContextProvider>
         </IntercomProvider>
       </AppTheme>
     </ReactQueryProvider>

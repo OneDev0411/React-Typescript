@@ -3,6 +3,7 @@ import React from 'react'
 import Downshift from 'downshift'
 import { connect } from 'react-redux'
 
+import { withNotificationBadge } from '@app/components/Pages/Dashboard/SideNav/notificationBadgesContext/WithNotificationBadges'
 import { createFormTask, changeNeedsAttention } from 'actions/deals'
 import { addNotification as notify } from 'components/notification'
 import { getDealChecklists } from 'reducers/deals/checklists'
@@ -35,15 +36,17 @@ class DropDownTasks extends React.Component {
    * @param {Object} deal - the deal object
    * @param {Object} task - the task object
    */
-  notifyOffice = (deal, task) => {
-    const { changeNeedsAttention, notify } = this.props
+  notifyOffice = async (deal, task) => {
+    const { changeNeedsAttention, notify, notificationBadges } = this.props
 
-    changeNeedsAttention(deal.id, task.id, true).then(() =>
-      notify({
-        message: `Office has been notified for "${task.title}"`,
-        status: 'success'
-      })
-    )
+    await changeNeedsAttention(deal.id, task.id, true)
+
+    notify({
+      message: `Office has been notified for "${task.title}"`,
+      status: 'success'
+    })
+
+    notificationBadges.reload()
   }
 
   /**
@@ -371,4 +374,4 @@ export default connect(mapStateToProps, {
   notify,
   createFormTask,
   changeNeedsAttention
-})(DropDownTasks)
+})(withNotificationBadge(DropDownTasks))

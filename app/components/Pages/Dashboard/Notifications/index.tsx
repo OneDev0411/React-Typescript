@@ -1,21 +1,25 @@
 import { useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { useTitle } from 'react-use'
+import { useEffectOnce, useTitle } from 'react-use'
 
 import { useNavigate } from '@app/hooks/use-navigate'
 import { WithRouterProps } from '@app/routes/types'
 import { withRouter } from '@app/routes/with-router'
-import { markNotificationAsSeen } from 'actions/notifications'
+import {
+  getAllNotifications,
+  markNotificationAsSeen
+} from '@app/store_actions/notifications'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import { IAppState } from 'reducers/index'
 import {
-  selectNotificationNewCount,
   selectNotifications,
   selectNotificationIsFetching
 } from 'reducers/notifications'
 import { selectUser } from 'selectors/user'
+
+import useNotificationBadgesContext from '../SideNav/notificationBadgesContext/useNotificationBadgesContext'
 
 import { CrmEvents } from './CrmEvents'
 import EmptyState from './EmptyState'
@@ -26,22 +30,30 @@ function Notifications({ params }: WithRouterProps) {
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
   const navigate = useNavigate()
+  const {
+    reload: reloadNotificationBadges,
+    decreaseBadgeCounter,
+    badges
+  } = useNotificationBadgesContext()
+
+  useEffectOnce(() => {
+    reloadNotificationBadges()
+    dispatch(getAllNotifications())
+  })
+
   const isFetching = useSelector((store: IAppState) =>
     selectNotificationIsFetching(store.globalNotifications)
   )
   const notifications = useSelector((store: IAppState) =>
     selectNotifications(store.globalNotifications)
   )
-  const unreadNotificationsCount = useSelector((store: IAppState) =>
-    selectNotificationNewCount(store.globalNotifications)
-  )
+
   const [selectedEvent, setSelectedEvent] = useState<UUID | null>(
     (params.type && params.type === 'crm' && params.id) || null
   )
 
   const documentTitle = () => {
-    const counter =
-      unreadNotificationsCount > 0 ? `: ${unreadNotificationsCount} unread` : ''
+    const counter = badges.generic > 0 ? `: ${badges.generic} unread` : ''
 
     return `Notifications${counter} | Rechat`
   }
@@ -58,6 +70,10 @@ function Notifications({ params }: WithRouterProps) {
 
   const handleNotifClick = (notification: INotification) => {
     dispatch(markNotificationAsSeen(notification.id))
+
+    if (!notification.seen) {
+      decreaseBadgeCounter('generic')
+    }
 
     switch (notification.notification_type) {
       case 'DealRoleReactedToEnvelope':

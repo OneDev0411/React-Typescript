@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react'
+import React, { useMemo, useState, useCallback } from 'react'
 
 import {
   Box,
@@ -26,6 +26,7 @@ import {
   mdiClose
 } from '@mdi/js'
 import { useDispatch } from 'react-redux'
+import { useEffectOnce } from 'react-use'
 
 import { Avatar } from 'components/Avatar'
 import { EmailResponseComposeForm } from 'components/EmailCompose/EmailResponseComposeForm'
@@ -40,6 +41,7 @@ import { getEmailThread } from 'models/email/get-email-thread'
 import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
 import { getNameInitials } from 'utils/helpers'
 
+import useNotificationBadgesContext from '../../../SideNav/notificationBadgesContext/useNotificationBadgesContext'
 import useEmailThreadArchiver from '../../helpers/use-email-thread-archiver'
 import useEmailThreadDeleter from '../../helpers/use-email-thread-deleter'
 import useEmailThreadEvents from '../../helpers/use-email-thread-events'
@@ -71,6 +73,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
   const dispatch = useDispatch()
   const classes = useStyles()
   const theme = useTheme<Theme>()
+  const { decreaseBadgeCounter } = useNotificationBadgesContext()
 
   const fetchEmailThread = useCallback(
     async (skipMarkingAsRead: boolean = false) => {
@@ -86,6 +89,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
           if (!skipMarkingAsRead && !emailThread.is_read) {
             try {
               await setEmailThreadsReadStatus([emailThread.id], true)
+              decreaseBadgeCounter('unread_email_threads')
             } catch (reason) {
               console.error(reason)
               dispatch(
@@ -114,12 +118,12 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
         setStatus('empty')
       }
     },
-    [dispatch, emailThreadId]
+    [decreaseBadgeCounter, dispatch, emailThreadId]
   )
 
-  useEffect(() => {
+  useEffectOnce(() => {
     fetchEmailThread()
-  }, [fetchEmailThread])
+  })
 
   const { setEmailThreadReadStatus, setEmailThreadReadStatusDisabled } =
     useEmailThreadReadStatusSetter(

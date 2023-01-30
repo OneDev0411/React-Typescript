@@ -12,7 +12,6 @@ import data from './data'
 import deals from './deals'
 import { emailTemplates } from './email-templates'
 import globalTriggers, { IGlobalTriggerState } from './global-triggers'
-import { inbox } from './inbox'
 import { intercom } from './intercom'
 import alerts from './listings/alerts'
 import favorites from './listings/favorites'
@@ -21,7 +20,6 @@ import {
   INotificationState,
   notifications as globalNotifications
 } from './notifications'
-import showings, { IShowingsState } from './showings'
 import socket from './socket'
 import { tasks } from './tasks'
 import user, { IUserState } from './user'
@@ -42,8 +40,6 @@ const appReducer = combineReducers({
   intercom,
   confirmation,
   globalNotifications,
-  inbox,
-
   /* deals reducers */
   deals,
 
@@ -51,9 +47,6 @@ const appReducer = combineReducers({
   search,
   alerts,
   favorites,
-
-  /* showings reducers */
-  showings,
 
   /* active team reducers (aka active user's role) */
   activeTeam,
@@ -81,7 +74,6 @@ type IAppReducer = Omit<
 export interface IAppState extends IAppReducer {
   user: IUserState
   globalNotifications: INotificationState
-  showings: IShowingsState
   activeTeam: IActiveTeamState
   impersonateUser: IImpersonateUserState
   globalTriggers: IGlobalTriggerState

@@ -11,7 +11,7 @@ import {
   Typography
 } from '@material-ui/core'
 import { mdiReload } from '@mdi/js'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 import * as ReactUse from 'react-use'
 import superagent from 'superagent'
@@ -48,8 +48,10 @@ import {
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 import { useSectionErrorContext } from 'components/QuestionWizard/hooks/use-section-error-context'
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 
 import Message from '../../../Chatroom/Util/message'
+import useNotificationBadgesContext from '../../../SideNav/notificationBadgesContext/useNotificationBadgesContext'
 import { ContactRoles } from '../../Create/components/ContactRoles'
 import { isPrimaryAgent } from '../../utils/roles'
 import { RoleCard } from '../RoleCard'
@@ -77,14 +79,14 @@ interface Props {
 export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
   const development = useQueryParamValue('dev')
   const host = useQueryParamValue('host', 'localhost:8081')
-
+  const { reload: reloadNotificationBadges } = useNotificationBadgesContext()
   const app = useRef<any>(null)
   const [module, setModule] = useState<any>(null)
   const [debugVersion, setDebugVersion] = useState(Math.random())
   const [manifest, setManifest] = useState<Partial<Manifest>>({})
 
   const notify = useNotify()
-  const dispatch = useDispatch()
+  const dispatch = useReduxDispatch()
 
   const { user, roles, attributeDefs, brandChecklists, checklists } =
     useSelector<IAppState, State>(({ deals, user, contacts }) => ({
@@ -159,8 +161,9 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
       }
 
       await dispatch(changeNeedsAttention(deal.id, task.id, attentionRequest))
+      reloadNotificationBadges()
     },
-    [deal.id, task, dispatch, user]
+    [user, dispatch, deal.id, task, reloadNotificationBadges]
   )
 
   const updateDealContext = useCallback(
@@ -249,6 +252,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
           await dispatch(
             changeNeedsAttention(deal.id, task.id, attentionRequest)
           )
+          reloadNotificationBadges()
         }
 
         if (status) {
@@ -258,7 +262,7 @@ export function EmbedApplication({ deal, task, isBackOffice, onClose }: Props) {
         console.log(e)
       }
     },
-    [task, user, deal.id, dispatch]
+    [user, task, dispatch, deal.id, reloadNotificationBadges]
   )
 
   const App = useCallback(

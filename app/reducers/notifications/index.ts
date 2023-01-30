@@ -7,12 +7,13 @@ export interface INotificationState {
     new: number
   }>
   data: INotification[]
+  isFetching: boolean
 }
 
 export const notifications = (
-  state: INotificationState = { info: {}, data: [] },
+  state: INotificationState = { info: {}, data: [], isFetching: true },
   action
-) => {
+): INotificationState => {
   switch (action.type) {
     case actionTypes.FETCH_NOTIFICATIONS_REQUEST:
       return {
@@ -99,6 +100,6 @@ export const notifications = (
   }
 }
 
-export const selectNotifications = state => state.data
-export const selectNotificationIsFetching = state => state.isFetching
-export const selectNotificationNewCount = state => state.info.new || 0
+export const selectNotifications = (state: INotificationState) => state.data
+export const selectNotificationIsFetching = (state: INotificationState) =>
+  state.isFetching
