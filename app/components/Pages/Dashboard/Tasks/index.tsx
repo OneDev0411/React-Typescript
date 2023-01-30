@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { Box } from '@material-ui/core'
 
+import { withRouter } from '@app/routes/with-router'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 
 import { TasksListContext, TasksListFilters } from './context'
@@ -9,7 +10,7 @@ import { CreateTask } from './CreateTask'
 import { TasksFilters } from './Filters'
 import { TasksTable } from './Table'
 
-export default function Tasks() {
+function Tasks() {
   const [sortBy, setSortBy] = useState('-created_at')
   const [filter, setFilter] = useState<Partial<TasksListFilters>>({
     q: ''
@@ -47,3 +48,5 @@ export default function Tasks() {
     </TasksListContext.Provider>
   )
 }
+
+export default withRouter(Tasks)
