@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useContext } from 'react'
 
-import { Button, makeStyles, Theme, useTheme } from '@material-ui/core'
+import { makeStyles, Theme, useTheme } from '@material-ui/core'
 import { mdiAlertOctagonOutline } from '@mdi/js'
 import pluralize from 'pluralize'
 import { useDispatch } from 'react-redux'
@@ -48,7 +48,7 @@ const useStyles = makeStyles(
       marginTop: theme.spacing(1)
     },
     secondaryButton: {
-      marginRight: theme.spacing(1),
+      marginRight: theme.spacing(2),
       fontWeight: 400,
       opacity: 0.7,
       color: '#854300',
@@ -57,6 +57,14 @@ const useStyles = makeStyles(
       '&:hover': {
         textDecoration: 'none',
         color: '#854300'
+      }
+    },
+    primaryButton: {
+      fontWeight: 400,
+      cursor: 'pointer',
+      textDecoration: 'none',
+      '&:hover': {
+        textDecoration: 'none'
       }
     },
     bold: {
@@ -214,7 +222,12 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
 
   return (
     <>
-      <Callout dense type="warn" closeButtonTooltip="Dismiss">
+      <Callout
+        dense
+        type="warn"
+        closeButtonTooltip="Dismiss"
+        style={{ border: '1px solid #F6E1BF' }}
+      >
         <div className={classes.container}>
           <div className={classes.iconWrapper}>
             <SvgIcon path={mdiAlertOctagonOutline} className={classes.icon} />
@@ -237,13 +250,14 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
               >
                 Dismiss
               </Link>
-              <Button
+              <Link
+                to=""
                 color="secondary"
-                variant="text"
                 onClick={handleReviewClick}
+                className={classes.primaryButton}
               >
                 Review
-              </Button>
+              </Link>
             </div>
           </div>
         </div>
