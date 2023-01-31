@@ -157,7 +157,7 @@ function MainFeatures({ listing }: Props) {
               <SvgIcon path={mdiRelativeScale} />
               <Box ml={1}>
                 <Typography variant="subtitle1" className={classes.value}>
-                  {getFormattedValue(displayLotSize)}
+                  {getFormattedValue(parseFloat(displayLotSize))}
                 </Typography>
               </Box>
             </Box>
