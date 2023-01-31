@@ -53,7 +53,7 @@ function MainFeatures({ listing }: Props) {
     lotSize === null || typeof lotSize === 'undefined'
       ? '--'
       : lotSize < 1
-      ? `${(lotSize * 43560).toFixed(2)} sq ft`
+      ? `${(lotSize * 43560).toFixed(2)} sqft`
       : `${lotSize.toFixed(2)} acres`
 
   // We don't have bath or bed counts for land, so we'll just show the property type
