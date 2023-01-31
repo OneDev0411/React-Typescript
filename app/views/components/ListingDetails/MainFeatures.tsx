@@ -49,6 +49,12 @@ function MainFeatures({ listing }: Props) {
   )
   const priceSqft = squareFeet > 0 ? Math.round(listing.price / squareFeet) : 0
   const lotSize = property.lot_size_area
+  let displayLotSize =
+    lotSize === null || typeof lotSize === 'undefined'
+      ? '--'
+      : lotSize < 1
+      ? `${(lotSize * 43560).toFixed(2)} sq ft`
+      : `${lotSize.toFixed(2)} acres`
 
   // We don't have bath or bed counts for land, so we'll just show the property type
   if (isLand) {
@@ -151,7 +157,7 @@ function MainFeatures({ listing }: Props) {
               <SvgIcon path={mdiRelativeScale} />
               <Box ml={1}>
                 <Typography variant="subtitle1" className={classes.value}>
-                  {getFormattedValue(lotSize)}
+                  {getFormattedValue(displayLotSize)}
                 </Typography>
               </Box>
             </Box>
