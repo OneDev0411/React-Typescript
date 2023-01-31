@@ -23,8 +23,9 @@ interface Props {
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    root: {
-      borderRadius: theme.spacing(0.5)
+    callout: {
+      borderRadius: theme.spacing(0.5),
+      border: '1px solid #F6E1BF'
     },
     container: {
       padding: theme.spacing(1, 1),
@@ -226,7 +227,8 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
         dense
         type="warn"
         closeButtonTooltip="Dismiss"
-        style={{ border: '1px solid #F6E1BF' }}
+        className={classes.callout}
+        style={{ marginLeft: '9px', marginRight: '9px' }}
       >
         <div className={classes.container}>
           <div className={classes.iconWrapper}>
