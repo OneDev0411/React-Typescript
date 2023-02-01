@@ -69,8 +69,6 @@ export function FontExplorer() {
     preview()
   }
 
-  console.log({ activeFont })
-
   return (
     <div className={classes.root}>
       <div className={classes.container}>
