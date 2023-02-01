@@ -6,10 +6,10 @@ import { useDebounce } from 'react-use'
 import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
 
 export function TextRotateProperty() {
-  const { label, preview } = useCanvasTextContext()
+  const { textPreviewLabel, preview } = useCanvasTextContext()
 
   const [rotation, setRotation] = useState<number>(
-    label?.node.getAttr('rotation') ?? 0
+    textPreviewLabel?.node.getAttr('rotation') ?? 0
   )
   const [debouncedRotation, setDebouncedRotation] = useState(rotation)
 
@@ -28,7 +28,7 @@ export function TextRotateProperty() {
   const handleChangeRotation = (value: number) => {
     setRotation(value)
     setDebouncedRotation(value)
-    label?.rotate(value)
+    textPreviewLabel?.rotate(value)
   }
 
   return (

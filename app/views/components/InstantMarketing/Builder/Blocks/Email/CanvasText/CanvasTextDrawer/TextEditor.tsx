@@ -7,9 +7,9 @@ import { DefaultCanvasTextProperties } from './constants'
 import { useCanvasTextContext } from './hooks/get-canvas-text-context'
 
 export function TextEditor() {
-  const { label, setTextProperty, preview } = useCanvasTextContext()
+  const { textPreviewLabel, setTextProperty, preview } = useCanvasTextContext()
   const [textValue, setTextValue] = useState(
-    label?.textNode.text() || DefaultCanvasTextProperties.text.text!
+    textPreviewLabel?.textNode.text() || DefaultCanvasTextProperties.text.text!
   )
 
   const [debouncedTextValue, setDebouncedTextValue] = useState(textValue)
@@ -38,7 +38,7 @@ export function TextEditor() {
       autoFocus
       multiline
       fullWidth
-      rows={5}
+      minRows={5}
       variant="outlined"
       value={textValue}
       inputProps={{

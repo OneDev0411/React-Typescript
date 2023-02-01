@@ -15,7 +15,7 @@ export const DefaultCanvasTextProperties: CanvasTextProperties = {
   text: {
     text: 'Untitled Text',
     fontSize: 40,
-    fontFamily: 'Arial',
+    fontFamily: 'Lato',
     lineHeight: 1.1,
     padding: 10,
     fill: '#000'

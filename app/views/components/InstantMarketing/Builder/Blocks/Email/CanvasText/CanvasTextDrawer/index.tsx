@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import {
   Box,
@@ -9,7 +9,6 @@ import {
 } from '@material-ui/core'
 import type { Model } from 'backbone'
 import cn from 'classnames'
-import Pikaso, { Konva, LabelModel } from 'pikaso'
 
 import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
 import { noop } from '@app/utils/helpers'
@@ -20,9 +19,9 @@ import type { TemplateOptions } from '../../../types'
 
 import { AdvancedProperties } from './AdvancedProperties'
 import { BasicProperties } from './BasicProperties'
-import { DefaultCanvasTextProperties } from './constants'
 import { Context } from './context'
 import { FontExplorer } from './FontExplorer'
+import { useEditor } from './hooks/use-editor'
 import { TextEditor } from './TextEditor'
 
 const useStyles = makeStyles(
@@ -77,9 +76,10 @@ export function CanvasTextDrawer({
   const [activeTab, setActiveTab] = useState<Tabs>('fonts')
 
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
-  const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
-
-  const label = editor ? (editor.board.activeShapes[0] as LabelModel) : null
+  const [editor, textPreviewLabel, fontPreviewLabel] = useEditor(
+    editorRef,
+    model
+  )
 
   const handleDone = async () => {
     onClose()
@@ -87,18 +87,18 @@ export function CanvasTextDrawer({
   }
 
   const uploadResultImage = async () => {
-    if (!label) {
+    if (!textPreviewLabel) {
       return
     }
 
     const data = JSON.stringify(editor?.export.toJson())
 
-    model!.trigger('canvas-text:save-state', {
+    model?.trigger('canvas-text:save-state', {
       data
     })
 
     const file = await convertUrlToImageFile(
-      label.node.toDataURL({
+      textPreviewLabel.node.toDataURL({
         pixelRatio: 2
       })
     )
@@ -107,85 +107,77 @@ export function CanvasTextDrawer({
       model,
       file,
       json: data,
-      rect: label.node.getClientRect()
+      rect: textPreviewLabel.node.getClientRect()
     })
   }
 
   const preview = useCallback(() => {
-    if (!label) {
+    if (!textPreviewLabel) {
       return
     }
 
-    const image = label.node.toDataURL({
+    const image = textPreviewLabel.node.toDataURL({
       pixelRatio: 2
     })
 
-    const rect = label.node.getClientRect()
+    const rect = textPreviewLabel.node.getClientRect()
 
     model!.trigger('canvas-text:update', {
       image,
       width: rect.width,
       height: rect.height
     })
-  }, [label, model])
+  }, [textPreviewLabel, model])
 
   const setTextProperty = useCallback(
     (property: string, value: unknown) => {
-      label?.textNode.setAttr(property, value)
+      textPreviewLabel?.textNode.setAttr(property, value)
     },
-    [label]
+    [textPreviewLabel]
   )
 
   const setTagProperty = useCallback(
     (property: string, value: unknown) => {
-      label?.tagNode.setAttr(property, value)
+      textPreviewLabel?.tagNode.setAttr(property, value)
     },
-    [label]
+    [textPreviewLabel]
   )
 
   const getTextProperty = useCallback(
     (property: string) => {
-      return label?.textNode.getAttr(property)
+      return textPreviewLabel?.textNode.getAttr(property)
     },
-    [label]
+    [textPreviewLabel]
   )
 
   const getTagProperty = useCallback(
     (property: string) => {
-      return label?.tagNode.getAttr(property)
+      return textPreviewLabel?.tagNode.getAttr(property)
     },
-    [label]
+    [textPreviewLabel]
   )
 
-  useEffect(() => {
-    if (editor || !model || !editorRef.current) {
-      return
-    }
+  const getFontPreview = useCallback(
+    (fontName: string) => {
+      if (!fontPreviewLabel) {
+        return ''
+      }
 
-    Konva.Util.createCanvasElement = () => {
-      const iframe = document.querySelector('.gjs-frame') as HTMLIFrameElement
+      const normalizedName = fontName
+        .replaceAll('-', ' ')
+        .replace(/\B([A-Z])\B/g, ' $1')
 
-      return iframe.contentDocument!.createElement('canvas')
-    }
+      fontPreviewLabel.textNode.setAttrs({
+        fontFamily: fontName,
+        text: normalizedName
+      })
 
-    const instance = new Pikaso({
-      width: 50,
-      height: 50,
-      container: editorRef.current
-    })
-
-    const state = decodeURIComponent(model.get('canvas-json'))
-
-    if (state) {
-      instance.load(state)
-    } else {
-      instance.shapes.label.insert(DefaultCanvasTextProperties)
-    }
-
-    setEditor(instance)
-  }, [editorRef, editor, model])
-
-  console.log('>>>>', templateOptions)
+      return fontPreviewLabel.node.toDataURL({
+        pixelRatio: 2
+      })
+    },
+    [fontPreviewLabel]
+  )
 
   return (
     <>
@@ -210,12 +202,13 @@ export function CanvasTextDrawer({
               <Context.Provider
                 value={{
                   editor,
-                  label,
+                  textPreviewLabel,
                   templateOptions,
                   setTextProperty,
                   setTagProperty,
                   getTextProperty,
                   getTagProperty,
+                  getFontPreview,
                   preview
                 }}
               >

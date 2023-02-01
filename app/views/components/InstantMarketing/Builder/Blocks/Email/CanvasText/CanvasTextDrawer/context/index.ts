@@ -6,12 +6,13 @@ import type { TemplateOptions } from '../../../../types'
 
 export interface CanvasTextContext {
   editor: Nullable<Pikaso>
-  label: Nullable<LabelModel>
+  textPreviewLabel: Nullable<LabelModel>
   templateOptions: Nullable<TemplateOptions>
   setTextProperty: (property: string, value: unknown) => void
   setTagProperty: (property: string, value: unknown) => void
   getTextProperty<T>(property: string): T | undefined
   getTagProperty<T>(property: string): T | undefined
+  getFontPreview: (fontName: string) => string
   preview: () => void
 }
 
