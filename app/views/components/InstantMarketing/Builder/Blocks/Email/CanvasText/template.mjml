@@ -1,0 +1,7 @@
+<mj-image 
+  data-type="canvas-text" 
+  data-json=""
+  padding="0"
+  alt="{{alt}}"
+  src="{{image}}"
+></mj-image>

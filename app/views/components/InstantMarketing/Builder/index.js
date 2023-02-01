@@ -49,6 +49,7 @@ import Templates from '../Templates'
 import { AddToMarketingCenterButton } from './AddToMarketingCenterButton'
 import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenterButton/constants'
 import { registerEmailBlocks } from './Blocks/Email'
+import { CanvasTextDrawer } from './Blocks/Email/CanvasText/CanvasTextDrawer'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
 import { registerSocialBlocks } from './Blocks/Social'
 import {
@@ -110,6 +111,7 @@ class Builder extends React.Component {
       mapToEdit: null,
       carouselToEdit: null,
       videoToEdit: null,
+      canvasTextToEdit: null,
       matterportToEdit: null,
       showImageQuickFilters: false
     }
@@ -606,6 +608,19 @@ class Builder extends React.Component {
       },
       video: {
         onDrop: this.openSearchVideoDrawer
+      },
+      canvasText: {
+        onInit: (model, isNewBlock) => {
+          if (isNewBlock) {
+            this.setState({ canvasTextToEdit: model })
+          }
+        },
+        onLoad: model => {
+          this.setState({ canvasTextToEdit: model })
+        },
+        onDrop: () => {
+          this.blocks.canvasText.selectHandler({})
+        }
       },
       article: {
         onDrop: () => {
@@ -1642,6 +1657,35 @@ class Builder extends React.Component {
                   : await uploadAsset(templateId, file)
 
                 return uploadedAsset.file.url
+              }}
+            />
+          )}
+          {!!this.state.canvasTextToEdit && (
+            <CanvasTextDrawer
+              model={this.state.canvasTextToEdit}
+              templateOptions={this.selectedTemplateOptions}
+              onClose={() => this.setState({ canvasTextToEdit: null })}
+              onUploadComplete={async ({ model, file, json, rect }) => {
+                const uploadedAsset = await uploadAsset(
+                  this.selectedTemplate.id,
+                  file
+                )
+
+                model.trigger('canvas-text:update', {
+                  image: uploadedAsset.file.url,
+                  width: rect.width,
+                  height: rect.height
+                })
+
+                const dataJson = encodeURIComponent(json)
+
+                // This snippet is used by the template team
+                console.log(`<mj-image 
+                    data-type="canvas-text" 
+                    width="${parseInt(rect.width, 10)}" 
+                    height="${parseInt(rect.height, 10)}" 
+                    data-json="${dataJson}" 
+                    src="${uploadedAsset.file.url}"></mj-image>`)
               }}
             />
           )}
