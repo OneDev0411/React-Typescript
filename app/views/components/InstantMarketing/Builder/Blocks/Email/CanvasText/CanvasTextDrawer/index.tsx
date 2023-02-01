@@ -9,12 +9,14 @@ import {
 } from '@material-ui/core'
 import type { Model } from 'backbone'
 import cn from 'classnames'
-import Pikaso, { LabelModel } from 'pikaso'
+import Pikaso, { Konva, LabelModel } from 'pikaso'
 
 import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
 import { noop } from '@app/utils/helpers'
 import OverlayDrawer from '@app/views/components/OverlayDrawer'
 import { PageTabs, Tab } from '@app/views/components/PageTabs'
+
+import type { TemplateOptions } from '../../../types'
 
 import { AdvancedProperties } from './AdvancedProperties'
 import { BasicProperties } from './BasicProperties'
@@ -54,6 +56,7 @@ interface IRect {
 
 interface Props {
   model: Nullable<Model>
+  templateOptions: Nullable<TemplateOptions>
   onClose: () => void
   onUploadComplete: (data: {
     file: File
@@ -63,7 +66,12 @@ interface Props {
   }) => void
 }
 
-export function CanvasTextDrawer({ model, onClose, onUploadComplete }: Props) {
+export function CanvasTextDrawer({
+  model,
+  templateOptions,
+  onClose,
+  onUploadComplete
+}: Props) {
   const classes = useStyles()
 
   const [activeTab, setActiveTab] = useState<Tabs>('fonts')
@@ -154,6 +162,12 @@ export function CanvasTextDrawer({ model, onClose, onUploadComplete }: Props) {
       return
     }
 
+    Konva.Util.createCanvasElement = () => {
+      const iframe = document.querySelector('.gjs-frame') as HTMLIFrameElement
+
+      return iframe.contentDocument!.createElement('canvas')
+    }
+
     const instance = new Pikaso({
       width: 50,
       height: 50,
@@ -170,6 +184,8 @@ export function CanvasTextDrawer({ model, onClose, onUploadComplete }: Props) {
 
     setEditor(instance)
   }, [editorRef, editor, model])
+
+  console.log('>>>>', templateOptions)
 
   return (
     <>
@@ -195,6 +211,7 @@ export function CanvasTextDrawer({ model, onClose, onUploadComplete }: Props) {
                 value={{
                   editor,
                   label,
+                  templateOptions,
                   setTextProperty,
                   setTagProperty,
                   getTextProperty,

@@ -5,9 +5,14 @@ import { CirclePicker, ColorState } from 'react-color'
 
 import { DefaultCanvasTextProperties } from '../constants'
 import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
+import { useAvailableColors } from '../hooks/use-available-colors'
 
 export function TagColorProperty() {
-  const { getTagProperty, setTagProperty, preview } = useCanvasTextContext()
+  const { getTagProperty, templateOptions, setTagProperty, preview } =
+    useCanvasTextContext()
+  const colors = useAvailableColors(
+    templateOptions?.textEditor?.extraColors ?? []
+  )
 
   const [color, setColor] = useState<ColorState['hex']>(
     getTagProperty<string>('fill') ?? DefaultCanvasTextProperties.tag.fill!
@@ -29,28 +34,9 @@ export function TagColorProperty() {
         <CirclePicker
           width="100%"
           circleSize={20}
+          circleSpacing={8}
           color={color}
-          colors={[
-            'transparent',
-            '#f44336',
-            '#e91e63',
-            '#9c27b0',
-            '#673ab7',
-            '#3f51b5',
-            '#2196f3',
-            '#03a9f4',
-            '#00bcd4',
-            '#009688',
-            '#4caf50',
-            '#8bc34a',
-            '#cddc39',
-            '#ffeb3b',
-            '#ffc107',
-            '#ff9800',
-            '#ff5722',
-            '#795548',
-            '#607d8b'
-          ]}
+          colors={colors}
           onChange={handleChangeColor}
         />
       </Box>

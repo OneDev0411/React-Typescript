@@ -9,16 +9,18 @@ import {
   Theme
 } from '@material-ui/core'
 import { mdiMagnify } from '@mdi/js'
-import { Font } from '@samuelmeuli/font-manager'
+// import { Font } from '@samuelmeuli/font-manager'
 import cn from 'classnames'
-import FontFaceObserver from 'fontfaceobserver'
+// import FontFaceObserver from 'fontfaceobserver'
 import matchSorter from 'match-sorter'
 
-import { useFonts } from '@app/hooks/use-fonts'
+// import { useFonts } from '@app/hooks/use-fonts'
+import { getBrandFontFamilies } from '@app/utils/get-brand-fonts'
 import { SvgIcon } from '@app/views/components/SvgIcons'
 
-import { DefaultCanvasTextProperties } from './constants'
+// import { DefaultCanvasTextProperties } from './constants'
 import { useCanvasTextContext } from './hooks/get-canvas-text-context'
+import { useBrand } from './hooks/use-brand'
 
 const LIMIT = 30
 
@@ -76,52 +78,51 @@ const useStyles = makeStyles(
 
 export function FontExplorer() {
   const classes = useStyles()
-  const { getTextProperty, setTextProperty, preview } = useCanvasTextContext()
+  const { templateOptions, getTextProperty, setTextProperty, preview } =
+    useCanvasTextContext()
 
-  const [fonts] = useFonts({
-    limit: 300,
-    categories: ['handwriting', 'display', 'serif', 'monospace'],
-    sort: 'popularity',
-    scripts: ['latin', 'latin-ext'],
-    variants: ['regular', '600']
-  })
-  const [activeFont, setActiveFont] = useState<Nullable<Font>>(null)
+  const brand = useBrand()
+
+  const [activeFont, setActiveFont] = useState<Nullable<string>>(null)
   const [displayCount, setDisplayCount] = useState(LIMIT)
   const [searchCriteria, setSearchCriteria] = useState('')
 
-  const list = useMemo(() => {
-    const list = Object.values(Object.fromEntries(fonts))
+  const fonts = useMemo(
+    () => [
+      ...getBrandFontFamilies(brand!),
+      ...(templateOptions?.textEditor?.extraFonts ?? [])
+    ],
+    [brand, templateOptions?.textEditor?.extraFonts]
+  )
 
+  const list = useMemo(() => {
     const filteredList =
-      searchCriteria.length > 1
-        ? matchSorter(list, searchCriteria, {
-            keys: ['family', 'kind']
-          })
-        : list
+      searchCriteria.length > 1 ? matchSorter(fonts, searchCriteria) : fonts
 
     return filteredList.slice(0, displayCount)
-  }, [fonts, displayCount, searchCriteria])
+  }, [displayCount, searchCriteria, fonts])
 
   const handleShowMore = () => {
     setDisplayCount(count =>
-      count + LIMIT < fonts.size ? count + LIMIT : fonts.size
+      count + LIMIT < fonts.length ? count + LIMIT : fonts.length
     )
   }
 
-  const handleSelectFont = (font: Font) => {
+  const handleSelectFont = (font: string) => {
     setActiveFont(font)
-
-    new FontFaceObserver(font.family, {
-      style: getTextProperty<string>('fontStyle')
-    })
-      .load()
-      .then(() => {
-        setTextProperty('fontFamily', font.family)
-        preview()
-      })
-      .catch((e: ErrorEvent) => {
-        console.log(e)
-      })
+    setTextProperty('fontFamily', font)
+    preview()
+    // new FontFaceObserver(font, {
+    //   style: getTextProperty<string>('fontStyle')
+    // })
+    //   .load()
+    //   .then(() => {
+    //     setTextProperty('fontFamily', font)
+    //     preview()
+    //   })
+    //   .catch((e: ErrorEvent) => {
+    //     console.log(e)
+    //   })
   }
 
   const isShowMoreVisible = () => {
@@ -129,7 +130,7 @@ export function FontExplorer() {
       return false
     }
 
-    if (displayCount >= fonts.size) {
+    if (displayCount >= fonts.length) {
       return false
     }
 
@@ -140,17 +141,16 @@ export function FontExplorer() {
    * When creating canvas data from json, select the active font
    */
   useEffect(() => {
-    const currentLabelFont =
-      getTextProperty<string>('fontFamily') ??
-      DefaultCanvasTextProperties.text.fontFamily!
-
-    if (
-      fonts.size > 0 &&
-      activeFont === null &&
-      currentLabelFont !== DefaultCanvasTextProperties.text.fontFamily
-    ) {
-      setActiveFont(fonts.get(currentLabelFont) ?? null)
-    }
+    // const currentLabelFont =
+    //   getTextProperty<string>('fontFamily') ??
+    //   DefaultCanvasTextProperties.text.fontFamily!
+    // if (
+    //   fonts.size > 0 &&
+    //   activeFont === null &&
+    //   currentLabelFont !== DefaultCanvasTextProperties.text.fontFamily
+    // ) {
+    //   setActiveFont(fonts.get(currentLabelFont) ?? null)
+    // }
   }, [fonts, activeFont, getTextProperty])
 
   return (
@@ -193,18 +193,18 @@ export function FontExplorer() {
       )}
 
       <div className={classes.container}>
-        {list.map(font => (
+        {list.map(fontName => (
           <div
-            key={font.id}
+            key={fontName}
             className={cn(classes.block, {
-              active: activeFont?.id === font.id
+              active: activeFont === fontName
             })}
             style={{
-              fontFamily: font.family
+              fontFamily: fontName
             }}
-            onClick={() => handleSelectFont(font)}
+            onClick={() => handleSelectFont(fontName)}
           >
-            {font.family}
+            {fontName}
           </div>
         ))}
       </div>
