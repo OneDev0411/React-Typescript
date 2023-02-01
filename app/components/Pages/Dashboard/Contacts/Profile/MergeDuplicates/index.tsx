@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useContext } from 'react'
 
-import { makeStyles, Theme, useTheme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 import { mdiAlertOctagonOutline } from '@mdi/js'
 import pluralize from 'pluralize'
 import { useDispatch } from 'react-redux'
@@ -78,7 +78,6 @@ const useStyles = makeStyles(
 )
 
 export default function MergeDuplicates({ contact, mergeCallback }: Props) {
-  const theme = useTheme()
   const dispatch = useDispatch()
   const classes = useStyles()
   const confirmation = useContext(ConfirmationModalContext)
@@ -236,7 +235,7 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
           </div>
 
           <div className={classes.content}>
-            <span style={{ color: theme.palette.warning.contrastText }}>
+            <span>
               We’ve found {duplicateContacts.contacts.length - 1} other{' '}
               {pluralize('contact', duplicateContacts.contacts.length - 1)}{' '}
               similar. Do you want to merge them?
