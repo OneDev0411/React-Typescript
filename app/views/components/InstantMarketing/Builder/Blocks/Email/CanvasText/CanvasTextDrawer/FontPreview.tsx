@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { Skeleton } from '@material-ui/lab'
+import FontFaceObserver from 'fontfaceobserver'
 
 import { useCanvasTextContext } from './hooks/get-canvas-text-context'
 
@@ -19,11 +20,18 @@ export function FontPreview({ fontName }: Props) {
       return
     }
 
-    iframe.contentDocument!.fonts.ready.then(() => {
+    const getPreview = () => {
       const preview = getFontPreview(fontName)
 
       setSrc(preview)
-    })
+    }
+
+    new FontFaceObserver(fontName, {}, iframe.contentWindow)
+      .load()
+      .then(getPreview)
+      .catch(getPreview)
+
+    iframe.contentDocument!.fonts.ready.then(() => {})
   }, [fontName, getFontPreview])
 
   if (!src) {
