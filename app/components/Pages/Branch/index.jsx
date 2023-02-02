@@ -1,7 +1,7 @@
 // Branch.js
 import { useState } from 'react'
 
-import * as BranchSDK from 'branch-sdk-rechat'
+import * as BranchSDK from 'branch-sdk'
 import idx from 'idx'
 import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
