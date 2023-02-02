@@ -98,6 +98,10 @@ function SideNavMenu(props: WithRouterProps) {
     dispatch(activateIntercom(isIntercomActive))
   }
 
+  const deal_notifications = useAcl([ACL.BACK_OFFICE])
+    ? badges.deal_need_attentions
+    : badges.deal_notifications
+
   const handleOpenExternalLink = link =>
     window.open(link, '_blank', 'noopener noreferrer')
 
@@ -224,7 +228,7 @@ function SideNavMenu(props: WithRouterProps) {
     {
       access: transactionsAccess,
       hasChildrenNotification: !!(
-        badges.deal_notifications || badges.showing_notifications
+        deal_notifications || badges.showing_notifications
       ),
       hasDivider: true,
       icon: mdiCurrencyUsd,
@@ -236,7 +240,7 @@ function SideNavMenu(props: WithRouterProps) {
           id: 'deals',
           isHidden: !useAcl(dealsAccess),
           label: 'Deals',
-          notificationCount: badges.deal_notifications,
+          notificationCount: deal_notifications,
           to: '/dashboard/deals'
         },
         {
