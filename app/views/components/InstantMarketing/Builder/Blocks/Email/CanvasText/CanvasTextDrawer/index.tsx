@@ -76,10 +76,8 @@ export function CanvasTextDrawer({
   const [activeTab, setActiveTab] = useState<Tabs>('fonts')
 
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
-  const [editor, textPreviewLabel, fontPreviewLabel] = useEditor(
-    editorRef,
-    model
-  )
+  const { editor, textPreviewLabel, fontPreviewLabel, isEditorLoaded } =
+    useEditor(editorRef, model)
 
   const handleDone = async () => {
     onClose()
@@ -197,7 +195,7 @@ export function CanvasTextDrawer({
           </Box>
         </OverlayDrawer.Header>
         <OverlayDrawer.Body className={classes.drawerBodyRoot}>
-          {editor ? (
+          {isEditorLoaded ? (
             <div>
               <Context.Provider
                 value={{

@@ -5,10 +5,16 @@ import Pikaso, { Konva, LabelModel } from 'pikaso'
 
 import { DefaultCanvasTextProperties } from '../constants'
 
+import { useIframe } from './use-iframe'
+import { useIframeFonts } from './use-iframe-fonts'
+
 export function useEditor(
   editorRef: MutableRefObject<Nullable<HTMLDivElement>>,
   model: Nullable<Model>
-): [Nullable<Pikaso>, Nullable<LabelModel>, Nullable<LabelModel>] {
+) {
+  const iframe = useIframe()
+  const iframeFonts = useIframeFonts()
+
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
   const [textPreviewLabel, fontPreviewLabel] = editor
     ? [
@@ -18,15 +24,12 @@ export function useEditor(
     : [null, null]
 
   useEffect(() => {
-    if (editor || !model || !editorRef.current) {
+    if (editor || !model || !iframe || !editorRef.current) {
       return
     }
 
-    Konva.Util.createCanvasElement = () => {
-      const iframe = document.querySelector('.gjs-frame') as HTMLIFrameElement
-
-      return iframe.contentDocument!.createElement('canvas')
-    }
+    Konva.Util.createCanvasElement = () =>
+      iframe!.contentDocument!.createElement('canvas')
 
     const instance = new Pikaso({
       width: 50,
@@ -51,7 +54,12 @@ export function useEditor(
     }
 
     setEditor(instance)
-  }, [editorRef, editor, model])
+  }, [editorRef, editor, model, iframe])
 
-  return [editor, textPreviewLabel, fontPreviewLabel]
+  return {
+    editor,
+    isEditorLoaded: editor !== null && iframeFonts.length > 0,
+    textPreviewLabel,
+    fontPreviewLabel
+  }
 }

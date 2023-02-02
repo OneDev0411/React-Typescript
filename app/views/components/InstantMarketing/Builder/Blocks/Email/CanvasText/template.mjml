@@ -2,6 +2,7 @@
   data-type="canvas-text" 
   data-json=""
   padding="0"
+  css-class="fancy-fonts"
   alt="{{alt}}"
   src="{{image}}"
 ></mj-image>

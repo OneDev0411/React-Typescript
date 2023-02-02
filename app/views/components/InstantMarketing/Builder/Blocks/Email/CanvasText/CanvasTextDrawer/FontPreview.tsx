@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 
 import { Skeleton } from '@material-ui/lab'
-import FontFaceObserver from 'fontfaceobserver'
 
 import { useCanvasTextContext } from './hooks/get-canvas-text-context'
+import { useIframeFonts } from './hooks/use-iframe-fonts'
 
 interface Props {
   fontName: string
@@ -11,12 +11,12 @@ interface Props {
 
 export function FontPreview({ fontName }: Props) {
   const [src, setSrc] = useState<Nullable<string>>(null)
+
   const { getFontPreview } = useCanvasTextContext()
+  const fonts = useIframeFonts()
 
   useEffect(() => {
-    const iframe = document.querySelector('.gjs-frame') as HTMLIFrameElement
-
-    if (!iframe) {
+    if (fonts.length === 0 || src) {
       return
     }
 
@@ -26,13 +26,14 @@ export function FontPreview({ fontName }: Props) {
       setSrc(preview)
     }
 
-    new FontFaceObserver(fontName, {}, iframe.contentWindow)
-      .load()
-      .then(getPreview)
-      .catch(getPreview)
+    const font = fonts.find(font => font.family === fontName)
 
-    iframe.contentDocument!.fonts.ready.then(() => {})
-  }, [fontName, getFontPreview])
+    if (font) {
+      font.load().then(getPreview).catch(getPreview)
+    } else {
+      getPreview()
+    }
+  }, [fontName, getFontPreview, fonts, src])
 
   if (!src) {
     return <Skeleton variant="rect" width="130px" height="48px" />
