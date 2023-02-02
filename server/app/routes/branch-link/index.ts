@@ -5,8 +5,6 @@ import qs from 'qs'
 const BASE_URL = 'https://api2.branch.io'
 
 export default async (req: Request, res: Response) => {
-  console.log(req.body)
-
   try {
     const response = await axios({
       method: req.method,
