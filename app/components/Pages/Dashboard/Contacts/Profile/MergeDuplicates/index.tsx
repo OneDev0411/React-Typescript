@@ -1,9 +1,12 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react'
+import { useState, useEffect, useCallback, useContext } from 'react'
 
-import { Button, useTheme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
+import { mdiAlertOctagonOutline } from '@mdi/js'
 import pluralize from 'pluralize'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router'
 
+import { SvgIcon } from '@app/views/components/SvgIcons'
 import { Callout } from 'components/Callout'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import DuplicateContactsDrawer from 'components/DuplicateContacts/DuplicateContactsDrawer'
@@ -13,16 +16,70 @@ import { getContactDuplicateContacts } from 'models/contacts/get-contact-duplica
 import { DuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts/types'
 import { mergeContact } from 'models/contacts/merge-contact'
 
-import { CallOutContentContainer } from './styled'
-
 interface Props {
   contact: IContact
   mergeCallback: (contactId: UUID) => Promise<void>
 }
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    callout: {
+      borderRadius: theme.spacing(0.5),
+      border: '1px solid #F6E1BF'
+    },
+    container: {
+      padding: theme.spacing(1, 1),
+      display: 'flex',
+      flexDirection: 'row'
+    },
+    iconWrapper: {
+      height: theme.spacing(2),
+      padding: theme.spacing(0, 2, 0, 0)
+    },
+    icon: {
+      color: '#854300'
+    },
+    content: {
+      display: 'flex',
+      width: 'fit-content',
+      flexDirection: 'column',
+      color: '#673400'
+    },
+    buttonWrapper: {
+      marginTop: theme.spacing(1)
+    },
+    secondaryButton: {
+      marginRight: theme.spacing(2),
+      fontWeight: 400,
+      opacity: 0.7,
+      color: '#854300',
+      cursor: 'pointer',
+      textDecoration: 'none',
+      '&:hover': {
+        textDecoration: 'none',
+        color: '#854300'
+      }
+    },
+    primaryButton: {
+      fontWeight: 400,
+      cursor: 'pointer',
+      textDecoration: 'none',
+      '&:hover': {
+        textDecoration: 'none'
+      }
+    },
+    bold: {
+      fontFamily: 'LatoBold'
+    }
+  }),
+  {
+    name: 'MergeDuplicates'
+  }
+)
+
 export default function MergeDuplicates({ contact, mergeCallback }: Props) {
-  const theme = useTheme()
   const dispatch = useDispatch()
+  const classes = useStyles()
   const confirmation = useContext(ConfirmationModalContext)
   const [isOpen, setIsOpen] = useState(true)
   const [masterId, setMasterId] = useState(contact.id)
@@ -167,27 +224,44 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
     <>
       <Callout
         dense
-        type="info"
+        type="warn"
         closeButtonTooltip="Dismiss"
-        style={{
-          padding: theme.spacing(0.5, 2),
-          margin: theme.spacing(0, 0, 2, 0),
-          borderRadius: `${theme.shape.borderRadius}px`
-        }}
-        onClose={() => {
-          handleDismissMergeCallout(contact.id)
-        }}
+        className={classes.callout}
+        style={{ marginLeft: '9px', marginRight: '9px' }}
       >
-        <CallOutContentContainer>
-          <span style={{ color: theme.palette.warning.contrastText }}>
-            We’ve found {duplicateContacts.contacts.length - 1} other{' '}
-            {pluralize('contact', duplicateContacts.contacts.length - 1)}{' '}
-            similar to <b>{contact.display_name}</b>. Do you want to merge them?
-          </span>
-          <Button color="secondary" variant="text" onClick={handleReviewClick}>
-            Review
-          </Button>
-        </CallOutContentContainer>
+        <div className={classes.container}>
+          <div className={classes.iconWrapper}>
+            <SvgIcon path={mdiAlertOctagonOutline} className={classes.icon} />
+          </div>
+
+          <div className={classes.content}>
+            <span>
+              We’ve found {duplicateContacts.contacts.length - 1} other{' '}
+              {pluralize('contact', duplicateContacts.contacts.length - 1)}{' '}
+              similar. Do you want to merge them?
+            </span>
+            <div className={classes.buttonWrapper}>
+              <Link
+                className={classes.secondaryButton}
+                color="inherit"
+                onClick={() => {
+                  handleDismissMergeCallout(contact.id)
+                }}
+                to=""
+              >
+                Dismiss
+              </Link>
+              <Link
+                to=""
+                color="secondary"
+                onClick={handleReviewClick}
+                className={classes.primaryButton}
+              >
+                Review
+              </Link>
+            </div>
+          </div>
+        </div>
       </Callout>
 
       {isContactsListDrawerOpen && (

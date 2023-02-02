@@ -45,7 +45,7 @@ const padding = ({ theme, dense }: Props) =>
 const margin = ({ theme, dense }: Props) =>
   dense ? theme.spacing(2, 0) : theme.spacing(3, 2)
 export const CalloutContainer = styled.div<Props>`
-  border-radius: 6px;
+  border-radius: 4px;
   padding: ${padding};
   margin: ${margin};
   color: ${fontColor};

@@ -575,12 +575,14 @@ const ContactProfile = ({
         </div>
 
         <div className={classes.container}>
-          <MergeDuplicates contact={contact} mergeCallback={mergeCallback} />
-
           <div className={classes.boxContainer}>
             <div
               className={cn(classes.contentContainer, classes.sidenavContainer)}
             >
+              <MergeDuplicates
+                contact={contact}
+                mergeCallback={mergeCallback}
+              />
               <LastTouch
                 contact={contact}
                 onUpdateTouchFreq={handleUpdateTouchFreq}
