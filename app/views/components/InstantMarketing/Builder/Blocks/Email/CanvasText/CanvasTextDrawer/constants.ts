@@ -13,7 +13,7 @@ export const DefaultCanvasTextProperties: CanvasTextProperties = {
     y: 0
   },
   text: {
-    text: 'Untitled Text',
+    text: 'Sample Text',
     fontSize: 40,
     fontFamily: 'Lato',
     lineHeight: 1.1,

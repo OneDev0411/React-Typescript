@@ -88,7 +88,7 @@ export default function registerCanvasTextBlock(
   registerBlock(
     editor,
     {
-      label: 'Fancy Text',
+      label: 'Fancy Font',
       icon: CanvasTextIcon,
       category: BASICS_BLOCK_CATEGORY,
       blockName: canvasTextBlockName,

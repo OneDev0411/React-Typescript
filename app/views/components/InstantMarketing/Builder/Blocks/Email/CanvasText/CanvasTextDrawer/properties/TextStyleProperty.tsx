@@ -105,7 +105,7 @@ export function TextStyleProperty() {
   return (
     <Box my={2}>
       <Typography variant="body1" color="textSecondary">
-        Text Styles
+        Font Styles
       </Typography>
 
       <Box mt={2} display="flex" alignItems="center">
