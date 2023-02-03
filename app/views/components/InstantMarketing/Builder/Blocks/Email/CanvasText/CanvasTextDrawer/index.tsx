@@ -76,8 +76,10 @@ export function CanvasTextDrawer({
   const [activeTab, setActiveTab] = useState<Tabs>('fonts')
 
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
-  const { editor, textPreviewLabel, fontPreviewLabel, isEditorLoaded } =
-    useEditor(editorRef, model)
+  const { editor, textPreviewLabel, fontPreviewLabel } = useEditor(
+    editorRef,
+    model
+  )
 
   const handleDone = async () => {
     onClose()
@@ -89,7 +91,13 @@ export function CanvasTextDrawer({
       return
     }
 
-    const data = JSON.stringify(editor?.export.toJson())
+    const json = editor?.export.toJson()
+
+    // only keep label preview shape
+    const data = JSON.stringify({
+      ...json,
+      shapes: [json?.shapes[0]]
+    })
 
     model?.trigger('canvas-text:save-state', {
       data
@@ -195,7 +203,7 @@ export function CanvasTextDrawer({
           </Box>
         </OverlayDrawer.Header>
         <OverlayDrawer.Body className={classes.drawerBodyRoot}>
-          {isEditorLoaded ? (
+          {editor ? (
             <div>
               <Context.Provider
                 value={{

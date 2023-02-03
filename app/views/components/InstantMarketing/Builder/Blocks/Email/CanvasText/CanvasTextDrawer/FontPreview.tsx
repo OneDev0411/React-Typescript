@@ -13,10 +13,10 @@ export function FontPreview({ fontName }: Props) {
   const [src, setSrc] = useState<Nullable<string>>(null)
 
   const { getFontPreview } = useCanvasTextContext()
-  const fonts = useIframeFonts()
+  const [, loadFont] = useIframeFonts()
 
   useEffect(() => {
-    if (fonts.length === 0 || src) {
+    if (src) {
       return
     }
 
@@ -26,14 +26,8 @@ export function FontPreview({ fontName }: Props) {
       setSrc(preview)
     }
 
-    const font = fonts.find(font => font.family === fontName)
-
-    if (font) {
-      font.load().then(getPreview).catch(getPreview)
-    } else {
-      getPreview()
-    }
-  }, [fontName, getFontPreview, fonts, src])
+    loadFont(fontName).then(getPreview).catch(getPreview)
+  }, [fontName, getFontPreview, loadFont, src])
 
   if (!src) {
     return <Skeleton variant="rect" width="130px" height="48px" />

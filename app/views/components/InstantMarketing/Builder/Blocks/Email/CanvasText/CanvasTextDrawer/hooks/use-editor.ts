@@ -1,7 +1,7 @@
 import { MutableRefObject, useState, useEffect } from 'react'
 
 import { Model } from 'backbone'
-import Pikaso, { Konva, LabelModel } from 'pikaso'
+import Pikaso, { JsonData, Konva, LabelModel } from 'pikaso'
 
 import { DefaultCanvasTextProperties } from '../constants'
 
@@ -13,7 +13,7 @@ export function useEditor(
   model: Nullable<Model>
 ) {
   const iframe = useIframe()
-  const iframeFonts = useIframeFonts()
+  const [, loadFont] = useIframeFonts()
 
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
   const [textPreviewLabel, fontPreviewLabel] = editor
@@ -31,18 +31,30 @@ export function useEditor(
     Konva.Util.createCanvasElement = () =>
       iframe!.contentDocument!.createElement('canvas')
 
-    const instance = new Pikaso({
-      width: 50,
-      height: 50,
-      container: editorRef.current
-    })
+    const load = async () => {
+      const instance = new Pikaso({
+        width: 50,
+        height: 50,
+        container: editorRef.current as HTMLDivElement
+      })
 
-    const state = decodeURIComponent(model.get('canvas-json'))
+      const state = decodeURIComponent(model.get('canvas-json'))
 
-    if (state) {
-      instance.load(state)
-    } else {
-      instance.shapes.label.insert(DefaultCanvasTextProperties)
+      if (state) {
+        const jsonState = JSON.parse(state) as JsonData
+
+        const initialFontName =
+          jsonState.shapes?.[0]?.children?.[1].attrs.fontFamily
+
+        try {
+          await loadFont(initialFontName)
+        } catch (e) {
+        } finally {
+          await instance.load(state)
+        }
+      } else {
+        instance.shapes.label.insert(DefaultCanvasTextProperties)
+      }
 
       instance.shapes.label.insert({
         ...DefaultCanvasTextProperties,
@@ -51,14 +63,15 @@ export function useEditor(
           lineHeight: 1
         }
       })
+
+      setEditor(instance)
     }
 
-    setEditor(instance)
-  }, [editorRef, editor, model, iframe])
+    load()
+  }, [editorRef, editor, model, iframe, loadFont])
 
   return {
     editor,
-    isEditorLoaded: editor !== null && iframeFonts.length > 0,
     textPreviewLabel,
     fontPreviewLabel
   }

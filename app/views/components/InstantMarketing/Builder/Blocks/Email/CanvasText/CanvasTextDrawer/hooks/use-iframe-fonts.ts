@@ -4,7 +4,10 @@ import { useEffectOnce } from 'react-use'
 
 import { useIframe } from './use-iframe'
 
-export function useIframeFonts() {
+export function useIframeFonts(): [
+  FontFace[],
+  (fontName: string) => Promise<void>
+] {
   const iframe = useIframe()
   const [fonts, setFonts] = useState<FontFace[]>([])
 
@@ -14,5 +17,28 @@ export function useIframeFonts() {
     })
   })
 
-  return fonts
+  const loadFont = (fontName: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const iframeFonts = iframe.contentDocument!.fonts
+
+      iframeFonts.ready
+        .then(() => {
+          const font = Array.from(iframeFonts).find(
+            font => font.family === fontName
+          )
+
+          if (font) {
+            font
+              .load()
+              .then(() => resolve())
+              .catch(reject)
+          } else {
+            reject(new Error('Font not found'))
+          }
+        })
+        .catch(reject)
+    })
+  }
+
+  return [fonts, loadFont]
 }
