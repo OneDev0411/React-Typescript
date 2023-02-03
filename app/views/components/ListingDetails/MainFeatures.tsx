@@ -62,9 +62,6 @@ function MainFeatures({ listing }: Props) {
         ).toLocaleString()} sqft`
       : `${parseFloat(lotSize.toFixed(2)).toLocaleString()} acres`
 
-  console.log('lotSize', lotSize)
-  console.log('displayLotSize', displayLotSize)
-
   // We don't have bath or bed counts for land, so we'll just show the property type
   if (isLand) {
     return (
