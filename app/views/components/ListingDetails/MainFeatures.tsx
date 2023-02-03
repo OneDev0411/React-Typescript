@@ -49,12 +49,21 @@ function MainFeatures({ listing }: Props) {
   )
   const priceSqft = squareFeet > 0 ? Math.round(listing.price / squareFeet) : 0
   const lotSize = property.lot_size_area
-  let displayLotSize =
-    lotSize === null || typeof lotSize === 'undefined'
+  const SQFT_PER_ACRE = 43560
+
+  const convertAcresToSqft = (acres: number): number => acres * SQFT_PER_ACRE
+
+  const displayLotSize =
+    lotSize == null
       ? '--'
       : lotSize < 1
-      ? `${parseFloat((lotSize * 43560).toFixed(2)).toLocaleString()} sqft`
+      ? `${parseFloat(
+          convertAcresToSqft(lotSize).toFixed(2)
+        ).toLocaleString()} sqft`
       : `${parseFloat(lotSize.toFixed(2)).toLocaleString()} acres`
+
+  console.log('lotSize', lotSize)
+  console.log('displayLotSize', displayLotSize)
 
   // We don't have bath or bed counts for land, so we'll just show the property type
   if (isLand) {
