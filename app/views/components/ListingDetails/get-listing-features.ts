@@ -49,7 +49,7 @@ export function getListingFeatures(listing: IListing): Feature[] {
       title: 'Cost Breakdown',
       items: [
         {
-          label: 'Price/sqt',
+          label: 'Price/sqft',
           value:
             property.square_meters > 0
               ? valueToString(
