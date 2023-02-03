@@ -66,7 +66,8 @@ export function FontExplorer() {
       ...DefaultCanvasTextProperties,
       text: {
         fontSize: 35,
-        lineHeight: 1
+        lineHeight: 1,
+        padding: 3
       }
     }
   })
