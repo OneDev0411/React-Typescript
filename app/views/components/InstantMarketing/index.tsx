@@ -1,9 +1,8 @@
-import { useContext, ReactNode } from 'react'
+import { useContext, ReactNode, lazy, Suspense } from 'react'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { TemplateData } from 'utils/marketing-center/render-branded-template'
 
-import Builder from './Builder'
 import MarketingTemplatePurposeDrawer from './components/MarketingTemplatePurposeDrawer'
 import { useMarketingBuilderActions } from './hooks/use-marketing-builder-actions'
 import { useMarketingTemplatePurposeState } from './hooks/use-marketing-template-purpose-state'
@@ -64,6 +63,8 @@ export interface InstantMarketingProps {
   templatePurpose?: IMarketingTemplatePurpose
   shouldSkipVideoGif?: boolean
 }
+
+const Builder = lazy(() => import('./Builder'))
 
 export default function InstantMarketing({
   closeConfirmation = true,
@@ -129,28 +130,30 @@ export default function InstantMarketing({
         onClose={onClose}
       />
       {!isPurposeDrawerOpen && (
-        <Builder
-          hideTemplatesColumn={hideTemplatesColumn}
-          templateData={correctedTemplateData}
-          templateTypes={templateTypes}
-          mediums={mediums}
-          assets={assets}
-          defaultTemplate={defaultTemplate}
-          containerStyle={containerStyle}
-          isTemplatesColumnHiddenDefault={isTemplatesColumnHiddenDefault}
-          bareMode={bareMode}
-          saveButtonText={saveButtonText}
-          saveButtonStartIcon={saveButtonStartIcon}
-          onClose={handleClose}
-          onSave={handleSave}
-          onSocialSharing={handleSocialSharing}
-          onPrintableSharing={handleSocialSharing}
-          actionButtonsDisabled={actionButtonsDisabled}
-          customActions={customActions}
-          saveButtonWrapper={saveButtonWrapper}
-          templatePurpose={templatePurpose}
-          shouldSkipVideoGif={shouldSkipVideoGif}
-        />
+        <Suspense fallback={null}>
+          <Builder
+            hideTemplatesColumn={hideTemplatesColumn}
+            templateData={correctedTemplateData}
+            templateTypes={templateTypes}
+            mediums={mediums}
+            assets={assets}
+            defaultTemplate={defaultTemplate}
+            containerStyle={containerStyle}
+            isTemplatesColumnHiddenDefault={isTemplatesColumnHiddenDefault}
+            bareMode={bareMode}
+            saveButtonText={saveButtonText}
+            saveButtonStartIcon={saveButtonStartIcon}
+            onClose={handleClose}
+            onSave={handleSave}
+            onSocialSharing={handleSocialSharing}
+            onPrintableSharing={handleSocialSharing}
+            actionButtonsDisabled={actionButtonsDisabled}
+            customActions={customActions}
+            saveButtonWrapper={saveButtonWrapper}
+            templatePurpose={templatePurpose}
+            shouldSkipVideoGif={shouldSkipVideoGif}
+          />
+        </Suspense>
       )}
     </>
   )
