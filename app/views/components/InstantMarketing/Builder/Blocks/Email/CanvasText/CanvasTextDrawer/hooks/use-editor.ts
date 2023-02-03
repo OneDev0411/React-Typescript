@@ -1,57 +1,70 @@
 import { MutableRefObject, useState, useEffect } from 'react'
 
-import { Model } from 'backbone'
-import Pikaso, { Konva, LabelModel } from 'pikaso'
+import Pikaso, { JsonData, Konva, LabelModel } from 'pikaso'
 
-import { DefaultCanvasTextProperties } from '../constants'
+import { CanvasTextProperties, DefaultCanvasTextProperties } from '../constants'
 
-export function useEditor(
-  editorRef: MutableRefObject<Nullable<HTMLDivElement>>,
-  model: Nullable<Model>
-): [Nullable<Pikaso>, Nullable<LabelModel>, Nullable<LabelModel>] {
+import { useIframe } from './use-iframe'
+import { useIframeFonts } from './use-iframe-fonts'
+
+interface Options {
+  editorRef: MutableRefObject<Nullable<HTMLDivElement>>
+  state?: Nullable<string>
+  labelConfig?: CanvasTextProperties
+}
+
+export function useEditor({
+  editorRef,
+  state = null,
+  labelConfig = DefaultCanvasTextProperties
+}: Options) {
+  const iframe = useIframe()
+  const [, loadFont] = useIframeFonts()
+
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
-  const [textPreviewLabel, fontPreviewLabel] = editor
-    ? [
-        editor.board.activeShapes[0] as LabelModel,
-        editor.board.activeShapes[1] as LabelModel
-      ]
-    : [null, null]
+  const textPreviewLabel = editor
+    ? (editor.board.activeShapes[0] as LabelModel)
+    : null
 
   useEffect(() => {
-    if (editor || !model || !editorRef.current) {
+    if (editor || !iframe || !editorRef.current) {
       return
     }
 
-    Konva.Util.createCanvasElement = () => {
-      const iframe = document.querySelector('.gjs-frame') as HTMLIFrameElement
+    const load = async () => {
+      Konva.Util.createCanvasElement = () =>
+        iframe!.contentDocument!.createElement('canvas')
 
-      return iframe.contentDocument!.createElement('canvas')
-    }
-
-    const instance = new Pikaso({
-      width: 50,
-      height: 50,
-      container: editorRef.current
-    })
-
-    const state = decodeURIComponent(model.get('canvas-json'))
-
-    if (state) {
-      instance.load(state)
-    } else {
-      instance.shapes.label.insert(DefaultCanvasTextProperties)
-
-      instance.shapes.label.insert({
-        ...DefaultCanvasTextProperties,
-        text: {
-          fontSize: 35,
-          lineHeight: 1
-        }
+      const instance = new Pikaso({
+        width: 100,
+        height: 100,
+        container: editorRef.current as HTMLDivElement
       })
+
+      if (state) {
+        const jsonState = JSON.parse(state) as JsonData
+
+        const initialFontName =
+          jsonState.shapes?.[0]?.children?.[1].attrs.fontFamily
+
+        try {
+          await loadFont(initialFontName)
+        } catch (e) {
+        } finally {
+          await instance.load(state)
+        }
+      } else {
+        instance.shapes.label.insert(labelConfig)
+      }
+
+      setEditor(instance)
     }
 
-    setEditor(instance)
-  }, [editorRef, editor, model])
+    load()
+  }, [editorRef, editor, iframe, loadFont, state, labelConfig])
 
-  return [editor, textPreviewLabel, fontPreviewLabel]
+  return {
+    editor,
+    textPreviewLabel
+  }
 }

@@ -12,7 +12,6 @@ export interface CanvasTextContext {
   setTagProperty: (property: string, value: unknown) => void
   getTextProperty<T>(property: string): T | undefined
   getTagProperty<T>(property: string): T | undefined
-  getFontPreview: (fontName: string) => string
   preview: () => void
 }
 

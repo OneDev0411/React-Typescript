@@ -1,13 +1,15 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 
 import { getBrandFontFamilies } from '@app/utils/get-brand-fonts'
 
+import { DefaultCanvasTextProperties } from './constants'
 import { FontPreview } from './FontPreview'
 import { useCanvasTextContext } from './hooks/get-canvas-text-context'
 import { useBrand } from './hooks/use-brand'
+import { useEditor } from './hooks/use-editor'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -56,6 +58,20 @@ const useStyles = makeStyles(
 export function FontExplorer() {
   const classes = useStyles()
   const brand = useBrand()
+
+  const fontsPreviewRef = useRef<Nullable<HTMLDivElement>>(null)
+  const { textPreviewLabel } = useEditor({
+    editorRef: fontsPreviewRef,
+    labelConfig: {
+      ...DefaultCanvasTextProperties,
+      text: {
+        fontSize: 35,
+        lineHeight: 1,
+        padding: 3
+      }
+    }
+  })
+
   const { templateOptions, setTextProperty, preview } = useCanvasTextContext()
   const [activeFont, setActiveFont] = useState<Nullable<string>>(null)
   const fonts = [
@@ -80,10 +96,23 @@ export function FontExplorer() {
             })}
             onClick={() => handleSelectFont(fontName)}
           >
-            <FontPreview fontName={fontName} />
+            <FontPreview
+              fontName={fontName}
+              textPreviewLabel={textPreviewLabel}
+            />
           </div>
         ))}
       </div>
+
+      <div
+        ref={fontsPreviewRef}
+        style={{
+          position: 'absolute',
+          left: -500,
+          top: -500,
+          visibility: 'hidden'
+        }}
+      />
     </div>
   )
 }

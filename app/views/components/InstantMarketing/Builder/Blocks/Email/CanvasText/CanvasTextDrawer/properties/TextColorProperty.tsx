@@ -27,7 +27,7 @@ export function TextColorProperty() {
   return (
     <Box my={2}>
       <Typography variant="body1" color="textSecondary">
-        Text Color
+        Font Color
       </Typography>
 
       <Box mt={2}>
