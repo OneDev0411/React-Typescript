@@ -30,7 +30,10 @@ export function useIframeFonts(): [
           if (font) {
             font
               .load()
-              .then(() => resolve())
+              .then(() => {
+                document.fonts.add(font)
+                resolve()
+              })
               .catch(reject)
           } else {
             reject(new Error('Font not found'))

@@ -60,10 +60,11 @@ export default function registerCanvasTextBlock(
       },
       update(data: UpdateEvent) {
         this.model.setAttributes({
+          ...this.attr,
           src: data.image,
           alt: data.alt,
           width: data.width,
-          height: data.height
+          height: 'auto'
         })
 
         this.rerender()

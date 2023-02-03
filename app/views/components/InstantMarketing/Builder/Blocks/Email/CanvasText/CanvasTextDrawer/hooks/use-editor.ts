@@ -1,6 +1,6 @@
 import { MutableRefObject, useState, useEffect } from 'react'
 
-import Pikaso, { JsonData, Konva, LabelModel } from 'pikaso'
+import Pikaso, { JsonData, LabelModel } from 'pikaso'
 
 import { CanvasTextProperties, DefaultCanvasTextProperties } from '../constants'
 
@@ -32,9 +32,6 @@ export function useEditor({
     }
 
     const load = async () => {
-      Konva.Util.createCanvasElement = () =>
-        iframe!.contentDocument!.createElement('canvas')
-
       const instance = new Pikaso({
         width: 100,
         height: 100,
