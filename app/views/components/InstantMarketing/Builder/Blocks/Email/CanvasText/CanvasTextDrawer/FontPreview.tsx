@@ -1,33 +1,44 @@
 import { useEffect, useState } from 'react'
 
 import { Skeleton } from '@material-ui/lab'
+import { LabelModel } from 'pikaso'
 
-import { useCanvasTextContext } from './hooks/get-canvas-text-context'
 import { useIframeFonts } from './hooks/use-iframe-fonts'
 
 interface Props {
   fontName: string
+  textPreviewLabel: Nullable<LabelModel>
 }
 
-export function FontPreview({ fontName }: Props) {
+export function FontPreview({ fontName, textPreviewLabel }: Props) {
   const [src, setSrc] = useState<Nullable<string>>(null)
 
-  const { getFontPreview } = useCanvasTextContext()
   const [, loadFont] = useIframeFonts()
 
   useEffect(() => {
-    if (src) {
+    if (!textPreviewLabel || src) {
       return
     }
 
     const getPreview = () => {
-      const preview = getFontPreview(fontName)
+      const normalizedName = fontName
+        .replaceAll('-', ' ')
+        .replace(/\B([A-Z])\B/g, ' $1')
+
+      textPreviewLabel.textNode.setAttrs({
+        fontFamily: fontName,
+        text: normalizedName
+      })
+
+      const preview = textPreviewLabel.node.toDataURL({
+        pixelRatio: 2
+      })
 
       setSrc(preview)
     }
 
     loadFont(fontName).then(getPreview).catch(getPreview)
-  }, [fontName, getFontPreview, loadFont, src])
+  }, [fontName, textPreviewLabel, loadFont, src])
 
   if (!src) {
     return <Skeleton variant="rect" width="130px" height="48px" />

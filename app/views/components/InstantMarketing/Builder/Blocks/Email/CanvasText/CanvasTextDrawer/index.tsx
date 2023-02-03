@@ -76,10 +76,10 @@ export function CanvasTextDrawer({
   const [activeTab, setActiveTab] = useState<Tabs>('fonts')
 
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
-  const { editor, textPreviewLabel, fontPreviewLabel } = useEditor(
+  const { editor, textPreviewLabel } = useEditor({
     editorRef,
-    model
-  )
+    state: decodeURIComponent(model?.get('canvas-json'))
+  })
 
   const handleDone = async () => {
     onClose()
@@ -91,13 +91,7 @@ export function CanvasTextDrawer({
       return
     }
 
-    const json = editor?.export.toJson()
-
-    // only keep label preview shape
-    const data = JSON.stringify({
-      ...json,
-      shapes: [json?.shapes[0]]
-    })
+    const data = JSON.stringify(editor?.export.toJson())
 
     model?.trigger('canvas-text:save-state', {
       data
@@ -163,28 +157,6 @@ export function CanvasTextDrawer({
     [textPreviewLabel]
   )
 
-  const getFontPreview = useCallback(
-    (fontName: string) => {
-      if (!fontPreviewLabel) {
-        return ''
-      }
-
-      const normalizedName = fontName
-        .replaceAll('-', ' ')
-        .replace(/\B([A-Z])\B/g, ' $1')
-
-      fontPreviewLabel.textNode.setAttrs({
-        fontFamily: fontName,
-        text: normalizedName
-      })
-
-      return fontPreviewLabel.node.toDataURL({
-        pixelRatio: 2
-      })
-    },
-    [fontPreviewLabel]
-  )
-
   return (
     <>
       <OverlayDrawer open hideBackdrop width={400} onClose={noop}>
@@ -195,7 +167,7 @@ export function CanvasTextDrawer({
             justifyContent="space-between"
             py={1}
           >
-            <Typography variant="h6">Fancy Text</Typography>
+            <Typography variant="h6">Fancy Font</Typography>
 
             <Button variant="contained" color="primary" onClick={handleDone}>
               Done
@@ -214,7 +186,6 @@ export function CanvasTextDrawer({
                   setTagProperty,
                   getTextProperty,
                   getTagProperty,
-                  getFontPreview,
                   preview
                 }}
               >
