@@ -51,7 +51,7 @@ URL="https://$APP.$REVIEW_HOST"
 CONFIG="$CONFIG API_HOST_LOCAL=$URL APP_SHARE_URL=$URL APP_SHARE_URL=$URL"
 
 # This is used for Sentry's "release" parameter. Heroku sents this env automatically.
-CONFIG="$CONFIG SOURCE_VERSION=$APP"
+CONFIG="$CONFIG SOURCE_VERSION=$APP NODE_MODULES_CACHE=true"
 
 ssh "dokku@$REVIEW_HOST" config:set --no-restart $APP $CONFIG
 
