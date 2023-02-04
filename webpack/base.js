@@ -98,9 +98,6 @@ module.exports = {
         RECHAT_FORMS_URL: JSON.stringify(process.env.RECHAT_FORMS_URL),
         RECHAT_STORE_URL: JSON.stringify(process.env.RECHAT_STORE_URL),
         AWS_ACCESS_KEY: JSON.stringify(process.env.AWS_ACCESS_KEY),
-        AWS_SECRET_ACCESS_KEY: JSON.stringify(
-          process.env.AWS_SECRET_ACCESS_KEY
-        ),
         ASSETS_BUCKET: JSON.stringify(process.env.ASSETS_BUCKET),
         ASSETS_BASEURL: JSON.stringify(process.env.ASSETS_BASEURL),
         FB_APP_ID: JSON.stringify(process.env.FB_APP_ID),
