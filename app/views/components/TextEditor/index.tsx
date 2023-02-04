@@ -16,7 +16,6 @@ import { shallowEqual } from 'recompose'
 
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 
-// import { FieldError } from '../final-form-fields/FieldError'
 import { ToolbarFragments } from './components/ToolbarFragments'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
