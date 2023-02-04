@@ -6,6 +6,7 @@ cache:
       - package-lock.json
   paths:
     - .npm
+    - node_modules
 
 stages:
   - test
