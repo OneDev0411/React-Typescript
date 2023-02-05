@@ -1,5 +1,10 @@
 image: node:14-alpine
 
+stages:
+  - deps
+  - tests
+  - deploy
+
 variables:
   CONTAINER_IMAGE: registry.gitlab.com/rechat/web:$CI_COMMIT_REF_NAME
 
