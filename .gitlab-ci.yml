@@ -5,9 +5,6 @@ stages:
   - tests
   - deploy
 
-variables:
-  CONTAINER_IMAGE: registry.gitlab.com/rechat/web:$CI_COMMIT_REF_NAME
-
 deps:
   stage: deps
   script:
@@ -18,8 +15,8 @@ deps:
 jest:
   stage: tests
   script:
-    - docker build --target deps . -t web-tests
-    - docker run -t web 'npm' 'run' 'test:ci'
+    - docker build --target deps . -t $CI_COMMIT_REF_NAME-jest
+    - docker run -t $CI_COMMIT_REF_NAME-jest 'npm' 'run' 'test:ci'
   tags:
     - shell
   needs:
@@ -28,8 +25,8 @@ jest:
 eslint:
   stage: tests
   script:
-    - docker build --target deps . -t web-tests
-    - docker run -t web 'npm' 'run' 'lint:ci'
+    - docker build --target deps . -t $CI_COMMIT_REF_NAME-eslint
+    - docker run -t $CI_COMMIT_REF_NAME-eslint 'npm' 'run' 'lint:ci'
   tags:
     - shell
   needs:
@@ -38,8 +35,8 @@ eslint:
 typescript:
   stage: tests
   script:
-    - docker build --target deps . -t web-tests
-    - docker run -t web 'npm' 'run' 'types:check'
+    - docker build --target deps . -t $CI_COMMIT_REF_NAME-typescript
+    - docker run -t $CI_COMMIT_REF_NAME-typescript 'npm' 'run' 'types:check'
   tags:
     - shell
   needs:
@@ -47,9 +44,6 @@ typescript:
 
 alpha:
   stage: deploy
-  environment:
-    name: review/$CI_BUILD_REF_NAME
-    url: https://$CI_COMMIT_REF_SLUG.rechat.co/
   script:
     - ./dokku.sh
 
