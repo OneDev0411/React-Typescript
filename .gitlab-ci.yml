@@ -15,7 +15,7 @@ deps:
 jest:
   stage: tests
   script:
-    - docker run -t $CI_COMMIT_REF_NAME-base 'npm' 'run' 'test:ci'
+    - docker run -t $CI_COMMIT_REF_NAME-deps 'npm' 'run' 'test:ci'
   tags:
     - shell
   needs:
@@ -24,7 +24,7 @@ jest:
 eslint:
   stage: tests
   script:
-    - - docker run -t $CI_COMMIT_REF_NAME-base 'npm' 'run' 'lint:ci'
+    - - docker run -t $CI_COMMIT_REF_NAME-deps 'npm' 'run' 'lint:ci'
   tags:
     - shell
   needs:
@@ -33,7 +33,7 @@ eslint:
 typescript:
   stage: tests
   script:
-    - docker run -t $CI_COMMIT_REF_NAME-base 'npm' 'run' 'types:check'
+    - docker run -t $CI_COMMIT_REF_NAME-deps 'npm' 'run' 'types:check'
   tags:
     - shell
   needs:
