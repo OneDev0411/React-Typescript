@@ -18,9 +18,9 @@ ADD .env .
 
 ENV NODE_ENV=production
 
-RUN set -o allexport && . .env && set +o allexport && printenv && npm run build
+RUN set -o allexport && . .env && set +o allexport && npm run build
 
-FROM built AS serve
+FROM deps AS serve
 EXPOSE 80
 CMD set -o allexport && . .env && set +o allexport && npm run serve
 
