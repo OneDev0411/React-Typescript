@@ -11,9 +11,7 @@ echo $APP
 
 ./extract-config.sh
 
-echo "Extracted config:"
-
-printenv
+echo CI_COMMIT_REF_SLUG="$CI_COMMIT_REF_SLUG" >> .env # Needed by Sentry but not part of source
 
 docker build . -t $APP
 
