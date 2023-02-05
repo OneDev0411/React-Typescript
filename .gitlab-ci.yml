@@ -5,9 +5,6 @@ stages:
   - tests
   - deploy
 
-variables:
-  CONTAINER_IMAGE: registry.gitlab.com/rechat/web:$CI_COMMIT_REF_NAME
-
 deps:
   stage: deps
   script:

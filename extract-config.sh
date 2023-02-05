@@ -12,3 +12,5 @@ do
   val=$(cat /tmp/configs | jq ".$key")
   echo $key="$val" >> .env
 done
+
+echo URL="$URL" API_HOST_LOCAL="$URL" APP_SHARE_URL="$URL" >> .env
