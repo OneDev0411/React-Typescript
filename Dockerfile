@@ -12,13 +12,12 @@ RUN npm install -g npm@8.1
 RUN npm ci
 ADD . .
 
+
 FROM deps AS built
-
-ADD .env .
-
+ADD .env /etc/environment
 ENV NODE_ENV=production
-
 RUN set -o allexport && . .env && set +o allexport && npm run build
+
 
 FROM built AS serve
 EXPOSE 80
