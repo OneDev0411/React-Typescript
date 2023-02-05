@@ -58,4 +58,3 @@ alpha:
     - master
   tags:
     - shell
-  needs: ["deps"]
