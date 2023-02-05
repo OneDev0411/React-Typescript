@@ -48,6 +48,11 @@ alpha:
     on_stop: destroy_alpha
   script:
     - ./dokku.sh
+    -  docker cp $APP.web.1:/app/statoscope.html .
+  artifacts:
+    name: "Statoscope Bundle Analyzer"
+    paths:
+      - ./statoscope.html
 
   needs:
     - deps
