@@ -5,6 +5,9 @@ stages:
   - tests
   - deploy
 
+variables:
+  CONTAINER_IMAGE: registry.gitlab.com/rechat/web:$CI_COMMIT_REF_NAME
+
 deps:
   stage: deps
   script:
@@ -48,7 +51,8 @@ alpha:
     name: review/$CI_BUILD_REF_NAME
     url: https://$CI_COMMIT_REF_SLUG.rechat.co/
   script:
-    - docker build --target deps . -t web
+    - ./dokku.sh
+
   needs:
     - deps
   tags:
