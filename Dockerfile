@@ -21,12 +21,6 @@ ENV NODE_ENV=production
 RUN set -o allexport && . .env && set +o allexport && npm run build
 
 FROM built AS serve
-RUN echo "Serving"
-
-RUN cat .env
-
-RUN echo "Running"
-
 EXPOSE 80
-CMD set -o allexport && . .env && set +o allexport && printenv && npm run serve
+CMD set -o allexport && . .env && set +o allexport && npm run serve
 
