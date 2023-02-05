@@ -1,92 +1,56 @@
-image: nikolaik/python-nodejs:python3.10-nodejs14
-
-cache:
-  key:
-    files:
-      - package-lock.json
-  paths:
-    - .npm
-    - node_modules
+image: node:14-alpine
 
 stages:
-  - test
-  - review
+  - deps
+  - tests
   - deploy
 
-test_unit:
-  stage: test
-  script:
-    - npm i --cache .npm --prefer-offline
-    - npm run lint:ci
-    - npm run types:check
-    - npm run test:ci
-  needs: []
-  coverage: '/Lines\s+:\s([\d\.]+)/'
-  artifacts:
-    paths:
-      - coverage
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage/cobertura-coverage.xml
+variables:
+  CONTAINER_IMAGE: registry.gitlab.com/rechat/web:$CI_COMMIT_REF_NAME
 
-deploy_beta:
+# docker:
+#   stage: build
+#   only:
+#     - build
+#
+#   script:
+#     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+#     - docker build -t $CONTAINER_IMAGE .
+#     - docker push $CONTAINER_IMAGE
+
+deps:
+  stage: deps
+  script:
+    - docker build --target deps .
+
+jest:
+  stage: tests
+  script:
+    - docker build --target deps . -t web-tests
+    - docker run -t web 'npm' 'run' 'test:ci'
+
+eslint:
+  stage: tests
+  script:
+    - docker build --target deps . -t web-tests
+    - docker run -t web 'npm' 'run' 'lint:ci'
+
+typescript:
+  stage: tests
+  script:
+    - docker build --target deps . -t web-tests
+    - docker run -t web 'npm' 'run' 'types:check'
+
+alpha:
   stage: deploy
-  image: timbru31/ruby-node:latest
-  before_script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl && gem install faraday -v 1.8.0
-  script:
-    - dpl --provider=heroku --app=rechat-irish --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
-  environment:
-    name: beta
-    url: https://beta.rechat.com
-  only:
-    - stage
-
-deploy_production:
-  stage: deploy
-  image: timbru31/ruby-node:latest
-  before_script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl && gem install faraday -v 1.8.0
-  script:
-    - dpl --provider=heroku --app=rechat-web --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
-  environment:
-    name: production
-    url: https://app.rechat.com
-  only:
-    - master
-
-start_review:
-  stage: review
-  script:
-    - npm i --cache .npm --prefer-offline
-    - chmod u+x ./dokku.sh
-    - ./dokku.sh
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: https://$CI_COMMIT_REF_SLUG.rechat.co/
-    on_stop: stop_review
-  only:
-    - merge_requests
-  except:
-    - master
-  needs: []
-
-stop_review:
-  stage: review
+    on_stop: destroy
   script:
-    - chmod u+x ./dokku-stop.sh
-    - ./dokku-stop.sh
-  environment:
-    name: review/$CI_BUILD_REF_NAME
-    action: stop
-  when: manual
+    - docker build --target deps . -t web
   only:
     - merge_requests
   except:
     - master
-  needs: []
+
