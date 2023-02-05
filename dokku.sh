@@ -31,5 +31,5 @@ dokku letsencrypt:list | grep $APP
 if [ $? -eq 0 ]; then
   echo "Skipping letsencrypt..."
 else
-  dokku letsencrypt:enable $APP $CI_COMMIT_REF_SLUG
+  dokku letsencrypt:enable $APP $APP || true
 fi
