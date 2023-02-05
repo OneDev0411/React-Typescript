@@ -17,6 +17,15 @@ jest:
   stage: tests
   script:
     - docker run -t $CI_COMMIT_REF_NAME-deps 'npm' 'run' 'test:ci'
+  coverage: '/Lines\s+:\s([\d\.]+)/'
+  artifacts:
+    paths:
+      - coverage
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+
   tags:
     - shell
   needs:
