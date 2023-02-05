@@ -9,7 +9,7 @@
 APP=$CI_COMMIT_REF_SLUG
 echo $APP
 
-docker build . $APP
+docker build . -t $APP
 
 # Create the app. Dont exit if it already exists
 
