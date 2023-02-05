@@ -19,6 +19,7 @@ jest:
     - docker run -t $CI_COMMIT_REF_NAME-deps 'npm' 'run' 'test:ci'
   coverage: '/Lines\s+:\s([\d\.]+)/'
   artifacts:
+    expire_in: 3 days
     paths:
       - coverage
     reports:
