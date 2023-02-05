@@ -30,7 +30,8 @@ const config = {
   optimization: {
     minimize: true,
     splitChunks: {
-      chunks: 'all'
+      chunks: 'all',
+      maxInitialSize: 10000
     },
     minimizer: [
       new TerserPlugin({
