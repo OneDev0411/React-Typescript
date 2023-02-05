@@ -49,11 +49,7 @@ alpha:
     url: https://$CI_COMMIT_REF_SLUG.rechat.co/
   script:
     - docker build --target deps . -t web
-  only:
-    - merge_requests
-  except:
-    - master
-  tags:
-    - shell
   needs:
     - deps
+  tags:
+    - shell
