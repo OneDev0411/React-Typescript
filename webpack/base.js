@@ -32,6 +32,10 @@ module.exports = {
     globalObject: 'self',
     assetModuleFilename: '[hash][ext]' // Webpack bby default includes [query] in this, S3 file upload plugin can't handle it.
   },
+  cache: {
+    type: 'filesystem',
+    cacheDirectory: '/tmp/webpack'
+  },
   resolve: {
     modules: [resolvePath('../app'), 'node_modules'],
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.css'],
