@@ -25,6 +25,7 @@ dokku config:set --no-restart $APP $CONFIG
 dokku apps:unlock $APP || true
 
 dokku git:from-image $APP $APP
+dokku ps:rebuild $APP # Dokku says: `No changes detected, skipping git commit`. This is to force a redeploy.
 
 # Generate Certificates. Due do some race conditions we should do this last.
 dokku letsencrypt:list | grep $APP
