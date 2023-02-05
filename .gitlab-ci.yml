@@ -1,10 +1,5 @@
 image: node:14-alpine
 
-stages:
-  - deps
-  - tests
-  - deploy
-
 variables:
   CONTAINER_IMAGE: registry.gitlab.com/rechat/web:$CI_COMMIT_REF_NAME
 
@@ -32,6 +27,8 @@ jest:
     - docker run -t web 'npm' 'run' 'test:ci'
   tags:
     - shell
+  needs:
+    - deps
 
 eslint:
   stage: tests
@@ -40,6 +37,8 @@ eslint:
     - docker run -t web 'npm' 'run' 'lint:ci'
   tags:
     - shell
+  needs:
+    - deps
 
 typescript:
   stage: tests
@@ -48,6 +47,8 @@ typescript:
     - docker run -t web 'npm' 'run' 'types:check'
   tags:
     - shell
+  needs:
+    - deps
 
 alpha:
   stage: deploy
