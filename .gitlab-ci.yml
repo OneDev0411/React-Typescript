@@ -56,6 +56,7 @@ alpha:
 
 destroy_alpha:
   stage: destroy
+  script:
     - ./dokku-stop.sh
   environment:
     name: review/$CI_BUILD_REF_NAME
