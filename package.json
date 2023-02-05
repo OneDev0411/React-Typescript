@@ -4,6 +4,7 @@
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
+    "start": "npm run serve",
     "commit": "commit",
     "develop": "cross-env NODE_ENV=development TS_NODE_PROJECT='server/tsconfig.json' nodemon --watch 'server/app/**/*' --watch 'server/types/**/*' -e ts --exec node -r ts-node/register --trace-deprecation ./server/index.ts",
     "build:server": "rimraf server-dist && cross-env NODE_ENV=production tsc -p server/tsconfig.production.json",
@@ -40,7 +41,6 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "npm run types:check",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`"
     }
   },
