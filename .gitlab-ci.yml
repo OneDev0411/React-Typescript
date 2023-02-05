@@ -22,39 +22,43 @@ deps:
   stage: deps
   script:
     - docker build --target deps .
+  tags:
+    - shell
 
 jest:
   stage: tests
   script:
     - docker build --target deps . -t web-tests
     - docker run -t web 'npm' 'run' 'test:ci'
+  tags:
+    - shell
 
 eslint:
   stage: tests
   script:
     - docker build --target deps . -t web-tests
     - docker run -t web 'npm' 'run' 'lint:ci'
+  tags:
+    - shell
 
 typescript:
   stage: tests
   script:
     - docker build --target deps . -t web-tests
     - docker run -t web 'npm' 'run' 'types:check'
+  tags:
+    - shell
 
 alpha:
   stage: deploy
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: https://$CI_COMMIT_REF_SLUG.rechat.co/
-    on_stop: destroy
   script:
     - docker build --target deps . -t web
   only:
     - merge_requests
   except:
     - master
-
-destroy:
-  stage: destroy
-  script:
-    - echo "Todo"
+  tags:
+    - shell
