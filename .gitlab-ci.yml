@@ -54,9 +54,5 @@ alpha:
     - docker build --target deps . -t web
   needs:
     - deps
-  only:
-    - merge_requests
-  except:
-    - master
   tags:
     - shell
