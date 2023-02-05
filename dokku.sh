@@ -11,6 +11,10 @@ echo $APP
 
 ./extract-config.sh
 
+echo "Extracted config:"
+
+printenv
+
 docker build . -t $APP
 
 # Create the app. Dont exit if it already exists
