@@ -16,8 +16,6 @@ import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
 import { TextEditorProps, TextEditorRef } from '../../../TextEditor/types'
 import { useUploadAttachment } from '../../helpers/use-upload-attachment'
 
-import { EmailEditorFeatures } from './EmailEditorFeatures'
-
 interface Props {
   content?: string
   hasStaticBody?: boolean
@@ -98,16 +96,8 @@ const EmailBody = ({
           ref={editorRef}
           onChange={onChangeEditor}
           editorState={editorState}
-        >
-          <EmailEditorFeatures
-            uploadImage={uploadImage}
-            hasTemplateVariables={hasTemplateVariables}
-            signature={signature || ''}
-            hasSignatureByDefault={hasSignatureByDefault}
-            stateFromHtmlOptions={stateFromHtmlOptions}
-            onEditSignature={() => setSignatureEditorVisible(true)}
-          />
-        </TextEditor>
+          imageOptions={{uploadImage}}
+        />
       )}
       <EditEmailSignatureDrawer
         isOpen={signatureEditorVisible}

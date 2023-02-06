@@ -24,21 +24,15 @@ import { defaultTheme } from './default-emoji-theme'
 import { useEmojiStyles } from './use-emoji-styles'
 import { usePopperizedEmojiSuggestions } from './use-popperized-emoji-suggestions'
 
+import { EmojiFeatureProps } from './types'
+
 const emojis = createEmojisFromStrategy(strategy)
 const imagePath = '//cdn.jsdelivr.net/emojione/assets/svg/' // google: 'https://ssl.gstatic.com/mail/emoji/v7/png48/emoji_u'
 const imageType = 'svg' // google: 'png'
 const cacheBustParam = '?v=2.2.7'
 const toneSelectOpenDelay = 500
 
-interface Props {
-  /**
-   * If true, emoji suggestion popover will be closed upon selecting an emoji.
-   * defaults to true
-   */
-  closeOnSelection?: boolean
-}
-
-export function EmojiFeature({ closeOnSelection = true }: Props) {
+export function EmojiFeature({ closeOnSelection = true }: EmojiFeatureProps) {
   const { setEditorState, editorState } = useContext(EditorContext)
   const editorStateRef = useLatestValueRef(editorState)
   const storeRef = useRef({

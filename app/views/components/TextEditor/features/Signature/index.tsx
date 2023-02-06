@@ -1,8 +1,6 @@
 import { useState, useContext, useLayoutEffect } from 'react'
 
 import { Box } from '@material-ui/core'
-import { ContentBlock } from 'draft-js'
-import { Options as ExportOptions } from 'draft-js-import-html'
 import { useSelector } from 'react-redux'
 
 import useNotify from '@app/hooks/use-notify'
@@ -17,33 +15,14 @@ import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 
 import createSignaturePlugin from './draft-js-signature-plugin'
 
-interface Props {
-  /**
-   * Whether to include signature by default or not
-   */
-  hasSignatureByDefault?: boolean
-
-  /**
-   * Signature content.
-   * If string is passed, it's converted to ContentBlocks via stateFromHTML
-   */
-  signature: ContentBlock[] | string
-
-  /**
-   * Callback to be called when signature doesn't exist and the user tries to
-   * use it.
-   */
-  onEditSignature?: () => void
-
-  stateFromHtmlOptions: ExportOptions
-}
+import { SignatureFeatureProps } from './types'
 
 export function SignatureFeature({
   signature,
   onEditSignature,
   stateFromHtmlOptions,
   hasSignatureByDefault
-}: Props) {
+}: SignatureFeatureProps) {
   const notify = useNotify()
   const confirmation = useContext(ConfirmationModalContext)
   const { editorState, setEditorState } = useContext(EditorContext)

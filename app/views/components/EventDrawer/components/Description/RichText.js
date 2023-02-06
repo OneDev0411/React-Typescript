@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 
 import { TextEditor } from 'components/TextEditor'
-import { RichTextFeature } from 'components/TextEditor/features/RichText'
 
 Description.propTypes = {
   placeholder: PropTypes.string
@@ -19,9 +18,7 @@ export function Description(props) {
     <Field
       name="description"
       render={({ input: { value, ...restInput } }) => (
-        <TextEditor editorState={value} {...restInput} {...props}>
-          <RichTextFeature />
-        </TextEditor>
+        <TextEditor editorState={value} {...restInput} {...props} />
       )}
     />
   )

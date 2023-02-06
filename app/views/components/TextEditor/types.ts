@@ -16,6 +16,12 @@ import { ClassesProps } from 'utils/ts-utils'
 import { createEditorRef } from './create-editor-ref'
 import { styles } from './styles'
 
+import { ImageFeatureProps } from './features/Image/types'
+import { EmojiFeatureProps } from './features/Emoji/types'
+import { RichTextFeatureProps } from './features/RichText/types'
+import { SignatureFeatureProps } from './features/Signature/types'
+import { TemplateExpressionsFeatureProps } from './features/TemplateExpressions/types'
+
 export interface ReferenceObject {
   clientHeight: number
   clientWidth: number
@@ -60,6 +66,12 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
   onAttachmentDropped?: (file: File[]) => void
 
   appendix?: ReactNode
+
+  imageOptions?: ImageFeatureProps
+  emojiOptions?: EmojiFeatureProps
+  templateExpressionsOptions?: TemplateExpressionsFeatureProps
+  richTextOptions?: RichTextFeatureProps
+  signatureOptions?: SignatureFeatureProps
 }
 
 export interface AtomicBlockEntityData {

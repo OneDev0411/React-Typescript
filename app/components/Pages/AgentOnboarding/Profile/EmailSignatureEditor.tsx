@@ -6,10 +6,6 @@ import { EditorState } from 'draft-js'
 
 import { StyledTextEditor } from 'components/EditEmailSignature'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { EmojiFeature } from 'components/TextEditor/features/Emoji'
-import { ImageFeature } from 'components/TextEditor/features/Image'
-import { RichTextFeature } from 'components/TextEditor/features/RichText'
-import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signature-attachment'
 
 interface Props {
   editorState: EditorState
@@ -17,13 +13,6 @@ interface Props {
 }
 
 export default function EmailSignatureEditor({ editorState, onChange }: Props) {
-  const uploadImage = async file => {
-    const response = await uploadEmailSignatureAttachment(file)
-    const uploadedFile: IFile = response.body.data
-
-    return uploadedFile.url
-  }
-
   return (
     <>
       <Box mb={0.5} display="flex" justifyContent="center" alignItems="center">
@@ -35,11 +24,7 @@ export default function EmailSignatureEditor({ editorState, onChange }: Props) {
         editorState={editorState}
         onChange={onChange}
         placeholder="Type something or copy from your Gmail or Outlook account"
-      >
-        <RichTextFeature />
-        <ImageFeature uploadImage={uploadImage} />
-        <EmojiFeature />
-      </StyledTextEditor>
+      />
     </>
   )
 }

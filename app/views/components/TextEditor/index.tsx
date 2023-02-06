@@ -19,7 +19,6 @@ import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 import { ToolbarFragments } from './components/ToolbarFragments'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
-import { DEFAULT_EDITOR_FEATURES } from './default-editor-features'
 import { EditorContext, EditorToolbarContext } from './editor-context'
 import { useCreateEditorContext } from './hooks/use-create-editor-context'
 import { useCreateToolbarContext } from './hooks/use-create-toolbar-context'
@@ -28,6 +27,13 @@ import { EditorContainer, EditorWrapper, Toolbar } from './styled'
 import { styles } from './styles'
 import { TextEditorProps } from './types'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
+
+
+import { EmojiFeature } from './features/Emoji'
+import { RichTextFeature } from './features/RichText'
+import { ImageFeature } from './features/Image'
+import { SignatureFeature } from './features/Signature'
+import { TemplateExpressionsFeature } from './features/TemplateExpressions'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
@@ -42,7 +48,6 @@ const useStyles = makeStyles(styles, { name: 'TextEditor' })
 export const TextEditor = forwardRef(
   (
     {
-      children = DEFAULT_EDITOR_FEATURES,
       className = '',
       defaultValue = '',
       disabled = false,
@@ -58,6 +63,11 @@ export const TextEditor = forwardRef(
       toolbarRef,
       style,
       editorState,
+      imageOptions,
+      richTextOptions,
+      templateExpressionsOptions,
+      signatureOptions,
+      emojiOptions,
       ...props
     }: TextEditorProps,
     ref
@@ -204,7 +214,11 @@ export const TextEditor = forwardRef(
             )}
             <EditorContext.Provider value={editorContext}>
               <EditorToolbarContext.Provider value={toolbarContext}>
-                {children}
+                  <ImageFeature {...imageOptions} />
+                  <RichTextFeature {...richTextOptions} />
+                  <EmojiFeature {...emojiOptions} />
+                  <SignatureFeature {...signatureOptions} />
+                  <TemplateExpressionsFeature {...templateExpressionsOptions} />
               </EditorToolbarContext.Provider>
             </EditorContext.Provider>
             {appendix}
