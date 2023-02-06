@@ -10,7 +10,6 @@ import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 
 import { insertTemplateVariable } from './modifiers/insert-template-expression'
 import createTemplateExpressionsPlugin from './template-expressions-plugin'
-
 import { TemplateExpressionsFeatureProps } from './types'
 
 export function TemplateExpressionsFeature({

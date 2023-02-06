@@ -21,10 +21,9 @@ import { EditorContext } from '../../editor-context'
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 
 import { defaultTheme } from './default-emoji-theme'
+import { EmojiFeatureProps } from './types'
 import { useEmojiStyles } from './use-emoji-styles'
 import { usePopperizedEmojiSuggestions } from './use-popperized-emoji-suggestions'
-
-import { EmojiFeatureProps } from './types'
 
 const emojis = createEmojisFromStrategy(strategy)
 const imagePath = '//cdn.jsdelivr.net/emojione/assets/svg/' // google: 'https://ssl.gstatic.com/mail/emoji/v7/png48/emoji_u'

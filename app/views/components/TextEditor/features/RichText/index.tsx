@@ -33,7 +33,6 @@ import createPasteLinkPlugin from './draft-js-paste-link-plugin'
 import HeadingButtons from './HeadingButtons'
 import { LinkEditorPopover } from './LinkEditorPopover'
 import { LinkPreview } from './LinkPreview'
-
 import { RichTextFeatureProps } from './types'
 
 export function RichTextFeature({

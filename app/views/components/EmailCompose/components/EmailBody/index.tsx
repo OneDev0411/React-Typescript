@@ -14,6 +14,7 @@ import { selectUserEmailSignatureImpersonateFirst } from 'selectors/user'
 
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
 import { TextEditorProps, TextEditorRef } from '../../../TextEditor/types'
+import { defaultTemplateVariableSuggestions } from '../../default-template-variable-suggestions'
 import { useUploadAttachment } from '../../helpers/use-upload-attachment'
 
 interface Props {
@@ -96,7 +97,17 @@ const EmailBody = ({
           ref={editorRef}
           onChange={onChangeEditor}
           editorState={editorState}
-          imageOptions={{uploadImage}}
+          imageOptions={{ uploadImage }}
+          signatureOptions={{
+            signature: signature || '',
+            onEditSignature: () => setSignatureEditorVisible(true),
+            stateFromHtmlOptions,
+            hasSignatureByDefault
+          }}
+          templateExpressionsOptions={{
+            showInToolbar: !!hasTemplateVariables,
+            templateVariableSuggestionGroups: defaultTemplateVariableSuggestions
+          }}
         />
       )}
       <EditEmailSignatureDrawer

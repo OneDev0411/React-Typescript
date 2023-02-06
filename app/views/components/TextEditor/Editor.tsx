@@ -172,6 +172,26 @@ const Editor = forwardRef(
       }
     }
 
+    const EditorToolbar = React.useMemo(() => {
+      return (
+        <>
+          {imageOptions && <ImageFeature {...imageOptions} />}
+          <RichTextFeature {...richTextOptions} />
+          <EmojiFeature {...emojiOptions} />
+          {signatureOptions && <SignatureFeature {...signatureOptions} />}
+          {templateExpressionsOptions && (
+            <TemplateExpressionsFeature {...templateExpressionsOptions} />
+          )}
+        </>
+      )
+    }, [
+      imageOptions,
+      richTextOptions,
+      emojiOptions,
+      signatureOptions,
+      templateExpressionsOptions
+    ])
+
     return (
       <EditorContainer
         className={cn(className, classes.root)}
@@ -212,13 +232,7 @@ const Editor = forwardRef(
             )}
             <EditorContext.Provider value={editorContext}>
               <EditorToolbarContext.Provider value={toolbarContext}>
-                {imageOptions && <ImageFeature {...imageOptions} />}
-                <RichTextFeature {...richTextOptions} />
-                <EmojiFeature {...emojiOptions} />
-                {signatureOptions && <SignatureFeature {...signatureOptions} />}
-                {templateExpressionsOptions && (
-                  <TemplateExpressionsFeature {...templateExpressionsOptions} />
-                )}
+                {EditorToolbar}
               </EditorToolbarContext.Provider>
             </EditorContext.Provider>
             {appendix}

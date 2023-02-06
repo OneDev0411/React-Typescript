@@ -14,7 +14,6 @@ import { EditorContext } from '../../editor-context'
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 
 import createSignaturePlugin from './draft-js-signature-plugin'
-
 import { SignatureFeatureProps } from './types'
 
 export function SignatureFeature({

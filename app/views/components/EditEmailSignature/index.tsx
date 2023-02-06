@@ -80,7 +80,7 @@ export default function EditEmailSignature({
           autofocus
           editorState={editorState}
           onChange={setEditorState}
-          imageOptions={{uploadImage}}
+          imageOptions={{ uploadImage }}
         />
       </Box>
 
