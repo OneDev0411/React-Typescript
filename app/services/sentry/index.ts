@@ -3,7 +3,7 @@ export function setupSentry(user: IUser, brand: IBrand) {
     return
   }
 
-  Sentry.init({
+  window.Sentry.init({
     environment: process.env.SENTRY_ENVIRONMENT,
     release: process.env.SOURCE_VERSION,
     beforeSend: (event, hint) => {
@@ -13,7 +13,7 @@ export function setupSentry(user: IUser, brand: IBrand) {
     }
   })
 
-  Sentry.configureScope(scope => {
+  window.Sentry.configureScope(scope => {
     scope.setUser({
       id: user.id,
       email: user.email,
