@@ -1,6 +1,6 @@
 import { Suspense, lazy } from 'react'
 
-const Calendar = lazy(() => import('./GridCalendar.tsx'))
+const Calendar = lazy(() => import('./GridCalendar'))
 
 export default function GridCalendar(props) {
   return (
