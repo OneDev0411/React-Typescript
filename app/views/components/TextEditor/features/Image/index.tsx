@@ -33,12 +33,14 @@ import { updateEntityData } from '../../modifiers/update-entity-data'
 import { AddGifButton } from './AddGifButton'
 import { AddImageButton } from './AddImageButton'
 import { InlineImageToolbar } from './ImageInlineToolbar'
+import { ImageFeatureProps } from './types'
 import { getImageDimensions } from './utils/get-image-dimensions'
 import { getImageSizeOptions } from './utils/get-image-size-options'
 
-import { ImageFeatureProps } from './types'
-
-export function ImageFeature({ uploadImage, allowGif = true }: ImageFeatureProps) {
+export function ImageFeature({
+  uploadImage,
+  allowGif = true
+}: ImageFeatureProps) {
   const dispatch = useDispatch()
 
   const { editorState, setEditorState, editorRef } = useContext(EditorContext)

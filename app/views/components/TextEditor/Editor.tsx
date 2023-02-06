@@ -20,6 +20,11 @@ import { ToolbarFragments } from './components/ToolbarFragments'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
 import { EditorContext, EditorToolbarContext } from './editor-context'
+import { EmojiFeature } from './features/Emoji'
+import { ImageFeature } from './features/Image'
+import { RichTextFeature } from './features/RichText'
+import { SignatureFeature } from './features/Signature'
+import { TemplateExpressionsFeature } from './features/TemplateExpressions'
 import { useCreateEditorContext } from './hooks/use-create-editor-context'
 import { useCreateToolbarContext } from './hooks/use-create-toolbar-context'
 import { moveSelectionToStart } from './modifiers/move-selection-to-start'
@@ -27,13 +32,6 @@ import { EditorContainer, EditorWrapper, Toolbar } from './styled'
 import { styles } from './styles'
 import { TextEditorProps } from './types'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
-
-
-import { EmojiFeature } from './features/Emoji'
-import { RichTextFeature } from './features/RichText'
-import { ImageFeature } from './features/Image'
-import { SignatureFeature } from './features/Signature'
-import { TemplateExpressionsFeature } from './features/TemplateExpressions'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
@@ -214,11 +212,13 @@ const Editor = forwardRef(
             )}
             <EditorContext.Provider value={editorContext}>
               <EditorToolbarContext.Provider value={toolbarContext}>
-                  <ImageFeature {...imageOptions} />
-                  <RichTextFeature {...richTextOptions} />
-                  <EmojiFeature {...emojiOptions} />
-                  <SignatureFeature {...signatureOptions} />
+                {imageOptions && <ImageFeature {...imageOptions} />}
+                <RichTextFeature {...richTextOptions} />
+                <EmojiFeature {...emojiOptions} />
+                {signatureOptions && <SignatureFeature {...signatureOptions} />}
+                {templateExpressionsOptions && (
                   <TemplateExpressionsFeature {...templateExpressionsOptions} />
+                )}
               </EditorToolbarContext.Provider>
             </EditorContext.Provider>
             {appendix}
