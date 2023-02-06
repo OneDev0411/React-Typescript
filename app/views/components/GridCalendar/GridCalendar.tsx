@@ -85,7 +85,7 @@ interface Props {
   actionRef?: RefObject<ActionRef>
 }
 
-export const GridCalendarPresentation = ({
+const GridCalendarPresentation = ({
   actionRef,
   initialRange,
   contrariwise = false,
@@ -513,4 +513,6 @@ export const GridCalendarPresentation = ({
   )
 }
 
-export const GridCalendar = memo(GridCalendarPresentation)
+const GridCalendar = memo(GridCalendarPresentation)
+
+export default GridCalendar
