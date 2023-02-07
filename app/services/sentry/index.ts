@@ -3,25 +3,31 @@ export function setupSentry(user: IUser, brand: IBrand) {
     return
   }
 
-  window.Sentry.init({
-    environment: process.env.SENTRY_ENVIRONMENT,
-    release: process.env.SOURCE_VERSION,
-    beforeSend: (event, hint) => {
-      console.log('[ Sentry ] ', hint.originalException)
+  if (!window.Sentry) {
+    return
+  }
 
-      return event
-    }
-  })
+  window.Sentry.onLoad(() => {
+    window.Sentry.init({
+      environment: process.env.SENTRY_ENVIRONMENT,
+      release: process.env.SOURCE_VERSION,
+      beforeSend: (event, hint) => {
+        console.log('[ Sentry ] ', hint.originalException)
 
-  window.Sentry.configureScope(scope => {
-    scope.setUser({
-      id: user.id,
-      email: user.email,
-      name: user.display_name,
-      brand: brand && {
-        id: brand.id,
-        name: brand.name
+        return event
       }
+    })
+
+    window.Sentry.configureScope(scope => {
+      scope.setUser({
+        id: user.id,
+        email: user.email,
+        name: user.display_name,
+        brand: brand && {
+          id: brand.id,
+          name: brand.name
+        }
+      })
     })
   })
 }
