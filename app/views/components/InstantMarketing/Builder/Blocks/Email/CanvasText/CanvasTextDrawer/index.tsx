@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 import type { Model } from 'backbone'
 import cn from 'classnames'
+// import LZString from 'lz-string'
 
 import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
 import { noop } from '@app/utils/helpers'
@@ -55,6 +56,7 @@ interface IRect {
 
 interface Props {
   model: Nullable<Model>
+  templateUrl: string
   templateOptions: Nullable<TemplateOptions>
   onClose: () => void
   onUploadComplete: (data: {
@@ -68,6 +70,7 @@ interface Props {
 export function CanvasTextDrawer({
   model,
   templateOptions,
+  templateUrl,
   onClose,
   onUploadComplete
 }: Props) {
@@ -90,6 +93,30 @@ export function CanvasTextDrawer({
     if (!textPreviewLabel) {
       return
     }
+
+    // const omit = {
+    //   width: undefined,
+    //   height: undefined,
+    //   x: undefined,
+    //   y: undefined
+    // }
+
+    // console.log(templateUrl)
+
+    // const x = {
+    //   url: templateUrl,
+    //   data: {
+    //     text: { ...textPreviewLabel.textNode.attrs, ...omit },
+    //     tag: { ...textPreviewLabel.tagNode.attrs, ...omit }
+    //   }
+    // }
+
+    // const c1 = JSON.stringify(x)
+    // const c2 = LZString.compressToEncodedURIComponent(c1)
+
+    // console.log({ c1: JSON.stringify(x), c2 })
+
+    // return
 
     const data = JSON.stringify(editor?.export.toJson())
 

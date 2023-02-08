@@ -1663,6 +1663,7 @@ class Builder extends React.Component {
           {!!this.state.canvasTextToEdit && (
             <CanvasTextDrawer
               model={this.state.canvasTextToEdit}
+              templateUrl={this.selectedTemplate.url}
               templateOptions={this.selectedTemplateOptions}
               onClose={() => this.setState({ canvasTextToEdit: null })}
               onUploadComplete={async ({ model, file, json, rect }) => {
