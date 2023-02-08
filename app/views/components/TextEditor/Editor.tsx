@@ -145,8 +145,6 @@ const Editor = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rerenderEditor])
 
-    useEffect(() => {}, [])
-
     const dropzoneProps: Partial<ComponentType<typeof Dropzone>> =
       getDropzoneProps({
         disabled: !onAttachmentDropped,
