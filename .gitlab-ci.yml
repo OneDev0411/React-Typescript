@@ -1,21 +1,25 @@
-image: nikolaik/python-nodejs:python3.10-nodejs14
+image: node:14-alpine
 
 stages:
-  - test
-  - review
+  - deps
+  - tests
   - deploy
+  - destroy
 
-test_unit:
-  stage: test
+deps:
+  stage: deps
   script:
-    - npm install -g npm@8.1
-    - npm ci
-    - npm run lint:ci
-    - npm run types:check
-    - npm run test:ci
-  needs: []
+    - docker build --target deps . -t $CI_COMMIT_REF_NAME-deps
+  tags:
+    - shell
+
+jest:
+  stage: tests
+  script:
+    - docker run -t $CI_COMMIT_REF_NAME-deps 'npm' 'run' 'test:ci'
   coverage: '/Lines\s+:\s([\d\.]+)/'
   artifacts:
+    expire_in: 3 days
     paths:
       - coverage
     reports:
@@ -23,64 +27,55 @@ test_unit:
         coverage_format: cobertura
         path: coverage/cobertura-coverage.xml
 
-deploy_beta:
-  stage: deploy
-  image: timbru31/ruby-node:latest
-  before_script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl && gem install faraday -v 1.8.0
-  script:
-    - dpl --provider=heroku --app=rechat-irish --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
-  environment:
-    name: beta
-    url: https://beta.rechat.com
-  only:
-    - stage
+  tags:
+    - shell
+  needs:
+    - deps
 
-deploy_production:
-  stage: deploy
-  image: timbru31/ruby-node:latest
-  before_script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl && gem install faraday -v 1.8.0
+eslint:
+  stage: tests
   script:
-    - dpl --provider=heroku --app=rechat-web --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
-  environment:
-    name: production
-    url: https://app.rechat.com
-  only:
-    - master
+    - - docker run -t $CI_COMMIT_REF_NAME-deps 'npm' 'run' 'lint:ci'
+  tags:
+    - shell
+  needs:
+    - deps
 
-start_review:
-  stage: review
+typescript:
+  stage: tests
   script:
-    - npm install -g npm@8.1
-    - npm ci
-    - chmod u+x ./dokku.sh
-    - ./dokku.sh
+    - docker run -t $CI_COMMIT_REF_NAME-deps 'npm' 'run' 'types:check'
+  tags:
+    - shell
+  needs:
+    - deps
+
+alpha:
+  stage: deploy
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: https://$CI_COMMIT_REF_SLUG.rechat.co/
-    on_stop: stop_review
-  only:
-    - merge_requests
-  except:
-    - master
-  needs: []
-
-stop_review:
-  stage: review
+    on_stop: destroy_alpha
   script:
-    - chmod u+x ./dokku-stop.sh
+    - ./dokku.sh
+    -  docker cp $CI_BUILD_REF_NAME.web.1:/app/statoscope.html .
+  artifacts:
+    name: "Statoscope Bundle Analyzer"
+    paths:
+      - ./statoscope.html
+
+  needs:
+    - deps
+  tags:
+    - shell
+
+destroy_alpha:
+  stage: destroy
+  script:
     - ./dokku-stop.sh
   environment:
     name: review/$CI_BUILD_REF_NAME
     action: stop
   when: manual
-  only:
-    - merge_requests
-  except:
-    - master
-  needs: []
+  tags:
+    - shell

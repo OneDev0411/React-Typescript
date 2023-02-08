@@ -1,4 +1,6 @@
 declare module 'draft-js-plugins-editor' {
+  import * as React from 'react'
+
   import {
     ContentBlock,
     ContentState,
@@ -6,7 +8,6 @@ declare module 'draft-js-plugins-editor' {
     EditorState,
     EditorProps
   } from 'draft-js'
-  import * as React from 'react'
 
   /**
    * importing DraftDecorator from draftjs types doesn't work for some reason
@@ -82,9 +83,9 @@ declare module 'draft-js-plugins-editor' {
     : never
 
   // from https://stackoverflow.com/a/58715632/1493081
-  type Cons<H, T extends any[]> = ((h: H, ...t: T) => void) extends ((
+  type Cons<H, T extends any[]> = ((h: H, ...t: T) => void) extends (
     ...r: infer R
-  ) => void)
+  ) => void
     ? R
     : never
 

@@ -10,9 +10,6 @@ import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signatu
 import { selectUserEmailSignature } from 'selectors/user'
 
 import { TextEditor } from '../TextEditor'
-import { EmojiFeature } from '../TextEditor/features/Emoji'
-import { ImageFeature } from '../TextEditor/features/Image'
-import { RichTextFeature } from '../TextEditor/features/RichText'
 import { useEditorState } from '../TextEditor/hooks/use-editor-state'
 
 interface Props {
@@ -83,11 +80,8 @@ export default function EditEmailSignature({
           autofocus
           editorState={editorState}
           onChange={setEditorState}
-        >
-          <RichTextFeature />
-          <ImageFeature uploadImage={uploadImage} />
-          <EmojiFeature />
-        </StyledTextEditor>
+          imageOptions={{ uploadImage }}
+        />
       </Box>
 
       {showActions && (

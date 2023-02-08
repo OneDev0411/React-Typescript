@@ -21,6 +21,7 @@ import { EditorContext } from '../../editor-context'
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 
 import { defaultTheme } from './default-emoji-theme'
+import { EmojiFeatureProps } from './types'
 import { useEmojiStyles } from './use-emoji-styles'
 import { usePopperizedEmojiSuggestions } from './use-popperized-emoji-suggestions'
 
@@ -30,15 +31,7 @@ const imageType = 'svg' // google: 'png'
 const cacheBustParam = '?v=2.2.7'
 const toneSelectOpenDelay = 500
 
-interface Props {
-  /**
-   * If true, emoji suggestion popover will be closed upon selecting an emoji.
-   * defaults to true
-   */
-  closeOnSelection?: boolean
-}
-
-export function EmojiFeature({ closeOnSelection = true }: Props) {
+export function EmojiFeature({ closeOnSelection = true }: EmojiFeatureProps) {
   const { setEditorState, editorState } = useContext(EditorContext)
   const editorStateRef = useLatestValueRef(editorState)
   const storeRef = useRef({
