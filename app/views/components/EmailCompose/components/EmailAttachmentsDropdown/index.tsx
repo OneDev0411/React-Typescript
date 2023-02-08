@@ -3,7 +3,21 @@ import React from 'react'
 import { List, ListItem, Tooltip } from '@material-ui/core'
 import { mdiAttachment, mdiDropbox, mdiProgressUpload } from '@mdi/js'
 import { useField } from 'react-final-form'
-import { useDropboxChooser } from 'use-dropbox-chooser'
+import { useDropboxChooser } from 'use-dropbox-chooser/lib'
+
+/*
+ * We use `/lib` to force Webpack to fetch the source code of the library and build it itself.
+ * This is because the library builds using Rollup, which uses regenerateRuntime without providing
+ * a proper polyfill for it. It appesrs that in the normal code path this is not a problem.
+ * But if the user has an ad blocker, loading the script would fail, and it'd follow to use
+ * regenerateRuntime functions which don't exist, leading to web#5914.
+ *
+ * The only way I managed to get a nice build out of it is using a .browserslists file
+ * that includes IE 11. This would cause babel-preset-env to include a massive, massive load of polyfills
+ * which basically doubles the size of our bundle.
+ *
+ * This allows us to skip those polyfills because it'd just use Webpack to build the library.
+ */
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import {
