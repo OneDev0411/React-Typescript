@@ -79,3 +79,37 @@ destroy_alpha:
   when: manual
   tags:
     - shell
+
+deploy_beta:
+  stage: deploy
+  image: timbru31/ruby-node:latest
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl && gem install faraday -v 1.8.0
+  script:
+    - dpl --provider=heroku --app=rechat-irish --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
+  environment:
+    name: beta
+    url: https://beta.rechat.com
+  only:
+    - stage
+  tags:
+    - docker
+
+deploy_production:
+  stage: deploy
+  image: timbru31/ruby-node:latest
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl && gem install faraday -v 1.8.0
+  script:
+    - dpl --provider=heroku --app=rechat-web --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
+  environment:
+    name: production
+    url: https://app.rechat.com
+  only:
+    - master
+  tags:
+    - docker
