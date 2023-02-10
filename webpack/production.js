@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 const SentryCliPlugin = require('@sentry/webpack-plugin')
+const StatoscopeWebpackPlugin = require('@statoscope/webpack-plugin').default
 const CompressionPlugin = require('compression-webpack-plugin')
 const moment = require('moment')
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
@@ -43,6 +44,9 @@ const config = {
     ]
   },
   plugins: [
+    new StatoscopeWebpackPlugin({
+      saveReportTo: 'statoscope.html'
+    }),
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.SourceMapDevToolPlugin({
       filename: 'sourcemaps/[name][hash].js.map'

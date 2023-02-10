@@ -1,5 +1,6 @@
-import * as Sentry from '@sentry/react'
 import { browserHistory } from 'react-router'
+
+import { setupSentry } from 'services/sentry'
 
 import * as actionsType from '../../constants/auth/signin'
 import signin from '../../models/auth/signin'
@@ -30,16 +31,7 @@ const submitSigninForm =
 
           const { brand } = getState()
 
-          Sentry.configureScope(scope => {
-            scope.setUser({
-              id: user.id,
-              email: user.email,
-              brand: brand && {
-                id: brand.id,
-                name: brand.name
-              }
-            })
-          })
+          setupSentry(user, brand)
 
           if (redirectTo) {
             if (redirectTo.includes('http')) {

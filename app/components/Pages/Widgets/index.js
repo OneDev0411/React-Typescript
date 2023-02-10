@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
-import * as Sentry from '@sentry/react'
 import idx from 'idx'
 import { connect } from 'react-redux'
 
 import { withRouter } from '@app/routes/with-router'
+import { setupSentry } from 'services/sentry'
 
 import getBrand from '../../../store_actions/brand'
 
@@ -27,7 +27,7 @@ class App extends Component {
       this.setFullStoryUser(user)
 
       // set user data for sentry
-      this.setSentryUser(user, this.props.brand)
+      setupSentry(user, this.props.brand)
     }
   }
 
@@ -38,20 +38,6 @@ class App extends Component {
         email: user.email
       })
     }
-  }
-
-  setSentryUser(user, brand) {
-    Sentry.configureScope(scope => {
-      scope.setUser({
-        id: user.id,
-        email: user.email,
-        name: user.display_name,
-        brand: brand && {
-          id: brand.id,
-          name: brand.name
-        }
-      })
-    })
   }
 
   render() {

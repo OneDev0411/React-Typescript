@@ -5,14 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import editUser from 'actions/user/edit'
 import { addNotification } from 'components/notification'
-import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signature-attachment'
 import { selectUserEmailSignature } from 'selectors/user'
 
 import { StyledTextEditor } from '../EditEmailSignature'
 import Drawer from '../OverlayDrawer'
-import { EmojiFeature } from '../TextEditor/features/Emoji'
-import { ImageFeature } from '../TextEditor/features/Image'
-import { RichTextFeature } from '../TextEditor/features/RichText'
 import { useEditorState } from '../TextEditor/hooks/use-editor-state'
 
 interface Props {
@@ -52,19 +48,6 @@ export function EditEmailSignatureDrawer({ isOpen, onClose }: Props) {
     }
   }
 
-  const uploadImage = async file => {
-    try {
-      setIsSaving(true)
-
-      const response = await uploadEmailSignatureAttachment(file)
-      const uploadedFile: IFile = response.body.data
-
-      return uploadedFile.url
-    } finally {
-      setIsSaving(false)
-    }
-  }
-
   return (
     <Drawer open={isOpen} onClose={onClose}>
       <Drawer.Header title="Edit Email Signature" />
@@ -74,11 +57,7 @@ export function EditEmailSignatureDrawer({ isOpen, onClose }: Props) {
             autofocus
             editorState={editorState}
             onChange={setEditorState}
-          >
-            <RichTextFeature />
-            <ImageFeature uploadImage={uploadImage} />
-            <EmojiFeature />
-          </StyledTextEditor>
+          />
         </Box>
       </Drawer.Body>
       <Drawer.Footer>

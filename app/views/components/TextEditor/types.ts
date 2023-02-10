@@ -14,6 +14,11 @@ import Dropzone from 'react-dropzone-rechat'
 import { ClassesProps } from 'utils/ts-utils'
 
 import { createEditorRef } from './create-editor-ref'
+import { EmojiFeatureProps } from './features/Emoji/types'
+import { ImageFeatureProps } from './features/Image/types'
+import { RichTextFeatureProps } from './features/RichText/types'
+import { SignatureFeatureProps } from './features/Signature/types'
+import { TemplateExpressionsFeatureProps } from './features/TemplateExpressions/types'
 import { styles } from './styles'
 
 export interface ReferenceObject {
@@ -60,6 +65,12 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
   onAttachmentDropped?: (file: File[]) => void
 
   appendix?: ReactNode
+
+  imageOptions?: ImageFeatureProps
+  emojiOptions?: EmojiFeatureProps
+  templateExpressionsOptions?: TemplateExpressionsFeatureProps
+  richTextOptions?: RichTextFeatureProps
+  signatureOptions?: SignatureFeatureProps
 }
 
 export interface AtomicBlockEntityData {

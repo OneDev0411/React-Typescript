@@ -1,21 +1,25 @@
-image: nikolaik/python-nodejs:python3.10-nodejs14
+image: node:14-alpine
 
 stages:
-  - test
-  - review
+  - deps
+  - tests
   - deploy
+  - destroy
 
-test_unit:
-  stage: test
+deps:
+  stage: deps
   script:
-    - npm install -g npm@8.1
-    - npm ci
-    - npm run lint:ci
-    - npm run types:check
-    - npm run test:ci
-  needs: []
+    - docker build --target deps . -t $CI_COMMIT_REF_NAME-deps
+  tags:
+    - shell
+
+jest:
+  stage: tests
+  script:
+    - docker run -t $CI_COMMIT_REF_NAME-deps 'npm' 'run' 'test:ci'
   coverage: '/Lines\s+:\s([\d\.]+)/'
   artifacts:
+    expire_in: 3 days
     paths:
       - coverage
     reports:
@@ -23,7 +27,60 @@ test_unit:
         coverage_format: cobertura
         path: coverage/cobertura-coverage.xml
 
-deploy_beta:
+  tags:
+    - shell
+  needs:
+    - deps
+
+eslint:
+  stage: tests
+  script:
+    - - docker run -t $CI_COMMIT_REF_NAME-deps 'npm' 'run' 'lint:ci'
+  tags:
+    - shell
+  needs:
+    - deps
+
+typescript:
+  stage: tests
+  script:
+    - docker run -t $CI_COMMIT_REF_NAME-deps 'npm' 'run' 'types:check'
+  tags:
+    - shell
+  needs:
+    - deps
+
+alpha:
+  stage: deploy
+  environment:
+    name: review/$CI_BUILD_REF_NAME
+    url: https://$CI_COMMIT_REF_SLUG.rechat.co/
+    on_stop: destroy
+  script:
+    - ./dokku.sh
+    -  docker cp $CI_BUILD_REF_NAME.web.1:/app/statoscope.html .
+  artifacts:
+    name: "Statoscope Bundle Analyzer"
+    paths:
+      - ./statoscope.html
+
+  needs:
+    - deps
+  tags:
+    - shell
+
+destroy:
+  stage: destroy
+  script:
+    - ./dokku-stop.sh
+  environment:
+    name: review/$CI_BUILD_REF_NAME
+    action: stop
+  when: manual
+  tags:
+    - shell
+
+beta:
   stage: deploy
   image: timbru31/ruby-node:latest
   before_script:
@@ -37,8 +94,10 @@ deploy_beta:
     url: https://beta.rechat.com
   only:
     - stage
+  tags:
+    - docker
 
-deploy_production:
+production:
   stage: deploy
   image: timbru31/ruby-node:latest
   before_script:
@@ -52,35 +111,5 @@ deploy_production:
     url: https://app.rechat.com
   only:
     - master
-
-start_review:
-  stage: review
-  script:
-    - npm install -g npm@8.1
-    - npm ci
-    - chmod u+x ./dokku.sh
-    - ./dokku.sh
-  environment:
-    name: review/$CI_BUILD_REF_NAME
-    url: https://$CI_COMMIT_REF_SLUG.rechat.co/
-    on_stop: stop_review
-  only:
-    - merge_requests
-  except:
-    - master
-  needs: []
-
-stop_review:
-  stage: review
-  script:
-    - chmod u+x ./dokku-stop.sh
-    - ./dokku-stop.sh
-  environment:
-    name: review/$CI_BUILD_REF_NAME
-    action: stop
-  when: manual
-  only:
-    - merge_requests
-  except:
-    - master
-  needs: []
+  tags:
+    - docker

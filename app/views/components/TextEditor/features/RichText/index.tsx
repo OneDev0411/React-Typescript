@@ -33,37 +33,14 @@ import createPasteLinkPlugin from './draft-js-paste-link-plugin'
 import HeadingButtons from './HeadingButtons'
 import { LinkEditorPopover } from './LinkEditorPopover'
 import { LinkPreview } from './LinkPreview'
-
-interface Props {
-  /**
-   * Support for bold, italic and underline.
-   * Defaults to true
-   */
-  inlineFormatting?: boolean
-  /**
-   * Support for links
-   * Defaults to true
-   */
-  link?: boolean
-  /**
-   * Support for ordered and unordered lists
-   * Defaults to true
-   */
-  lists?: boolean
-
-  /**
-   * Support for text size options
-   * Default to true
-   */
-  textSize?: boolean
-}
+import { RichTextFeatureProps } from './types'
 
 export function RichTextFeature({
   inlineFormatting = true,
   link = true,
   lists = true,
   textSize = true
-}: Props) {
+}: RichTextFeatureProps) {
   const { editorState, setEditorState, editorRef } = useContext(EditorContext)
   const originalEditorRef = useRef<DraftEditor | null>(null)
 

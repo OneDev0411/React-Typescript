@@ -1,20 +1,19 @@
-import { ReactNode } from 'react'
-
 import { fireEvent, render } from '@testing-library/react'
 
 import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
 
 import { TextEditor } from '..'
 import { TestBed } from '../../../../../tests/unit/TestBed'
-import { ImageFeature } from '../features/Image'
 
-const TE = ({ children }: { children?: ReactNode }) => {
+const TE = props => {
   const [editorState, setEditorState] = useEditorState('')
 
   return (
-    <TextEditor onChange={setEditorState} editorState={editorState}>
-      {children}
-    </TextEditor>
+    <TextEditor
+      onChange={setEditorState}
+      editorState={editorState}
+      {...props}
+    />
   )
 }
 
@@ -44,9 +43,11 @@ describe('TextEditor', () => {
   it('should show image picker button if ImageFeature is used, and it should open image picker dialog', done => {
     const { getByTestId, container } = render(
       <TestBed>
-        <TE>
-          <ImageFeature />
-        </TE>
+        <TE
+          imageOptions={{
+            uploadImage: () => {}
+          }}
+        />
       </TestBed>
     )
 

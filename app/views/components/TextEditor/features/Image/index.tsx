@@ -33,22 +33,14 @@ import { updateEntityData } from '../../modifiers/update-entity-data'
 import { AddGifButton } from './AddGifButton'
 import { AddImageButton } from './AddImageButton'
 import { InlineImageToolbar } from './ImageInlineToolbar'
+import { ImageFeatureProps } from './types'
 import { getImageDimensions } from './utils/get-image-dimensions'
 import { getImageSizeOptions } from './utils/get-image-size-options'
 
-interface Props {
-  /**
-   * an optional function to be used when an image is
-   * added to the editor. It should upload the image and return the promise
-   * of the uploaded image url. The src of the image in the editor will be
-   * uploaded to that uploaded image url.
-   * @param file
-   */
-  uploadImage?: (file: File) => Promise<string>
-  allowGif?: boolean
-}
-
-export function ImageFeature({ uploadImage, allowGif = true }: Props) {
+export function ImageFeature({
+  uploadImage,
+  allowGif = true
+}: ImageFeatureProps) {
   const dispatch = useDispatch()
 
   const { editorState, setEditorState, editorRef } = useContext(EditorContext)

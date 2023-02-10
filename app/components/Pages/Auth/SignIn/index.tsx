@@ -1,6 +1,5 @@
 import { useState } from 'react'
 
-import * as Sentry from '@sentry/react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { useNavigate } from '@app/hooks/use-navigate'
@@ -15,6 +14,7 @@ import { withRouter } from '@app/routes/with-router'
 import { setUserAndActiveTeam } from '@app/store_actions/active-team'
 import { Logo } from '@app/views/components/OAuthPageLayout/Logo'
 import { PoweredBy } from '@app/views/components/OAuthPageLayout/PoweredBy'
+import { setupSentry } from 'services/sentry'
 
 import { IAppState } from '../../../../reducers'
 import { getUserDefaultHomepage } from '../../../../utils/get-default-home-page'
@@ -113,16 +113,7 @@ function Signin(props: WithRouterProps) {
 
       dispatch(setUserAndActiveTeam(user, activeTeam))
 
-      Sentry.configureScope(scope => {
-        scope.setUser({
-          id: user.id,
-          email: user.email,
-          brand: brand && {
-            id: brand.id,
-            name: brand.name
-          }
-        })
-      })
+      setupSentry(user, brand)
 
       await logUserLoginActivity()
 

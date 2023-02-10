@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 
 import {
   ITemplateVariableSuggestion,
-  ITemplateVariableSuggestionGroup,
   TemplateVariablesButton
 } from '../../../TemplateVariablesButton'
 import { ToolbarFragment } from '../../components/ToolbarFragment'
@@ -11,25 +10,12 @@ import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 
 import { insertTemplateVariable } from './modifiers/insert-template-expression'
 import createTemplateExpressionsPlugin from './template-expressions-plugin'
-
-interface Props {
-  /**
-   * Suggestions for template expressions
-   */
-  templateVariableSuggestionGroups: ITemplateVariableSuggestionGroup[]
-  /**
-   * Weather to show variable insertion dropdown in the toolbar or not.
-   * If set to false, expressions will bw shown as atomic pieces but there
-   * is no UI in toolbar for adding more expressions.
-   * Defaults to true
-   */
-  showInToolbar?: boolean
-}
+import { TemplateExpressionsFeatureProps } from './types'
 
 export function TemplateExpressionsFeature({
   templateVariableSuggestionGroups,
   showInToolbar = true
-}: Props) {
+}: TemplateExpressionsFeatureProps) {
   useEditorPlugins(
     () => ({
       templateExpressions: createTemplateExpressionsPlugin()
