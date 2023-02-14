@@ -23,7 +23,10 @@ export const BACKGROUND_IMAGE_ALLOWED_ELEMENT_TYPES: string[] = [
   'image-bg'
 ]
 
-export const BACKGROUND_URL_ALLOWED_ELEMENT_TYPES: string[] = ['mj-hero']
+export const BACKGROUND_URL_ALLOWED_ELEMENT_TYPES: string[] = [
+  'mj-hero',
+  'mj-section'
+]
 
 export const MAP_TOOLBAR_BUTTONS_PREFIX = `${TOOLBAR_BUTTONS_PREFIX}-map`
 // eslint-disable-next-line max-len
