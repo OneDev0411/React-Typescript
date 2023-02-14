@@ -16,12 +16,12 @@ const IntroduceAssigneesEmailCompose = ({
   assignees
 }: Props) => {
   const hasOneAssignee = assignees.length === 1
-  const assigneesName = hasOneAssignee
-    ? assignees[0].display_name
-    : assignees.map(assignee => assignee.display_name).join(', ')
-  const assigneesFirstName = hasOneAssignee
-    ? assignees[0].display_name.split(' ')[0]
-    : assignees.map(assignee => assignee.display_name.split(' ')[0]).join(', ')
+  const assigneesName = assignees
+    .map(assignee => assignee.display_name)
+    .join(', ')
+  const assigneesFirstName = assignees
+    .map(assignee => assignee.first_name)
+    .join(', ')
   const firstName = contactName.split(' ')[0]
 
   return (
