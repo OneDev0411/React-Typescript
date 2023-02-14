@@ -103,7 +103,7 @@ export function getImage(model: Model): string {
   const isBackgroundUrlAllowedElement = isBackgroundUrlAllowed(model)
 
   if (isBackgroundUrlAllowedElement) {
-    return model.getAttributes()['background-url']
+    return model.get('attributes')['background-url']
   }
 
   return ''
