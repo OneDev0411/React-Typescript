@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 
-import { Theme, makeStyles } from '@material-ui/core'
+import { Theme, makeStyles, Typography } from '@material-ui/core'
 
+import { useActiveBrand } from '@app/hooks/brand'
 import { normalizeContact } from '@app/models/contacts/helpers/normalize-contact'
 import { noop } from '@app/utils/helpers'
 
@@ -26,6 +27,7 @@ export function AssigneesInlineEdit({
   close = noop
 }: AssigneesInlineEditProps) {
   const classes = useStyles()
+  const activeBrand = useActiveBrand()
 
   const normalizedContact = useMemo(() => {
     return normalizeContact(contact)
@@ -37,11 +39,17 @@ export function AssigneesInlineEdit({
 
   return (
     <div className={classes.container}>
-      <AssigneesEditMode
-        contact={normalizedContact}
-        onSave={onSave}
-        onClose={close}
-      />
+      {activeBrand.id === contact.brand ? (
+        <AssigneesEditMode
+          contact={normalizedContact}
+          onSave={onSave}
+          onClose={close}
+        />
+      ) : (
+        <Typography variant="body2">
+          You don't have the right access to edit
+        </Typography>
+      )}
     </div>
   )
 }
