@@ -466,6 +466,24 @@ class Builder extends React.Component {
     })
   }
 
+  addTemplateAssets = () => {
+    if (!this.selectedTemplateOptions.assets) {
+      return
+    }
+
+    Object.entries(this.selectedTemplateOptions.assets).forEach(group => {
+      const [key, assets] = group
+
+      assets.forEach(asset => {
+        this.editor.AssetManager.add({
+          image: asset.url,
+          asset: true,
+          key
+        })
+      })
+    })
+  }
+
   setupImageDoubleClickHandler = () => {
     const components = this.editor.DomComponents
     const image = components.getType('image')
@@ -1170,6 +1188,7 @@ class Builder extends React.Component {
     }
 
     this.registerComponentExtensions()
+    this.addTemplateAssets()
   }
 
   deselectAll = () => {
