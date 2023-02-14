@@ -146,6 +146,10 @@ export const load = async () => {
           )
         } else if (type === 'static') {
           collection = this.collection.filter(asset => asset.attributes.static)
+        } else if (type === 'asset') {
+          collection = this.collection.filter(
+            asset => asset.get('key') === target.getAttributes().asset
+          )
         }
 
         collection.forEach(asset => {
