@@ -6,6 +6,7 @@ import {
   CircularProgress,
   DialogActions
 } from '@material-ui/core'
+import difference from 'lodash/difference'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
 import { addAssignee } from '@app/models/assignees/add-assignee'
@@ -75,8 +76,17 @@ export function AssigneesEditMode({ contact, onClose, onSave }: Props) {
 
       onSave(data)
 
+      // When suggesting an introduction email, we care about unique people,
+      // not <user,brand> tuples.
+      const assigneesBefore = (contact.assignees ?? []).map(a => a.user.id)
+      const assigneesAfter = selectedAgents.map(a => a.id)
+
+      // Only show the introduction dialog if new people have been assigned
+      const shouldShowIntroduceDialog =
+        difference(assigneesAfter, assigneesBefore).length > 0
+
       // Email feature is only available if the contact has an email
-      if (selectedAgents.length > 0 && contact.email) {
+      if (shouldShowIntroduceDialog && contact.email) {
         setShowIntroduceDialog(true)
       } else {
         onClose()
