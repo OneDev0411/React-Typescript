@@ -6,6 +6,7 @@ type Props = {
   contactEmail: string
   contactName: string
   assignees: BrandedUser[]
+  firstName: Nullable<string>
 }
 
 const IntroduceAssigneesEmailCompose = ({
@@ -13,7 +14,8 @@ const IntroduceAssigneesEmailCompose = ({
   onClose,
   contactEmail,
   contactName,
-  assignees
+  assignees,
+  firstName
 }: Props) => {
   const hasOneAssignee = assignees.length === 1
   const assigneesName = assignees
@@ -22,7 +24,6 @@ const IntroduceAssigneesEmailCompose = ({
   const assigneesFirstName = assignees
     .map(assignee => assignee.first_name)
     .join(', ')
-  const firstName = contactName.split(' ')[0]
 
   return (
     <SingleEmailComposeDrawer
