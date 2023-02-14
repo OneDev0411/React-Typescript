@@ -19,6 +19,10 @@ const IntroduceAssigneesEmailCompose = ({
   const assigneesName = hasOneAssignee
     ? assignees[0].display_name
     : assignees.map(assignee => assignee.display_name).join(', ')
+  const assigneesFirstName = hasOneAssignee
+    ? assignees[0].display_name.split(' ')[0]
+    : assignees.map(assignee => assignee.display_name.split(' ')[0]).join(', ')
+  const firstName = contactName.split(' ')[0]
 
   return (
     <SingleEmailComposeDrawer
@@ -37,10 +41,12 @@ const IntroduceAssigneesEmailCompose = ({
           }))
         ],
         body: [
-          `Hi ${contactName} <br/> <br/>`,
-          `I'm reaching out to connect you with ${assigneesName}. <br/> <br/>`,
+          `Hi ${firstName}, <br/><br/>`,
+          `I'm reaching out to connect you with ${assigneesName}. <br/><br/>`,
           `I highly recommend ${
-            hasOneAssignee ? assigneesName : 'them'
+            hasOneAssignee
+              ? `${assigneesFirstName} is an amazing agent`
+              : `${assigneesFirstName} are amazing agents`
           }, and we work together regularly. I'll stay close, but I promise you're in good hands!`
         ].join('')
       }}
