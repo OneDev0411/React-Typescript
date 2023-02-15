@@ -139,6 +139,7 @@ export function AssigneesEditMode({ contact, onClose, onSave }: Props) {
             contactEmail={contact.email}
             assignees={selectedAgents}
             contactName={contact.display_name}
+            firstName={contact.first_name}
           />
         </>
       )}
