@@ -6,7 +6,7 @@ import { useIframe } from './use-iframe'
 
 export function useIframeFonts(): [
   FontFace[],
-  (fontName: string) => Promise<void>
+  (fontName?: string) => Promise<void>
 ] {
   const iframe = useIframe()
   const [fonts, setFonts] = useState<FontFace[]>([])
@@ -17,21 +17,27 @@ export function useIframeFonts(): [
     })
   })
 
-  const loadFont = (fontName: string): Promise<void> => {
+  const loadFont = (fontName?: string): Promise<void> => {
     return new Promise((resolve, reject) => {
+      if (!fontName) {
+        reject()
+
+        return
+      }
+
       const iframeFonts = iframe.contentDocument!.fonts
 
       iframeFonts.ready
         .then(() => {
-          const font = Array.from(iframeFonts).find(
-            font => font.family === fontName
+          const fontFace = Array.from(iframeFonts).find(
+            ({ family }) => family === fontName
           )
 
-          if (font) {
-            font
+          if (fontFace) {
+            fontFace
               .load()
               .then(() => {
-                document.fonts.add(font)
+                document.fonts.add(fontFace)
                 resolve()
               })
               .catch(reject)

@@ -3,14 +3,16 @@ import { useEffect, useState } from 'react'
 import { Skeleton } from '@material-ui/lab'
 import { LabelModel } from 'pikaso'
 
+import type { TemplateFont } from '../../../types'
+
 import { useIframeFonts } from './hooks/use-iframe-fonts'
 
 interface Props {
-  fontName: string
+  font: TemplateFont
   textPreviewLabel: Nullable<LabelModel>
 }
 
-export function FontPreview({ fontName, textPreviewLabel }: Props) {
+export function FontPreview({ font, textPreviewLabel }: Props) {
   const [src, setSrc] = useState<Nullable<string>>(null)
 
   const [, loadFont] = useIframeFonts()
@@ -21,13 +23,9 @@ export function FontPreview({ fontName, textPreviewLabel }: Props) {
     }
 
     const getPreview = () => {
-      const normalizedName = fontName
-        .replaceAll('-', ' ')
-        .replace(/\B([A-Z])\B/g, ' $1')
-
       textPreviewLabel.textNode.setAttrs({
-        fontFamily: fontName,
-        text: normalizedName
+        fontFamily: font.name,
+        text: font.name
       })
 
       const preview = textPreviewLabel.node.toDataURL({
@@ -37,12 +35,12 @@ export function FontPreview({ fontName, textPreviewLabel }: Props) {
       setSrc(preview)
     }
 
-    loadFont(fontName).then(getPreview).catch(getPreview)
-  }, [fontName, textPreviewLabel, loadFont, src])
+    loadFont(font.name).then(getPreview).catch(getPreview)
+  }, [font, textPreviewLabel, loadFont, src])
 
   if (!src) {
     return <Skeleton variant="rect" width="130px" height="48px" />
   }
 
-  return <img src={src} alt={fontName} />
+  return <img src={src} alt={font.name} />
 }

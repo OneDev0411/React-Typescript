@@ -21,7 +21,7 @@ import FontFaceObserver from 'fontfaceobserver'
 
 import { muiIconSizes, SvgIcon } from '@app/views/components/SvgIcons'
 
-import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
+import { useCanvasTextContext } from '../hooks/use-canvas-text-context'
 
 type Alignment = 'left' | 'center' | 'right'
 type TextDecoration = 'line-through' | 'underline' | ''

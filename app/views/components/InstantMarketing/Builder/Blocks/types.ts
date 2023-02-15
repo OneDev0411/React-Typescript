@@ -24,7 +24,7 @@ export interface TemplateOptions {
   blocks: TemplateBlockBase[]
   disableDefault?: string[] | true
   textEditor?: {
-    extraFonts?: string[]
+    extraFonts?: TemplateFont[]
     extraColors?: string[]
   }
 }
@@ -52,3 +52,30 @@ export type BlockOnDropFunc = (model: Model, blockId: string | number) => void
 export interface RegisterBlockSelectHandler<TSelectedItem> {
   selectHandler: (selectedItem?: TSelectedItem) => void
 }
+
+export interface TemplateFontVariant {
+  files: Record<string, string>
+  local?: string
+  'font-weight': string
+  'font-style': string
+}
+
+export interface TemplateLocalFont {
+  source: 'local'
+  name: string
+}
+
+export interface TemplateCssFont {
+  source: 'css'
+  name: string
+  variants: string[]
+  url: string
+}
+
+export interface TemplateFileFont {
+  source: 'file'
+  name: string
+  variants: TemplateFontVariant[]
+}
+
+export type TemplateFont = TemplateFileFont | TemplateCssFont

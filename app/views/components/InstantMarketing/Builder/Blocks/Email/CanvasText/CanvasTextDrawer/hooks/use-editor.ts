@@ -1,6 +1,7 @@
 import { MutableRefObject, useState, useEffect } from 'react'
 
-import Pikaso, { JsonData, LabelModel } from 'pikaso'
+import LZString from 'lz-string'
+import Pikaso, { Konva, LabelModel } from 'pikaso'
 
 import { CanvasTextProperties, DefaultCanvasTextProperties } from '../constants'
 
@@ -19,6 +20,7 @@ export function useEditor({
   labelConfig = DefaultCanvasTextProperties
 }: Options) {
   const iframe = useIframe()
+
   const [, loadFont] = useIframeFonts()
 
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
@@ -31,6 +33,23 @@ export function useEditor({
       return
     }
 
+    const parseState = (): Nullable<{
+      label: Konva.TextConfig
+      tag: Konva.RectConfig
+    }> => {
+      if (!state) {
+        return null
+      }
+
+      const decompressed = LZString.decompressFromEncodedURIComponent(state)
+
+      if (!decompressed) {
+        return null
+      }
+
+      return JSON.parse(decompressed)
+    }
+
     const load = async () => {
       const instance = new Pikaso({
         width: 100,
@@ -38,23 +57,30 @@ export function useEditor({
         container: editorRef.current as HTMLDivElement
       })
 
+      const state = parseState()
+
       if (state) {
-        const jsonState = JSON.parse(state) as JsonData
+        instance.shapes.label.insert({
+          ...DefaultCanvasTextProperties,
+          tag: state.tag,
+          text: state.label
+        })
 
-        const initialFontName =
-          jsonState.shapes?.[0]?.children?.[1].attrs.fontFamily
+        loadFont(state.label.fontFamily)
+          .catch(() => {})
+          .finally(() => {
+            instance.shapes.label.insert({
+              ...DefaultCanvasTextProperties,
+              tag: state.tag,
+              text: state.label
+            })
 
-        try {
-          await loadFont(initialFontName)
-        } catch (e) {
-        } finally {
-          await instance.load(state)
-        }
+            setEditor(instance)
+          })
       } else {
         instance.shapes.label.insert(labelConfig)
+        setEditor(instance)
       }
-
-      setEditor(instance)
     }
 
     load()

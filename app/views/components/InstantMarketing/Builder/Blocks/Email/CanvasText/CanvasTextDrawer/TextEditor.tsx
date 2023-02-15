@@ -4,7 +4,7 @@ import { TextField } from '@material-ui/core'
 import { useDebounce, useEffectOnce } from 'react-use'
 
 import { DefaultCanvasTextProperties } from './constants'
-import { useCanvasTextContext } from './hooks/get-canvas-text-context'
+import { useCanvasTextContext } from './hooks/use-canvas-text-context'
 
 export function TextEditor() {
   const { textPreviewLabel, setTextProperty, preview } = useCanvasTextContext()

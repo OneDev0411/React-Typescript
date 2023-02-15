@@ -1031,6 +1031,8 @@ class Builder extends React.Component {
   getMjmlTemplate() {
     const result = this.editor.getHtml()
 
+    console.log('$$$$', result, this.state.selectedTemplate)
+
     return {
       ...this.state.selectedTemplate,
       result
@@ -1666,27 +1668,14 @@ class Builder extends React.Component {
               templateUrl={this.selectedTemplate.url}
               templateOptions={this.selectedTemplateOptions}
               onClose={() => this.setState({ canvasTextToEdit: null })}
-              onUploadComplete={async ({ model, file, json, rect }) => {
-                const uploadedAsset = await uploadAsset(
-                  this.selectedTemplate.id,
-                  file
-                )
+              onUploadComplete={async ({ model, json, rect }) => {
+                const url = `https://fancy.rechat.com/text.png?q=${json}`
 
                 model.trigger('canvas-text:update', {
-                  image: uploadedAsset.file.url,
+                  image: url,
                   width: rect.width,
                   height: rect.height
                 })
-
-                const dataJson = encodeURIComponent(json)
-
-                // This snippet is used by the template team
-                console.log(`<mj-image 
-                    data-type="canvas-text" 
-                    width="${parseInt(rect.width, 10)}" 
-                    height="${parseInt(rect.height, 10)}" 
-                    data-json="${dataJson}" 
-                    src="${uploadedAsset.file.url}"></mj-image>`)
               }}
             />
           )}

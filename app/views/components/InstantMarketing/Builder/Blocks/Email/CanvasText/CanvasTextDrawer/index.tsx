@@ -9,9 +9,9 @@ import {
 } from '@material-ui/core'
 import type { Model } from 'backbone'
 import cn from 'classnames'
-// import LZString from 'lz-string'
+import { omit } from 'lodash'
+import LZString from 'lz-string'
 
-import { convertUrlToImageFile } from '@app/utils/file-utils/convert-url-to-image-file'
 import { noop } from '@app/utils/helpers'
 import OverlayDrawer from '@app/views/components/OverlayDrawer'
 import { PageTabs, Tab } from '@app/views/components/PageTabs'
@@ -60,7 +60,6 @@ interface Props {
   templateOptions: Nullable<TemplateOptions>
   onClose: () => void
   onUploadComplete: (data: {
-    file: File
     rect: IRect
     json: string
     model: Nullable<Model>
@@ -81,7 +80,7 @@ export function CanvasTextDrawer({
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
   const { editor, textPreviewLabel } = useEditor({
     editorRef,
-    state: decodeURIComponent(model?.get('canvas-json'))
+    state: model?.get('canvas-json')
   })
 
   const handleDone = async () => {
@@ -94,48 +93,39 @@ export function CanvasTextDrawer({
       return
     }
 
-    // const omit = {
-    //   width: undefined,
-    //   height: undefined,
-    //   x: undefined,
-    //   y: undefined
-    // }
+    const ignoredFields = ['width', 'height', 'x', 'y']
 
-    // console.log(templateUrl)
+    const data = {
+      label: omit(textPreviewLabel.textNode.attrs, ignoredFields),
+      tag: omit(textPreviewLabel.tagNode.attrs, ignoredFields),
+      url: `${templateUrl}/blocks.json`
+    }
 
-    // const x = {
-    //   url: templateUrl,
-    //   data: {
-    //     text: { ...textPreviewLabel.textNode.attrs, ...omit },
-    //     tag: { ...textPreviewLabel.tagNode.attrs, ...omit }
-    //   }
-    // }
-
-    // const c1 = JSON.stringify(x)
-    // const c2 = LZString.compressToEncodedURIComponent(c1)
-
-    // console.log({ c1: JSON.stringify(x), c2 })
-
-    // return
-
-    const data = JSON.stringify(editor?.export.toJson())
+    const encoded = LZString.compressToEncodedURIComponent(JSON.stringify(data))
+    const rect = textPreviewLabel.node.getClientRect()
 
     model?.trigger('canvas-text:save-state', {
-      data
+      data: encoded
     })
-
-    const file = await convertUrlToImageFile(
-      textPreviewLabel.node.toDataURL({
-        pixelRatio: 2
-      })
-    )
 
     onUploadComplete({
       model,
-      file,
-      json: data,
-      rect: textPreviewLabel.node.getClientRect()
+      rect,
+      json: encoded
     })
+
+    // This snippet is used by the template team
+    console.log(`
+    {% set fancyFont %}
+    ${JSON.stringify({ ...data, url: './blocks.json' })}
+    {% endset %}
+    <mj-image 
+      data-type="canvas-text"
+      width="${parseInt(rect.width.toString(), 10)}" 
+      height="${parseInt(rect.height.toString(), 10)}" 
+      data-json="{{ fancyFont | encode }}" 
+      src="https://fancy.rechat.com/text.png?q={{fancyFont | encode }}">
+    </mj-image>`)
   }
 
   const preview = useCallback(() => {
@@ -208,6 +198,7 @@ export function CanvasTextDrawer({
                 value={{
                   editor,
                   textPreviewLabel,
+                  templateUrl,
                   templateOptions,
                   setTextProperty,
                   setTagProperty,

@@ -4,8 +4,8 @@ import { Box, Typography } from '@material-ui/core'
 import { CirclePicker, ColorState } from 'react-color'
 
 import { DefaultCanvasTextProperties } from '../constants'
-import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
 import { useAvailableColors } from '../hooks/use-available-colors'
+import { useCanvasTextContext } from '../hooks/use-canvas-text-context'
 
 export function TagColorProperty() {
   const { getTagProperty, templateOptions, setTagProperty, preview } =
