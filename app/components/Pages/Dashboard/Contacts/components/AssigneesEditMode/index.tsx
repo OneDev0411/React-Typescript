@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   makeStyles,
@@ -62,6 +62,16 @@ export function AssigneesEditMode({ contact, onClose, onSave }: Props) {
     setSearchCriteria,
     500
   )
+  // When suggesting an introduction email, we care about unique people,
+  // not <user,brand> tuples.
+  const shouldShowIntroduceDialog = useMemo(() => {
+    return (
+      difference(
+        selectedAgents.map(({ id }) => id),
+        (contact.assignees ?? []).map(({ user }) => user.id)
+      ).length > 0
+    )
+  }, [contact.assignees, selectedAgents])
 
   const handleSave = async () => {
     setIsSaving(true)
@@ -75,15 +85,6 @@ export function AssigneesEditMode({ contact, onClose, onSave }: Props) {
       })
 
       onSave(data)
-
-      // When suggesting an introduction email, we care about unique people,
-      // not <user,brand> tuples.
-      const assigneesBefore = (contact.assignees ?? []).map(a => a.user.id)
-      const assigneesAfter = selectedAgents.map(a => a.id)
-
-      // Only show the introduction dialog if new people have been assigned
-      const shouldShowIntroduceDialog =
-        difference(assigneesAfter, assigneesBefore).length > 0
 
       // Email feature is only available if the contact has an email
       if (shouldShowIntroduceDialog && contact.email) {
