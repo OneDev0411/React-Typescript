@@ -19,6 +19,14 @@ describe('Test deal form get-attribute-value helper', () => {
     expect(value).toBe('Mr Ramin Mousavi')
   })
 
+  it('Should return correct value when attribute is array and phone_number and format the phone number', () => {
+    const value = getAttributeValue(deal.roles[0] as any, {
+      attributes: ['wrong_field', 'phone_number']
+    })
+
+    expect(value).toBe('(424) 382-8604')
+  })
+
   it('Should return correct value when attribute value is zero', () => {
     const role = {
       ...deal.roles[0],
