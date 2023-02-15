@@ -18,8 +18,6 @@ export const parseStatusFilterString = (
   statusKeys.forEach(key => {
     if (statusQueries.includes(key)) {
       statusList[key] = true
-    } else {
-      statusList[key] = false
     }
   })
 
