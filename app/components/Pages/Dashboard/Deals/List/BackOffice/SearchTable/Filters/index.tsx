@@ -14,7 +14,7 @@ import {
   mdiHelpCircleOutline
 } from '@mdi/js'
 import { saveAs } from 'file-saver'
-import { isEqual, pickBy } from 'lodash'
+import { isEqual } from 'lodash'
 import { useDispatch } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce/lib'
@@ -112,8 +112,7 @@ export const Filters = ({
   useDeepCompareEffect(() => {
     // remove false statuses from the user filters
     const cleanedUserFilters: DealsListFilters = {
-      ...userFilters,
-      status: pickBy(userFilters.status, v => v === true)
+      ...userFilters
     }
 
     const payload: DealsListPayload = {
