@@ -67,12 +67,6 @@ export function useEditor({
       const state = parseState()
 
       if (state) {
-        instance.shapes.label.insert({
-          ...DefaultCanvasTextProperties,
-          tag: state.tag,
-          text: state.label
-        })
-
         loadFont(state.label.fontFamily)
           .catch(() => {})
           .finally(() => {
@@ -82,7 +76,14 @@ export function useEditor({
               text: state.label
             })
 
+            console.log('>>> INIT', {
+              ...DefaultCanvasTextProperties,
+              tag: state.tag,
+              text: state.label
+            })
+
             setEditor(instance)
+            setIsLoading(false)
           })
       } else {
         instance.shapes.label.insert(labelConfig)

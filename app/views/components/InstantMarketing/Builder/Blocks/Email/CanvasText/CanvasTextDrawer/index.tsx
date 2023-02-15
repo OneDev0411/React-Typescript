@@ -47,31 +47,18 @@ const useStyles = makeStyles(
 
 type Tabs = 'fonts' | 'basic-properties' | 'advanced-properties'
 
-interface IRect {
-  x: number
-  y: number
-  width: number
-  height: number
-}
-
 interface Props {
   model: Nullable<Model>
   templateUrl: string
   templateOptions: Nullable<TemplateOptions>
   onClose: () => void
-  onUploadComplete: (data: {
-    rect: IRect
-    json: string
-    model: Nullable<Model>
-  }) => void
 }
 
 export function CanvasTextDrawer({
   model,
   templateOptions,
   templateUrl,
-  onClose,
-  onUploadComplete
+  onClose
 }: Props) {
   const classes = useStyles()
 
@@ -108,10 +95,10 @@ export function CanvasTextDrawer({
       data: encoded
     })
 
-    onUploadComplete({
-      model,
-      rect,
-      json: encoded
+    model?.trigger('canvas-text:update', {
+      image: `https://fancy.rechat.com/text.png?q=${encoded}`,
+      width: rect.width,
+      height: rect.height
     })
 
     // This snippet will be used by template team
@@ -198,7 +185,6 @@ export function CanvasTextDrawer({
                 value={{
                   editor,
                   textPreviewLabel,
-                  templateUrl,
                   templateOptions,
                   setTextProperty,
                   setTagProperty,
@@ -258,7 +244,14 @@ export function CanvasTextDrawer({
               </Context.Provider>
             </div>
           ) : (
-            <CircularProgress />
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              height="100%"
+            >
+              <CircularProgress />
+            </Box>
           )}
         </OverlayDrawer.Body>
       </OverlayDrawer>

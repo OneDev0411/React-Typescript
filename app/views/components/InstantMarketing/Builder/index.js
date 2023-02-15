@@ -1668,15 +1668,6 @@ class Builder extends React.Component {
               templateUrl={this.selectedTemplate.url}
               templateOptions={this.selectedTemplateOptions}
               onClose={() => this.setState({ canvasTextToEdit: null })}
-              onUploadComplete={async ({ model, json, rect }) => {
-                const url = `https://fancy.rechat.com/text.png?q=${json}`
-
-                model.trigger('canvas-text:update', {
-                  image: url,
-                  width: rect.width,
-                  height: rect.height
-                })
-              }}
             />
           )}
           <SearchArticleDrawer
