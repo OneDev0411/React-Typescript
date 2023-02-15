@@ -23,13 +23,14 @@ export function useEditor({
 
   const [, loadFont] = useIframeFonts()
 
+  const [isLoading, setIsLoading] = useState(false)
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
   const textPreviewLabel = editor
     ? (editor.board.activeShapes[0] as LabelModel)
     : null
 
   useEffect(() => {
-    if (editor || !iframe || !editorRef.current) {
+    if (!iframe || !editorRef.current || !!editor || isLoading) {
       return
     }
 
@@ -37,20 +38,26 @@ export function useEditor({
       label: Konva.TextConfig
       tag: Konva.RectConfig
     }> => {
-      if (!state) {
+      try {
+        if (!state) {
+          return null
+        }
+
+        const decompressed = LZString.decompressFromEncodedURIComponent(state)
+
+        if (!decompressed) {
+          return null
+        }
+
+        return JSON.parse(decompressed)
+      } catch (e) {
         return null
       }
-
-      const decompressed = LZString.decompressFromEncodedURIComponent(state)
-
-      if (!decompressed) {
-        return null
-      }
-
-      return JSON.parse(decompressed)
     }
 
     const load = async () => {
+      setIsLoading(true)
+
       const instance = new Pikaso({
         width: 100,
         height: 100,
@@ -80,14 +87,16 @@ export function useEditor({
       } else {
         instance.shapes.label.insert(labelConfig)
         setEditor(instance)
+        setIsLoading(false)
       }
     }
 
     load()
-  }, [editorRef, editor, iframe, loadFont, state, labelConfig])
+  }, [editorRef, editor, iframe, loadFont, state, labelConfig, isLoading])
 
   return {
     editor,
+    isLoading,
     textPreviewLabel
   }
 }

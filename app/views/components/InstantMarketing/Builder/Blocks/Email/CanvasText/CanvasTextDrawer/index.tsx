@@ -114,7 +114,7 @@ export function CanvasTextDrawer({
       json: encoded
     })
 
-    // This snippet is used by the template team
+    // This snippet will be used by template team
     console.log(`
     {% set fancyFont %}
     ${JSON.stringify({ ...data, url: './blocks.json' })}
