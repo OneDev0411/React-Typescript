@@ -15,11 +15,12 @@ export const Button = styled(IconButton)`
   bottom: 0.5em;
   width: 48px;
   height: 48px;
-  z-index: 1004;
+  z-index: 2147483001;
   border-radius: 100%;
   opacity: 0;
   transform: translateY(1rem);
   transition: all 0.5s;
+  line-height: 1;
 
   ${props => props.isActive && buttonVisibilityStyle}
 `
