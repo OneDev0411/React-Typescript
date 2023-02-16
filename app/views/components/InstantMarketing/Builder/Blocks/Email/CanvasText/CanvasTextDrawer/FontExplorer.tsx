@@ -68,8 +68,11 @@ export function FontExplorer() {
     }
   })
 
-  const { templateOptions, setTextProperty, preview } = useCanvasTextContext()
-  const [activeFont, setActiveFont] = useState<Nullable<string>>(null)
+  const { templateOptions, setTextProperty, getTextProperty, preview } =
+    useCanvasTextContext()
+  const [activeFont, setActiveFont] = useState<Nullable<string>>(
+    getTextProperty<string>('fontFamily') ?? null
+  )
   const fonts = templateOptions?.textEditor?.extraFonts ?? []
 
   const handleSelectFont = (fontName: string) => {

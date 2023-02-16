@@ -76,12 +76,6 @@ export function useEditor({
               text: state.label
             })
 
-            console.log('>>> INIT', {
-              ...DefaultCanvasTextProperties,
-              tag: state.tag,
-              text: state.label
-            })
-
             setEditor(instance)
             setIsLoading(false)
           })
