@@ -81,6 +81,7 @@ export function CanvasTextDrawer({
     }
 
     const ignoredFields = ['width', 'height', 'x', 'y']
+    const { text } = textPreviewLabel.textNode.attrs
 
     const data = {
       label: omit(textPreviewLabel.textNode.attrs, ignoredFields),
@@ -108,6 +109,7 @@ export function CanvasTextDrawer({
     {% endset %}
     <mj-image 
       data-type="canvas-text"
+      title="${text}"
       width="${parseInt(rect.width.toString(), 10)}" 
       height="${parseInt(rect.height.toString(), 10)}" 
       data-json="{{ fancyFont | encode }}" 
