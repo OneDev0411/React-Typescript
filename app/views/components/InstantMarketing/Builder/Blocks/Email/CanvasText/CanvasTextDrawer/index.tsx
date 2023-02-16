@@ -86,6 +86,9 @@ export function CanvasTextDrawer({
     const data = {
       label: omit(textPreviewLabel.textNode.attrs, ignoredFields),
       tag: omit(textPreviewLabel.tagNode.attrs, ignoredFields),
+      root: {
+        rotation: textPreviewLabel?.node.getAttr('rotation') ?? 0
+      },
       url: `${templateUrl}/blocks.json`
     }
 

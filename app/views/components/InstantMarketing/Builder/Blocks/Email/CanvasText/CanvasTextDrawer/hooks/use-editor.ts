@@ -37,6 +37,7 @@ export function useEditor({
     const parseState = (): Nullable<{
       label: Konva.TextConfig
       tag: Konva.RectConfig
+      root: Konva.RectConfig
     }> => {
       try {
         if (!state) {
@@ -70,11 +71,13 @@ export function useEditor({
         loadFont(state.label.fontFamily)
           .catch(() => {})
           .finally(() => {
-            instance.shapes.label.insert({
+            const label = instance.shapes.label.insert({
               ...DefaultCanvasTextProperties,
               tag: state.tag,
               text: state.label
             })
+
+            label.rotate(state.root?.rotation ?? 0)
 
             setEditor(instance)
             setIsLoading(false)
