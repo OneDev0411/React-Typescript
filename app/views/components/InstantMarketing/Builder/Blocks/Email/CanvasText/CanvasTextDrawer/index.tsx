@@ -112,6 +112,8 @@ export function CanvasTextDrawer({
     {% endset %}
     <mj-image 
       data-type="canvas-text"
+      css-class="fancy-font"
+      alt="${text}"
       title="${text}"
       width="${parseInt(rect.width.toString(), 10)}" 
       height="${parseInt(rect.height.toString(), 10)}" 
