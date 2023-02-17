@@ -343,27 +343,11 @@ class Builder extends React.Component {
   }
 
   get selectedTemplateFonts() {
-    if (
-      this.selectedTemplateOptions &&
-      this.selectedTemplateOptions.textEditor &&
-      this.selectedTemplateOptions.textEditor.extraFonts
-    ) {
-      return this.selectedTemplateOptions.textEditor.extraFonts
-    }
-
-    return []
+    return this.selectedTemplateOptions?.textEditor?.extraFonts ?? []
   }
 
   get selectedTemplateColors() {
-    if (
-      this.selectedTemplateOptions &&
-      this.selectedTemplateOptions.textEditor &&
-      this.selectedTemplateOptions.textEditor.extraColors
-    ) {
-      return this.selectedTemplateOptions.textEditor.extraColors
-    }
-
-    return []
+    return this.selectedTemplateOptions?.textEditor?.extraColors ?? []
   }
 
   loadCKEditor = () => {
@@ -403,7 +387,9 @@ class Builder extends React.Component {
       const templateFonts = this.selectedTemplateFonts
 
       const fonts =
-        templateFonts.length > 0 ? templateFonts : this.getTemplateMarkupFonts()
+        templateFonts.length > 0
+          ? templateFonts.map(font => font.name)
+          : this.getTemplateMarkupFonts()
 
       const pluginsToRemove = this.getCKEditorPluginsToRemove()
 
