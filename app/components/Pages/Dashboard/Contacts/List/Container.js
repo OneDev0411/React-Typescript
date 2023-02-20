@@ -335,8 +335,9 @@ class ContactsList extends React.Component {
   }
 
   handleUnmount = () => {
+    const filters = this.props.filters
+
     const {
-      filters = this.props.filters,
       searchInputValue = this.state.searchInputValue,
       start = 0,
       order = this.state.sortOrder,
