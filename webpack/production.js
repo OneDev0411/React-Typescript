@@ -49,7 +49,7 @@ const config = {
     }),
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.SourceMapDevToolPlugin({
-      filename: 'sourcemaps/[name][hash].js.map'
+      filename: 'sourcemaps/[name].[chunkhash].js.map'
     }),
     new MomentLocalesPlugin(),
     new CompressionPlugin({

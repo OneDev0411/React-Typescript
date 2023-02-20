@@ -26,7 +26,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: __DEV__ ? '[name].bundle.js' : '[name].[fullhash].js',
+    filename: __DEV__ ? '[name].bundle.js' : '[name].[chunkhash].js',
     chunkFilename: '[name].[chunkhash].js',
     publicPath: '/',
     globalObject: 'self',
