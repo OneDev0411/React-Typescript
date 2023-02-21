@@ -115,9 +115,9 @@ function ConnectedAccounts({
       <ConnectedAgents className={classes.section} user={user} />
       <ConnectedInstagram className={classes.section} />
 
-      <Acl.Beta>
+      <Acl.LeadAssignment>
         <ConnectedLeadChannels className={classes.section} />
-      </Acl.Beta>
+      </Acl.LeadAssignment>
 
       {user.docusign && (
         <ConnectedDocusign
