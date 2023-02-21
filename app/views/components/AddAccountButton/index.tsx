@@ -190,7 +190,7 @@ export function AddAccountButton({
             helperLink="https://help.rechat.com/guides/crm/connect-to-outlook-google"
           />
           {leadChannels.includes('Zillow') && (
-            <Acl.LeadAssignment>
+            <Acl.Beta>
               <AccountMenuItem
                 onClick={() => {
                   goTo('/dashboard/account/connected-accounts', null, {
@@ -207,11 +207,11 @@ export function AddAccountButton({
                 }
                 helperLink="https://help.rechat.com/guides/crm/connect-to-zillow"
               />
-            </Acl.LeadAssignment>
+            </Acl.Beta>
           )}
 
           {leadChannels.includes('Realtor') && (
-            <Acl.LeadAssignment>
+            <Acl.Beta>
               <AccountMenuItem
                 onClick={() => {
                   goTo('/dashboard/account/connected-accounts', null, {
@@ -228,7 +228,7 @@ export function AddAccountButton({
                 }
                 helperLink="https://help.rechat.com/guides/crm/connect-to-realtor"
               />
-            </Acl.LeadAssignment>
+            </Acl.Beta>
           )}
 
           <ConnectedAccounts

@@ -33,7 +33,7 @@ export function TaskTypeCell({ task }: Props) {
 
   return (
     <div className={cn(classes.root, { done: task.status === 'DONE' })}>
-      {eventTypesIcons[task.task_type].icon({
+      {eventTypesIcons[task.task_type]?.icon({
         size: muiIconSizes.small
       })}
 

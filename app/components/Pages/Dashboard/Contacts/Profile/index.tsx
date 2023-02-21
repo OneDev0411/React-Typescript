@@ -600,9 +600,9 @@ const ContactProfile = ({
               <Deals contact={contact} />
               <Details {..._props} />
               <Partner {..._props} />
-              <Acl.Beta>
+              <Acl.LeadAssignment>
                 <Assignee {..._props} />
-              </Acl.Beta>
+              </Acl.LeadAssignment>
               <Owner
                 onSelect={onChangeOwner}
                 owner={contact.user}
