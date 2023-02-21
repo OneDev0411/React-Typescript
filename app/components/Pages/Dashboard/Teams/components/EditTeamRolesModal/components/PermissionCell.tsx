@@ -1,8 +1,5 @@
-import React from 'react'
-
+import { Checkbox } from '@material-ui/core'
 import { Field } from 'react-final-form'
-
-import { Checkbox } from 'components/Checkbox'
 
 interface Props {
   permission: string
