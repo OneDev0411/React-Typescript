@@ -89,7 +89,7 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
       divider: 'rgba(0, 0, 0, 0.12)',
       background: {
         paper: white,
-        default: '#fafafa'
+        default: '#f2f2f2'
       },
       action: {
         active: 'rgba(0, 0, 0, 0.54)',
