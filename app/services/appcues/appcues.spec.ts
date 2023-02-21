@@ -18,7 +18,8 @@ describe('createAppcuesAccessList', () => {
       hasShowingsAccess: false,
       hasSTOREAccess: false,
       hasWebsitesAccess: false,
-      hasShareToInstagramAccess: false
+      hasShareToInstagramAccess: false,
+      hasLeadAssignmentAccess: false
     }
   })
 
@@ -43,7 +44,8 @@ describe('createAppcuesAccessList', () => {
       hasShowingsAccess: false,
       hasSTOREAccess: true,
       hasWebsitesAccess: false,
-      hasShareToInstagramAccess: false
+      hasShareToInstagramAccess: false,
+      hasLeadAssignmentAccess: false
     }
     const actual = createAppcuesAccessList(userACL, defaultUserAcl)
 
@@ -75,7 +77,8 @@ describe('createAppcuesAccessList', () => {
       hasShowingsAccess: true,
       hasSTOREAccess: true,
       hasWebsitesAccess: true,
-      hasShareToInstagramAccess: false
+      hasShareToInstagramAccess: false,
+      hasLeadAssignmentAccess: false
     }
     const actual = createAppcuesAccessList(userACL, defaultUserAcl)
 
@@ -96,7 +99,8 @@ describe('createAppcuesAccessList', () => {
       hasShowingsAccess: false,
       hasSTOREAccess: false,
       hasWebsitesAccess: false,
-      hasShareToInstagramAccess: false
+      hasShareToInstagramAccess: false,
+      hasLeadAssignmentAccess: false
     }
     const actual = createAppcuesAccessList(userACL, defaultUserAcl)
 
@@ -136,7 +140,8 @@ describe('createAppcuesUserData', () => {
       hasShowingsAccess: false,
       hasSTOREAccess: false,
       hasWebsitesAccess: false,
-      hasShareToInstagramAccess: false
+      hasShareToInstagramAccess: false,
+      hasLeadAssignmentAccess: false
     }
 
     const appcuesBrandsList = {
@@ -186,7 +191,8 @@ describe('createAppcuesUserData', () => {
       hasShowingsAccess: false,
       hasSTOREAccess: false,
       hasWebsitesAccess: false,
-      hasShareToInstagramAccess: false
+      hasShareToInstagramAccess: false,
+      hasLeadAssignmentAccess: false
     }
 
     const appcuesBrandsList = {
@@ -236,7 +242,8 @@ describe('createAppcuesUserData', () => {
       hasShowingsAccess: false,
       hasSTOREAccess: false,
       hasWebsitesAccess: false,
-      hasShareToInstagramAccess: false
+      hasShareToInstagramAccess: false,
+      hasLeadAssignmentAccess: false
     }
 
     const appcuesBrandsList = {
@@ -286,7 +293,8 @@ describe('createAppcuesUserData', () => {
       hasShowingsAccess: true,
       hasSTOREAccess: true,
       hasWebsitesAccess: false,
-      hasShareToInstagramAccess: false
+      hasShareToInstagramAccess: false,
+      hasLeadAssignmentAccess: false
     }
 
     const appcuesBrandsList = {
@@ -336,7 +344,8 @@ describe('createAppcuesUserData', () => {
       hasShowingsAccess: true,
       hasSTOREAccess: true,
       hasWebsitesAccess: true,
-      hasShareToInstagramAccess: false
+      hasShareToInstagramAccess: false,
+      hasLeadAssignmentAccess: false
     }
 
     const appcuesBrandsList = {
@@ -386,7 +395,8 @@ describe('createAppcuesUserData', () => {
       hasShowingsAccess: false,
       hasSTOREAccess: false,
       hasWebsitesAccess: false,
-      hasShareToInstagramAccess: false
+      hasShareToInstagramAccess: false,
+      hasLeadAssignmentAccess: false
     }
 
     const appcuesBrandsList = {

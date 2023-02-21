@@ -84,7 +84,7 @@ export function useColumns({
   totalRows,
   tableContainerRef
 }: Data): TableColumn<IContact>[] {
-  const hasBetaAccess = useAcl(ACL.BETA)
+  const hasLeadAssignmentAccess = useAcl(ACL.LEAD_ASSIGNMENT)
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -96,11 +96,7 @@ export function useColumns({
     dispatch(getContact(contactId, query))
   }
 
-  // TODO: I had to extract columns this way because the assignees column is
-  // in the middle of the array and it should be behind the beta access ACL for now
-  // Merge all of these and convert the return to a simple array after it goes public
-  // https://gitlab.com/rechat/web/-/issues/6705#note_1166240925
-  const columns = [
+  return [
     {
       id: 'name',
       width: '250px',
@@ -224,6 +220,34 @@ export function useColumns({
         />
       )
     },
+    ...(hasLeadAssignmentAccess
+      ? [
+          {
+            id: 'assignees',
+            width: '160px',
+            header: () => (
+              <HeaderColumn text="Assignees" iconPath={mdiAccountArrowLeft} />
+            ),
+            render: ({ row: contact }) => {
+              return (
+                <div className={classes.cell}>
+                  <AssigneesCell assignees={contact.assignees || []} />
+                </div>
+              )
+            },
+            renderInlineEdit: (
+              { row: contact }: any,
+              close: (() => void) | undefined
+            ) => (
+              <AssigneesInlineEdit
+                contact={contact}
+                callback={handleReloadContact}
+                close={close}
+              />
+            )
+          }
+        ]
+      : []),
     {
       id: 'home-anniversary',
       width: '190px',
@@ -265,35 +289,4 @@ export function useColumns({
       }
     }
   ]
-
-  const assigneesColumn = {
-    id: 'assignees',
-    width: '160px',
-    header: () => (
-      <HeaderColumn text="Assignees" iconPath={mdiAccountArrowLeft} />
-    ),
-    render: ({ row: contact }) => {
-      return (
-        <div className={classes.cell}>
-          <AssigneesCell assignees={contact.assignees || []} />
-        </div>
-      )
-    },
-    renderInlineEdit: (
-      { row: contact }: any,
-      close: (() => void) | undefined
-    ) => (
-      <AssigneesInlineEdit
-        contact={contact}
-        callback={handleReloadContact}
-        close={close}
-      />
-    )
-  }
-
-  if (hasBetaAccess) {
-    columns.splice(columns.length - 1, 0, assigneesColumn)
-  }
-
-  return columns
 }
