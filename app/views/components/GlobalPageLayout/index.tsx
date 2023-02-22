@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Box, BoxProps } from '@material-ui/core'
-import { makeStyles, Theme } from '@material-ui/core/styles'
 
 import GlobalHeader, { GlobalHeaderProps } from 'components/GlobalHeader'
 import GlobalHeaderWithSearch, {
@@ -13,13 +12,7 @@ interface Props extends BoxProps {
   children: React.ReactNode
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  layout: { backgroundColor: theme.palette.background.default }
-}))
-
 const GlobalPageLayout = ({ gutter = 4, ...props }: Props) => {
-  const classes = useStyles()
-
   return (
     <Box
       id="GlobalPageLayout"
@@ -27,7 +20,6 @@ const GlobalPageLayout = ({ gutter = 4, ...props }: Props) => {
       height="100%"
       display="flex"
       flexDirection="column"
-      className={classes.layout}
       {...props}
     />
   )
