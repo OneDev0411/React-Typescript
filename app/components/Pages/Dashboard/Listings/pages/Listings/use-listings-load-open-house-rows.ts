@@ -33,7 +33,9 @@ function useListingLoadOpenHouseRows(): UseListingLoadOpenHouseRowsReturn {
             await getTasks({
               associations: [
                 'crm_task.associations',
-                'crm_association.listing'
+                'crm_task.assignees',
+                'crm_association.listing',
+                'crm_association.contact'
               ],
               omit: ['crm_task.metadata'],
               ...defaultFilter

@@ -22,8 +22,6 @@
     "test:unit": "cross-env NODE_ENV=test jest",
     "test:update-snapshots": "npm run test:unit -- -u",
     "test:ci": "cross-env NODE_ENV=test jest --coverage --maxWorkers 6",
-    "test": "jest --watch",
-    "jest": "jest",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -424,5 +422,9 @@
   "engines": {
     "node": "14.x",
     "npm": "8.1.3"
+  },
+  "volta": {
+    "node": "14.21.2",
+    "npm": "8.1.4"
   }
 }
