@@ -467,7 +467,7 @@ class Builder extends React.Component {
   }
 
   addTemplateAssets = () => {
-    if (!this.selectedTemplateOptions.assets) {
+    if (!this.selectedTemplateOptions?.assets) {
       return
     }
 
