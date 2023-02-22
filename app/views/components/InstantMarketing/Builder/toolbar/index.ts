@@ -9,6 +9,7 @@ import {
 } from '../constants'
 import {
   isImage,
+  isVideo,
   isBackgroundImageAllowed,
   isBackgroundUrlAllowed,
   hasToolbarImageButtons,
@@ -27,18 +28,16 @@ interface RegisterImageToolbarButtonsOptions {
 function registerImageToolbarButtons(
   editor: Editor,
   selected: Model,
-  {
-    onChangeImageClick,
-    onEditImageClick,
-    onQuickFiltersClick
-  }: RegisterImageToolbarButtonsOptions
+  { onChangeImageClick, onEditImageClick }: RegisterImageToolbarButtonsOptions
 ) {
   const isImageElement = isImage(selected)
+  const isVideoElement = isVideo(selected)
   const isBackgroundImageAllowedElement = isBackgroundImageAllowed(selected)
   const isBackgroundUrlAllowedElement = isBackgroundUrlAllowed(selected)
 
   if (
     !isImageElement &&
+    !isVideoElement &&
     !isBackgroundImageAllowedElement &&
     !isBackgroundUrlAllowedElement
   ) {
@@ -52,23 +51,19 @@ function registerImageToolbarButtons(
     return
   }
 
-  toolbar.unshift(
-    // {
-    //   name: EDIT_IMAGE_TOOLBAR_BUTTON_NAME,
-    //   attributes: { class: 'fa fa-file-image-o image-filter' },
-    //   command: () => editor.runCommand('call-fn', { fn: onQuickFiltersClick })
-    // },
-    {
+  toolbar.unshift({
+    name: CHANGE_IMAGE_TOOLBAR_BUTTON_NAME,
+    attributes: { class: 'fa fa-image' },
+    command: () => editor.runCommand('call-fn', { fn: onChangeImageClick })
+  })
+
+  if (!isVideoElement) {
+    toolbar.unshift({
       name: EDIT_IMAGE_TOOLBAR_BUTTON_NAME,
       attributes: { class: 'fa fa-pencil image' },
       command: () => editor.runCommand('call-fn', { fn: onEditImageClick })
-    },
-    {
-      name: CHANGE_IMAGE_TOOLBAR_BUTTON_NAME,
-      attributes: { class: 'fa fa-image' },
-      command: () => editor.runCommand('call-fn', { fn: onChangeImageClick })
-    }
-  )
+    })
+  }
 }
 
 interface RegisterMapToolbarButtonsOptions {

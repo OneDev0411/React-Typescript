@@ -1,4 +1,4 @@
-import { Editor } from 'grapesjs'
+import type { Editor, Model } from 'grapesjs'
 
 import config from './config'
 
@@ -108,12 +108,11 @@ export function createGrapesInstance(
             allowedTypes: STYLE_MANAGER_BG_COLORABLE_TYPES,
             forbiddenStyles: ['background-image']
           },
-          getPropName: (model, defaultPropName) => {
+          getPropName: (model: Model, defaultPropName: string) => {
             // The mj-image and mj-spacer component do not support the background-color property. Instead,
             // it has the container-background-color.
             if (
-              model.get('type') === 'mj-image' ||
-              model.get('type') === 'mj-spacer'
+              ['mj-image', 'mj-video', 'mj-spacer'].includes(model.get('type'))
             ) {
               return 'container-background-color'
             }

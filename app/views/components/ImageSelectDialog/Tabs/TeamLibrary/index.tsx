@@ -187,7 +187,7 @@ function TeamLibrary({
       bgcolor={
         isDragActive ? theme.palette.grey[400] : theme.palette.common.white
       }
-      {...{ ...getRootProps(), css: {} }}
+      {...{ ...getRootProps(), sx: {} }}
     >
       {results.length === 0 && (
         <Box

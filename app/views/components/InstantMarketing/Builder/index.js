@@ -489,6 +489,7 @@ class Builder extends React.Component {
     const image = components.getType('image')
     const imageBg = components.getType('image-bg')
     const mjImage = components.getType('mj-image')
+    const mjVideo = components.getType('mj-video')
     const mjCarouselImage = components.getType('mj-carousel-image')
 
     const imageComponents = [
@@ -503,6 +504,10 @@ class Builder extends React.Component {
       {
         name: 'mj-image',
         component: mjImage
+      },
+      {
+        name: 'mj-video',
+        component: mjVideo
       },
       {
         name: 'mj-carousel-image',
@@ -838,10 +843,12 @@ class Builder extends React.Component {
 
   singleClickTextEditing = () => {
     this.editor.on('component:selected', selected => {
-      const isImageAsset =
-        selected.get('type') === 'image' ||
-        selected.get('type') === 'mj-image' ||
-        selected.get('type') === 'mj-carousel-image'
+      const isImageAsset = [
+        'image',
+        'mj-image',
+        'mj-video',
+        'mj-carousel-image'
+      ].includes(selected.get('type'))
 
       if (isImageAsset) {
         return
@@ -949,8 +956,6 @@ class Builder extends React.Component {
     const style = document.createElement('style')
     const css =
       'body { margin: 0 auto !important; background-color: #ffffff !important }'
-
-    style.type = 'text/css'
 
     if (style.styleSheet) {
       style.styleSheet.cssText = css
@@ -1456,7 +1461,7 @@ class Builder extends React.Component {
       return false
     }
 
-    /* 
+    /*
        We have a problem loading animate.js file of templates
        after switching a template inside of the builder so for now
        I Disabled template list for video templates
@@ -1699,11 +1704,11 @@ class Builder extends React.Component {
                 const dataJson = encodeURIComponent(json)
 
                 // This snippet is used by the template team
-                console.log(`<mj-image 
-                    data-type="canvas-text" 
-                    width="${parseInt(rect.width, 10)}" 
-                    height="${parseInt(rect.height, 10)}" 
-                    data-json="${dataJson}" 
+                console.log(`<mj-image
+                    data-type="canvas-text"
+                    width="${parseInt(rect.width, 10)}"
+                    height="${parseInt(rect.height, 10)}"
+                    data-json="${dataJson}"
                     src="${uploadedAsset.file.url}"></mj-image>`)
               }}
             />
