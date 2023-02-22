@@ -29,21 +29,31 @@ export function useIframeFonts(): [
 
       iframeFonts.ready
         .then(() => {
-          const fontFace = Array.from(iframeFonts).find(
+          const fontFaces = Array.from(iframeFonts).filter(
             ({ family }) => family === fontName
           )
 
-          if (fontFace) {
-            fontFace
-              .load()
-              .then(() => {
-                document.fonts.add(fontFace)
-                resolve()
-              })
-              .catch(reject)
-          } else {
+          if ((fontFaces?.length ?? 0) === 0) {
             reject(new Error('Font not found'))
+
+            return
           }
+
+          Promise.all(
+            fontFaces.map(fontFace => {
+              return new Promise<void>((loadResolve, loadReject) => {
+                fontFace
+                  .load()
+                  .then(() => {
+                    document.fonts.add(fontFace)
+                    loadResolve()
+                  })
+                  .catch(loadReject)
+              })
+            })
+          )
+            .then(() => resolve())
+            .catch(reject)
         })
         .catch(reject)
     })
