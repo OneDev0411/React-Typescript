@@ -44,6 +44,11 @@ export const defaultTemplateVariableSuggestions: ITemplateVariableSuggestionGrou
           title: 'Company',
           expression: 'recipient.company',
           description: "Recipient's company name will be inserted here"
+        },
+        {
+          title: 'Address',
+          expression: 'recipient.address.0.full',
+          description: "Recipient's address will be inserted here"
         }
       ]
     },

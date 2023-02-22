@@ -137,6 +137,10 @@ export async function attachCKEditor(
           {
             value: 'recipient.phone_number',
             label: "Recipient's Phone Number"
+          },
+          {
+            value: 'recipient.address.0.full',
+            label: "Recipient's Address"
           }
         ]
       }
