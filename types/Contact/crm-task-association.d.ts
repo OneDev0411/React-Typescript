@@ -11,10 +11,10 @@ declare type ICRMTaskAssociation<
   brand: UUID
   association_type: CRMTaskAssociationType
   crm_task: UUID
-  index: number | null
+  index: Nullable<number>
   metadata: any
   type: 'crm_association'
-} & Association<'contact', IContact | null, Associations> &
-  Association<'deal', IDeal | null, Associations> &
-  Association<'email', IEmailCampaign | null, Associations> &
-  Association<'listing', IListing | null, Associations>
+} & Association<'contact', Nullable<IContact>, Associations> &
+  Association<'deal', Nullable<IDeal>, Associations> &
+  Association<'email', Nullable<IEmailCampaign>, Associations> &
+  Association<'listing', Nullable<IListing>, Associations>

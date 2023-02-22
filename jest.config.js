@@ -4,6 +4,7 @@ module.exports = {
   moduleFileExtensions: ['js', 'jsx', 'json', 'ts', 'tsx'],
   collectCoverageFrom: ['app/**/*.{js,jsx,ts,tsx}', '!**/node_modules/**'],
   testURL: 'http://localhost:8080',
+  globalSetup: '<rootDir>/globalSetupTests.js',
   setupFilesAfterEnv: ['./setupTests.js'],
   verbose: true,
   coverageReporters: ['cobertura', 'lcov', 'text-summary'],

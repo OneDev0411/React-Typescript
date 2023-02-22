@@ -98,7 +98,7 @@ export const normalizeListing = (listing, showStatus = true) => {
       statusColor: `#${getStatusColor(listing.status)}`,
       placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
-    details: `${listing.status}, 
+    details: `${listing.status},
     $${listing.price.toLocaleString()}${isLeaseProperty(listing) ? '/mo' : ''}`,
     id: listing.id,
     location: listing.location || listing.property.address.location,
