@@ -17,6 +17,8 @@ export const IMAGE_ELEMENT_TYPES: string[] = [
   'mj-carousel-image'
 ]
 
+export const VIDEO_ELEMENT_TYPES: string[] = ['mj-video']
+
 export const BACKGROUND_IMAGE_ALLOWED_ELEMENT_TYPES: string[] = [
   'cell',
   'div',

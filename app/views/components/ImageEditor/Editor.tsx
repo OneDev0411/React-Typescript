@@ -225,7 +225,9 @@ export default function EditorDialog({
       id="editor-dialog"
       fullWidth
       maxWidth="lg"
-      onEntered={() => setTimeout(setupEditor, 500)}
+      TransitionProps={{
+        onEntered: () => setTimeout(setupEditor, 500)
+      }}
     >
       <DialogTitle>
         <Box display="flex" alignItems="center" justifyContent="space-between">

@@ -5,26 +5,36 @@ import { typeEmbedMap } from '../Blocks/Website/Map'
 import {
   IMAGE_TOOLBAR_BUTTONS_PREFIX,
   IMAGE_ELEMENT_TYPES,
+  VIDEO_ELEMENT_TYPES,
   BACKGROUND_IMAGE_ALLOWED_ELEMENT_TYPES,
   BACKGROUND_URL_ALLOWED_ELEMENT_TYPES,
   MAP_TOOLBAR_BUTTONS_PREFIX,
   CAROUSEL_TOOLBAR_BUTTONS_PREFIX
 } from '../constants'
 
+const getElementType = (model: Model): string =>
+  model.get('type') || model.get('tagName') || ''
+
 export function isImage(model: Model): boolean {
-  const elementType = model.get('type') || model.get('tagName') || ''
+  const elementType = getElementType(model)
 
   return IMAGE_ELEMENT_TYPES.includes(elementType)
 }
 
+export function isVideo(model: Model): boolean {
+  const elementType = getElementType(model)
+
+  return VIDEO_ELEMENT_TYPES.includes(elementType)
+}
+
 export function isBackgroundImageAllowed(model: Model): boolean {
-  const elementType = model.get('type') || model.get('tagName') || ''
+  const elementType = getElementType(model)
 
   return BACKGROUND_IMAGE_ALLOWED_ELEMENT_TYPES.includes(elementType)
 }
 
 export function isBackgroundUrlAllowed(model: Model): boolean {
-  const elementType = model.get('type') || model.get('tagName') || ''
+  const elementType = getElementType(model)
 
   return BACKGROUND_URL_ALLOWED_ELEMENT_TYPES.includes(elementType)
 }
@@ -41,8 +51,9 @@ export function hasToolbarImageButtons(model: Model): boolean {
 
 export function setImage(model: Model, url: string): void {
   const isImageElement = isImage(model)
+  const isVideoElement = isVideo(model)
 
-  if (isImageElement) {
+  if (isImageElement || isVideoElement) {
     // @ts-ignore
     model.setAttributes({
       // @ts-ignore

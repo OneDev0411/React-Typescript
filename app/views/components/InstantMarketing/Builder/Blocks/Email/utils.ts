@@ -3,6 +3,7 @@ import type { Editor } from 'grapesjs'
 const BLOCK_IDS_TO_REMOVE = [
   'mj-button',
   'mj-image',
+  'mj-video',
   'mj-social-group',
   'mj-social-element',
   'mj-navbar',
