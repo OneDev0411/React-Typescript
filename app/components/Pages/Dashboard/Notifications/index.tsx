@@ -107,6 +107,10 @@ function Notifications({ params }: WithRouterProps) {
       case 'EmailCampaignReactedToEmailCampaignEmail':
         navigate(`/dashboard/insights/${notification.subjects[0].id}`)
         break
+      case 'UserAssignedContactRole':
+        navigate(`/dashboard/contacts/${notification.objects[0].contact}`)
+        break
+
       default:
         break
     }

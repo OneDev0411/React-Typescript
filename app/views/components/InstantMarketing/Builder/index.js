@@ -452,11 +452,30 @@ class Builder extends React.Component {
     })
   }
 
+  addTemplateAssets = () => {
+    if (!this.selectedTemplateOptions?.assets) {
+      return
+    }
+
+    Object.entries(this.selectedTemplateOptions.assets).forEach(group => {
+      const [key, assets] = group
+
+      assets.forEach(asset => {
+        this.editor.AssetManager.add({
+          image: asset.url,
+          asset: true,
+          key
+        })
+      })
+    })
+  }
+
   setupImageDoubleClickHandler = () => {
     const components = this.editor.DomComponents
     const image = components.getType('image')
     const imageBg = components.getType('image-bg')
     const mjImage = components.getType('mj-image')
+    const mjVideo = components.getType('mj-video')
     const mjCarouselImage = components.getType('mj-carousel-image')
 
     const imageComponents = [
@@ -471,6 +490,10 @@ class Builder extends React.Component {
       {
         name: 'mj-image',
         component: mjImage
+      },
+      {
+        name: 'mj-video',
+        component: mjVideo
       },
       {
         name: 'mj-carousel-image',
@@ -806,10 +829,12 @@ class Builder extends React.Component {
 
   singleClickTextEditing = () => {
     this.editor.on('component:selected', selected => {
-      const isImageAsset =
-        selected.get('type') === 'image' ||
-        selected.get('type') === 'mj-image' ||
-        selected.get('type') === 'mj-carousel-image'
+      const isImageAsset = [
+        'image',
+        'mj-image',
+        'mj-video',
+        'mj-carousel-image'
+      ].includes(selected.get('type'))
 
       if (isImageAsset) {
         return
@@ -917,8 +942,6 @@ class Builder extends React.Component {
     const style = document.createElement('style')
     const css =
       'body { margin: 0 auto !important; background-color: #ffffff !important }'
-
-    style.type = 'text/css'
 
     if (style.styleSheet) {
       style.styleSheet.cssText = css
@@ -1158,6 +1181,7 @@ class Builder extends React.Component {
     }
 
     this.registerComponentExtensions()
+    this.addTemplateAssets()
   }
 
   deselectAll = () => {
@@ -1425,7 +1449,7 @@ class Builder extends React.Component {
       return false
     }
 
-    /* 
+    /*
        We have a problem loading animate.js file of templates
        after switching a template inside of the builder so for now
        I Disabled template list for video templates

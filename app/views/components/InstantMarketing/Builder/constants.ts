@@ -17,13 +17,18 @@ export const IMAGE_ELEMENT_TYPES: string[] = [
   'mj-carousel-image'
 ]
 
+export const VIDEO_ELEMENT_TYPES: string[] = ['mj-video']
+
 export const BACKGROUND_IMAGE_ALLOWED_ELEMENT_TYPES: string[] = [
   'cell',
   'div',
   'image-bg'
 ]
 
-export const BACKGROUND_URL_ALLOWED_ELEMENT_TYPES: string[] = ['mj-hero']
+export const BACKGROUND_URL_ALLOWED_ELEMENT_TYPES: string[] = [
+  'mj-hero',
+  'mj-section'
+]
 
 export const MAP_TOOLBAR_BUTTONS_PREFIX = `${TOOLBAR_BUTTONS_PREFIX}-map`
 // eslint-disable-next-line max-len

@@ -19,7 +19,7 @@ declare type ICRMTask<
   title: string
   description: string
   due_date: number
-  end_date: number | null
+  end_date: Nullable<number>
   status: ICRMTaskStatus
   task_type: CRMTaskTypes
   metadata: any
@@ -27,14 +27,14 @@ declare type ICRMTask<
   type: 'crm_task'
 } & Association<
   'associations',
-  ICRMTaskAssociation<CRMTaskAssociations>[] | null,
+  Nullable<ICRMTaskAssociation<CRMTaskAssociations>[]>,
   Associations
 > &
-  Association<'assignees', IUser[] | null, Associations> &
+  Association<'assignees', Nullable<IUser[]>, Associations> &
   Association<'created_by', IUser, Associations> &
   Association<'updated_by', IUser, Associations> &
   // Association<'files', any[] | null, Associations> &
-  Association<'reminders', ICRMTaskReminder[] | null, Associations> &
+  Association<'reminders', Nullable<ICRMTaskReminder[]>, Associations> &
   Association<'contacts', UUID[], Associations, 'associations'> &
   Association<'deals', UUID[], Associations, 'associations'> &
   Association<'emails', UUID[], Associations, 'associations'> &

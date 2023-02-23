@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   makeStyles,
@@ -6,6 +6,7 @@ import {
   CircularProgress,
   DialogActions
 } from '@material-ui/core'
+import difference from 'lodash/difference'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
 import { addAssignee } from '@app/models/assignees/add-assignee'
@@ -61,6 +62,16 @@ export function AssigneesEditMode({ contact, onClose, onSave }: Props) {
     setSearchCriteria,
     500
   )
+  // When suggesting an introduction email, we care about unique people,
+  // not <user,brand> tuples.
+  const shouldShowIntroduceDialog = useMemo(() => {
+    return (
+      difference(
+        selectedAgents.map(({ id }) => id),
+        (contact.assignees ?? []).map(({ user }) => user.id)
+      ).length > 0
+    )
+  }, [contact.assignees, selectedAgents])
 
   const handleSave = async () => {
     setIsSaving(true)
@@ -76,7 +87,7 @@ export function AssigneesEditMode({ contact, onClose, onSave }: Props) {
       onSave(data)
 
       // Email feature is only available if the contact has an email
-      if (selectedAgents.length > 0 && contact.email) {
+      if (shouldShowIntroduceDialog && contact.email) {
         setShowIntroduceDialog(true)
       } else {
         onClose()
@@ -139,6 +150,7 @@ export function AssigneesEditMode({ contact, onClose, onSave }: Props) {
             contactEmail={contact.email}
             assignees={selectedAgents}
             contactName={contact.display_name}
+            firstName={contact.first_name}
           />
         </>
       )}

@@ -1,15 +1,15 @@
 declare interface IUserBase extends IModel<'user'> {
-  first_name: string | null
-  last_name: string | null
+  first_name: Nullable<string>
+  last_name: Nullable<string>
   display_name: string
   email: string
-  phone_number: string | null
+  phone_number: Nullable<string>
   is_shadow: boolean
   fake_email?: boolean
   docusign?: IUserDocusign
-  profile_image_url: string | null
-  cover_image_url: string | null
-  email_signature: string | null
+  profile_image_url: Nullable<string>
+  cover_image_url: Nullable<string>
+  email_signature: Nullable<string>
   access_token: string
   refresh_token: string
   facebook: Nullable<string>
@@ -21,7 +21,7 @@ declare interface IUserBase extends IModel<'user'> {
 }
 declare interface IUserInput extends Partial<IUserBase> {
   agent?: UUID
-  brand?: UUID | null
+  brand?: Nullable<UUID>
   skip_confirmation?: boolean
 
   user_connect?: UUID
@@ -32,9 +32,9 @@ declare interface IUserInput extends Partial<IUserBase> {
 declare type TUserType = 'Agent' | 'Client' | 'Admin'
 
 declare interface IUser extends IUserBase {
-  last_seen_at: number | null
-  cover_image_thumbnail_url: string | null
-  brand: string | null
+  last_seen_at: Nullable<number>
+  cover_image_thumbnail_url: Nullable<string>
+  brand: Nullable<string>
   id: UUID
 
   email_confirmed: boolean
@@ -43,7 +43,7 @@ declare interface IUser extends IUserBase {
 
   secondary_password?: string
 
-  active_brand: string | null
+  active_brand: Nullable<string>
 
   agents: Nullable<IAgent[]>
 

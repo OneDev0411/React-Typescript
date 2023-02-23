@@ -1,1 +1,1 @@
-<mj-image padding="0" rechat-editable="true" href="{{url}}" src="{{image}}"></mj-image>
+<mj-image data-type="mj-video" padding="0" rechat-editable="true" href="{{url}}" src="{{image}}"></mj-image>

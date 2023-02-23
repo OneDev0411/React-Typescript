@@ -26,11 +26,11 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: __DEV__ ? '[name].bundle.js' : '[name].[fullhash].js',
-    chunkFilename: '[name].[chunkhash].js',
+    filename: __DEV__ ? '[name].bundle.js' : '[name].[contenthash].js',
+    chunkFilename: '[name].[contenthash].js',
     publicPath: '/',
     globalObject: 'self',
-    assetModuleFilename: '[hash][ext]' // Webpack bby default includes [query] in this, S3 file upload plugin can't handle it.
+    assetModuleFilename: '[contenthash][ext]' // Webpack bby default includes [query] in this, S3 file upload plugin can't handle it.
   },
   cache: {
     type: 'filesystem',

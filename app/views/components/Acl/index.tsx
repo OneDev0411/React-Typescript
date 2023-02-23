@@ -58,5 +58,8 @@ export default Object.assign(Acl, {
   AgentNetwork: withProps<Pick<Props, 'access'>, {}>({
     access: [ACL.AGENT_NETWORK]
   })(Acl),
-  Beta: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.BETA] })(Acl)
+  Beta: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.BETA] })(Acl),
+  LeadAssignment: withProps<Pick<Props, 'access'>, {}>({
+    access: [ACL.LEAD_ASSIGNMENT]
+  })(Acl)
 })

@@ -10,10 +10,12 @@ import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
 import { RegisterBlockSelectHandler, TemplateBlockOptions } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
+import { isComponent } from '../../Website/utils'
 
 import template from './template.mjml'
 
 const blockName = 'rechat-video'
+const componentName = 'mj-video'
 
 interface VideoRenderData {
   url: string
@@ -30,6 +32,11 @@ export default function registerVideoBlock(
   templateBlockOptions: TemplateBlockOptions,
   { onDrop }: Options
 ): RegisterBlockSelectHandler<Video> {
+  editor.DomComponents.addType(componentName, {
+    isComponent: isComponent(componentName),
+    extend: 'mj-image'
+  })
+
   const videoBlocks = {
     [blockName]: templateBlockOptions.blocks[blockName]?.template || template
   }

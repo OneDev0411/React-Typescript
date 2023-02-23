@@ -12,7 +12,7 @@ const useStyles = makeStyles(
       position: 'absolute',
       top: theme.spacing(1),
       right: theme.spacing(1),
-      color: alpha(theme.palette.common.white, 80),
+      color: alpha(theme.palette.common.white, 0.8),
       filter: `drop-shadow(0px 0px 5px ${theme.palette.grey[700]})`,
       zIndex: 3
     }

@@ -6,6 +6,7 @@ type Props = {
   contactEmail: string
   contactName: string
   assignees: BrandedUser[]
+  firstName: Nullable<string>
 }
 
 const IntroduceAssigneesEmailCompose = ({
@@ -13,12 +14,16 @@ const IntroduceAssigneesEmailCompose = ({
   onClose,
   contactEmail,
   contactName,
-  assignees
+  assignees,
+  firstName
 }: Props) => {
   const hasOneAssignee = assignees.length === 1
-  const assigneesName = hasOneAssignee
-    ? assignees[0].display_name
-    : assignees.map(assignee => assignee.display_name).join(', ')
+  const assigneesName = assignees
+    .map(assignee => assignee.display_name)
+    .join(', ')
+  const assigneesFirstName = assignees
+    .map(assignee => assignee.first_name)
+    .join(', ')
 
   return (
     <SingleEmailComposeDrawer
@@ -37,10 +42,12 @@ const IntroduceAssigneesEmailCompose = ({
           }))
         ],
         body: [
-          `Hi ${contactName} <br/> <br/>`,
-          `I'm reaching out to connect you with ${assigneesName}. <br/> <br/>`,
+          `Hi ${firstName}, <br/><br/>`,
+          `I'm reaching out to connect you with ${assigneesName}. <br/><br/>`,
           `I highly recommend ${
-            hasOneAssignee ? assigneesName : 'them'
+            hasOneAssignee
+              ? `${assigneesFirstName} is an amazing agent`
+              : `${assigneesFirstName} are amazing agents`
           }, and we work together regularly. I'll stay close, but I promise you're in good hands!`
         ].join('')
       }}
