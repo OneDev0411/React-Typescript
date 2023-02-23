@@ -364,9 +364,10 @@ function ListingDetails({
       </Box>
       <Box p={4}>
         <MLSNote
-          mlsName={listing.mls_info.mls}
+          mlsName={listing.mls_info.name}
           logo={listing.mls_info.logo}
           disclaimer={listing.mls_info.disclaimer}
+          copyright={listing.mls_info.copyright}
         />
       </Box>
 

@@ -227,8 +227,10 @@ interface ProposedAgent extends IModel<'user'> {
 declare type IListingAssociation = 'agent' | 'proposed_agent' | 'mls_info'
 interface MlsInfo extends IModel<'mls_info'> {
   mls: string
+  name: string
   disclaimer: string
   logo: Nullable<string>
+  copyright: Nullable<string>
   enable_agent_network: boolean
 }
 
