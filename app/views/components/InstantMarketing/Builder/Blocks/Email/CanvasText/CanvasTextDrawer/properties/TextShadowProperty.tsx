@@ -14,7 +14,7 @@ import { useDebounce } from 'react-use'
 
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 
-import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
+import { useCanvasTextContext } from '../hooks/use-canvas-text-context'
 
 const SLIDER_PROPERTIES = {
   x: {

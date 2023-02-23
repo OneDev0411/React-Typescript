@@ -4,7 +4,7 @@ import { Box, Slider, Typography } from '@material-ui/core'
 import { useDebounce } from 'react-use'
 
 import { DefaultCanvasTextProperties } from '../constants'
-import { useCanvasTextContext } from '../hooks/get-canvas-text-context'
+import { useCanvasTextContext } from '../hooks/use-canvas-text-context'
 
 export function TextPaddingProperty() {
   const { getTextProperty, setTextProperty, preview } = useCanvasTextContext()

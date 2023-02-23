@@ -70,7 +70,7 @@ export default function registerCanvasTextBlock(
         this.rerender()
       },
       saveState({ data }: { data: string }) {
-        this.attr['data-json'] = encodeURIComponent(data)
+        this.attr['data-json'] = data
         this.model.set('canvas-json', this.attr['data-json'])
       },
       events: {

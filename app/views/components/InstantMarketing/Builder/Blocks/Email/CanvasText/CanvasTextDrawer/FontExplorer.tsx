@@ -3,12 +3,9 @@ import { useRef, useState } from 'react'
 import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 
-import { getBrandFontFamilies } from '@app/utils/get-brand-fonts'
-
 import { DefaultCanvasTextProperties } from './constants'
 import { FontPreview } from './FontPreview'
-import { useCanvasTextContext } from './hooks/get-canvas-text-context'
-import { useBrand } from './hooks/use-brand'
+import { useCanvasTextContext } from './hooks/use-canvas-text-context'
 import { useEditor } from './hooks/use-editor'
 
 const useStyles = makeStyles(
@@ -57,7 +54,6 @@ const useStyles = makeStyles(
 
 export function FontExplorer() {
   const classes = useStyles()
-  const brand = useBrand()
 
   const fontsPreviewRef = useRef<Nullable<HTMLDivElement>>(null)
   const { textPreviewLabel } = useEditor({
@@ -72,12 +68,12 @@ export function FontExplorer() {
     }
   })
 
-  const { templateOptions, setTextProperty, preview } = useCanvasTextContext()
-  const [activeFont, setActiveFont] = useState<Nullable<string>>(null)
-  const fonts = [
-    ...getBrandFontFamilies(brand!),
-    ...(templateOptions?.textEditor?.extraFonts ?? [])
-  ]
+  const { templateOptions, setTextProperty, getTextProperty, preview } =
+    useCanvasTextContext()
+  const [activeFont, setActiveFont] = useState<Nullable<string>>(
+    getTextProperty<string>('fontFamily') ?? null
+  )
+  const fonts = templateOptions?.textEditor?.extraFonts ?? []
 
   const handleSelectFont = (fontName: string) => {
     setActiveFont(fontName)
@@ -88,18 +84,15 @@ export function FontExplorer() {
   return (
     <div className={classes.root}>
       <div className={classes.container}>
-        {fonts.map(fontName => (
+        {fonts.map(font => (
           <div
-            key={fontName}
+            key={font.name}
             className={cn(classes.block, {
-              active: fontName === activeFont
+              active: font.name === activeFont
             })}
-            onClick={() => handleSelectFont(fontName)}
+            onClick={() => handleSelectFont(font.name)}
           >
-            <FontPreview
-              fontName={fontName}
-              textPreviewLabel={textPreviewLabel}
-            />
+            <FontPreview font={font} textPreviewLabel={textPreviewLabel} />
           </div>
         ))}
       </div>

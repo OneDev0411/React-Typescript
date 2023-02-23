@@ -343,27 +343,11 @@ class Builder extends React.Component {
   }
 
   get selectedTemplateFonts() {
-    if (
-      this.selectedTemplateOptions &&
-      this.selectedTemplateOptions.textEditor &&
-      this.selectedTemplateOptions.textEditor.extraFonts
-    ) {
-      return this.selectedTemplateOptions.textEditor.extraFonts
-    }
-
-    return []
+    return this.selectedTemplateOptions?.textEditor?.extraFonts ?? []
   }
 
   get selectedTemplateColors() {
-    if (
-      this.selectedTemplateOptions &&
-      this.selectedTemplateOptions.textEditor &&
-      this.selectedTemplateOptions.textEditor.extraColors
-    ) {
-      return this.selectedTemplateOptions.textEditor.extraColors
-    }
-
-    return []
+    return this.selectedTemplateOptions?.textEditor?.extraColors ?? []
   }
 
   loadCKEditor = () => {
@@ -403,7 +387,9 @@ class Builder extends React.Component {
       const templateFonts = this.selectedTemplateFonts
 
       const fonts =
-        templateFonts.length > 0 ? templateFonts : this.getTemplateMarkupFonts()
+        templateFonts.length > 0
+          ? templateFonts.map(font => font.name)
+          : this.getTemplateMarkupFonts()
 
       const pluginsToRemove = this.getCKEditorPluginsToRemove()
 
@@ -1054,6 +1040,8 @@ class Builder extends React.Component {
   getMjmlTemplate() {
     const result = this.editor.getHtml()
 
+    console.log('$$$$', result, this.state.selectedTemplate)
+
     return {
       ...this.state.selectedTemplate,
       result
@@ -1687,30 +1675,9 @@ class Builder extends React.Component {
           {!!this.state.canvasTextToEdit && (
             <CanvasTextDrawer
               model={this.state.canvasTextToEdit}
+              templateUrl={this.selectedTemplate.url}
               templateOptions={this.selectedTemplateOptions}
               onClose={() => this.setState({ canvasTextToEdit: null })}
-              onUploadComplete={async ({ model, file, json, rect }) => {
-                const uploadedAsset = await uploadAsset(
-                  this.selectedTemplate.id,
-                  file
-                )
-
-                model.trigger('canvas-text:update', {
-                  image: uploadedAsset.file.url,
-                  width: rect.width,
-                  height: rect.height
-                })
-
-                const dataJson = encodeURIComponent(json)
-
-                // This snippet is used by the template team
-                console.log(`<mj-image
-                    data-type="canvas-text"
-                    width="${parseInt(rect.width, 10)}"
-                    height="${parseInt(rect.height, 10)}"
-                    data-json="${dataJson}"
-                    src="${uploadedAsset.file.url}"></mj-image>`)
-              }}
             />
           )}
           <SearchArticleDrawer
