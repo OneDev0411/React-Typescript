@@ -41,9 +41,15 @@ interface Props {
   mlsName: string
   disclaimer: string
   logo: Nullable<string>
+  copyright: Nullable<string>
 }
 
-export default function MLSNote({ disclaimer, mlsName, logo }: Props) {
+export default function MLSNote({
+  disclaimer,
+  mlsName,
+  logo,
+  copyright
+}: Props) {
   const classes = useStyles()
   const activeBrand = useUnsafeActiveBrand()
   const hostBrand = useSelector<IAppState, IBrand>(
@@ -57,6 +63,14 @@ export default function MLSNote({ disclaimer, mlsName, logo }: Props) {
   }
 
   const renderedDisclaimer = nunjucks.renderString(disclaimer, { brokerage })
+  const mlsCopyrightLine =
+    copyright ??
+    'Copyright ©{{currentYear}} {{mlsName}}. All rights reserved. Last updated at {{lastUpdated}}'
+  const renderedCopyright = nunjucks.renderString(mlsCopyrightLine, {
+    mlsName,
+    currentYear: new Date().getFullYear(),
+    lastUpdated: fecha.format(lastUpdateDate, 'MMM DD, YYYY hh:mm A')
+  })
 
   return (
     <div className={classes.container}>
@@ -72,14 +86,13 @@ export default function MLSNote({ disclaimer, mlsName, logo }: Props) {
         />
         <Typography variant="body1" className={classes.closedNote}>
           Some properties which appear for sale on this website may no longer be
-          available because they are under contract, have Closed or are no
+          available because they are under contract, have closed or are no
           longer being offered for sale.
-          <br />
-          {`Copyright © ${mlsName} ${lastUpdateDate.getFullYear()}. All rights reserved. Last updated at ${fecha.format(
-            lastUpdateDate,
-            'MMM DD, YYYY hh:mm A'
-          )}.`}
         </Typography>
+        <Typography
+          variant="body1"
+          dangerouslySetInnerHTML={{ __html: renderedCopyright }}
+        />
       </Grid>
     </div>
   )
