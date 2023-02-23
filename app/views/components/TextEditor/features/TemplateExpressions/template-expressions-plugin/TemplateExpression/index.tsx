@@ -65,9 +65,11 @@ export const TemplateExpression = ({
 }: Props) => {
   const classes = useTemplateExpressionStyles()
 
-  const [, expression = '', ...rest] =
-    new RegExp(expressionRegExp).exec(decoratedText) || []
-  const fallback = rest[rest.length - 1] || ''
+  const [matches] = [...decoratedText.matchAll(expressionRegExp)]
+  const [, , subject, attribute] = matches
+
+  const expression = `${subject}.${attribute}`
+  const fallback = matches[matches.length - 1] || ''
 
   const fallbackPopover = useMenu({
     id: 'template-expression-fallback'
