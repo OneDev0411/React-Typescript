@@ -81,7 +81,7 @@
     },
 
     afterInit(editor) {
-      let placeholderReplaceRegex = /\{\{([^\{\}])+\}\}/g
+      let placeholderReplaceRegex = /{{\s*((recipient|user|sender|email)+)\.([.\w]+)\s*(or\s*"([^"}]*)?")*\s*}}/gi
 
       editor.dataProcessor.dataFilter.addRules({
         text(text, node) {
