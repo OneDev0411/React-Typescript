@@ -140,7 +140,7 @@ export default function ListingAlertFiltersEditor({
                   <Slider
                     valueLabelDisplay="auto"
                     value={filters.radius}
-                    step={1}
+                    step={filters.radius >= 0 && filters.radius < 1 ? 0.25 : 1}
                     min={0}
                     max={20}
                     onChange={(event: unknown, newValue: number) => {
