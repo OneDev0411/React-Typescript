@@ -49,6 +49,18 @@ function MainFeatures({ listing }: Props) {
   )
   const priceSqft = squareFeet > 0 ? Math.round(listing.price / squareFeet) : 0
   const lotSize = property.lot_size_area
+  const SQFT_PER_ACRE = 43560
+
+  const convertAcresToSqft = (acres: number): number => acres * SQFT_PER_ACRE
+
+  const displayLotSize =
+    lotSize == null
+      ? '--'
+      : lotSize < 1
+      ? `${parseFloat(
+          convertAcresToSqft(lotSize).toFixed(2)
+        ).toLocaleString()} sqft`
+      : `${parseFloat(lotSize.toFixed(2)).toLocaleString()} acres`
 
   // We don't have bath or bed counts for land, so we'll just show the property type
   if (isLand) {
@@ -151,7 +163,7 @@ function MainFeatures({ listing }: Props) {
               <SvgIcon path={mdiRelativeScale} />
               <Box ml={1}>
                 <Typography variant="subtitle1" className={classes.value}>
-                  {getFormattedValue(lotSize)}
+                  {getFormattedValue(displayLotSize)}
                 </Typography>
               </Box>
             </Box>
