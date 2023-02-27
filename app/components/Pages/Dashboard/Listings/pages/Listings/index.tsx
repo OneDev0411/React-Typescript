@@ -66,7 +66,7 @@ function Listings({ params }: ListingsProps) {
       </PageLayout.Header>
       <PageLayout.Main>
         <ListingsOpenHouseProvider>
-          <ListingsList searchTerm={searchTerm} />
+          <ListingsList withPagination searchTerm={searchTerm} />
         </ListingsOpenHouseProvider>
       </PageLayout.Main>
     </PageLayout>

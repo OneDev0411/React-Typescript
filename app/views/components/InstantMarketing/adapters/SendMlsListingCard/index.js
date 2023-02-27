@@ -131,9 +131,9 @@ class SendMlsListingCard extends Component {
 
     if (!this.props.isEdit) {
       try {
-        const listingDrawerListings = await getBrandListings(
-          this.props.activeBrandId
-        )
+        const listingDrawerListings = await getBrandListings({
+          filters: { brand: this.props.activeBrandId }
+        })
 
         this.setState({ listingDrawerListings })
       } catch (e) {

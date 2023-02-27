@@ -1,35 +1,43 @@
 import { byValert } from './get-listings'
 
-export type GetBrandListingsOptions = Partial<{
-  status: IListingStatus[]
-  property_types: string[]
-  property_subtypes: string[]
-  limit?: number
-}>
-
-const DEFAULT_OPTIONS: GetBrandListingsOptions = {
-  status: ['Active'],
-  property_types: ['Residential'],
-  property_subtypes: [
-    'RES-Single Family',
-    'RES-Condo',
-    'RES-Townhouse',
-    'RES-Half Duplex',
-    'RES-Farm/Ranch'
-  ]
+export interface GetBrandListingsFilters
+  extends Omit<AlertFilters, 'limit' | 'offset'> {
+  brand?: UUID
 }
 
-export async function getBrandListings(
-  brand: UUID,
-  options: GetBrandListingsOptions = DEFAULT_OPTIONS
-): Promise<ICompactListing[]> {
+export interface GetBrandListingsOptions {
+  limit?: number
+  offset?: number
+  order?: string[]
+}
+
+interface GetBrandListingProperties {
+  filters?: GetBrandListingsFilters
+  options?: GetBrandListingsOptions
+}
+
+export async function getBrandListings({
+  filters = {
+    listing_statuses: ['Active'],
+    property_types: ['Residential'],
+    property_subtypes: [
+      'RES-Single Family',
+      'RES-Condo',
+      'RES-Townhouse',
+      'RES-Half Duplex',
+      'RES-Farm/Ranch'
+    ]
+  },
+  options = { order: ['status'] }
+}: GetBrandListingProperties): Promise<ICompactListing[]> {
+  const { order: sort_order, ...optionProperties } = options
+
   const response = await byValert(
     {
-      brand,
-      sort_order: ['status'],
-      ...options
+      ...filters,
+      sort_order
     },
-    {},
+    optionProperties,
     false
   )
 

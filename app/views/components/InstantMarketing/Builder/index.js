@@ -244,9 +244,11 @@ class Builder extends React.Component {
     this.editor.on('frame:load:before', this.setCanvasModeToStandardHTML5)
 
     try {
-      const listingDrawerListings = await getBrandListings(
-        this.props.activeBrand.id
-      )
+      const listingDrawerListings = await getBrandListings({
+        filters: {
+          brand: this.props.activeBrand.id
+        }
+      })
 
       this.setState({ listingDrawerListings })
     } catch (e) {

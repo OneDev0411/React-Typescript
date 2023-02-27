@@ -15,7 +15,6 @@ interface UseListingLoadOpenHouseRowsReturn {
 }
 
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
-const defaultFilter = { task_type: 'Open House' }
 
 function useListingLoadOpenHouseRows(): UseListingLoadOpenHouseRowsReturn {
   const hasAccess = useAcl(openHouseAccess)
@@ -38,7 +37,7 @@ function useListingLoadOpenHouseRows(): UseListingLoadOpenHouseRowsReturn {
                 'crm_association.contact'
               ],
               omit: ['crm_task.metadata'],
-              ...defaultFilter
+              task_type: 'Open House'
             })
           ).data
       ),

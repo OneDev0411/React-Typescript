@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router'
 
 import { getDealsListings } from '@app/models/listings/listing/get-deals-listings'
 import { getBrandListings } from '@app/models/listings/search/get-brand-listings'
+import { byValert as getBrandListingsCount } from '@app/models/listings/search/get-listings-count'
 import { getTasks } from '@app/models/tasks/get-tasks'
 import MockBrandListingsEmpty from 'tests/unit/fixtures/listing/brandListings/brandListingsEmpty.json'
 import MockBrandListingsWithData from 'tests/unit/fixtures/listing/brandListings/brandListingsWithData.json'
@@ -25,14 +26,13 @@ jest.mock('react-window')
 jest.mock('@app/models/tasks/get-tasks')
 jest.mock('@app/models/listings/listing/get-deals-listings')
 jest.mock('@app/models/listings/search/get-brand-listings')
+jest.mock('@app/models/listings/search/get-listings-count')
 jest.mock(
   '@app/views/components/TextEditor/features/Image/utils/get-image-dimensions'
 )
 
 describe('Listings page / Table rendering', () => {
-  beforeAll(() => {
-    jest.resetAllMocks()
-
+  beforeEach(() => {
     const mockedGetTasks = getTasks as jest.MockedFunction<typeof getTasks>
 
     mockedGetTasks.mockReturnValue(Promise.resolve(MockOpenHouseTasksWithData))
@@ -43,12 +43,22 @@ describe('Listings page / Table rendering', () => {
       Promise.resolve(MockBrandListingsWithData)
     )
 
+    const mockedGetBrandListingsCount =
+      getBrandListingsCount as jest.MockedFunction<any>
+
+    mockedGetBrandListingsCount.mockReturnValue(Promise.resolve(400))
+
     const mockedGetDealsListings = getDealsListings as jest.MockedFunction<any>
 
     mockedGetDealsListings.mockReturnValue(
-      Promise.resolve(MockDealsListingsWithData)
+      Promise.resolve({ listings: MockDealsListingsWithData, count: 100 })
     )
   })
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
   describe('When Listings is not empty', () => {
     it('should render all items of listings list when deals listings is not empty', async () => {
       render(
@@ -62,10 +72,22 @@ describe('Listings page / Table rendering', () => {
         expect(screen.getAllByTestId('table-row').length).toBe(4)
       )
     })
+
+    it('should render the pagination', async () => {
+      render(
+        <ListingsPageTestProvider>
+          <Listings {...routerProps} />
+        </ListingsPageTestProvider>
+      )
+
+      await waitFor(() =>
+        expect(screen.getByTestId('pagination')).toBeInTheDocument()
+      )
+    })
   })
 
   describe('When Listings is empty', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       const mockedGetTasks = getTasks as jest.MockedFunction<typeof getTasks>
 
       mockedGetTasks.mockReturnValue(Promise.resolve(MockOpenHouseTasksEmpty))
@@ -77,12 +99,21 @@ describe('Listings page / Table rendering', () => {
         Promise.resolve(MockBrandListingsEmpty)
       )
 
+      const mockedGetBrandListingsCount =
+        getBrandListingsCount as jest.MockedFunction<any>
+
+      mockedGetBrandListingsCount.mockReturnValue(Promise.resolve(0))
+
       const mockedGetDealsListings =
         getDealsListings as jest.MockedFunction<any>
 
       mockedGetDealsListings.mockReturnValue(
-        Promise.resolve(MockDealsListingsEmpty)
+        Promise.resolve({ listings: MockDealsListingsEmpty, count: 0 })
       )
+    })
+
+    afterEach(() => {
+      jest.resetAllMocks()
     })
 
     it('should show Empty State Component when it is not searching', async () => {
@@ -110,10 +141,45 @@ describe('Listings page / Table rendering', () => {
         expect(screen.getByText('No Results')).toBeInTheDocument()
       )
     })
+
+    it('should not render the pagination', async () => {
+      render(
+        <ListingsPageTestProvider>
+          <Listings {...routerProps} />
+        </ListingsPageTestProvider>
+      )
+
+      await waitFor(() =>
+        expect(screen.queryByTestId('pagination')).not.toBeInTheDocument()
+      )
+    })
   })
 })
 
 describe('ListingsPage / Add mls account button', () => {
+  beforeEach(() => {
+    const mockedGetTasks = getTasks as jest.MockedFunction<typeof getTasks>
+
+    mockedGetTasks.mockReturnValue(Promise.resolve(MockOpenHouseTasksWithData))
+
+    const mockedGetBrandListings = getBrandListings as jest.MockedFunction<any>
+
+    mockedGetBrandListings.mockReturnValue(
+      Promise.resolve(MockBrandListingsWithData)
+    )
+
+    const mockedGetBrandListingsCount =
+      getBrandListingsCount as jest.MockedFunction<any>
+
+    mockedGetBrandListingsCount.mockReturnValue(Promise.resolve(400))
+
+    const mockedGetDealsListings = getDealsListings as jest.MockedFunction<any>
+
+    mockedGetDealsListings.mockReturnValue(
+      Promise.resolve({ listings: MockDealsListingsWithData, count: 100 })
+    )
+  })
+
   it('should redirect to add mls account and open the modal when user clicks on the button', async () => {
     render(
       <ListingsPageTestProvider>

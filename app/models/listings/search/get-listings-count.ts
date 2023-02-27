@@ -2,9 +2,9 @@ import { createValertOptions } from '@app/components/Pages/Dashboard/MLS/helpers
 
 import Fetch from '../../../services/fetch'
 
-export const byValert = async (
-  filters: ReturnType<typeof createValertOptions>,
-  query: string
+export const byValert = async <T extends {}>(
+  filters: ReturnType<typeof createValertOptions> | T,
+  query: string | object = {}
 ): Promise<number> => {
   try {
     const response = await new Fetch()
