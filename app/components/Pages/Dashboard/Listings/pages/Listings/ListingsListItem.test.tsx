@@ -31,10 +31,14 @@ jest.mock('@app/models/tasks/get-tasks', () => ({
   getTasks: () => Promise.resolve(MockOpenHouseTasksWithData)
 }))
 jest.mock('@app/models/listings/listing/get-deals-listings', () => ({
-  getDealsListings: () => Promise.resolve(MockDealsListingsWithData)
+  getDealsListings: () =>
+    Promise.resolve({ listings: MockDealsListingsWithData, count: 100 })
 }))
 jest.mock('@app/models/listings/search/get-brand-listings', () => ({
   getBrandListings: () => Promise.resolve(MockBrandListingsWithData)
+}))
+jest.mock('@app/models/listings/search/get-listings-count', () => ({
+  byValert: () => Promise.resolve(1200)
 }))
 
 // Listing modal mocks

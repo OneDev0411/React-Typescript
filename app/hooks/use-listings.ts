@@ -1,74 +1,155 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 import { useUnsafeActiveBrandId } from '@app/hooks/brand/use-unsafe-active-brand-id'
-import { getDealsListings } from '@app/models/listings/listing/get-deals-listings'
+import {
+  getDealsListings,
+  GetDealsListingOptions,
+  GetDealsListingFilters
+} from '@app/models/listings/listing/get-deals-listings'
 import {
   getBrandListings,
-  GetBrandListingsOptions
+  GetBrandListingsOptions,
+  GetBrandListingsFilters
 } from '@app/models/listings/search/get-brand-listings'
+import { byValert as getBrandListingsCount } from '@app/models/listings/search/get-listings-count'
 
-export function useBrandListings(
-  options?: GetBrandListingsOptions,
-  limit?: number
-): Nullable<ICompactListing[]> {
+import { useDeepMemo } from './use-deep-memo'
+
+interface UseBrandListingCountProperties {
+  filters?: Exclude<GetBrandListingsFilters, 'brand'>
+  isEnabled?: boolean
+}
+
+export function useBrandListingsCount({
+  filters: filterParameters,
+  isEnabled
+}: UseBrandListingCountProperties): number {
   const activeBrandId = useUnsafeActiveBrandId()
-  const [listings, setListings] = useState<Nullable<ICompactListing[]>>(null)
+  const [count, setCount] = useState<number>(0)
+  const filters = useDeepMemo(
+    () => ({
+      brand: activeBrandId as UUID,
+      ...filterParameters
+    }),
+    [activeBrandId, filterParameters]
+  )
+
+  const fetchBrandListingsCount = useCallback(async () => {
+    try {
+      const brandListingsCount = await getBrandListingsCount(filters)
+
+      setCount(brandListingsCount)
+    } catch (error) {
+      console.error('error fetching brand listings count', error)
+    }
+  }, [filters])
 
   useEffect(() => {
-    async function fetchBrandListings() {
-      if (!activeBrandId) {
-        return
-      }
-
-      try {
-        const brandListings = await getBrandListings(activeBrandId, {
-          ...options,
-          limit
-        })
-
-        setListings(brandListings)
-      } catch (error) {
-        console.error('error fetching brand listings', error)
-        setListings([])
-      }
+    if (activeBrandId && isEnabled) {
+      fetchBrandListingsCount()
     }
+  }, [activeBrandId, fetchBrandListingsCount, isEnabled])
 
-    fetchBrandListings()
-  }, [activeBrandId, options, limit])
+  return count
+}
+
+interface UseBrandListingProperties {
+  filters?: Exclude<GetBrandListingsFilters, 'brand'>
+  options?: GetBrandListingsOptions
+}
+
+export function useBrandListings({
+  filters: filterParameters,
+  options: optionParameters
+}: UseBrandListingProperties = {}): Nullable<ICompactListing[]> {
+  const activeBrandId = useUnsafeActiveBrandId()
+  const [listings, setListings] = useState<Nullable<ICompactListing[]>>(null)
+  const options = useDeepMemo(
+    () => ({ ...optionParameters }),
+    [optionParameters]
+  )
+  const filters = useDeepMemo(
+    () => ({
+      brand: activeBrandId as UUID,
+      ...filterParameters
+    }),
+    [activeBrandId, filterParameters]
+  )
+  const fetchBrandListings = useCallback(async () => {
+    try {
+      setListings(null)
+
+      const brandListings = await getBrandListings({
+        options,
+        filters
+      })
+
+      setListings(brandListings)
+    } catch (error) {
+      console.error('error fetching brand listings', error)
+      setListings([])
+    }
+  }, [options, filters])
+
+  useEffect(() => {
+    if (activeBrandId) {
+      fetchBrandListings()
+    }
+  }, [activeBrandId, fetchBrandListings])
 
   return listings
 }
 
-export function useDealsListings(
-  listingIdsToExclude?: UUID[],
-  dealsLimit?: number
-): Nullable<IListing[]> {
+interface UseDealListingFilters extends Omit<GetDealsListingFilters, 'brand'> {
+  listingIdsToExclude?: UUID[]
+}
+
+interface UseDealListingProperties {
+  filters?: UseDealListingFilters
+  options?: GetDealsListingOptions
+}
+
+export function useDealsListings({
+  filters: { listingIdsToExclude, ...filterParameters } = {},
+  options: optionParameters
+}: UseDealListingProperties): {
+  count: number
+  listings: Nullable<IListing[]>
+} {
   const activeBrandId = useUnsafeActiveBrandId()
   const [listings, setListings] = useState<Nullable<IListing[]>>(null)
+  const [count, setCount] = useState<number>(0)
+  const options = useDeepMemo(
+    () => ({ ...optionParameters }),
+    [optionParameters]
+  )
+  const filters = useDeepMemo(
+    () => ({ brand: activeBrandId as UUID, ...filterParameters }),
+    [activeBrandId, filterParameters]
+  )
+
+  const fetchDealsWithListings = useCallback(async () => {
+    try {
+      setListings(null)
+
+      const { count: listingsCount, listings } = await getDealsListings({
+        filters,
+        options
+      })
+
+      setListings(listings)
+      setCount(listingsCount)
+    } catch (error) {
+      console.error('error fetching deals listings', error)
+      setListings([])
+    }
+  }, [options, filters])
 
   useEffect(() => {
-    async function fetchDealsListings() {
-      if (!listingIdsToExclude || !activeBrandId) {
-        return
-      }
-
-      try {
-        const dealsListings = await getDealsListings(activeBrandId, dealsLimit)
-
-        // We're removing duplicate listings that we already have them
-        const uniqueDealsListings = dealsListings.filter(
-          listing => !listingIdsToExclude.includes(listing.id)
-        )
-
-        setListings(uniqueDealsListings)
-      } catch (error) {
-        console.error('error fetching deals listings', error)
-        setListings([])
-      }
+    if (activeBrandId) {
+      fetchDealsWithListings()
     }
+  }, [activeBrandId, fetchDealsWithListings])
 
-    fetchDealsListings()
-  }, [listingIdsToExclude, activeBrandId, dealsLimit])
-
-  return listings
+  return { count, listings }
 }

@@ -85,6 +85,7 @@ configure({ testIdAttribute: 'data-test' })
 
 // Fix mapbox-gl issue
 window.URL.createObjectURL = function () {}
+window.HTMLElement.prototype.scrollIntoView = function () {}
 
 afterEach(() => {
   // reset the history

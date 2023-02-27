@@ -1,9 +1,11 @@
-import { Chip, makeStyles, Tooltip } from '@material-ui/core'
+import { useCallback, useState, useMemo, useRef, MouseEvent } from 'react'
+
+import { Box, Chip, makeStyles, Tooltip } from '@material-ui/core'
+import Pagination from '@material-ui/lab/Pagination'
 import classNames from 'classnames'
 import { useSelector } from 'react-redux'
 
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
-import { GetBrandListingsOptions } from '@app/models/listings/search/get-brand-listings'
 import { selectUserAgents } from '@app/selectors/user'
 import { isUserCoAgent } from '@app/utils/listing'
 import { Table } from '@app/views/components/Grid/Table'
@@ -18,7 +20,6 @@ import ListingsListColumnText from './ListingsListColumnText'
 import ListingsListEmptyState from './ListingsListEmptyState'
 import { ListingRow } from './types'
 import useListingsListSort from './use-listings-list-sort'
-import useListingsSearchRows from './use-listings-search-rows'
 
 const useStyles = makeStyles(
   theme => ({
@@ -34,25 +35,64 @@ const useStyles = makeStyles(
   { name: 'ListingsList' }
 )
 
-const OPTIONS: GetBrandListingsOptions = {
-  status: ['Active']
-}
+const ITEMS_PER_PAGE = 200
 
 interface Props {
   searchTerm: string
+  withPagination?: boolean
 }
 
-function ListingsList({ searchTerm }: Props) {
+function ListingsList({ searchTerm, withPagination }: Props) {
+  const [currentPage, setCurrentPage] = useState(1)
   const classes = useStyles()
   const gridClasses = useGridStyles()
 
+  const listingsTableWrapperRef = useRef<Nullable<HTMLDivElement>>(null)
   const isSearching = searchTerm.trim().length > 0
   const userAgents = useSelector(selectUserAgents)
 
-  const { listings: rows, isLoading } = useBrandAndDealsListings(OPTIONS)
+  const scrollToTop = useCallback(() => {
+    if (listingsTableWrapperRef.current) {
+      listingsTableWrapperRef.current?.scrollIntoView({
+        block: 'start',
+        behavior: 'smooth'
+      })
+    }
+  }, [listingsTableWrapperRef])
 
-  const resultRows = useListingsSearchRows(rows, searchTerm)
-  const sortedRows = useListingsListSort(resultRows)
+  const onPageChange = useCallback(
+    (_: MouseEvent<HTMLButtonElement>, pageNumber: number) => {
+      setCurrentPage(pageNumber)
+      scrollToTop()
+    },
+    [scrollToTop]
+  )
+
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE
+  const {
+    listings: rows,
+    count: totalCount,
+    isLoading
+  } = useBrandAndDealsListings({
+    filters: {
+      listing_statuses: ['Active'],
+      search: searchTerm
+    },
+    options: { offset, limit: ITEMS_PER_PAGE },
+    withListingsCount: withPagination
+  })
+
+  const isPaginationEnabled = useMemo(() => {
+    return (
+      withPagination &&
+      !isLoading &&
+      rows.length > 0 &&
+      !searchTerm &&
+      ITEMS_PER_PAGE <= totalCount
+    )
+  }, [withPagination, isLoading, rows, searchTerm, totalCount])
+
+  const sortedRows = useListingsListSort(rows)
 
   const columns: TableColumn<ListingRow>[] = [
     {
@@ -130,31 +170,47 @@ function ListingsList({ searchTerm }: Props) {
   ]
 
   return (
-    <Table
-      rows={sortedRows}
-      totalRows={sortedRows.length}
-      columns={columns}
-      loading={isLoading ? 'middle' : null}
-      LoadingStateComponent={() => (
-        <LoadingContainer style={{ padding: '10% 0' }} />
+    <div ref={listingsTableWrapperRef}>
+      <Table
+        rows={sortedRows}
+        totalRows={sortedRows.length}
+        columns={columns}
+        loading={isLoading ? 'middle' : null}
+        LoadingStateComponent={() => (
+          <LoadingContainer style={{ padding: '10% 0' }} />
+        )}
+        getTrProps={() => ({
+          className: classNames(classes.row, gridClasses.row),
+          'data-test': 'table-row'
+        })}
+        EmptyStateComponent={() => (
+          <ListingsListEmptyState
+            title={
+              isSearching ? 'No Results ' : 'You don’t have any listings yet.'
+            }
+            subtitle={
+              isSearching
+                ? 'Make sure you have searched for the right address or try adding your other MLS Accounts using the button at the top'
+                : 'Use the “Add MLS Account” button at top to connect all your MLS accounts and let us retrieve your listings.'
+            }
+          />
+        )}
+      />
+      {isPaginationEnabled && (
+        <Box display="flex" justifyContent="center" p={4}>
+          <Pagination
+            data-test="pagination"
+            page={currentPage}
+            onChange={onPageChange}
+            count={Math.ceil(totalCount / ITEMS_PER_PAGE)}
+            variant="outlined"
+            color="primary"
+            size="large"
+            shape="rounded"
+          />
+        </Box>
       )}
-      getTrProps={() => ({
-        className: classNames(classes.row, gridClasses.row),
-        'data-test': 'table-row'
-      })}
-      EmptyStateComponent={() => (
-        <ListingsListEmptyState
-          title={
-            isSearching ? 'No Results ' : 'You don’t have any listings yet.'
-          }
-          subtitle={
-            isSearching
-              ? 'Make sure you have searched for the right address or try adding your other MLS Accounts using the button at the top'
-              : 'Use the “Add MLS Account” button at top to connect all your MLS accounts and let us retrieve your listings.'
-          }
-        />
-      )}
-    />
+    </div>
   )
 }
 

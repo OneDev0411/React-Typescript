@@ -18,7 +18,7 @@ function useLoadListingsData(enable: boolean): [ICompactListing[], any] {
 
   useEffect(() => {
     if (enable) {
-      run(async () => getBrandListings(activeBrandId))
+      run(async () => getBrandListings({ filters: { brand: activeBrandId } }))
     }
   }, [enable, activeBrandId, run])
 

@@ -3,7 +3,6 @@ import React, { useState, useMemo } from 'react'
 import { mdiMapSearchOutline } from '@mdi/js'
 
 import { useBrandListings, useDealsListings } from '@app/hooks/use-listings'
-import { GetBrandListingsOptions } from '@app/models/listings/search/get-brand-listings'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { normalizeListing } from '../../utils/association-normalizers'
@@ -11,10 +10,6 @@ import SearchListingsDrawer from '../SearchListingDrawer'
 
 import { AddAssociationButton } from './AddAssociationButton'
 import { AddAssociationProps } from './types'
-
-const OPTIONS: GetBrandListingsOptions = {
-  status: ['Active']
-}
 
 export function AddListingAssociation({
   disabled,
@@ -26,13 +21,19 @@ export function AddListingAssociation({
 }: AddAssociationProps) {
   const [isOpen, setIsOpen] = useState(false)
   // Brand Listings
-  const brandListings = useBrandListings(OPTIONS, 10)
+  const brandListings = useBrandListings({
+    filters: { listing_statuses: ['Active'] },
+    options: { limit: 10 }
+  })
   const brandListingsIds = useMemo(
     () => brandListings?.map(listing => listing.id),
     [brandListings]
   )
   // Deals Listings
-  const dealListings = useDealsListings(brandListingsIds, 10)
+  const { listings: dealListings } = useDealsListings({
+    filters: { listingIdsToExclude: brandListingsIds },
+    options: { limit: 10 }
+  })
 
   const onOpen = () => setIsOpen(true)
   const onClose = () => setIsOpen(false)

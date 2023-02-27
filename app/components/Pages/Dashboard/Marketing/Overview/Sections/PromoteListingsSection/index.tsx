@@ -9,7 +9,9 @@ import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
 
 export default function PromoteListingsSection() {
-  const { listings, isLoading } = useBrandAndDealsListings(undefined, 4)
+  const { listings, isLoading } = useBrandAndDealsListings({
+    options: { limit: 4 }
+  })
 
   return (
     <SectionLayout

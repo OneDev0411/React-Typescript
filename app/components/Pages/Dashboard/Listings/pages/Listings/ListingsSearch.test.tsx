@@ -1,7 +1,14 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  within
+} from '@testing-library/react'
 
 import { getDealsListings } from '@app/models/listings/listing/get-deals-listings'
 import { getBrandListings } from '@app/models/listings/search/get-brand-listings'
+import { byValert as getBrandListingsCount } from '@app/models/listings/search/get-listings-count'
 import { getTasks } from '@app/models/tasks/get-tasks'
 import MockBrandListingsEmpty from 'tests/unit/fixtures/listing/brandListings/brandListingsEmpty.json'
 import MockBrandListingsWithData from 'tests/unit/fixtures/listing/brandListings/brandListingsWithData.json'
@@ -22,6 +29,7 @@ jest.mock('react-window')
 jest.mock('@app/models/tasks/get-tasks')
 jest.mock('@app/models/listings/listing/get-deals-listings')
 jest.mock('@app/models/listings/search/get-brand-listings')
+jest.mock('@app/models/listings/search/get-listings-count')
 
 jest.mock('@app/models/Deal/role/get-definitions', () => ({
   getDefinitions: () => jest.fn(() => [])
@@ -29,9 +37,7 @@ jest.mock('@app/models/Deal/role/get-definitions', () => ({
 
 describe('Listings page / search', () => {
   describe('When Listings table has data', () => {
-    beforeAll(() => {
-      jest.resetAllMocks()
-
+    beforeEach(() => {
       const mockedGetTasks = getTasks as jest.MockedFunction<typeof getTasks>
 
       mockedGetTasks.mockReturnValue(Promise.resolve(MockOpenHouseTasksEmpty))
@@ -43,15 +49,24 @@ describe('Listings page / search', () => {
         Promise.resolve(MockBrandListingsWithData)
       )
 
+      const mockedGetBrandListingsCount =
+        getBrandListingsCount as jest.MockedFunction<any>
+
+      mockedGetBrandListingsCount.mockReturnValue(Promise.resolve(1200))
+
       const mockedGetDealsListings =
         getDealsListings as jest.MockedFunction<any>
 
       mockedGetDealsListings.mockReturnValue(
-        Promise.resolve(MockDealsListingsWithData)
+        Promise.resolve({ listings: MockDealsListingsWithData, count: 100 })
       )
     })
 
-    it('should find the one item if input value was "red"', async () => {
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should call the api with "red" search parameter', async () => {
       render(
         <ListingsPageTestProvider>
           <Listings {...routerProps} />
@@ -69,13 +84,17 @@ describe('Listings page / search', () => {
 
       await waitFor(() => {
         expect(input.value).toBe('red')
-
-        expect(screen.getAllByTestId('table-row').length).toBe(1)
-        expect(screen.getByText('2137 Red Mountain Road')).toBeInTheDocument()
+        expect(getBrandListings).toHaveBeenLastCalledWith(
+          expect.objectContaining({
+            filters: expect.objectContaining({
+              search: 'red'
+            })
+          })
+        )
       })
     })
 
-    it('should find the two item if input value was "street"', async () => {
+    it('should call the api when pagination is happen', async () => {
       render(
         <ListingsPageTestProvider>
           <Listings {...routerProps} />
@@ -87,46 +106,20 @@ describe('Listings page / search', () => {
         expect(screen.getAllByTestId('table-row').length).toBe(4)
       })
 
-      const input = screen.getByPlaceholderText('Search') as HTMLInputElement
+      const buttonElement = within(screen.getByTestId('pagination')).getByText(
+        '2'
+      ) as HTMLButtonElement
 
-      fireEvent.input(input, { target: { value: 'street' } })
-
-      await waitFor(() => {
-        expect(input.value).toBe('street')
-
-        expect(screen.getAllByTestId('table-row').length).toBe(2)
-        expect(
-          screen.getByText('2555 N Pearl Street Unit RR3')
-        ).toBeInTheDocument()
-        expect(
-          screen.getByText('988 Decatur Street Unit 2')
-        ).toBeInTheDocument()
-        expect(
-          screen.queryByText('2137 Red Mountain Road')
-        ).not.toBeInTheDocument()
-      })
-    })
-
-    it('should not find any item if input value was "something else"', async () => {
-      render(
-        <ListingsPageTestProvider>
-          <Listings {...routerProps} />
-        </ListingsPageTestProvider>
-      )
+      fireEvent.click(buttonElement)
 
       await waitFor(() => {
-        // We have total 4 listings in the mock data
-        expect(screen.getAllByTestId('table-row').length).toBe(4)
-      })
-
-      const input = screen.getByPlaceholderText('Search') as HTMLInputElement
-
-      fireEvent.input(input, { target: { value: 'something else' } })
-
-      await waitFor(() => {
-        expect(input.value).toBe('something else')
-
-        expect(screen.queryAllByTestId('table-row').length).toBe(0)
+        expect(getBrandListings).toHaveBeenLastCalledWith(
+          expect.objectContaining({
+            options: expect.objectContaining({
+              offset: 200
+            })
+          })
+        )
       })
     })
   })
@@ -146,11 +139,16 @@ describe('Listings page / search', () => {
         Promise.resolve(MockBrandListingsEmpty)
       )
 
+      const mockedGetBrandListingsCount =
+        getBrandListingsCount as jest.MockedFunction<any>
+
+      mockedGetBrandListingsCount.mockReturnValue(Promise.resolve(0))
+
       const mockedGetDealsListings =
         getDealsListings as jest.MockedFunction<any>
 
       mockedGetDealsListings.mockReturnValue(
-        Promise.resolve(MockDealsListingsEmpty)
+        Promise.resolve({ listings: MockDealsListingsEmpty, count: 0 })
       )
     })
 
@@ -176,6 +174,24 @@ describe('Listings page / search', () => {
 
         expect(screen.getByText('No Results')).toBeInTheDocument()
       })
+    })
+
+    it('should not render the pagination', async () => {
+      render(
+        <ListingsPageTestProvider>
+          <Listings {...routerProps} />
+        </ListingsPageTestProvider>
+      )
+
+      await waitFor(() =>
+        expect(
+          screen.getByText('You don’t have any listings yet.')
+        ).toBeInTheDocument()
+      )
+
+      await waitFor(() =>
+        expect(screen.queryByTestId('pagination')).not.toBeInTheDocument()
+      )
     })
   })
 })
