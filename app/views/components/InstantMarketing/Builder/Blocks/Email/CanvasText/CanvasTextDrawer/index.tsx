@@ -27,6 +27,9 @@ import { TextEditor } from './TextEditor'
 
 const useStyles = makeStyles(
   () => ({
+    header: {
+      userSelect: 'none'
+    },
     drawerBodyRoot: {
       display: 'flex',
       flexDirection: 'column',
@@ -71,12 +74,9 @@ export function CanvasTextDrawer({
   })
 
   const handleDone = async () => {
-    onClose()
-    uploadResultImage()
-  }
-
-  const uploadResultImage = async () => {
     if (!textPreviewLabel) {
+      onClose()
+
       return
     }
 
@@ -96,6 +96,9 @@ export function CanvasTextDrawer({
     const rect = textPreviewLabel.node.getClientRect()
 
     model?.trigger('canvas-text:save-state', {
+      text,
+      rect,
+      json: data,
       data: encoded
     })
 
@@ -105,21 +108,7 @@ export function CanvasTextDrawer({
       height: rect.height
     })
 
-    // This snippet will be used by template team
-    console.log(`
-    {% set fancyFont %}
-    ${JSON.stringify({ ...data, url: './blocks.json' })}
-    {% endset %}
-    <mj-image 
-      data-type="canvas-text"
-      css-class="fancy-font"
-      alt="${text}"
-      title="${text}"
-      width="${parseInt(rect.width.toString(), 10)}" 
-      height="${parseInt(rect.height.toString(), 10)}" 
-      data-json="{{ fancyFont | encode }}" 
-      src="https://fancy.rechat.com/text.png?q={{fancyFont | encode }}">
-    </mj-image>`)
+    onClose()
   }
 
   const preview = useCallback(() => {
@@ -170,19 +159,27 @@ export function CanvasTextDrawer({
 
   return (
     <>
-      <OverlayDrawer open hideBackdrop width={400} onClose={noop}>
+      <OverlayDrawer open hideBackdrop width={460} onClose={noop}>
         <OverlayDrawer.Header title="Fancy Test">
           <Box
             display="flex"
             alignItems="center"
             justifyContent="space-between"
             py={1}
+            className={classes.header}
           >
             <Typography variant="h6">Fancy Font</Typography>
 
-            <Button variant="contained" color="primary" onClick={handleDone}>
-              Done
-            </Button>
+            <Box display="flex" alignItems="center">
+              <Box mr={1}>
+                <Button color="secondary" onClick={onClose}>
+                  Cancel
+                </Button>
+              </Box>
+              <Button variant="contained" color="primary" onClick={handleDone}>
+                Done
+              </Button>
+            </Box>
           </Box>
         </OverlayDrawer.Header>
         <OverlayDrawer.Body className={classes.drawerBodyRoot}>
