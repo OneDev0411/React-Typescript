@@ -12,6 +12,8 @@ import { handleBlockDragStopEvent } from '../../utils'
 import { isComponent } from '../../Website/utils'
 
 import template from './template.mjml'
+import { IRect } from './types'
+import { logResult } from './utils/result-log'
 
 export const canvasTextBlockName = 'canvas-text'
 
@@ -64,17 +66,34 @@ export default function registerCanvasTextBlock(
           src: data.image,
           alt: data.alt,
           width: data.width,
-          height: 'auto'
+          height: data.height
         })
 
         this.rerender()
       },
-      saveState({ data }: { data: string }) {
+      saveState({
+        data,
+        json,
+        text,
+        rect
+      }: {
+        data: string
+        json: object
+        text: string
+        rect: IRect
+      }) {
         this.attr['data-json'] = data
         this.model.set('canvas-json', this.attr['data-json'])
+
+        logResult({
+          text,
+          json,
+          rect,
+          attrs: this.attr
+        })
       },
       events: {
-        dblclick() {
+        click() {
           onLoad(this.model)
         }
       }
