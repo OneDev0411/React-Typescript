@@ -21,7 +21,7 @@
     "lint:tests": "eslint ./tests",
     "test:unit": "cross-env NODE_ENV=test jest",
     "test:update-snapshots": "npm run test:unit -- -u",
-    "test:ci": "cross-env NODE_ENV=test jest --coverage --maxWorkers 6",
+    "test:ci": "cross-env NODE_ENV=test jest --coverage --testTimeout=10000",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
