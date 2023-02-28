@@ -8,7 +8,7 @@ export const List = styled(Card)`
   top: calc(100% + 0.5rem);
   left: 0;
   overflow: auto;
-  width: 18.75rem;
+  width: 16.75rem;
   min-height: 2rem;
   max-height: 18.75rem;
   z-index: 1001;
