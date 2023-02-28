@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { Typography } from '@material-ui/core'
 import { mdiChevronUp } from '@mdi/js'
 import Downshift from 'downshift'
 
@@ -113,6 +114,13 @@ export class DropDownList extends React.Component {
                       {item.label}
                     </Item>
                   ))}
+                  {this.getFilteredOptions(filterValue).length === 0 && (
+                    <Item>
+                      <Typography variant="body1">
+                        Nothing to select!
+                      </Typography>
+                    </Item>
+                  )}
                 </List>
               )}
             </div>
