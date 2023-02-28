@@ -25,7 +25,7 @@ export interface ZipcodeOption {
 const useStyles = makeStyles(
   () => ({
     paper: {
-      minWidth: '450px'
+      minWidth: '455px'
     },
     title: {
       flexGrow: 1
