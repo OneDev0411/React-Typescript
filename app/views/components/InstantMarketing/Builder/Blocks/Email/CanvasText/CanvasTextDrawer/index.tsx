@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 
 import {
   Box,
@@ -11,6 +11,7 @@ import type { Model } from 'backbone'
 import cn from 'classnames'
 import { omit } from 'lodash'
 import LZString from 'lz-string'
+import { LabelModel } from 'pikaso'
 
 import { noop } from '@app/utils/helpers'
 import OverlayDrawer from '@app/views/components/OverlayDrawer'
@@ -64,41 +65,47 @@ export function CanvasTextDrawer({
   onClose
 }: Props) {
   const classes = useStyles()
-
+  const initialState = model?.get('canvas-json')
   const [activeTab, setActiveTab] = useState<Tabs>('fonts')
 
   const editorRef = useRef<Nullable<HTMLDivElement>>(null)
-  const { editor, textPreviewLabel } = useEditor({
+  const { editor, reset, getLabelNode } = useEditor({
     editorRef,
-    state: model?.get('canvas-json')
+    state: initialState
   })
 
-  const handleCancel = () => {
-    model?.trigger('canvas-text:reset')
-    onClose()
+  const textPreviewLabel = useMemo(
+    () => getLabelNode(editor),
+    [editor, getLabelNode]
+  )
+
+  const handleCancel = async () => {
+    const editor = await reset()
+
+    handleSave(getLabelNode(editor))
   }
 
-  const handleDone = async () => {
-    if (!textPreviewLabel) {
+  const handleSave = async (label: Nullable<LabelModel>) => {
+    if (!label) {
       onClose()
 
       return
     }
 
     const ignoredFields = ['width', 'height', 'x', 'y']
-    const { text } = textPreviewLabel.textNode.attrs
+    const { text } = label.textNode.attrs
 
     const data = {
-      label: omit(textPreviewLabel.textNode.attrs, ignoredFields),
-      tag: omit(textPreviewLabel.tagNode.attrs, ignoredFields),
+      label: omit(label.textNode.attrs, ignoredFields),
+      tag: omit(label.tagNode.attrs, ignoredFields),
       root: {
-        rotation: textPreviewLabel?.node.getAttr('rotation') ?? 0
+        rotation: label?.node.getAttr('rotation') ?? 0
       },
       url: `${templateUrl}/blocks.json`
     }
 
     const encoded = LZString.compressToEncodedURIComponent(JSON.stringify(data))
-    const rect = textPreviewLabel.node.getClientRect()
+    const rect = label.node.getClientRect()
 
     model?.trigger('canvas-text:save-state', {
       text,
@@ -176,12 +183,18 @@ export function CanvasTextDrawer({
             <Typography variant="h6">Fancy Font</Typography>
 
             <Box display="flex" alignItems="center">
-              <Box mr={1}>
-                <Button color="secondary" onClick={handleCancel}>
-                  Cancel
-                </Button>
-              </Box>
-              <Button variant="contained" color="primary" onClick={handleDone}>
+              {initialState && (
+                <Box mr={1}>
+                  <Button color="secondary" onClick={handleCancel}>
+                    Cancel
+                  </Button>
+                </Box>
+              )}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleSave(textPreviewLabel)}
+              >
                 Done
               </Button>
             </Box>
