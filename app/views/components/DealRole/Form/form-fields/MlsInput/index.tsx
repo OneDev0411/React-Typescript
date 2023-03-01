@@ -67,7 +67,9 @@ export function MlsInput({ label, isVisible, input, mutators }: Props) {
       }
       isLoading={isSearching}
       options={searchByMlsId}
-      getOptionLabel={option => `${option.label} (${option.value})`}
+      getOptionLabel={option =>
+        `${option.label} (${option.value} on ${option.mls})`
+      }
       onChange={handleSelectSuggestion}
       onInputChange={input.onChange}
     />
