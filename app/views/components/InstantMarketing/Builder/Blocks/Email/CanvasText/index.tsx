@@ -53,10 +53,13 @@ export default function registerCanvasTextBlock(
       init({ model }) {
         const isNewBlock = this.attr['data-json'] === ''
 
+        this.initialAttrs = this.attr
+
         model.set('canvas-json', this.attr['data-json'])
 
         this.listenTo(model, 'canvas-text:update', this.update)
         this.listenTo(model, 'canvas-text:save-state', this.saveState)
+        this.listenTo(model, 'canvas-text:reset', this.reset)
 
         onInit(model, isNewBlock)
       },
@@ -69,6 +72,11 @@ export default function registerCanvasTextBlock(
           height: data.height
         })
 
+        this.rerender()
+      },
+      reset() {
+        this.model.set('canvas-json', this.initialAttrs['data-json'])
+        this.model.setAttributes(this.initialAttrs)
         this.rerender()
       },
       saveState({

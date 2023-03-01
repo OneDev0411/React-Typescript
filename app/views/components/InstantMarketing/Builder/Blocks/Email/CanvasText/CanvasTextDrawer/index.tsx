@@ -73,6 +73,11 @@ export function CanvasTextDrawer({
     state: model?.get('canvas-json')
   })
 
+  const handleCancel = () => {
+    model?.trigger('canvas-text:reset')
+    onClose()
+  }
+
   const handleDone = async () => {
     if (!textPreviewLabel) {
       onClose()
@@ -172,7 +177,7 @@ export function CanvasTextDrawer({
 
             <Box display="flex" alignItems="center">
               <Box mr={1}>
-                <Button color="secondary" onClick={onClose}>
+                <Button color="secondary" onClick={handleCancel}>
                   Cancel
                 </Button>
               </Box>
