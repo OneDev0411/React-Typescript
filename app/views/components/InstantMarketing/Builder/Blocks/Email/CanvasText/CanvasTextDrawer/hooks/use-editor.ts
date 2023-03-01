@@ -1,9 +1,15 @@
-import { MutableRefObject, useState, useEffect } from 'react'
+import {
+  MutableRefObject,
+  useState,
+  useEffect,
+  useCallback,
+  useRef
+} from 'react'
 
-import LZString from 'lz-string'
-import Pikaso, { Konva, LabelModel } from 'pikaso'
+import Pikaso, { LabelModel } from 'pikaso'
 
 import { CanvasTextProperties, DefaultCanvasTextProperties } from '../constants'
+import { parseState } from '../utils/parse-state'
 
 import { useIframe } from './use-iframe'
 import { useIframeFonts } from './use-iframe-fonts'
@@ -22,79 +28,79 @@ export function useEditor({
   const iframe = useIframe()
 
   const [, loadFont] = useIframeFonts()
-
+  const initialState = useRef(state)
   const [isLoading, setIsLoading] = useState(false)
   const [editor, setEditor] = useState<Nullable<Pikaso>>(null)
-  const textPreviewLabel = editor
-    ? (editor.board.activeShapes[0] as LabelModel)
-    : null
 
-  useEffect(() => {
-    if (!iframe || !editorRef.current || !!editor || isLoading) {
-      return
-    }
+  const reset = () => loadEditorFromState(initialState.current)
 
-    const parseState = (): Nullable<{
-      label: Konva.TextConfig
-      tag: Konva.RectConfig
-      root: Konva.RectConfig
-    }> => {
-      try {
-        if (!state) {
-          return null
-        }
+  const getLabelNode = useCallback(
+    (editor: Nullable<Pikaso>) =>
+      editor ? (editor.board.activeShapes[0] as LabelModel) : null,
+    []
+  )
 
-        const decompressed = LZString.decompressFromEncodedURIComponent(state)
-
-        if (!decompressed) {
-          return null
-        }
-
-        return JSON.parse(decompressed)
-      } catch (e) {
-        return null
-      }
-    }
-
-    const load = async () => {
-      setIsLoading(true)
-
+  const loadEditorFromState = useCallback(
+    (state: Nullable<string>): Promise<Pikaso> => {
       const instance = new Pikaso({
         width: 100,
         height: 100,
         container: editorRef.current as HTMLDivElement
       })
 
-      const state = parseState()
+      const json = parseState(state)
 
-      if (state) {
-        loadFont(state.label.fontFamily)
-          .catch(() => {})
-          .finally(() => {
-            const label = instance.shapes.label.insert({
-              ...DefaultCanvasTextProperties,
-              tag: state.tag,
-              text: state.label
+      return new Promise(resolve => {
+        if (json) {
+          loadFont(json.label.fontFamily)
+            .catch(() => {})
+            .finally(() => {
+              const label = instance.shapes.label.insert({
+                ...DefaultCanvasTextProperties,
+                tag: json.tag,
+                text: json.label
+              })
+
+              label.rotate(json.root?.rotation ?? 0)
+
+              resolve(instance)
             })
+        } else {
+          instance.shapes.label.insert(labelConfig)
 
-            label.rotate(state.root?.rotation ?? 0)
+          resolve(instance)
+        }
+      })
+    },
+    [editorRef, labelConfig, loadFont]
+  )
 
-            setEditor(instance)
-            setIsLoading(false)
-          })
-      } else {
-        instance.shapes.label.insert(labelConfig)
+  useEffect(() => {
+    if (!iframe || !editorRef.current || !!editor || isLoading) {
+      return
+    }
+
+    const load = async () => {
+      setIsLoading(true)
+
+      try {
+        const instance = await loadEditorFromState(state)
+
         setEditor(instance)
+      } catch (e) {
+        console.log(e)
+      } finally {
         setIsLoading(false)
       }
     }
 
     load()
-  }, [editorRef, editor, iframe, loadFont, state, labelConfig, isLoading])
+  }, [editorRef, editor, iframe, state, isLoading, loadEditorFromState])
 
   return {
     editor,
+    reset,
     isLoading,
-    textPreviewLabel
+    getLabelNode
   }
 }

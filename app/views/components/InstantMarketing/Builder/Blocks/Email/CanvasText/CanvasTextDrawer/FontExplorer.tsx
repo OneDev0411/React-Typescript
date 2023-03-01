@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
@@ -56,7 +56,7 @@ export function FontExplorer() {
   const classes = useStyles()
 
   const fontsPreviewRef = useRef<Nullable<HTMLDivElement>>(null)
-  const { textPreviewLabel } = useEditor({
+  const { editor, getLabelNode } = useEditor({
     editorRef: fontsPreviewRef,
     labelConfig: {
       ...DefaultCanvasTextProperties,
@@ -67,6 +67,11 @@ export function FontExplorer() {
       }
     }
   })
+
+  const textPreviewLabel = useMemo(
+    () => getLabelNode(editor),
+    [editor, getLabelNode]
+  )
 
   const { templateOptions, setTextProperty, getTextProperty, preview } =
     useCanvasTextContext()
