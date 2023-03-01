@@ -17,7 +17,6 @@ type NormalizedAgent = IAgent & {
   company: string
   value: string
   label: string
-  mls: string
 }
 
 export function MlsInput({ label, isVisible, input, mutators }: Props) {
