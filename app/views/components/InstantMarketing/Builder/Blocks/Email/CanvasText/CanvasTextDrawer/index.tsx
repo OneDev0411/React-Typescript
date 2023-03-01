@@ -79,7 +79,7 @@ export function CanvasTextDrawer({
     [editor, getLabelNode]
   )
 
-  const handleReset = async () => {
+  const handleCancel = async () => {
     const editor = await reset()
 
     handleSave(getLabelNode(editor))
@@ -185,7 +185,7 @@ export function CanvasTextDrawer({
             <Box display="flex" alignItems="center">
               {initialState && (
                 <Box mr={1}>
-                  <Button color="secondary" onClick={handleReset}>
+                  <Button color="secondary" onClick={handleCancel}>
                     Cancel
                   </Button>
                 </Box>
