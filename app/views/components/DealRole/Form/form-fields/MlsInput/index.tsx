@@ -43,8 +43,7 @@ export function MlsInput({ label, isVisible, input, mutators }: Props) {
           ...agent,
           company: agent.office ? agent.office.name : '',
           value: agent.mlsid,
-          label: agent.full_name,
-          mls: agent.mls
+          label: agent.full_name
         }))
       } catch (e) {
         setIsSearching(false)
