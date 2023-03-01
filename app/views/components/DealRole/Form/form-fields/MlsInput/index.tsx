@@ -17,6 +17,7 @@ type NormalizedAgent = IAgent & {
   company: string
   value: string
   label: string
+  mls: string
 }
 
 export function MlsInput({ label, isVisible, input, mutators }: Props) {
@@ -43,7 +44,8 @@ export function MlsInput({ label, isVisible, input, mutators }: Props) {
           ...agent,
           company: agent.office ? agent.office.name : '',
           value: agent.mlsid,
-          label: agent.full_name
+          label: agent.full_name,
+          mls: agent.mls
         }))
       } catch (e) {
         setIsSearching(false)
@@ -67,7 +69,9 @@ export function MlsInput({ label, isVisible, input, mutators }: Props) {
       }
       isLoading={isSearching}
       options={searchByMlsId}
-      getOptionLabel={option => `${option.label} (${option.value})`}
+      getOptionLabel={option =>
+        `${option.label} (${option.value} on ${option.mls})`
+      }
       onChange={handleSelectSuggestion}
       onInputChange={input.onChange}
     />
